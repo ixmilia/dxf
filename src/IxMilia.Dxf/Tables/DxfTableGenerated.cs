@@ -369,7 +369,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
         }
 
@@ -416,7 +416,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
         }
 
         internal static DxfBlockRecord FromBuffer(DxfCodePairBufferReader buffer)
@@ -565,7 +565,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
             pairs.Add(new DxfCodePair(3, (DimensioningSuffix)));
             pairs.Add(new DxfCodePair(4, (AlternateDimensioningSuffix)));
@@ -828,7 +828,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
             pairs.Add(new DxfCodePair(62, DxfColor.GetRawValue(Color)));
             pairs.Add(new DxfCodePair(6, (LinetypeName)));
@@ -909,7 +909,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
             pairs.Add(new DxfCodePair(3, (Description)));
             pairs.Add(new DxfCodePair(72, (int)(AlignmentCode)));
@@ -1022,7 +1022,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
             pairs.Add(new DxfCodePair(40, (TextHeight)));
             pairs.Add(new DxfCodePair(41, (WidthFactor)));
@@ -1103,7 +1103,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
             pairs.Add(new DxfCodePair(10, Origin.X));
             pairs.Add(new DxfCodePair(20, Origin.Y));
@@ -1206,7 +1206,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
             pairs.Add(new DxfCodePair(40, (ViewHeight)));
             pairs.Add(new DxfCodePair(10, ViewCenterPoint.X));
@@ -1359,7 +1359,7 @@ namespace IxMilia.Dxf
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)Flags));
             pairs.Add(new DxfCodePair(10, LowerLeft.X));
             pairs.Add(new DxfCodePair(20, LowerLeft.Y));

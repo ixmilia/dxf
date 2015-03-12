@@ -2731,7 +2731,7 @@ namespace IxMilia.Dxf
         // setter method
         internal static void SetHeaderVariable(string keyName, DxfCodePair pair, DxfHeader header)
         {
-		    switch (keyName)
+            switch (keyName)
             {
                 case ACADMAINTVER:
                     EnsureCode(pair, 70);

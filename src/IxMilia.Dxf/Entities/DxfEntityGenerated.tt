@@ -27,14 +27,14 @@ namespace IxMilia.Dxf.Entities
 var enumNames = new HashSet<string>();
 foreach (var entity in entities.OrderBy(e => EntityType(e)))
 {
-	var entityType = EntityType(entity);
-	if (!string.IsNullOrEmpty(entityType) && !enumNames.Contains(entityType))
-	{
-		enumNames.Add(entityType);
+    var entityType = EntityType(entity);
+    if (!string.IsNullOrEmpty(entityType) && !enumNames.Contains(entityType))
+    {
+        enumNames.Add(entityType);
 #>
         <#= entityType #>,
 <#
-	} // if
+    } // if
 } // foreach entity
 #>
     }
@@ -50,9 +50,9 @@ var baseEntity = xml.Elements(XName.Get("Entity", xmlns)).Where(x => Name(x) == 
 <#
 foreach (var property in GetProperties(baseEntity))
 {
-	var typeString = Type(property);
-	if (AllowMultiples(property))
-		typeString = string.Format("List<{0}>", typeString);
+    var typeString = Type(property);
+    if (AllowMultiples(property))
+        typeString = string.Format("List<{0}>", typeString);
 #>
         public <#= typeString #> <#= Name(property) #> { get; set; }
 <#
@@ -68,14 +68,14 @@ foreach (var property in GetProperties(baseEntity))
 <#
 foreach (var entity in entities)
 {
-	var typeString = TypeString(entity);
-	if (!string.IsNullOrEmpty(typeString))
-	{
+    var typeString = TypeString(entity);
+    if (!string.IsNullOrEmpty(typeString))
+    {
 #>
                     case DxfEntityType.<#= EntityType(entity) #>:
                         return "<#= typeString #>";
 <#
-	} // if
+    } // if
 } // foreach entity
 #>
                     default:
@@ -107,9 +107,9 @@ foreach (var property in GetProperties(baseEntity))
 <#
 foreach (var property in GetProperties(baseEntity))
 {
-	var defaultValue = AllowMultiples(property)
-		? string.Format("new List<{0}>()", Type(property))
-		: DefaultValue(property);
+    var defaultValue = AllowMultiples(property)
+        ? string.Format("new List<{0}>()", Type(property))
+        : DefaultValue(property);
 #>
             this.<#= Name(property) #> = <#= defaultValue #>;
 <#
@@ -121,21 +121,21 @@ foreach (var property in GetProperties(baseEntity))
         {
             pairs.Add(new DxfCodePair(0, EntityTypeString));
 <#
-			foreach (var line in GetWriteCommands(baseEntity))
-			{
-				if (string.IsNullOrWhiteSpace(line))
-				{
+            foreach (var line in GetWriteCommands(baseEntity))
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
 #>
 
 <#
-				}
-				else
-				{
+                }
+                else
+                {
 #>
             <#= line #>
 <#
-				}
-			} // foreach
+                }
+            } // foreach
 #>
         }
 
@@ -144,52 +144,52 @@ foreach (var property in GetProperties(baseEntity))
             switch (pair.Code)
             {
 <#
-		foreach (var propertyGroup in GetProperties(baseEntity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
-		{
-			var code = propertyGroup.Key;
-			if (propertyGroup.Count() == 1)
-			{
-				var property = propertyGroup.Single();
-				var name = Name(property);
-				var codes = GetCodeOverrides(property);
-				if (codes != null)
-				{
-					var suffix = 'X';
-					for (int i = 0; i < codes.Length; i++, suffix++)
-					{
+        foreach (var propertyGroup in GetProperties(baseEntity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
+        {
+            var code = propertyGroup.Key;
+            if (propertyGroup.Count() == 1)
+            {
+                var property = propertyGroup.Single();
+                var name = Name(property);
+                var codes = GetCodeOverrides(property);
+                if (codes != null)
+                {
+                    var suffix = 'X';
+                    for (int i = 0; i < codes.Length; i++, suffix++)
+                    {
 #>
                 case <#= codes[i] #>:
                     this.<#= name #>.<#= suffix #> = pair.DoubleValue;
                     break;
 <#
-					} // for
-				} // if
-				else
-				{
-					var codeType = DxfCodePair.ExpectedType(code);
-					var codeTypeValue = TypeToString(codeType);
-					var assignCode = AllowMultiples(property)
-						? string.Format("this.{0}.Add(", Name(property))
-						: string.Format("this.{0} = ", Name(property));
-					var assignSuffix = AllowMultiples(property)
-						? ")"
-						: "";
+                    } // for
+                } // if
+                else
+                {
+                    var codeType = DxfCodePair.ExpectedType(code);
+                    var codeTypeValue = TypeToString(codeType);
+                    var assignCode = AllowMultiples(property)
+                        ? string.Format("this.{0}.Add(", Name(property))
+                        : string.Format("this.{0} = ", Name(property));
+                    var assignSuffix = AllowMultiples(property)
+                        ? ")"
+                        : "";
 #>
                 case <#= code #>:
                     <#= assignCode #><#= ReadConverter(property) #>(pair.<#= codeTypeValue #>)<#= assignSuffix #>;
                     break;
 <#
-				} // else
-			} // if one property per code
-			else
-			{
+                } // else
+            } // if one property per code
+            else
+            {
 #>
                 case <#= code #>:
                     // TODO: code is shared by properties <#= string.Join(", ", propertyGroup.Select(p => Name(p))) #>
                     break;
 <#
-			} // else multiple properties per code
-		} // foreach property
+            } // else multiple properties per code
+        } // foreach property
 #>
                 default:
                     return false;
@@ -208,15 +208,15 @@ foreach (var property in GetProperties(baseEntity))
 <#
 foreach (var entity in entities)
 {
-	var typeString = TypeString(entity);
-	if (!string.IsNullOrEmpty(typeString))
-	{
+    var typeString = TypeString(entity);
+    if (!string.IsNullOrEmpty(typeString))
+    {
 #>
                 case "<#= typeString #>":
                     entity = new <#= Name(entity) #>();
                     break;
 <#
-	} // if
+    } // if
 } // foreach entity
 #>
                 default:
@@ -238,7 +238,7 @@ foreach (var entity in entities)
 foreach (var entity in entities)
 {
     var className = Name(entity);
-	var baseClass = BaseClass(entity);
+    var baseClass = BaseClass(entity);
 #>
     /// <summary>
     /// <#= className #> class
@@ -247,54 +247,54 @@ foreach (var entity in entities)
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.<#= EntityType(entity) #>; } }
 <#
-	// min and max entity supported versions
-	var minVersion = MinVersion(entity);
-	if (minVersion != null)
-	{
+    // min and max entity supported versions
+    var minVersion = MinVersion(entity);
+    if (minVersion != null)
+    {
 #>
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.<#= minVersion #>; } }
 <#
-	} // if
+    } // if
 
-	var maxVersion = MaxVersion(entity);
-	if (maxVersion != null)
-	{
+    var maxVersion = MaxVersion(entity);
+    if (maxVersion != null)
+    {
 #>
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.<#= maxVersion #>; } }
 <#
-	} // if
+    } // if
 
 #>
 
 <#
 
-	//
-	// Properties
-	//
-	foreach (var property in GetProperties(entity))
-	{
-		var propertyType = Type(property);
-		var getset = ProtectedSet(property) ? "{ get; protected set; }" : "{ get; set; }";
-		if (AllowMultiples(property))
-		{
-			propertyType = string.Format("List<{0}>", propertyType);
-		}
+    //
+    // Properties
+    //
+    foreach (var property in GetProperties(entity))
+    {
+        var propertyType = Type(property);
+        var getset = ProtectedSet(property) ? "{ get; protected set; }" : "{ get; set; }";
+        if (AllowMultiples(property))
+        {
+            propertyType = string.Format("List<{0}>", propertyType);
+        }
 #>
         <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> <#= getset #>
 <#
-	} // foreach property
+    } // foreach property
 
-	foreach (var property in GetProperties(entity))
-	{
-		var flags = property.Elements(XName.Get("Flag", xmlns));
-		if (flags.Any())
-		{
+    foreach (var property in GetProperties(entity))
+    {
+        var flags = property.Elements(XName.Get("Flag", xmlns));
+        if (flags.Any())
+        {
 #>
 
         // <#= Name(property) #> flags
 <#
-			foreach (var flag in flags)
-			{
+            foreach (var flag in flags)
+            {
 #>
 
         public bool <#= Name(flag) #>
@@ -308,16 +308,16 @@ foreach (var entity in entities)
             }
         }
 <#
-			} // foreach flag
-		} // if
-	} // foreach property
+            } // foreach flag
+        } // if
+    } // foreach property
 
-	var defaultConstructorType = DefaultConstructor(entity);
-	if (defaultConstructorType != null)
-	{
-	    //
-	    // Default constructor
-	    //
+    var defaultConstructorType = DefaultConstructor(entity);
+    if (defaultConstructorType != null)
+    {
+        //
+        // Default constructor
+        //
 #>
 
         <#= defaultConstructorType #> <#= className #>()
@@ -326,96 +326,96 @@ foreach (var entity in entities)
         }
 
 <#
-	} // if (defaultConstructorType != null)
+    } // if (defaultConstructorType != null)
 
-	var constructors = entity.Elements(XName.Get("Constructor", xmlns));
-	if (constructors.Any())
-	{
+    var constructors = entity.Elements(XName.Get("Constructor", xmlns));
+    if (constructors.Any())
+    {
 #>
         //
         // Parameterized constructors
         //
 <#
-		foreach (var constructor in constructors)
-		{
-			var parameters = constructor.Elements(XName.Get("ConstructorParameter", xmlns));
-			var argList = new List<string>();
-			foreach (var parameter in parameters)
-			{
-				var paramName = CamlCase(Property(parameter));
-				var paramType = Type(parameter);
-				argList.Add(paramType + " " + paramName);
-			}
+        foreach (var constructor in constructors)
+        {
+            var parameters = constructor.Elements(XName.Get("ConstructorParameter", xmlns));
+            var argList = new List<string>();
+            foreach (var parameter in parameters)
+            {
+                var paramName = CamlCase(Property(parameter));
+                var paramType = Type(parameter);
+                argList.Add(paramType + " " + paramName);
+            }
 
-			var sig = string.Join(", ", argList);
+            var sig = string.Join(", ", argList);
 #>
         public <#= className #>(<#= sig #>)
             : this()
         {
 <#
-			foreach (var parameter in parameters)
-			{
+            foreach (var parameter in parameters)
+            {
 #>
             this.<#= Property(parameter) #> = <#= CamlCase(Property(parameter)) #>;
 <#
-			} // foreach parameter
+            } // foreach parameter
 #>
         }
 
 <#
-		} // foreach constructor
-	} // if
+        } // foreach constructor
+    } // if
 
-	//
-	// Copy constructor
-	//
-	var copyConstructorAccessibility = CopyConstructor(entity);
-	if (copyConstructorAccessibility != null)
-	{
-		if (copyConstructorAccessibility == "inherited")
-		{
+    //
+    // Copy constructor
+    //
+    var copyConstructorAccessibility = CopyConstructor(entity);
+    if (copyConstructorAccessibility != null)
+    {
+        if (copyConstructorAccessibility == "inherited")
+        {
 #>
         internal <#= className #>(<#= BaseClass(entity) #> other)
             : base(other)
         {
         }
 <#
-		}
-		else
-		{
+        }
+        else
+        {
 #>
         <#= copyConstructorAccessibility #> <#= className #>(<#= className #> other)
             : base(other)
         {
 <#
-		foreach (var property in GetProperties(entity))
-		{
+        foreach (var property in GetProperties(entity))
+        {
 #>
             this.<#= Name(property) #> = other.<#= Name(property) #>;
 <#
-		} // foreach property
+        } // foreach property
 #>
         }
 <#
-		} // else
+        } // else
 #>
 
 <#
-	} // copyConstructorAccessibility != null
+    } // copyConstructorAccessibility != null
 #>
         protected override void Initialize()
         {
             base.Initialize();
 <#
-		foreach (var property in GetProperties(entity))
-		{
-			var defaultValue = AllowMultiples(property)
-				? string.Format("new List<{0}>()", Type(property))
-				: DefaultValue(property);
+        foreach (var property in GetProperties(entity))
+        {
+            var defaultValue = AllowMultiples(property)
+                ? string.Format("new List<{0}>()", Type(property))
+                : DefaultValue(property);
 #>
             this.<#= Name(property) #> = <#= defaultValue #>;
 <#
-		} // foreach property
+        } // foreach property
 #>
         }
 
@@ -423,26 +423,26 @@ foreach (var entity in entities)
         {
             base.AddValuePairs(pairs, version);
 <#
-			foreach (var line in GetWriteCommands(entity))
-			{
-				if (string.IsNullOrWhiteSpace(line))
-				{
+            foreach (var line in GetWriteCommands(entity))
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
 #>
 
 <#
-				}
-				else
-				{
+                }
+                else
+                {
 #>
             <#= line #>
 <#
-				}
-			} // foreach
+                }
+            } // foreach
 #>
         }
 <#
-	if (GetProperties(entity).Any())
-	{
+    if (GetProperties(entity).Any())
+    {
 #>
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -450,52 +450,52 @@ foreach (var entity in entities)
             switch (pair.Code)
             {
 <#
-		foreach (var propertyGroup in GetProperties(entity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
-		{
-			var code = propertyGroup.Key;
-			if (propertyGroup.Count() == 1)
-			{
-				var property = propertyGroup.Single();
-				var name = Name(property);
-				var codes = GetCodeOverrides(property);
-				if (codes != null)
-				{
-					var suffix = 'X';
-					for (int i = 0; i < codes.Length; i++, suffix++)
-					{
+        foreach (var propertyGroup in GetProperties(entity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
+        {
+            var code = propertyGroup.Key;
+            if (propertyGroup.Count() == 1)
+            {
+                var property = propertyGroup.Single();
+                var name = Name(property);
+                var codes = GetCodeOverrides(property);
+                if (codes != null)
+                {
+                    var suffix = 'X';
+                    for (int i = 0; i < codes.Length; i++, suffix++)
+                    {
 #>
                 case <#= codes[i] #>:
                     this.<#= name #>.<#= suffix #> = pair.DoubleValue;
                     break;
 <#
-					} // for
-				} // if
-				else
-				{
-					var codeType = DxfCodePair.ExpectedType(code);
-					var codeTypeValue = TypeToString(codeType);
-					var assignCode = AllowMultiples(property)
-						? string.Format("this.{0}.Add(", Name(property))
-						: string.Format("this.{0} = ", Name(property));
-					var assignSuffix = AllowMultiples(property)
-						? ")"
-						: "";
+                    } // for
+                } // if
+                else
+                {
+                    var codeType = DxfCodePair.ExpectedType(code);
+                    var codeTypeValue = TypeToString(codeType);
+                    var assignCode = AllowMultiples(property)
+                        ? string.Format("this.{0}.Add(", Name(property))
+                        : string.Format("this.{0} = ", Name(property));
+                    var assignSuffix = AllowMultiples(property)
+                        ? ")"
+                        : "";
 #>
                 case <#= code #>:
                     <#= assignCode #><#= ReadConverter(property) #>(pair.<#= codeTypeValue #>)<#= assignSuffix #>;
                     break;
 <#
-				} // else
-			} // if one property per code
-			else
-			{
+                } // else
+            } // if one property per code
+            else
+            {
 #>
                 case <#= code #>:
                     // TODO: code is shared by properties <#= string.Join(", ", propertyGroup.Select(p => Name(p))) #>
                     break;
 <#
-			} // else multiple properties per code
-		} // foreach property
+            } // else multiple properties per code
+        } // foreach property
 #>
                 default:
                     return base.TrySetPair(pair);
@@ -504,7 +504,7 @@ foreach (var entity in entities)
             return true;
         }
 <#
-	} // if
+    } // if
 #>
     }
 

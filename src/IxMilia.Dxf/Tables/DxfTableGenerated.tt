@@ -28,7 +28,7 @@ namespace IxMilia.Dxf.Tables
 
 foreach (var table in tables)
 {
-	var tableItem = Name(table.Element(XName.Get("TableItem", xmlns)));
+    var tableItem = Name(table.Element(XName.Get("TableItem", xmlns)));
 #>
 
     public partial class Dxf<#= Type(table) #>Table : DxfTable
@@ -83,8 +83,8 @@ namespace IxMilia.Dxf
 
 foreach (var table in tables)
 {
-	var tableItem = table.Element(XName.Get("TableItem", xmlns));
-	var properties = tableItem.Elements(XName.Get("Property", xmlns));
+    var tableItem = table.Element(XName.Get("TableItem", xmlns));
+    var properties = tableItem.Elements(XName.Get("Property", xmlns));
 #>
 
     public partial class <#= Name(tableItem) #> : DxfSymbolTableFlags
@@ -95,15 +95,15 @@ foreach (var table in tables)
 
         // properties
 <#
-	foreach (var property in properties)
-	{
-		var propertyType = Type(property);
-		if (AllowMultiples(property))
-			propertyType = string.Format("List<{0}>", propertyType);
+    foreach (var property in properties)
+    {
+        var propertyType = Type(property);
+        if (AllowMultiples(property))
+            propertyType = string.Format("List<{0}>", propertyType);
 #>
         public <#= propertyType #> <#= Name(property) #> { get; set; }
 <#
-	} // foreach (var property in properties)
+    } // foreach (var property in properties)
 
 #>
 
@@ -111,15 +111,15 @@ foreach (var table in tables)
             : base()
         {
 <#
-	foreach (var property in properties)
-	{
-		var defaultValue = DefaultValue(property);
-		if (AllowMultiples(property))
-			defaultValue = string.Format("new List<{0}>()", Type(property));
+    foreach (var property in properties)
+    {
+        var defaultValue = DefaultValue(property);
+        if (AllowMultiples(property))
+            defaultValue = string.Format("new List<{0}>()", Type(property));
 #>
             <#= Name(property) #> = <#= defaultValue #>;
 <#
-	} // foreach (var property in properties)
+    } // foreach (var property in properties)
 
 #>
         }
@@ -127,43 +127,43 @@ foreach (var table in tables)
         internal override void AddValuePairs(List<DxfCodePair> pairs)
         {
             pairs.Add(new DxfCodePair(100, AcDbText));
-			pairs.Add(new DxfCodePair(2, Name));
+            pairs.Add(new DxfCodePair(2, Name));
 <#
-	if (HasFlags(tableItem))
-	{
+    if (HasFlags(tableItem))
+    {
 #>
             pairs.Add(new DxfCodePair(70, (short)Flags));
 <#
-	} // has flags
+    } // has flags
     foreach (var property in properties)
-	{
-		if (AllowMultiples(property))
-		{
+    {
+        if (AllowMultiples(property))
+        {
 #>
             pairs.AddRange(<#= Name(property) #>.Select(value => new DxfCodePair(<#= Code(property) #>, value)));
 <#
-		}
-		else
-		{
-			var codeOverrides = CodeOverrides(property);
-			if (Code(property) < 0 && codeOverrides != null)
-			{
-				char prop = 'X';
-				for (int i = 0; i < codeOverrides.Length; i++, prop++)
-				{
+        }
+        else
+        {
+            var codeOverrides = CodeOverrides(property);
+            if (Code(property) < 0 && codeOverrides != null)
+            {
+                char prop = 'X';
+                for (int i = 0; i < codeOverrides.Length; i++, prop++)
+                {
 #>
             pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= Name(property) #>.<#= prop #>));
 <#
-				}
-			}
-			else
-			{
+                }
+            }
+            else
+            {
 #>
             pairs.Add(new DxfCodePair(<#= Code(property) #>, <#= WriteConverter(property) #>(<#= Name(property) #>)));
 <#
-			}
-		}
-	} // foreach (var property in properties)
+            }
+        }
+    } // foreach (var property in properties)
 #>
         }
 
@@ -185,54 +185,54 @@ foreach (var table in tables)
                         item.Name = pair.StringValue;
                         break;
 <#
-	if (HasFlags(tableItem))
-	{
+    if (HasFlags(tableItem))
+    {
 #>
                     case 70:
                         item.Flags = (int)pair.ShortValue;
                         break;
 <#
-	} // has flags
+    } // has flags
     foreach (var property in properties)
-	{
-		var codeOverrides = CodeOverrides(property);
-		if (Code(property) < 0 && codeOverrides != null)
-		{
-			char prop = 'X';
-			for (int i = 0; i < codeOverrides.Length; i++, prop++)
-			{
-				var codeType = DxfCodePair.ExpectedType(codeOverrides[i]);
-				var codeTypeValue = TypeToString(codeType);
+    {
+        var codeOverrides = CodeOverrides(property);
+        if (Code(property) < 0 && codeOverrides != null)
+        {
+            char prop = 'X';
+            for (int i = 0; i < codeOverrides.Length; i++, prop++)
+            {
+                var codeType = DxfCodePair.ExpectedType(codeOverrides[i]);
+                var codeTypeValue = TypeToString(codeType);
 #>
                     case <#= codeOverrides[i] #>:
                         item.<#= Name(property) #>.<#= prop #> = <#= ReadConverter(property) #>(pair.<#= codeTypeValue #>);
                         break;
 <#
-			}
-		}
-		else
-		{
-			var code = Code(property);
-			var codeType = DxfCodePair.ExpectedType(code);
-			var codeTypeValue = TypeToString(codeType);
-			if (AllowMultiples(property))
-			{
+            }
+        }
+        else
+        {
+            var code = Code(property);
+            var codeType = DxfCodePair.ExpectedType(code);
+            var codeTypeValue = TypeToString(codeType);
+            if (AllowMultiples(property))
+            {
 #>
                     case <#= Code(property) #>:
                         item.<#= Name(property) #>.Add(<#= ReadConverter(property) #>(pair.<#= codeTypeValue #>));
                         break;
 <#
-			}
-			else
-			{
+            }
+            else
+            {
 #>
                     case <#= Code(property) #>:
                         item.<#= Name(property) #> = <#= ReadConverter(property) #>(pair.<#= codeTypeValue #>);
                         break;
 <#
-			}
-		}
-	} // foreach (var property in properties)
+            }
+        }
+    } // foreach (var property in properties)
 #>
                 }
             }

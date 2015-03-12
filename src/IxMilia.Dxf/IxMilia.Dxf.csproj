@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup>
+    <Import Project="..\Targets\IxMilia.targets" />
+  </ImportGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C067E97D-3B96-462A-B09D-33FAD60DE761}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IxMilia.Dxf</RootNamespace>
+    <AssemblyName>IxMilia.Dxf</AssemblyName>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <DefineConstants>$(DefineConstants);DXF</DefineConstants>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <ItemGroup>
+    <Compile Include="DxfAcadVersion.cs" />
+    <Compile Include="DxfClass.cs" />
+    <Compile Include="DxfCodePair.cs" />
+    <Compile Include="DxfCodePair.ExpectedType.cs" />
+    <Compile Include="DxfCodePairBufferReader.cs" />
+    <Compile Include="DxfColor.cs" />
+    <Compile Include="DxfFile.cs" />
+    <Compile Include="DxfHelpers.cs" />
+    <Compile Include="DxfPoint.cs" />
+    <Compile Include="DxfReader.cs" />
+    <Compile Include="DxfReadException.cs" />
+    <Compile Include="DxfShadowMode.cs" />
+    <Compile Include="DxfWriter.cs" />
+    <Compile Include="Blocks\DxfBlock.cs" />
+    <Compile Include="Entities\DxfEntity.cs" />
+    <Compile Include="Entities\DxfEntityGenerated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sections\DxfBlocksSection.cs" />
+    <Compile Include="Sections\DxfClassesSection.cs" />
+    <Compile Include="Sections\DxfEntitiesSection.cs" />
+    <Compile Include="Sections\DxfHeader.cs" />
+    <Compile Include="Sections\DxfHeaderGenerated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DxfHeaderGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Sections\DxfHeaderSection.cs" />
+    <Compile Include="Sections\DxfSection.cs" />
+    <Compile Include="Sections\DxfSectionType.cs" />
+    <Compile Include="Sections\DxfTablesSection.cs" />
+    <Compile Include="Sections\DxfThumbnailImageSection.cs" />
+    <Compile Include="Tables\DxfSymbolTableFlags.cs" />
+    <Compile Include="Tables\DxfTable.cs" />
+    <Compile Include="Tables\DxfTableGenerated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DxfTableGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tables\DxfTableItems.cs" />
+    <Compile Include="Tables\DxfTableType.cs" />
+    <Compile Include="Tables\DxfViewMode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DxfCommon.t4" />
+    <None Include="Entities\DxfEntityGenerated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DxfEntityGenerated.cs</LastGenOutput>
+    </None>
+    <None Include="Entities\EntitiesSpec.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Entities\EntitiesSpec.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sections\HeaderVariablesSpec.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sections\HeaderVariablesSpec.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sections\DxfHeaderGenerated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DxfHeaderGenerated.cs</LastGenOutput>
+    </None>
+    <None Include="Tables\DxfTableGenerated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DxfTableGenerated.cs</LastGenOutput>
+    </None>
+    <None Include="Tables\TableSpec.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Tables\TableSpec.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>

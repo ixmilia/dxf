@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Tables xmlns="http://IxMilia.com/Dxf/TableSpec">
+  <Table Type="AppId" TypeString="AppIdText">
+    <TableItem Name="DxfAppId" ClassName="AcDbRegAppTableRecord">
+    </TableItem>
+  </Table>
+  <Table Type="BlockRecord" TypeString="BlockRecordText">
+    <TableItem Name="DxfBlockRecord" ClassName="AcDbBlockTableRecord" HasFlags="false">
+    </TableItem>
+  </Table>
+  <Table Type="DimStyle" TypeString="DimStyleText">
+    <TableItem Name="DxfDimStyle" ClassName="AcDbDimStyleTableRecord">
+      <Property Name="DimensioningSuffix" Code="3" Type="string" DefaultValue="null" />
+      <Property Name="AlternateDimensioningSuffix" Code="4" Type="string" DefaultValue="null" />
+      <Property Name="ArrowBlockName" Code="5" Type="string" DefaultValue="null" />
+      <Property Name="FirstArrowBlockname" Code="6" Type="string" DefaultValue="null" />
+      <Property Name="SecondArrowBlockName" Code="7" Type="string" DefaultValue="null" />
+      <Property Name="DimensioningScaleFactor" Code="40" Type="double" DefaultValue="1.0" />
+      <Property Name="DimensioningArrowSize" Code="41" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionExtensionLineOffset" Code="42" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionLineIncrement" Code="43" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionExtensionLineExtension" Code="44" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionDistanceRoundingValue" Code="45" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionLineExtension" Code="46" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionPlusTolerance" Code="47" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionMinusTolerance" Code="48" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensioningTextHeight" Code="140" Type="double" DefaultValue="0.0" />
+      <Property Name="CenterMarkSize" Code="141" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensioningTickSize" Code="142" Type="double" DefaultValue="0.0" />
+      <Property Name="AlternateDimensioningScaleFactor" Code="143" Type="double" DefaultValue="1.0" />
+      <Property Name="DimensionLinearMeasurementScaleFactor" Code="144" Type="double" DefaultValue="1.0" />
+      <Property Name="DimensionVerticalTextPosition" Code="145" Type="double" DefaultValue="0.0" />
+      <Property Name="DimensionToleranceDisplacScaleFactor" Code="146" Type="double" DefaultValue="1.0" />
+      <Property Name="DimensionLineGap" Code="147" Type="double" DefaultValue="0.0" />
+      <Property Name="GenerateDimensionTolerances" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="GenerateDimensionLimits" Code="72" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="DimensionTextInsideHorizontal" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="DimensionTextOutsideHorizontal" Code="74" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="SuppressFirstDimensionExtensionLine" Code="75" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="SuppressSecondDimensionExtensionLine" Code="76" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="TextAboveDimensionLine" Code="77" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="DimensionUnitZeroSuppression" Code="78" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
+      <Property Name="UseAlternateDimensioning" Code="170" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="AlternateDimensioningDecimalPlaces" Code="171" Type="short" DefaultValue="0" />
+      <Property Name="ForceDimensionLineExtensionsOutsideIfTextExists" Code="172" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="UseSeparateArrowBlocksForDimensions" Code="173" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="ForceDimensionTextInsideExtensions" Code="174" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="SuppressOutsideExtensionDimensionLines" Code="175" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+      <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+      <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+      <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" />
+      <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" />
+      <Property Name="DimensionToleranceDecimalPlaces" Code="272" Type="short" DefaultValue="0" />
+      <Property Name="AlternateDimensioningUnits" Code="273" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" />
+      <Property Name="AlternateDimensioningToleranceDecimalPlaces" Code="274" Type="short" DefaultValue="0" />
+      <Property Name="StyleHandle" Code="340" Type="string" DefaultValue="null" />
+      <Property Name="DimensioningAngleFormat" Code="275" Type="DxfAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" />
+      <Property Name="DimensionTextJustification" Code="280" Type="DxfDimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification)" WriteConverter="(short)" />
+      <Property Name="DimensionToleranceVerticalJustification" Code="283" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" />
+      <Property Name="DimensionToleranceZeroSuppression" Code="284" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
+      <Property Name="AlternateDimensioningZeroSupression" Code="285" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
+      <Property Name="AlternateDimensioningToleranceZeroSupression" Code="286" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
+      <Property Name="DimensionTextAndArrowPlacement" Code="287" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" />
+      <Property Name="DimensionCursorControlsTextPosition" Code="288" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+    </TableItem>
+  </Table>
+  <Table Type="Layer" TypeString="LayerText">
+    <TableItem Name="DxfLayer" ClassName="AcDbLayerTableRecord">
+      <Property Name="Color" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+      <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="null" />
+    </TableItem>
+  </Table>
+  <Table Type="LType" TypeString="LTypeText">
+    <TableItem Name="DxfLineType" ClassName="AcDbLinetypeTableRecord">
+      <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
+      <Property Name="AlignmentCode" Code="72" Type="int" DefaultValue="(int)'A'" ReadConverter="(int)" WriteConverter="(int)" />
+      <Property Name="ElementCount" Code="73" Type="int" DefaultValue="0" />
+      <Property Name="TotalPatternLength" Code="40" Type="double" DefaultValue="0.0" />
+      <Property Name="DashDotSpaceLengths" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="ComplexLinetypeElementTypes" Code="74" Type="short" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="ShapeNumbers" Code="75" Type="short" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="StylePointers" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="ScaleValues" Code="46" Type="double" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="RotationAngles" Code="50" Type="double" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="XOffsets" Code="44" Type="double" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="YOffsets" Code="45" Type="double" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="TextStrings" Code="9" Type="string" DefaultValue="null" AllowMultiples="true" />
+    </TableItem>
+  </Table>
+  <Table Type="Style" TypeString="StyleText">
+    <TableItem Name="DxfStyle" ClassName="AcDbTextStyleTableRecord">
+      <Property Name="TextHeight" Code="40" Type="double" DefaultValue="0.0" />
+      <Property Name="WidthFactor" Code="41" Type="double" DefaultValue="1.0" />
+      <Property Name="ObliqueAngle" Code="50" Type="double" DefaultValue="0.0" />
+      <Property Name="TextGenerationFlags" Code="71" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
+      <Property Name="LastHeightUsed" Code="42" Type="double" DefaultValue="0.0" />
+      <Property Name="PrimaryFontFileName" Code="3" Type="string" DefaultValue="null" />
+      <Property Name="BigFontFileName" Code="4" Type="string" DefaultValue="null" />
+    </TableItem>
+  </Table>
+  <Table Type="Ucs" TypeString="UcsText">
+    <TableItem Name="DxfUcs" ClassName="AcDbUCSTableRecord">
+      <Property Name="Origin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+      <Property Name="XAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
+      <Property Name="YAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="12,22,32" />
+    </TableItem>
+  </Table>
+  <Table Type="View" TypeString="ViewText">
+    <TableItem Name="DxfView" ClassName="AcDbViewTableRecord">
+      <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" />
+      <Property Name="ViewCenterPoint" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20" />
+      <Property Name="ViewWidth" Code="41" Type="double" DefaultValue="1.0" />
+      <Property Name="ViewDirection" Code="-3" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="11,21,31" />
+      <Property Name="TargetPoint" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
+      <Property Name="LensLength" Code="42" Type="double" DefaultValue="1.0" />
+      <Property Name="FrontClippingPlane" Code="43" Type="double" DefaultValue="0.0" />
+      <Property Name="BackClippingPlane" Code="44" Type="double" DefaultValue="1.0" />
+      <Property Name="TwistAngle" Code="50" Type="double" DefaultValue="0.0" />
+      <Property Name="ViewMode" Code="71" Type="short" DefaultValue="0" />
+    </TableItem>
+  </Table>
+  <Table Type="ViewPort" TypeString="ViewPortText">
+    <TableItem Name="DxfViewPort" ClassName="AcDbViewportTableRecord">
+      <Property Name="LowerLeft" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20" />
+      <Property Name="UpperRight" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21" />
+      <Property Name="ViewCenter" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22" />
+      <Property Name="SnapBasePoint" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23" />
+      <Property Name="SnapSpacing" Code="-2" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="14,24" />
+      <Property Name="GridSpacing" Code="-2" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="15,25" />
+      <Property Name="ViewDirection" Code="-3" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="16,26,36" />
+      <Property Name="TargetViewPoint" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="17,27,37" />
+      <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="0.0" />
+      <Property Name="ViewPortAspectRatio" Code="41" Type="double" DefaultValue="0.0" />
+      <Property Name="LensLength" Code="42" Type="double" DefaultValue="0.0" />
+      <Property Name="FrontClippingPlane" Code="43" Type="double" DefaultValue="0.0" />
+      <Property Name="BackClippingPlane" Code="44" Type="double" DefaultValue="0.0" />
+      <Property Name="SnapRotationAngle" Code="50" Type="double" DefaultValue="0.0" />
+      <Property Name="ViewTwistAngle" Code="51" Type="double" DefaultValue="0.0" />
+      <Property Name="ViewMode" Code="71" Type="DxfViewMode" DefaultValue="0" ReadConverter="(DxfViewMode)" WriteConverter="(short)" />
+      <Property Name="CircleZoomPercent" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
+      <Property Name="FastZoom" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="UCSIcon" Code="74" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="SnapOn" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="GridOn" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="SnapStyle" Code="77" Type="short" DefaultValue="0" />
+      <Property Name="SnapIsoPair" Code="78" Type="short" DefaultValue="0" />
+    </TableItem>
+  </Table>
+</Tables>

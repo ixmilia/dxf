@@ -1,0 +1,311 @@
+﻿<#@ include file="$(ProjectDir)\DxfCodePair.ExpectedType.cs" #>
+<#@ include file="$(ProjectDir)\DxfReadException.cs" #>
+<#+
+public string TypeToString(Type type)
+{
+    string expected;
+    if (type == typeof(string)) expected = "String";
+	else if (type == typeof(double)) expected = "Double";
+	else if (type == typeof(short)) expected = "Short";
+	else if (type == typeof(int)) expected = "Integer";
+	else if (type == typeof(long)) expected = "Long";
+	else if (type == typeof(bool)) expected = "Bool";
+	else throw new Exception("Unsupported code pair type");
+	// TODO: handle
+
+    return expected + "Value";
+}
+
+string SubclassMarker(XElement entity)
+{
+	var value = entity.Attribute("SubclassMarker").Value;
+	return value == "null" ? null : value;
+}
+
+string EntityType(XElement entity)
+{
+	return entity.Attribute("EntityType").Value;
+}
+
+string TypeString(XElement entity)
+{
+	return entity.Attribute("TypeString").Value;
+}
+
+string BaseClass(XElement entity)
+{
+	var att = entity.Attribute("BaseClass");
+	return att == null ? "DxfEntity" : att.Value;
+}
+
+bool DisableWritingDefault(XElement property)
+{
+	var att = property.Attribute("DisableWritingDefault");
+	return att != null && bool.Parse(att.Value);
+}
+
+string Type(XElement property)
+{
+	return property.Attribute("Type").Value;
+}
+
+string ReadConverter(XElement property)
+{
+	var att = property.Attribute("ReadConverter");
+	return att == null ? string.Empty : att.Value;
+}
+
+string WriteConverter(XElement property)
+{
+	var att = property.Attribute("WriteConverter");
+	return att == null ? string.Empty : att.Value;
+}
+
+string Name(XElement property)
+{
+	return property.Attribute("Name").Value;
+}
+
+int Code(XElement property)
+{
+	return int.Parse(property.Attribute("Code").Value);
+}
+
+string Property(XElement flag)
+{
+	return flag.Attribute("Property").Value;
+}
+
+IEnumerable<XElement> GetProperties(XElement entity)
+{
+	return entity.Elements(XName.Get("Property", entity.Name.NamespaceName));
+}
+
+int Mask(XElement flag)
+{
+	return int.Parse(flag.Attribute("Mask").Value);
+}
+
+int[] GetCodeOverrides(XElement property)
+{
+	var codesAtt = property.Attribute("CodeOverrides");
+	return codesAtt == null ? null : codesAtt.Value.Split(',').Select(c => int.Parse(c)).ToArray();
+}
+
+string DefaultValue(XElement property)
+{
+	var value = property.Attribute("DefaultValue").Value;
+	if (property.Attribute("Type").Value == "string" && value != "null")
+	{
+		value = string.Format("\"{0}\"", value);
+	}
+
+	return value;
+}
+
+bool AllowMultiples(XElement property)
+{
+	var att = property.Attribute("AllowMultiples");
+	return att != null && bool.Parse(att.Value);
+}
+
+bool ProtectedSet(XElement property)
+{
+	var att = property.Attribute("ProtectedSet");
+	return att == null ? false : bool.Parse(att.Value);
+}
+
+string Accessibility(XElement property)
+{
+	var att = property.Attribute("Accessibility");
+	return att == null ? "public" : att.Value;
+}
+
+List<string> GetWriteCommands(XElement entity)
+{
+	var att = entity.Element(XName.Get("WriteOrder", entity.Name.NamespaceName));
+	var lines = new List<string>();
+	if (att == null)
+	{
+		// default order
+		if (!string.IsNullOrEmpty(SubclassMarker(entity)))
+			lines.Add(string.Format("pairs.Add(new DxfCodePair(100, \"{0}\"));", SubclassMarker(entity)));
+		foreach (var property in GetProperties(entity))
+		{
+			lines.AddRange(GetPropertyWriteLines(property));
+		}
+	}
+	else
+	{
+		// specific order
+		foreach (var spec in att.Elements())
+		{
+			lines.AddRange(WriteValue(spec, entity));
+		}
+	}
+
+	return lines;
+}
+
+IEnumerable<string> WriteValue(XElement spec, XElement entity)
+{
+	switch (spec.Name.LocalName)
+	{
+		case "WriteSpecificValue":
+			return new[] { WriteSpecificValue(spec) };
+		case "WriteProperty":
+			return WriteProperty(spec, entity);
+		case "Foreach":
+			var lines = new List<string>();
+			lines.Add(string.Format("foreach (var item in {0})", spec.Attribute("Property").Value));
+			lines.Add("{");
+			lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => "    " + l));
+			lines.Add("}");
+			lines.Add("\n");
+			return lines;
+		default:
+			throw new NotSupportedException();
+	}
+}
+
+string WriteSpecificValue(XElement spec)
+{
+	var code = Code(spec);
+	var codeType = DxfCodePair.ExpectedType(code);
+	var value = spec.Attribute("Value").Value;
+	var useQuotes = codeType == typeof(string) && value != "null";
+	var writeValue = useQuotes
+		? string.Format("\"{0}\"", value)
+		: value;
+
+	var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, writeValue);
+	var defaultValue = spec.Attribute("DontWriteIfValueIs");
+	if (defaultValue != null)
+	{
+		line = string.Format("if ({0} != {1}) {{ {2} }}", value, defaultValue.Value, line);
+	}
+
+	return line;
+}
+
+IEnumerable<string> WriteProperty(XElement spec, XElement entity)
+{
+	var property = GetProperties(entity).Single(p => Name(p) == spec.Attribute("Property").Value);
+	return GetPropertyWriteLines(property);
+}
+
+string CopyConstructor(XElement entity)
+{
+	var att = entity.Attribute("CopyConstructor");
+	return att == null || att.Value == "None" ? null : CamlCase(att.Value);
+}
+
+string DefaultConstructor(XElement entity)
+{
+	var att = entity.Attribute("DefaultConstructor");
+	if (att == null)
+		return "public";
+	return att == null || att.Value == "None" ? null : CamlCase(att.Value);
+}
+
+string Tag(XElement entity)
+{
+	var att = entity.Attribute("Tag");
+	return att == null ? null : att.Value;
+}
+
+string MinVersion(XElement property)
+{
+	var att = property.Attribute("MinVersion");
+	return att == null ? null : att.Value;
+}
+
+string MaxVersion(XElement property)
+{
+	var att = property.Attribute("MaxVersion");
+	return att == null ? null : att.Value;
+}
+
+IEnumerable<string> GetPropertyWriteLines(XElement property)
+{
+	var lines = new List<string>();
+	var code = Code(property);
+	var codes = GetCodeOverrides(property);
+	var name = Name(property);
+	var minVersion = MinVersion(property);
+	var maxVersion = MaxVersion(property);
+	var writePredicates = new List<string>();
+	if (minVersion != null)
+		writePredicates.Add(string.Format("version >= DxfAcadVersion.{0}", minVersion));
+	if (maxVersion != null)
+		writePredicates.Add(string.Format("version <= DxfAcadVersion.{0}", maxVersion));
+
+	if (DisableWritingDefault(property))
+		writePredicates.Add(string.Format("this.{0} != {1}", name, DefaultValue(property)));
+
+	string indentPrefix = string.Empty;
+	if (writePredicates.Any())
+	{
+		lines.Add(string.Format("if ({0})", string.Join(" && ", writePredicates)));
+		lines.Add("{");
+		indentPrefix = "    ";
+	}
+
+	if (codes != null)
+	{
+		var suffix = 'X';
+		for (int i = 0; i < codes.Length; i++, suffix++)
+		{
+			lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}.{3}));", indentPrefix, codes[i], name, suffix));
+		}
+	}
+	else
+	{
+		if (AllowMultiples(property))
+		{
+			lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, p)));", indentPrefix, name, code));
+		}
+		else
+		{
+			lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}(this.{3})));", indentPrefix, code, WriteConverter(property), name));
+		}
+	}
+
+	if (writePredicates.Any())
+	{
+		lines.Add("}");
+		lines.Add(string.Empty);
+	}
+
+	return lines;
+}
+
+string CamlCase(string value)
+{
+	return char.ToLower(value[0]) + value.Substring(1);
+}
+
+bool HasFlags(XElement xml)
+{
+	return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true"));
+}
+
+string ClassName(XElement xml)
+{
+	return AttributeOrDefault(xml, "ClassName");
+}
+
+int[] CodeOverrides(XElement xml)
+{
+	var text = AttributeOrDefault(xml, "CodeOverrides");
+	if (text == null)
+		return null;
+	return text.Split(",".ToCharArray()).Select(i => int.Parse(i)).ToArray();
+}
+
+string AttributeOrDefault(XElement xml, string attributeName, string defaultValue = null)
+{
+	var att = xml.Attribute(attributeName);
+	return att == null ? defaultValue : att.Value;
+}
+#>

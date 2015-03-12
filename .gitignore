@@ -1,0 +1,11 @@
+# ignore VS
+*.suo
+[Bb]inaries/
+[Bb]in/
+[Dd]ebug/
+[Oo]bj/
+[Rr]elease/
+*.ide
+/packages
+*.user
+/.vs

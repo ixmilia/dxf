@@ -1,0 +1,19 @@
+<Project
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+  DefaultTargets="Build"
+  ToolsVersion="12.0">
+
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+    <ProjectFile>$(MSBuildThisFileDirectory)\IxMilia.Dxf\IxMilia.Dxf.csproj</ProjectFile>
+  </PropertyGroup>
+
+  <Target Name="Build">
+    <MSBuild BuildInParallel="true"
+             Projects="$(MSBuildThisFileDirectory)\..\BuildAndTest.proj"
+             Properties="TreatWarningsAsErrors=true;Configuration=$(Configuration)"
+             Targets="BuildAndTest" />
+    <Exec Command="$(MSBuildThisFileDirectory)\.nuget\NuGet.exe pack $(ProjectFile) -Prop Configuration=$(Configuration) -OutputDirectory $(MSBuildThisFileDirectory)\Binaries\$(Configuration) -Symbols" />
+  </Target>
+
+</Project>

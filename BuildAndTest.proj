@@ -1,0 +1,60 @@
+<Project
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+  DefaultTargets="BuildAndTest"
+  ToolsVersion="12.0">
+
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <DxfSolution>$(MSBuildThisFileDirectory)\src\IxMilia.Dxf.sln</DxfSolution>
+    <TestAssembly>$(MSBuildThisFileDirectory)\src\Binaries\$(Configuration)\IxMilia.Dxf.Test.dll</TestAssembly>
+    <NuGetExe>$(MSBuildThisFileDirectory)\src\.nuget\NuGet.exe</NuGetExe>
+  </PropertyGroup>
+
+  <UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Url ParameterType="System.String" Required="true" />
+      <Destination ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+          new System.Net.WebClient().DownloadFile(Url, Destination);
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="RestorePackages">
+    <DownloadFile Url="https://www.nuget.org/nuget.exe" Destination="$(NuGetExe)" />
+    <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(DxfSolution)&quot;" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="RestorePackages">
+    <MSBuild BuildInParallel="true"
+             Projects="$(DxfSolution)"
+             Properties="TreatWarningsAsErrors=true"
+             Targets="Build" />
+  </Target>
+
+  <Target Name="Clean">
+    <MSBuild BuildInParallel="true"
+             Projects="$(DxfSolution)"
+             Targets="Clean" />
+  </Target>
+
+  <Target Name="Rebuild">
+    <MSBuild BuildInParallel="true"
+             Projects="$(DxfSolution)"
+             Properties="TreatWarningsAsErrors=true"
+             Targets="Rebuild" />
+  </Target>
+
+  <Target Name="Test">
+    <Exec Command="$(MSBuildThisFileDirectory)\src\packages\xunit.runners.1.9.2\tools\xunit.console.clr4.exe $(TestAssembly)" />
+  </Target>
+
+  <Target Name="BuildAndTest"
+          DependsOnTargets="Build;Test" />
+
+</Project>

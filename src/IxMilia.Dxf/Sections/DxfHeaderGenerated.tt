@@ -31,9 +31,9 @@ namespace IxMilia.Dxf
 
 var seenProperties = new HashSet<string>();
 foreach (var property in variables) {
-	var propertyName = property.Attribute("Property").Value;
+    var propertyName = property.Attribute("Property").Value;
     if (!seenProperties.Contains(propertyName)) {
-		seenProperties.Add(propertyName); // don't write duplicate properties
+        seenProperties.Add(propertyName); // don't write duplicate properties
 #>
 
         /// <summary>
@@ -41,11 +41,11 @@ foreach (var property in variables) {
         /// </summary>
         public <#= property.Attribute("Type").Value #> <#= property.Attribute("Property").Value #> { get; set; }
 <#
-	} // if
-	else
-	{
-		this.Warning("Duplicate property found: " + propertyName);
-	} // else
+    } // if
+    else
+    {
+        this.Warning("Duplicate property found: " + propertyName);
+    } // else
 } // foreach
 #>
 
@@ -53,17 +53,17 @@ foreach (var property in variables) {
         private void SetDefaults()
         {
 <# foreach (var property in variables) {
-	var defaultValue = property.Attribute("DefaultValue").Value;
-	if (property.Attribute("Type").Value == "string" && defaultValue != "null" && (!defaultValue.StartsWith("\"") && !defaultValue.EndsWith("\"")))
-	{
-		defaultValue = string.Format("\"{0}\"", defaultValue);
-	}
-	else if (property.Attribute("Type").Value == "char" && defaultValue.Length == 1)
-	{
-		if (defaultValue == "\"")
-			defaultValue = "\\\"";
-		defaultValue = string.Format("'{0}'", defaultValue);
-	}
+    var defaultValue = property.Attribute("DefaultValue").Value;
+    if (property.Attribute("Type").Value == "string" && defaultValue != "null" && (!defaultValue.StartsWith("\"") && !defaultValue.EndsWith("\"")))
+    {
+        defaultValue = string.Format("\"{0}\"", defaultValue);
+    }
+    else if (property.Attribute("Type").Value == "char" && defaultValue.Length == 1)
+    {
+        if (defaultValue == "\"")
+            defaultValue = "\\\"";
+        defaultValue = string.Format("'{0}'", defaultValue);
+    }
 #>
             this.<#= property.Attribute("Property").Value #> = <#= defaultValue #>; // <#= property.Attribute("Name").Value #>
 <# } #>
@@ -74,29 +74,29 @@ foreach (var property in variables) {
         {
 <# foreach (var property in variables) {
     var converterAtt = property.Attribute("WriteConverter");
-	var converter = converterAtt == null ? string.Empty : converterAtt.Value;
-	var type = property.Attribute("Type").Value;
-	var minVersionAtt = property.Attribute("MinVersion");
-	var maxVersionAtt = property.Attribute("MaxVersion");
-	var minVersion = minVersionAtt == null ? "Min" : minVersionAtt.Value;
-	var maxVersion = maxVersionAtt == null ? "Max" : maxVersionAtt.Value;
-	var usingIf = minVersionAtt != null || maxVersionAtt != null;
+    var converter = converterAtt == null ? string.Empty : converterAtt.Value;
+    var type = property.Attribute("Type").Value;
+    var minVersionAtt = property.Attribute("MinVersion");
+    var maxVersionAtt = property.Attribute("MaxVersion");
+    var minVersion = minVersionAtt == null ? "Min" : minVersionAtt.Value;
+    var maxVersion = maxVersionAtt == null ? "Max" : maxVersionAtt.Value;
+    var usingIf = minVersionAtt != null || maxVersionAtt != null;
 #>
             // <#= property.Attribute("Name").Value #>
 <#
     if (usingIf) {
-		var minIfText = "version >= DxfAcadVersion." + minVersion;
-		var maxIfText = "version <= DxfAcadVersion." + maxVersion;
-		string allIfText;
-		if (minVersionAtt != null && maxVersionAtt != null) {
-			allIfText = minIfText + " && " + maxIfText;
-		}
-		else if (minVersionAtt != null) {
-			allIfText = minIfText;
-		}
-		else {
-			allIfText = maxIfText;
-		}
+        var minIfText = "version >= DxfAcadVersion." + minVersion;
+        var maxIfText = "version <= DxfAcadVersion." + maxVersion;
+        string allIfText;
+        if (minVersionAtt != null && maxVersionAtt != null) {
+            allIfText = minIfText + " && " + maxIfText;
+        }
+        else if (minVersionAtt != null) {
+            allIfText = minIfText;
+        }
+        else {
+            allIfText = maxIfText;
+        }
 #>
             if (<#= allIfText #>)
             {
@@ -105,27 +105,27 @@ foreach (var property in variables) {
 #>
 <# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(9, <#= property.Attribute("Name").Value #>));
 <#
-	if (type == "DxfPoint" || type == "DxfVector")
-	{
-		var prop = property.Attribute("Property").Value;
+    if (type == "DxfPoint" || type == "DxfVector")
+    {
+        var prop = property.Attribute("Property").Value;
 #>
 <# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(10, header.<#= prop #>.X));
 <# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(20, header.<#= prop #>.Y));
 <#
-		if (Math.Abs(int.Parse(property.Attribute("Code").Value)) >= 3)
-		{
+        if (Math.Abs(int.Parse(property.Attribute("Code").Value)) >= 3)
+        {
 #>
 <# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(30, header.<#= prop #>.Z));
 <#
-		}
-	}
-	else
-	{
+        }
+    }
+    else
+    {
 #>
 <# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(<#= property.Attribute("Code").Value #>, <#= converter #>(header.<#= property.Attribute("Property").Value #>)));
 <#
-	} // if
-	if (usingIf) {
+    } // if
+    if (usingIf) {
 #>
             }
 <#
@@ -140,34 +140,34 @@ foreach (var property in variables) {
         // setter method
         internal static void SetHeaderVariable(string keyName, DxfCodePair pair, DxfHeader header)
         {
-		    switch (keyName)
+            switch (keyName)
             {
 <# foreach (var property in variables) {
     var converterAtt = property.Attribute("ReadConverter");
-	var converter = converterAtt == null ? string.Empty : converterAtt.Value;
+    var converter = converterAtt == null ? string.Empty : converterAtt.Value;
 #>
                 case <#= property.Attribute("Name").Value #>:
 <#
-	var type = property.Attribute("Type").Value;
-	var prop = property.Attribute("Property").Value;
-	if (type == "DxfPoint" || type == "DxfVector")
-	{
+    var type = property.Attribute("Type").Value;
+    var prop = property.Attribute("Property").Value;
+    if (type == "DxfPoint" || type == "DxfVector")
+    {
 #>
                     SetPoint(pair, header.<#= prop #>);
                     break;
 <#
-	}
-	else
-	{
-		var code = int.Parse(property.Attribute("Code").Value);
-		var codeType = DxfCodePair.ExpectedType(code);
-		var codeTypeValue = TypeToString(codeType);
+    }
+    else
+    {
+        var code = int.Parse(property.Attribute("Code").Value);
+        var codeType = DxfCodePair.ExpectedType(code);
+        var codeTypeValue = TypeToString(codeType);
 #>
                     EnsureCode(pair, <#= code #>);
                     header.<#= prop #> = <#= converter #>(pair.<#= codeTypeValue #>);
                     break;
 <#
-	} // if
+    } // if
 } // foreach
 #>
                 default:
@@ -177,12 +177,12 @@ foreach (var property in variables) {
         }
 
 <# foreach (var property in variables) {
-	var flags = property.Elements(flagElement);
-	if (flags.Any()) {
+    var flags = property.Elements(flagElement);
+    if (flags.Any()) {
 #>
         // <#= property.Attribute("Name").Value #> flags
 <#
-		foreach (var flag in flags) {
+        foreach (var flag in flags) {
 #>
         public bool <#= flag.Attribute("Name").Value #>
         {
@@ -196,8 +196,8 @@ foreach (var property in variables) {
         }
 
 <#
-		} // foreach
-	} // if
+        } // foreach
+    } // if
 } // foreach
 #>
 

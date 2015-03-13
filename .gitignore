@@ -6,6 +6,7 @@
 [Oo]bj/
 [Rr]elease/
 *.ide
-/packages
+packages/
 *.user
-/.vs
+.vs/
+NuGet.exe

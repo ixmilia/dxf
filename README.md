@@ -1,25 +1,50 @@
 ﻿IxMilia.Dxf
 ===========
 
-A portable .NET library for reading and writing DXF files.
+A portable .NET library for reading and writing DXF files.  Clone and build
+locally or directly consume the
+[NuGet package](http://www.nuget.org/packages/IxMilia.Dxf/).
 
 ### Usage
 
 Open a DXF file:
 
 ``` C#
+using System.IO;
 using IxMilia.Dxf;
+using IxMilia.Dxf.Entities;
 // ...
 DxfFile dxfFile;
 using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
 {
     dxfFile = DxfFile.Load(fs);
 }
+
+foreach (DxfEntity entity in dxfFile.Entities)
+{
+    switch (entity.EntityType)
+    {
+        case DxfEntityType.Line:
+            DxfLine line = (DxfLine)entity;
+            // ...
+            break;
+        // ...
+    }
+}
 ```
 
 Save a DXF file:
 
 ``` C#
+using System.IO;
+using IxMilia.Dxf;
+using IxMilia.Dxf.Entities;
+// ...
+
+DxfFile dxfFile = new DxfFile();
+dxfFile.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(50, 50, 0)));
+// ...
+
 using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
 {
     dxfFile.Save(fs);

@@ -67,5 +67,4 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
 
 ### DXF reference
 
-http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853 (use archive.org, May 9, 2013)
-http://www.autodesk.com/techpubs/autocad/acad2000/dxf/
+See `spec/DXF Specification.md` for links to the full Autodesk DXF specification.

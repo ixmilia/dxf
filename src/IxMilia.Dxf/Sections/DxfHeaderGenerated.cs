@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace IxMilia.Dxf
 {
@@ -1362,7 +1363,6 @@ namespace IxMilia.Dxf
             this.CurrentMultilineScale = 1.0; // CMLSCALE
             this.CurrentMultilineStyle = null; // CMLSTYLE
             this.CoordinateDisplay = DxfCoordinateDisplay.Static; // COORDS
-            this.NewObjectPlotStyleHandle = null; // CPSNID
             this.ShadowMode = DxfShadowMode.CastsAndReceivesShadows; // CSHADOW
             this.RetainDeletedObjects = false; // DELOBJ
             this.AngularDimensionPrecision = 12; // DIMADEC
@@ -1395,7 +1395,6 @@ namespace IxMilia.Dxf
             this.DimensionExtensionLineExtension = 0.0; // DIMEXE
             this.DimensionExtensionLineOffset = 0.0; // DIMEXO
             this.DimensionTextHeightScaleFactor = 1.0; // DIMFAC
-            this.DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines; // DIMFIT
             this.DimensionLineGap = 0.0; // DIMGAP
             this.DimensionTextJustification = DxfDimensionTextJustification.AboveLineCenter; // DIMJUST
             this.DimensionLeaderBlockName = null; // DIMLDRBLK
@@ -1427,7 +1426,6 @@ namespace IxMilia.Dxf
             this.DimensionVerticalTextPosition = 0.0; // DIMTVP
             this.DimensionTextStyle = null; // DIMTXSTY
             this.DimensioningTextHeight = 10.0; // DIMTXT
-            this.DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMTZIN
             this.DimensionUnitFormat = DxfUnitFormat.Scientific; // DIMUNIT
             this.DimensionCursorControlsTextPosition = true; // DIMUPT
             this.DimensionUnitZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMZIN
@@ -1566,8 +1564,11 @@ namespace IxMilia.Dxf
         internal static void AddValueToList(List<DxfCodePair> list, DxfHeader header, DxfAcadVersion version)
         {
             // ACADMAINTVER
-            list.Add(new DxfCodePair(9, ACADMAINTVER));
-            list.Add(new DxfCodePair(70, (header.MaintenenceVersion)));
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, ACADMAINTVER));
+                list.Add(new DxfCodePair(70, (header.MaintenenceVersion)));
+            }
 
             // ACADVER
             list.Add(new DxfCodePair(9, ACADVER));
@@ -1656,12 +1657,18 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(40, (header.SecondChamferDistance)));
 
             // CHAMFERC
-            list.Add(new DxfCodePair(9, CHAMFERC));
-            list.Add(new DxfCodePair(40, (header.ChamferLength)));
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, CHAMFERC));
+                list.Add(new DxfCodePair(40, (header.ChamferLength)));
+            }
 
             // CHAMFERD
-            list.Add(new DxfCodePair(9, CHAMFERD));
-            list.Add(new DxfCodePair(40, (header.ChamferAngle)));
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, CHAMFERD));
+                list.Add(new DxfCodePair(40, (header.ChamferAngle)));
+            }
 
             // CLAYER
             list.Add(new DxfCodePair(9, CLAYER));
@@ -1676,8 +1683,18 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(40, (header.CurrentMultilineScale)));
 
             // CMLSTYLE
-            list.Add(new DxfCodePair(9, CMLSTYLE));
-            list.Add(new DxfCodePair(2, (header.CurrentMultilineStyle)));
+            if (version <= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(9, CMLSTYLE));
+                list.Add(new DxfCodePair(7, (header.CurrentMultilineStyle)));
+            }
+
+            // CMLSTYLE
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, CMLSTYLE));
+                list.Add(new DxfCodePair(2, (header.CurrentMultilineStyle)));
+            }
 
             // COORDS
             if (version <= DxfAcadVersion.R14)
@@ -1687,7 +1704,7 @@ namespace IxMilia.Dxf
             }
 
             // CPSNID
-            if (version >= DxfAcadVersion.R2000 && version <= DxfAcadVersion.R2000)
+            if (version == DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, CPSNID));
                 list.Add(new DxfCodePair(390, (header.NewObjectPlotStyleHandle)));
@@ -1787,8 +1804,18 @@ namespace IxMilia.Dxf
             }
 
             // DIMBLK
-            list.Add(new DxfCodePair(9, DIMBLK));
-            list.Add(new DxfCodePair(1, (header.ArrowBlockName)));
+            if (version <= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(9, DIMBLK));
+                list.Add(new DxfCodePair(2, (header.ArrowBlockName)));
+            }
+
+            // DIMBLK
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, DIMBLK));
+                list.Add(new DxfCodePair(1, (header.ArrowBlockName)));
+            }
 
             // DIMBLK1
             list.Add(new DxfCodePair(9, DIMBLK1));
@@ -2082,7 +2109,7 @@ namespace IxMilia.Dxf
             }
 
             // HANDLING
-            if (version <= DxfAcadVersion.R14)
+            if (version == DxfAcadVersion.R14)
             {
                 list.Add(new DxfCodePair(9, HANDLING));
                 list.Add(new DxfCodePair(70, (short)(header.NextAvailableHandle)));
@@ -2206,8 +2233,11 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(70, (header.MaximumActiveViewports)));
 
             // MEASUREMENT
-            list.Add(new DxfCodePair(9, MEASUREMENT));
-            list.Add(new DxfCodePair(70, (short)(header.DrawingUnits)));
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, MEASUREMENT));
+                list.Add(new DxfCodePair(70, (short)(header.DrawingUnits)));
+            }
 
             // MENU
             list.Add(new DxfCodePair(9, MENU));
@@ -2309,8 +2339,11 @@ namespace IxMilia.Dxf
             }
 
             // PROXYGRAPHICS
-            list.Add(new DxfCodePair(9, PROXYGRAPHICS));
-            list.Add(new DxfCodePair(70, BoolShort(header.SaveProxyGraphics)));
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, PROXYGRAPHICS));
+                list.Add(new DxfCodePair(70, BoolShort(header.SaveProxyGraphics)));
+            }
 
             // PSLTSCALE
             list.Add(new DxfCodePair(9, PSLTSCALE));
@@ -2828,8 +2861,18 @@ namespace IxMilia.Dxf
                     header.CurrentMultilineScale = (pair.DoubleValue);
                     break;
                 case CMLSTYLE:
-                    EnsureCode(pair, 2);
-                    header.CurrentMultilineStyle = (pair.StringValue);
+                    switch (pair.Code)
+                    {
+                        case 7:
+                            header.CurrentMultilineStyle = (pair.StringValue);
+                            break;
+                        case 2:
+                            header.CurrentMultilineStyle = (pair.StringValue);
+                            break;
+                        default:
+                            Debug.Assert(false, string.Format("Expected code [7, 2], got {0}", pair.Code));
+                            break;
+                    }
                     break;
                 case COORDS:
                     EnsureCode(pair, 70);
@@ -2912,8 +2955,18 @@ namespace IxMilia.Dxf
                     header.DimensionToleranceZeroSuppression = (DxfUnitZeroSuppression)(pair.ShortValue);
                     break;
                 case DIMBLK:
-                    EnsureCode(pair, 1);
-                    header.ArrowBlockName = (pair.StringValue);
+                    switch (pair.Code)
+                    {
+                        case 2:
+                            header.ArrowBlockName = (pair.StringValue);
+                            break;
+                        case 1:
+                            header.ArrowBlockName = (pair.StringValue);
+                            break;
+                        default:
+                            Debug.Assert(false, string.Format("Expected code [2, 1], got {0}", pair.Code));
+                            break;
+                    }
                     break;
                 case DIMBLK1:
                     EnsureCode(pair, 1);

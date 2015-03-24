@@ -53,11 +53,11 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
 
 ### Status
 
-- HEADER section - complete through R2014
-- CLASSES section - complete through R2014
-- TABLES section - complete through R14
-- BLOCKS section - complete through R14
-- ENTITIES section - common complete through R2014, entities complete through R2000, DIMENSION complete through R2014
+- HEADER section - complete R13 through R2014
+- CLASSES section - complete R14 through R2014
+- TABLES section - complete R14 through R14
+- BLOCKS section - complete R14 through R14
+- ENTITIES section - common complete R13 through R2014, entities complete R13 through R2000, DIMENSION complete R13 through R2014
 - OBJECTS section - NYI
 
 ### TODO

@@ -668,6 +668,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfProxyEntity : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.ProxyEntity; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         public int ProxyEntityClassId { get; set; }
         public int ApplicationEntityClassId { get; set; }
@@ -2628,6 +2629,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfImage : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Image; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         public int ClassVersion { get; set; }
         public DxfPoint Location { get; set; }
@@ -3081,9 +3083,13 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(212, BlockOffset.X));
             pairs.Add(new DxfCodePair(222, BlockOffset.Y));
             pairs.Add(new DxfCodePair(232, BlockOffset.Z));
-            pairs.Add(new DxfCodePair(213, AnnotationOffset.X));
-            pairs.Add(new DxfCodePair(223, AnnotationOffset.Y));
-            pairs.Add(new DxfCodePair(233, AnnotationOffset.Z));
+            if (version >= DxfAcadVersion.R14)
+            {
+                pairs.Add(new DxfCodePair(213, AnnotationOffset.X));
+                pairs.Add(new DxfCodePair(223, AnnotationOffset.Y));
+                pairs.Add(new DxfCodePair(233, AnnotationOffset.Z));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -3284,6 +3290,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfLwPolyline : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.LwPolyline; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         public int VertexCount { get; set; }
         public int Flags { get; set; }
@@ -3367,9 +3374,18 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(10, item.Location.X));
                 pairs.Add(new DxfCodePair(20, item.Location.Y));
-                if (item.StartingWidth != 0.0) { pairs.Add(new DxfCodePair(40, item.StartingWidth)); }
-                if (item.EndingWidth != 0.0) { pairs.Add(new DxfCodePair(41, item.EndingWidth)); }
-                if (item.Bulge != 0.0) { pairs.Add(new DxfCodePair(42, item.Bulge)); }
+                if (item.StartingWidth != 0.0)
+                {
+                    pairs.Add(new DxfCodePair(40, item.StartingWidth));
+                }
+                if (item.EndingWidth != 0.0)
+                {
+                    pairs.Add(new DxfCodePair(41, item.EndingWidth));
+                }
+                if (item.Bulge != 0.0)
+                {
+                    pairs.Add(new DxfCodePair(42, item.Bulge));
+                }
             }
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
@@ -3497,6 +3513,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfOle2Frame : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Ole2Frame; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         public int VersionNumber { get; set; }
         public string Description { get; set; }
@@ -3700,6 +3717,7 @@ namespace IxMilia.Dxf.Entities
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Polyline; } }
 
+        public bool ContainsVertices { get; set; }
         public DxfPoint Location { get; set; }
         public double Thickness { get; set; }
         public int Flags { get; set; }
@@ -3810,6 +3828,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
+            this.ContainsVertices = true;
             this.Location = DxfPoint.Origin;
             this.Thickness = 0.0;
             this.Flags = 0;
@@ -3827,6 +3846,11 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version);
             pairs.Add(new DxfCodePair(100, "AcDb2dPolyline"));
+            if (version <= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(66, BoolShort(this.ContainsVertices)));
+            }
+
             pairs.Add(new DxfCodePair(10, Location.X));
             pairs.Add(new DxfCodePair(20, Location.Y));
             pairs.Add(new DxfCodePair(30, Location.Z));
@@ -3905,6 +3929,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 41:
                     this.DefaultEndingWidth = (pair.DoubleValue);
+                    break;
+                case 66:
+                    this.ContainsVertices = BoolShort(pair.ShortValue);
                     break;
                 case 70:
                     this.Flags = (int)(pair.ShortValue);

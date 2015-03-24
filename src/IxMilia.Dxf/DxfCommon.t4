@@ -153,7 +153,7 @@ IEnumerable<string> WriteValue(XElement spec, XElement entity)
     switch (spec.Name.LocalName)
     {
         case "WriteSpecificValue":
-            return new[] { WriteSpecificValue(spec) };
+            return WriteSpecificValue(spec);
         case "WriteProperty":
             return WriteProperty(spec, entity);
         case "Foreach":
@@ -169,7 +169,7 @@ IEnumerable<string> WriteValue(XElement spec, XElement entity)
     }
 }
 
-string WriteSpecificValue(XElement spec)
+IEnumerable<string> WriteSpecificValue(XElement spec)
 {
     var code = Code(spec);
     var codeType = DxfCodePair.ExpectedType(code);
@@ -180,13 +180,45 @@ string WriteSpecificValue(XElement spec)
         : value;
 
     var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, writeValue);
+    var minVersion = MinVersion(spec);
+    var maxVersion = MaxVersion(spec);
     var defaultValue = spec.Attribute("DontWriteIfValueIs");
-    if (defaultValue != null)
+    var predicate = new List<string>();
+    if (minVersion != null || maxVersion != null)
     {
-        line = string.Format("if ({0} != {1}) {{ {2} }}", value, defaultValue.Value, line);
+        if (minVersion == maxVersion)
+        {
+            predicate.Add("version == DxfAcadVersion." + minVersion);
+        }
+        else
+        {
+            if (minVersion != null)
+            {
+                predicate.Add("version >= DxfAcadVersion." + minVersion);
+            }
+            if (maxVersion != null)
+            {
+                predicate.Add("version <= DxfAcadVersion." + maxVersion);
+            }
+        }
     }
 
-    return line;
+    if (defaultValue != null)
+    {
+        predicate.Add(string.Format("{0} != {1}", value, defaultValue.Value));
+    }
+
+    if (predicate.Any())
+    {
+        yield return string.Format("if ({0})", string.Join(" && ", predicate));
+        yield return "{";
+        yield return "    " + line;
+        yield return "}";
+    }
+    else
+    {
+        yield return line;
+    }
 }
 
 IEnumerable<string> WriteProperty(XElement spec, XElement entity)

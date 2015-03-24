@@ -61,7 +61,7 @@
   ACAD_PROXY_ENTITY
   
   -->
-  <Entity Name="DxfProxyEntity" EntityType="ProxyEntity" SubclassMarker="AcDbProxyEntity" TypeString="ACAD_PROXY_ENTITY">
+  <Entity Name="DxfProxyEntity" EntityType="ProxyEntity" SubclassMarker="AcDbProxyEntity" TypeString="ACAD_PROXY_ENTITY" MinVersion="R14">
     <Property Name="ProxyEntityClassId" Code="90" Type="int" DefaultValue="498" />
     <Property Name="ApplicationEntityClassId" Code="91" Type="int" DefaultValue="500" />
     <Property Name="GraphicsDataSize" Code="92" Type="int" DefaultValue="0" />
@@ -353,13 +353,13 @@
   HATCH
   
   -->
-  <!-- TODO -->
+  <!-- TODO MinVersion="R14" -->
   <!--
   
   IMAGE
   
   -->
-  <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE">
+  <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE" MinVersion="R14">
     <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
     <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="UVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
@@ -445,7 +445,7 @@
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
     <Property Name="Right" Code="211" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="211,221,231" />
     <Property Name="BlockOffset" Code="212" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="212,222,232" />
-    <Property Name="AnnotationOffset" Code="213" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="213,223,233" />
+    <Property Name="AnnotationOffset" Code="213" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="213,223,233" MinVersion="R14" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="AcDbLeader" />
       <WriteProperty Property="DimensionStyleName" />
@@ -490,7 +490,7 @@
   LWPOLYLINE
   
   -->
-  <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE">
+  <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE" MinVersion="R14">
     <Property Name="VertexCount" Code="90" Type="int" DefaultValue="0" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
       <Flag Name="IsClosed" Mask="1" />
@@ -558,7 +558,7 @@
   OLE2FRAME
   
   -->
-  <Entity Name="DxfOle2Frame" EntityType="Ole2Frame" SubclassMarker="AcDbOle2Frame" TypeString="OLE2FRAME">
+  <Entity Name="DxfOle2Frame" EntityType="Ole2Frame" SubclassMarker="AcDbOle2Frame" TypeString="OLE2FRAME" MinVersion="R14">
     <Property Name="VersionNumber" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
     <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
     <Property Name="UpperLeftCorner" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
@@ -602,6 +602,7 @@
   
   -->
   <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE">
+    <Property Name="ContainsVertices" Code="66" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R13" />
     <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" DisableWritingDefault="true">

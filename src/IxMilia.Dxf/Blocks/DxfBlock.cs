@@ -103,6 +103,11 @@ namespace IxMilia.Dxf.Blocks
 
         internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer)
         {
+            if (!buffer.ItemsRemain)
+            {
+                return null;
+            }
+
             var block = new DxfBlock();
             var readingBlockStart = true;
             var readingBlockEnd = false;

@@ -994,6 +994,7 @@ AcDbAlignedDimension
 
         #region Block tests
 
+        [Fact]
         public void ReadBlockTest()
         {
             var file = Parse(@"
@@ -1071,5 +1072,37 @@ EOF");
         }
 
         #endregion
+
+        #region Version-specific entity writer tests
+
+        [Fact]
+        public void WriteVersionSpecificEntities()
+        {
+            var file = new DxfFile();
+            file.Entities.Add(new DxfProxyEntity());
+
+            file.Header.Version = DxfAcadVersion.R14;
+            VerifyFileContains(file, "ACAD_PROXY_ENTITY");
+
+            file.Header.Version = DxfAcadVersion.R13;
+            VerifyFileDoesNotContain(file, "ACAD_PROXY_ENTITY");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificEntityProperties()
+        {
+            var file = new DxfFile();
+            file.Entities.Add(new DxfLeader());
+
+            // annotation offset is only written for >= R14
+            file.Header.Version = DxfAcadVersion.R14;
+            VerifyFileContains(file, "213");
+
+            file.Header.Version = DxfAcadVersion.R13;
+            VerifyFileDoesNotContain(file, "213");
+        }
+
+        #endregion
+
     }
 }

@@ -112,5 +112,145 @@ ENDSEC");
             var bitmap = file.GetThumbnailBitmap();
             AssertArrayEqual(expected, bitmap);
         }
+
+        [Fact]
+        public void ReadVersionSpecificClassTest_R13()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1012
+  0
+ENDSEC
+  0
+SECTION
+  2
+CLASSES
+  0
+<class dxf name>
+  1
+CPP_CLASS_NAME
+  2
+<application name>
+ 90
+42
+  0
+ENDSEC
+  0
+EOF
+");
+            Assert.Equal(1, file.Classes.Count);
+
+            var cls = file.Classes.Single();
+            Assert.Equal(cls.ClassDxfRecordName, "<class dxf name>");
+            Assert.Equal(cls.CppClassName, "CPP_CLASS_NAME");
+            Assert.Equal(cls.ApplicationName, "<application name>");
+            Assert.Equal(cls.ClassVersionNumber, 42);
+        }
+
+        [Fact]
+        public void ReadVersionSpecificClassTest_R14()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1014
+  0
+ENDSEC
+  0
+SECTION
+  2
+CLASSES
+  0
+CLASS
+  1
+<class dxf name>
+  2
+CPP_CLASS_NAME
+  3
+<application name>
+ 90
+42
+  0
+ENDSEC
+  0
+EOF
+");
+            Assert.Equal(1, file.Classes.Count);
+
+            var cls = file.Classes.Single();
+            Assert.Equal(cls.ClassDxfRecordName, "<class dxf name>");
+            Assert.Equal(cls.CppClassName, "CPP_CLASS_NAME");
+            Assert.Equal(cls.ApplicationName, "<application name>");
+            Assert.Equal(cls.ProxyCapabilities.Value, 42);
+        }
+
+        [Fact]
+        public void WriteVersionSpecificClassTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            file.Classes.Add(new DxfClass()
+            {
+                ClassDxfRecordName = "<class dxf name>",
+                CppClassName = "CPP_CLASS_NAME",
+                ApplicationName = "<application name>",
+                ClassVersionNumber = 42
+            });
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+CLASSES
+  0
+<class dxf name>
+  1
+CPP_CLASS_NAME
+  2
+<application name>
+ 90
+42
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificClassTest_R14()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Classes.Add(new DxfClass()
+            {
+                ClassDxfRecordName = "<class dxf name>",
+                CppClassName = "CPP_CLASS_NAME",
+                ApplicationName = "<application name>",
+                ProxyCapabilities = new DxfProxyCapabilities(42)
+            });
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+CLASSES
+  0
+CLASS
+  1
+<class dxf name>
+  2
+CPP_CLASS_NAME
+  3
+<application name>
+ 90
+42
+");
+        }
     }
 }

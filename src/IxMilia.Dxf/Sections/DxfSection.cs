@@ -47,7 +47,7 @@ namespace IxMilia.Dxf.Sections
             yield return new DxfCodePair(0, EndSectionText);
         }
 
-        internal static DxfSection FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfSection FromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
             Debug.Assert(buffer.ItemsRemain);
             var sectionType = buffer.Peek();
@@ -64,7 +64,7 @@ namespace IxMilia.Dxf.Sections
                     section = DxfBlocksSection.BlocksSectionFromBuffer(buffer);
                     break;
                 case ClassesSectionText:
-                    section = DxfClassesSection.ClassesSectionFromBuffer(buffer);
+                    section = DxfClassesSection.ClassesSectionFromBuffer(buffer, version);
                     break;
                 case EntitiesSectionText:
                     section = DxfEntitiesSection.EntitiesSectionFromBuffer(buffer);

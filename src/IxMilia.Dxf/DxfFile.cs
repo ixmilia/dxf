@@ -117,13 +117,14 @@ namespace IxMilia.Dxf
             var file = new DxfFile();
             var reader = new DxfReader(stream);
             var buffer = new DxfCodePairBufferReader(reader.ReadCodePairs());
+            var version = DxfAcadVersion.R14;
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
                 if (DxfCodePair.IsSectionStart(pair))
                 {
                     buffer.Advance(); // swallow (0, SECTION) pair
-                    var section = DxfSection.FromBuffer(buffer);
+                    var section = DxfSection.FromBuffer(buffer, version);
                     if (section != null)
                     {
                         switch (section.Type)
@@ -139,6 +140,7 @@ namespace IxMilia.Dxf
                                 break;
                             case DxfSectionType.Header:
                                 file.HeaderSection = (DxfHeaderSection)section;
+                                version = file.Header.Version;
                                 break;
                             case DxfSectionType.Tables:
                                 file.TablesSection = (DxfTablesSection)section;

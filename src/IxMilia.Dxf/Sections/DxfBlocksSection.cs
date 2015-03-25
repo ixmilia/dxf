@@ -25,7 +25,7 @@ namespace IxMilia.Dxf.Sections
             return this.Blocks.SelectMany(e => e.GetValuePairs(version));
         }
 
-        internal static DxfBlocksSection BlocksSectionFromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfBlocksSection BlocksSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
             var section = new DxfBlocksSection();
             while (buffer.ItemsRemain)
@@ -49,7 +49,7 @@ namespace IxMilia.Dxf.Sections
                 }
 
                 buffer.Advance(); // swallow (0, CLASS)
-                var block = DxfBlock.FromBuffer(buffer);
+                var block = DxfBlock.FromBuffer(buffer, version);
                 if (block != null)
                 {
                     section.Blocks.Add(block);

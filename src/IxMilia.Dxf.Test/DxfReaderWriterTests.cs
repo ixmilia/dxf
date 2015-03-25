@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Linq;
+using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
 using Xunit;
@@ -250,6 +251,291 @@ CPP_CLASS_NAME
 <application name>
  90
 42
+");
+        }
+
+        [Fact]
+        public void ReadVersionSpecificBlockTest_R13()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1012
+  0
+ENDSEC
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+11
+ 20
+22
+ 30
+33
+  3
+<block name>
+  1
+<xref path>
+  0
+POINT
+ 10
+1.1
+ 20
+2.2
+ 30
+3.3
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockEnd
+  0
+ENDSEC
+  0
+EOF
+");
+
+            var block = file.Blocks.Single();
+            Assert.Equal("<block name>", block.Name);
+            Assert.Equal("<handle>", block.Handle);
+            Assert.Equal("<layer>", block.Layer);
+            Assert.Equal(11, block.BasePoint.X);
+            Assert.Equal(22, block.BasePoint.Y);
+            Assert.Equal(33, block.BasePoint.Z);
+            var point = (DxfModelPoint)block.Entities.Single();
+            Assert.Equal(1.1, point.Location.X);
+            Assert.Equal(2.2, point.Location.Y);
+            Assert.Equal(3.3, point.Location.Z);
+        }
+
+        [Fact]
+        public void ReadVersionSpecificBlockTest_R14()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1014
+  0
+ENDSEC
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+11
+ 20
+22
+ 30
+33
+  3
+<block name>
+  1
+<xref>
+  0
+POINT
+ 10
+1.1
+ 20
+2.2
+ 30
+3.3
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbBlockEnd
+  0
+ENDSEC
+  0
+EOF
+");
+
+            var block = file.Blocks.Single();
+            Assert.Equal("<block name>", block.Name);
+            Assert.Equal("<handle>", block.Handle);
+            Assert.Equal("<layer>", block.Layer);
+            Assert.Equal("<xref>", block.XrefName);
+            Assert.Equal(11, block.BasePoint.X);
+            Assert.Equal(22, block.BasePoint.Y);
+            Assert.Equal(33, block.BasePoint.Z);
+            var point = (DxfModelPoint)block.Entities.Single();
+            Assert.Equal(1.1, point.Location.X);
+            Assert.Equal(2.2, point.Location.Y);
+            Assert.Equal(3.3, point.Location.Z);
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            var block = new DxfBlock();
+            block.Name = "<block name>";
+            block.Handle = "<handle>";
+            block.Layer = "<layer>";
+            block.XrefName = "<xref>";
+            block.BasePoint = new DxfPoint(11, 22, 33);
+            block.Entities.Add(new DxfModelPoint(new DxfPoint(111, 222, 333)));
+            file.Blocks.Add(block);
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+1.1000000000000000E+001
+ 20
+2.2000000000000000E+001
+ 30
+3.3000000000000000E+001
+  3
+<block name>
+  1
+<xref>
+");
+            VerifyFileContains(file, @"
+ 10
+1.1100000000000000E+002
+ 20
+2.2200000000000000E+002
+ 30
+3.3300000000000000E+002
+");
+            VerifyFileContains(file, @"
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockEnd
+  0
+ENDSEC
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockTest_R14()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            var block = new DxfBlock();
+            block.Name = "<block name>";
+            block.Handle = "<handle>";
+            block.Layer = "<layer>";
+            block.XrefName = "<xref>";
+            block.BasePoint = new DxfPoint(11, 22, 33);
+            block.Entities.Add(new DxfModelPoint(new DxfPoint(111, 222, 333)));
+            file.Blocks.Add(block);
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+1.1000000000000000E+001
+ 20
+2.2000000000000000E+001
+ 30
+3.3000000000000000E+001
+  3
+<block name>
+  1
+<xref>
+");
+            VerifyFileContains(file, @"
+ 10
+1.1100000000000000E+002
+ 20
+2.2200000000000000E+002
+ 30
+3.3300000000000000E+002
+");
+            VerifyFileContains(file, @"
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbBlockEnd
+  0
+ENDSEC
 ");
         }
     }

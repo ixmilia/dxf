@@ -56,6 +56,7 @@ namespace IxMilia.Dxf.Entities
         public bool IsInPaperSpace { get; set; }
         public string Layer { get; set; }
         public string LinetypeName { get; set; }
+        public double Elevation { get; set; }
         public string MaterialHandle { get; set; }
         public DxfColor Color { get; set; }
         public short LineweightEnumValue { get; set; }
@@ -160,6 +161,7 @@ namespace IxMilia.Dxf.Entities
             this.IsInPaperSpace = other.IsInPaperSpace;
             this.Layer = other.Layer;
             this.LinetypeName = other.LinetypeName;
+            this.Elevation = other.Elevation;
             this.MaterialHandle = other.MaterialHandle;
             this.Color = other.Color;
             this.LineweightEnumValue = other.LineweightEnumValue;
@@ -181,6 +183,7 @@ namespace IxMilia.Dxf.Entities
             this.IsInPaperSpace = false;
             this.Layer = "0";
             this.LinetypeName = "BYLAYER";
+            this.Elevation = 0.0;
             this.MaterialHandle = "BYLAYER";
             this.Color = DxfColor.ByLayer;
             this.LineweightEnumValue = 0;
@@ -215,6 +218,11 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(6, (this.LinetypeName)));
             }
 
+            if (version <= DxfAcadVersion.R12 && this.Elevation != 0.0)
+            {
+                pairs.Add(new DxfCodePair(38, (this.Elevation)));
+            }
+
             if (version >= DxfAcadVersion.R2007 && this.MaterialHandle != "BYLAYER")
             {
                 pairs.Add(new DxfCodePair(347, (this.MaterialHandle)));
@@ -230,12 +238,12 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(370, (this.LineweightEnumValue)));
             }
 
-            if (this.LinetypeScale != 1.0)
+            if (version >= DxfAcadVersion.R13 && this.LinetypeScale != 1.0)
             {
                 pairs.Add(new DxfCodePair(48, (this.LinetypeScale)));
             }
 
-            if (this.IsVisible != true)
+            if (version >= DxfAcadVersion.R13 && this.IsVisible != true)
             {
                 pairs.Add(new DxfCodePair(60, NotBoolShort(this.IsVisible)));
             }
@@ -289,6 +297,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 8:
                     this.Layer = (pair.StringValue);
+                    break;
+                case 38:
+                    this.Elevation = (pair.DoubleValue);
                     break;
                 case 48:
                     this.LinetypeScale = (pair.DoubleValue);
@@ -614,6 +625,7 @@ namespace IxMilia.Dxf.Entities
     public partial class Dxf3DSolid : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.ModelerGeometry; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public short FormatVersionNumber { get; set; }
         public List<string> CustomData { get; set; }
@@ -1192,7 +1204,10 @@ namespace IxMilia.Dxf.Entities
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
             base.AddValuePairs(pairs, version);
-            pairs.Add(new DxfCodePair(100, "AcDbText"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbText"));
+            }
             if (this.Thickness != 0.0)
             {
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
@@ -1203,7 +1218,10 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(30, Location.Z));
             pairs.Add(new DxfCodePair(40, (this.TextHeight)));
             pairs.Add(new DxfCodePair(1, (this.Value)));
-            pairs.Add(new DxfCodePair(100, "AcDbAttributeDefinition"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbAttributeDefinition"));
+            }
             if (this.Rotation != 0)
             {
                 pairs.Add(new DxfCodePair(50, (this.Rotation)));
@@ -1244,7 +1262,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
-            pairs.Add(new DxfCodePair(100, "AcDbAttributeDefinition"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbAttributeDefinition"));
+            }
             pairs.Add(new DxfCodePair(3, (this.Prompt)));
             pairs.Add(new DxfCodePair(2, (this.Tag)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
@@ -1464,7 +1485,10 @@ namespace IxMilia.Dxf.Entities
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
             base.AddValuePairs(pairs, version);
-            pairs.Add(new DxfCodePair(100, "AcDbText"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbText"));
+            }
             if (this.Thickness != 0.0)
             {
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
@@ -1475,7 +1499,10 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(30, Location.Z));
             pairs.Add(new DxfCodePair(40, (this.TextHeight)));
             pairs.Add(new DxfCodePair(1, (this.Value)));
-            pairs.Add(new DxfCodePair(100, "AcDbAttribute"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbAttribute"));
+            }
             pairs.Add(new DxfCodePair(2, (this.Tag)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
             if (this.FieldLength != 0)
@@ -1614,6 +1641,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfBody : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Body; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public short FormatVersionNumber { get; set; }
         public List<string> CustomData { get; set; }
@@ -1984,7 +2012,10 @@ namespace IxMilia.Dxf.Entities
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
             base.AddValuePairs(pairs, version);
-            pairs.Add(new DxfCodePair(100, "AcDbAlignedDimension"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbAlignedDimension"));
+            }
             pairs.Add(new DxfCodePair(12, InsertionPoint.X));
             pairs.Add(new DxfCodePair(22, InsertionPoint.Y));
             pairs.Add(new DxfCodePair(32, InsertionPoint.Z));
@@ -1996,7 +2027,10 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(34, DefinitionPoint3.Z));
             pairs.Add(new DxfCodePair(50, (this.RotationAngle)));
             pairs.Add(new DxfCodePair(52, (this.ExtensionLineAngle)));
-            pairs.Add(new DxfCodePair(100, "AcDbRotatedDimension"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbRotatedDimension"));
+            }
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -2518,6 +2552,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfEllipse : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Ellipse; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public DxfPoint Center { get; set; }
         public DxfVector MajorAxis { get; set; }
@@ -3000,6 +3035,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfLeader : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Leader; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public string DimensionStyleName { get; set; }
         public bool UseArrowheads { get; set; }
@@ -3454,6 +3490,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfOleFrame : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.OleFrame; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public int VersionNumber { get; set; }
         public int BinaryDataLength { get; set; }
@@ -3974,6 +4011,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfRay : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Ray; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public DxfPoint StartPoint { get; set; }
         public DxfVector UnitDirectionVector { get; set; }
@@ -4048,6 +4086,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfRegion : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Region; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public short FormatVersionNumber { get; set; }
         public List<string> CustomData { get; set; }
@@ -4489,6 +4528,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfSpline : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Spline; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public DxfVector Normal { get; set; }
         public int Flags { get; set; }
@@ -4952,6 +4992,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfTolerance : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Tolerance; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public string DimensionStyleName { get; set; }
         public DxfPoint InsertionPoint { get; set; }
@@ -5304,22 +5345,22 @@ namespace IxMilia.Dxf.Entities
 
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(50, (this.CurveFitTangentDirection)));
-            if (this.PolyfaceMeshVertexIndex1 != 0)
+            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex1 != 0)
             {
                 pairs.Add(new DxfCodePair(71, (short)(this.PolyfaceMeshVertexIndex1)));
             }
 
-            if (this.PolyfaceMeshVertexIndex2 != 0)
+            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex2 != 0)
             {
                 pairs.Add(new DxfCodePair(72, (short)(this.PolyfaceMeshVertexIndex2)));
             }
 
-            if (this.PolyfaceMeshVertexIndex3 != 0)
+            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex3 != 0)
             {
                 pairs.Add(new DxfCodePair(73, (short)(this.PolyfaceMeshVertexIndex3)));
             }
 
-            if (this.PolyfaceMeshVertexIndex4 != 0)
+            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex4 != 0)
             {
                 pairs.Add(new DxfCodePair(74, (short)(this.PolyfaceMeshVertexIndex4)));
             }
@@ -5406,6 +5447,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfXLine : DxfEntity
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.XLine; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public DxfPoint FirstPoint { get; set; }
         public DxfVector UnitDirectionVector { get; set; }

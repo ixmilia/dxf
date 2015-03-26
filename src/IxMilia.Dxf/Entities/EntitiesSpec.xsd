@@ -100,6 +100,8 @@
       <xs:attribute name="Code" type="xs:int" use="required" />
       <xs:attribute name="Value" type="xs:string" use="required" />
       <xs:attribute name="DontWriteIfValueIs" type="xs:string" use="optional" />
+      <xs:attribute name="MinVersion" type="VersionType" use="optional" />
+      <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
     </xs:complexType>
   </xs:element>
 

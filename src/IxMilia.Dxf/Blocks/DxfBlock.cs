@@ -77,13 +77,20 @@ namespace IxMilia.Dxf.Blocks
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(0, BlockText));
-            list.Add(new DxfCodePair(5, Handle));
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(5, Handle));
 
-            // TODO: application-defined 102 codes for R14+
+                // TODO: application-defined 102 codes for R14+
+                list.Add(new DxfCodePair(100, AcDbEntityText));
+            }
 
-            list.Add(new DxfCodePair(100, AcDbEntityText));
             list.Add(new DxfCodePair(8, Layer));
-            list.Add(new DxfCodePair(100, AcDbBlockBeginText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(100, AcDbBlockBeginText));
+            }
+
             list.Add(new DxfCodePair(2, Name));
             list.Add(new DxfCodePair(70, (short)Flags));
             list.Add(new DxfCodePair(10, BasePoint.X));
@@ -96,7 +103,10 @@ namespace IxMilia.Dxf.Blocks
             list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version)));
 
             list.Add(new DxfCodePair(0, EndBlockText));
-            list.Add(new DxfCodePair(5, Handle));
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(5, Handle));
+            }
 
             // TODO: application-defined 102 codes for R14+
 
@@ -106,7 +116,10 @@ namespace IxMilia.Dxf.Blocks
                 list.Add(new DxfCodePair(8, Layer));
             }
 
-            list.Add(new DxfCodePair(100, AcDbBlockEndText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(100, AcDbBlockEndText));
+            }
 
             return list;
         }

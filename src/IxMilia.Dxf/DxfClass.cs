@@ -88,28 +88,27 @@ namespace IxMilia.Dxf
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
         {
             var list = new List<DxfCodePair>();
-            Action<int, object> add = (code, value) => list.Add(new DxfCodePair(code, value));
             if (version >= DxfAcadVersion.R14)
             {
-                add(0, ClassText);
-                add(1, ClassDxfRecordName);
-                add(2, CppClassName);
-                add(3, ApplicationName);
-                add(90, ProxyCapabilities.Value);
+                list.Add(new DxfCodePair(0, ClassText));
+                list.Add(new DxfCodePair(1, ClassDxfRecordName));
+                list.Add(new DxfCodePair(2, CppClassName));
+                list.Add(new DxfCodePair(3, ApplicationName));
+                list.Add(new DxfCodePair(90, ProxyCapabilities.Value));
                 if (version >= DxfAcadVersion.R2004)
-                    add(91, null);
+                    list.Add(new DxfCodePair(91, null));
             }
             else
             {
                 // version <= DxfAcadVersion.R13
-                add(0, ClassDxfRecordName);
-                add(1, CppClassName);
-                add(2, ApplicationName);
-                add(90, ClassVersionNumber);
+                list.Add(new DxfCodePair(0, ClassDxfRecordName));
+                list.Add(new DxfCodePair(1, CppClassName));
+                list.Add(new DxfCodePair(2, ApplicationName));
+                list.Add(new DxfCodePair(90, ClassVersionNumber));
             }
 
-            add(280, (short)(WasClassLoadedWithFile ? 0 : 1));
-            add(281, (short)(IsEntity ? 1 : 0));
+            list.Add(new DxfCodePair(280, (short)(WasClassLoadedWithFile ? 0 : 1)));
+            list.Add(new DxfCodePair(281, (short)(IsEntity ? 1 : 0)));
 
             return list;
         }

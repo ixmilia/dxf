@@ -76,38 +76,37 @@ namespace IxMilia.Dxf.Blocks
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
         {
             var list = new List<DxfCodePair>();
-            Action<int, object> add = (code, value) => list.Add(new DxfCodePair(code, value));
-            add(0, BlockText);
-            add(5, Handle);
+            list.Add(new DxfCodePair(0, BlockText));
+            list.Add(new DxfCodePair(5, Handle));
 
             // TODO: application-defined 102 codes for R14+
 
-            add(100, AcDbEntityText);
-            add(8, Layer);
-            add(100, AcDbBlockBeginText);
-            add(2, Name);
-            add(70, (short)Flags);
-            add(10, BasePoint.X);
-            add(20, BasePoint.Y);
-            add(30, BasePoint.Z);
-            add(3, Name);
+            list.Add(new DxfCodePair(100, AcDbEntityText));
+            list.Add(new DxfCodePair(8, Layer));
+            list.Add(new DxfCodePair(100, AcDbBlockBeginText));
+            list.Add(new DxfCodePair(2, Name));
+            list.Add(new DxfCodePair(70, (short)Flags));
+            list.Add(new DxfCodePair(10, BasePoint.X));
+            list.Add(new DxfCodePair(20, BasePoint.Y));
+            list.Add(new DxfCodePair(30, BasePoint.Z));
+            list.Add(new DxfCodePair(3, Name));
             if (!string.IsNullOrEmpty(XrefName))
-                add(1, XrefName);
+                list.Add(new DxfCodePair(1, XrefName));
 
             list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version)));
 
-            add(0, EndBlockText);
-            add(5, Handle);
+            list.Add(new DxfCodePair(0, EndBlockText));
+            list.Add(new DxfCodePair(5, Handle));
 
             // TODO: application-defined 102 codes for R14+
 
             if (version == DxfAcadVersion.R13)
             {
-                add(100, AcDbEntityText);
-                add(8, Layer);
+                list.Add(new DxfCodePair(100, AcDbEntityText));
+                list.Add(new DxfCodePair(8, Layer));
             }
 
-            add(100, AcDbBlockEndText);
+            list.Add(new DxfCodePair(100, AcDbBlockEndText));
 
             return list;
         }

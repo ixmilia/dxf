@@ -1442,6 +1442,8 @@ namespace IxMilia.Dxf
         public double BackClippingPlane { get; set; }
         public double SnapRotationAngle { get; set; }
         public double ViewTwistAngle { get; set; }
+        public short Status { get; set; }
+        public short ID { get; set; }
         public DxfViewMode ViewMode { get; set; }
         public int CircleZoomPercent { get; set; }
         public bool FastZoom { get; set; }
@@ -1469,6 +1471,8 @@ namespace IxMilia.Dxf
             BackClippingPlane = 0.0;
             SnapRotationAngle = 0.0;
             ViewTwistAngle = 0.0;
+            Status = 0;
+            ID = 0;
             ViewMode = 0;
             CircleZoomPercent = 0;
             FastZoom = true;
@@ -1513,6 +1517,16 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
             pairs.Add(new DxfCodePair(50, (SnapRotationAngle)));
             pairs.Add(new DxfCodePair(51, (ViewTwistAngle)));
+            if (version == DxfAcadVersion.R12)
+            {
+                pairs.Add(new DxfCodePair(68, (Status)));
+            }
+
+            if (version == DxfAcadVersion.R12)
+            {
+                pairs.Add(new DxfCodePair(69, (ID)));
+            }
+
             pairs.Add(new DxfCodePair(71, (short)(ViewMode)));
             pairs.Add(new DxfCodePair(72, (short)(CircleZoomPercent)));
             pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
@@ -1614,6 +1628,12 @@ namespace IxMilia.Dxf
                         break;
                     case 51:
                         item.ViewTwistAngle = (pair.DoubleValue);
+                        break;
+                    case 68:
+                        item.Status = (pair.ShortValue);
+                        break;
+                    case 69:
+                        item.ID = (pair.ShortValue);
                         break;
                     case 71:
                         item.ViewMode = (DxfViewMode)(pair.ShortValue);

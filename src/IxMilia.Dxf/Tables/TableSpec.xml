@@ -138,6 +138,8 @@
       <Property Name="BackClippingPlane" Code="44" Type="double" DefaultValue="0.0" />
       <Property Name="SnapRotationAngle" Code="50" Type="double" DefaultValue="0.0" />
       <Property Name="ViewTwistAngle" Code="51" Type="double" DefaultValue="0.0" />
+      <Property Name="Status" Code="68" Type="short" DefaultValue="0" MinVersion="R12" MaxVersion="R12" />
+      <Property Name="ID" Code="69" Type="short" DefaultValue="0" MinVersion="R12" MaxVersion="R12" />
       <Property Name="ViewMode" Code="71" Type="DxfViewMode" DefaultValue="0" ReadConverter="(DxfViewMode)" WriteConverter="(short)" />
       <Property Name="CircleZoomPercent" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
       <Property Name="FastZoom" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />

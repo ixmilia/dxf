@@ -37,13 +37,21 @@ namespace IxMilia.Dxf.Sections
 
         private IEnumerable<DxfTable> GetTables(DxfAcadVersion version)
         {
-            yield return AppIdTable;
+            if (version >= DxfAcadVersion.R12)
+            {
+                yield return AppIdTable;
+            }
+
             if (version >= DxfAcadVersion.R13)
             {
                 yield return BlockRecordTable;
             }
 
-            yield return DimStyleTable;
+            if (version >= DxfAcadVersion.R12)
+            {
+                yield return DimStyleTable;
+            }
+
             yield return LTypeTable;
             yield return LayerTable;
             yield return StyleTable;

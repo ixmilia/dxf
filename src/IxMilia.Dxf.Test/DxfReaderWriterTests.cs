@@ -621,5 +621,86 @@ EOF
             Assert.Equal("ENTRY_2", style2.Name);
             Assert.Equal("BUFONTS.TXT", style2.PrimaryFontFileName);
         }
+
+        [Fact]
+        public void WriteVersionSpecificSectionsTest_R12()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R12;
+            file.Classes.Add(new DxfClass());
+
+            // no CLASSES section in R12
+            VerifyFileDoesNotContain(file, @"
+  0
+SECTION
+  2
+CLASSES
+");
+
+            // no OBJECTS section in R12
+            VerifyFileDoesNotContain(file, @"
+  0
+SECTION
+  2
+OBJECTS
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificSectionsTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            file.Classes.Add(new DxfClass());
+
+            // CLASSES section added in R13
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+CLASSES
+");
+
+            // OBJECTS section added in R13
+            // NYI
+//            VerifyFileContains(file, @"
+//  0
+//SECTION
+//  2
+//OBJECTS
+//");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockRecordTest_R12()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R12;
+            file.BlockRecords.Add(new DxfBlockRecord());
+
+            // no BLOCK_RECORD in R12
+            VerifyFileDoesNotContain(file, @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockRecordTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            file.BlockRecords.Add(new DxfBlockRecord());
+
+            // BLOCK_RECORD added in R13
+            VerifyFileContains(file, @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+");
+        }
     }
 }

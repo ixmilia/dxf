@@ -93,12 +93,19 @@ namespace IxMilia.Dxf
             get
             {
                 yield return this.HeaderSection;
-                yield return this.ClassSection;
+                if (Header.Version >= DxfAcadVersion.R13)
+                {
+                    yield return this.ClassSection;
+                }
+
                 yield return this.TablesSection;
                 yield return this.BlocksSection;
                 yield return this.EntitiesSection;
+                // TODO: objects section only supported on R13+
                 if (Header.Version >= DxfAcadVersion.R2000 && this.ThumbnailImageSection != null)
+                {
                     yield return this.ThumbnailImageSection;
+                }
             }
         }
 

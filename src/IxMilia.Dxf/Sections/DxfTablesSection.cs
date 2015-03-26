@@ -35,9 +35,26 @@ namespace IxMilia.Dxf.Sections
             this.ViewPortTable = new DxfViewPortTable();
         }
 
+        private IEnumerable<DxfTable> GetTables(DxfAcadVersion version)
+        {
+            yield return AppIdTable;
+            if (version >= DxfAcadVersion.R13)
+            {
+                yield return BlockRecordTable;
+            }
+
+            yield return DimStyleTable;
+            yield return LTypeTable;
+            yield return LayerTable;
+            yield return StyleTable;
+            yield return UcsTable;
+            yield return ViewTable;
+            yield return ViewPortTable;
+        }
+
         protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version)
         {
-            foreach (var table in new DxfTable[] { AppIdTable, BlockRecordTable, DimStyleTable, LTypeTable, LayerTable, StyleTable, UcsTable, ViewTable, ViewPortTable })
+            foreach (var table in GetTables(version))
             {
                 foreach (var pair in table.GetValuePairs(version))
                     yield return pair;

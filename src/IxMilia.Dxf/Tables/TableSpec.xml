@@ -50,20 +50,20 @@
       <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
       <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
       <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
-      <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" />
-      <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" />
-      <Property Name="DimensionToleranceDecimalPlaces" Code="272" Type="short" DefaultValue="0" />
-      <Property Name="AlternateDimensioningUnits" Code="273" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" />
-      <Property Name="AlternateDimensioningToleranceDecimalPlaces" Code="274" Type="short" DefaultValue="0" />
-      <Property Name="StyleHandle" Code="340" Type="string" DefaultValue="null" />
-      <Property Name="DimensioningAngleFormat" Code="275" Type="DxfAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" />
-      <Property Name="DimensionTextJustification" Code="280" Type="DxfDimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification)" WriteConverter="(short)" />
-      <Property Name="DimensionToleranceVerticalJustification" Code="283" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" />
-      <Property Name="DimensionToleranceZeroSuppression" Code="284" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
-      <Property Name="AlternateDimensioningZeroSupression" Code="285" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
-      <Property Name="AlternateDimensioningToleranceZeroSupression" Code="286" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
-      <Property Name="DimensionTextAndArrowPlacement" Code="287" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" />
-      <Property Name="DimensionCursorControlsTextPosition" Code="288" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" MinVersion="R13" />
+      <Property Name="DimensionToleranceDecimalPlaces" Code="272" Type="short" DefaultValue="0" MinVersion="R13" />
+      <Property Name="AlternateDimensioningUnits" Code="273" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="AlternateDimensioningToleranceDecimalPlaces" Code="274" Type="short" DefaultValue="0" MinVersion="R13" />
+      <Property Name="StyleHandle" Code="340" Type="string" DefaultValue="null" MinVersion="R13" />
+      <Property Name="DimensioningAngleFormat" Code="275" Type="DxfAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="DimensionTextJustification" Code="280" Type="DxfDimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="DimensionToleranceVerticalJustification" Code="283" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="DimensionToleranceZeroSuppression" Code="284" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="AlternateDimensioningZeroSupression" Code="285" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="AlternateDimensioningToleranceZeroSupression" Code="286" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="DimensionTextAndArrowPlacement" Code="287" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MinVersion="R13" />
+      <Property Name="DimensionCursorControlsTextPosition" Code="288" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
     </TableItem>
   </Table>
   <Table Type="Layer" TypeString="LayerText">
@@ -79,14 +79,14 @@
       <Property Name="ElementCount" Code="73" Type="int" DefaultValue="0" />
       <Property Name="TotalPatternLength" Code="40" Type="double" DefaultValue="0.0" />
       <Property Name="DashDotSpaceLengths" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="ComplexLinetypeElementTypes" Code="74" Type="short" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="ShapeNumbers" Code="75" Type="short" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="StylePointers" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="ScaleValues" Code="46" Type="double" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="RotationAngles" Code="50" Type="double" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="XOffsets" Code="44" Type="double" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="YOffsets" Code="45" Type="double" DefaultValue="null" AllowMultiples="true" />
-      <Property Name="TextStrings" Code="9" Type="string" DefaultValue="null" AllowMultiples="true" />
+      <Property Name="ComplexLinetypeElementTypes" Code="74" Type="short" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+      <Property Name="ShapeNumbers" Code="75" Type="short" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+      <Property Name="StylePointers" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+      <Property Name="ScaleValues" Code="46" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+      <Property Name="RotationAngles" Code="50" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+      <Property Name="XOffsets" Code="44" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+      <Property Name="YOffsets" Code="45" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+      <Property Name="TextStrings" Code="9" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
     </TableItem>
   </Table>
   <Table Type="Style" TypeString="StyleText">

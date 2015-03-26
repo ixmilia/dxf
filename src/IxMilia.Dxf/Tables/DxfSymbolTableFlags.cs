@@ -16,19 +16,22 @@ namespace IxMilia.Dxf
         {
         }
 
-        internal void AddCommonValuePairs(List<DxfCodePair> pairs)
+        internal void AddCommonValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
             pairs.Add(new DxfCodePair(0, DxfTable.TableTypeToName(TableType)));
-            if (TableType == DxfTableType.DimStyle)
+            if (version >= DxfAcadVersion.R13)
             {
-                pairs.Add(new DxfCodePair(105, Handle));
-            }
-            else
-            {
-                pairs.Add(new DxfCodePair(5, Handle));
-            }
+                if (TableType == DxfTableType.DimStyle)
+                {
+                    pairs.Add(new DxfCodePair(105, Handle));
+                }
+                else
+                {
+                    pairs.Add(new DxfCodePair(5, Handle));
+                }
 
-            pairs.Add(new DxfCodePair(100, "AcDbSymbolTableRecord"));
+                pairs.Add(new DxfCodePair(100, "AcDbSymbolTableRecord"));
+            }
         }
 
         internal void TrySetPair(DxfCodePair pair)
@@ -44,7 +47,7 @@ namespace IxMilia.Dxf
             }
         }
 
-        internal abstract void AddValuePairs(List<DxfCodePair> pairs);
+        internal abstract void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version);
 
         public bool ExternallyDependentOnXRef
         {

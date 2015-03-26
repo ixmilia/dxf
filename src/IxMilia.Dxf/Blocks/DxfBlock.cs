@@ -96,7 +96,11 @@ namespace IxMilia.Dxf.Blocks
             list.Add(new DxfCodePair(10, BasePoint.X));
             list.Add(new DxfCodePair(20, BasePoint.Y));
             list.Add(new DxfCodePair(30, BasePoint.Z));
-            list.Add(new DxfCodePair(3, Name));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(3, Name));
+            }
+
             if (!string.IsNullOrEmpty(XrefName))
                 list.Add(new DxfCodePair(1, XrefName));
 

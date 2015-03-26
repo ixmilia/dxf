@@ -12,7 +12,7 @@
   <Variable Name="AUPREC" Code="70" Type="short" Property="AngleUnitPrecision" DefaultValue="12" />
   <Variable Name="BLIPMODE" Code="70" Type="bool" Property="BlipMode" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R14" />
   <Variable Name="CECOLOR" Code="62" Type="DxfColor" Property="CurrentEntityColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
-  <Variable Name="CELTSCALE" Code="40" Type="double" Property="CurrentEntityLinetypeScale" DefaultValue="1.0" />
+  <Variable Name="CELTSCALE" Code="40" Type="double" Property="CurrentEntityLinetypeScale" DefaultValue="1.0" MinVersion="R13" />
   <Variable Name="CELTYPE" Code="6" Type="string" Property="CurrentEntityLinetype" DefaultValue="BYBLOCK" />
   <Variable Name="CELWEIGHT" Code="370" Type="short" Property="NewObjectLineWeight" DefaultValue="0" MinVersion="R2000" />
   <Variable Name="CEPSNID" Code="390" Type="string" Property="NewObjectPlotStyleHandle" DefaultValue="null" MinVersion="R2004" />
@@ -22,54 +22,54 @@
   <Variable Name="CHAMFERC" Code="40" Type="double" Property="ChamferLength" DefaultValue="0.0" MinVersion="R14" />
   <Variable Name="CHAMFERD" Code="40" Type="double" Property="ChamferAngle" DefaultValue="0.0" MinVersion="R14" />
   <Variable Name="CLAYER" Code="8" Type="string" Property="CurrentLayer" DefaultValue="0" />
-  <Variable Name="CMLJUST" Code="70" Type="DxfJustification" Property="CurrentMultilineJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" />
-  <Variable Name="CMLSCALE" Code="40" Type="double" Property="CurrentMultilineScale" DefaultValue="1.0" />
+  <Variable Name="CMLJUST" Code="70" Type="DxfJustification" Property="CurrentMultilineJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" MinVersion="R13" />
+  <Variable Name="CMLSCALE" Code="40" Type="double" Property="CurrentMultilineScale" DefaultValue="1.0" MinVersion="R13" />
 
   <!-- code 7 in R13, code 2 in R14+ -->
-  <Variable Name="CMLSTYLE" Code="7" Type="string" Property="CurrentMultilineStyle" DefaultValue="null" MaxVersion="R13" />
+  <Variable Name="CMLSTYLE" Code="7" Type="string" Property="CurrentMultilineStyle" DefaultValue="null" MinVersion="R13" MaxVersion="R13" />
   <Variable Name="CMLSTYLE" Code="2" Type="string" Property="CurrentMultilineStyle" DefaultValue="null" MinVersion="R14" />
 
   <Variable Name="COORDS" Code="70" Type="DxfCoordinateDisplay" Property="CoordinateDisplay" DefaultValue="DxfCoordinateDisplay.Static" ReadConverter="(DxfCoordinateDisplay)" WriteConverter="(short)" MaxVersion="R14" />
   <Variable Name="CPSNID" Code="390" Type="string" Property="NewObjectPlotStyleHandle" DefaultValue="null" MinVersion="R2000" MaxVersion="R2000" />
   <Variable Name="CSHADOW" Code="280" Type="DxfShadowMode" Property="ShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode)" WriteConverter="(short)" MinVersion="R2007" />
-  <Variable Name="DELOBJ" Code="70" Type="bool" Property="RetainDeletedObjects" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R14" />
+  <Variable Name="DELOBJ" Code="70" Type="bool" Property="RetainDeletedObjects" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" MaxVersion="R14" />
   <Variable Name="DIMADEC" Code="70" Type="short" Property="AngularDimensionPrecision" DefaultValue="12" MinVersion="R2000" />
   <Variable Name="DIMALT" Code="70" Type="bool" Property="UseAlternateDimensioning" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMALTD" Code="70" Type="short" Property="AlternateDimensioningDecimalPlaces" DefaultValue="0" />
   <Variable Name="DIMALTF" Code="40" Type="double" Property="AlternateDimensioningScaleFactor" DefaultValue="1.0" />
   <Variable Name="DIMALTRND" Code="40" Type="double" Property="AlternateDimensioningUnitRounding" DefaultValue="0.0" MinVersion="R2000" />
-  <Variable Name="DIMALTTD" Code="70" Type="short" Property="AlternateDimensioningToleranceDecimalPlaces" DefaultValue="0" />
-  <Variable Name="DIMALTTZ" Code="70" Type="DxfUnitZeroSuppression" Property="AlternateDimensioningToleranceZeroSupression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
-  <Variable Name="DIMALTU" Code="70" Type="DxfUnitFormat" Property="AlternateDimensioningUnits" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" />
-  <Variable Name="DIMALTZ" Code="70" Type="DxfUnitZeroSuppression" Property="AlternateDimensioningZeroSupression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
+  <Variable Name="DIMALTTD" Code="70" Type="short" Property="AlternateDimensioningToleranceDecimalPlaces" DefaultValue="0" MinVersion="R13" />
+  <Variable Name="DIMALTTZ" Code="70" Type="DxfUnitZeroSuppression" Property="AlternateDimensioningToleranceZeroSupression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
+  <Variable Name="DIMALTU" Code="70" Type="DxfUnitFormat" Property="AlternateDimensioningUnits" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MinVersion="R13" />
+  <Variable Name="DIMALTZ" Code="70" Type="DxfUnitZeroSuppression" Property="AlternateDimensioningZeroSupression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
   <Variable Name="DIMAPOST" Code="1" Type="string" Property="AlternateDimensioningSuffix" DefaultValue="null" />
   <Variable Name="DIMASO" Code="70" Type="bool" Property="CreateAssociativeDimensioning" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMASSOC" Code="280" Type="DxfDimensionAssociativity" Property="DimensionObjectAssociativity" DefaultValue="DxfDimensionAssociativity.AssociativeObjects" ReadConverter="(DxfDimensionAssociativity)" WriteConverter="(short)" MinVersion="R2004" />
   <Variable Name="DIMASZ" Code="40" Type="double" Property="DimensioningArrowSize" DefaultValue="1.0" />
   <Variable Name="DIMATFIT" Code="70" Type="DxfDimensionFit" Property="DimensionTextAndArrowPlacement" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MinVersion="R2000" />
-  <Variable Name="DIMAUNIT" Code="70" Type="DxfAngleFormat" Property="DimensioningAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" />
-  <Variable Name="DIMAZIN" Code="70" Type="DxfUnitZeroSuppression" Property="DimensionToleranceZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MaxVersion="R2000" />
+  <Variable Name="DIMAUNIT" Code="70" Type="DxfAngleFormat" Property="DimensioningAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" MinVersion="R13" />
+  <Variable Name="DIMAZIN" Code="70" Type="DxfUnitZeroSuppression" Property="DimensionToleranceZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R2000" />
 
-  <!-- code 2 in R13, code 1 in R14+ -->
+  <!-- code 2 in R13-, code 1 in R14+ -->
   <Variable Name="DIMBLK" Code="2" Type="string" Property="ArrowBlockName" DefaultValue="null" MaxVersion="R13" />
   <Variable Name="DIMBLK" Code="1" Type="string" Property="ArrowBlockName" DefaultValue="null" MinVersion="R14" />
-  
+
   <Variable Name="DIMBLK1" Code="1" Type="string" Property="FirstArrowBlockName" DefaultValue="null" />
   <Variable Name="DIMBLK2" Code="1" Type="string" Property="SecondArrowBlockName" DefaultValue="null" />
   <Variable Name="DIMCEN" Code="40" Type="double" Property="CenterMarkSize" DefaultValue="1.0" />
   <Variable Name="DIMCLRD" Code="70" Type="DxfColor" Property="DimensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
   <Variable Name="DIMCLRE" Code="70" Type="DxfColor" Property="DimensionExtensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
   <Variable Name="DIMCLRT" Code="70" Type="DxfColor" Property="DimensionTextColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
-  <Variable Name="DIMDEC" Code="70" Type="short" Property="DimensionUnitToleranceDecimalPlaces" DefaultValue="12" />
+  <Variable Name="DIMDEC" Code="70" Type="short" Property="DimensionUnitToleranceDecimalPlaces" DefaultValue="12" MinVersion="R13" />
   <Variable Name="DIMDLE" Code="40" Type="double" Property="DimensionLineExtension" DefaultValue="0.0" />
   <Variable Name="DIMDLI" Code="40" Type="double" Property="DimensionLineIncrement" DefaultValue="0.0" />
   <Variable Name="DIMDSEP" Code="70" Type="char" Property="DimensionDecimalSeparatorChar" DefaultValue="." ReadConverter="(char)" WriteConverter="(short)" MinVersion="R2000" />
   <Variable Name="DIMEXE" Code="40" Type="double" Property="DimensionExtensionLineExtension" DefaultValue="0.0" />
   <Variable Name="DIMEXO" Code="40" Type="double" Property="DimensionExtensionLineOffset" DefaultValue="0.0" />
   <Variable Name="DIMFAC" Code="40" Type="double" Property="DimensionTextHeightScaleFactor" DefaultValue="1.0" MinVersion="R2000" />
-  <Variable Name="DIMFIT" Code="70" Type="DxfDimensionFit" Property="DimensionTextAndArrowPlacement" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MaxVersion="R14" />
+  <Variable Name="DIMFIT" Code="70" Type="DxfDimensionFit" Property="DimensionTextAndArrowPlacement" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MinVersion="R13" MaxVersion="R14" />
   <Variable Name="DIMGAP" Code="40" Type="double" Property="DimensionLineGap" DefaultValue="0.0" />
-  <Variable Name="DIMJUST" Code="70" Type="DxfDimensionTextJustification" Property="DimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification)" WriteConverter="(short)" />
+  <Variable Name="DIMJUST" Code="70" Type="DxfDimensionTextJustification" Property="DimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification)" WriteConverter="(short)" MinVersion="R13" />
   <Variable Name="DIMLDRBLK" Code="1" Type="string" Property="DimensionLeaderBlockName" DefaultValue="null" MinVersion="R2000" />
   <Variable Name="DIMLFAC" Code="40" Type="double" Property="DimensionLinearMeasurementsScaleFactor" DefaultValue="1.0" />
   <Variable Name="DIMLIM" Code="70" Type="bool" Property="GenerateDimensionLimits" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
@@ -82,12 +82,13 @@
   <Variable Name="DIMSCALE" Code="40" Type="double" Property="DimensioningScaleFactor" DefaultValue="1.0" />
   <Variable Name="DIMSD1" Code="70" Type="bool" Property="SuppressFirstDimensionExtensionLine" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMSD2" Code="70" Type="bool" Property="SuppressSecondDimensionExtensionLine" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+    <!-- TODO: DIMSE1/2 are in R12, but not DIMSD1/2 -->
   <!-- DIMSE1 and DIMSE2 appear to be identical to DIMSD1 and DIMSD2, respectively, and are omitted -->
   <Variable Name="DIMSHO" Code="70" Type="bool" Property="RecomputeDimensionsWhileDragging" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMSOXD" Code="70" Type="bool" Property="SuppressOutsideExtensionDimensionLines" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMSTYLE" Code="2" Type="string" Property="DimensionStyleName" DefaultValue="null" />
   <Variable Name="DIMTAD" Code="70" Type="bool" Property="TextAboveDimensionLine" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-  <Variable Name="DIMTDEC" Code="70" Type="short" Property="DimensionToleranceDecimalPlaces" DefaultValue="12" />
+  <Variable Name="DIMTDEC" Code="70" Type="short" Property="DimensionToleranceDecimalPlaces" DefaultValue="12" MinVersion="R13" />
   <Variable Name="DIMTFAC" Code="40" Type="double" Property="DimensionToleranceDisplayScaleFactor" DefaultValue="1.0" />
   <Variable Name="DIMTIH" Code="70" Type="bool" Property="DimensionTextInsideHorizontal" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMTIX" Code="70" Type="bool" Property="ForceDimensionTextInsideExtensions" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
@@ -96,20 +97,24 @@
   <Variable Name="DIMTOFL" Code="70" Type="bool" Property="ForceDimensionLineExtensionsOutsideIfTextIs" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMTOH" Code="70" Type="bool" Property="DimensionTextOutsideHorizontal" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMTOL" Code="70" Type="bool" Property="GenerateDimensionTolerances" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-  <Variable Name="DIMTOLJ" Code="70" Type="DxfJustification" Property="DimensionToleranceVerticalJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" />
+  <Variable Name="DIMTOLJ" Code="70" Type="DxfJustification" Property="DimensionToleranceVerticalJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" MinVersion="R13" />
   <Variable Name="DIMTP" Code="40" Type="double" Property="DimensionPlusTolerance" DefaultValue="0.0" />
   <Variable Name="DIMTSZ" Code="40" Type="double" Property="DimensioningTickSize" DefaultValue="0.0" />
   <Variable Name="DIMTVP" Code="40" Type="double" Property="DimensionVerticalTextPosition" DefaultValue="0.0" />
-  <Variable Name="DIMTXSTY" Code="7" Type="string" Property="DimensionTextStyle" DefaultValue="null" />
+  <Variable Name="DIMTXSTY" Code="7" Type="string" Property="DimensionTextStyle" DefaultValue="null" MinVersion="R13" />
   <Variable Name="DIMTXT" Code="40" Type="double" Property="DimensioningTextHeight" DefaultValue="10.0" />
-  <Variable Name="DIMTZIN" Code="70" Type="DxfUnitZeroSuppression" Property="DimensionToleranceZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
-  <Variable Name="DIMUNIT" Code="70" Type="DxfUnitFormat" Property="DimensionUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MaxVersion="R14" />
-  <Variable Name="DIMUPT" Code="70" Type="bool" Property="DimensionCursorControlsTextPosition" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+  <Variable Name="DIMTZIN" Code="70" Type="DxfUnitZeroSuppression" Property="DimensionToleranceZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
+  <Variable Name="DIMUNIT" Code="70" Type="DxfUnitFormat" Property="DimensionUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MinVersion="R13" MaxVersion="R14" />
+  <Variable Name="DIMUPT" Code="70" Type="bool" Property="DimensionCursorControlsTextPosition" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
   <Variable Name="DIMZIN" Code="70" Type="DxfUnitZeroSuppression" Property="DimensionUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
-  <Variable Name="DISPSILH" Code="70" Type="bool" Property="DisplaySilhouetteCurvesInWireframeMode" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+  <Variable Name="DISPSILH" Code="70" Type="bool" Property="DisplaySilhouetteCurvesInWireframeMode" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
   <Variable Name="DRAGMODE" Code="70" Type="DxfDragMode" Property="DragMode" DefaultValue="DxfDragMode.Auto" ReadConverter="(DxfDragMode)" WriteConverter="(short)" MaxVersion="R14" />
   <Variable Name="DRAGVS" Code="349" Type="string" Property="ThreeDSolidCreationVisualStyle" DefaultValue="null" MinVersion="R2007" />
-  <Variable Name="DWGCODEPAGE" Code="3" Type="string" Property="DrawingCodePage" DefaultValue="437" />
+
+  <!-- code 70 in R12-, code 3 in R13+ -->
+  <Variable Name="DWGCODEPAGE" Code="70" Type="string" Property="DrawingCodePage" DefaultValue="437" ReadConverter="StringShort" WriteConverter="StringShort" MaxVersion="R12" />
+  <Variable Name="DWGCODEPAGE" Code="3" Type="string" Property="DrawingCodePage" DefaultValue="437" MinVersion="R13" />
+
   <Variable Name="ELEVATION" Code="40" Type="double" Property="Elevation" DefaultValue="0.0" />
   <Variable Name="ENDCAPS" Code="280" Type="DxfEndCapSetting" Property="EndCapSetting" DefaultValue="DxfEndCapSetting.None" ReadConverter="(DxfEndCapSetting)" WriteConverter="(short)" MinVersion="R2000" />
   <Variable Name="EXTMAX" Code="-3" Type="DxfPoint" Property="MaximumDrawingExtents" DefaultValue="DxfPoint.Origin" />
@@ -119,7 +124,7 @@
   <Variable Name="FILLMODE" Code="70" Type="bool" Property="FillModeOn" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="FINGERPRINTGUID" Code="2" Type="Guid" Property="FingerprintGuid" DefaultValue="Guid.NewGuid()" ReadConverter="GuidString" WriteConverter="GuidString" MinVersion="R2000" />
   <Variable Name="HALOGAP" Code="280" Type="double" Property="HaloGapPercent" DefaultValue="0.0" ReadConverter="(double)" WriteConverter="(short)" MinVersion="R2004" />
-  <Variable Name="HANDLING" Code="70" Type="int" Property="NextAvailableHandle" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" MinVersion="R14" MaxVersion="R14" />
+  <Variable Name="HANDLING" Code="70" Type="int" Property="NextAvailableHandle" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" MaxVersion="R14" />
   <Variable Name="HANDSEED" Code="5" Type="string" Property="NextAvailableHandle2" DefaultValue="" />
   <Variable Name="HIDETEXT" Code="290" Type="bool" Property="HideTextObjectsWhenProducintHiddenView" DefaultValue="false" MinVersion="R2004" />
   <Variable Name="HYPERLINKBASE" Code="1" Type="string" Property="HyperlinBase" DefaultValue="null" MinVersion="R2000" />
@@ -166,8 +171,8 @@
   <Variable Name="PELEVATION" Code="40" Type="double" Property="PaperspaceElevation" DefaultValue="0.0" />
   <Variable Name="PEXTMAX" Code="-3" Type="DxfPoint" Property="PaperspaceMaximumDrawingExtents" DefaultValue="DxfPoint.Origin" />
   <Variable Name="PEXTMIN" Code="-3" Type="DxfPoint" Property="PaperspaceMinimumDrawingExtents" DefaultValue="DxfPoint.Origin" />
-  <Variable Name="PICKSTYLE" Code="70" Type="DxfPickStyle" Property="PickStyle" DefaultValue="DxfPickStyle.None" ReadConverter="(DxfPickStyle)" WriteConverter="(short)" MaxVersion="R14" />
-  <Variable Name="PINSBASE" Code="-3" Type="DxfPoint" Property="PaperspaceInsertionBase" DefaultValue="DxfPoint.Origin" />
+  <Variable Name="PICKSTYLE" Code="70" Type="DxfPickStyle" Property="PickStyle" DefaultValue="DxfPickStyle.None" ReadConverter="(DxfPickStyle)" WriteConverter="(short)" MinVersion="R13" MaxVersion="R14" />
+  <Variable Name="PINSBASE" Code="-3" Type="DxfPoint" Property="PaperspaceInsertionBase" DefaultValue="DxfPoint.Origin" MinVersion="R14" />
   <Variable Name="PLIMCHECK" Code="70" Type="bool" Property="LimitCheckingInPaperspace" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="PLIMMAX" Code="-2" Type="DxfPoint" Property="PaperspaceMaximumDrawingLimits" DefaultValue="DxfPoint.Origin" />
   <Variable Name="PLIMMIN" Code="-2" Type="DxfPoint" Property="PaperspaceMinimumDrawingLimits" DefaultValue="DxfPoint.Origin" />
@@ -226,7 +231,7 @@
   <Variable Name="THICKNESS" Code="40" Type="double" Property="Thickness" DefaultValue="0.0" />
   <Variable Name="TILEMODE" Code="70" Type="bool" Property="PreviousReleaseTileCompatability" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="TRACEWID" Code="40" Type="double" Property="TraceWidth" DefaultValue="0.0" />
-  <Variable Name="TREEDEPTH" Code="70" Type="short" Property="SpacialIndexMaxDepth" DefaultValue="0" />
+  <Variable Name="TREEDEPTH" Code="70" Type="short" Property="SpacialIndexMaxDepth" DefaultValue="0" MinVersion="R14" />
   <Variable Name="UCSBASE" Code="2" Type="string" Property="UCSDefinitionName" DefaultValue="null" MinVersion="R2000" />
   <Variable Name="UCSNAME" Code="2" Type="string" Property="UCSName" DefaultValue="null" />
   <Variable Name="UCSORG" Code="-3" Type="DxfPoint" Property="UCSOrigin" DefaultValue="DxfPoint.Origin" />

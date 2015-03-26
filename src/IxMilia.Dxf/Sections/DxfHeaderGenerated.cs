@@ -20,6 +20,8 @@ namespace IxMilia.Dxf
         private const string ATTREQ = "$ATTREQ";
         private const string AUNITS = "$AUNITS";
         private const string AUPREC = "$AUPREC";
+        private const string AXISMODE = "$AXISMODE";
+        private const string AXISUNIT = "$AXISUNIT";
         private const string BLIPMODE = "$BLIPMODE";
         private const string CECOLOR = "$CECOLOR";
         private const string CELTSCALE = "$CELTSCALE";
@@ -279,6 +281,16 @@ namespace IxMilia.Dxf
         /// The $AUPREC header variable.
         /// </summary>
         public short AngleUnitPrecision { get; set; }
+
+        /// <summary>
+        /// The $AXISMODE header variable.
+        /// </summary>
+        public bool AxisOn { get; set; }
+
+        /// <summary>
+        /// The $AXISUNIT header variable.
+        /// </summary>
+        public DxfVector AxisTickSpacing { get; set; }
 
         /// <summary>
         /// The $BLIPMODE header variable.
@@ -1347,6 +1359,8 @@ namespace IxMilia.Dxf
             this.PromptForAttributeOnInsert = true; // ATTREQ
             this.AngleUnitFormat = DxfAngleFormat.DecimalDegrees; // AUNITS
             this.AngleUnitPrecision = 12; // AUPREC
+            this.AxisOn = false; // AXISMODE
+            this.AxisTickSpacing = DxfVector.Zero; // AXISUNIT
             this.BlipMode = false; // BLIPMODE
             this.CurrentEntityColor = DxfColor.ByBlock; // CECOLOR
             this.CurrentEntityLinetypeScale = 1.0; // CELTSCALE
@@ -1608,6 +1622,21 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(9, AUPREC));
             list.Add(new DxfCodePair(70, (header.AngleUnitPrecision)));
 
+            // AXISMODE
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, AXISMODE));
+                list.Add(new DxfCodePair(70, BoolShort(header.AxisOn)));
+            }
+
+            // AXISUNIT
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, AXISUNIT));
+                list.Add(new DxfCodePair(10, header.AxisTickSpacing.X));
+                list.Add(new DxfCodePair(20, header.AxisTickSpacing.Y));
+            }
+
             // BLIPMODE
             if (version <= DxfAcadVersion.R14)
             {
@@ -1854,16 +1883,25 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(40, (header.CenterMarkSize)));
 
             // DIMCLRD
-            list.Add(new DxfCodePair(9, DIMCLRD));
-            list.Add(new DxfCodePair(70, DxfColor.GetRawValue(header.DimensionLineColor)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, DIMCLRD));
+                list.Add(new DxfCodePair(70, DxfColor.GetRawValue(header.DimensionLineColor)));
+            }
 
             // DIMCLRE
-            list.Add(new DxfCodePair(9, DIMCLRE));
-            list.Add(new DxfCodePair(70, DxfColor.GetRawValue(header.DimensionExtensionLineColor)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, DIMCLRE));
+                list.Add(new DxfCodePair(70, DxfColor.GetRawValue(header.DimensionExtensionLineColor)));
+            }
 
             // DIMCLRT
-            list.Add(new DxfCodePair(9, DIMCLRT));
-            list.Add(new DxfCodePair(70, DxfColor.GetRawValue(header.DimensionTextColor)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, DIMCLRT));
+                list.Add(new DxfCodePair(70, DxfColor.GetRawValue(header.DimensionTextColor)));
+            }
 
             // DIMDEC
             if (version >= DxfAcadVersion.R13)
@@ -1910,8 +1948,11 @@ namespace IxMilia.Dxf
             }
 
             // DIMGAP
-            list.Add(new DxfCodePair(9, DIMGAP));
-            list.Add(new DxfCodePair(40, (header.DimensionLineGap)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, DIMGAP));
+                list.Add(new DxfCodePair(40, (header.DimensionLineGap)));
+            }
 
             // DIMJUST
             if (version >= DxfAcadVersion.R13)
@@ -1990,8 +2031,11 @@ namespace IxMilia.Dxf
             }
 
             // DIMTFAC
-            list.Add(new DxfCodePair(9, DIMTFAC));
-            list.Add(new DxfCodePair(40, (header.DimensionToleranceDisplayScaleFactor)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, DIMTFAC));
+                list.Add(new DxfCodePair(40, (header.DimensionToleranceDisplayScaleFactor)));
+            }
 
             // DIMTIH
             list.Add(new DxfCodePair(9, DIMTIH));
@@ -2101,7 +2145,7 @@ namespace IxMilia.Dxf
             }
 
             // DWGCODEPAGE
-            if (version <= DxfAcadVersion.R12)
+            if (version == DxfAcadVersion.R12)
             {
                 list.Add(new DxfCodePair(9, DWGCODEPAGE));
                 list.Add(new DxfCodePair(70, StringShort(header.DrawingCodePage)));
@@ -2287,8 +2331,11 @@ namespace IxMilia.Dxf
             }
 
             // MAXACTVP
-            list.Add(new DxfCodePair(9, MAXACTVP));
-            list.Add(new DxfCodePair(70, (header.MaximumActiveViewports)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, MAXACTVP));
+                list.Add(new DxfCodePair(70, (header.MaximumActiveViewports)));
+            }
 
             // MEASUREMENT
             if (version >= DxfAcadVersion.R14)
@@ -2339,20 +2386,29 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(40, (header.PointDisplaySize)));
 
             // PELEVATION
-            list.Add(new DxfCodePair(9, PELEVATION));
-            list.Add(new DxfCodePair(40, (header.PaperspaceElevation)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PELEVATION));
+                list.Add(new DxfCodePair(40, (header.PaperspaceElevation)));
+            }
 
             // PEXTMAX
-            list.Add(new DxfCodePair(9, PEXTMAX));
-            list.Add(new DxfCodePair(10, header.PaperspaceMaximumDrawingExtents.X));
-            list.Add(new DxfCodePair(20, header.PaperspaceMaximumDrawingExtents.Y));
-            list.Add(new DxfCodePair(30, header.PaperspaceMaximumDrawingExtents.Z));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PEXTMAX));
+                list.Add(new DxfCodePair(10, header.PaperspaceMaximumDrawingExtents.X));
+                list.Add(new DxfCodePair(20, header.PaperspaceMaximumDrawingExtents.Y));
+                list.Add(new DxfCodePair(30, header.PaperspaceMaximumDrawingExtents.Z));
+            }
 
             // PEXTMIN
-            list.Add(new DxfCodePair(9, PEXTMIN));
-            list.Add(new DxfCodePair(10, header.PaperspaceMinimumDrawingExtents.X));
-            list.Add(new DxfCodePair(20, header.PaperspaceMinimumDrawingExtents.Y));
-            list.Add(new DxfCodePair(30, header.PaperspaceMinimumDrawingExtents.Z));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PEXTMIN));
+                list.Add(new DxfCodePair(10, header.PaperspaceMinimumDrawingExtents.X));
+                list.Add(new DxfCodePair(20, header.PaperspaceMinimumDrawingExtents.Y));
+                list.Add(new DxfCodePair(30, header.PaperspaceMinimumDrawingExtents.Z));
+            }
 
             // PICKSTYLE
             if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
@@ -2371,22 +2427,34 @@ namespace IxMilia.Dxf
             }
 
             // PLIMCHECK
-            list.Add(new DxfCodePair(9, PLIMCHECK));
-            list.Add(new DxfCodePair(70, BoolShort(header.LimitCheckingInPaperspace)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PLIMCHECK));
+                list.Add(new DxfCodePair(70, BoolShort(header.LimitCheckingInPaperspace)));
+            }
 
             // PLIMMAX
-            list.Add(new DxfCodePair(9, PLIMMAX));
-            list.Add(new DxfCodePair(10, header.PaperspaceMaximumDrawingLimits.X));
-            list.Add(new DxfCodePair(20, header.PaperspaceMaximumDrawingLimits.Y));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PLIMMAX));
+                list.Add(new DxfCodePair(10, header.PaperspaceMaximumDrawingLimits.X));
+                list.Add(new DxfCodePair(20, header.PaperspaceMaximumDrawingLimits.Y));
+            }
 
             // PLIMMIN
-            list.Add(new DxfCodePair(9, PLIMMIN));
-            list.Add(new DxfCodePair(10, header.PaperspaceMinimumDrawingLimits.X));
-            list.Add(new DxfCodePair(20, header.PaperspaceMinimumDrawingLimits.Y));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PLIMMIN));
+                list.Add(new DxfCodePair(10, header.PaperspaceMinimumDrawingLimits.X));
+                list.Add(new DxfCodePair(20, header.PaperspaceMinimumDrawingLimits.Y));
+            }
 
             // PLINEGEN
-            list.Add(new DxfCodePair(9, PLINEGEN));
-            list.Add(new DxfCodePair(70, BoolShort(header.IsPolylineContinuousAroundVerticies)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PLINEGEN));
+                list.Add(new DxfCodePair(70, BoolShort(header.IsPolylineContinuousAroundVerticies)));
+            }
 
             // PLINEWID
             list.Add(new DxfCodePair(9, PLINEWID));
@@ -2407,8 +2475,11 @@ namespace IxMilia.Dxf
             }
 
             // PSLTSCALE
-            list.Add(new DxfCodePair(9, PSLTSCALE));
-            list.Add(new DxfCodePair(70, BoolShort(header.ScaleLinetypesInPaperspace)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PSLTSCALE));
+                list.Add(new DxfCodePair(70, BoolShort(header.ScaleLinetypesInPaperspace)));
+            }
 
             // PSTYLEMODE
             if (version >= DxfAcadVersion.R2000)
@@ -2432,14 +2503,20 @@ namespace IxMilia.Dxf
             }
 
             // PUCSNAME
-            list.Add(new DxfCodePair(9, PUCSNAME));
-            list.Add(new DxfCodePair(2, (header.PaperspaceUCSName)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PUCSNAME));
+                list.Add(new DxfCodePair(2, (header.PaperspaceUCSName)));
+            }
 
             // PUCSORG
-            list.Add(new DxfCodePair(9, PUCSORG));
-            list.Add(new DxfCodePair(10, header.PaperspaceUCSOrigin.X));
-            list.Add(new DxfCodePair(20, header.PaperspaceUCSOrigin.Y));
-            list.Add(new DxfCodePair(30, header.PaperspaceUCSOrigin.Z));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PUCSORG));
+                list.Add(new DxfCodePair(10, header.PaperspaceUCSOrigin.X));
+                list.Add(new DxfCodePair(20, header.PaperspaceUCSOrigin.Y));
+                list.Add(new DxfCodePair(30, header.PaperspaceUCSOrigin.Z));
+            }
 
             // PUCSORGBACK
             if (version >= DxfAcadVersion.R2000)
@@ -2510,16 +2587,22 @@ namespace IxMilia.Dxf
             }
 
             // PUCSXDIR
-            list.Add(new DxfCodePair(9, PUCSXDIR));
-            list.Add(new DxfCodePair(10, header.PaperspaceXAxis.X));
-            list.Add(new DxfCodePair(20, header.PaperspaceXAxis.Y));
-            list.Add(new DxfCodePair(30, header.PaperspaceXAxis.Z));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PUCSXDIR));
+                list.Add(new DxfCodePair(10, header.PaperspaceXAxis.X));
+                list.Add(new DxfCodePair(20, header.PaperspaceXAxis.Y));
+                list.Add(new DxfCodePair(30, header.PaperspaceXAxis.Z));
+            }
 
             // PUCSYDIR
-            list.Add(new DxfCodePair(9, PUCSYDIR));
-            list.Add(new DxfCodePair(10, header.PaperspaceYAxis.X));
-            list.Add(new DxfCodePair(20, header.PaperspaceYAxis.Y));
-            list.Add(new DxfCodePair(30, header.PaperspaceYAxis.Z));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, PUCSYDIR));
+                list.Add(new DxfCodePair(10, header.PaperspaceYAxis.X));
+                list.Add(new DxfCodePair(20, header.PaperspaceYAxis.Y));
+                list.Add(new DxfCodePair(30, header.PaperspaceYAxis.Z));
+            }
 
             // QTEXTMODE
             list.Add(new DxfCodePair(9, QTEXTMODE));
@@ -2530,12 +2613,18 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(70, BoolShort(header.UseRegenMode)));
 
             // SHADEDGE
-            list.Add(new DxfCodePair(9, SHADEDGE));
-            list.Add(new DxfCodePair(70, (short)(header.EdgeShading)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, SHADEDGE));
+                list.Add(new DxfCodePair(70, (short)(header.EdgeShading)));
+            }
 
             // SHADEDIF
-            list.Add(new DxfCodePair(9, SHADEDIF));
-            list.Add(new DxfCodePair(70, (header.PercentAmbientToDiffuse)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, SHADEDIF));
+                list.Add(new DxfCodePair(70, (header.PercentAmbientToDiffuse)));
+            }
 
             // SHADOWPLANELOCATION
             if (version >= DxfAcadVersion.R2007)
@@ -2637,8 +2726,11 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(40, (header.Thickness)));
 
             // TILEMODE
-            list.Add(new DxfCodePair(9, TILEMODE));
-            list.Add(new DxfCodePair(70, BoolShort(header.PreviousReleaseTileCompatability)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, TILEMODE));
+                list.Add(new DxfCodePair(70, BoolShort(header.PreviousReleaseTileCompatability)));
+            }
 
             // TRACEWID
             list.Add(new DxfCodePair(9, TRACEWID));
@@ -2659,8 +2751,18 @@ namespace IxMilia.Dxf
             }
 
             // UCSNAME
-            list.Add(new DxfCodePair(9, UCSNAME));
-            list.Add(new DxfCodePair(2, (header.UCSName)));
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, UCSNAME));
+                list.Add(new DxfCodePair(1, (header.UCSName)));
+            }
+
+            // UCSNAME
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, UCSNAME));
+                list.Add(new DxfCodePair(2, (header.UCSName)));
+            }
 
             // UCSORG
             list.Add(new DxfCodePair(9, UCSORG));
@@ -2749,8 +2851,11 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(30, header.UCSYAxis.Z));
 
             // UNITMODE
-            list.Add(new DxfCodePair(9, UNITMODE));
-            list.Add(new DxfCodePair(70, BoolShort(header.DisplayFractionsInInput)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, UNITMODE));
+                list.Add(new DxfCodePair(70, BoolShort(header.DisplayFractionsInInput)));
+            }
 
             // USERI1
             list.Add(new DxfCodePair(9, USERI1));
@@ -2804,8 +2909,11 @@ namespace IxMilia.Dxf
             }
 
             // VISRETAIN
-            list.Add(new DxfCodePair(9, VISRETAIN));
-            list.Add(new DxfCodePair(70, BoolShort(header.RetainXRefDependentVisibilitySettings)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(9, VISRETAIN));
+                list.Add(new DxfCodePair(70, BoolShort(header.RetainXRefDependentVisibilitySettings)));
+            }
 
             // WORLDVIEW
             list.Add(new DxfCodePair(9, WORLDVIEW));
@@ -2867,6 +2975,13 @@ namespace IxMilia.Dxf
                 case AUPREC:
                     EnsureCode(pair, 70);
                     header.AngleUnitPrecision = (pair.ShortValue);
+                    break;
+                case AXISMODE:
+                    EnsureCode(pair, 70);
+                    header.AxisOn = BoolShort(pair.ShortValue);
+                    break;
+                case AXISUNIT:
+                    SetPoint(pair, header.AxisTickSpacing);
                     break;
                 case BLIPMODE:
                     EnsureCode(pair, 70);
@@ -3620,8 +3735,18 @@ namespace IxMilia.Dxf
                     header.UCSDefinitionName = (pair.StringValue);
                     break;
                 case UCSNAME:
-                    EnsureCode(pair, 2);
-                    header.UCSName = (pair.StringValue);
+                    switch (pair.Code)
+                    {
+                        case 1:
+                            header.UCSName = (pair.StringValue);
+                            break;
+                        case 2:
+                            header.UCSName = (pair.StringValue);
+                            break;
+                        default:
+                            Debug.Assert(false, string.Format("Expected code [1, 2], got {0}", pair.Code));
+                            break;
+                    }
                     break;
                 case UCSORG:
                     SetPoint(pair, header.UCSOrigin);
@@ -3977,6 +4102,10 @@ namespace IxMilia.Dxf
                     return this.AngleUnitFormat;
                 case AUPREC:
                     return this.AngleUnitPrecision;
+                case AXISMODE:
+                    return this.AxisOn;
+                case AXISUNIT:
+                    return this.AxisTickSpacing;
                 case BLIPMODE:
                     return this.BlipMode;
                 case CECOLOR:
@@ -4440,6 +4569,12 @@ namespace IxMilia.Dxf
                     break;
                 case AUPREC:
                     this.AngleUnitPrecision = (short)value;
+                    break;
+                case AXISMODE:
+                    this.AxisOn = (bool)value;
+                    break;
+                case AXISUNIT:
+                    this.AxisTickSpacing = (DxfVector)value;
                     break;
                 case BLIPMODE:
                     this.BlipMode = (bool)value;

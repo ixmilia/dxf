@@ -37,7 +37,7 @@ namespace IxMilia.Dxf.Sections
 
         protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version)
         {
-            foreach (var table in new DxfTable[] { AppIdTable, BlockRecordTable, DimStyleTable, LayerTable, LTypeTable, StyleTable, UcsTable, ViewTable, ViewPortTable })
+            foreach (var table in new DxfTable[] { AppIdTable, BlockRecordTable, DimStyleTable, LTypeTable, LayerTable, StyleTable, UcsTable, ViewTable, ViewPortTable })
             {
                 foreach (var pair in table.GetValuePairs(version))
                     yield return pair;

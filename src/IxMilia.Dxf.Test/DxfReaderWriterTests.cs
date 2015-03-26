@@ -538,5 +538,88 @@ AcDbBlockEnd
 ENDSEC
 ");
         }
+
+        [Fact]
+        public void ReadTableTest()
+        {
+            // sample pulled from R13 spec
+            var file = Parse(@"
+  0
+SECTION
+  2
+TABLES
+  0
+TABLE
+  2
+STYLE
+  5
+1C
+ 70
+3
+1001
+APP_X
+1040
+42.0
+  0
+STYLE
+  5
+3A
+  2
+ENTRY_1
+ 70
+64
+ 40
+0.4
+ 41
+1.0
+ 50
+0.0
+ 71
+0
+ 42
+0.4
+  3
+BUFONTS.TXT
+  0
+STYLE
+  5
+C2
+  2
+ENTRY_2
+  3
+BUFONTS.TXT
+1001
+APP_1
+1070
+45
+1001
+APP_2
+1004
+18A5B3EF2C199A
+  0
+ENDSEC
+  0
+EOF
+");
+            var styleTable = file.TablesSection.StyleTable;
+            Assert.Equal("1C", styleTable.Handle);
+            Assert.Equal(3, styleTable.MaxEntries);
+
+            var style1 = file.Styles.First();
+            Assert.Equal("3A", style1.Handle);
+            Assert.Equal("ENTRY_1", style1.Name);
+            Assert.Equal(64, style1.StandardFlags);
+            Assert.Equal(0.4, style1.TextHeight);
+            Assert.Equal(1.0, style1.WidthFactor);
+            Assert.Equal(0.0, style1.ObliqueAngle);
+            Assert.Equal(0, style1.TextGenerationFlags);
+            Assert.Equal(0.4, style1.LastHeightUsed);
+            Assert.Equal("BUFONTS.TXT", style1.PrimaryFontFileName);
+
+            var style2 = file.Styles.Skip(1).Single();
+            Assert.Equal("C2", style2.Handle);
+            Assert.Equal("ENTRY_2", style2.Name);
+            Assert.Equal("BUFONTS.TXT", style2.PrimaryFontFileName);
+        }
     }
 }

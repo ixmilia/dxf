@@ -3337,7 +3337,6 @@ namespace IxMilia.Dxf.Entities
         public int VertexCount { get; set; }
         public int Flags { get; set; }
         public double ConstantWidth { get; set; }
-        public double Elevation { get; set; }
         public double Thickness { get; set; }
         private List<double> VertexCoordinateX { get; set; }
         private List<double> VertexCoordinateY { get; set; }
@@ -3381,7 +3380,6 @@ namespace IxMilia.Dxf.Entities
             this.VertexCount = 0;
             this.Flags = 0;
             this.ConstantWidth = 0.0;
-            this.Elevation = 0.0;
             this.Thickness = 0.0;
             this.VertexCoordinateX = new List<double>();
             this.VertexCoordinateY = new List<double>();
@@ -3402,11 +3400,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(43, (this.ConstantWidth)));
             }
 
-            if (this.Elevation != 0.0)
+            if (Elevation != 0.0)
             {
-                pairs.Add(new DxfCodePair(38, (this.Elevation)));
+                pairs.Add(new DxfCodePair(38, Elevation));
             }
-
             if (this.Thickness != 0.0)
             {
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
@@ -3448,9 +3445,6 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 20:
                     this.VertexCoordinateY.Add((pair.DoubleValue));
-                    break;
-                case 38:
-                    this.Elevation = (pair.DoubleValue);
                     break;
                 case 39:
                     this.Thickness = (pair.DoubleValue);

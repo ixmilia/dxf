@@ -498,7 +498,6 @@
       <Flag Name="IsPLineGen" Mask="128" />
     </Property>
     <Property Name="ConstantWidth" Code="43" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
-    <Property Name="Elevation" Code="38" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="VertexCoordinateX" Code="10" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
     <Property Name="VertexCoordinateY" Code="20" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
@@ -511,7 +510,7 @@
       <WriteSpecificValue Code="90" Value="Vertices.Count" />
       <WriteProperty Property="Flags" />
       <WriteProperty Property="ConstantWidth" />
-      <WriteProperty Property="Elevation" />
+      <WriteSpecificValue Code="38" Value="Elevation" DontWriteIfValueIs="0.0" />
       <WriteProperty Property="Thickness" />
       <Foreach Property="Vertices">
         <WriteSpecificValue Code="10" Value="item.Location.X" />

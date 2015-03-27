@@ -53,17 +53,16 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
 
 ### Status
 
-- HEADER section - complete through R2014
-- CLASSES section - complete through R2014
-- TABLES section - complete through R14
-- BLOCKS section - complete through R14
-- ENTITIES section - common complete through R2014, entities complete through R2000, DIMENSION complete through R2014
+- HEADER section - complete R10 through R2014
+- CLASSES section - complete R10 through R2014
+- TABLES section - complete R10 through R14
+- BLOCKS section - complete R10 through R14
+- ENTITIES section - common complete R10 through R2014, entities complete R10 through R2000, DIMENSION complete R10 through R2014
 - OBJECTS section - NYI
 
 ### TODO
 
 - 102 codes for entities
-- add min/max for classes/tables/blocks/objects sections
 
 ### DXF reference
 

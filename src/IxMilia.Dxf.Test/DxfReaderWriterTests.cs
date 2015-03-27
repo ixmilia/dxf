@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Linq;
+using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
 using Xunit;
@@ -111,6 +112,595 @@ ENDSEC");
             };
             var bitmap = file.GetThumbnailBitmap();
             AssertArrayEqual(expected, bitmap);
+        }
+
+        [Fact]
+        public void ReadVersionSpecificClassTest_R13()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1012
+  0
+ENDSEC
+  0
+SECTION
+  2
+CLASSES
+  0
+<class dxf name>
+  1
+CPP_CLASS_NAME
+  2
+<application name>
+ 90
+42
+  0
+ENDSEC
+  0
+EOF
+");
+            Assert.Equal(1, file.Classes.Count);
+
+            var cls = file.Classes.Single();
+            Assert.Equal(cls.ClassDxfRecordName, "<class dxf name>");
+            Assert.Equal(cls.CppClassName, "CPP_CLASS_NAME");
+            Assert.Equal(cls.ApplicationName, "<application name>");
+            Assert.Equal(cls.ClassVersionNumber, 42);
+        }
+
+        [Fact]
+        public void ReadVersionSpecificClassTest_R14()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1014
+  0
+ENDSEC
+  0
+SECTION
+  2
+CLASSES
+  0
+CLASS
+  1
+<class dxf name>
+  2
+CPP_CLASS_NAME
+  3
+<application name>
+ 90
+42
+  0
+ENDSEC
+  0
+EOF
+");
+            Assert.Equal(1, file.Classes.Count);
+
+            var cls = file.Classes.Single();
+            Assert.Equal(cls.ClassDxfRecordName, "<class dxf name>");
+            Assert.Equal(cls.CppClassName, "CPP_CLASS_NAME");
+            Assert.Equal(cls.ApplicationName, "<application name>");
+            Assert.Equal(cls.ProxyCapabilities.Value, 42);
+        }
+
+        [Fact]
+        public void WriteVersionSpecificClassTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            file.Classes.Add(new DxfClass()
+            {
+                ClassDxfRecordName = "<class dxf name>",
+                CppClassName = "CPP_CLASS_NAME",
+                ApplicationName = "<application name>",
+                ClassVersionNumber = 42
+            });
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+CLASSES
+  0
+<class dxf name>
+  1
+CPP_CLASS_NAME
+  2
+<application name>
+ 90
+42
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificClassTest_R14()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Classes.Add(new DxfClass()
+            {
+                ClassDxfRecordName = "<class dxf name>",
+                CppClassName = "CPP_CLASS_NAME",
+                ApplicationName = "<application name>",
+                ProxyCapabilities = new DxfProxyCapabilities(42)
+            });
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+CLASSES
+  0
+CLASS
+  1
+<class dxf name>
+  2
+CPP_CLASS_NAME
+  3
+<application name>
+ 90
+42
+");
+        }
+
+        [Fact]
+        public void ReadVersionSpecificBlockTest_R13()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1012
+  0
+ENDSEC
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+11
+ 20
+22
+ 30
+33
+  3
+<block name>
+  1
+<xref path>
+  0
+POINT
+ 10
+1.1
+ 20
+2.2
+ 30
+3.3
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockEnd
+  0
+ENDSEC
+  0
+EOF
+");
+
+            var block = file.Blocks.Single();
+            Assert.Equal("<block name>", block.Name);
+            Assert.Equal("<handle>", block.Handle);
+            Assert.Equal("<layer>", block.Layer);
+            Assert.Equal(11, block.BasePoint.X);
+            Assert.Equal(22, block.BasePoint.Y);
+            Assert.Equal(33, block.BasePoint.Z);
+            var point = (DxfModelPoint)block.Entities.Single();
+            Assert.Equal(1.1, point.Location.X);
+            Assert.Equal(2.2, point.Location.Y);
+            Assert.Equal(3.3, point.Location.Z);
+        }
+
+        [Fact]
+        public void ReadVersionSpecificBlockTest_R14()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1014
+  0
+ENDSEC
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+11
+ 20
+22
+ 30
+33
+  3
+<block name>
+  1
+<xref>
+  0
+POINT
+ 10
+1.1
+ 20
+2.2
+ 30
+3.3
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbBlockEnd
+  0
+ENDSEC
+  0
+EOF
+");
+
+            var block = file.Blocks.Single();
+            Assert.Equal("<block name>", block.Name);
+            Assert.Equal("<handle>", block.Handle);
+            Assert.Equal("<layer>", block.Layer);
+            Assert.Equal("<xref>", block.XrefName);
+            Assert.Equal(11, block.BasePoint.X);
+            Assert.Equal(22, block.BasePoint.Y);
+            Assert.Equal(33, block.BasePoint.Z);
+            var point = (DxfModelPoint)block.Entities.Single();
+            Assert.Equal(1.1, point.Location.X);
+            Assert.Equal(2.2, point.Location.Y);
+            Assert.Equal(3.3, point.Location.Z);
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            var block = new DxfBlock();
+            block.Name = "<block name>";
+            block.Handle = "<handle>";
+            block.Layer = "<layer>";
+            block.XrefName = "<xref>";
+            block.BasePoint = new DxfPoint(11, 22, 33);
+            block.Entities.Add(new DxfModelPoint(new DxfPoint(111, 222, 333)));
+            file.Blocks.Add(block);
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+1.1000000000000000E+001
+ 20
+2.2000000000000000E+001
+ 30
+3.3000000000000000E+001
+  3
+<block name>
+  1
+<xref>
+");
+            VerifyFileContains(file, @"
+ 10
+1.1100000000000000E+002
+ 20
+2.2200000000000000E+002
+ 30
+3.3300000000000000E+002
+");
+            VerifyFileContains(file, @"
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockEnd
+  0
+ENDSEC
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockTest_R14()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            var block = new DxfBlock();
+            block.Name = "<block name>";
+            block.Handle = "<handle>";
+            block.Layer = "<layer>";
+            block.XrefName = "<xref>";
+            block.BasePoint = new DxfPoint(11, 22, 33);
+            block.Entities.Add(new DxfModelPoint(new DxfPoint(111, 222, 333)));
+            file.Blocks.Add(block);
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+  5
+<handle>
+100
+AcDbEntity
+  8
+<layer>
+100
+AcDbBlockBegin
+  2
+<block name>
+ 70
+0
+ 10
+1.1000000000000000E+001
+ 20
+2.2000000000000000E+001
+ 30
+3.3000000000000000E+001
+  3
+<block name>
+  1
+<xref>
+");
+            VerifyFileContains(file, @"
+ 10
+1.1100000000000000E+002
+ 20
+2.2200000000000000E+002
+ 30
+3.3300000000000000E+002
+");
+            VerifyFileContains(file, @"
+  0
+ENDBLK
+  5
+<handle>
+100
+AcDbBlockEnd
+  0
+ENDSEC
+");
+        }
+
+        [Fact]
+        public void ReadTableTest()
+        {
+            // sample pulled from R13 spec
+            var file = Parse(@"
+  0
+SECTION
+  2
+TABLES
+  0
+TABLE
+  2
+STYLE
+  5
+1C
+ 70
+3
+1001
+APP_X
+1040
+42.0
+  0
+STYLE
+  5
+3A
+  2
+ENTRY_1
+ 70
+64
+ 40
+0.4
+ 41
+1.0
+ 50
+0.0
+ 71
+0
+ 42
+0.4
+  3
+BUFONTS.TXT
+  0
+STYLE
+  5
+C2
+  2
+ENTRY_2
+  3
+BUFONTS.TXT
+1001
+APP_1
+1070
+45
+1001
+APP_2
+1004
+18A5B3EF2C199A
+  0
+ENDSEC
+  0
+EOF
+");
+            var styleTable = file.TablesSection.StyleTable;
+            Assert.Equal("1C", styleTable.Handle);
+            Assert.Equal(3, styleTable.MaxEntries);
+
+            var style1 = file.Styles.First();
+            Assert.Equal("3A", style1.Handle);
+            Assert.Equal("ENTRY_1", style1.Name);
+            Assert.Equal(64, style1.StandardFlags);
+            Assert.Equal(0.4, style1.TextHeight);
+            Assert.Equal(1.0, style1.WidthFactor);
+            Assert.Equal(0.0, style1.ObliqueAngle);
+            Assert.Equal(0, style1.TextGenerationFlags);
+            Assert.Equal(0.4, style1.LastHeightUsed);
+            Assert.Equal("BUFONTS.TXT", style1.PrimaryFontFileName);
+
+            var style2 = file.Styles.Skip(1).Single();
+            Assert.Equal("C2", style2.Handle);
+            Assert.Equal("ENTRY_2", style2.Name);
+            Assert.Equal("BUFONTS.TXT", style2.PrimaryFontFileName);
+        }
+
+        [Fact]
+        public void WriteVersionSpecificSectionsTest_R12()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R12;
+            file.Classes.Add(new DxfClass());
+
+            // no CLASSES section in R12
+            VerifyFileDoesNotContain(file, @"
+  0
+SECTION
+  2
+CLASSES
+");
+
+            // no OBJECTS section in R12
+            VerifyFileDoesNotContain(file, @"
+  0
+SECTION
+  2
+OBJECTS
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificSectionsTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            file.Classes.Add(new DxfClass());
+
+            // CLASSES section added in R13
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+CLASSES
+");
+
+            // OBJECTS section added in R13
+            // NYI
+//            VerifyFileContains(file, @"
+//  0
+//SECTION
+//  2
+//OBJECTS
+//");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockRecordTest_R12()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R12;
+            file.BlockRecords.Add(new DxfBlockRecord());
+
+            // no BLOCK_RECORD in R12
+            VerifyFileDoesNotContain(file, @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+");
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockRecordTest_R13()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R13;
+            file.BlockRecords.Add(new DxfBlockRecord());
+
+            // BLOCK_RECORD added in R13
+            VerifyFileContains(file, @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+");
         }
     }
 }

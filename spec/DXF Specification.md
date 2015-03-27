@@ -3,6 +3,14 @@ Official DXF Specification
 
 Since I don't want to fall afoul of Autodesk's lawyers, this repo can't include the actual DXF documentation.  It can, however contain links to the official documents that I've been able to scrape together.  For most scenarios the 2014 documentation should suffice, but all other versions are included here for backwards compatibility and reference between versions.
 
+[R10 (non-Autodesk source)](http://www.martinreddy.net/gfx/3d/DXF10.spec)
+
+[R11 (differences between R10 and R11)](http://autodesk.blogs.com/between_the_lines/ACAD_R11.html)
+
+[R12 (non-Autodesk source)](http://www.martinreddy.net/gfx/3d/DXF12.spec)
+
+[R13 (self-extracting 16-bit executable)](http://www.autodesk.com/techpubs/autocad/dxf/dxf13_hlp.exe)
+
 [R14](http://www.autodesk.com/techpubs/autocad/acadr14/dxf/index.htm)
 
 [2000](http://www.autodesk.com/techpubs/autocad/acad2000/dxf/index.htm)

@@ -39,17 +39,21 @@ namespace IxMilia.Dxf.Tables
             // common pairs
             pairs.Add(new DxfCodePair(0, DxfSection.TableText));
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
-            pairs.Add(new DxfCodePair(5, Handle));
-            // 102 ({ACAD_XDICTIONARY) codes surrounding code 360
-            if (version >= DxfAcadVersion.R2000)
-                pairs.Add(new DxfCodePair(330, OwnerHandle));
-            pairs.Add(new DxfCodePair(100, "AcDbSymbolTable"));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(5, Handle));
+                // 102 ({ACAD_XDICTIONARY) codes surrounding code 360
+                if (version >= DxfAcadVersion.R2000)
+                    pairs.Add(new DxfCodePair(330, OwnerHandle));
+                pairs.Add(new DxfCodePair(100, "AcDbSymbolTable"));
+            }
+
             pairs.Add(new DxfCodePair(70, (short)MaxEntries));
 
             foreach (var item in symbolItems.OrderBy(i => i.Name))
             {
-                item.AddCommonValuePairs(pairs);
-                item.AddValuePairs(pairs);
+                item.AddCommonValuePairs(pairs, version);
+                item.AddValuePairs(pairs, version);
             }
 
             pairs.Add(new DxfCodePair(0, DxfSection.EndTableText));

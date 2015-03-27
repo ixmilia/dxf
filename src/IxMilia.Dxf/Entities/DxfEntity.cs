@@ -216,7 +216,7 @@ namespace IxMilia.Dxf.Entities
 
     public partial class DxfPolyline
     {
-        public double Elevation
+        public new double Elevation
         {
             get { return Location.Z; }
             set { Location.Z = value; }

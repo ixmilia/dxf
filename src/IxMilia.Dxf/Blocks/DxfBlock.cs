@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using IxMilia.Dxf.Entities;
 
@@ -75,34 +76,65 @@ namespace IxMilia.Dxf.Blocks
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
         {
             var list = new List<DxfCodePair>();
-            Action<int, object> add = (code, value) => list.Add(new DxfCodePair(code, value));
-            add(0, BlockText);
-            add(5, Handle);
-            // TODO: application-defined 102 codes
-            add(100, AcDbEntityText);
-            add(8, Layer);
-            add(100, AcDbBlockBeginText);
-            add(2, Name);
-            add(70, (short)Flags);
-            add(10, BasePoint.X);
-            add(20, BasePoint.Y);
-            add(30, BasePoint.Z);
-            add(3, Name);
+            list.Add(new DxfCodePair(0, BlockText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(5, Handle));
+
+                // TODO: application-defined 102 codes for R14+
+                list.Add(new DxfCodePair(100, AcDbEntityText));
+            }
+
+            list.Add(new DxfCodePair(8, Layer));
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(100, AcDbBlockBeginText));
+            }
+
+            list.Add(new DxfCodePair(2, Name));
+            list.Add(new DxfCodePair(70, (short)Flags));
+            list.Add(new DxfCodePair(10, BasePoint.X));
+            list.Add(new DxfCodePair(20, BasePoint.Y));
+            list.Add(new DxfCodePair(30, BasePoint.Z));
+            if (version >= DxfAcadVersion.R12)
+            {
+                list.Add(new DxfCodePair(3, Name));
+            }
+
             if (!string.IsNullOrEmpty(XrefName))
-                add(1, XrefName);
+                list.Add(new DxfCodePair(1, XrefName));
 
             list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version)));
 
-            add(0, EndBlockText);
-            add(5, Handle);
-            // TODO: application-defined 102 codes
-            add(100, AcDbBlockEndText);
+            list.Add(new DxfCodePair(0, EndBlockText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(5, Handle));
+            }
+
+            // TODO: application-defined 102 codes for R14+
+
+            if (version == DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(100, AcDbEntityText));
+                list.Add(new DxfCodePair(8, Layer));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(100, AcDbBlockEndText));
+            }
 
             return list;
         }
 
-        internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
+            if (!buffer.ItemsRemain)
+            {
+                return null;
+            }
+
             var block = new DxfBlock();
             var readingBlockStart = true;
             var readingBlockEnd = false;
@@ -130,8 +162,9 @@ namespace IxMilia.Dxf.Blocks
                 }
                 else if (pair.Code == 0)
                 {
-                    // probably an entity
+                    // should be an entity
                     var entity = DxfEntity.FromBuffer(buffer);
+                    Debug.Assert(entity != null);
                     if (entity != null)
                         block.Entities.Add(entity);
                 }
@@ -148,6 +181,8 @@ namespace IxMilia.Dxf.Blocks
                                 break;
                             case 2:
                                 block.Name = pair.StringValue;
+                                break;
+                            case 3:
                                 break;
                             case 5:
                                 block.Handle = pair.StringValue;
@@ -172,7 +207,19 @@ namespace IxMilia.Dxf.Blocks
                     else if (readingBlockEnd)
                     {
                         buffer.Advance();
-                        // TODO: could be (5, <handle) or (100, AcDbBlockEnd)
+                        switch (pair.Code)
+                        {
+                            case 5:
+                                Debug.Assert(pair.StringValue == block.Handle);
+                                break;
+                            case 8:
+                                Debug.Assert(version == DxfAcadVersion.R13);
+                                Debug.Assert(pair.StringValue == block.Layer);
+                                break;
+                            case 100:
+                                Debug.Assert(pair.StringValue == AcDbEntityText || pair.StringValue == AcDbBlockEndText);
+                                break;
+                        }
                     }
                     else
                     {

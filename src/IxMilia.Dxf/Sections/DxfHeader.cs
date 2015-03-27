@@ -24,6 +24,18 @@ namespace IxMilia.Dxf
             set { SetValue(variableName, value); }
         }
 
+        private static string StringShort(short s)
+        {
+            return s.ToString();
+        }
+
+        private static short StringShort(string s)
+        {
+            short result;
+            short.TryParse(s, out result);
+            return result;
+        }
+
         private static bool BoolShort(short s)
         {
             return s != 0;

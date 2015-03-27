@@ -24,7 +24,7 @@ namespace IxMilia.Dxf.Sections
            return this.Classes.SelectMany(e => e.GetValuePairs(version));
         }
 
-        internal static DxfClassesSection ClassesSectionFromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfClassesSection ClassesSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
             var section = new DxfClassesSection();
             while (buffer.ItemsRemain)
@@ -42,8 +42,7 @@ namespace IxMilia.Dxf.Sections
                     throw new DxfReadException("Expected new class.");
                 }
 
-                buffer.Advance(); // swallow (0, CLASS)
-                var cls = DxfClass.FromBuffer(buffer);
+                var cls = DxfClass.FromBuffer(buffer, version);
                 if (cls != null)
                 {
                     section.Classes.Add(cls);

@@ -20,17 +20,27 @@ var variables = xml.Elements(XName.Get("Variable", xmlns));
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace IxMilia.Dxf
 {
     public partial class DxfHeader
     {
         // key names
-<# foreach (var property in variables) {
-    var name = property.Attribute("Name").Value.ToUpper();
+<#  var seenKeys = new HashSet<string>();
+    foreach (var property in variables) {
+        var name = property.Attribute("Name").Value.ToUpper();
+        if (seenKeys.Contains(name))
+        {
+            this.Warning("Duplicate key found: " + name);
+        }
+        else
+        {
+            seenKeys.Add(name);
 #>
         private const string <#= name #> = "$<#= name #>";
-<# }
+<#      }
+    } // foreach
 
 var seenProperties = new HashSet<string>();
 foreach (var property in variables) {
@@ -55,21 +65,35 @@ foreach (var property in variables) {
         // set defaults
         private void SetDefaults()
         {
-<# foreach (var property in variables) {
-    var defaultValue = property.Attribute("DefaultValue").Value;
-    if (property.Attribute("Type").Value == "string" && defaultValue != "null" && (!defaultValue.StartsWith("\"") && !defaultValue.EndsWith("\"")))
+<#
+    seenProperties.Clear();
+    foreach (var property in variables)
     {
-        defaultValue = string.Format("\"{0}\"", defaultValue);
-    }
-    else if (property.Attribute("Type").Value == "char" && defaultValue.Length == 1)
-    {
-        if (defaultValue == "\"")
-            defaultValue = "\\\"";
-        defaultValue = string.Format("'{0}'", defaultValue);
-    }
+        var propertyName = property.Attribute("Property").Value;
+        if (seenProperties.Contains(propertyName))
+        {
+            this.Warning("Duplicate property found: " + propertyName);
+        }
+        else
+        {
+            seenProperties.Add(propertyName);
+            var defaultValue = property.Attribute("DefaultValue").Value;
+            if (property.Attribute("Type").Value == "string" && defaultValue != "null" && (!defaultValue.StartsWith("\"") && !defaultValue.EndsWith("\"")))
+            {
+                defaultValue = string.Format("\"{0}\"", defaultValue);
+            }
+            else if (property.Attribute("Type").Value == "char" && defaultValue.Length == 1)
+            {
+                if (defaultValue == "\"")
+                    defaultValue = "\\\"";
+                defaultValue = string.Format("'{0}'", defaultValue);
+            }
 #>
-            this.<#= property.Attribute("Property").Value #> = <#= defaultValue #>; // <#= property.Attribute("Name").Value #>
-<# } #>
+            this.<#= propertyName #> = <#= defaultValue #>; // <#= property.Attribute("Name").Value #>
+<#
+        } // if
+    } // foreach
+#>
         }
 
         // build list of code value pairs
@@ -91,7 +115,10 @@ foreach (var property in variables) {
         var minIfText = "version >= DxfAcadVersion." + minVersion;
         var maxIfText = "version <= DxfAcadVersion." + maxVersion;
         string allIfText;
-        if (minVersionAtt != null && maxVersionAtt != null) {
+        if (minVersion == maxVersion) {
+            allIfText = "version == DxfAcadVersion." + minVersion;
+        }
+        else if (minVersionAtt != null && maxVersionAtt != null) {
             allIfText = minIfText + " && " + maxIfText;
         }
         else if (minVersionAtt != null) {
@@ -145,33 +172,66 @@ foreach (var property in variables) {
         {
             switch (keyName)
             {
-<# foreach (var property in variables) {
-    var converterAtt = property.Attribute("ReadConverter");
-    var converter = converterAtt == null ? string.Empty : converterAtt.Value;
-#>
-                case <#= property.Attribute("Name").Value #>:
 <#
-    var type = property.Attribute("Type").Value;
-    var prop = property.Attribute("Property").Value;
-    if (type == "DxfPoint" || type == "DxfVector")
+    foreach (var propertyGroup in variables.GroupBy(v => v.Attribute("Name").Value))
     {
+#>
+                case <#= propertyGroup.Key #>:
+<#
+        var type = propertyGroup.First().Attribute("Type").Value;
+        var prop = propertyGroup.First().Attribute("Property").Value;
+        if (type == "DxfPoint" || type == "DxfVector")
+        {
 #>
                     SetPoint(pair, header.<#= prop #>);
                     break;
 <#
-    }
-    else
-    {
-        var code = int.Parse(property.Attribute("Code").Value);
-        var codeType = DxfCodePair.ExpectedType(code);
-        var codeTypeValue = TypeToString(codeType);
+        }
+        else
+        {
+            if (propertyGroup.Count() > 1)
+            {
+#>
+                    switch (pair.Code)
+                    {
+<#
+                foreach (var property in propertyGroup)
+                {
+                    var code = int.Parse(property.Attribute("Code").Value);
+                    var codeType = DxfCodePair.ExpectedType(code);
+                    var codeTypeValue = TypeToString(codeType);
+                    var converterAtt = property.Attribute("ReadConverter");
+                    var converter = converterAtt == null ? string.Empty : converterAtt.Value;
+#>
+                        case <#= code #>:
+                            header.<#= prop #> = <#= converter #>(pair.<#= codeTypeValue #>);
+                            break;
+<#
+                }
+#>
+                        default:
+                            Debug.Assert(false, string.Format("Expected code [<#= string.Join(", ", propertyGroup.Select(p => p.Attribute("Code").Value)) #>], got {0}", pair.Code));
+                            break;
+                    }
+<#
+            }
+            else
+            {
+                var code = int.Parse(propertyGroup.First().Attribute("Code").Value);
+                var codeType = DxfCodePair.ExpectedType(code);
+                var codeTypeValue = TypeToString(codeType);
+                var converterAtt = propertyGroup.First().Attribute("ReadConverter");
+                var converter = converterAtt == null ? string.Empty : converterAtt.Value;
 #>
                     EnsureCode(pair, <#= code #>);
                     header.<#= prop #> = <#= converter #>(pair.<#= codeTypeValue #>);
+<#
+            } // if
+#>
                     break;
 <#
-    } // if
-} // foreach
+        } // if
+    } // foreach
 #>
                 default:
                     // unsupported variable
@@ -209,12 +269,23 @@ foreach (var property in variables) {
             switch (variableName.ToUpper())
             {
 <#
-foreach (var property in variables) {
+    seenProperties.Clear();
+    foreach (var property in variables)
+    {
+        var propertyName = property.Attribute("Name").Value;
+        if (seenProperties.Contains(propertyName))
+        {
+            this.Warning("Duplicate property found: " + propertyName);
+        }
+        else
+        {
+            seenProperties.Add(propertyName);
 #>
-                case <#= property.Attribute("Name").Value #>:
+                case <#= propertyName #>:
                     return this.<#= property.Attribute("Property").Value #>;
 <#
-} // foreach
+        } // if
+    } // foreach
 #>
                 default:
                     throw new ArgumentException("Unrecognized variable", "variableName");
@@ -226,13 +297,24 @@ foreach (var property in variables) {
             switch (variableName.ToUpper())
             {
 <#
-foreach (var property in variables) {
+    seenProperties.Clear();
+    foreach (var property in variables)
+    {
+        var propertyName = property.Attribute("Name").Value;
+        if (seenProperties.Contains(propertyName))
+        {
+            this.Warning("Duplicate property found: " + propertyName);
+        }
+        else
+        {
+            seenProperties.Add(propertyName);
 #>
-                case <#= property.Attribute("Name").Value #>:
+                case <#= propertyName #>:
                     this.<#= property.Attribute("Property").Value #> = (<#= property.Attribute("Type").Value #>)value;
                     break;
 <#
-} // foreach
+        } // if
+    } // foreach
 #>
                 default:
                     throw new ArgumentException("Unrecognized variable", "variableName");

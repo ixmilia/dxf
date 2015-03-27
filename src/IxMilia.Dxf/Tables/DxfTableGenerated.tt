@@ -20,6 +20,7 @@ var tables = xml.Elements(XName.Get("Table", xmlns));
 using System.Linq;
 using System.Collections.Generic;
 using IxMilia.Dxf.Sections;
+using IxMilia.Dxf.Tables;
 
 namespace IxMilia.Dxf.Tables
 {
@@ -94,7 +95,7 @@ foreach (var table in tables)
     {
         internal const string AcDbText = "<#= ClassName(tableItem) #>";
 
-        protected override string TableType { get { return Tables.DxfTable.<#= TypeString(table) #>; } }
+        protected override DxfTableType TableType { get { return DxfTableType.<#= Type(table) #>; } }
 
         // properties
 <#
@@ -127,24 +128,57 @@ foreach (var table in tables)
 #>
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
 <#
     if (HasFlags(tableItem))
     {
 #>
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
 <#
     } // has flags
     foreach (var property in properties)
     {
+        var minVersion = MinVersion(property);
+        var maxVersion = MaxVersion(property);
+        var hasPredicate = minVersion != null || maxVersion != null;
+        var indent = hasPredicate ? "    " : "";
+        string predicate = null;
+        if (hasPredicate)
+        {
+            var parts = new List<string>();
+            if (minVersion != null) parts.Add("version >= DxfAcadVersion." + minVersion);
+            if (maxVersion != null) parts.Add("version <= DxfAcadVersion." + maxVersion);
+            predicate = string.Join(" && ", parts);
+            if (minVersion == maxVersion)
+                predicate = "version == DxfAcadVersion." + minVersion;
+        }
+
         if (AllowMultiples(property))
         {
+            if (hasPredicate)
+            {
 #>
-            pairs.AddRange(<#= Name(property) #>.Select(value => new DxfCodePair(<#= Code(property) #>, value)));
+            if (<#= predicate #>)
+            {
 <#
+            } // if
+#>
+            <#= indent #>pairs.AddRange(<#= Name(property) #>.Select(value => new DxfCodePair(<#= Code(property) #>, value)));
+<#
+            if (hasPredicate)
+            {
+#>
+            }
+
+<#
+            } // if
         }
         else
         {
@@ -154,16 +188,44 @@ foreach (var table in tables)
                 char prop = 'X';
                 for (int i = 0; i < codeOverrides.Length; i++, prop++)
                 {
+                    if (hasPredicate)
+                    {
 #>
-            pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= Name(property) #>.<#= prop #>));
+            if (<#= predicate #>)
+            {
 <#
-                }
+                    } // if
+#>
+            <#= indent #>pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= Name(property) #>.<#= prop #>));
+<#
+                    if (hasPredicate)
+                    {
+#>
+            }
+
+<#
+                    } // if
+                } // for
             }
             else
             {
+                if (hasPredicate)
+                {
 #>
-            pairs.Add(new DxfCodePair(<#= Code(property) #>, <#= WriteConverter(property) #>(<#= Name(property) #>)));
+            if (<#= predicate #>)
+            {
 <#
+                } // if
+#>
+            <#= indent #>pairs.Add(new DxfCodePair(<#= Code(property) #>, <#= WriteConverter(property) #>(<#= Name(property) #>)));
+<#
+                if (hasPredicate)
+                {
+#>
+            }
+
+<#
+                } // if
             }
         }
     } // foreach (var property in properties)
@@ -184,15 +246,12 @@ foreach (var table in tables)
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
 <#
     if (HasFlags(tableItem))
     {
 #>
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
 <#
     } // has flags
@@ -237,6 +296,9 @@ foreach (var table in tables)
         }
     } // foreach (var property in properties)
 #>
+                    default:
+                        item.TrySetPair(pair);
+                        break;
                 }
             }
 

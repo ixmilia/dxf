@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace IxMilia.Dxf
 {
@@ -78,6 +79,7 @@ namespace IxMilia.Dxf
         public string ClassDxfRecordName { get; set; }
         public string CppClassName { get; set; }
         public string ApplicationName { get; set; }
+        public int ClassVersionNumber { get; set; }
         public DxfProxyCapabilities ProxyCapabilities { get; set; }
         public int InstanceCount { get; set; }
         public bool WasClassLoadedWithFile { get; set; }
@@ -86,26 +88,52 @@ namespace IxMilia.Dxf
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
         {
             var list = new List<DxfCodePair>();
-            Action<int, object> add = (code, value) => list.Add(new DxfCodePair(code, value));
-            add(0, ClassText);
-            add(1, ClassDxfRecordName);
-            add(2, CppClassName);
-            add(3, ApplicationName);
-            add(90, ProxyCapabilities.Value);
-            if (version >= DxfAcadVersion.R2004)
-                add(91, null);
-            add(280, (short)(WasClassLoadedWithFile ? 0 : 1));
-            add(281, (short)(IsEntity ? 1 : 0));
+            if (version >= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(0, ClassText));
+                list.Add(new DxfCodePair(1, ClassDxfRecordName));
+                list.Add(new DxfCodePair(2, CppClassName));
+                list.Add(new DxfCodePair(3, ApplicationName));
+                list.Add(new DxfCodePair(90, ProxyCapabilities.Value));
+                if (version >= DxfAcadVersion.R2004)
+                    list.Add(new DxfCodePair(91, null));
+            }
+            else
+            {
+                // version <= DxfAcadVersion.R13
+                list.Add(new DxfCodePair(0, ClassDxfRecordName));
+                list.Add(new DxfCodePair(1, CppClassName));
+                list.Add(new DxfCodePair(2, ApplicationName));
+                list.Add(new DxfCodePair(90, ClassVersionNumber));
+            }
+
+            list.Add(new DxfCodePair(280, (short)(WasClassLoadedWithFile ? 0 : 1)));
+            list.Add(new DxfCodePair(281, (short)(IsEntity ? 1 : 0)));
 
             return list;
         }
 
-        internal static DxfClass FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfClass FromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
             var cls = new DxfClass();
+
+            // version R13 has varing values for the leading 0 code pair
+            var pair = buffer.Peek();
+            Debug.Assert(pair.Code == 0);
+            if (version <= DxfAcadVersion.R13)
+            {
+                cls.ClassDxfRecordName = pair.StringValue;
+            }
+            else
+            {
+                // swallow (0, CLASS)
+                Debug.Assert(pair.StringValue == ClassText);
+            }
+
+            buffer.Advance();
             while (buffer.ItemsRemain)
             {
-                var pair = buffer.Peek();
+                pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
                     break;
@@ -115,16 +143,26 @@ namespace IxMilia.Dxf
                 switch (pair.Code)
                 {
                     case 1:
-                        cls.ClassDxfRecordName = pair.StringValue;
+                        if (version <= DxfAcadVersion.R13)
+                            cls.CppClassName = pair.StringValue;
+                        else
+                            cls.ClassDxfRecordName = pair.StringValue;
                         break;
                     case 2:
-                        cls.CppClassName = pair.StringValue;
+                        if (version <= DxfAcadVersion.R13)
+                            cls.ApplicationName = pair.StringValue;
+                        else
+                            cls.CppClassName = pair.StringValue;
                         break;
                     case 3:
-                        cls.ApplicationName = pair.StringValue;
+                        if (version >= DxfAcadVersion.R14)
+                            cls.ApplicationName = pair.StringValue;
                         break;
                     case 90:
-                        cls.ProxyCapabilities = new DxfProxyCapabilities(pair.IntegerValue);
+                        if (version <= DxfAcadVersion.R13)
+                            cls.ClassVersionNumber = pair.IntegerValue;
+                        else
+                            cls.ProxyCapabilities = new DxfProxyCapabilities(pair.IntegerValue);
                         break;
                     case 91:
                         cls.InstanceCount = pair.IntegerValue;

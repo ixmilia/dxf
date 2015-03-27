@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using IxMilia.Dxf.Sections;
 
@@ -72,8 +73,39 @@ namespace IxMilia.Dxf
             }
         }
 
-        public DxfCodePair(int code, object value)
+        public DxfCodePair(int code, string value)
         {
+            Debug.Assert(ExpectedType(code) == typeof(string));
+            data = new KeyValuePair<int, object>(code, value);
+        }
+
+        public DxfCodePair(int code, double value)
+        {
+            Debug.Assert(ExpectedType(code) == typeof(double));
+            data = new KeyValuePair<int, object>(code, value);
+        }
+
+        public DxfCodePair(int code, short value)
+        {
+            Debug.Assert(ExpectedType(code) == typeof(short));
+            data = new KeyValuePair<int, object>(code, value);
+        }
+
+        public DxfCodePair(int code, int value)
+        {
+            Debug.Assert(ExpectedType(code) == typeof(int));
+            data = new KeyValuePair<int, object>(code, value);
+        }
+
+        public DxfCodePair(int code, long value)
+        {
+            Debug.Assert(ExpectedType(code) == typeof(long));
+            data = new KeyValuePair<int, object>(code, value);
+        }
+
+        public DxfCodePair(int code, bool value)
+        {
+            Debug.Assert(ExpectedType(code) == typeof(bool));
             data = new KeyValuePair<int, object>(code, value);
         }
 

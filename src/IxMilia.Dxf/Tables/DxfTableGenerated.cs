@@ -5,6 +5,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using IxMilia.Dxf.Sections;
+using IxMilia.Dxf.Tables;
 
 namespace IxMilia.Dxf.Tables
 {
@@ -359,7 +360,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbRegAppTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.AppIdText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.AppId; } }
 
         // properties
 
@@ -368,11 +369,15 @@ namespace IxMilia.Dxf
         {
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
         }
 
         internal static DxfAppId FromBuffer(DxfCodePairBufferReader buffer)
@@ -389,11 +394,11 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    default:
+                        item.TrySetPair(pair);
                         break;
                 }
             }
@@ -406,7 +411,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbBlockTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.BlockRecordText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.BlockRecord; } }
 
         // properties
 
@@ -415,9 +420,13 @@ namespace IxMilia.Dxf
         {
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
         }
 
@@ -435,8 +444,8 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
+                    default:
+                        item.TrySetPair(pair);
                         break;
                 }
             }
@@ -449,7 +458,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbDimStyleTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.DimStyleText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.DimStyle; } }
 
         // properties
         public string DimensioningSuffix { get; set; }
@@ -564,11 +573,15 @@ namespace IxMilia.Dxf
             DimensionCursorControlsTextPosition = true;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(3, (DimensioningSuffix)));
             pairs.Add(new DxfCodePair(4, (AlternateDimensioningSuffix)));
             pairs.Add(new DxfCodePair(5, (ArrowBlockName)));
@@ -608,20 +621,76 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(176, DxfColor.GetRawValue(DimensionLineColor)));
             pairs.Add(new DxfCodePair(177, DxfColor.GetRawValue(DimensionExtensionLineColor)));
             pairs.Add(new DxfCodePair(178, DxfColor.GetRawValue(DimensionTextColor)));
-            pairs.Add(new DxfCodePair(270, (short)(DimensionUnitFormat)));
-            pairs.Add(new DxfCodePair(271, (DimensionUnitToleranceDecimalPlaces)));
-            pairs.Add(new DxfCodePair(272, (DimensionToleranceDecimalPlaces)));
-            pairs.Add(new DxfCodePair(273, (short)(AlternateDimensioningUnits)));
-            pairs.Add(new DxfCodePair(274, (AlternateDimensioningToleranceDecimalPlaces)));
-            pairs.Add(new DxfCodePair(340, (StyleHandle)));
-            pairs.Add(new DxfCodePair(275, (short)(DimensioningAngleFormat)));
-            pairs.Add(new DxfCodePair(280, (short)(DimensionTextJustification)));
-            pairs.Add(new DxfCodePair(283, (short)(DimensionToleranceVerticalJustification)));
-            pairs.Add(new DxfCodePair(284, (short)(DimensionToleranceZeroSuppression)));
-            pairs.Add(new DxfCodePair(285, (short)(AlternateDimensioningZeroSupression)));
-            pairs.Add(new DxfCodePair(286, (short)(AlternateDimensioningToleranceZeroSupression)));
-            pairs.Add(new DxfCodePair(287, (short)(DimensionTextAndArrowPlacement)));
-            pairs.Add(new DxfCodePair(288, BoolShort(DimensionCursorControlsTextPosition)));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(270, (short)(DimensionUnitFormat)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(271, (DimensionUnitToleranceDecimalPlaces)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(272, (DimensionToleranceDecimalPlaces)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(273, (short)(AlternateDimensioningUnits)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(274, (AlternateDimensioningToleranceDecimalPlaces)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(340, (StyleHandle)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(275, (short)(DimensioningAngleFormat)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(280, (short)(DimensionTextJustification)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(283, (short)(DimensionToleranceVerticalJustification)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(284, (short)(DimensionToleranceZeroSuppression)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(285, (short)(AlternateDimensioningZeroSupression)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(286, (short)(AlternateDimensioningToleranceZeroSupression)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(287, (short)(DimensionTextAndArrowPlacement)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(288, BoolShort(DimensionCursorControlsTextPosition)));
+            }
+
         }
 
         internal static DxfDimStyle FromBuffer(DxfCodePairBufferReader buffer)
@@ -638,11 +707,8 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
                     case 3:
                         item.DimensioningSuffix = (pair.StringValue);
@@ -803,6 +869,9 @@ namespace IxMilia.Dxf
                     case 288:
                         item.DimensionCursorControlsTextPosition = BoolShort(pair.ShortValue);
                         break;
+                    default:
+                        item.TrySetPair(pair);
+                        break;
                 }
             }
 
@@ -814,7 +883,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbLayerTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.LayerText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.Layer; } }
 
         // properties
         public DxfColor Color { get; set; }
@@ -827,11 +896,15 @@ namespace IxMilia.Dxf
             LinetypeName = null;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(62, DxfColor.GetRawValue(Color)));
             pairs.Add(new DxfCodePair(6, (LinetypeName)));
         }
@@ -850,17 +923,17 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
                     case 62:
                         item.Color = DxfColor.FromRawValue(pair.ShortValue);
                         break;
                     case 6:
                         item.LinetypeName = (pair.StringValue);
+                        break;
+                    default:
+                        item.TrySetPair(pair);
                         break;
                 }
             }
@@ -873,7 +946,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbLinetypeTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.LTypeText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.LType; } }
 
         // properties
         public string Description { get; set; }
@@ -908,24 +981,60 @@ namespace IxMilia.Dxf
             TextStrings = new List<string>();
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(3, (Description)));
             pairs.Add(new DxfCodePair(72, (int)(AlignmentCode)));
             pairs.Add(new DxfCodePair(73, (ElementCount)));
             pairs.Add(new DxfCodePair(40, (TotalPatternLength)));
             pairs.AddRange(DashDotSpaceLengths.Select(value => new DxfCodePair(49, value)));
-            pairs.AddRange(ComplexLinetypeElementTypes.Select(value => new DxfCodePair(74, value)));
-            pairs.AddRange(ShapeNumbers.Select(value => new DxfCodePair(75, value)));
-            pairs.AddRange(StylePointers.Select(value => new DxfCodePair(340, value)));
-            pairs.AddRange(ScaleValues.Select(value => new DxfCodePair(46, value)));
-            pairs.AddRange(RotationAngles.Select(value => new DxfCodePair(50, value)));
-            pairs.AddRange(XOffsets.Select(value => new DxfCodePair(44, value)));
-            pairs.AddRange(YOffsets.Select(value => new DxfCodePair(45, value)));
-            pairs.AddRange(TextStrings.Select(value => new DxfCodePair(9, value)));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(ComplexLinetypeElementTypes.Select(value => new DxfCodePair(74, value)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(ShapeNumbers.Select(value => new DxfCodePair(75, value)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(StylePointers.Select(value => new DxfCodePair(340, value)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(ScaleValues.Select(value => new DxfCodePair(46, value)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(RotationAngles.Select(value => new DxfCodePair(50, value)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(XOffsets.Select(value => new DxfCodePair(44, value)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(YOffsets.Select(value => new DxfCodePair(45, value)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.AddRange(TextStrings.Select(value => new DxfCodePair(9, value)));
+            }
+
         }
 
         internal static DxfLineType FromBuffer(DxfCodePairBufferReader buffer)
@@ -942,11 +1051,8 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
                     case 3:
                         item.Description = (pair.StringValue);
@@ -987,6 +1093,9 @@ namespace IxMilia.Dxf
                     case 9:
                         item.TextStrings.Add((pair.StringValue));
                         break;
+                    default:
+                        item.TrySetPair(pair);
+                        break;
                 }
             }
 
@@ -998,7 +1107,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbTextStyleTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.StyleText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.Style; } }
 
         // properties
         public double TextHeight { get; set; }
@@ -1021,11 +1130,15 @@ namespace IxMilia.Dxf
             BigFontFileName = null;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(40, (TextHeight)));
             pairs.Add(new DxfCodePair(41, (WidthFactor)));
             pairs.Add(new DxfCodePair(50, (ObliqueAngle)));
@@ -1049,11 +1162,8 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
                     case 40:
                         item.TextHeight = (pair.DoubleValue);
@@ -1076,6 +1186,9 @@ namespace IxMilia.Dxf
                     case 4:
                         item.BigFontFileName = (pair.StringValue);
                         break;
+                    default:
+                        item.TrySetPair(pair);
+                        break;
                 }
             }
 
@@ -1087,7 +1200,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbUCSTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.UcsText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.Ucs; } }
 
         // properties
         public DxfPoint Origin { get; set; }
@@ -1102,11 +1215,15 @@ namespace IxMilia.Dxf
             YAxis = DxfVector.XAxis;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(10, Origin.X));
             pairs.Add(new DxfCodePair(20, Origin.Y));
             pairs.Add(new DxfCodePair(30, Origin.Z));
@@ -1132,11 +1249,8 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
                     case 10:
                         item.Origin.X = (pair.DoubleValue);
@@ -1165,6 +1279,9 @@ namespace IxMilia.Dxf
                     case 32:
                         item.YAxis.Z = (pair.DoubleValue);
                         break;
+                    default:
+                        item.TrySetPair(pair);
+                        break;
                 }
             }
 
@@ -1176,7 +1293,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbViewTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.ViewText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.View; } }
 
         // properties
         public double ViewHeight { get; set; }
@@ -1205,11 +1322,15 @@ namespace IxMilia.Dxf
             ViewMode = 0;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(40, (ViewHeight)));
             pairs.Add(new DxfCodePair(10, ViewCenterPoint.X));
             pairs.Add(new DxfCodePair(20, ViewCenterPoint.Y));
@@ -1241,11 +1362,8 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
                     case 40:
                         item.ViewHeight = (pair.DoubleValue);
@@ -1292,6 +1410,9 @@ namespace IxMilia.Dxf
                     case 71:
                         item.ViewMode = (pair.ShortValue);
                         break;
+                    default:
+                        item.TrySetPair(pair);
+                        break;
                 }
             }
 
@@ -1303,7 +1424,7 @@ namespace IxMilia.Dxf
     {
         internal const string AcDbText = "AcDbViewportTableRecord";
 
-        protected override string TableType { get { return Tables.DxfTable.ViewPortText; } }
+        protected override DxfTableType TableType { get { return DxfTableType.ViewPort; } }
 
         // properties
         public DxfPoint LowerLeft { get; set; }
@@ -1321,6 +1442,8 @@ namespace IxMilia.Dxf
         public double BackClippingPlane { get; set; }
         public double SnapRotationAngle { get; set; }
         public double ViewTwistAngle { get; set; }
+        public short Status { get; set; }
+        public short ID { get; set; }
         public DxfViewMode ViewMode { get; set; }
         public int CircleZoomPercent { get; set; }
         public bool FastZoom { get; set; }
@@ -1348,6 +1471,8 @@ namespace IxMilia.Dxf
             BackClippingPlane = 0.0;
             SnapRotationAngle = 0.0;
             ViewTwistAngle = 0.0;
+            Status = 0;
+            ID = 0;
             ViewMode = 0;
             CircleZoomPercent = 0;
             FastZoom = true;
@@ -1358,11 +1483,15 @@ namespace IxMilia.Dxf
             SnapIsoPair = 0;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
-            pairs.Add(new DxfCodePair(100, AcDbText));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, AcDbText));
+            }
+
             pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)Flags));
+            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(10, LowerLeft.X));
             pairs.Add(new DxfCodePair(20, LowerLeft.Y));
             pairs.Add(new DxfCodePair(11, UpperRight.X));
@@ -1388,6 +1517,16 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
             pairs.Add(new DxfCodePair(50, (SnapRotationAngle)));
             pairs.Add(new DxfCodePair(51, (ViewTwistAngle)));
+            if (version == DxfAcadVersion.R12)
+            {
+                pairs.Add(new DxfCodePair(68, (Status)));
+            }
+
+            if (version == DxfAcadVersion.R12)
+            {
+                pairs.Add(new DxfCodePair(69, (ID)));
+            }
+
             pairs.Add(new DxfCodePair(71, (short)(ViewMode)));
             pairs.Add(new DxfCodePair(72, (short)(CircleZoomPercent)));
             pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
@@ -1412,11 +1551,8 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
-                    case 2:
-                        item.Name = pair.StringValue;
-                        break;
                     case 70:
-                        item.Flags = (int)pair.ShortValue;
+                        item.StandardFlags = (int)pair.ShortValue;
                         break;
                     case 10:
                         item.LowerLeft.X = (pair.DoubleValue);
@@ -1493,6 +1629,12 @@ namespace IxMilia.Dxf
                     case 51:
                         item.ViewTwistAngle = (pair.DoubleValue);
                         break;
+                    case 68:
+                        item.Status = (pair.ShortValue);
+                        break;
+                    case 69:
+                        item.ID = (pair.ShortValue);
+                        break;
                     case 71:
                         item.ViewMode = (DxfViewMode)(pair.ShortValue);
                         break;
@@ -1516,6 +1658,9 @@ namespace IxMilia.Dxf
                         break;
                     case 78:
                         item.SnapIsoPair = (pair.ShortValue);
+                        break;
+                    default:
+                        item.TrySetPair(pair);
                         break;
                 }
             }

@@ -32,6 +32,8 @@
       <xs:attribute name="CodeOverrides" type="xs:string" use="optional" />
       <xs:attribute name="WriteConverter" type="xs:string" use="optional" />
       <xs:attribute name="ReadConverter" type="xs:string" use="optional" />
+      <xs:attribute name="MinVersion" type="VersionType" use="optional" />
+      <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
     </xs:complexType>
   </xs:element>
 
@@ -57,8 +59,6 @@
       </xs:sequence>
       <xs:attribute name="Type" type="xs:string" use="required" />
       <xs:attribute name="TypeString" type="xs:string" use="required" />
-      <xs:attribute name="MinVersion" type="VersionType" use="optional" />
-      <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
     </xs:complexType>
   </xs:element>
 

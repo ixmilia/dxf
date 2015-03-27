@@ -22,16 +22,17 @@ namespace IxMilia.Dxf
 
     public static class DxfAcadVersionStrings
     {
-        public const string R10 = "AC1006";
-        public const string R11 = "AC1009";
-        public const string R12 = "AC1009";
-        public const string R13 = "AC1012";
-        public const string R14 = "AC1014";
-        public const string R2000 = "AC1015";
-        public const string R2004 = "AC1018";
-        public const string R2007 = "AC1021";
-        public const string R2010 = "AC1024";
-        public const string R2013 = "AC1027";
+        private const string R10 = "AC1006";
+        private const string R11 = "AC1009";
+        private const string R12 = "AC1009";
+        private const string R13_Pre = "AC1011"; // according to the DXF R13 spec, 'AC1011' is correct, but all later specs use 'AC1012'
+        private const string R13 = "AC1012";
+        private const string R14 = "AC1014";
+        private const string R2000 = "AC1015";
+        private const string R2004 = "AC1018";
+        private const string R2007 = "AC1021";
+        private const string R2010 = "AC1024";
+        private const string R2013 = "AC1027";
 
         public static string VersionToString(DxfAcadVersion version)
         {
@@ -71,6 +72,7 @@ namespace IxMilia.Dxf
                 case R11:
                 // case R12:
                     return DxfAcadVersion.R12;
+                case R13_Pre:
                 case R13:
                     return DxfAcadVersion.R13;
                 case R14:

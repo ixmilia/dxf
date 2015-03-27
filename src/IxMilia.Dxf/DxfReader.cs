@@ -81,8 +81,24 @@ namespace IxMilia.Dxf
             int code = ReadCode();
             if (code == -1)
                 return null;
-            object value = ReadValue(DxfCodePair.ExpectedType(code));
-            return new DxfCodePair(code, value);
+            var expectedType = DxfCodePair.ExpectedType(code);
+            DxfCodePair pair;
+            if (expectedType == typeof(short))
+                pair = new DxfCodePair(code, ReadShort());
+            else if (expectedType == typeof(double))
+                pair = new DxfCodePair(code, ReadDouble());
+            else if (expectedType == typeof(string))
+                pair = new DxfCodePair(code, ReadString());
+            else if (expectedType == typeof(int))
+                pair = new DxfCodePair(code, ReadInt());
+            else if (expectedType == typeof(long))
+                pair = new DxfCodePair(code, ReadLong());
+            else if (expectedType == typeof(bool))
+                pair = new DxfCodePair(code, ReadBool());
+            else
+                throw new DxfReadException("Reading type not supported: " + expectedType);
+
+            return pair;
         }
 
         private int ReadCode()
@@ -117,51 +133,52 @@ namespace IxMilia.Dxf
             return code;
         }
 
-        private object ReadValue(Type expectedType)
+        private short ReadShort()
         {
-            object value = null;
+            return readText
+                ? short.Parse(ReadLine().Trim())
+                : binReader.ReadInt16();
+        }
+
+        private double ReadDouble()
+        {
+            return readText
+                ? double.Parse(ReadLine().Trim())
+                : binReader.ReadDouble();
+        }
+
+        private string ReadString()
+        {
             if (readText)
             {
-                string line = ReadLine().Trim(); ;
-                if (expectedType == typeof(short))
-                    value = short.Parse(line);
-                else if (expectedType == typeof(double))
-                    value = double.Parse(line);
-                else if (expectedType == typeof(string))
-                    value = line;
-                else if (expectedType == typeof(int))
-                    value = int.Parse(line);
-                else if (expectedType == typeof(long))
-                    value = long.Parse(line);
-                else if (expectedType == typeof(bool))
-                    value = short.Parse(line) != 0;
-                else
-                    throw new DxfReadException("Reading type not supported " + expectedType);
+                return ReadLine().Trim();
             }
             else
             {
-                if (expectedType == typeof(short))
-                    value = binReader.ReadInt16();
-                else if (expectedType == typeof(double))
-                    value = binReader.ReadDouble();
-                else if (expectedType == typeof(string))
-                {
-                    StringBuilder sb = new StringBuilder();
-                    for (int b = binReader.Read(); b != 0; b = binReader.Read())
-                        sb.Append((char)b);
-                    value = sb.ToString();
-                }
-                else if (expectedType == typeof(int))
-                    value = binReader.ReadInt32();
-                else if (expectedType == typeof(long))
-                    value = binReader.ReadInt64();
-                else if (expectedType == typeof(bool))
-                    value = binReader.ReadInt16() != 0;
-                else
-                    throw new DxfReadException("Reading type not supported " + expectedType);
+                var sb = new StringBuilder();
+                for (int b = binReader.Read(); b != 0; b = binReader.Read())
+                    sb.Append((char)b);
+                return sb.ToString();
             }
+        }
 
-            return value;
+        private int ReadInt()
+        {
+            return readText
+                ? int.Parse(ReadLine().Trim())
+                : binReader.ReadInt32();
+        }
+
+        private long ReadLong()
+        {
+            return readText
+                ? long.Parse(ReadLine().Trim())
+                : binReader.ReadInt64();
+        }
+
+        private bool ReadBool()
+        {
+            return ReadShort() != 0;
         }
 
         private string ReadLine()

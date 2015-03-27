@@ -13,14 +13,15 @@
     <!-- 102 codes ({ACAD_XDICTIONARY) around code 360 -->
     <Property Name="OwnerHandle" Code="330" Type="string" DefaultValue="null" MinVersion="R2000" />
     <!-- subclass marker 100,AcDbEntity -->
-    <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" />
+    <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="Layer" Code="8" Type="string" DefaultValue="0" />
     <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" />
+    <Property Name="Elevation" Code="38" Type="double" DefaultValue="0.0" DisableWritingDefault="true" MaxVersion="R12" />
     <Property Name="MaterialHandle" Code="347" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" MinVersion="R2007" />
     <Property Name="Color" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" DisableWritingDefault="true" />
     <Property Name="LineweightEnumValue" Code="370" Type="short" DefaultValue="0" MinVersion="R2000" />
-    <Property Name="LinetypeScale" Code="48" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
-    <Property Name="IsVisible" Code="60" Type="bool" DefaultValue="true" ReadConverter="!BoolShort" WriteConverter="NotBoolShort" DisableWritingDefault="true" />
+    <Property Name="LinetypeScale" Code="48" Type="double" DefaultValue="1.0" DisableWritingDefault="true" MinVersion="R13" />
+    <Property Name="IsVisible" Code="60" Type="bool" DefaultValue="true" ReadConverter="!BoolShort" WriteConverter="NotBoolShort" DisableWritingDefault="true" MinVersion="R13" />
     <Property Name="ImageByteCount" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2000" />
     <Property Name="PreviewImageData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R2000" />
     <Property Name="Color24Bit" Code="420" Type="int" DefaultValue="0" MinVersion="R2004" />
@@ -51,7 +52,7 @@
   3DSOLID
   
   -->
-  <Entity Name="Dxf3DSolid" EntityType="ModelerGeometry" SubclassMarker="AcDbModelerGeometry" TypeString="3DSOLID">
+  <Entity Name="Dxf3DSolid" EntityType="ModelerGeometry" SubclassMarker="AcDbModelerGeometry" TypeString="3DSOLID" MinVersion="R13">
     <Property Name="FormatVersionNumber" Code="70" Type="short" DefaultValue="1" />
     <Property Name="CustomData" Code="1" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="CustomData2" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
@@ -61,7 +62,7 @@
   ACAD_PROXY_ENTITY
   
   -->
-  <Entity Name="DxfProxyEntity" EntityType="ProxyEntity" SubclassMarker="AcDbProxyEntity" TypeString="ACAD_PROXY_ENTITY">
+  <Entity Name="DxfProxyEntity" EntityType="ProxyEntity" SubclassMarker="AcDbProxyEntity" TypeString="ACAD_PROXY_ENTITY" MinVersion="R14">
     <Property Name="ProxyEntityClassId" Code="90" Type="int" DefaultValue="498" />
     <Property Name="ApplicationEntityClassId" Code="91" Type="int" DefaultValue="500" />
     <Property Name="GraphicsDataSize" Code="92" Type="int" DefaultValue="0" />
@@ -156,14 +157,14 @@
       <Flag Name="IsAttributePresent" Mask="8" />
     </Property>
     <Property Name="FieldLength" Code="73" Type="short" DefaultValue="0" DisableWritingDefault="true" />
-    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
+    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" MinVersion="R12" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbText" />
+      <WriteSpecificValue Code="100" Value="AcDbText" MinVersion="R13" />
       <WriteProperty Property="Thickness" />
       <WriteProperty Property="Location" />
       <WriteProperty Property="TextHeight" />
       <WriteProperty Property="Value" />
-      <WriteSpecificValue Code="100" Value="AcDbAttributeDefinition" />
+      <WriteSpecificValue Code="100" Value="AcDbAttributeDefinition" MinVersion="R13" />
       <WriteProperty Property="Rotation" />
       <WriteProperty Property="RelativeXScaleFactor" />
       <WriteProperty Property="ObliqueAngle" />
@@ -172,7 +173,7 @@
       <WriteProperty Property="HorizontalTextJustification" />
       <WriteProperty Property="SecondAlignmentPoint" />
       <WriteProperty Property="Normal" />
-      <WriteSpecificValue Code="100" Value="AcDbAttributeDefinition" />
+      <WriteSpecificValue Code="100" Value="AcDbAttributeDefinition" MinVersion="R13" />
       <WriteProperty Property="Prompt" />
       <WriteProperty Property="Tag" />
       <WriteProperty Property="Flags" />
@@ -207,16 +208,16 @@
       <Flag Name="IsTextUpsideDown" Mask="4" />
     </Property>
     <Property Name="HorizontalTextJustification" Code="72" Type="DxfHorizontalTextJustification" DefaultValue="DxfHorizontalTextJustification.Left" ReadConverter="(DxfHorizontalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
-    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
+    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbText" />
+      <WriteSpecificValue Code="100" Value="AcDbText" MinVersion="R13" />
       <WriteProperty Property="Thickness" />
       <WriteProperty Property="Location" />
       <WriteProperty Property="TextHeight" />
       <WriteProperty Property="Value" />
-      <WriteSpecificValue Code="100" Value="AcDbAttribute" />
+      <WriteSpecificValue Code="100" Value="AcDbAttribute" MinVersion="R13" />
       <WriteProperty Property="Tag" />
       <WriteProperty Property="Flags" />
       <WriteProperty Property="FieldLength" />
@@ -236,7 +237,7 @@
   BODY
   
   -->
-  <Entity Name="DxfBody" EntityType="Body" SubclassMarker="AcDbModelerGeometry" TypeString="BODY">
+  <Entity Name="DxfBody" EntityType="Body" SubclassMarker="AcDbModelerGeometry" TypeString="BODY" MinVersion="R13">
     <Property Name="FormatVersionNumber" Code="70" Type="short" DefaultValue="1" />
     <Property Name="CustomData" Code="1" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="CustomData2" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
@@ -276,7 +277,7 @@
     <Property Name="TextRotationAngle" Code="53" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="HorizontalDirectionAngle" Code="51" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
-    <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
+    <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" MinVersion="R12" />
   </Entity>
   <!-- rotated, horizontal, or vertical; type 0 -->
   <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="RotatedHorizontalOrVertical">
@@ -286,13 +287,13 @@
     <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" />
     <Property Name="ExtensionLineAngle" Code="52" Type="double" DefaultValue="0.0" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbAlignedDimension" />
+      <WriteSpecificValue Code="100" Value="AcDbAlignedDimension" MinVersion="R13" />
       <WriteProperty Property="InsertionPoint" />
       <WriteProperty Property="DefinitionPoint2" />
       <WriteProperty Property="DefinitionPoint3" />
       <WriteProperty Property="RotationAngle" />
       <WriteProperty Property="ExtensionLineAngle" />
-      <WriteSpecificValue Code="100" Value="AcDbRotatedDimension" />
+      <WriteSpecificValue Code="100" Value="AcDbRotatedDimension" MinVersion="R13" />
     </WriteOrder>
   </Entity>
   <!-- aligned; type 1 -->
@@ -326,7 +327,7 @@
     <Property Name="DefinitionPoint5" Code="16" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="16,26,36" />
   </Entity>
   <!-- ordinate; type 6 -->
-  <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate">
+  <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate" MinVersion="R11">
     <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
     <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
   </Entity>
@@ -335,7 +336,7 @@
   ELLIPSE
   
   -->
-  <Entity Name="DxfEllipse" EntityType="Ellipse" SubclassMarker="AcDbEllipse" TypeString="ELLIPSE">
+  <Entity Name="DxfEllipse" EntityType="Ellipse" SubclassMarker="AcDbEllipse" TypeString="ELLIPSE" MinVersion="R13">
     <Property Name="Center" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="MajorAxis" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
@@ -353,13 +354,13 @@
   HATCH
   
   -->
-  <!-- TODO -->
+  <!-- TODO MinVersion="R14" -->
   <!--
   
   IMAGE
   
   -->
-  <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE">
+  <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE" MinVersion="R14">
     <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
     <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="UVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
@@ -427,7 +428,7 @@
   LEADER
   
   -->
-  <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER">
+  <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13">
     <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
     <Property Name="UseArrowheads" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
     <Property Name="PathType" Code="72" Type="DxfLeaderPathType" DefaultValue="DxfLeaderPathType.StraightLineSegments" ReadConverter="(DxfLeaderPathType)" WriteConverter="(short)" />
@@ -445,7 +446,7 @@
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
     <Property Name="Right" Code="211" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="211,221,231" />
     <Property Name="BlockOffset" Code="212" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="212,222,232" />
-    <Property Name="AnnotationOffset" Code="213" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="213,223,233" />
+    <Property Name="AnnotationOffset" Code="213" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="213,223,233" MinVersion="R14" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="AcDbLeader" />
       <WriteProperty Property="DimensionStyleName" />
@@ -475,7 +476,7 @@
   LINE
   
   -->
-  <Entity Name="DxfLine" EntityType="Line" SubclassMarker="AcDbLine" TypeString="LINE">
+  <Entity Name="DxfLine" EntityType="Line" SubclassMarker="AcDbLine" TypeString="LINE,3DLINE">
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="P1" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="P2" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
@@ -490,14 +491,13 @@
   LWPOLYLINE
   
   -->
-  <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE">
+  <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE" MinVersion="R14">
     <Property Name="VertexCount" Code="90" Type="int" DefaultValue="0" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
       <Flag Name="IsClosed" Mask="1" />
       <Flag Name="IsPLineGen" Mask="128" />
     </Property>
     <Property Name="ConstantWidth" Code="43" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
-    <Property Name="Elevation" Code="38" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="VertexCoordinateX" Code="10" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
     <Property Name="VertexCoordinateY" Code="20" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
@@ -510,7 +510,7 @@
       <WriteSpecificValue Code="90" Value="Vertices.Count" />
       <WriteProperty Property="Flags" />
       <WriteProperty Property="ConstantWidth" />
-      <WriteProperty Property="Elevation" />
+      <WriteSpecificValue Code="38" Value="Elevation" DontWriteIfValueIs="0.0" />
       <WriteProperty Property="Thickness" />
       <Foreach Property="Vertices">
         <WriteSpecificValue Code="10" Value="item.Location.X" />
@@ -539,7 +539,7 @@
   OLEFRAME
   
   -->
-  <Entity Name="DxfOleFrame" EntityType="OleFrame" SubclassMarker="AcDbOleFrame" TypeString="OLEFRAME">
+  <Entity Name="DxfOleFrame" EntityType="OleFrame" SubclassMarker="AcDbOleFrame" TypeString="OLEFRAME" MinVersion="R13">
     <Property Name="VersionNumber" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
     <Property Name="BinaryDataLength" Code="90" Type="int" DefaultValue="0" />
     <Property Name="BinaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" />
@@ -558,7 +558,7 @@
   OLE2FRAME
   
   -->
-  <Entity Name="DxfOle2Frame" EntityType="Ole2Frame" SubclassMarker="AcDbOle2Frame" TypeString="OLE2FRAME">
+  <Entity Name="DxfOle2Frame" EntityType="Ole2Frame" SubclassMarker="AcDbOle2Frame" TypeString="OLE2FRAME" MinVersion="R14">
     <Property Name="VersionNumber" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
     <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
     <Property Name="UpperLeftCorner" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
@@ -602,7 +602,8 @@
   
   -->
   <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE">
-    <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="ContainsVertices" Code="66" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R13" />
+    <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R12" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" DisableWritingDefault="true">
       <Flag Name="IsClosed" Mask="1" />
@@ -628,7 +629,7 @@
   RAY
   
   -->
-  <Entity Name="DxfRay" EntityType="Ray" SubclassMarker="AcDbRay" TypeString="RAY">
+  <Entity Name="DxfRay" EntityType="Ray" SubclassMarker="AcDbRay" TypeString="RAY" MinVersion="R13">
     <Property Name="StartPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="UnitDirectionVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
     <Constructor>
@@ -641,7 +642,7 @@
   REGION
   
   -->
-  <Entity Name="DxfRegion" EntityType="Region" SubclassMarker="AcDbModelerGeometry" TypeString="REGION">
+  <Entity Name="DxfRegion" EntityType="Region" SubclassMarker="AcDbModelerGeometry" TypeString="REGION" MinVersion="R13">
     <Property Name="FormatVersionNumber" Code="70" Type="short" DefaultValue="1" />
     <Property Name="CustomData" Code="1" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="CustomData2" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
@@ -702,7 +703,7 @@
   SPLINE
   
   -->
-  <Entity Name="DxfSpline" EntityType="Spline" SubclassMarker="AcDbSpline" TypeString="SPLINE">
+  <Entity Name="DxfSpline" EntityType="Spline" SubclassMarker="AcDbSpline" TypeString="SPLINE" MinVersion="R13">
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
       <Flag Name="IsClosed" Mask="1" />
@@ -787,7 +788,7 @@
   TOLERANCE
   
   -->
-  <Entity Name="DxfTolerance" EntityType="Tolerance" SubclassMarker="AcDbFcf" TypeString="TOLERANCE">
+  <Entity Name="DxfTolerance" EntityType="Tolerance" SubclassMarker="AcDbFcf" TypeString="TOLERANCE" MinVersion="R13">
     <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
     <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
@@ -826,10 +827,10 @@
       <Flag Name="IsPolyfaceMeshVertex" Mask="128" />
     </Property>
     <Property Name="CurveFitTangentDirection" Code="50" Type="double" DefaultValue="0.0" />
-    <Property Name="PolyfaceMeshVertexIndex1" Code="71" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" />
-    <Property Name="PolyfaceMeshVertexIndex2" Code="72" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" />
-    <Property Name="PolyfaceMeshVertexIndex3" Code="73" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" />
-    <Property Name="PolyfaceMeshVertexIndex4" Code="74" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" />
+    <Property Name="PolyfaceMeshVertexIndex1" Code="71" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" MinVersion="R13" />
+    <Property Name="PolyfaceMeshVertexIndex2" Code="72" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" MinVersion="R13" />
+    <Property Name="PolyfaceMeshVertexIndex3" Code="73" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" MinVersion="R13" />
+    <Property Name="PolyfaceMeshVertexIndex4" Code="74" Type="int" DefaultValue="0" DisableWritingDefault="true" ReadConverter="(int)" WriteConverter="(short)" MinVersion="R13" />
     <Constructor>
       <ConstructorParameter Property="Location" Type="DxfPoint" />
     </Constructor>
@@ -839,7 +840,7 @@
   VIEWPORT
   
   -->
-  <!-- TODO -->
+  <!-- TODO MinVersion="R12" -->
   <!--
   
   WIPEOUT
@@ -853,7 +854,7 @@
   XLINE
   
   -->
-  <Entity Name="DxfXLine" EntityType="XLine" SubclassMarker="AcDbXline" TypeString="XLINE">
+  <Entity Name="DxfXLine" EntityType="XLine" SubclassMarker="AcDbXline" TypeString="XLINE" MinVersion="R13">
     <Property Name="FirstPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="UnitDirectionVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
     <Constructor>

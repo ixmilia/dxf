@@ -76,16 +76,19 @@
   <Variable Name="DIMLFAC" Code="40" Type="double" Property="DimensionLinearMeasurementsScaleFactor" DefaultValue="1.0" />
   <Variable Name="DIMLIM" Code="70" Type="bool" Property="GenerateDimensionLimits" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMLUNIT" Code="70" Type="DxfNonAngularUnits" Property="DimensionNonAngularUnits" DefaultValue="DxfNonAngularUnits.Scientific" ReadConverter="(DxfNonAngularUnits)" WriteConverter="(short)" MinVersion="R2000" />
-  <!--<Variable Name="DIMLWD" MinVersion="R2000" />
-  <Variable Name="DIMLWE" MinVersion="R2000" />-->
+  <Variable Name="DIMLWD" Code="70" Type="DxfLineWeight" Property="DimensionLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue" WriteConverter="DxfLineWeight.GetRawValue" MinVersion="R2000" />
+  <Variable Name="DIMLWE" Code="70" Type="DxfLineWeight" Property="DimensionExtensionLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue" WriteConverter="DxfLineWeight.GetRawValue" MinVersion="R2000" />
   <Variable Name="DIMPOST" Code="1" Type="string" Property="DimensioningSuffix" DefaultValue="null" />
   <Variable Name="DIMRND" Code="40" Type="double" Property="DimensionDistanceRoundingValue" DefaultValue="0.001" />
   <Variable Name="DIMSAH" Code="70" Type="bool" Property="UseSeparateArrowBlocksForDimensions" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMSCALE" Code="40" Type="double" Property="DimensioningScaleFactor" DefaultValue="1.0" />
   <Variable Name="DIMSD1" Code="70" Type="bool" Property="SuppressFirstDimensionExtensionLine" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMSD2" Code="70" Type="bool" Property="SuppressSecondDimensionExtensionLine" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-    <!-- TODO: DIMSE1/2 are in R12, but not DIMSD1/2 -->
-  <!-- DIMSE1 and DIMSE2 appear to be identical to DIMSD1 and DIMSD2, respectively, and are omitted -->
+
+  <!-- DIMSE1 and DIMSE2 appear to be identical to DIMSD1 and DIMSD2 -->
+  <Variable Name="DIMSE1" Code="70" Type="bool" Property="SuppressFirstDimensionExtensionLine" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
+  <Variable Name="DIMSE2" Code="70" Type="bool" Property="SuppressSecondDimensionExtensionLine" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
+
   <Variable Name="DIMSHO" Code="70" Type="bool" Property="RecomputeDimensionsWhileDragging" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMSOXD" Code="70" Type="bool" Property="SuppressOutsideExtensionDimensionLines" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="DIMSTYLE" Code="2" Type="string" Property="DimensionStyleName" DefaultValue="null" />

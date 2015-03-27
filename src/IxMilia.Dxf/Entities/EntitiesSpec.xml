@@ -13,7 +13,7 @@
     <!-- 102 codes ({ACAD_XDICTIONARY) around code 360 -->
     <Property Name="OwnerHandle" Code="330" Type="string" DefaultValue="null" MinVersion="R2000" />
     <!-- subclass marker 100,AcDbEntity -->
-    <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" />
+    <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="Layer" Code="8" Type="string" DefaultValue="0" />
     <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" />
     <Property Name="Elevation" Code="38" Type="double" DefaultValue="0.0" DisableWritingDefault="true" MaxVersion="R12" />
@@ -157,7 +157,7 @@
       <Flag Name="IsAttributePresent" Mask="8" />
     </Property>
     <Property Name="FieldLength" Code="73" Type="short" DefaultValue="0" DisableWritingDefault="true" />
-    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
+    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" MinVersion="R12" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="AcDbText" MinVersion="R13" />
       <WriteProperty Property="Thickness" />
@@ -208,7 +208,7 @@
       <Flag Name="IsTextUpsideDown" Mask="4" />
     </Property>
     <Property Name="HorizontalTextJustification" Code="72" Type="DxfHorizontalTextJustification" DefaultValue="DxfHorizontalTextJustification.Left" ReadConverter="(DxfHorizontalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
-    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
+    <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
     <WriteOrder>
@@ -277,7 +277,7 @@
     <Property Name="TextRotationAngle" Code="53" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="HorizontalDirectionAngle" Code="51" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
-    <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
+    <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" MinVersion="R12" />
   </Entity>
   <!-- rotated, horizontal, or vertical; type 0 -->
   <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="RotatedHorizontalOrVertical">
@@ -327,7 +327,7 @@
     <Property Name="DefinitionPoint5" Code="16" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="16,26,36" />
   </Entity>
   <!-- ordinate; type 6 -->
-  <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate">
+  <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate" MinVersion="R12">
     <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
     <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
   </Entity>
@@ -476,7 +476,7 @@
   LINE
   
   -->
-  <Entity Name="DxfLine" EntityType="Line" SubclassMarker="AcDbLine" TypeString="LINE">
+  <Entity Name="DxfLine" EntityType="Line" SubclassMarker="AcDbLine" TypeString="LINE,3DLINE">
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="P1" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="P2" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
@@ -604,7 +604,7 @@
   -->
   <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE">
     <Property Name="ContainsVertices" Code="66" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R13" />
-    <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R12" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" DisableWritingDefault="true">
       <Flag Name="IsClosed" Mask="1" />
@@ -841,7 +841,7 @@
   VIEWPORT
   
   -->
-  <!-- TODO -->
+  <!-- TODO MinVersion="R12" -->
   <!--
   
   WIPEOUT

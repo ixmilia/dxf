@@ -207,7 +207,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(330, (this.OwnerHandle)));
             }
 
-            if (this.IsInPaperSpace != false)
+            if (version >= DxfAcadVersion.R12 && this.IsInPaperSpace != false)
             {
                 pairs.Add(new DxfCodePair(67, BoolShort(this.IsInPaperSpace)));
             }
@@ -400,6 +400,7 @@ namespace IxMilia.Dxf.Entities
                     entity = new DxfLeader();
                     break;
                 case "LINE":
+                case "3DLINE":
                     entity = new DxfLine();
                     break;
                 case "LWPOLYLINE":
@@ -1274,7 +1275,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(73, (this.FieldLength)));
             }
 
-            if (this.VerticalTextJustification != DxfVerticalTextJustification.Baseline)
+            if (version >= DxfAcadVersion.R12 && this.VerticalTextJustification != DxfVerticalTextJustification.Baseline)
             {
                 pairs.Add(new DxfCodePair(74, (short)(this.VerticalTextJustification)));
             }
@@ -1540,7 +1541,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(72, (short)(this.HorizontalTextJustification)));
             }
 
-            if (this.VerticalTextJustification != DxfVerticalTextJustification.Baseline)
+            if (version >= DxfAcadVersion.R12 && this.VerticalTextJustification != DxfVerticalTextJustification.Baseline)
             {
                 pairs.Add(new DxfCodePair(74, (short)(this.VerticalTextJustification)));
             }
@@ -1904,7 +1905,11 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
-            pairs.Add(new DxfCodePair(3, (this.DimensionStyleName)));
+            if (version >= DxfAcadVersion.R12)
+            {
+                pairs.Add(new DxfCodePair(3, (this.DimensionStyleName)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -2483,6 +2488,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfOrdinateDimension : DxfDimensionBase
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Dimension; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R12; } }
 
         public DxfPoint DefinitionPoint2 { get; set; }
         public DxfPoint DefinitionPoint3 { get; set; }
@@ -3888,9 +3894,13 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(66, BoolShort(this.ContainsVertices)));
             }
 
-            pairs.Add(new DxfCodePair(10, Location.X));
-            pairs.Add(new DxfCodePair(20, Location.Y));
-            pairs.Add(new DxfCodePair(30, Location.Z));
+            if (version >= DxfAcadVersion.R12)
+            {
+                pairs.Add(new DxfCodePair(10, Location.X));
+                pairs.Add(new DxfCodePair(20, Location.Y));
+                pairs.Add(new DxfCodePair(30, Location.Z));
+            }
+
             if (this.Thickness != 0.0)
             {
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));

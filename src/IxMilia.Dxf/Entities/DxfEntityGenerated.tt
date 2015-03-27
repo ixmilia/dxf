@@ -72,6 +72,9 @@ foreach (var property in GetProperties(baseEntity))
 foreach (var entity in entities)
 {
     var typeString = TypeString(entity);
+    var commaIndex = typeString.IndexOf(',');
+    if (commaIndex >= 0)
+        typeString = typeString.Substring(0, commaIndex);
     if (!string.IsNullOrEmpty(typeString))
     {
 #>
@@ -214,8 +217,14 @@ foreach (var entity in entities)
     var typeString = TypeString(entity);
     if (!string.IsNullOrEmpty(typeString))
     {
+        var typeStrings = typeString.Split(',');
+        foreach (var singleTypeString in typeStrings)
+        {
 #>
-                case "<#= typeString #>":
+                case "<#= singleTypeString #>":
+<#
+        } // foreach
+#>
                     entity = new <#= Name(entity) #>();
                     break;
 <#

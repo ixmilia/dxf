@@ -2488,7 +2488,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfOrdinateDimension : DxfDimensionBase
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Dimension; } }
-        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R12; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R11; } }
 
         public DxfPoint DefinitionPoint2 { get; set; }
         public DxfPoint DefinitionPoint3 { get; set; }

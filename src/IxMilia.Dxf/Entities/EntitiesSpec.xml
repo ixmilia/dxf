@@ -327,7 +327,7 @@
     <Property Name="DefinitionPoint5" Code="16" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="16,26,36" />
   </Entity>
   <!-- ordinate; type 6 -->
-  <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate" MinVersion="R12">
+  <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate" MinVersion="R11">
     <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
     <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
   </Entity>

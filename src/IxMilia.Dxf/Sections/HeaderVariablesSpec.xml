@@ -59,9 +59,9 @@
   <Variable Name="DIMBLK1" Code="1" Type="string" Property="FirstArrowBlockName" DefaultValue="null" />
   <Variable Name="DIMBLK2" Code="1" Type="string" Property="SecondArrowBlockName" DefaultValue="null" />
   <Variable Name="DIMCEN" Code="40" Type="double" Property="CenterMarkSize" DefaultValue="1.0" />
-  <Variable Name="DIMCLRD" Code="70" Type="DxfColor" Property="DimensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R12" />
-  <Variable Name="DIMCLRE" Code="70" Type="DxfColor" Property="DimensionExtensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R12" />
-  <Variable Name="DIMCLRT" Code="70" Type="DxfColor" Property="DimensionTextColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R12" />
+  <Variable Name="DIMCLRD" Code="70" Type="DxfColor" Property="DimensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R11" />
+  <Variable Name="DIMCLRE" Code="70" Type="DxfColor" Property="DimensionExtensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R11" />
+  <Variable Name="DIMCLRT" Code="70" Type="DxfColor" Property="DimensionTextColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R11" />
   <Variable Name="DIMDEC" Code="70" Type="short" Property="DimensionUnitToleranceDecimalPlaces" DefaultValue="12" MinVersion="R13" />
   <Variable Name="DIMDLE" Code="40" Type="double" Property="DimensionLineExtension" DefaultValue="0.0" />
   <Variable Name="DIMDLI" Code="40" Type="double" Property="DimensionLineIncrement" DefaultValue="0.0" />
@@ -70,7 +70,7 @@
   <Variable Name="DIMEXO" Code="40" Type="double" Property="DimensionExtensionLineOffset" DefaultValue="0.0" />
   <Variable Name="DIMFAC" Code="40" Type="double" Property="DimensionTextHeightScaleFactor" DefaultValue="1.0" MinVersion="R2000" />
   <Variable Name="DIMFIT" Code="70" Type="DxfDimensionFit" Property="DimensionTextAndArrowPlacement" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MinVersion="R13" MaxVersion="R14" />
-  <Variable Name="DIMGAP" Code="40" Type="double" Property="DimensionLineGap" DefaultValue="0.0" MinVersion="R12" />
+  <Variable Name="DIMGAP" Code="40" Type="double" Property="DimensionLineGap" DefaultValue="0.0" MinVersion="R11" />
   <Variable Name="DIMJUST" Code="70" Type="DxfDimensionTextJustification" Property="DimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification)" WriteConverter="(short)" MinVersion="R13" />
   <Variable Name="DIMLDRBLK" Code="1" Type="string" Property="DimensionLeaderBlockName" DefaultValue="null" MinVersion="R2000" />
   <Variable Name="DIMLFAC" Code="40" Type="double" Property="DimensionLinearMeasurementsScaleFactor" DefaultValue="1.0" />
@@ -146,7 +146,7 @@
   <Variable Name="LUNITS" Code="70" Type="DxfUnitFormat" Property="UnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" />
   <Variable Name="LUPREC" Code="70" Type="short" Property="UnitPrecision" DefaultValue="12" />
   <Variable Name="LWDISPLAY" Code="290" Type="bool" Property="DisplayLinewieghtInModelAndLayoutTab" DefaultValue="false" MinVersion="R2000" />
-  <Variable Name="MAXACTVP" Code="70" Type="short" Property="MaximumActiveViewports" DefaultValue="3" MinVersion="R12" />
+  <Variable Name="MAXACTVP" Code="70" Type="short" Property="MaximumActiveViewports" DefaultValue="3" MinVersion="R11" />
   <Variable Name="MEASUREMENT" Code="70" Type="DxfDrawingUnits" Property="DrawingUnits" DefaultValue="DxfDrawingUnits.English" ReadConverter="(DxfDrawingUnits)" WriteConverter="(short)" MinVersion="R14" />
   <Variable Name="MENU" Code="1" Type="string" Property="FileName" DefaultValue="null" />
   <Variable Name="MIRRTEXT" Code="70" Type="bool" Property="MirrorText" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
@@ -170,24 +170,24 @@
   </Variable>
   <Variable Name="PDMODE" Code="70" Type="int" Property="PointDisplayMode" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
   <Variable Name="PDSIZE" Code="40" Type="double" Property="PointDisplaySize" DefaultValue="0.0" />
-  <Variable Name="PELEVATION" Code="40" Type="double" Property="PaperspaceElevation" DefaultValue="0.0" MinVersion="R12" />
-  <Variable Name="PEXTMAX" Code="-3" Type="DxfPoint" Property="PaperspaceMaximumDrawingExtents" DefaultValue="DxfPoint.Origin" MinVersion="R12" />
-  <Variable Name="PEXTMIN" Code="-3" Type="DxfPoint" Property="PaperspaceMinimumDrawingExtents" DefaultValue="DxfPoint.Origin" MinVersion="R12" />
+  <Variable Name="PELEVATION" Code="40" Type="double" Property="PaperspaceElevation" DefaultValue="0.0" MinVersion="R11" />
+  <Variable Name="PEXTMAX" Code="-3" Type="DxfPoint" Property="PaperspaceMaximumDrawingExtents" DefaultValue="DxfPoint.Origin" MinVersion="R11" />
+  <Variable Name="PEXTMIN" Code="-3" Type="DxfPoint" Property="PaperspaceMinimumDrawingExtents" DefaultValue="DxfPoint.Origin" MinVersion="R11" />
   <Variable Name="PICKSTYLE" Code="70" Type="DxfPickStyle" Property="PickStyle" DefaultValue="DxfPickStyle.None" ReadConverter="(DxfPickStyle)" WriteConverter="(short)" MinVersion="R13" MaxVersion="R14" />
   <Variable Name="PINSBASE" Code="-3" Type="DxfPoint" Property="PaperspaceInsertionBase" DefaultValue="DxfPoint.Origin" MinVersion="R14" />
-  <Variable Name="PLIMCHECK" Code="70" Type="bool" Property="LimitCheckingInPaperspace" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R12" />
-  <Variable Name="PLIMMAX" Code="-2" Type="DxfPoint" Property="PaperspaceMaximumDrawingLimits" DefaultValue="DxfPoint.Origin" MinVersion="R12" />
-  <Variable Name="PLIMMIN" Code="-2" Type="DxfPoint" Property="PaperspaceMinimumDrawingLimits" DefaultValue="DxfPoint.Origin" MinVersion="R12" />
-  <Variable Name="PLINEGEN" Code="70" Type="bool" Property="IsPolylineContinuousAroundVerticies" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R12" />
+  <Variable Name="PLIMCHECK" Code="70" Type="bool" Property="LimitCheckingInPaperspace" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R11" />
+  <Variable Name="PLIMMAX" Code="-2" Type="DxfPoint" Property="PaperspaceMaximumDrawingLimits" DefaultValue="DxfPoint.Origin" MinVersion="R11" />
+  <Variable Name="PLIMMIN" Code="-2" Type="DxfPoint" Property="PaperspaceMinimumDrawingLimits" DefaultValue="DxfPoint.Origin" MinVersion="R11" />
+  <Variable Name="PLINEGEN" Code="70" Type="bool" Property="IsPolylineContinuousAroundVerticies" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R11" />
   <Variable Name="PLINEWID" Code="40" Type="double" Property="DefaultPolylineWidth" DefaultValue="0.0" />
   <Variable Name="PROJECTNAME" Code="1" Type="string" Property="ProjectName" DefaultValue="null" MinVersion="R2004" />
   <Variable Name="PROXYGRAPHICS" Code="70" Type="bool" Property="SaveProxyGraphics" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R14" />
-  <Variable Name="PSLTSCALE" Code="70" Type="bool" Property="ScaleLinetypesInPaperspace" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R12" />
+  <Variable Name="PSLTSCALE" Code="70" Type="bool" Property="ScaleLinetypesInPaperspace" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R11" />
   <Variable Name="PSTYLEMODE" Code="290" Type="bool" Property="UsesColorDependentPlotStyleTables" DefaultValue="false" MinVersion="R2000" />
   <Variable Name="PSVPSCALE" Code="40" Type="double" Property="ViewportViewScaleFactor" DefaultValue="0.0" MinVersion="R2000" />
   <Variable Name="PUCSBASE" Code="2" Type="string" Property="PaperspaceUCSDefinitionName" DefaultValue="null" MinVersion="R2000" />
-  <Variable Name="PUCSNAME" Code="2" Type="string" Property="PaperspaceUCSName" DefaultValue="null" MinVersion="R12" />
-  <Variable Name="PUCSORG" Code="-3" Type="DxfPoint" Property="PaperspaceUCSOrigin" DefaultValue="DxfPoint.Origin" MinVersion="R12" />
+  <Variable Name="PUCSNAME" Code="2" Type="string" Property="PaperspaceUCSName" DefaultValue="null" MinVersion="R11" />
+  <Variable Name="PUCSORG" Code="-3" Type="DxfPoint" Property="PaperspaceUCSOrigin" DefaultValue="DxfPoint.Origin" MinVersion="R11" />
   <Variable Name="PUCSORGBACK" Code="-3" Type="DxfPoint" Property="PaperspaceUCSOriginBack" DefaultValue="DxfPoint.Origin" MinVersion="R2000" />
   <Variable Name="PUCSORGBOTTOM" Code="-3" Type="DxfPoint" Property="PaperspaceUCSOriginBottom" DefaultValue="DxfPoint.Origin" MinVersion="R2000" />
   <Variable Name="PUCSORGFRONT" Code="-3" Type="DxfPoint" Property="PaperspaceUCSOriginFront" DefaultValue="DxfPoint.Origin" MinVersion="R2000" />
@@ -196,12 +196,12 @@
   <Variable Name="PUCSORGTOP" Code="-3" Type="DxfPoint" Property="PaperspaceUCSOriginTop" DefaultValue="DxfPoint.Origin" MinVersion="R2000" />
   <Variable Name="PUCSORTHOREF" Code="2" Type="string" Property="PaperspaceOrthoUCSReference" DefaultValue="null" MinVersion="R2000" />
   <Variable Name="PUCSORTHOVIEW" Code="70" Type="DxfOrthographicViewType" Property="PaperspaceOrthographicViewType" DefaultValue="DxfOrthographicViewType.None" ReadConverter="(DxfOrthographicViewType)" WriteConverter="(short)" MinVersion="R2000" />
-  <Variable Name="PUCSXDIR" Code="-3" Type="DxfVector" Property="PaperspaceXAxis" DefaultValue="DxfVector.XAxis" MinVersion="R12" />
-  <Variable Name="PUCSYDIR" Code="-3" Type="DxfVector" Property="PaperspaceYAxis" DefaultValue="DxfVector.YAxis" MinVersion="R12" />
+  <Variable Name="PUCSXDIR" Code="-3" Type="DxfVector" Property="PaperspaceXAxis" DefaultValue="DxfVector.XAxis" MinVersion="R11" />
+  <Variable Name="PUCSYDIR" Code="-3" Type="DxfVector" Property="PaperspaceYAxis" DefaultValue="DxfVector.YAxis" MinVersion="R11" />
   <Variable Name="QTEXTMODE" Code="70" Type="bool" Property="UseQuickTextMode" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="REGENMODE" Code="70" Type="bool" Property="UseRegenMode" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-  <Variable Name="SHADEDGE" Code="70" Type="DxfShadeEdgeMode" Property="EdgeShading" DefaultValue="DxfShadeEdgeMode.FacesShadedEdgeNotHighlighted" ReadConverter="(DxfShadeEdgeMode)" WriteConverter="(short)" MinVersion="R12" />
-  <Variable Name="SHADEDIF" Code="70" Type="short" Property="PercentAmbientToDiffuse" DefaultValue="70" MinVersion="R12" />
+  <Variable Name="SHADEDGE" Code="70" Type="DxfShadeEdgeMode" Property="EdgeShading" DefaultValue="DxfShadeEdgeMode.FacesShadedEdgeNotHighlighted" ReadConverter="(DxfShadeEdgeMode)" WriteConverter="(short)" MinVersion="R11" />
+  <Variable Name="SHADEDIF" Code="70" Type="short" Property="PercentAmbientToDiffuse" DefaultValue="70" MinVersion="R11" />
   <Variable Name="SHADOWPLANELOCATION" Code="40" Type="double" Property="ShadowPlaneZOffset" DefaultValue="0.0" MinVersion="R2007" />
   <Variable Name="SKETCHINC" Code="40" Type="double" Property="SketchRecordIncrement" DefaultValue="0.0" />
   <Variable Name="SKPOLY" Code="70" Type="DxfPolySketchMode" Property="PolylineSketchMode" DefaultValue="DxfPolySketchMode.SketchLines" ReadConverter="(DxfPolySketchMode)" WriteConverter="(short)" />
@@ -231,14 +231,14 @@
   <Variable Name="TEXTSIZE" Code="40" Type="double" Property="DefaultTextHeight" DefaultValue="0.0" />
   <Variable Name="TEXTSTYLE" Code="7" Type="string" Property="TextStyle" DefaultValue="null" />
   <Variable Name="THICKNESS" Code="40" Type="double" Property="Thickness" DefaultValue="0.0" />
-  <Variable Name="TILEMODE" Code="70" Type="bool" Property="PreviousReleaseTileCompatability" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R12" />
+  <Variable Name="TILEMODE" Code="70" Type="bool" Property="PreviousReleaseTileCompatability" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R11" />
   <Variable Name="TRACEWID" Code="40" Type="double" Property="TraceWidth" DefaultValue="0.0" />
   <Variable Name="TREEDEPTH" Code="70" Type="short" Property="SpacialIndexMaxDepth" DefaultValue="0" MinVersion="R14" />
   <Variable Name="UCSBASE" Code="2" Type="string" Property="UCSDefinitionName" DefaultValue="null" MinVersion="R2000" />
 
-  <!-- code 1 in R10, 2 in R12+ -->
+  <!-- code 1 in R10, 2 in R11+ -->
   <Variable Name="UCSNAME" Code="1" Type="string" Property="UCSName" DefaultValue="null" MaxVersion="R10" />
-  <Variable Name="UCSNAME" Code="2" Type="string" Property="UCSName" DefaultValue="null" MinVersion="R12" />
+  <Variable Name="UCSNAME" Code="2" Type="string" Property="UCSName" DefaultValue="null" MinVersion="R11" />
 
   <Variable Name="UCSORG" Code="-3" Type="DxfPoint" Property="UCSOrigin" DefaultValue="DxfPoint.Origin" />
   <Variable Name="UCSORGBACK" Code="-3" Type="DxfPoint" Property="UCSOriginBack" DefaultValue="DxfPoint.Origin" MinVersion="R2000" />
@@ -251,7 +251,7 @@
   <Variable Name="UCSORTHOVIEW" Code="70" Type="DxfOrthographicViewType" Property="OrthgraphicViewType" DefaultValue="DxfOrthographicViewType.None" ReadConverter="(DxfOrthographicViewType)" WriteConverter="(short)" MinVersion="R2000" />
   <Variable Name="UCSXDIR" Code="-3" Type="DxfVector" Property="UCSXAxis" DefaultValue="DxfVector.XAxis" />
   <Variable Name="UCSYDIR" Code="-3" Type="DxfVector" Property="UCSYAxis" DefaultValue="DxfVector.YAxis" />
-  <Variable Name="UNITMODE" Code="70" Type="bool" Property="DisplayFractionsInInput" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R12" />
+  <Variable Name="UNITMODE" Code="70" Type="bool" Property="DisplayFractionsInInput" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R11" />
   <Variable Name="USERI1" Code="70" Type="short" Property="UserInt1" DefaultValue="0" />
   <Variable Name="USERI2" Code="70" Type="short" Property="UserInt2" DefaultValue="0" />
   <Variable Name="USERI3" Code="70" Type="short" Property="UserInt3" DefaultValue="0" />

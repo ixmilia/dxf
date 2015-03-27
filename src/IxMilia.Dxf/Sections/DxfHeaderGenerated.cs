@@ -78,12 +78,16 @@ namespace IxMilia.Dxf
         private const string DIMLFAC = "$DIMLFAC";
         private const string DIMLIM = "$DIMLIM";
         private const string DIMLUNIT = "$DIMLUNIT";
+        private const string DIMLWD = "$DIMLWD";
+        private const string DIMLWE = "$DIMLWE";
         private const string DIMPOST = "$DIMPOST";
         private const string DIMRND = "$DIMRND";
         private const string DIMSAH = "$DIMSAH";
         private const string DIMSCALE = "$DIMSCALE";
         private const string DIMSD1 = "$DIMSD1";
         private const string DIMSD2 = "$DIMSD2";
+        private const string DIMSE1 = "$DIMSE1";
+        private const string DIMSE2 = "$DIMSE2";
         private const string DIMSHO = "$DIMSHO";
         private const string DIMSOXD = "$DIMSOXD";
         private const string DIMSTYLE = "$DIMSTYLE";
@@ -561,6 +565,16 @@ namespace IxMilia.Dxf
         /// The $DIMLUNIT header variable.
         /// </summary>
         public DxfNonAngularUnits DimensionNonAngularUnits { get; set; }
+
+        /// <summary>
+        /// The $DIMLWD header variable.
+        /// </summary>
+        public DxfLineWeight DimensionLineWeight { get; set; }
+
+        /// <summary>
+        /// The $DIMLWE header variable.
+        /// </summary>
+        public DxfLineWeight DimensionExtensionLineWeight { get; set; }
 
         /// <summary>
         /// The $DIMPOST header variable.
@@ -1415,6 +1429,8 @@ namespace IxMilia.Dxf
             this.DimensionLinearMeasurementsScaleFactor = 1.0; // DIMLFAC
             this.GenerateDimensionLimits = false; // DIMLIM
             this.DimensionNonAngularUnits = DxfNonAngularUnits.Scientific; // DIMLUNIT
+            this.DimensionLineWeight = new DxfLineWeight(); // DIMLWD
+            this.DimensionExtensionLineWeight = new DxfLineWeight(); // DIMLWE
             this.DimensioningSuffix = null; // DIMPOST
             this.DimensionDistanceRoundingValue = 0.001; // DIMRND
             this.UseSeparateArrowBlocksForDimensions = false; // DIMSAH
@@ -1983,6 +1999,20 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(70, (short)(header.DimensionNonAngularUnits)));
             }
 
+            // DIMLWD
+            if (version >= DxfAcadVersion.R2000)
+            {
+                list.Add(new DxfCodePair(9, DIMLWD));
+                list.Add(new DxfCodePair(70, DxfLineWeight.GetRawValue(header.DimensionLineWeight)));
+            }
+
+            // DIMLWE
+            if (version >= DxfAcadVersion.R2000)
+            {
+                list.Add(new DxfCodePair(9, DIMLWE));
+                list.Add(new DxfCodePair(70, DxfLineWeight.GetRawValue(header.DimensionExtensionLineWeight)));
+            }
+
             // DIMPOST
             list.Add(new DxfCodePair(9, DIMPOST));
             list.Add(new DxfCodePair(1, (header.DimensioningSuffix)));
@@ -2006,6 +2036,20 @@ namespace IxMilia.Dxf
             // DIMSD2
             list.Add(new DxfCodePair(9, DIMSD2));
             list.Add(new DxfCodePair(70, BoolShort(header.SuppressSecondDimensionExtensionLine)));
+
+            // DIMSE1
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(9, DIMSE1));
+                list.Add(new DxfCodePair(70, BoolShort(header.SuppressFirstDimensionExtensionLine)));
+            }
+
+            // DIMSE2
+            if (version >= DxfAcadVersion.R13)
+            {
+                list.Add(new DxfCodePair(9, DIMSE2));
+                list.Add(new DxfCodePair(70, BoolShort(header.SuppressSecondDimensionExtensionLine)));
+            }
 
             // DIMSHO
             list.Add(new DxfCodePair(9, DIMSHO));
@@ -3227,6 +3271,14 @@ namespace IxMilia.Dxf
                     EnsureCode(pair, 70);
                     header.DimensionNonAngularUnits = (DxfNonAngularUnits)(pair.ShortValue);
                     break;
+                case DIMLWD:
+                    EnsureCode(pair, 70);
+                    header.DimensionLineWeight = DxfLineWeight.FromRawValue(pair.ShortValue);
+                    break;
+                case DIMLWE:
+                    EnsureCode(pair, 70);
+                    header.DimensionExtensionLineWeight = DxfLineWeight.FromRawValue(pair.ShortValue);
+                    break;
                 case DIMPOST:
                     EnsureCode(pair, 1);
                     header.DimensioningSuffix = (pair.StringValue);
@@ -3248,6 +3300,14 @@ namespace IxMilia.Dxf
                     header.SuppressFirstDimensionExtensionLine = BoolShort(pair.ShortValue);
                     break;
                 case DIMSD2:
+                    EnsureCode(pair, 70);
+                    header.SuppressSecondDimensionExtensionLine = BoolShort(pair.ShortValue);
+                    break;
+                case DIMSE1:
+                    EnsureCode(pair, 70);
+                    header.SuppressFirstDimensionExtensionLine = BoolShort(pair.ShortValue);
+                    break;
+                case DIMSE2:
                     EnsureCode(pair, 70);
                     header.SuppressSecondDimensionExtensionLine = BoolShort(pair.ShortValue);
                     break;
@@ -4218,6 +4278,10 @@ namespace IxMilia.Dxf
                     return this.GenerateDimensionLimits;
                 case DIMLUNIT:
                     return this.DimensionNonAngularUnits;
+                case DIMLWD:
+                    return this.DimensionLineWeight;
+                case DIMLWE:
+                    return this.DimensionExtensionLineWeight;
                 case DIMPOST:
                     return this.DimensioningSuffix;
                 case DIMRND:
@@ -4229,6 +4293,10 @@ namespace IxMilia.Dxf
                 case DIMSD1:
                     return this.SuppressFirstDimensionExtensionLine;
                 case DIMSD2:
+                    return this.SuppressSecondDimensionExtensionLine;
+                case DIMSE1:
+                    return this.SuppressFirstDimensionExtensionLine;
+                case DIMSE2:
                     return this.SuppressSecondDimensionExtensionLine;
                 case DIMSHO:
                     return this.RecomputeDimensionsWhileDragging;
@@ -4744,6 +4812,12 @@ namespace IxMilia.Dxf
                 case DIMLUNIT:
                     this.DimensionNonAngularUnits = (DxfNonAngularUnits)value;
                     break;
+                case DIMLWD:
+                    this.DimensionLineWeight = (DxfLineWeight)value;
+                    break;
+                case DIMLWE:
+                    this.DimensionExtensionLineWeight = (DxfLineWeight)value;
+                    break;
                 case DIMPOST:
                     this.DimensioningSuffix = (string)value;
                     break;
@@ -4760,6 +4834,12 @@ namespace IxMilia.Dxf
                     this.SuppressFirstDimensionExtensionLine = (bool)value;
                     break;
                 case DIMSD2:
+                    this.SuppressSecondDimensionExtensionLine = (bool)value;
+                    break;
+                case DIMSE1:
+                    this.SuppressFirstDimensionExtensionLine = (bool)value;
+                    break;
+                case DIMSE2:
                     this.SuppressSecondDimensionExtensionLine = (bool)value;
                     break;
                 case DIMSHO:

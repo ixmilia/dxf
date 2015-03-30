@@ -131,7 +131,11 @@
   <Variable Name="HALOGAP" Code="280" Type="double" Property="HaloGapPercent" DefaultValue="0.0" ReadConverter="(double)" WriteConverter="(short)" MinVersion="R2004" />
   <Variable Name="HANDLING" Code="70" Type="int" Property="NextAvailableHandle" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" MaxVersion="R14" />
   <Variable Name="HANDSEED" Code="5" Type="string" Property="NextAvailableHandle2" DefaultValue="" />
+  
+  <!-- the spec says this should be a code 290 bool, but some R2010 files encountered in the wild have a code 280 short instead -->
   <Variable Name="HIDETEXT" Code="290" Type="bool" Property="HideTextObjectsWhenProducintHiddenView" DefaultValue="false" MinVersion="R2004" />
+  <Variable Name="HIDETEXT" Code="280" Type="bool" Property="HideTextObjectsWhenProducintHiddenView" DefaultValue="false" ReadConverter="BoolShort" MinVersion="R2004" SuppressWriting="true" />
+
   <Variable Name="HYPERLINKBASE" Code="1" Type="string" Property="HyperlinBase" DefaultValue="null" MinVersion="R2000" />
   <Variable Name="INDEXCTL" Code="280" Type="DxfLayerAndSpatialIndexSaveMode" Property="LayerAndSpatialIndexSaveMode" DefaultValue="DxfLayerAndSpatialIndexSaveMode.None" ReadConverter="(DxfLayerAndSpatialIndexSaveMode)" WriteConverter="(short)" MinVersion="R2004" />
   <Variable Name="INSBASE" Code="-3" Type="DxfPoint" Property="InsertionBase" DefaultValue="DxfPoint.Origin" />
@@ -140,7 +144,11 @@
   <Variable Name="INTERFEREOBJVS" Code="345" Type="string" Property="InterferenceObjectVisualStylePointer" DefaultValue="Conceptual" MinVersion="R2007" />
   <Variable Name="INTERFEREVPVS" Code="346" Type="string" Property="InterferenceViewPortVisualStylePointer" DefaultValue="3d Wireframe" MinVersion="R2007" />
   <Variable Name="INTERSECTIONCOLOR" Code="70" Type="DxfColor" Property="IntersectionPolylineColor" DefaultValue="DxfColor.ByEntity" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R2004" />
+
+  <!-- the spec says this should be a code 290 bool, but some R2010 files encountered in the wild have a code 280 short instead -->
   <Variable Name="INTERSECTIONDISPLAY" Code="290" Type="bool" Property="DisplayIntersectionPolylines" DefaultValue="false" MinVersion="R2004" />
+  <Variable Name="INTERSECTIONDISPLAY" Code="280" Type="bool" Property="DisplayIntersectionPolylines" DefaultValue="false" ReadConverter="BoolShort" MinVersion="R2004" SuppressWriting="true" />
+
   <Variable Name="JOINSTYLE" Code="280" Type="DxfJoinStyle" Property="LineweightJointSetting" DefaultValue="DxfJoinStyle.None" ReadConverter="(DxfJoinStyle)" WriteConverter="(short)" MinVersion="R2000" />
   <Variable Name="LIMCHECK" Code="70" Type="bool" Property="UseLimitsChecking" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="LIMMAX" Code="-2" Type="DxfPoint" Property="MaximumDrawingLimits" DefaultValue="DxfPoint.Origin" />
@@ -269,6 +277,10 @@
   <Variable Name="VERSIONGUID" Code="2" Type="Guid" Property="VersionGuid" DefaultValue="Guid.NewGuid()" ReadConverter="GuidString" WriteConverter="GuidString" MinVersion="R2000" />
   <Variable Name="VISRETAIN" Code="70" Type="bool" Property="RetainXRefDependentVisibilitySettings" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R12" />
   <Variable Name="WORLDVIEW" Code="70" Type="bool" Property="SetUCSToWCSInDViewOrVPoint" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+
+  <!-- the spec says this should be a code 290 bool, but some R2010 files encountered in the wild have a code 280 short instead -->
   <Variable Name="XCLIPFRAME" Code="290" Type="bool" Property="IsXRefClippingBoundaryVisible" DefaultValue="false" MinVersion="R2004" />
+  <Variable Name="XCLIPFRAME" Code="280" Type="bool" Property="IsXRefClippingBoundaryVisible" DefaultValue="false" ReadConverter="BoolShort" MinVersion="R2004" SuppressWriting="true" />
+
   <Variable Name="XEDIT" Code="290" Type="bool" Property="CanUseInPlaceReferenceEditing" DefaultValue="false" MinVersion="R2000" />
 </Spec>

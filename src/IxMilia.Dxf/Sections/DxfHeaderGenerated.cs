@@ -3472,8 +3472,18 @@ namespace IxMilia.Dxf
                     header.NextAvailableHandle2 = (pair.StringValue);
                     break;
                 case HIDETEXT:
-                    EnsureCode(pair, 290);
-                    header.HideTextObjectsWhenProducintHiddenView = (pair.BoolValue);
+                    switch (pair.Code)
+                    {
+                        case 290:
+                            header.HideTextObjectsWhenProducintHiddenView = (pair.BoolValue);
+                            break;
+                        case 280:
+                            header.HideTextObjectsWhenProducintHiddenView = BoolShort(pair.ShortValue);
+                            break;
+                        default:
+                            Debug.Assert(false, string.Format("Expected code [290, 280], got {0}", pair.Code));
+                            break;
+                    }
                     break;
                 case HYPERLINKBASE:
                     EnsureCode(pair, 1);
@@ -3507,8 +3517,18 @@ namespace IxMilia.Dxf
                     header.IntersectionPolylineColor = DxfColor.FromRawValue(pair.ShortValue);
                     break;
                 case INTERSECTIONDISPLAY:
-                    EnsureCode(pair, 290);
-                    header.DisplayIntersectionPolylines = (pair.BoolValue);
+                    switch (pair.Code)
+                    {
+                        case 290:
+                            header.DisplayIntersectionPolylines = (pair.BoolValue);
+                            break;
+                        case 280:
+                            header.DisplayIntersectionPolylines = BoolShort(pair.ShortValue);
+                            break;
+                        default:
+                            Debug.Assert(false, string.Format("Expected code [290, 280], got {0}", pair.Code));
+                            break;
+                    }
                     break;
                 case JOINSTYLE:
                     EnsureCode(pair, 280);
@@ -3904,8 +3924,18 @@ namespace IxMilia.Dxf
                     header.SetUCSToWCSInDViewOrVPoint = BoolShort(pair.ShortValue);
                     break;
                 case XCLIPFRAME:
-                    EnsureCode(pair, 290);
-                    header.IsXRefClippingBoundaryVisible = (pair.BoolValue);
+                    switch (pair.Code)
+                    {
+                        case 290:
+                            header.IsXRefClippingBoundaryVisible = (pair.BoolValue);
+                            break;
+                        case 280:
+                            header.IsXRefClippingBoundaryVisible = BoolShort(pair.ShortValue);
+                            break;
+                        default:
+                            Debug.Assert(false, string.Format("Expected code [290, 280], got {0}", pair.Code));
+                            break;
+                    }
                     break;
                 case XEDIT:
                     EnsureCode(pair, 290);

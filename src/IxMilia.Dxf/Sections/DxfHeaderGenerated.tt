@@ -99,7 +99,7 @@ foreach (var property in variables) {
         // build list of code value pairs
         internal static void AddValueToList(List<DxfCodePair> list, DxfHeader header, DxfAcadVersion version)
         {
-<# foreach (var property in variables) {
+<# foreach (var property in variables.Where(p => !SuppressWriting(p))) {
     var converterAtt = property.Attribute("WriteConverter");
     var converter = converterAtt == null ? string.Empty : converterAtt.Value;
     var type = property.Attribute("Type").Value;

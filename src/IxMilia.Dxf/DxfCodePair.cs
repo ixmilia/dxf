@@ -52,14 +52,7 @@ namespace IxMilia.Dxf
 
         public bool BoolValue
         {
-            get
-            {
-                // In some AutoCAD 2010 files (AC1024), the header variables $HIDETEXT, $XCLIPFRAME, and $INTERSECTIONDISPLAY
-                // are encoded as code 280 shorts instead of 290 bools.  This is to special-case just those scenarios.
-                return Value.GetType() == typeof(short)
-                    ? (short)Value != 0
-                    : (bool)Value;
-            }
+            get { return (bool)Value; }
         }
 
         public string HandleValue

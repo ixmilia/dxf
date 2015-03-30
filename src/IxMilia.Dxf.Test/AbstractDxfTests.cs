@@ -34,13 +34,18 @@ EOF
 ", sectionName, string.IsNullOrWhiteSpace(data) ? null : "\r\n" + data.Trim()));
         }
 
-        protected static void VerifyFileContents(DxfFile file, string expected, Action<string, string> predicate)
+        protected static string ToString(DxfFile file)
         {
             var stream = new MemoryStream();
             file.Save(stream);
             stream.Flush();
             stream.Seek(0, SeekOrigin.Begin);
-            var actual = new StreamReader(stream).ReadToEnd();
+            return new StreamReader(stream).ReadToEnd();
+        }
+
+        protected static void VerifyFileContents(DxfFile file, string expected, Action<string, string> predicate)
+        {
+            var actual = ToString(file);
             predicate(expected, actual);
         }
 

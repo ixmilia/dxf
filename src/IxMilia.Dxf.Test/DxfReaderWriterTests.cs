@@ -702,5 +702,72 @@ TABLE
 BLOCK_RECORD
 ");
         }
+
+        [Fact]
+        public void Code280ShortInsteadOfCode290BoolTest()
+        {
+            // the spec says header variables $HIDETEXT, $INTERSECTIONDISPLAY,  and $XCLIPFRAME should be code 290
+            // bools but some R2010 files encountered in the wild have a code 280 short instead
+
+            // first test code 290 bool
+            var file = Section("HEADER", @"
+  9
+$ACADVER
+  1
+AC1018
+  9
+$HIDETEXT
+290
+1
+  9
+$INTERSECTIONDISPLAY
+290
+1
+  9
+$XCLIPFRAME
+290
+1
+");
+            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
+            Assert.True(file.Header.DisplayIntersectionPolylines);
+            Assert.True(file.Header.IsXRefClippingBoundaryVisible);
+
+            // now test code 280 short
+            file = Section("HEADER", @"
+  9
+$ACADVER
+  1
+AC1018
+  9
+$HIDETEXT
+280
+1
+  9
+$INTERSECTIONDISPLAY
+280
+1
+  9
+$XCLIPFRAME
+280
+1
+");
+            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
+            Assert.True(file.Header.DisplayIntersectionPolylines);
+            Assert.True(file.Header.IsXRefClippingBoundaryVisible);
+
+            // verify that these variables aren't written twice
+            file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2004;
+            var text = ToString(file);
+
+            Assert.True(text.IndexOf("$HIDETEXT") > 0); // make sure it's there
+            Assert.Equal(text.IndexOf("$HIDETEXT"), text.LastIndexOf("$HIDETEXT")); // first and last should be the same
+
+            Assert.True(text.IndexOf("$INTERSECTIONDISPLAY") > 0); // make sure it's there
+            Assert.Equal(text.IndexOf("$INTERSECTIONDISPLAY"), text.LastIndexOf("$INTERSECTIONDISPLAY")); // first and last should be the same
+
+            Assert.True(text.IndexOf("$XCLIPFRAME") > 0); // make sure it's there
+            Assert.Equal(text.IndexOf("$XCLIPFRAME"), text.LastIndexOf("$XCLIPFRAME")); // first and last should be the same
+        }
     }
 }

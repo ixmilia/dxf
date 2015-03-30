@@ -39,6 +39,12 @@ string BaseClass(XElement entity)
     return att == null ? "DxfEntity" : att.Value;
 }
 
+bool SuppressWriting(XElement property)
+{
+    var att = property.Attribute("SuppressWriting");
+    return att != null && bool.Parse(att.Value);
+}
+
 bool DisableWritingDefault(XElement property)
 {
     var att = property.Attribute("DisableWritingDefault");

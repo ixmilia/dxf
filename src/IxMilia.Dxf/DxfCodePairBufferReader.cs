@@ -2,32 +2,22 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace IxMilia.Dxf
 {
     internal class DxfBufferReader<T>
     {
-        private T[] items;
-        private int position;
-        private Func<T, bool> isIgnorable;
-
-        public int Position { get { return position; } }
+        private readonly IEnumerator<T> enumerator;
+        private readonly Func<T, bool> isIgnorable;
 
         public DxfBufferReader(IEnumerable<T> pairs, Func<T, bool> isIgnorable)
         {
-            this.items = pairs.ToArray();
-            this.position = 0;
+            this.enumerator = pairs.GetEnumerator();
             this.isIgnorable = isIgnorable;
+            ItemsRemain = enumerator.MoveNext();
         }
 
-        public bool ItemsRemain
-        {
-            get
-            {
-                return this.position < this.items.Length;
-            }
-        }
+        public bool ItemsRemain { get; private set; }
 
         public T Peek()
         {
@@ -36,15 +26,15 @@ namespace IxMilia.Dxf
                 throw new DxfReadException("No more items.");
             }
 
-            return this.items[this.position];
+            return enumerator.Current;
         }
 
         public void Advance()
         {
-            this.position++;
+            ItemsRemain = enumerator.MoveNext();
             while (ItemsRemain && isIgnorable(Peek()))
             {
-                this.position++;
+                ItemsRemain = enumerator.MoveNext();
             }
         }
     }

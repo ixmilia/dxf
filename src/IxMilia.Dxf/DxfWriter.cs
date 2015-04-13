@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace IxMilia.Dxf
@@ -64,7 +65,7 @@ namespace IxMilia.Dxf
         {
             if (textWriter != null)
             {
-                textWriter.WriteLine(code.ToString().PadLeft(3));
+                textWriter.WriteLine(code.ToString(CultureInfo.InvariantCulture).PadLeft(3));
             }
             else if (binWriter != null)
             {
@@ -117,7 +118,7 @@ namespace IxMilia.Dxf
         private void WriteDouble(double value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value.ToString("E16"));
+                textWriter.WriteLine(value.ToString("0.0##############", CultureInfo.InvariantCulture));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -125,7 +126,7 @@ namespace IxMilia.Dxf
         private void WriteShort(short value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value);
+                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -133,7 +134,7 @@ namespace IxMilia.Dxf
         private void WriteInt(int value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value);
+                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -141,7 +142,7 @@ namespace IxMilia.Dxf
         private void WriteLong(long value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value);
+                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
             else if (binWriter != null)
                 binWriter.Write(value);
         }

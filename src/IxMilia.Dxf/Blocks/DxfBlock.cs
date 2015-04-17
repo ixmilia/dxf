@@ -1,6 +1,5 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +7,7 @@ using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Blocks
 {
-    public class DxfBlock
+    public class DxfBlock : IDxfHasHandle
     {
         internal const string BlockText = "BLOCK";
         internal const string EndBlockText = "ENDBLK";
@@ -18,7 +17,7 @@ namespace IxMilia.Dxf.Blocks
 
         private int Flags = 0;
 
-        public string Handle { get; set; }
+        public uint Handle { get; set; }
         public string Layer { get; set; }
         public string Name { get; set; }
         public DxfPoint BasePoint { get; set; }
@@ -73,14 +72,17 @@ namespace IxMilia.Dxf.Blocks
             Entities = new List<DxfEntity>();
         }
 
-        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
+        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(0, BlockText));
+            if (outputHandles)
+            {
+                list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
+            }
+
             if (version >= DxfAcadVersion.R13)
             {
-                list.Add(new DxfCodePair(5, Handle));
-
                 // TODO: application-defined 102 codes for R14+
                 list.Add(new DxfCodePair(100, AcDbEntityText));
             }
@@ -104,12 +106,13 @@ namespace IxMilia.Dxf.Blocks
             if (!string.IsNullOrEmpty(XrefName))
                 list.Add(new DxfCodePair(1, XrefName));
 
-            list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version)));
+            // entities in blocks never have handles
+            list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version, outputHandles: false)));
 
             list.Add(new DxfCodePair(0, EndBlockText));
-            if (version >= DxfAcadVersion.R13)
+            if (outputHandles)
             {
-                list.Add(new DxfCodePair(5, Handle));
+                list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
             }
 
             // TODO: application-defined 102 codes for R14+
@@ -185,7 +188,7 @@ namespace IxMilia.Dxf.Blocks
                             case 3:
                                 break;
                             case 5:
-                                block.Handle = pair.StringValue;
+                                block.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                                 break;
                             case 8:
                                 block.Layer = pair.StringValue;
@@ -210,7 +213,7 @@ namespace IxMilia.Dxf.Blocks
                         switch (pair.Code)
                         {
                             case 5:
-                                Debug.Assert(pair.StringValue == block.Handle);
+                                Debug.Assert(DxfCommonConverters.UIntHandle(pair.StringValue) == block.Handle);
                                 break;
                             case 8:
                                 Debug.Assert(version == DxfAcadVersion.R13);

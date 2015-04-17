@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace IxMilia.Dxf.Tables
 {
-    public abstract partial class DxfTable
+    public abstract partial class DxfTable : IDxfHasHandle
     {
         public const string AppIdText = "APPID";
         public const string BlockRecordText = "BLOCK_RECORD";
@@ -19,9 +19,9 @@ namespace IxMilia.Dxf.Tables
         public const string ViewPortText = "VPORT";
 
         internal abstract DxfTableType TableType { get; }
-        public string Handle { get; set; }
+        public uint Handle { get; set; }
         public int MaxEntries { get; set; }
-        public string OwnerHandle { get; set; }
+        public uint OwnerHandle { get; set; }
 
         public DxfTable()
         {
@@ -29,7 +29,7 @@ namespace IxMilia.Dxf.Tables
 
         protected abstract IEnumerable<DxfSymbolTableFlags> GetSymbolItems();
 
-        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
+        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
             var pairs = new List<DxfCodePair>();
             var symbolItems = GetSymbolItems();
@@ -39,12 +39,16 @@ namespace IxMilia.Dxf.Tables
             // common pairs
             pairs.Add(new DxfCodePair(0, DxfSection.TableText));
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
+            if (outputHandles)
+            {
+                pairs.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
+            }
+
             if (version >= DxfAcadVersion.R13)
             {
-                pairs.Add(new DxfCodePair(5, Handle));
                 // 102 ({ACAD_XDICTIONARY) codes surrounding code 360
                 if (version >= DxfAcadVersion.R2000)
-                    pairs.Add(new DxfCodePair(330, OwnerHandle));
+                    pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
                 pairs.Add(new DxfCodePair(100, "AcDbSymbolTable"));
             }
 
@@ -52,8 +56,8 @@ namespace IxMilia.Dxf.Tables
 
             foreach (var item in symbolItems.OrderBy(i => i.Name))
             {
-                item.AddCommonValuePairs(pairs, version);
-                item.AddValuePairs(pairs, version);
+                item.AddCommonValuePairs(pairs, version, outputHandles);
+                item.AddValuePairs(pairs, version, outputHandles);
             }
 
             pairs.Add(new DxfCodePair(0, DxfSection.EndTableText));
@@ -190,10 +194,13 @@ namespace IxMilia.Dxf.Tables
                     switch (common.Code)
                     {
                         case 5:
-                            result.Handle = common.StringValue;
+                            result.Handle = DxfCommonConverters.UIntHandle(common.StringValue);
                             break;
                         case 70:
                             result.MaxEntries = common.ShortValue;
+                            break;
+                        case 330:
+                            result.OwnerHandle = DxfCommonConverters.UIntHandle(common.StringValue);
                             break;
                     }
                 }

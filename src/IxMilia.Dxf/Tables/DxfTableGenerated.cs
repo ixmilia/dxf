@@ -369,7 +369,7 @@ namespace IxMilia.Dxf
         {
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -420,7 +420,7 @@ namespace IxMilia.Dxf
         {
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -573,7 +573,7 @@ namespace IxMilia.Dxf
             DimensionCursorControlsTextPosition = true;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -896,7 +896,7 @@ namespace IxMilia.Dxf
             LinetypeName = null;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -981,7 +981,7 @@ namespace IxMilia.Dxf
             TextStrings = new List<string>();
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -1130,7 +1130,7 @@ namespace IxMilia.Dxf
             BigFontFileName = null;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -1215,7 +1215,7 @@ namespace IxMilia.Dxf
             YAxis = DxfVector.XAxis;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -1322,7 +1322,7 @@ namespace IxMilia.Dxf
             ViewMode = 0;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {
@@ -1483,7 +1483,7 @@ namespace IxMilia.Dxf
             SnapIsoPair = 0;
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {

@@ -129,8 +129,8 @@
   <Variable Name="FILLMODE" Code="70" Type="bool" Property="FillModeOn" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
   <Variable Name="FINGERPRINTGUID" Code="2" Type="Guid" Property="FingerprintGuid" DefaultValue="Guid.NewGuid()" ReadConverter="GuidString" WriteConverter="GuidString" MinVersion="R2000" />
   <Variable Name="HALOGAP" Code="280" Type="double" Property="HaloGapPercent" DefaultValue="0.0" ReadConverter="(double)" WriteConverter="(short)" MinVersion="R2004" />
-  <Variable Name="HANDLING" Code="70" Type="int" Property="NextAvailableHandle" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" MaxVersion="R14" />
-  <Variable Name="HANDSEED" Code="5" Type="string" Property="NextAvailableHandle2" DefaultValue="" />
+  <Variable Name="HANDLING" Code="70" Type="bool" Property="HandlesEnabled" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R12" />
+  <Variable Name="HANDSEED" Code="5" Type="uint" Property="NextAvailableHandle" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
   
   <!-- the spec says this should be a code 290 bool, but some R2010 files encountered in the wild have a code 280 short instead -->
   <Variable Name="HIDETEXT" Code="290" Type="bool" Property="HideTextObjectsWhenProducintHiddenView" DefaultValue="false" MinVersion="R2004" />

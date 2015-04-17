@@ -19,9 +19,9 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Classes; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
         {
-           return this.Classes.SelectMany(e => e.GetValuePairs(version));
+           return this.Classes.SelectMany(e => e.GetValuePairs(version, outputHandles));
         }
 
         internal static DxfClassesSection ClassesSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)

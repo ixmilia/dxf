@@ -35,7 +35,7 @@ namespace IxMilia.Dxf.Sections
             this.ViewPortTable = new DxfViewPortTable();
         }
 
-        private IEnumerable<DxfTable> GetTables(DxfAcadVersion version)
+        internal IEnumerable<DxfTable> GetTables(DxfAcadVersion version)
         {
             if (version >= DxfAcadVersion.R12)
             {
@@ -60,11 +60,11 @@ namespace IxMilia.Dxf.Sections
             yield return ViewPortTable;
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
         {
             foreach (var table in GetTables(version))
             {
-                foreach (var pair in table.GetValuePairs(version))
+                foreach (var pair in table.GetValuePairs(version, outputHandles))
                     yield return pair;
             }
         }

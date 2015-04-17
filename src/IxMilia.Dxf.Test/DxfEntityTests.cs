@@ -20,7 +20,7 @@ ill-placed comment
   0
 {0}
   5
-<handle>
+42
   6
 <linetype-name>
   8
@@ -36,7 +36,7 @@ ill-placed comment
 {1}
 ", entityType, data.Trim()));
             var entity = file.Entities.Single();
-            Assert.Equal("<handle>", entity.Handle);
+            Assert.Equal(0x42u, entity.Handle);
             Assert.Equal("<linetype-name>", entity.LinetypeName);
             Assert.Equal("<layer>", entity.Layer);
             Assert.Equal(3.14159, entity.LinetypeScale);
@@ -52,7 +52,7 @@ ill-placed comment
   0
 {0}", entityType));
             var entity = file.Entities.Single();
-            Assert.Null(entity.Handle);
+            Assert.NotEqual(0x0u, entity.Handle);
             Assert.Equal("0", entity.Layer);
             Assert.Equal("BYLAYER", entity.LinetypeName);
             Assert.Equal(1.0, entity.LinetypeScale);
@@ -66,12 +66,14 @@ ill-placed comment
         {
             var file = new DxfFile();
             file.Entities.Add(entity);
-            var stream = new MemoryStream();
-            file.Save(stream);
-            stream.Flush();
-            stream.Seek(0, SeekOrigin.Begin);
-            var actual = new StreamReader(stream).ReadToEnd();
-            Assert.True(actual.Contains(text.Trim()));
+            using (var stream = new MemoryStream())
+            {
+                file.Save(stream);
+                stream.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+                var actual = new StreamReader(stream).ReadToEnd();
+                Assert.Contains(text.Trim(), actual);
+            }
         }
 
         #endregion
@@ -670,7 +672,7 @@ SEQEND
   0
 LINE
   5
-
+A
   8
 0
 100
@@ -698,7 +700,7 @@ AcDbLine
   0
 CIRCLE
   5
-
+A
   8
 0
 100
@@ -722,7 +724,7 @@ AcDbCircle
   0
 ARC
   5
-
+A
   8
 0
 100
@@ -752,7 +754,7 @@ AcDbArc
   0
 ELLIPSE
   5
-
+A
   8
 0
 100
@@ -786,7 +788,7 @@ AcDbEllipse
   0
 TEXT
   5
-
+A
   8
 0
 100
@@ -818,7 +820,7 @@ AcDbText
   0
 POLYLINE
   5
-
+A
   8
 0
 100
@@ -832,7 +834,7 @@ AcDb2dPolyline
   0
 SEQEND
   5
-
+B
   8
 0
   0
@@ -885,7 +887,7 @@ AcDbTrace
             EnsureFileContainsEntity(new DxfLine(new DxfPoint(1, 2, 3), new DxfPoint(4, 5, 6))
                 {
                     Color = DxfColor.FromIndex(7),
-                    Handle = "foo",
+                    Handle = 0x42u,
                     Layer = "bar",
                     Thickness = 7,
                     ExtrusionDirection = new DxfVector(8, 9, 10)
@@ -893,7 +895,7 @@ AcDbTrace
   0
 LINE
   5
-foo
+42
   8
 bar
  62
@@ -933,14 +935,14 @@ AcDbLine
                 DefinitionPoint1 = new DxfPoint(330.25, 1310.0, 330.25),
                 DefinitionPoint2 = new DxfPoint(330.25, 1282.0, 0.0),
                 DefinitionPoint3 = new DxfPoint(319.75, 1282.0, 0.0),
-                Handle = "foo",
+                Handle = 0x42u,
                 Layer = "bar",
                 Text = "text"
             }, @"
   0
 DIMENSION
   5
-foo
+42
   8
 bar
  62

@@ -1,7 +1,9 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 
 namespace IxMilia.Dxf.Entities
@@ -128,7 +130,7 @@ namespace IxMilia.Dxf.Entities
             get { return DxfAcadVersion.Max; }
         }
 
-        protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
         }
 
@@ -137,13 +139,13 @@ namespace IxMilia.Dxf.Entities
             return this;
         }
 
-        public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
+        public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
             var pairs = new List<DxfCodePair>();
             if (version >= MinVersion && version <= MaxVersion)
             {
-                AddValuePairs(pairs, version);
-                AddTrailingCodePairs(pairs, version);
+                AddValuePairs(pairs, version, outputHandles);
+                AddTrailingCodePairs(pairs, version, outputHandles);
             }
 
             return pairs;
@@ -172,17 +174,27 @@ namespace IxMilia.Dxf.Entities
 
         protected static bool BoolShort(short s)
         {
-            return s != 0;
+            return DxfCommonConverters.BoolShort(s);
         }
 
         protected static short BoolShort(bool b)
         {
-            return (short)(b ? 1 : 0);
+            return DxfCommonConverters.BoolShort(b);
         }
 
         private static short NotBoolShort(bool b)
         {
             return BoolShort(!b);
+        }
+
+        protected static uint UIntHandle(string s)
+        {
+            return DxfCommonConverters.UIntHandle(s);
+        }
+
+        protected static string UIntHandle(uint u)
+        {
+            return DxfCommonConverters.UIntHandle(u);
         }
 
         private static void SwallowEntity(DxfCodePairBufferReader buffer)
@@ -214,7 +226,7 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
-    public partial class DxfPolyline
+    public partial class DxfPolyline : IDxfHasEntityChildren
     {
         public new double Elevation
         {
@@ -233,17 +245,27 @@ namespace IxMilia.Dxf.Entities
             set { seqend = value; }
         }
 
-        protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             foreach (var vertex in Vertices)
             {
-                pairs.AddRange(vertex.GetValuePairs(version));
+                pairs.AddRange(vertex.GetValuePairs(version, outputHandles));
             }
 
             if (Seqend != null)
             {
-                pairs.AddRange(Seqend.GetValuePairs(version));
+                pairs.AddRange(Seqend.GetValuePairs(version, outputHandles));
             }
+        }
+
+        public IEnumerable<DxfEntity> GetChildren()
+        {
+            foreach (var vertex in vertices)
+            {
+                yield return vertex;
+            }
+
+            yield return seqend;
         }
     }
 
@@ -288,7 +310,7 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
-    public partial class DxfInsert
+    public partial class DxfInsert : IDxfHasEntityChildren
     {
         private List<DxfAttribute> attributes = new List<DxfAttribute>();
         private DxfSeqend seqend = new DxfSeqend();
@@ -301,17 +323,27 @@ namespace IxMilia.Dxf.Entities
             set { seqend = value; }
         }
 
-        protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             foreach (var attribute in Attributes)
             {
-                pairs.AddRange(attribute.GetValuePairs(version));
+                pairs.AddRange(attribute.GetValuePairs(version, outputHandles));
             }
 
             if (Seqend != null)
             {
-                pairs.AddRange(Seqend.GetValuePairs(version));
+                pairs.AddRange(Seqend.GetValuePairs(version, outputHandles));
             }
+        }
+
+        public IEnumerable<DxfEntity> GetChildren()
+        {
+            foreach (var attribute in attributes)
+            {
+                yield return attribute;
+            }
+
+            yield return seqend;
         }
     }
 

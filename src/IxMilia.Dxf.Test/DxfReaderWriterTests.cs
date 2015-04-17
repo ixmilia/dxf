@@ -24,14 +24,16 @@ namespace IxMilia.Dxf.Test
         [Fact]
         public void SkipBomTest()
         {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write((char)0xFEFF); // BOM
-            writer.Write("0\r\nEOF");
-            writer.Flush();
-            stream.Seek(0, SeekOrigin.Begin);
-            var file = DxfFile.Load(stream);
-            Assert.Equal(0, file.Layers.Count);
+            using (var stream = new MemoryStream())
+            using (var writer = new StreamWriter(stream))
+            {
+                writer.Write((char)0xFEFF); // BOM
+                writer.Write("0\r\nEOF");
+                writer.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+                var file = DxfFile.Load(stream);
+                Assert.Equal(0, file.Layers.Count);
+            }
         }
 
         [Fact]
@@ -275,7 +277,7 @@ BLOCKS
   0
 BLOCK
   5
-<handle>
+42
 100
 AcDbEntity
   8
@@ -307,7 +309,7 @@ POINT
   0
 ENDBLK
   5
-<handle>
+42
 100
 AcDbEntity
   8
@@ -322,7 +324,7 @@ EOF
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal("<handle>", block.Handle);
+            Assert.Equal(0x42u, block.Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal(11, block.BasePoint.X);
             Assert.Equal(22, block.BasePoint.Y);
@@ -354,7 +356,7 @@ BLOCKS
   0
 BLOCK
   5
-<handle>
+42
 100
 AcDbEntity
   8
@@ -386,7 +388,7 @@ POINT
   0
 ENDBLK
   5
-<handle>
+42
 100
 AcDbBlockEnd
   0
@@ -397,7 +399,7 @@ EOF
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal("<handle>", block.Handle);
+            Assert.Equal(0x42u, block.Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal("<xref>", block.XrefName);
             Assert.Equal(11, block.BasePoint.X);
@@ -416,7 +418,7 @@ EOF
             file.Header.Version = DxfAcadVersion.R13;
             var block = new DxfBlock();
             block.Name = "<block name>";
-            block.Handle = "<handle>";
+            block.Handle = 0x42u;
             block.Layer = "<layer>";
             block.XrefName = "<xref>";
             block.BasePoint = new DxfPoint(11, 22, 33);
@@ -430,7 +432,7 @@ BLOCKS
   0
 BLOCK
   5
-<handle>
+42
 100
 AcDbEntity
   8
@@ -464,7 +466,7 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-<handle>
+42
 100
 AcDbEntity
   8
@@ -483,7 +485,7 @@ ENDSEC
             file.Header.Version = DxfAcadVersion.R14;
             var block = new DxfBlock();
             block.Name = "<block name>";
-            block.Handle = "<handle>";
+            block.Handle = 0x42u;
             block.Layer = "<layer>";
             block.XrefName = "<xref>";
             block.BasePoint = new DxfPoint(11, 22, 33);
@@ -497,7 +499,7 @@ BLOCKS
   0
 BLOCK
   5
-<handle>
+42
 100
 AcDbEntity
   8
@@ -531,7 +533,7 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-<handle>
+42
 100
 AcDbBlockEnd
   0
@@ -602,11 +604,11 @@ ENDSEC
 EOF
 ");
             var styleTable = file.TablesSection.StyleTable;
-            Assert.Equal("1C", styleTable.Handle);
+            Assert.Equal(0x1Cu, styleTable.Handle);
             Assert.Equal(3, styleTable.MaxEntries);
 
             var style1 = file.Styles.First();
-            Assert.Equal("3A", style1.Handle);
+            Assert.Equal(0x3Au, style1.Handle);
             Assert.Equal("ENTRY_1", style1.Name);
             Assert.Equal(64, style1.StandardFlags);
             Assert.Equal(0.4, style1.TextHeight);
@@ -617,7 +619,7 @@ EOF
             Assert.Equal("BUFONTS.TXT", style1.PrimaryFontFileName);
 
             var style2 = file.Styles.Skip(1).Single();
-            Assert.Equal("C2", style2.Handle);
+            Assert.Equal(0xC2u, style2.Handle);
             Assert.Equal("ENTRY_2", style2.Name);
             Assert.Equal("BUFONTS.TXT", style2.PrimaryFontFileName);
         }

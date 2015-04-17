@@ -36,11 +36,16 @@ EOF
 
         protected static string ToString(DxfFile file)
         {
-            var stream = new MemoryStream();
-            file.Save(stream);
-            stream.Flush();
-            stream.Seek(0, SeekOrigin.Begin);
-            return new StreamReader(stream).ReadToEnd();
+            using (var stream = new MemoryStream())
+            {
+                file.Save(stream);
+                stream.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
         }
 
         protected static void VerifyFileContents(DxfFile file, string expected, Action<string, string> predicate)
@@ -51,12 +56,12 @@ EOF
 
         protected static void VerifyFileContains(DxfFile file, string expected)
         {
-            VerifyFileContents(file, expected, (ex, ac) => Assert.True(ac.Contains(ex.Trim())));
+            VerifyFileContents(file, expected, (ex, ac) => Assert.Contains(ex.Trim(), ac));
         }
 
         protected static void VerifyFileDoesNotContain(DxfFile file, string unexpected)
         {
-            VerifyFileContents(file, unexpected, (ex, ac) => Assert.False(ac.Contains(ex.Trim())));
+            VerifyFileContents(file, unexpected, (ex, ac) => Assert.DoesNotContain(ex.Trim(), ac));
         }
 
         protected static void VerifyFileIsExactly(DxfFile file, string expected)

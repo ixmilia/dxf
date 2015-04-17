@@ -67,6 +67,7 @@
       <xs:attribute name="ReadConverter" type="xs:string" use="optional" />
       <xs:attribute name="WriteConverter" type="xs:string" use="optional" />
       <xs:attribute name="ProtectedSet" type="xs:boolean" use="optional" />
+      <xs:attribute name="WriteCondition" type="xs:string" use="optional" />
       <xs:attribute name="MinVersion" type="VersionType" use="optional" />
       <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
     </xs:complexType>

@@ -33,11 +33,11 @@ namespace IxMilia.Dxf.Sections
             return Type.ToSectionName();
         }
 
-        protected internal abstract IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version);
+        protected internal abstract IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles);
 
-        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
+        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
-            var pairs = GetSpecificPairs(version).ToList();
+            var pairs = GetSpecificPairs(version, outputHandles).ToList();
             if (pairs.Count == 0)
                 yield break;
             yield return new DxfCodePair(0, SectionText);

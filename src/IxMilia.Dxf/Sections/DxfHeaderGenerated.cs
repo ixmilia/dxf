@@ -784,12 +784,12 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $HANDLING header variable.
         /// </summary>
-        public int NextAvailableHandle { get; set; }
+        public bool HandlesEnabled { get; set; }
 
         /// <summary>
         /// The $HANDSEED header variable.
         /// </summary>
-        public string NextAvailableHandle2 { get; set; }
+        public uint NextAvailableHandle { get; set; }
 
         /// <summary>
         /// The $HIDETEXT header variable.
@@ -1472,8 +1472,8 @@ namespace IxMilia.Dxf
             this.FillModeOn = true; // FILLMODE
             this.FingerprintGuid = Guid.NewGuid(); // FINGERPRINTGUID
             this.HaloGapPercent = 0.0; // HALOGAP
-            this.NextAvailableHandle = 0; // HANDLING
-            this.NextAvailableHandle2 = ""; // HANDSEED
+            this.HandlesEnabled = true; // HANDLING
+            this.NextAvailableHandle = 0; // HANDSEED
             this.HideTextObjectsWhenProducintHiddenView = false; // HIDETEXT
             this.HyperlinBase = null; // HYPERLINKBASE
             this.LayerAndSpatialIndexSaveMode = DxfLayerAndSpatialIndexSaveMode.None; // INDEXCTL
@@ -2255,15 +2255,15 @@ namespace IxMilia.Dxf
             }
 
             // HANDLING
-            if (version <= DxfAcadVersion.R14)
+            if (version <= DxfAcadVersion.R12)
             {
                 list.Add(new DxfCodePair(9, HANDLING));
-                list.Add(new DxfCodePair(70, (short)(header.NextAvailableHandle)));
+                list.Add(new DxfCodePair(70, BoolShort(header.HandlesEnabled)));
             }
 
             // HANDSEED
             list.Add(new DxfCodePair(9, HANDSEED));
-            list.Add(new DxfCodePair(5, (header.NextAvailableHandle2)));
+            list.Add(new DxfCodePair(5, UIntHandle(header.NextAvailableHandle)));
 
             // HIDETEXT
             if (version >= DxfAcadVersion.R2004)
@@ -3465,11 +3465,11 @@ namespace IxMilia.Dxf
                     break;
                 case HANDLING:
                     EnsureCode(pair, 70);
-                    header.NextAvailableHandle = (int)(pair.ShortValue);
+                    header.HandlesEnabled = BoolShort(pair.ShortValue);
                     break;
                 case HANDSEED:
                     EnsureCode(pair, 5);
-                    header.NextAvailableHandle2 = (pair.StringValue);
+                    header.NextAvailableHandle = UIntHandle(pair.StringValue);
                     break;
                 case HIDETEXT:
                     switch (pair.Code)
@@ -4401,9 +4401,9 @@ namespace IxMilia.Dxf
                 case HALOGAP:
                     return this.HaloGapPercent;
                 case HANDLING:
-                    return this.NextAvailableHandle;
+                    return this.HandlesEnabled;
                 case HANDSEED:
-                    return this.NextAvailableHandle2;
+                    return this.NextAvailableHandle;
                 case HIDETEXT:
                     return this.HideTextObjectsWhenProducintHiddenView;
                 case HYPERLINKBASE:
@@ -4981,10 +4981,10 @@ namespace IxMilia.Dxf
                     this.HaloGapPercent = (double)value;
                     break;
                 case HANDLING:
-                    this.NextAvailableHandle = (int)value;
+                    this.HandlesEnabled = (bool)value;
                     break;
                 case HANDSEED:
-                    this.NextAvailableHandle2 = (string)value;
+                    this.NextAvailableHandle = (uint)value;
                     break;
                 case HIDETEXT:
                     this.HideTextObjectsWhenProducintHiddenView = (bool)value;

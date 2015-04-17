@@ -1,6 +1,5 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -85,7 +84,7 @@ namespace IxMilia.Dxf
         public bool WasClassLoadedWithFile { get; set; }
         public bool IsEntity { get; set; }
 
-        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version)
+        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
             var list = new List<DxfCodePair>();
             if (version >= DxfAcadVersion.R14)

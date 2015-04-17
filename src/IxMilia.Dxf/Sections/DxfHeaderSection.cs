@@ -237,7 +237,7 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Header; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
         {
             var values = new List<DxfCodePair>();
             DxfHeader.AddValueToList(values, this.Header, version);

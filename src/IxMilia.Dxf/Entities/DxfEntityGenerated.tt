@@ -48,7 +48,7 @@ var baseEntity = xml.Elements(XName.Get("Entity", xmlns)).Where(x => Name(x) == 
     /// <summary>
     /// DxfEntity class
     /// </summary>
-    public partial class DxfEntity
+    public partial class DxfEntity : IDxfHasHandle
     {
 <#
 foreach (var property in GetProperties(baseEntity))
@@ -123,7 +123,7 @@ foreach (var property in GetProperties(baseEntity))
 #>
         }
 
-        protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair(0, EntityTypeString));
 <#
@@ -431,9 +431,9 @@ foreach (var entity in entities)
 #>
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
-            base.AddValuePairs(pairs, version);
+            base.AddValuePairs(pairs, version, outputHandles);
 <#
             foreach (var line in GetWriteCommands(entity))
             {

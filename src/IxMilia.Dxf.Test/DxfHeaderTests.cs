@@ -289,7 +289,7 @@ TABLE
   2
 LAYER
   5
-
+5
 100
 AcDbSymbolTable
  70
@@ -297,7 +297,7 @@ AcDbSymbolTable
   0
 LAYER
   5
-
+A
 100
 AcDbSymbolTableRecord
 100
@@ -332,7 +332,7 @@ TABLE
   2
 VPORT
   5
-
+9
 100
 AcDbSymbolTable
  70
@@ -340,7 +340,7 @@ AcDbSymbolTable
   0
 VPORT
   5
-
+A
 100
 AcDbSymbolTableRecord
 100

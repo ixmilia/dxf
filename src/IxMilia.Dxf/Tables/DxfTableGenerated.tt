@@ -128,7 +128,7 @@ foreach (var table in tables)
 #>
         }
 
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R13)
             {

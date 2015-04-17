@@ -55,17 +55,6 @@ namespace IxMilia.Dxf
             get { return (bool)Value; }
         }
 
-        public string HandleValue
-        {
-            get
-            {
-                if (IsHandle)
-                    return StringValue;
-                else
-                    throw new DxfReadException("Value was not a valid handle");
-            }
-        }
-
         public DxfCodePair(int code, string value)
         {
             Debug.Assert(ExpectedType(code) == typeof(string));

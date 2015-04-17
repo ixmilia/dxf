@@ -5,29 +5,29 @@ using IxMilia.Dxf.Tables;
 
 namespace IxMilia.Dxf
 {
-    public abstract class DxfSymbolTableFlags
+    public abstract class DxfSymbolTableFlags : IDxfHasHandle
     {
         public int StandardFlags;
         public string Name { get; set; }
         protected abstract DxfTableType TableType { get; }
-        public string Handle { get; set; }
+        public uint Handle { get; set; }
 
         public DxfSymbolTableFlags()
         {
         }
 
-        internal void AddCommonValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
+        internal void AddCommonValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair(0, DxfTable.TableTypeToName(TableType)));
-            if (version >= DxfAcadVersion.R13)
+            if (outputHandles)
             {
                 if (TableType == DxfTableType.DimStyle)
                 {
-                    pairs.Add(new DxfCodePair(105, Handle));
+                    pairs.Add(new DxfCodePair(105, DxfCommonConverters.UIntHandle(Handle)));
                 }
                 else
                 {
-                    pairs.Add(new DxfCodePair(5, Handle));
+                    pairs.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
                 }
 
                 pairs.Add(new DxfCodePair(100, "AcDbSymbolTableRecord"));
@@ -42,12 +42,12 @@ namespace IxMilia.Dxf
                     Name = pair.StringValue;
                     break;
                 case 5:
-                    Handle = pair.StringValue;
+                    Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
             }
         }
 
-        internal abstract void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version);
+        internal abstract void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles);
 
         public bool ExternallyDependentOnXRef
         {

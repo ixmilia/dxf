@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace IxMilia.Dxf
 {
@@ -26,34 +27,42 @@ namespace IxMilia.Dxf
 
         private static string StringShort(short s)
         {
-            return s.ToString();
+            return DxfCommonConverters.StringShort(s);
         }
 
         private static short StringShort(string s)
         {
-            short result;
-            short.TryParse(s, out result);
-            return result;
+            return DxfCommonConverters.StringShort(s);
         }
 
         private static bool BoolShort(short s)
         {
-            return s != 0;
+            return DxfCommonConverters.BoolShort(s);
         }
 
         private static short BoolShort(bool b)
         {
-            return (short)(b ? 1 : 0);
+            return DxfCommonConverters.BoolShort(b);
         }
 
         private static string GuidString(Guid g)
         {
-            return g.ToString();
+            return DxfCommonConverters.GuidString(g);
         }
 
         private static Guid GuidString(string s)
         {
-            return new Guid(s);
+            return DxfCommonConverters.GuidString(s);
+        }
+
+        private static uint UIntHandle(string s)
+        {
+            return DxfCommonConverters.UIntHandle(s);
+        }
+
+        private static string UIntHandle(uint u)
+        {
+            return DxfCommonConverters.UIntHandle(u);
         }
 
         // the Dublin Julian date epoch is December 31, 1899, and defined as the Julian day 2415020

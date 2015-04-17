@@ -25,6 +25,7 @@
     <Compile Include="DxfCodePair.ExpectedType.cs" />
     <Compile Include="DxfCodePairBufferReader.cs" />
     <Compile Include="DxfColor.cs" />
+    <Compile Include="DxfCommonConverters.cs" />
     <Compile Include="DxfFile.cs" />
     <Compile Include="DxfHelpers.cs" />
     <Compile Include="DxfLineWeight.cs" />
@@ -40,6 +41,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\IDxfHasEntityChildren.cs" />
+    <Compile Include="IDxfHasHandle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sections\DxfBlocksSection.cs" />
     <Compile Include="Sections\DxfClassesSection.cs" />

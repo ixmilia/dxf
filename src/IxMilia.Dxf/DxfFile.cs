@@ -1,8 +1,10 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
@@ -177,6 +179,7 @@ namespace IxMilia.Dxf
             }
 
             Debug.Assert(!buffer.ItemsRemain);
+            file.SetHandles();
 
             return file;
         }
@@ -191,14 +194,75 @@ namespace IxMilia.Dxf
             var writer = new DxfWriter(stream, asText);
             writer.Open();
 
+            var nextHandle = SetHandles();
+            Header.NextAvailableHandle = nextHandle;
+
             // write sections
+            var outputHandles = Header.Version >= DxfAcadVersion.R13 || Header.HandlesEnabled; // handles are always enabled on R13+
             foreach (var section in Sections)
             {
-                foreach (var pair in section.GetValuePairs(Header.Version))
+                foreach (var pair in section.GetValuePairs(Header.Version, outputHandles))
                     writer.WriteCodeValuePair(pair);
             }
 
             writer.Close();
+        }
+
+        private IEnumerable<DxfEntity> GetEntitiesAndChildren()
+        {
+            foreach (var entity in Entities)
+            {
+                yield return entity;
+                var hasChildren = entity as IDxfHasEntityChildren;
+                if (hasChildren != null)
+                {
+                    foreach (var child in hasChildren.GetChildren().Where(x => x != null))
+                    {
+                        yield return child;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<IDxfHasHandle> HandleItems
+        {
+            get
+            {
+                return this.TablesSection.GetTables(Header.Version).Cast<IDxfHasHandle>()
+                    .Concat(this.ApplicationIds.Cast<IDxfHasHandle>())
+                    .Concat(this.BlockRecords.Cast<IDxfHasHandle>())
+                    .Concat(this.Blocks.Cast<IDxfHasHandle>())
+                    .Concat(this.DimensionStyles.Cast<IDxfHasHandle>())
+                    .Concat(GetEntitiesAndChildren().Cast<IDxfHasHandle>())
+                    .Concat(this.Layers.Cast<IDxfHasHandle>())
+                    .Concat(this.Linetypes.Cast<IDxfHasHandle>())
+                    .Concat(this.Styles.Cast<IDxfHasHandle>())
+                    .Concat(this.UserCoordinateSystems.Cast<IDxfHasHandle>())
+                    .Concat(this.ViewPorts.Cast<IDxfHasHandle>())
+                    .Concat(this.Views.Cast<IDxfHasHandle>());
+            }
+        }
+
+        private uint SetHandles()
+        {
+            uint largestHandle = 0u;
+
+            foreach (var item in HandleItems)
+            {
+                largestHandle = Math.Max(largestHandle, item.Handle);
+            }
+
+            var nextHandle = largestHandle + 1;
+
+            foreach (var item in HandleItems)
+            {
+                if (item.Handle == 0u)
+                {
+                    item.Handle = nextHandle++;
+                }
+            }
+
+            return nextHandle;
         }
     }
 }

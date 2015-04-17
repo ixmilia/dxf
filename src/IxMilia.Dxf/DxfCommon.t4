@@ -265,15 +265,24 @@ string MaxVersion(XElement property)
     return att == null ? null : att.Value;
 }
 
+string WriteCondition(XElement property)
+{
+    var att = property.Attribute("WriteCondition");
+    return att == null ? null : att.Value;
+}
+
 IEnumerable<string> GetPropertyWriteLines(XElement property)
 {
     var lines = new List<string>();
     var code = Code(property);
     var codes = GetCodeOverrides(property);
     var name = Name(property);
+    var writeCondition = WriteCondition(property);
     var minVersion = MinVersion(property);
     var maxVersion = MaxVersion(property);
     var writePredicates = new List<string>();
+    if (writeCondition != null)
+        writePredicates.Add(writeCondition);
     if (minVersion != null)
         writePredicates.Add(string.Format("version >= DxfAcadVersion.{0}", minVersion));
     if (maxVersion != null)

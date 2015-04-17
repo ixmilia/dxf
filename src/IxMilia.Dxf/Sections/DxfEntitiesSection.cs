@@ -20,9 +20,9 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Entities; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
         {
-            return this.Entities.SelectMany(e => e.GetValuePairs(version));
+            return this.Entities.SelectMany(e => e.GetValuePairs(version, outputHandles));
         }
 
         internal static DxfEntitiesSection EntitiesSectionFromBuffer(DxfCodePairBufferReader buffer)

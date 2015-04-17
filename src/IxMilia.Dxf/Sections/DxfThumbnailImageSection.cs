@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 namespace IxMilia.Dxf.Sections
@@ -14,7 +15,7 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Thumbnail; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(90, RawData.Length));
@@ -27,7 +28,7 @@ namespace IxMilia.Dxf.Sections
                 sb.Clear();
                 for (int offset = i * ChunkSize; offset < ChunkSize && offset < RawData.Length; offset++)
                 {
-                    sb.Append(RawData[offset].ToString("X2"));
+                    sb.Append(RawData[offset].ToString("X2", CultureInfo.InvariantCulture));
                 }
 
                 list.Add(new DxfCodePair(310, sb.ToString()));

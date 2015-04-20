@@ -17,6 +17,12 @@ namespace IxMilia.Dxf.Tables
         GouraudShadedWithWireframe = 6
     }
 
+    public enum DxfDefaultLightingType
+    {
+        OneDistantLight = 0,
+        TwoDistantLights = 1
+    }
+
     public abstract partial class DxfTable : IDxfHasHandle
     {
         public const string AppIdText = "APPID";

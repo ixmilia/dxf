@@ -6,9 +6,14 @@
     </TableItem>
   </Table>
   <Table Type="BlockRecord" TypeString="BlockRecordText">
-    <!-- R14 spec page 30, R2000 spec page 25 -->
     <TableItem Name="DxfBlockRecord" ClassName="AcDbBlockTableRecord" HasFlags="false">
       <Property Name="LayoutHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
+
+      <!-- The following three properties aren't well defined in the spec, so this is a best-guess implementation. -->
+      <Property Name="InsertionUnits" Code="70" Type="DxfUnits" DefaultValue="DxfUnits.Unitless" ReadConverter="(DxfUnits)" WriteConverter="(short)" MinVersion="R2007" />
+      <Property Name="Explodability" Code="280" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+      <Property Name="Scalability" Code="281" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+
       <Property Name="BitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
       <Property Name="XDataApplicationName" Code="1001" Type="string" DefaultValue="null" WriteCondition="XDataApplicationName != null" MinVersion="R2000" />
       <Property Name="XDataStringData" Code="1000" Type="string" DefaultValue="null" WriteCondition="XDataStringData != null" MinVersion="R2000" />
@@ -81,6 +86,7 @@
       <Property Name="AlternateDimensioningToleranceZeroSupression" Code="286" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
       <Property Name="DimensionTextAndArrowPlacement" Code="287" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MinVersion="R13" />
       <Property Name="DimensionCursorControlsTextPosition" Code="288" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
+      <Property Name="DimensionTextAndArrowPlacement" Code="289" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MinVersion="R2000" />
       <Property Name="DimensionTextStyle" Code="340" Type="string" DefaultValue="null" MinVersion="R13" />
       <Property Name="DimensionLeaderBlockName" Code="341" Type="string" DefaultValue="null" MinVersion="R2000" />
       <Property Name="ArrowBlockName" Code="342" Type="string" DefaultValue="null" MinVersion="R2000" />
@@ -97,6 +103,7 @@
       <Property Name="IsLayerPlotted" Code="290" Type="bool" DefaultValue="true" MinVersion="R2000" />
       <Property Name="LineWeight" Code="370" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue" WriteConverter="DxfLineWeight.GetRawValue" MinVersion="R2000" />
       <Property Name="PlotStylePointer" Code="390" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
+      <Property Name="MaterialHandle" Code="347" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
     </TableItem>
   </Table>
   <Table Type="LType" TypeString="LTypeText">
@@ -153,6 +160,11 @@
       <Property Name="ViewMode" Code="71" Type="short" DefaultValue="0" />
       <Property Name="RenderMode" Code="281" Type="DxfViewRenderMode" DefaultValue="DxfViewRenderMode.Classic2D" ReadConverter="(DxfViewRenderMode)" WriteConverter="(short)" MinVersion="R2000" />
       <Property Name="IsAssociatedUCSPresent" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" />
+      <Property Name="IsCameraPlottable" Code="73" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+      <Property Name="BackgroundObjectPointer" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="BackgroundObjectPointer != 0u" MinVersion="R2007" />
+      <Property Name="SelectionObjectPointer" Code="334" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="SelectionObjectPointer != 0u" MinVersion="R2007" />
+      <Property Name="VisualStyleObjectPointer" Code="348" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="VisualStyleObjectPointer != 0u" MinVersion="R2007" />
+      <Property Name="SunOwnershipPointer" Code="361" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2010" />
       <Property Name="UCSOrigin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="110,120,130" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
       <Property Name="UCSXAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="111,121,131" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
       <Property Name="UCSYAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="112,122,132" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
@@ -172,25 +184,27 @@
       <Property Name="GridSpacing" Code="-2" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="15,25" />
       <Property Name="ViewDirection" Code="-3" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="16,26,36" />
       <Property Name="TargetViewPoint" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="17,27,37" />
-      <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="0.0" />
-      <Property Name="ViewPortAspectRatio" Code="41" Type="double" DefaultValue="0.0" />
+      <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="0.0" MaxVersion="R2004" />
+      <Property Name="ViewPortAspectRatio" Code="41" Type="double" DefaultValue="0.0" MaxVersion="R2004" />
       <Property Name="LensLength" Code="42" Type="double" DefaultValue="0.0" />
       <Property Name="FrontClippingPlane" Code="43" Type="double" DefaultValue="0.0" />
       <Property Name="BackClippingPlane" Code="44" Type="double" DefaultValue="0.0" />
+      <Property Name="ViewHeight" Code="45" Type="double" DefaultValue="0.0" MinVersion="R2007" />
       <Property Name="SnapRotationAngle" Code="50" Type="double" DefaultValue="0.0" />
       <Property Name="ViewTwistAngle" Code="51" Type="double" DefaultValue="0.0" />
       <Property Name="Status" Code="68" Type="short" DefaultValue="0" MinVersion="R12" MaxVersion="R12" />
       <Property Name="ID" Code="69" Type="short" DefaultValue="0" MinVersion="R12" MaxVersion="R12" />
       <Property Name="ViewMode" Code="71" Type="DxfViewMode" DefaultValue="0" ReadConverter="(DxfViewMode)" WriteConverter="(short)" />
       <Property Name="CircleZoomPercent" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
-      <Property Name="FastZoom" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+      <Property Name="FastZoom" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
       <Property Name="UCSIcon" Code="74" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-      <Property Name="SnapOn" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-      <Property Name="GridOn" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-      <Property Name="SnapStyle" Code="77" Type="short" DefaultValue="0" />
-      <Property Name="SnapIsoPair" Code="78" Type="short" DefaultValue="0" />
+      <Property Name="SnapOn" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
+      <Property Name="GridOn" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
+      <Property Name="SnapStyle" Code="77" Type="short" DefaultValue="0" MaxVersion="R2004" />
+      <Property Name="SnapIsoPair" Code="78" Type="short" DefaultValue="0" MaxVersion="R2004" />
+      <Property Name="PlotStyleSheet" Code="1" Type="string" DefaultValue="null" MinVersion="R2007" />
       <Property Name="RenderMode" Code="281" Type="DxfViewRenderMode" DefaultValue="DxfViewRenderMode.Classic2D" ReadConverter="(DxfViewRenderMode)" WriteConverter="(short)" MinVersion="R2000" />
-      <Property Name="HasOwnUCS" Code="65" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" />
+      <Property Name="HasOwnUCS" Code="65" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" MaxVersion="R2004" />
       <Property Name="UCSOrigin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="110,120,130" WriteCondition="HasOwnUCS" MinVersion="R2000" />
       <Property Name="UCSXAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="111,121,131" WriteCondition="HasOwnUCS" MinVersion="R2000" />
       <Property Name="UCSYAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="112,122,132" WriteCondition="HasOwnUCS" MinVersion="R2000" />
@@ -198,6 +212,18 @@
       <Property Name="UCSElevation" Code="146" Type="double" DefaultValue="0.0" WriteCondition="HasOwnUCS" MinVersion="R2000" />
       <Property Name="UCSHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="HasOwnUCS" MinVersion="R2000" />
       <Property Name="BaseUCSHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="HasOwnUCS" MinVersion="R2000" />
+      <Property Name="ShadePlotSetting" Code="170" Type="DxfShadeEdgeMode" DefaultValue="DxfShadeEdgeMode.FacesShadedEdgeNotHighlighted" ReadConverter="(DxfShadeEdgeMode)" WriteConverter="(short)" MinVersion="R2007" />
+      <Property Name="MajorGridLines" Code="61" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+      <Property Name="BackgroundObjectPointer" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="BackgroundObjectPointer != 0u" MinVersion="R2007" />
+      <Property Name="ShadePlotObjectPointer" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="ShadePlotObjectPointer != 0u" MinVersion="R2007" />
+      <Property Name="VisualStyleObjectPointer" Code="348" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="VisualStyleObjectPointer != 0u" MinVersion="R2007" />
+      <Property Name="IsDefaultLightingOn" Code="292" Type="bool" DefaultValue="true" MinVersion="R2007" />
+      <Property Name="DefaultLightingType" Code="282" Type="DxfDefaultLightingType" DefaultValue="DxfDefaultLightingType.OneDistantLight" ReadConverter="(DxfDefaultLightingType)" WriteConverter="(short)" MinVersion="R2007" />
+      <Property Name="Brightness" Code="141" Type="double" DefaultValue="0.0" MinVersion="R2007" />
+      <Property Name="Contrast" Code="142" Type="double" DefaultValue="0.0" MinVersion="R2007" />
+      <Property Name="AmbientColor" Code="62" Type="DxfColor" DefaultValue="DxfColor.FromRawValue(7)" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" WriteCondition="AmbientColor.RawValue != 7" MinVersion="R2007" />
+      <Property Name="AmbientColorInt" Code="421" Type="int" DefaultValue="0" WriteCondition="AmbientColorInt != 0" MinVersion="R2007" />
+      <Property Name="AmbientColorName" Code="431" Type="string" DefaultValue="BLACK" WriteCondition="AmbientColorName != &quot;BLACK&quot;" MinVersion="R2007" />
     </TableItem>
   </Table>
 </Tables>

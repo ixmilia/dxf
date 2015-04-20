@@ -417,6 +417,9 @@ namespace IxMilia.Dxf
 
         // properties
         public uint LayoutHandle { get; set; }
+        public DxfUnits InsertionUnits { get; set; }
+        public bool Explodability { get; set; }
+        public bool Scalability { get; set; }
         private List<string> BitmapPreviewData { get; set; }
         public string XDataApplicationName { get; set; }
         public string XDataStringData { get; set; }
@@ -425,6 +428,9 @@ namespace IxMilia.Dxf
             : base()
         {
             LayoutHandle = 0u;
+            InsertionUnits = DxfUnits.Unitless;
+            Explodability = true;
+            Scalability = true;
             BitmapPreviewData = new List<string>();
             XDataApplicationName = null;
             XDataStringData = null;
@@ -441,6 +447,21 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(340, UIntHandle(LayoutHandle)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(70, (short)(InsertionUnits)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(280, BoolShort(Explodability)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(281, BoolShort(Scalability)));
             }
 
             if (version >= DxfAcadVersion.R2000)
@@ -478,6 +499,15 @@ namespace IxMilia.Dxf
                 {
                     case 340:
                         item.LayoutHandle = UIntHandle(pair.StringValue);
+                        break;
+                    case 70:
+                        item.InsertionUnits = (DxfUnits)(pair.ShortValue);
+                        break;
+                    case 280:
+                        item.Explodability = BoolShort(pair.ShortValue);
+                        break;
+                    case 281:
+                        item.Scalability = BoolShort(pair.ShortValue);
                         break;
                     case 310:
                         item.BitmapPreviewData.Add((pair.StringValue));
@@ -631,6 +661,7 @@ namespace IxMilia.Dxf
             AlternateDimensioningToleranceZeroSupression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
             DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines;
             DimensionCursorControlsTextPosition = true;
+            DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines;
             DimensionTextStyle = null;
             DimensionLeaderBlockName = null;
             ArrowBlockName = null;
@@ -798,6 +829,11 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R13)
             {
                 pairs.Add(new DxfCodePair(288, BoolShort(DimensionCursorControlsTextPosition)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(289, (short)(DimensionTextAndArrowPlacement)));
             }
 
             if (version >= DxfAcadVersion.R13)
@@ -1033,6 +1069,9 @@ namespace IxMilia.Dxf
                     case 288:
                         item.DimensionCursorControlsTextPosition = BoolShort(pair.ShortValue);
                         break;
+                    case 289:
+                        item.DimensionTextAndArrowPlacement = (DxfDimensionFit)(pair.ShortValue);
+                        break;
                     case 340:
                         item.DimensionTextStyle = (pair.StringValue);
                         break;
@@ -1076,6 +1115,7 @@ namespace IxMilia.Dxf
         public bool IsLayerPlotted { get; set; }
         public DxfLineWeight LineWeight { get; set; }
         public uint PlotStylePointer { get; set; }
+        public uint MaterialHandle { get; set; }
 
         public DxfLayer()
             : base()
@@ -1085,6 +1125,7 @@ namespace IxMilia.Dxf
             IsLayerPlotted = true;
             LineWeight = new DxfLineWeight();
             PlotStylePointer = 0u;
+            MaterialHandle = 0u;
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -1111,6 +1152,11 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(390, UIntHandle(PlotStylePointer)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(347, UIntHandle(MaterialHandle)));
             }
 
         }
@@ -1148,6 +1194,9 @@ namespace IxMilia.Dxf
                         break;
                     case 390:
                         item.PlotStylePointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 347:
+                        item.MaterialHandle = UIntHandle(pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);
@@ -1597,6 +1646,11 @@ namespace IxMilia.Dxf
         public short ViewMode { get; set; }
         public DxfViewRenderMode RenderMode { get; set; }
         public bool IsAssociatedUCSPresent { get; set; }
+        public bool IsCameraPlottable { get; set; }
+        public uint BackgroundObjectPointer { get; set; }
+        public uint SelectionObjectPointer { get; set; }
+        public uint VisualStyleObjectPointer { get; set; }
+        public uint SunOwnershipPointer { get; set; }
         public DxfPoint UCSOrigin { get; set; }
         public DxfVector UCSXAxis { get; set; }
         public DxfVector UCSYAxis { get; set; }
@@ -1620,6 +1674,11 @@ namespace IxMilia.Dxf
             ViewMode = 0;
             RenderMode = DxfViewRenderMode.Classic2D;
             IsAssociatedUCSPresent = false;
+            IsCameraPlottable = false;
+            BackgroundObjectPointer = 0u;
+            SelectionObjectPointer = 0u;
+            VisualStyleObjectPointer = 0u;
+            SunOwnershipPointer = 0u;
             UCSOrigin = DxfPoint.Origin;
             UCSXAxis = DxfVector.XAxis;
             UCSYAxis = DxfVector.YAxis;
@@ -1661,6 +1720,31 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(72, BoolShort(IsAssociatedUCSPresent)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(73, BoolShort(IsCameraPlottable)));
+            }
+
+            if (BackgroundObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(332, UIntHandle(BackgroundObjectPointer)));
+            }
+
+            if (SelectionObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(334, UIntHandle(SelectionObjectPointer)));
+            }
+
+            if (VisualStyleObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(348, UIntHandle(VisualStyleObjectPointer)));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(361, UIntHandle(SunOwnershipPointer)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
@@ -1800,6 +1884,21 @@ namespace IxMilia.Dxf
                     case 72:
                         item.IsAssociatedUCSPresent = BoolShort(pair.ShortValue);
                         break;
+                    case 73:
+                        item.IsCameraPlottable = BoolShort(pair.ShortValue);
+                        break;
+                    case 332:
+                        item.BackgroundObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 334:
+                        item.SelectionObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 348:
+                        item.VisualStyleObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 361:
+                        item.SunOwnershipPointer = UIntHandle(pair.StringValue);
+                        break;
                     case 110:
                         item.UCSOrigin.X = (pair.DoubleValue);
                         break;
@@ -1881,6 +1980,7 @@ namespace IxMilia.Dxf
         public bool GridOn { get; set; }
         public short SnapStyle { get; set; }
         public short SnapIsoPair { get; set; }
+        public string PlotStyleSheet { get; set; }
         public DxfViewRenderMode RenderMode { get; set; }
         public bool HasOwnUCS { get; set; }
         public DxfPoint UCSOrigin { get; set; }
@@ -1890,6 +1990,18 @@ namespace IxMilia.Dxf
         public double UCSElevation { get; set; }
         public uint UCSHandle { get; set; }
         public uint BaseUCSHandle { get; set; }
+        public DxfShadeEdgeMode ShadePlotSetting { get; set; }
+        public bool MajorGridLines { get; set; }
+        public uint BackgroundObjectPointer { get; set; }
+        public uint ShadePlotObjectPointer { get; set; }
+        public uint VisualStyleObjectPointer { get; set; }
+        public bool IsDefaultLightingOn { get; set; }
+        public DxfDefaultLightingType DefaultLightingType { get; set; }
+        public double Brightness { get; set; }
+        public double Contrast { get; set; }
+        public DxfColor AmbientColor { get; set; }
+        public int AmbientColorInt { get; set; }
+        public string AmbientColorName { get; set; }
 
         public DxfViewPort()
             : base()
@@ -1907,6 +2019,7 @@ namespace IxMilia.Dxf
             LensLength = 0.0;
             FrontClippingPlane = 0.0;
             BackClippingPlane = 0.0;
+            ViewHeight = 0.0;
             SnapRotationAngle = 0.0;
             ViewTwistAngle = 0.0;
             Status = 0;
@@ -1919,6 +2032,7 @@ namespace IxMilia.Dxf
             GridOn = false;
             SnapStyle = 0;
             SnapIsoPair = 0;
+            PlotStyleSheet = null;
             RenderMode = DxfViewRenderMode.Classic2D;
             HasOwnUCS = false;
             UCSOrigin = DxfPoint.Origin;
@@ -1928,6 +2042,18 @@ namespace IxMilia.Dxf
             UCSElevation = 0.0;
             UCSHandle = 0u;
             BaseUCSHandle = 0u;
+            ShadePlotSetting = DxfShadeEdgeMode.FacesShadedEdgeNotHighlighted;
+            MajorGridLines = false;
+            BackgroundObjectPointer = 0u;
+            ShadePlotObjectPointer = 0u;
+            VisualStyleObjectPointer = 0u;
+            IsDefaultLightingOn = true;
+            DefaultLightingType = DxfDefaultLightingType.OneDistantLight;
+            Brightness = 0.0;
+            Contrast = 0.0;
+            AmbientColor = DxfColor.FromRawValue(7);
+            AmbientColorInt = 0;
+            AmbientColorName = "BLACK";
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -1957,11 +2083,24 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(17, TargetViewPoint.X));
             pairs.Add(new DxfCodePair(27, TargetViewPoint.Y));
             pairs.Add(new DxfCodePair(37, TargetViewPoint.Z));
-            pairs.Add(new DxfCodePair(40, (ViewHeight)));
-            pairs.Add(new DxfCodePair(41, (ViewPortAspectRatio)));
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(40, (ViewHeight)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(41, (ViewPortAspectRatio)));
+            }
+
             pairs.Add(new DxfCodePair(42, (LensLength)));
             pairs.Add(new DxfCodePair(43, (FrontClippingPlane)));
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(45, (ViewHeight)));
+            }
+
             pairs.Add(new DxfCodePair(50, (SnapRotationAngle)));
             pairs.Add(new DxfCodePair(51, (ViewTwistAngle)));
             if (version == DxfAcadVersion.R12)
@@ -1976,18 +2115,43 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(71, (short)(ViewMode)));
             pairs.Add(new DxfCodePair(72, (short)(CircleZoomPercent)));
-            pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
+            }
+
             pairs.Add(new DxfCodePair(74, BoolShort(UCSIcon)));
-            pairs.Add(new DxfCodePair(75, BoolShort(SnapOn)));
-            pairs.Add(new DxfCodePair(76, BoolShort(GridOn)));
-            pairs.Add(new DxfCodePair(77, (SnapStyle)));
-            pairs.Add(new DxfCodePair(78, (SnapIsoPair)));
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(75, BoolShort(SnapOn)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(76, BoolShort(GridOn)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(77, (SnapStyle)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(78, (SnapIsoPair)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(1, (PlotStyleSheet)));
+            }
+
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(281, (short)(RenderMode)));
             }
 
-            if (version >= DxfAcadVersion.R2000)
+            if (version >= DxfAcadVersion.R2000 && version <= DxfAcadVersion.R2004)
             {
                 pairs.Add(new DxfCodePair(65, BoolShort(HasOwnUCS)));
             }
@@ -2055,6 +2219,66 @@ namespace IxMilia.Dxf
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(346, UIntHandle(BaseUCSHandle)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(170, (short)(ShadePlotSetting)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(61, BoolShort(MajorGridLines)));
+            }
+
+            if (BackgroundObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(332, UIntHandle(BackgroundObjectPointer)));
+            }
+
+            if (ShadePlotObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(333, UIntHandle(ShadePlotObjectPointer)));
+            }
+
+            if (VisualStyleObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(348, UIntHandle(VisualStyleObjectPointer)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(292, (IsDefaultLightingOn)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(282, (short)(DefaultLightingType)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(141, (Brightness)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(142, (Contrast)));
+            }
+
+            if (AmbientColor.RawValue != 7 && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(62, DxfColor.GetRawValue(AmbientColor)));
+            }
+
+            if (AmbientColorInt != 0 && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(421, (AmbientColorInt)));
+            }
+
+            if (AmbientColorName != "BLACK" && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(431, (AmbientColorName)));
             }
 
         }
@@ -2147,6 +2371,9 @@ namespace IxMilia.Dxf
                     case 44:
                         item.BackClippingPlane = (pair.DoubleValue);
                         break;
+                    case 45:
+                        item.ViewHeight = (pair.DoubleValue);
+                        break;
                     case 50:
                         item.SnapRotationAngle = (pair.DoubleValue);
                         break;
@@ -2182,6 +2409,9 @@ namespace IxMilia.Dxf
                         break;
                     case 78:
                         item.SnapIsoPair = (pair.ShortValue);
+                        break;
+                    case 1:
+                        item.PlotStyleSheet = (pair.StringValue);
                         break;
                     case 281:
                         item.RenderMode = (DxfViewRenderMode)(pair.ShortValue);
@@ -2227,6 +2457,42 @@ namespace IxMilia.Dxf
                         break;
                     case 346:
                         item.BaseUCSHandle = UIntHandle(pair.StringValue);
+                        break;
+                    case 170:
+                        item.ShadePlotSetting = (DxfShadeEdgeMode)(pair.ShortValue);
+                        break;
+                    case 61:
+                        item.MajorGridLines = BoolShort(pair.ShortValue);
+                        break;
+                    case 332:
+                        item.BackgroundObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 333:
+                        item.ShadePlotObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 348:
+                        item.VisualStyleObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 292:
+                        item.IsDefaultLightingOn = (pair.BoolValue);
+                        break;
+                    case 282:
+                        item.DefaultLightingType = (DxfDefaultLightingType)(pair.ShortValue);
+                        break;
+                    case 141:
+                        item.Brightness = (pair.DoubleValue);
+                        break;
+                    case 142:
+                        item.Contrast = (pair.DoubleValue);
+                        break;
+                    case 62:
+                        item.AmbientColor = DxfColor.FromRawValue(pair.ShortValue);
+                        break;
+                    case 421:
+                        item.AmbientColorInt = (pair.IntegerValue);
+                        break;
+                    case 431:
+                        item.AmbientColorName = (pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);

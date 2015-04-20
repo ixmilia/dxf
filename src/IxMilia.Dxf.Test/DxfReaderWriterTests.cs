@@ -199,6 +199,124 @@ EOF
         }
 
         [Fact]
+        public void ReadVersionSpecificBlockRecordTest_R2000()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+  5
+2
+330
+0
+100
+AcDbSymbolTable
+ 70
+0
+  0
+BLOCK_RECORD
+  5
+A
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+<name>
+340
+A1
+310
+010203040506070809
+310
+010203040506070809
+1001
+ACAD
+1000
+DesignCenter Data
+1002
+{
+1070
+0
+1070
+1
+1070
+2
+1002
+}
+  0
+ENDTAB
+");
+            var blockRecord = file.BlockRecords.Single();
+            Assert.Equal("<name>", blockRecord.Name);
+            Assert.Equal(0xA1u, blockRecord.LayoutHandle);
+            Assert.Equal("ACAD", blockRecord.XDataApplicationName);
+            Assert.Equal("DesignCenter Data", blockRecord.XDataStringData);
+            AssertArrayEqual(new byte[]
+            {
+                0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
+                0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
+            }, blockRecord.BitmapData);
+        }
+
+        [Fact]
+        public void WriteVersionSpecificBlockRecordTest_R2000()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
+            var blockRecord = new DxfBlockRecord()
+            {
+                Name = "<name>",
+                XDataApplicationName = "ACAD",
+                XDataStringData = "DesignCenter Data",
+                BitmapData = new byte[]
+                {
+                    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
+                    0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
+                }
+            };
+            file.BlockRecords.Add(blockRecord);
+            VerifyFileContains(file, @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+  5
+2
+330
+0
+100
+AcDbSymbolTable
+ 70
+0
+  0
+BLOCK_RECORD
+  5
+A
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+<name>
+340
+0
+310
+010203040506070809010203040506070809
+1001
+ACAD
+1000
+DesignCenter Data
+  0
+ENDTAB
+");
+        }
+
+        [Fact]
         public void WriteVersionSpecificClassTest_R13()
         {
             var file = new DxfFile();

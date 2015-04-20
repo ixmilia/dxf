@@ -50,7 +50,7 @@
   <Variable Name="DIMASZ" Code="40" Type="double" Property="DimensioningArrowSize" DefaultValue="1.0" />
   <Variable Name="DIMATFIT" Code="70" Type="DxfDimensionFit" Property="DimensionTextAndArrowPlacement" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit)" WriteConverter="(short)" MinVersion="R2000" />
   <Variable Name="DIMAUNIT" Code="70" Type="DxfAngleFormat" Property="DimensioningAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" MinVersion="R13" />
-  <Variable Name="DIMAZIN" Code="70" Type="DxfUnitZeroSuppression" Property="DimensionToleranceZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R2000" />
+  <Variable Name="DIMAZIN" Code="70" Type="DxfUnitZeroSuppression" Property="DimensionAngleZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R2000" />
 
   <!-- code 2 in R13-, code 1 in R14+ -->
   <Variable Name="DIMBLK" Code="2" Type="string" Property="ArrowBlockName" DefaultValue="null" MaxVersion="R13" />

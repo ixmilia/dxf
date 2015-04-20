@@ -11,6 +11,7 @@ namespace IxMilia.Dxf
         public string Name { get; set; }
         protected abstract DxfTableType TableType { get; }
         public uint Handle { get; set; }
+        public uint OwnerHandle { get; set; }
 
         public DxfSymbolTableFlags()
         {
@@ -21,17 +22,27 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(0, DxfTable.TableTypeToName(TableType)));
             if (outputHandles)
             {
-                if (TableType == DxfTableType.DimStyle)
-                {
-                    pairs.Add(new DxfCodePair(105, DxfCommonConverters.UIntHandle(Handle)));
-                }
-                else
-                {
-                    pairs.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
-                }
-
-                pairs.Add(new DxfCodePair(100, "AcDbSymbolTableRecord"));
+                int code = TableType == DxfTableType.DimStyle ? 105 : 5;
+                pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(Handle)));
             }
+
+            // 102 {<application-name>
+            //   application-specific codes
+            // 102 }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                // 102 {ACAD_REACTORS
+                //   330 owner handle
+                // 102 }
+                // 102 {ACAD_XDICTIONARY
+                //   360 codes
+                // 102 }
+
+                pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+            }
+
+            pairs.Add(new DxfCodePair(100, "AcDbSymbolTableRecord"));
         }
 
         internal void TrySetPair(DxfCodePair pair)
@@ -44,10 +55,21 @@ namespace IxMilia.Dxf
                 case 5:
                     Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
+                case 330:
+                    OwnerHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                    break;
             }
         }
 
         internal abstract void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles);
+
+        internal virtual void BeforeWrite()
+        {
+        }
+
+        internal virtual void AfterRead()
+        {
+        }
 
         public bool ExternallyDependentOnXRef
         {
@@ -79,6 +101,35 @@ namespace IxMilia.Dxf
         protected static short BoolShort(bool b)
         {
             return (short)(b ? 1 : 0);
+        }
+
+        protected static uint UIntHandle(string s)
+        {
+            return DxfCommonConverters.UIntHandle(s);
+        }
+
+        protected static string UIntHandle(uint u)
+        {
+            return DxfCommonConverters.UIntHandle(u);
+        }
+    }
+
+    public partial class DxfBlockRecord
+    {
+        public byte[] BitmapData { get; set; }
+
+        internal override void BeforeWrite()
+        {
+            BitmapPreviewData.Clear();
+            var str = DxfCommonConverters.HexBytes(BitmapData);
+            BitmapPreviewData.AddRange(DxfCommonConverters.SplitIntoLines(str));
+        }
+
+        internal override void AfterRead()
+        {
+            var hex = string.Join(string.Empty, BitmapPreviewData);
+            BitmapPreviewData.Clear(); // don't keep this around
+            BitmapData = DxfCommonConverters.HexBytes(hex);
         }
     }
 }

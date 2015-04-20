@@ -71,8 +71,11 @@ ill-placed comment
                 file.Save(stream);
                 stream.Flush();
                 stream.Seek(0, SeekOrigin.Begin);
-                var actual = new StreamReader(stream).ReadToEnd();
-                Assert.Contains(text.Trim(), actual);
+                using (var reader = new StreamReader(stream))
+                {
+                    var actual = reader.ReadToEnd();
+                    Assert.Contains(text.Trim(), actual);
+                }
             }
         }
 

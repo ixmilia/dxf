@@ -464,7 +464,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $DIMAZIN header variable.
         /// </summary>
-        public DxfUnitZeroSuppression DimensionToleranceZeroSuppression { get; set; }
+        public DxfUnitZeroSuppression DimensionAngleZeroSuppression { get; set; }
 
         /// <summary>
         /// The $DIMBLK header variable.
@@ -700,6 +700,11 @@ namespace IxMilia.Dxf
         /// The $DIMTXT header variable.
         /// </summary>
         public double DimensioningTextHeight { get; set; }
+
+        /// <summary>
+        /// The $DIMTZIN header variable.
+        /// </summary>
+        public DxfUnitZeroSuppression DimensionToleranceZeroSuppression { get; set; }
 
         /// <summary>
         /// The $DIMUNIT header variable.
@@ -1408,7 +1413,7 @@ namespace IxMilia.Dxf
             this.DimensioningArrowSize = 1.0; // DIMASZ
             this.DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines; // DIMATFIT
             this.DimensioningAngleFormat = DxfAngleFormat.DecimalDegrees; // DIMAUNIT
-            this.DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMAZIN
+            this.DimensionAngleZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMAZIN
             this.ArrowBlockName = null; // DIMBLK
             this.FirstArrowBlockName = null; // DIMBLK1
             this.SecondArrowBlockName = null; // DIMBLK2
@@ -1456,6 +1461,7 @@ namespace IxMilia.Dxf
             this.DimensionVerticalTextPosition = 0.0; // DIMTVP
             this.DimensionTextStyle = null; // DIMTXSTY
             this.DimensioningTextHeight = 10.0; // DIMTXT
+            this.DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMTZIN
             this.DimensionUnitFormat = DxfUnitFormat.Scientific; // DIMUNIT
             this.DimensionCursorControlsTextPosition = true; // DIMUPT
             this.DimensionUnitZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMZIN
@@ -1869,7 +1875,7 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, DIMAZIN));
-                list.Add(new DxfCodePair(70, (short)(header.DimensionToleranceZeroSuppression)));
+                list.Add(new DxfCodePair(70, (short)(header.DimensionAngleZeroSuppression)));
             }
 
             // DIMBLK
@@ -3175,7 +3181,7 @@ namespace IxMilia.Dxf
                     break;
                 case DIMAZIN:
                     EnsureCode(pair, 70);
-                    header.DimensionToleranceZeroSuppression = (DxfUnitZeroSuppression)(pair.ShortValue);
+                    header.DimensionAngleZeroSuppression = (DxfUnitZeroSuppression)(pair.ShortValue);
                     break;
                 case DIMBLK:
                     switch (pair.Code)
@@ -4265,7 +4271,7 @@ namespace IxMilia.Dxf
                 case DIMAUNIT:
                     return this.DimensioningAngleFormat;
                 case DIMAZIN:
-                    return this.DimensionToleranceZeroSuppression;
+                    return this.DimensionAngleZeroSuppression;
                 case DIMBLK:
                     return this.ArrowBlockName;
                 case DIMBLK1:
@@ -4777,7 +4783,7 @@ namespace IxMilia.Dxf
                     this.DimensioningAngleFormat = (DxfAngleFormat)value;
                     break;
                 case DIMAZIN:
-                    this.DimensionToleranceZeroSuppression = (DxfUnitZeroSuppression)value;
+                    this.DimensionAngleZeroSuppression = (DxfUnitZeroSuppression)value;
                     break;
                 case DIMBLK:
                     this.ArrowBlockName = (string)value;

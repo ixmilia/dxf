@@ -551,6 +551,8 @@ BLOCKS
 BLOCK
   5
 42
+330
+0
 100
 AcDbEntity
   8
@@ -589,69 +591,6 @@ ENDBLK
 AcDbEntity
   8
 <layer>
-100
-AcDbBlockEnd
-  0
-ENDSEC
-");
-        }
-
-        [Fact]
-        public void WriteVersionSpecificBlockTest_R14()
-        {
-            var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
-            var block = new DxfBlock();
-            block.Name = "<block name>";
-            block.Handle = 0x42u;
-            block.Layer = "<layer>";
-            block.XrefName = "<xref>";
-            block.BasePoint = new DxfPoint(11, 22, 33);
-            block.Entities.Add(new DxfModelPoint(new DxfPoint(111, 222, 333)));
-            file.Blocks.Add(block);
-            VerifyFileContains(file, @"
-  0
-SECTION
-  2
-BLOCKS
-  0
-BLOCK
-  5
-42
-100
-AcDbEntity
-  8
-<layer>
-100
-AcDbBlockBegin
-  2
-<block name>
- 70
-0
- 10
-11.0
- 20
-22.0
- 30
-33.0
-  3
-<block name>
-  1
-<xref>
-");
-            VerifyFileContains(file, @"
- 10
-111.0
- 20
-222.0
- 30
-333.0
-");
-            VerifyFileContains(file, @"
-  0
-ENDBLK
-  5
-42
 100
 AcDbBlockEnd
   0

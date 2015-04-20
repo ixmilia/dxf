@@ -23,6 +23,8 @@ namespace IxMilia.Dxf.Blocks
         public DxfPoint BasePoint { get; set; }
         public string XrefName { get; set; }
         public List<DxfEntity> Entities { get; private set; }
+        public uint OwnerHandle { get; set; }
+        public string Description { get; set; }
 
         public bool IsAnonymous
         {
@@ -84,6 +86,7 @@ namespace IxMilia.Dxf.Blocks
             if (version >= DxfAcadVersion.R13)
             {
                 // TODO: application-defined 102 codes for R14+
+                list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
                 list.Add(new DxfCodePair(100, AcDbEntityText));
             }
 
@@ -104,7 +107,14 @@ namespace IxMilia.Dxf.Blocks
             }
 
             if (!string.IsNullOrEmpty(XrefName))
+            {
                 list.Add(new DxfCodePair(1, XrefName));
+            }
+
+            if (!string.IsNullOrEmpty(Description))
+            {
+                list.Add(new DxfCodePair(4, Description));
+            }
 
             // entities in blocks never have handles
             list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version, outputHandles: false)));
@@ -117,14 +127,15 @@ namespace IxMilia.Dxf.Blocks
 
             // TODO: application-defined 102 codes for R14+
 
-            if (version == DxfAcadVersion.R13)
+            if (version >= DxfAcadVersion.R2000)
             {
-                list.Add(new DxfCodePair(100, AcDbEntityText));
-                list.Add(new DxfCodePair(8, Layer));
+                list.Add(new DxfCodePair(330, 0));
             }
 
             if (version >= DxfAcadVersion.R13)
             {
+                list.Add(new DxfCodePair(100, AcDbEntityText));
+                list.Add(new DxfCodePair(8, Layer));
                 list.Add(new DxfCodePair(100, AcDbBlockEndText));
             }
 
@@ -187,6 +198,9 @@ namespace IxMilia.Dxf.Blocks
                                 break;
                             case 3:
                                 break;
+                            case 4:
+                                block.Description = pair.StringValue;
+                                break;
                             case 5:
                                 block.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                                 break;
@@ -204,6 +218,9 @@ namespace IxMilia.Dxf.Blocks
                                 break;
                             case 70:
                                 block.Flags = pair.ShortValue;
+                                break;
+                            case 330:
+                                block.OwnerHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
                                 break;
                         }
                     }

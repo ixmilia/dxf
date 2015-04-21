@@ -109,7 +109,7 @@ namespace IxMilia.Dxf.Entities
         Exact = 2
     }
 
-    public enum DxfDimensionVersion
+    public enum DxfVersion
     {
         R2010 = 0
     }
@@ -352,6 +352,7 @@ namespace IxMilia.Dxf.Entities
         public class DxfLwPolylineVertex
         {
             public DxfPoint Location { get; set; }
+            public int Identifier { get; set; }
             public double StartingWidth { get; set; }
             public double EndingWidth { get; set; }
             public double Bulge { get; set; }

@@ -57,12 +57,28 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
 - CLASSES section - complete R10 through R2014
 - TABLES section - complete R10 through R2014
 - BLOCKS section - complete R10 through R2014
-- ENTITIES section - common complete R10 through R2014, entities complete R10 through R2000, DIMENSION complete R10 through R2014
+- ENTITIES section
+  - common complete R10 through R2014
+  - still need AcDbXrecord for ATTDEF and ATTRIB
+  - entities complete R10 through R2014 _EXCEPT_
+    - HATCH
+    - HELIX
+    - LIGHT
+    - MESH
+    - MLINE
+    - MLEADER
+    - MLEADERSTYLE
+    - MTEXT
+    - SECTION
+    - SURFACE
+    - TABLE
+    - UNDERLAY
+    - VIEWPORT
 - OBJECTS section - NYI
 
 ### TODO
 
-- 102 codes for entities
+- XDATA (102/1002 codes)
 
 ### DXF reference
 

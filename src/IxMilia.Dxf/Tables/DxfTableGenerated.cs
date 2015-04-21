@@ -385,6 +385,8 @@ namespace IxMilia.Dxf
             var item = new DxfAppId();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -414,10 +416,24 @@ namespace IxMilia.Dxf
         protected override DxfTableType TableType { get { return DxfTableType.BlockRecord; } }
 
         // properties
+        public uint LayoutHandle { get; set; }
+        public DxfUnits InsertionUnits { get; set; }
+        public bool Explodability { get; set; }
+        public bool Scalability { get; set; }
+        private List<string> BitmapPreviewData { get; set; }
+        public string XDataApplicationName { get; set; }
+        public string XDataStringData { get; set; }
 
         public DxfBlockRecord()
             : base()
         {
+            LayoutHandle = 0u;
+            InsertionUnits = DxfUnits.Unitless;
+            Explodability = true;
+            Scalability = true;
+            BitmapPreviewData = new List<string>();
+            XDataApplicationName = null;
+            XDataStringData = null;
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -428,6 +444,41 @@ namespace IxMilia.Dxf
             }
 
             pairs.Add(new DxfCodePair(2, Name));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(340, UIntHandle(LayoutHandle)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(70, (short)(InsertionUnits)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(280, BoolShort(Explodability)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(281, BoolShort(Scalability)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.AddRange(BitmapPreviewData.Select(value => new DxfCodePair(310, value)));
+            }
+
+            if (XDataApplicationName != null && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(1001, (XDataApplicationName)));
+            }
+
+            if (XDataStringData != null && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(1000, (XDataStringData)));
+            }
+
         }
 
         internal static DxfBlockRecord FromBuffer(DxfCodePairBufferReader buffer)
@@ -435,6 +486,8 @@ namespace IxMilia.Dxf
             var item = new DxfBlockRecord();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -444,6 +497,27 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
+                    case 340:
+                        item.LayoutHandle = UIntHandle(pair.StringValue);
+                        break;
+                    case 70:
+                        item.InsertionUnits = (DxfUnits)(pair.ShortValue);
+                        break;
+                    case 280:
+                        item.Explodability = BoolShort(pair.ShortValue);
+                        break;
+                    case 281:
+                        item.Scalability = BoolShort(pair.ShortValue);
+                        break;
+                    case 310:
+                        item.BitmapPreviewData.Add((pair.StringValue));
+                        break;
+                    case 1001:
+                        item.XDataApplicationName = (pair.StringValue);
+                        break;
+                    case 1000:
+                        item.XDataStringData = (pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -464,7 +538,7 @@ namespace IxMilia.Dxf
         public string DimensioningSuffix { get; set; }
         public string AlternateDimensioningSuffix { get; set; }
         public string ArrowBlockName { get; set; }
-        public string FirstArrowBlockname { get; set; }
+        public string FirstArrowBlockName { get; set; }
         public string SecondArrowBlockName { get; set; }
         public double DimensioningScaleFactor { get; set; }
         public double DimensioningArrowSize { get; set; }
@@ -483,6 +557,7 @@ namespace IxMilia.Dxf
         public double DimensionVerticalTextPosition { get; set; }
         public double DimensionToleranceDisplacScaleFactor { get; set; }
         public double DimensionLineGap { get; set; }
+        public double AlternateDimensioningUnitRounding { get; set; }
         public bool GenerateDimensionTolerances { get; set; }
         public bool GenerateDimensionLimits { get; set; }
         public bool DimensionTextInsideHorizontal { get; set; }
@@ -491,6 +566,7 @@ namespace IxMilia.Dxf
         public bool SuppressSecondDimensionExtensionLine { get; set; }
         public bool TextAboveDimensionLine { get; set; }
         public DxfUnitZeroSuppression DimensionUnitZeroSuppression { get; set; }
+        public DxfUnitZeroSuppression DimensionAngleZeroSuppression { get; set; }
         public bool UseAlternateDimensioning { get; set; }
         public short AlternateDimensioningDecimalPlaces { get; set; }
         public bool ForceDimensionLineExtensionsOutsideIfTextExists { get; set; }
@@ -500,13 +576,17 @@ namespace IxMilia.Dxf
         public DxfColor DimensionLineColor { get; set; }
         public DxfColor DimensionExtensionLineColor { get; set; }
         public DxfColor DimensionTextColor { get; set; }
+        public short AngularDimensionPrecision { get; set; }
         public DxfUnitFormat DimensionUnitFormat { get; set; }
         public short DimensionUnitToleranceDecimalPlaces { get; set; }
         public short DimensionToleranceDecimalPlaces { get; set; }
         public DxfUnitFormat AlternateDimensioningUnits { get; set; }
         public short AlternateDimensioningToleranceDecimalPlaces { get; set; }
-        public string StyleHandle { get; set; }
         public DxfAngleFormat DimensioningAngleFormat { get; set; }
+        public short DimensionPrecision { get; set; }
+        public DxfNonAngularUnits DimensionNonAngularUnits { get; set; }
+        public char DimensionDecimalSeparatorChar { get; set; }
+        public DxfDimensionTextMovementRule DimensionTextMovementRule { get; set; }
         public DxfDimensionTextJustification DimensionTextJustification { get; set; }
         public DxfJustification DimensionToleranceVerticalJustification { get; set; }
         public DxfUnitZeroSuppression DimensionToleranceZeroSuppression { get; set; }
@@ -514,6 +594,10 @@ namespace IxMilia.Dxf
         public DxfUnitZeroSuppression AlternateDimensioningToleranceZeroSupression { get; set; }
         public DxfDimensionFit DimensionTextAndArrowPlacement { get; set; }
         public bool DimensionCursorControlsTextPosition { get; set; }
+        public string DimensionTextStyle { get; set; }
+        public string DimensionLeaderBlockName { get; set; }
+        public DxfLineWeight DimensionLineWeight { get; set; }
+        public DxfLineWeight DimensionExtensionLineWeight { get; set; }
 
         public DxfDimStyle()
             : base()
@@ -521,7 +605,7 @@ namespace IxMilia.Dxf
             DimensioningSuffix = null;
             AlternateDimensioningSuffix = null;
             ArrowBlockName = null;
-            FirstArrowBlockname = null;
+            FirstArrowBlockName = null;
             SecondArrowBlockName = null;
             DimensioningScaleFactor = 1.0;
             DimensioningArrowSize = 0.0;
@@ -540,6 +624,7 @@ namespace IxMilia.Dxf
             DimensionVerticalTextPosition = 0.0;
             DimensionToleranceDisplacScaleFactor = 1.0;
             DimensionLineGap = 0.0;
+            AlternateDimensioningUnitRounding = 0.0;
             GenerateDimensionTolerances = true;
             GenerateDimensionLimits = true;
             DimensionTextInsideHorizontal = true;
@@ -548,6 +633,7 @@ namespace IxMilia.Dxf
             SuppressSecondDimensionExtensionLine = true;
             TextAboveDimensionLine = true;
             DimensionUnitZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
+            DimensionAngleZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
             UseAlternateDimensioning = false;
             AlternateDimensioningDecimalPlaces = 0;
             ForceDimensionLineExtensionsOutsideIfTextExists = true;
@@ -557,13 +643,17 @@ namespace IxMilia.Dxf
             DimensionLineColor = null;
             DimensionExtensionLineColor = null;
             DimensionTextColor = null;
+            AngularDimensionPrecision = 12;
             DimensionUnitFormat = DxfUnitFormat.Scientific;
             DimensionUnitToleranceDecimalPlaces = 0;
             DimensionToleranceDecimalPlaces = 0;
             AlternateDimensioningUnits = DxfUnitFormat.Scientific;
             AlternateDimensioningToleranceDecimalPlaces = 0;
-            StyleHandle = null;
             DimensioningAngleFormat = DxfAngleFormat.DecimalDegrees;
+            DimensionPrecision = 12;
+            DimensionNonAngularUnits = DxfNonAngularUnits.Scientific;
+            DimensionDecimalSeparatorChar = '.';
+            DimensionTextMovementRule = DxfDimensionTextMovementRule.MoveLineWithText;
             DimensionTextJustification = DxfDimensionTextJustification.AboveLineCenter;
             DimensionToleranceVerticalJustification = DxfJustification.Top;
             DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
@@ -571,6 +661,14 @@ namespace IxMilia.Dxf
             AlternateDimensioningToleranceZeroSupression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
             DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines;
             DimensionCursorControlsTextPosition = true;
+            DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines;
+            DimensionTextStyle = null;
+            DimensionLeaderBlockName = null;
+            ArrowBlockName = null;
+            FirstArrowBlockName = null;
+            SecondArrowBlockName = null;
+            DimensionLineWeight = new DxfLineWeight();
+            DimensionExtensionLineWeight = new DxfLineWeight();
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -584,9 +682,21 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(3, (DimensioningSuffix)));
             pairs.Add(new DxfCodePair(4, (AlternateDimensioningSuffix)));
-            pairs.Add(new DxfCodePair(5, (ArrowBlockName)));
-            pairs.Add(new DxfCodePair(6, (FirstArrowBlockname)));
-            pairs.Add(new DxfCodePair(7, (SecondArrowBlockName)));
+            if (version <= DxfAcadVersion.R14)
+            {
+                pairs.Add(new DxfCodePair(5, (ArrowBlockName)));
+            }
+
+            if (version <= DxfAcadVersion.R14)
+            {
+                pairs.Add(new DxfCodePair(6, (FirstArrowBlockName)));
+            }
+
+            if (version <= DxfAcadVersion.R14)
+            {
+                pairs.Add(new DxfCodePair(7, (SecondArrowBlockName)));
+            }
+
             pairs.Add(new DxfCodePair(40, (DimensioningScaleFactor)));
             pairs.Add(new DxfCodePair(41, (DimensioningArrowSize)));
             pairs.Add(new DxfCodePair(42, (DimensionExtensionLineOffset)));
@@ -604,6 +714,11 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(145, (DimensionVerticalTextPosition)));
             pairs.Add(new DxfCodePair(146, (DimensionToleranceDisplacScaleFactor)));
             pairs.Add(new DxfCodePair(147, (DimensionLineGap)));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(148, (AlternateDimensioningUnitRounding)));
+            }
+
             pairs.Add(new DxfCodePair(71, BoolShort(GenerateDimensionTolerances)));
             pairs.Add(new DxfCodePair(72, BoolShort(GenerateDimensionLimits)));
             pairs.Add(new DxfCodePair(73, BoolShort(DimensionTextInsideHorizontal)));
@@ -612,6 +727,11 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(76, BoolShort(SuppressSecondDimensionExtensionLine)));
             pairs.Add(new DxfCodePair(77, BoolShort(TextAboveDimensionLine)));
             pairs.Add(new DxfCodePair(78, (short)(DimensionUnitZeroSuppression)));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(79, (short)(DimensionAngleZeroSuppression)));
+            }
+
             pairs.Add(new DxfCodePair(170, BoolShort(UseAlternateDimensioning)));
             pairs.Add(new DxfCodePair(171, (AlternateDimensioningDecimalPlaces)));
             pairs.Add(new DxfCodePair(172, BoolShort(ForceDimensionLineExtensionsOutsideIfTextExists)));
@@ -621,6 +741,11 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(176, DxfColor.GetRawValue(DimensionLineColor)));
             pairs.Add(new DxfCodePair(177, DxfColor.GetRawValue(DimensionExtensionLineColor)));
             pairs.Add(new DxfCodePair(178, DxfColor.GetRawValue(DimensionTextColor)));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(179, (AngularDimensionPrecision)));
+            }
+
             if (version >= DxfAcadVersion.R13)
             {
                 pairs.Add(new DxfCodePair(270, (short)(DimensionUnitFormat)));
@@ -648,12 +773,27 @@ namespace IxMilia.Dxf
 
             if (version >= DxfAcadVersion.R13)
             {
-                pairs.Add(new DxfCodePair(340, (StyleHandle)));
+                pairs.Add(new DxfCodePair(275, (short)(DimensioningAngleFormat)));
             }
 
-            if (version >= DxfAcadVersion.R13)
+            if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(275, (short)(DimensioningAngleFormat)));
+                pairs.Add(new DxfCodePair(276, (DimensionPrecision)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(277, (short)(DimensionNonAngularUnits)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(278, (short)(DimensionDecimalSeparatorChar)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(279, (short)(DimensionTextMovementRule)));
             }
 
             if (version >= DxfAcadVersion.R13)
@@ -691,6 +831,46 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(288, BoolShort(DimensionCursorControlsTextPosition)));
             }
 
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(289, (short)(DimensionTextAndArrowPlacement)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(340, (DimensionTextStyle)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(341, (DimensionLeaderBlockName)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(342, (ArrowBlockName)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(343, (FirstArrowBlockName)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(344, (SecondArrowBlockName)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(371, DxfLineWeight.GetRawValue(DimensionLineWeight)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(372, DxfLineWeight.GetRawValue(DimensionExtensionLineWeight)));
+            }
+
         }
 
         internal static DxfDimStyle FromBuffer(DxfCodePairBufferReader buffer)
@@ -698,6 +878,8 @@ namespace IxMilia.Dxf
             var item = new DxfDimStyle();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -720,7 +902,7 @@ namespace IxMilia.Dxf
                         item.ArrowBlockName = (pair.StringValue);
                         break;
                     case 6:
-                        item.FirstArrowBlockname = (pair.StringValue);
+                        item.FirstArrowBlockName = (pair.StringValue);
                         break;
                     case 7:
                         item.SecondArrowBlockName = (pair.StringValue);
@@ -776,6 +958,9 @@ namespace IxMilia.Dxf
                     case 147:
                         item.DimensionLineGap = (pair.DoubleValue);
                         break;
+                    case 148:
+                        item.AlternateDimensioningUnitRounding = (pair.DoubleValue);
+                        break;
                     case 71:
                         item.GenerateDimensionTolerances = BoolShort(pair.ShortValue);
                         break;
@@ -799,6 +984,9 @@ namespace IxMilia.Dxf
                         break;
                     case 78:
                         item.DimensionUnitZeroSuppression = (DxfUnitZeroSuppression)(pair.ShortValue);
+                        break;
+                    case 79:
+                        item.DimensionAngleZeroSuppression = (DxfUnitZeroSuppression)(pair.ShortValue);
                         break;
                     case 170:
                         item.UseAlternateDimensioning = BoolShort(pair.ShortValue);
@@ -827,6 +1015,9 @@ namespace IxMilia.Dxf
                     case 178:
                         item.DimensionTextColor = DxfColor.FromRawValue(pair.ShortValue);
                         break;
+                    case 179:
+                        item.AngularDimensionPrecision = (pair.ShortValue);
+                        break;
                     case 270:
                         item.DimensionUnitFormat = (DxfUnitFormat)(pair.ShortValue);
                         break;
@@ -842,11 +1033,20 @@ namespace IxMilia.Dxf
                     case 274:
                         item.AlternateDimensioningToleranceDecimalPlaces = (pair.ShortValue);
                         break;
-                    case 340:
-                        item.StyleHandle = (pair.StringValue);
-                        break;
                     case 275:
                         item.DimensioningAngleFormat = (DxfAngleFormat)(pair.ShortValue);
+                        break;
+                    case 276:
+                        item.DimensionPrecision = (pair.ShortValue);
+                        break;
+                    case 277:
+                        item.DimensionNonAngularUnits = (DxfNonAngularUnits)(pair.ShortValue);
+                        break;
+                    case 278:
+                        item.DimensionDecimalSeparatorChar = (char)(pair.ShortValue);
+                        break;
+                    case 279:
+                        item.DimensionTextMovementRule = (DxfDimensionTextMovementRule)(pair.ShortValue);
                         break;
                     case 280:
                         item.DimensionTextJustification = (DxfDimensionTextJustification)(pair.ShortValue);
@@ -869,6 +1069,30 @@ namespace IxMilia.Dxf
                     case 288:
                         item.DimensionCursorControlsTextPosition = BoolShort(pair.ShortValue);
                         break;
+                    case 289:
+                        item.DimensionTextAndArrowPlacement = (DxfDimensionFit)(pair.ShortValue);
+                        break;
+                    case 340:
+                        item.DimensionTextStyle = (pair.StringValue);
+                        break;
+                    case 341:
+                        item.DimensionLeaderBlockName = (pair.StringValue);
+                        break;
+                    case 342:
+                        item.ArrowBlockName = (pair.StringValue);
+                        break;
+                    case 343:
+                        item.FirstArrowBlockName = (pair.StringValue);
+                        break;
+                    case 344:
+                        item.SecondArrowBlockName = (pair.StringValue);
+                        break;
+                    case 371:
+                        item.DimensionLineWeight = DxfLineWeight.FromRawValue(pair.ShortValue);
+                        break;
+                    case 372:
+                        item.DimensionExtensionLineWeight = DxfLineWeight.FromRawValue(pair.ShortValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -888,12 +1112,20 @@ namespace IxMilia.Dxf
         // properties
         public DxfColor Color { get; set; }
         public string LinetypeName { get; set; }
+        public bool IsLayerPlotted { get; set; }
+        public DxfLineWeight LineWeight { get; set; }
+        public uint PlotStylePointer { get; set; }
+        public uint MaterialHandle { get; set; }
 
         public DxfLayer()
             : base()
         {
             Color = DxfColor.ByBlock;
             LinetypeName = null;
+            IsLayerPlotted = true;
+            LineWeight = new DxfLineWeight();
+            PlotStylePointer = 0u;
+            MaterialHandle = 0u;
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -907,6 +1139,26 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(62, DxfColor.GetRawValue(Color)));
             pairs.Add(new DxfCodePair(6, (LinetypeName)));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(290, (IsLayerPlotted)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(370, DxfLineWeight.GetRawValue(LineWeight)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(390, UIntHandle(PlotStylePointer)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(347, UIntHandle(MaterialHandle)));
+            }
+
         }
 
         internal static DxfLayer FromBuffer(DxfCodePairBufferReader buffer)
@@ -914,6 +1166,8 @@ namespace IxMilia.Dxf
             var item = new DxfLayer();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -931,6 +1185,18 @@ namespace IxMilia.Dxf
                         break;
                     case 6:
                         item.LinetypeName = (pair.StringValue);
+                        break;
+                    case 290:
+                        item.IsLayerPlotted = (pair.BoolValue);
+                        break;
+                    case 370:
+                        item.LineWeight = DxfLineWeight.FromRawValue(pair.ShortValue);
+                        break;
+                    case 390:
+                        item.PlotStylePointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 347:
+                        item.MaterialHandle = UIntHandle(pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);
@@ -1042,6 +1308,8 @@ namespace IxMilia.Dxf
             var item = new DxfLineType();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1153,6 +1421,8 @@ namespace IxMilia.Dxf
             var item = new DxfStyle();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1206,6 +1476,11 @@ namespace IxMilia.Dxf
         public DxfPoint Origin { get; set; }
         public DxfVector XAxis { get; set; }
         public DxfVector YAxis { get; set; }
+        public DxfOrthographicViewType OrthographicViewType { get; set; }
+        public double Elevation { get; set; }
+        public uint BaseUcsHandle { get; set; }
+        public DxfOrthographicViewType OrthographicType { get; set; }
+        public DxfPoint OrthographicOrigin { get; set; }
 
         public DxfUcs()
             : base()
@@ -1213,6 +1488,11 @@ namespace IxMilia.Dxf
             Origin = DxfPoint.Origin;
             XAxis = DxfVector.XAxis;
             YAxis = DxfVector.XAxis;
+            OrthographicViewType = DxfOrthographicViewType.None;
+            Elevation = 0.0;
+            BaseUcsHandle = 0u;
+            OrthographicType = DxfOrthographicViewType.Top;
+            OrthographicOrigin = DxfPoint.Origin;
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -1233,6 +1513,41 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(12, YAxis.X));
             pairs.Add(new DxfCodePair(22, YAxis.Y));
             pairs.Add(new DxfCodePair(32, YAxis.Z));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(79, (short)(OrthographicViewType)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(146, (Elevation)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(346, UIntHandle(BaseUcsHandle)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(71, (short)(OrthographicType)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(13, OrthographicOrigin.X));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(23, OrthographicOrigin.Y));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(33, OrthographicOrigin.Z));
+            }
+
         }
 
         internal static DxfUcs FromBuffer(DxfCodePairBufferReader buffer)
@@ -1240,6 +1555,8 @@ namespace IxMilia.Dxf
             var item = new DxfUcs();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1279,6 +1596,27 @@ namespace IxMilia.Dxf
                     case 32:
                         item.YAxis.Z = (pair.DoubleValue);
                         break;
+                    case 79:
+                        item.OrthographicViewType = (DxfOrthographicViewType)(pair.ShortValue);
+                        break;
+                    case 146:
+                        item.Elevation = (pair.DoubleValue);
+                        break;
+                    case 346:
+                        item.BaseUcsHandle = UIntHandle(pair.StringValue);
+                        break;
+                    case 71:
+                        item.OrthographicType = (DxfOrthographicViewType)(pair.ShortValue);
+                        break;
+                    case 13:
+                        item.OrthographicOrigin.X = (pair.DoubleValue);
+                        break;
+                    case 23:
+                        item.OrthographicOrigin.Y = (pair.DoubleValue);
+                        break;
+                    case 33:
+                        item.OrthographicOrigin.Z = (pair.DoubleValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -1306,6 +1644,20 @@ namespace IxMilia.Dxf
         public double BackClippingPlane { get; set; }
         public double TwistAngle { get; set; }
         public short ViewMode { get; set; }
+        public DxfViewRenderMode RenderMode { get; set; }
+        public bool IsAssociatedUCSPresent { get; set; }
+        public bool IsCameraPlottable { get; set; }
+        public uint BackgroundObjectPointer { get; set; }
+        public uint SelectionObjectPointer { get; set; }
+        public uint VisualStyleObjectPointer { get; set; }
+        public uint SunOwnershipPointer { get; set; }
+        public DxfPoint UCSOrigin { get; set; }
+        public DxfVector UCSXAxis { get; set; }
+        public DxfVector UCSYAxis { get; set; }
+        public DxfOrthographicViewType OrthographicViewType { get; set; }
+        public double UCSElevation { get; set; }
+        public uint UCSHandle { get; set; }
+        public uint BaseUCSHandle { get; set; }
 
         public DxfView()
             : base()
@@ -1320,6 +1672,20 @@ namespace IxMilia.Dxf
             BackClippingPlane = 1.0;
             TwistAngle = 0.0;
             ViewMode = 0;
+            RenderMode = DxfViewRenderMode.Classic2D;
+            IsAssociatedUCSPresent = false;
+            IsCameraPlottable = false;
+            BackgroundObjectPointer = 0u;
+            SelectionObjectPointer = 0u;
+            VisualStyleObjectPointer = 0u;
+            SunOwnershipPointer = 0u;
+            UCSOrigin = DxfPoint.Origin;
+            UCSXAxis = DxfVector.XAxis;
+            UCSYAxis = DxfVector.YAxis;
+            OrthographicViewType = DxfOrthographicViewType.None;
+            UCSElevation = 0.0;
+            UCSHandle = 0u;
+            BaseUCSHandle = 0u;
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -1346,6 +1712,106 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
             pairs.Add(new DxfCodePair(50, (TwistAngle)));
             pairs.Add(new DxfCodePair(71, (ViewMode)));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(281, (short)(RenderMode)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(72, BoolShort(IsAssociatedUCSPresent)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(73, BoolShort(IsCameraPlottable)));
+            }
+
+            if (BackgroundObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(332, UIntHandle(BackgroundObjectPointer)));
+            }
+
+            if (SelectionObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(334, UIntHandle(SelectionObjectPointer)));
+            }
+
+            if (VisualStyleObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(348, UIntHandle(VisualStyleObjectPointer)));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(361, UIntHandle(SunOwnershipPointer)));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(110, UCSOrigin.X));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(120, UCSOrigin.Y));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(130, UCSOrigin.Z));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(111, UCSXAxis.X));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(121, UCSXAxis.Y));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(131, UCSXAxis.Z));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(112, UCSYAxis.X));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(122, UCSYAxis.Y));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(132, UCSYAxis.Z));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(79, (short)(OrthographicViewType)));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(146, (UCSElevation)));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(345, UIntHandle(UCSHandle)));
+            }
+
+            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(346, UIntHandle(BaseUCSHandle)));
+            }
+
         }
 
         internal static DxfView FromBuffer(DxfCodePairBufferReader buffer)
@@ -1353,6 +1819,8 @@ namespace IxMilia.Dxf
             var item = new DxfView();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1410,6 +1878,66 @@ namespace IxMilia.Dxf
                     case 71:
                         item.ViewMode = (pair.ShortValue);
                         break;
+                    case 281:
+                        item.RenderMode = (DxfViewRenderMode)(pair.ShortValue);
+                        break;
+                    case 72:
+                        item.IsAssociatedUCSPresent = BoolShort(pair.ShortValue);
+                        break;
+                    case 73:
+                        item.IsCameraPlottable = BoolShort(pair.ShortValue);
+                        break;
+                    case 332:
+                        item.BackgroundObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 334:
+                        item.SelectionObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 348:
+                        item.VisualStyleObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 361:
+                        item.SunOwnershipPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 110:
+                        item.UCSOrigin.X = (pair.DoubleValue);
+                        break;
+                    case 120:
+                        item.UCSOrigin.Y = (pair.DoubleValue);
+                        break;
+                    case 130:
+                        item.UCSOrigin.Z = (pair.DoubleValue);
+                        break;
+                    case 111:
+                        item.UCSXAxis.X = (pair.DoubleValue);
+                        break;
+                    case 121:
+                        item.UCSXAxis.Y = (pair.DoubleValue);
+                        break;
+                    case 131:
+                        item.UCSXAxis.Z = (pair.DoubleValue);
+                        break;
+                    case 112:
+                        item.UCSYAxis.X = (pair.DoubleValue);
+                        break;
+                    case 122:
+                        item.UCSYAxis.Y = (pair.DoubleValue);
+                        break;
+                    case 132:
+                        item.UCSYAxis.Z = (pair.DoubleValue);
+                        break;
+                    case 79:
+                        item.OrthographicViewType = (DxfOrthographicViewType)(pair.ShortValue);
+                        break;
+                    case 146:
+                        item.UCSElevation = (pair.DoubleValue);
+                        break;
+                    case 345:
+                        item.UCSHandle = UIntHandle(pair.StringValue);
+                        break;
+                    case 346:
+                        item.BaseUCSHandle = UIntHandle(pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -1452,6 +1980,28 @@ namespace IxMilia.Dxf
         public bool GridOn { get; set; }
         public short SnapStyle { get; set; }
         public short SnapIsoPair { get; set; }
+        public string PlotStyleSheet { get; set; }
+        public DxfViewRenderMode RenderMode { get; set; }
+        public bool HasOwnUCS { get; set; }
+        public DxfPoint UCSOrigin { get; set; }
+        public DxfVector UCSXAxis { get; set; }
+        public DxfVector UCSYAxis { get; set; }
+        public DxfOrthographicViewType OrthographicViewType { get; set; }
+        public double UCSElevation { get; set; }
+        public uint UCSHandle { get; set; }
+        public uint BaseUCSHandle { get; set; }
+        public DxfShadeEdgeMode ShadePlotSetting { get; set; }
+        public bool MajorGridLines { get; set; }
+        public uint BackgroundObjectPointer { get; set; }
+        public uint ShadePlotObjectPointer { get; set; }
+        public uint VisualStyleObjectPointer { get; set; }
+        public bool IsDefaultLightingOn { get; set; }
+        public DxfDefaultLightingType DefaultLightingType { get; set; }
+        public double Brightness { get; set; }
+        public double Contrast { get; set; }
+        public DxfColor AmbientColor { get; set; }
+        public int AmbientColorInt { get; set; }
+        public string AmbientColorName { get; set; }
 
         public DxfViewPort()
             : base()
@@ -1469,6 +2019,7 @@ namespace IxMilia.Dxf
             LensLength = 0.0;
             FrontClippingPlane = 0.0;
             BackClippingPlane = 0.0;
+            ViewHeight = 0.0;
             SnapRotationAngle = 0.0;
             ViewTwistAngle = 0.0;
             Status = 0;
@@ -1481,6 +2032,28 @@ namespace IxMilia.Dxf
             GridOn = false;
             SnapStyle = 0;
             SnapIsoPair = 0;
+            PlotStyleSheet = null;
+            RenderMode = DxfViewRenderMode.Classic2D;
+            HasOwnUCS = false;
+            UCSOrigin = DxfPoint.Origin;
+            UCSXAxis = DxfVector.XAxis;
+            UCSYAxis = DxfVector.YAxis;
+            OrthographicViewType = DxfOrthographicViewType.None;
+            UCSElevation = 0.0;
+            UCSHandle = 0u;
+            BaseUCSHandle = 0u;
+            ShadePlotSetting = DxfShadeEdgeMode.FacesShadedEdgeNotHighlighted;
+            MajorGridLines = false;
+            BackgroundObjectPointer = 0u;
+            ShadePlotObjectPointer = 0u;
+            VisualStyleObjectPointer = 0u;
+            IsDefaultLightingOn = true;
+            DefaultLightingType = DxfDefaultLightingType.OneDistantLight;
+            Brightness = 0.0;
+            Contrast = 0.0;
+            AmbientColor = DxfColor.FromRawValue(7);
+            AmbientColorInt = 0;
+            AmbientColorName = "BLACK";
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -1510,11 +2083,24 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(17, TargetViewPoint.X));
             pairs.Add(new DxfCodePair(27, TargetViewPoint.Y));
             pairs.Add(new DxfCodePair(37, TargetViewPoint.Z));
-            pairs.Add(new DxfCodePair(40, (ViewHeight)));
-            pairs.Add(new DxfCodePair(41, (ViewPortAspectRatio)));
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(40, (ViewHeight)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(41, (ViewPortAspectRatio)));
+            }
+
             pairs.Add(new DxfCodePair(42, (LensLength)));
             pairs.Add(new DxfCodePair(43, (FrontClippingPlane)));
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(45, (ViewHeight)));
+            }
+
             pairs.Add(new DxfCodePair(50, (SnapRotationAngle)));
             pairs.Add(new DxfCodePair(51, (ViewTwistAngle)));
             if (version == DxfAcadVersion.R12)
@@ -1529,12 +2115,172 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(71, (short)(ViewMode)));
             pairs.Add(new DxfCodePair(72, (short)(CircleZoomPercent)));
-            pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
+            }
+
             pairs.Add(new DxfCodePair(74, BoolShort(UCSIcon)));
-            pairs.Add(new DxfCodePair(75, BoolShort(SnapOn)));
-            pairs.Add(new DxfCodePair(76, BoolShort(GridOn)));
-            pairs.Add(new DxfCodePair(77, (SnapStyle)));
-            pairs.Add(new DxfCodePair(78, (SnapIsoPair)));
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(75, BoolShort(SnapOn)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(76, BoolShort(GridOn)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(77, (SnapStyle)));
+            }
+
+            if (version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(78, (SnapIsoPair)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(1, (PlotStyleSheet)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(281, (short)(RenderMode)));
+            }
+
+            if (version >= DxfAcadVersion.R2000 && version <= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(65, BoolShort(HasOwnUCS)));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(110, UCSOrigin.X));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(120, UCSOrigin.Y));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(130, UCSOrigin.Z));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(111, UCSXAxis.X));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(121, UCSXAxis.Y));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(131, UCSXAxis.Z));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(112, UCSYAxis.X));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(122, UCSYAxis.Y));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(132, UCSYAxis.Z));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(79, (short)(OrthographicViewType)));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(146, (UCSElevation)));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(345, UIntHandle(UCSHandle)));
+            }
+
+            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(346, UIntHandle(BaseUCSHandle)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(170, (short)(ShadePlotSetting)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(61, BoolShort(MajorGridLines)));
+            }
+
+            if (BackgroundObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(332, UIntHandle(BackgroundObjectPointer)));
+            }
+
+            if (ShadePlotObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(333, UIntHandle(ShadePlotObjectPointer)));
+            }
+
+            if (VisualStyleObjectPointer != 0u && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(348, UIntHandle(VisualStyleObjectPointer)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(292, (IsDefaultLightingOn)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(282, (short)(DefaultLightingType)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(141, (Brightness)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(142, (Contrast)));
+            }
+
+            if (AmbientColor.RawValue != 7 && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(62, DxfColor.GetRawValue(AmbientColor)));
+            }
+
+            if (AmbientColorInt != 0 && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(421, (AmbientColorInt)));
+            }
+
+            if (AmbientColorName != "BLACK" && version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(431, (AmbientColorName)));
+            }
+
         }
 
         internal static DxfViewPort FromBuffer(DxfCodePairBufferReader buffer)
@@ -1542,6 +2288,8 @@ namespace IxMilia.Dxf
             var item = new DxfViewPort();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1623,6 +2371,9 @@ namespace IxMilia.Dxf
                     case 44:
                         item.BackClippingPlane = (pair.DoubleValue);
                         break;
+                    case 45:
+                        item.ViewHeight = (pair.DoubleValue);
+                        break;
                     case 50:
                         item.SnapRotationAngle = (pair.DoubleValue);
                         break;
@@ -1658,6 +2409,90 @@ namespace IxMilia.Dxf
                         break;
                     case 78:
                         item.SnapIsoPair = (pair.ShortValue);
+                        break;
+                    case 1:
+                        item.PlotStyleSheet = (pair.StringValue);
+                        break;
+                    case 281:
+                        item.RenderMode = (DxfViewRenderMode)(pair.ShortValue);
+                        break;
+                    case 65:
+                        item.HasOwnUCS = BoolShort(pair.ShortValue);
+                        break;
+                    case 110:
+                        item.UCSOrigin.X = (pair.DoubleValue);
+                        break;
+                    case 120:
+                        item.UCSOrigin.Y = (pair.DoubleValue);
+                        break;
+                    case 130:
+                        item.UCSOrigin.Z = (pair.DoubleValue);
+                        break;
+                    case 111:
+                        item.UCSXAxis.X = (pair.DoubleValue);
+                        break;
+                    case 121:
+                        item.UCSXAxis.Y = (pair.DoubleValue);
+                        break;
+                    case 131:
+                        item.UCSXAxis.Z = (pair.DoubleValue);
+                        break;
+                    case 112:
+                        item.UCSYAxis.X = (pair.DoubleValue);
+                        break;
+                    case 122:
+                        item.UCSYAxis.Y = (pair.DoubleValue);
+                        break;
+                    case 132:
+                        item.UCSYAxis.Z = (pair.DoubleValue);
+                        break;
+                    case 79:
+                        item.OrthographicViewType = (DxfOrthographicViewType)(pair.ShortValue);
+                        break;
+                    case 146:
+                        item.UCSElevation = (pair.DoubleValue);
+                        break;
+                    case 345:
+                        item.UCSHandle = UIntHandle(pair.StringValue);
+                        break;
+                    case 346:
+                        item.BaseUCSHandle = UIntHandle(pair.StringValue);
+                        break;
+                    case 170:
+                        item.ShadePlotSetting = (DxfShadeEdgeMode)(pair.ShortValue);
+                        break;
+                    case 61:
+                        item.MajorGridLines = BoolShort(pair.ShortValue);
+                        break;
+                    case 332:
+                        item.BackgroundObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 333:
+                        item.ShadePlotObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 348:
+                        item.VisualStyleObjectPointer = UIntHandle(pair.StringValue);
+                        break;
+                    case 292:
+                        item.IsDefaultLightingOn = (pair.BoolValue);
+                        break;
+                    case 282:
+                        item.DefaultLightingType = (DxfDefaultLightingType)(pair.ShortValue);
+                        break;
+                    case 141:
+                        item.Brightness = (pair.DoubleValue);
+                        break;
+                    case 142:
+                        item.Contrast = (pair.DoubleValue);
+                        break;
+                    case 62:
+                        item.AmbientColor = DxfColor.FromRawValue(pair.ShortValue);
+                        break;
+                    case 421:
+                        item.AmbientColorInt = (pair.IntegerValue);
+                        break;
+                    case 431:
+                        item.AmbientColorName = (pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);

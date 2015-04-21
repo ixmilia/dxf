@@ -6,6 +6,23 @@ using System.Linq;
 
 namespace IxMilia.Dxf.Tables
 {
+    public enum DxfViewRenderMode
+    {
+        Classic2D = 0,
+        Wireframe = 1,
+        HiddenLine = 2,
+        FlatShaded = 3,
+        GouraudShaded = 4,
+        FlatShadedWithWireframe = 5,
+        GouraudShadedWithWireframe = 6
+    }
+
+    public enum DxfDefaultLightingType
+    {
+        OneDistantLight = 0,
+        TwoDistantLights = 1
+    }
+
     public abstract partial class DxfTable : IDxfHasHandle
     {
         public const string AppIdText = "APPID";
@@ -31,6 +48,8 @@ namespace IxMilia.Dxf.Tables
 
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
+            BeforeWrite();
+
             var pairs = new List<DxfCodePair>();
             var symbolItems = GetSymbolItems();
             if (!symbolItems.Any())
@@ -41,7 +60,8 @@ namespace IxMilia.Dxf.Tables
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
             if (outputHandles)
             {
-                pairs.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
+                int code = TableType == DxfTableType.DimStyle ? 105 : 5;
+                pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(Handle)));
             }
 
             if (version >= DxfAcadVersion.R13)
@@ -165,6 +185,12 @@ namespace IxMilia.Dxf.Tables
             DxfTable result;
             switch (tableType)
             {
+                case DxfTable.AppIdText:
+                    result = DxfAppIdTable.ReadFromBuffer(buffer);
+                    break;
+                case DxfTable.BlockRecordText:
+                    result = DxfBlockRecordTable.ReadFromBuffer(buffer);
+                    break;
                 case DxfTable.DimStyleText:
                     result = DxfDimStyleTable.ReadFromBuffer(buffer);
                     break;
@@ -176,6 +202,12 @@ namespace IxMilia.Dxf.Tables
                     break;
                 case DxfTable.StyleText:
                     result = DxfStyleTable.ReadFromBuffer(buffer);
+                    break;
+                case DxfTable.UcsText:
+                    result = DxfUcsTable.ReadFromBuffer(buffer);
+                    break;
+                case DxfTable.ViewText:
+                    result = DxfViewTable.ReadFromBuffer(buffer);
                     break;
                 case DxfTable.ViewPortText:
                     result = DxfViewPortTable.ReadFromBuffer(buffer);
@@ -204,9 +236,19 @@ namespace IxMilia.Dxf.Tables
                             break;
                     }
                 }
+
+                result.AfterRead();
             }
 
             return result;
+        }
+
+        protected virtual void BeforeWrite()
+        {
+        }
+
+        protected virtual void AfterRead()
+        {
         }
 
         internal static void SwallowTable(DxfCodePairBufferReader buffer)
@@ -217,6 +259,25 @@ namespace IxMilia.Dxf.Tables
                 buffer.Advance();
                 if (DxfTablesSection.IsTableEnd(pair))
                     break;
+            }
+        }
+    }
+
+    public partial class DxfBlockRecordTable
+    {
+        protected override void BeforeWrite()
+        {
+            foreach (var blockRecord in Items)
+            {
+                blockRecord.BeforeWrite();
+            }
+        }
+
+        protected override void AfterRead()
+        {
+            foreach (var blockRecord in Items)
+            {
+                blockRecord.AfterRead();
             }
         }
     }

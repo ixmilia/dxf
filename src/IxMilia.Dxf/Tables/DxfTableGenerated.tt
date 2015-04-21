@@ -99,14 +99,24 @@ foreach (var table in tables)
 
         // properties
 <#
+    var seenProperties = new HashSet<string>();
     foreach (var property in properties)
     {
-        var propertyType = Type(property);
-        if (AllowMultiples(property))
-            propertyType = string.Format("List<{0}>", propertyType);
+        var name = Name(property);
+        if (seenProperties.Contains(name))
+        {
+            this.Warning("Duplicate property found: " + name);
+        }
+        else
+        {
+            seenProperties.Add(name);
+            var propertyType = Type(property);
+            if (AllowMultiples(property))
+                propertyType = string.Format("List<{0}>", propertyType);
 #>
-        public <#= propertyType #> <#= Name(property) #> { get; set; }
+        <#= Accessibility(property) #> <#= propertyType #> <#= name #> { get; set; }
 <#
+        } // else
     } // foreach (var property in properties)
 
 #>
@@ -145,19 +155,26 @@ foreach (var table in tables)
     } // has flags
     foreach (var property in properties)
     {
+        var writeCondition = WriteCondition(property);
         var minVersion = MinVersion(property);
         var maxVersion = MaxVersion(property);
-        var hasPredicate = minVersion != null || maxVersion != null;
+        var hasPredicate = writeCondition != null || minVersion != null || maxVersion != null;
         var indent = hasPredicate ? "    " : "";
         string predicate = null;
         if (hasPredicate)
         {
             var parts = new List<string>();
-            if (minVersion != null) parts.Add("version >= DxfAcadVersion." + minVersion);
-            if (maxVersion != null) parts.Add("version <= DxfAcadVersion." + maxVersion);
+            if (writeCondition != null) parts.Add(writeCondition);
+            if ((minVersion != null || maxVersion != null) && minVersion == maxVersion)
+            {
+                parts.Add("version == DxfAcadVersion." + minVersion);
+            }
+            else
+            {
+                if (minVersion != null) parts.Add("version >= DxfAcadVersion." + minVersion);
+                if (maxVersion != null) parts.Add("version <= DxfAcadVersion." + maxVersion);
+            }
             predicate = string.Join(" && ", parts);
-            if (minVersion == maxVersion)
-                predicate = "version == DxfAcadVersion." + minVersion;
         }
 
         if (AllowMultiples(property))
@@ -237,6 +254,8 @@ foreach (var table in tables)
             var item = new <#= Name(tableItem) #>();
             while (buffer.ItemsRemain)
             {
+                buffer.SwallowXData();
+
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {

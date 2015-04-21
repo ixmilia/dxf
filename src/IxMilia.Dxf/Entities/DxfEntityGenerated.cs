@@ -38,6 +38,7 @@ namespace IxMilia.Dxf.Entities
         Shape,
         Solid,
         Spline,
+        Sun,
         Text,
         Tolerance,
         Trace,
@@ -130,6 +131,8 @@ namespace IxMilia.Dxf.Entities
                         return "SOLID";
                     case DxfEntityType.Spline:
                         return "SPLINE";
+                    case DxfEntityType.Sun:
+                        return "SUN";
                     case DxfEntityType.Text:
                         return "TEXT";
                     case DxfEntityType.Tolerance:
@@ -443,6 +446,9 @@ namespace IxMilia.Dxf.Entities
                 case "SPLINE":
                     entity = new DxfSpline();
                     break;
+                case "SUN":
+                    entity = new DxfSun();
+                    break;
                 case "TEXT":
                     entity = new DxfText();
                     break;
@@ -635,6 +641,7 @@ namespace IxMilia.Dxf.Entities
         public short FormatVersionNumber { get; set; }
         public List<string> CustomData { get; set; }
         public List<string> CustomData2 { get; set; }
+        public uint OwnerHandle { get; set; }
 
         public Dxf3DSolid()
             : base()
@@ -647,6 +654,7 @@ namespace IxMilia.Dxf.Entities
             this.FormatVersionNumber = 1;
             this.CustomData = new List<string>();
             this.CustomData2 = new List<string>();
+            this.OwnerHandle = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -656,6 +664,15 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(70, (this.FormatVersionNumber)));
             pairs.AddRange(this.CustomData.Select(p => new DxfCodePair(1, p)));
             pairs.AddRange(this.CustomData2.Select(p => new DxfCodePair(3, p)));
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDb3dSolid"));
+            }
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(350, UIntHandle(this.OwnerHandle)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -670,6 +687,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 70:
                     this.FormatVersionNumber = (pair.ShortValue);
+                    break;
+                case 350:
+                    this.OwnerHandle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);
@@ -693,10 +713,10 @@ namespace IxMilia.Dxf.Entities
         public List<string> GraphicsDataString { get; set; }
         public int EntityDataSize { get; set; }
         public List<string> EntityDataString { get; set; }
-        public string ObjectID1 { get; set; }
-        public string ObjectID2 { get; set; }
-        public string ObjectID3 { get; set; }
-        public string ObjectID4 { get; set; }
+        public List<string> ObjectID1 { get; set; }
+        public List<string> ObjectID2 { get; set; }
+        public List<string> ObjectID3 { get; set; }
+        public List<string> ObjectID4 { get; set; }
         public int Terminator { get; set; }
         private uint ObjectDrawingFormat { get; set; }
         public bool OriginalDataFormatIsDxf { get; set; }
@@ -715,10 +735,10 @@ namespace IxMilia.Dxf.Entities
             this.GraphicsDataString = new List<string>();
             this.EntityDataSize = 0;
             this.EntityDataString = new List<string>();
-            this.ObjectID1 = null;
-            this.ObjectID2 = null;
-            this.ObjectID3 = null;
-            this.ObjectID4 = null;
+            this.ObjectID1 = new List<string>();
+            this.ObjectID2 = new List<string>();
+            this.ObjectID3 = new List<string>();
+            this.ObjectID4 = new List<string>();
             this.Terminator = 0;
             this.ObjectDrawingFormat = 0;
             this.OriginalDataFormatIsDxf = true;
@@ -734,10 +754,10 @@ namespace IxMilia.Dxf.Entities
             pairs.AddRange(this.GraphicsDataString.Select(p => new DxfCodePair(310, p)));
             pairs.Add(new DxfCodePair(93, (this.EntityDataSize)));
             pairs.AddRange(this.EntityDataString.Select(p => new DxfCodePair(310, p)));
-            pairs.Add(new DxfCodePair(330, (this.ObjectID1)));
-            pairs.Add(new DxfCodePair(340, (this.ObjectID2)));
-            pairs.Add(new DxfCodePair(350, (this.ObjectID3)));
-            pairs.Add(new DxfCodePair(360, (this.ObjectID4)));
+            pairs.AddRange(this.ObjectID1.Select(p => new DxfCodePair(330, p)));
+            pairs.AddRange(this.ObjectID2.Select(p => new DxfCodePair(340, p)));
+            pairs.AddRange(this.ObjectID3.Select(p => new DxfCodePair(350, p)));
+            pairs.AddRange(this.ObjectID4.Select(p => new DxfCodePair(360, p)));
             pairs.Add(new DxfCodePair(94, (this.Terminator)));
             if (version >= DxfAcadVersion.R2000)
             {
@@ -780,16 +800,16 @@ namespace IxMilia.Dxf.Entities
                     // TODO: code is shared by properties GraphicsDataString, EntityDataString
                     break;
                 case 330:
-                    this.ObjectID1 = (pair.StringValue);
+                    this.ObjectID1.Add((pair.StringValue));
                     break;
                 case 340:
-                    this.ObjectID2 = (pair.StringValue);
+                    this.ObjectID2.Add((pair.StringValue));
                     break;
                 case 350:
-                    this.ObjectID3 = (pair.StringValue);
+                    this.ObjectID3.Add((pair.StringValue));
                     break;
                 case 360:
-                    this.ObjectID4 = (pair.StringValue);
+                    this.ObjectID4.Add((pair.StringValue));
                     break;
                 default:
                     return base.TrySetPair(pair);
@@ -866,6 +886,7 @@ namespace IxMilia.Dxf.Entities
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.ArcAlignedText; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
 
         public string Text { get; set; }
         public string FontName { get; set; }
@@ -1103,11 +1124,13 @@ namespace IxMilia.Dxf.Entities
         public DxfHorizontalTextJustification HorizontalTextJustification { get; set; }
         public DxfPoint SecondAlignmentPoint { get; set; }
         public DxfVector Normal { get; set; }
+        public DxfVersion Version { get; set; }
         public string Prompt { get; set; }
         public string Tag { get; set; }
         public int Flags { get; set; }
         public short FieldLength { get; set; }
         public DxfVerticalTextJustification VerticalTextJustification { get; set; }
+        public bool IsLockedInBlock { get; set; }
 
         // TextGenerationFlags flags
 
@@ -1199,11 +1222,13 @@ namespace IxMilia.Dxf.Entities
             this.HorizontalTextJustification = DxfHorizontalTextJustification.Left;
             this.SecondAlignmentPoint = DxfPoint.Origin;
             this.Normal = DxfVector.ZAxis;
+            this.Version = DxfVersion.R2010;
             this.Prompt = null;
             this.Tag = null;
             this.Flags = 0;
             this.FieldLength = 0;
             this.VerticalTextJustification = DxfVerticalTextJustification.Baseline;
+            this.IsLockedInBlock = false;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -1271,6 +1296,11 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(100, "AcDbAttributeDefinition"));
             }
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(280, (short)(this.Version)));
+            }
+
             pairs.Add(new DxfCodePair(3, (this.Prompt)));
             pairs.Add(new DxfCodePair(2, (this.Tag)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
@@ -1282,6 +1312,11 @@ namespace IxMilia.Dxf.Entities
             if (version >= DxfAcadVersion.R12 && this.VerticalTextJustification != DxfVerticalTextJustification.Baseline)
             {
                 pairs.Add(new DxfCodePair(74, (short)(this.VerticalTextJustification)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(280, BoolShort(this.IsLockedInBlock)));
             }
 
         }
@@ -1359,6 +1394,9 @@ namespace IxMilia.Dxf.Entities
                 case 230:
                     this.Normal.Z = pair.DoubleValue;
                     break;
+                case 280:
+                    // TODO: code is shared by properties Version, IsLockedInBlock
+                    break;
                 default:
                     return base.TrySetPair(pair);
             }
@@ -1378,6 +1416,7 @@ namespace IxMilia.Dxf.Entities
         public DxfPoint Location { get; set; }
         public double TextHeight { get; set; }
         public string Value { get; set; }
+        public DxfVersion Version { get; set; }
         public string Tag { get; set; }
         public int Flags { get; set; }
         public short FieldLength { get; set; }
@@ -1390,6 +1429,7 @@ namespace IxMilia.Dxf.Entities
         public DxfVerticalTextJustification VerticalTextJustification { get; set; }
         public DxfPoint SecondAlignmentPoint { get; set; }
         public DxfVector Normal { get; set; }
+        public bool IsLockedInBlock { get; set; }
 
         // Flags flags
 
@@ -1473,6 +1513,7 @@ namespace IxMilia.Dxf.Entities
             this.Location = DxfPoint.Origin;
             this.TextHeight = 1.0;
             this.Value = null;
+            this.Version = DxfVersion.R2010;
             this.Tag = null;
             this.Flags = 0;
             this.FieldLength = 0;
@@ -1485,6 +1526,7 @@ namespace IxMilia.Dxf.Entities
             this.VerticalTextJustification = DxfVerticalTextJustification.Baseline;
             this.SecondAlignmentPoint = DxfPoint.Origin;
             this.Normal = DxfVector.ZAxis;
+            this.IsLockedInBlock = false;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -1508,6 +1550,11 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(100, "AcDbAttribute"));
             }
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(280, (short)(this.Version)));
+            }
+
             pairs.Add(new DxfCodePair(2, (this.Tag)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
             if (this.FieldLength != 0)
@@ -1558,6 +1605,11 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(210, Normal.X));
                 pairs.Add(new DxfCodePair(220, Normal.Y));
                 pairs.Add(new DxfCodePair(230, Normal.Z));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(280, BoolShort(this.IsLockedInBlock)));
             }
 
         }
@@ -1631,6 +1683,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 230:
                     this.Normal.Z = pair.DoubleValue;
+                    break;
+                case 280:
+                    // TODO: code is shared by properties Version, IsLockedInBlock
                     break;
                 default:
                     return base.TrySetPair(pair);
@@ -1796,7 +1851,7 @@ namespace IxMilia.Dxf.Entities
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Dimension; } }
 
-        public DxfDimensionVersion DimensionVersion { get; set; }
+        public DxfVersion Version { get; set; }
         public string BlockName { get; set; }
         public DxfPoint DefinitionPoint1 { get; set; }
         public DxfPoint TextMidPoint { get; set; }
@@ -1819,7 +1874,7 @@ namespace IxMilia.Dxf.Entities
         protected DxfDimensionBase(DxfDimensionBase other)
             : base(other)
         {
-            this.DimensionVersion = other.DimensionVersion;
+            this.Version = other.Version;
             this.BlockName = other.BlockName;
             this.DefinitionPoint1 = other.DefinitionPoint1;
             this.TextMidPoint = other.TextMidPoint;
@@ -1838,7 +1893,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
-            this.DimensionVersion = DxfDimensionVersion.R2010;
+            this.Version = DxfVersion.R2010;
             this.BlockName = null;
             this.DefinitionPoint1 = DxfPoint.Origin;
             this.TextMidPoint = DxfPoint.Origin;
@@ -1860,7 +1915,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(100, "AcDbDimension"));
             if (version >= DxfAcadVersion.R2010)
             {
-                pairs.Add(new DxfCodePair(280, (short)(this.DimensionVersion)));
+                pairs.Add(new DxfCodePair(280, (short)(this.Version)));
             }
 
             pairs.Add(new DxfCodePair(2, (this.BlockName)));
@@ -1975,7 +2030,7 @@ namespace IxMilia.Dxf.Entities
                     this.Normal.Z = pair.DoubleValue;
                     break;
                 case 280:
-                    this.DimensionVersion = (DxfDimensionVersion)(pair.ShortValue);
+                    this.Version = (DxfVersion)(pair.ShortValue);
                     break;
                 default:
                     return base.TrySetPair(pair);
@@ -2692,6 +2747,7 @@ namespace IxMilia.Dxf.Entities
         public int ClippingVertexCount { get; set; }
         private List<double> ClippingVerticesX { get; set; }
         private List<double> ClippingVerticesY { get; set; }
+        public bool IsInsideClipping { get; set; }
 
         // DisplayOptionsFlags flags
 
@@ -2763,6 +2819,7 @@ namespace IxMilia.Dxf.Entities
             this.ClippingVertexCount = 0;
             this.ClippingVerticesX = new List<double>();
             this.ClippingVerticesY = new List<double>();
+            this.IsInsideClipping = false;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -2794,6 +2851,11 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(14, item.X));
                 pairs.Add(new DxfCodePair(24, item.Y));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(290, (this.IsInsideClipping)));
             }
 
         }
@@ -2864,6 +2926,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 283:
                     this.Fade = (pair.ShortValue);
+                    break;
+                case 290:
+                    this.IsInsideClipping = (pair.BoolValue);
                     break;
                 case 340:
                     this.ImageDefReference = (pair.StringValue);
@@ -3344,6 +3409,7 @@ namespace IxMilia.Dxf.Entities
         public double Thickness { get; set; }
         private List<double> VertexCoordinateX { get; set; }
         private List<double> VertexCoordinateY { get; set; }
+        private List<int> VertexIdentifier { get; set; }
         private List<double> StartingWidth { get; set; }
         private List<double> EndingWidth { get; set; }
         private List<double> Bulge { get; set; }
@@ -3387,6 +3453,7 @@ namespace IxMilia.Dxf.Entities
             this.Thickness = 0.0;
             this.VertexCoordinateX = new List<double>();
             this.VertexCoordinateY = new List<double>();
+            this.VertexIdentifier = new List<int>();
             this.StartingWidth = new List<double>();
             this.EndingWidth = new List<double>();
             this.Bulge = new List<double>();
@@ -3417,6 +3484,10 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(10, item.Location.X));
                 pairs.Add(new DxfCodePair(20, item.Location.Y));
+                if (version >= DxfAcadVersion.R2013)
+                {
+                    pairs.Add(new DxfCodePair(91, item.Identifier));
+                }
                 if (item.StartingWidth != 0.0)
                 {
                     pairs.Add(new DxfCodePair(40, item.StartingWidth));
@@ -3470,6 +3541,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 90:
                     this.VertexCount = (pair.IntegerValue);
+                    break;
+                case 91:
+                    this.VertexIdentifier.Add((pair.IntegerValue));
                     break;
                 case 210:
                     this.ExtrusionDirection.X = pair.DoubleValue;
@@ -4150,6 +4224,7 @@ namespace IxMilia.Dxf.Entities
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.RText; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
 
         public DxfPoint InsertionPoint { get; set; }
         public DxfVector ExtrusionDirection { get; set; }
@@ -4786,6 +4861,109 @@ namespace IxMilia.Dxf.Entities
     }
 
     /// <summary>
+    /// DxfSun class
+    /// </summary>
+    public partial class DxfSun : DxfEntity
+    {
+        public override DxfEntityType EntityType { get { return DxfEntityType.Sun; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
+
+        public int Version { get; set; }
+        public bool Status { get; set; }
+        public DxfColor LightColor { get; set; }
+        public double Intensity { get; set; }
+        public bool CastsShadows { get; set; }
+        public int JulianDay { get; set; }
+        public int SecondsPastMidnight { get; set; }
+        public bool IsDST { get; set; }
+        public DxfShadowType ShadowTyoe { get; set; }
+        public short ShadowMapSize { get; set; }
+        public short ShadowSoftness { get; set; }
+
+        public DxfSun()
+            : base()
+        {
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            this.Version = 0;
+            this.Status = false;
+            this.LightColor = DxfColor.FromRawValue(7);
+            this.Intensity = 0.0;
+            this.CastsShadows = false;
+            this.JulianDay = 0;
+            this.SecondsPastMidnight = 0;
+            this.IsDST = false;
+            this.ShadowTyoe = DxfShadowType.RayTraced;
+            this.ShadowMapSize = 0;
+            this.ShadowSoftness = 0;
+        }
+
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbSun"));
+            pairs.Add(new DxfCodePair(90, (this.Version)));
+            pairs.Add(new DxfCodePair(290, (this.Status)));
+            pairs.Add(new DxfCodePair(63, DxfColor.GetRawValue(this.LightColor)));
+            pairs.Add(new DxfCodePair(40, (this.Intensity)));
+            pairs.Add(new DxfCodePair(291, (this.CastsShadows)));
+            pairs.Add(new DxfCodePair(91, (this.JulianDay)));
+            pairs.Add(new DxfCodePair(92, (this.SecondsPastMidnight)));
+            pairs.Add(new DxfCodePair(292, (this.IsDST)));
+            pairs.Add(new DxfCodePair(70, (short)(this.ShadowTyoe)));
+            pairs.Add(new DxfCodePair(71, (this.ShadowMapSize)));
+            pairs.Add(new DxfCodePair(280, (this.ShadowSoftness)));
+        }
+
+        internal override bool TrySetPair(DxfCodePair pair)
+        {
+            switch (pair.Code)
+            {
+                case 40:
+                    this.Intensity = (pair.DoubleValue);
+                    break;
+                case 63:
+                    this.LightColor = DxfColor.FromRawValue(pair.ShortValue);
+                    break;
+                case 70:
+                    this.ShadowTyoe = (DxfShadowType)(pair.ShortValue);
+                    break;
+                case 71:
+                    this.ShadowMapSize = (pair.ShortValue);
+                    break;
+                case 90:
+                    this.Version = (pair.IntegerValue);
+                    break;
+                case 91:
+                    this.JulianDay = (pair.IntegerValue);
+                    break;
+                case 92:
+                    this.SecondsPastMidnight = (pair.IntegerValue);
+                    break;
+                case 280:
+                    this.ShadowSoftness = (pair.ShortValue);
+                    break;
+                case 290:
+                    this.Status = (pair.BoolValue);
+                    break;
+                case 291:
+                    this.CastsShadows = (pair.BoolValue);
+                    break;
+                case 292:
+                    this.IsDST = (pair.BoolValue);
+                    break;
+                default:
+                    return base.TrySetPair(pair);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// DxfText class
     /// </summary>
     public partial class DxfText : DxfEntity
@@ -5004,6 +5182,7 @@ namespace IxMilia.Dxf.Entities
 
         public string DimensionStyleName { get; set; }
         public DxfPoint InsertionPoint { get; set; }
+        public string DisplayText { get; set; }
         public DxfVector ExtrusionDirection { get; set; }
         public DxfVector DirectionVector { get; set; }
 
@@ -5017,6 +5196,7 @@ namespace IxMilia.Dxf.Entities
             base.Initialize();
             this.DimensionStyleName = null;
             this.InsertionPoint = DxfPoint.Origin;
+            this.DisplayText = null;
             this.ExtrusionDirection = DxfVector.ZAxis;
             this.DirectionVector = DxfVector.XAxis;
         }
@@ -5029,6 +5209,11 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(10, InsertionPoint.X));
             pairs.Add(new DxfCodePair(20, InsertionPoint.Y));
             pairs.Add(new DxfCodePair(30, InsertionPoint.Z));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(1, (this.DisplayText)));
+            }
+
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
                 pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
@@ -5045,6 +5230,9 @@ namespace IxMilia.Dxf.Entities
         {
             switch (pair.Code)
             {
+                case 1:
+                    this.DisplayText = (pair.StringValue);
+                    break;
                 case 3:
                     this.DimensionStyleName = (pair.StringValue);
                     break;
@@ -5220,6 +5408,7 @@ namespace IxMilia.Dxf.Entities
         public int PolyfaceMeshVertexIndex2 { get; set; }
         public int PolyfaceMeshVertexIndex3 { get; set; }
         public int PolyfaceMeshVertexIndex4 { get; set; }
+        public int Identifier { get; set; }
 
         // Flags flags
 
@@ -5327,6 +5516,7 @@ namespace IxMilia.Dxf.Entities
             this.PolyfaceMeshVertexIndex2 = 0;
             this.PolyfaceMeshVertexIndex3 = 0;
             this.PolyfaceMeshVertexIndex4 = 0;
+            this.Identifier = 0;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -5373,6 +5563,11 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(74, (short)(this.PolyfaceMeshVertexIndex4)));
             }
 
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(91, (this.Identifier)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -5414,6 +5609,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 74:
                     this.PolyfaceMeshVertexIndex4 = (int)(pair.ShortValue);
+                    break;
+                case 91:
+                    this.Identifier = (pair.IntegerValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

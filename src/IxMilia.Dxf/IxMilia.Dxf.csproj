@@ -33,6 +33,7 @@
     <Compile Include="DxfReader.cs" />
     <Compile Include="DxfReadException.cs" />
     <Compile Include="DxfShadowMode.cs" />
+    <Compile Include="DxfShadowType.cs" />
     <Compile Include="DxfWriter.cs" />
     <Compile Include="Blocks\DxfBlock.cs" />
     <Compile Include="Entities\DxfEntity.cs" />

@@ -265,7 +265,10 @@ namespace IxMilia.Dxf.Entities
                 yield return vertex;
             }
 
-            yield return seqend;
+            if (seqend != null)
+            {
+                yield return seqend;
+            }
         }
     }
 
@@ -343,7 +346,10 @@ namespace IxMilia.Dxf.Entities
                 yield return attribute;
             }
 
-            yield return seqend;
+            if (seqend != null)
+            {
+                yield return seqend;
+            }
         }
     }
 

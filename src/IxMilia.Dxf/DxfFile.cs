@@ -208,22 +208,6 @@ namespace IxMilia.Dxf
             writer.Close();
         }
 
-        private IEnumerable<DxfEntity> GetEntitiesAndChildren()
-        {
-            foreach (var entity in Entities)
-            {
-                yield return entity;
-                var hasChildren = entity as IDxfHasEntityChildren;
-                if (hasChildren != null)
-                {
-                    foreach (var child in hasChildren.GetChildren().Where(x => x != null))
-                    {
-                        yield return child;
-                    }
-                }
-            }
-        }
-
         private IEnumerable<IDxfHasHandle> HandleItems
         {
             get
@@ -233,7 +217,7 @@ namespace IxMilia.Dxf
                     .Concat(this.BlockRecords.Cast<IDxfHasHandle>())
                     .Concat(this.Blocks.Cast<IDxfHasHandle>())
                     .Concat(this.DimensionStyles.Cast<IDxfHasHandle>())
-                    .Concat(GetEntitiesAndChildren().Cast<IDxfHasHandle>())
+                    .Concat(this.Entities.Cast<IDxfHasHandle>())
                     .Concat(this.Layers.Cast<IDxfHasHandle>())
                     .Concat(this.Linetypes.Cast<IDxfHasHandle>())
                     .Concat(this.Styles.Cast<IDxfHasHandle>())
@@ -250,6 +234,14 @@ namespace IxMilia.Dxf
             foreach (var item in HandleItems)
             {
                 largestHandle = Math.Max(largestHandle, item.Handle);
+                var parent = item as IDxfHasEntityChildren;
+                if (parent != null)
+                {
+                    foreach (var child in parent.GetChildren())
+                    {
+                        largestHandle = Math.Max(largestHandle, child.Handle);
+                    }
+                }
             }
 
             var nextHandle = largestHandle + 1;
@@ -259,6 +251,19 @@ namespace IxMilia.Dxf
                 if (item.Handle == 0u)
                 {
                     item.Handle = nextHandle++;
+                }
+
+                var parent = item as IDxfHasEntityChildren;
+                if (parent != null)
+                {
+                    foreach (var child in parent.GetChildren())
+                    {
+                        child.OwnerHandle = item.Handle;
+                        if (child.Handle == 0u)
+                        {
+                            child.Handle = nextHandle++;
+                        }
+                    }
                 }
             }
 

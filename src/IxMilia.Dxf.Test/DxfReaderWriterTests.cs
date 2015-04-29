@@ -828,5 +828,29 @@ $XCLIPFRAME
             Assert.True(text.IndexOf("$XCLIPFRAME") > 0); // make sure it's there
             Assert.Equal(text.IndexOf("$XCLIPFRAME"), text.LastIndexOf("$XCLIPFRAME")); // first and last should be the same
         }
+
+        [Fact]
+        public void ReadStringWithControlCharactersTest()
+        {
+            var file = Section("ENTITIES", @"
+  0
+TEXT
+  1
+a^G^ ^^ b
+");
+            var text = (DxfText)file.Entities.Single();
+            Assert.Equal("a\x7^\x1E b", text.Value);
+        }
+
+        [Fact]
+        public void WriteStringWithControlCharactersTest()
+        {
+            var file = new DxfFile();
+            file.Entities.Add(new DxfText() { Value = "a\x7^\x1E b" });
+            VerifyFileContains(file, @"
+  1
+a^G^ ^^ b
+");
+        }
     }
 }

@@ -21,6 +21,7 @@ namespace IxMilia.Dxf
         internal DxfTablesSection TablesSection { get; private set; }
         internal DxfBlocksSection BlocksSection { get; private set; }
         internal DxfEntitiesSection EntitiesSection { get; private set; }
+        internal DxfObjectsSection ObjectsSection { get; private set; }
         internal DxfThumbnailImageSection ThumbnailImageSection { get; private set; }
 
         public List<DxfEntity> Entities { get { return EntitiesSection.Entities; } }
@@ -103,7 +104,11 @@ namespace IxMilia.Dxf
                 yield return this.TablesSection;
                 yield return this.BlocksSection;
                 yield return this.EntitiesSection;
-                // TODO: objects section only supported on R13+
+                if (Header.Version >= DxfAcadVersion.R13)
+                {
+                    yield return this.ObjectsSection;
+                }
+
                 if (Header.Version >= DxfAcadVersion.R2000 && this.ThumbnailImageSection != null)
                 {
                     yield return this.ThumbnailImageSection;
@@ -118,6 +123,7 @@ namespace IxMilia.Dxf
             this.TablesSection = new DxfTablesSection();
             this.BlocksSection = new DxfBlocksSection();
             this.EntitiesSection = new DxfEntitiesSection();
+            this.ObjectsSection = new DxfObjectsSection();
             this.ThumbnailImageSection = null; // not always present
         }
 

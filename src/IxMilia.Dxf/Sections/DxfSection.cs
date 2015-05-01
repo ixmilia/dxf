@@ -37,12 +37,9 @@ namespace IxMilia.Dxf.Sections
 
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
-            var pairs = GetSpecificPairs(version, outputHandles).ToList();
-            if (pairs.Count == 0)
-                yield break;
             yield return new DxfCodePair(0, SectionText);
             yield return new DxfCodePair(2, this.Type.ToSectionName());
-            foreach (var pair in pairs)
+            foreach (var pair in GetSpecificPairs(version, outputHandles).ToList())
                 yield return pair;
             yield return new DxfCodePair(0, EndSectionText);
         }

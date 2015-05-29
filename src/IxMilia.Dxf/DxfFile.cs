@@ -21,6 +21,7 @@ namespace IxMilia.Dxf
         internal DxfTablesSection TablesSection { get; private set; }
         internal DxfBlocksSection BlocksSection { get; private set; }
         internal DxfEntitiesSection EntitiesSection { get; private set; }
+        internal DxfObjectsSection ObjectsSection { get; private set; }
         internal DxfThumbnailImageSection ThumbnailImageSection { get; private set; }
 
         public List<DxfEntity> Entities { get { return EntitiesSection.Entities; } }
@@ -103,7 +104,11 @@ namespace IxMilia.Dxf
                 yield return this.TablesSection;
                 yield return this.BlocksSection;
                 yield return this.EntitiesSection;
-                // TODO: objects section only supported on R13+
+                if (Header.Version >= DxfAcadVersion.R13)
+                {
+                    yield return this.ObjectsSection;
+                }
+
                 if (Header.Version >= DxfAcadVersion.R2000 && this.ThumbnailImageSection != null)
                 {
                     yield return this.ThumbnailImageSection;
@@ -118,6 +123,7 @@ namespace IxMilia.Dxf
             this.TablesSection = new DxfTablesSection();
             this.BlocksSection = new DxfBlocksSection();
             this.EntitiesSection = new DxfEntitiesSection();
+            this.ObjectsSection = new DxfObjectsSection();
             this.ThumbnailImageSection = null; // not always present
         }
 
@@ -208,22 +214,6 @@ namespace IxMilia.Dxf
             writer.Close();
         }
 
-        private IEnumerable<DxfEntity> GetEntitiesAndChildren()
-        {
-            foreach (var entity in Entities)
-            {
-                yield return entity;
-                var hasChildren = entity as IDxfHasEntityChildren;
-                if (hasChildren != null)
-                {
-                    foreach (var child in hasChildren.GetChildren().Where(x => x != null))
-                    {
-                        yield return child;
-                    }
-                }
-            }
-        }
-
         private IEnumerable<IDxfHasHandle> HandleItems
         {
             get
@@ -233,7 +223,7 @@ namespace IxMilia.Dxf
                     .Concat(this.BlockRecords.Cast<IDxfHasHandle>())
                     .Concat(this.Blocks.Cast<IDxfHasHandle>())
                     .Concat(this.DimensionStyles.Cast<IDxfHasHandle>())
-                    .Concat(GetEntitiesAndChildren().Cast<IDxfHasHandle>())
+                    .Concat(this.Entities.Cast<IDxfHasHandle>())
                     .Concat(this.Layers.Cast<IDxfHasHandle>())
                     .Concat(this.Linetypes.Cast<IDxfHasHandle>())
                     .Concat(this.Styles.Cast<IDxfHasHandle>())
@@ -250,6 +240,14 @@ namespace IxMilia.Dxf
             foreach (var item in HandleItems)
             {
                 largestHandle = Math.Max(largestHandle, item.Handle);
+                var parent = item as IDxfHasEntityChildren;
+                if (parent != null)
+                {
+                    foreach (var child in parent.GetChildren())
+                    {
+                        largestHandle = Math.Max(largestHandle, child.Handle);
+                    }
+                }
             }
 
             var nextHandle = largestHandle + 1;
@@ -259,6 +257,19 @@ namespace IxMilia.Dxf
                 if (item.Handle == 0u)
                 {
                     item.Handle = nextHandle++;
+                }
+
+                var parent = item as IDxfHasEntityChildren;
+                if (parent != null)
+                {
+                    foreach (var child in parent.GetChildren())
+                    {
+                        child.OwnerHandle = item.Handle;
+                        if (child.Handle == 0u)
+                        {
+                            child.Handle = nextHandle++;
+                        }
+                    }
                 }
             }
 

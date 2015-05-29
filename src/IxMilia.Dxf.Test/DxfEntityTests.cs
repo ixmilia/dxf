@@ -995,6 +995,97 @@ AcDbAlignedDimension
 ");
         }
 
+        [Fact]
+        public void WritePolylineTest()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000; // owner handles only present on R2000+
+            var poly = new DxfPolyline();
+            poly.Vertices.Add(new DxfVertex());
+            poly.Vertices.Add(new DxfVertex());
+            file.Entities.Add(poly);
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+ENTITIES
+  0
+POLYLINE
+  5
+A
+330
+0
+  8
+0
+370
+0
+100
+AcDb2dPolyline
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  0
+VERTEX
+  5
+B
+330
+A
+  8
+0
+370
+0
+100
+AcDbVertex
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 70
+0
+ 50
+0.0
+  0
+VERTEX
+  5
+C
+330
+A
+  8
+0
+370
+0
+100
+AcDbVertex
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 70
+0
+ 50
+0.0
+  0
+SEQEND
+  5
+D
+330
+A
+  8
+0
+370
+0
+  0
+ENDSEC
+");
+        }
+
         #endregion
 
         #region Block tests

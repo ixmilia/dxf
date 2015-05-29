@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace IxMilia.Dxf
 {
@@ -106,6 +107,7 @@ namespace IxMilia.Dxf
 
         private void WriteString(string value)
         {
+            value = TransformControlCharacters(value ?? string.Empty);
             if (textWriter != null)
                 textWriter.WriteLine(value);
             else if (binWriter != null)
@@ -161,6 +163,67 @@ namespace IxMilia.Dxf
             }
 
             return result;
+        }
+
+        private static string TransformControlCharacters(string str)
+        {
+            var sb = new StringBuilder();
+            foreach (var c in str)
+            {
+                if ((c >= 0x00 && c <= 0x1F) || c == '^')
+                {
+                    sb.Append('^');
+                    sb.Append(TransformControlCharacter(c));
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private static char TransformControlCharacter(char c)
+        {
+            switch ((int)c)
+            {
+                case 0x00: return '@';
+                case 0x01: return 'A';
+                case 0x02: return 'B';
+                case 0x03: return 'C';
+                case 0x04: return 'D';
+                case 0x05: return 'E';
+                case 0x06: return 'F';
+                case 0x07: return 'G';
+                case 0x08: return 'H';
+                case 0x09: return 'I';
+                case 0x0A: return 'J';
+                case 0x0B: return 'K';
+                case 0x0C: return 'L';
+                case 0x0D: return 'M';
+                case 0x0E: return 'N';
+                case 0x0F: return 'O';
+                case 0x10: return 'P';
+                case 0x11: return 'Q';
+                case 0x12: return 'R';
+                case 0x13: return 'S';
+                case 0x14: return 'T';
+                case 0x15: return 'U';
+                case 0x16: return 'V';
+                case 0x17: return 'W';
+                case 0x18: return 'X';
+                case 0x19: return 'Y';
+                case 0x1A: return 'Z';
+                case 0x1B: return '[';
+                case 0x1C: return '\\';
+                case 0x1D: return ']';
+                case 0x1E: return '^';
+                case 0x1F: return '_';
+                case '^': return ' ';
+                default:
+                    return c;
+            }
         }
     }
 }

@@ -55,6 +55,7 @@
       <DependentUpon>DxfHeaderGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Sections\DxfHeaderSection.cs" />
+    <Compile Include="Sections\DxfObjectsSection.cs" />
     <Compile Include="Sections\DxfSection.cs" />
     <Compile Include="Sections\DxfSectionType.cs" />
     <Compile Include="Sections\DxfTablesSection.cs" />

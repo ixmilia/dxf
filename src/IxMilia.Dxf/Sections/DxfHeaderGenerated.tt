@@ -21,6 +21,7 @@ var variables = xml.Elements(XName.Get("Variable", xmlns));
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf
 {

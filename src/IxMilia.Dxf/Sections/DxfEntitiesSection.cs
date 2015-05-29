@@ -119,7 +119,7 @@ namespace IxMilia.Dxf.Sections
                 }
             }
 
-            return null;
+            return new DxfSeqend();
         }
     }
 }

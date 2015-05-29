@@ -1,9 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 
 namespace IxMilia.Dxf.Entities
@@ -265,7 +263,10 @@ namespace IxMilia.Dxf.Entities
                 yield return vertex;
             }
 
-            yield return seqend;
+            if (seqend != null)
+            {
+                yield return seqend;
+            }
         }
     }
 
@@ -343,7 +344,10 @@ namespace IxMilia.Dxf.Entities
                 yield return attribute;
             }
 
-            yield return seqend;
+            if (seqend != null)
+            {
+                yield return seqend;
+            }
         }
     }
 

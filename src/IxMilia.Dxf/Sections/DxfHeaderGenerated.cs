@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf
 {
@@ -1129,7 +1130,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $SPLINETYPE header variable.
         /// </summary>
-        public short PEditSplineCurveType { get; set; }
+        public DxfPolylineCurvedAndSmoothSurfaceType PEditSplineCurveType { get; set; }
 
         /// <summary>
         /// The $SURFTAB1 header variable.
@@ -1144,7 +1145,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $SURFTYPE header variable.
         /// </summary>
-        public short PEditSmoothSurfaceType { get; set; }
+        public DxfPolylineCurvedAndSmoothSurfaceType PEditSmoothSurfaceType { get; set; }
 
         /// <summary>
         /// The $SURFU header variable.
@@ -1377,7 +1378,7 @@ namespace IxMilia.Dxf
             this.AttributeVisibility = DxfAttributeVisibility.None; // ATTMODE
             this.PromptForAttributeOnInsert = true; // ATTREQ
             this.AngleUnitFormat = DxfAngleFormat.DecimalDegrees; // AUNITS
-            this.AngleUnitPrecision = 12; // AUPREC
+            this.AngleUnitPrecision = 0; // AUPREC
             this.AxisOn = false; // AXISMODE
             this.AxisTickSpacing = DxfVector.Zero; // AXISUNIT
             this.BlipMode = false; // BLIPMODE
@@ -1394,7 +1395,7 @@ namespace IxMilia.Dxf
             this.CurrentLayer = "0"; // CLAYER
             this.CurrentMultilineJustification = DxfJustification.Top; // CMLJUST
             this.CurrentMultilineScale = 1.0; // CMLSCALE
-            this.CurrentMultilineStyle = null; // CMLSTYLE
+            this.CurrentMultilineStyle = "STANDARD"; // CMLSTYLE
             this.CoordinateDisplay = DxfCoordinateDisplay.Static; // COORDS
             this.ShadowMode = DxfShadowMode.CastsAndReceivesShadows; // CSHADOW
             this.RetainDeletedObjects = false; // DELOBJ
@@ -1421,7 +1422,7 @@ namespace IxMilia.Dxf
             this.DimensionLineColor = DxfColor.ByBlock; // DIMCLRD
             this.DimensionExtensionLineColor = DxfColor.ByBlock; // DIMCLRE
             this.DimensionTextColor = DxfColor.ByBlock; // DIMCLRT
-            this.DimensionUnitToleranceDecimalPlaces = 12; // DIMDEC
+            this.DimensionUnitToleranceDecimalPlaces = 4; // DIMDEC
             this.DimensionLineExtension = 0.0; // DIMDLE
             this.DimensionLineIncrement = 0.0; // DIMDLI
             this.DimensionDecimalSeparatorChar = '.'; // DIMDSEP
@@ -1444,9 +1445,9 @@ namespace IxMilia.Dxf
             this.SuppressSecondDimensionExtensionLine = false; // DIMSD2
             this.RecomputeDimensionsWhileDragging = true; // DIMSHO
             this.SuppressOutsideExtensionDimensionLines = false; // DIMSOXD
-            this.DimensionStyleName = null; // DIMSTYLE
+            this.DimensionStyleName = "STANDARD"; // DIMSTYLE
             this.TextAboveDimensionLine = false; // DIMTAD
-            this.DimensionToleranceDecimalPlaces = 12; // DIMTDEC
+            this.DimensionToleranceDecimalPlaces = 4; // DIMTDEC
             this.DimensionToleranceDisplayScaleFactor = 1.0; // DIMTFAC
             this.DimensionTextInsideHorizontal = false; // DIMTIH
             this.ForceDimensionTextInsideExtensions = false; // DIMTIX
@@ -1459,7 +1460,7 @@ namespace IxMilia.Dxf
             this.DimensionPlusTolerance = 0.0; // DIMTP
             this.DimensioningTickSize = 0.0; // DIMTSZ
             this.DimensionVerticalTextPosition = 0.0; // DIMTVP
-            this.DimensionTextStyle = null; // DIMTXSTY
+            this.DimensionTextStyle = "STANDARD"; // DIMTXSTY
             this.DimensioningTextHeight = 10.0; // DIMTXT
             this.DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMTZIN
             this.DimensionUnitFormat = DxfUnitFormat.Scientific; // DIMUNIT
@@ -1468,7 +1469,7 @@ namespace IxMilia.Dxf
             this.DisplaySilhouetteCurvesInWireframeMode = false; // DISPSILH
             this.DragMode = DxfDragMode.Auto; // DRAGMODE
             this.ThreeDSolidCreationVisualStyle = null; // DRAGVS
-            this.DrawingCodePage = "437"; // DWGCODEPAGE
+            this.DrawingCodePage = "ANSI_1252"; // DWGCODEPAGE
             this.Elevation = 0.0; // ELEVATION
             this.EndCapSetting = DxfEndCapSetting.None; // ENDCAPS
             this.MaximumDrawingExtents = DxfPoint.Origin; // EXTMAX
@@ -1496,11 +1497,11 @@ namespace IxMilia.Dxf
             this.MinimumDrawingLimits = DxfPoint.Origin; // LIMMIN
             this.LinetypeScale = 1.0; // LTSCALE
             this.UnitFormat = DxfUnitFormat.Scientific; // LUNITS
-            this.UnitPrecision = 12; // LUPREC
+            this.UnitPrecision = 4; // LUPREC
             this.DisplayLinewieghtInModelAndLayoutTab = false; // LWDISPLAY
             this.MaximumActiveViewports = 3; // MAXACTVP
             this.DrawingUnits = DxfDrawingUnits.English; // MEASUREMENT
-            this.FileName = null; // MENU
+            this.FileName = "."; // MENU
             this.MirrorText = false; // MIRRTEXT
             this.ObscuredLineColor = DxfColor.ByLayer; // OBSCOLOR
             this.ObscuredLineTypeStyle = DxfLinetypeStyle.Off; // OBSLTYPE
@@ -1545,11 +1546,11 @@ namespace IxMilia.Dxf
             this.PolylineSketchMode = DxfPolySketchMode.SketchLines; // SKPOLY
             this.ObjectSortingMethodsFlags = 0; // SORTENTS
             this.DisplaySplinePolygonControl = true; // SPLFRAME
-            this.LineSegmentsPerSplinePatch = 0; // SPLINESEGS
-            this.PEditSplineCurveType = 0; // SPLINETYPE
+            this.LineSegmentsPerSplinePatch = 8; // SPLINESEGS
+            this.PEditSplineCurveType = DxfPolylineCurvedAndSmoothSurfaceType.QuadraticBSpline; // SPLINETYPE
             this.MeshTabulationsInFirstDirection = 0; // SURFTAB1
             this.MeshTabulationsInSecondDirection = 0; // SURFTAB2
-            this.PEditSmoothSurfaceType = 0; // SURFTYPE
+            this.PEditSmoothSurfaceType = DxfPolylineCurvedAndSmoothSurfaceType.QuadraticBSpline; // SURFTYPE
             this.PEditSmoothMDensith = 0; // SURFU
             this.PEditSmoothNDensith = 0; // SURFV
             this.CreationDate = DateTime.Now; // TDCREATE
@@ -1559,7 +1560,7 @@ namespace IxMilia.Dxf
             this.UserElapsedTimer = TimeSpan.Zero; // TDUSRTIMER
             this.UpdateDateUniversal = DateTime.UtcNow; // TDUUPDATE
             this.DefaultTextHeight = 0.0; // TEXTSIZE
-            this.TextStyle = null; // TEXTSTYLE
+            this.TextStyle = "STANDARD"; // TEXTSTYLE
             this.Thickness = 0.0; // THICKNESS
             this.PreviousReleaseTileCompatability = false; // TILEMODE
             this.TraceWidth = 0.0; // TRACEWID
@@ -2711,7 +2712,7 @@ namespace IxMilia.Dxf
 
             // SPLINETYPE
             list.Add(new DxfCodePair(9, SPLINETYPE));
-            list.Add(new DxfCodePair(70, (header.PEditSplineCurveType)));
+            list.Add(new DxfCodePair(70, (short)(header.PEditSplineCurveType)));
 
             // SURFTAB1
             list.Add(new DxfCodePair(9, SURFTAB1));
@@ -2723,7 +2724,7 @@ namespace IxMilia.Dxf
 
             // SURFTYPE
             list.Add(new DxfCodePair(9, SURFTYPE));
-            list.Add(new DxfCodePair(70, (header.PEditSmoothSurfaceType)));
+            list.Add(new DxfCodePair(70, (short)(header.PEditSmoothSurfaceType)));
 
             // SURFU
             list.Add(new DxfCodePair(9, SURFU));
@@ -3746,7 +3747,7 @@ namespace IxMilia.Dxf
                     break;
                 case SPLINETYPE:
                     EnsureCode(pair, 70);
-                    header.PEditSplineCurveType = (pair.ShortValue);
+                    header.PEditSplineCurveType = (DxfPolylineCurvedAndSmoothSurfaceType)(pair.ShortValue);
                     break;
                 case SURFTAB1:
                     EnsureCode(pair, 70);
@@ -3758,7 +3759,7 @@ namespace IxMilia.Dxf
                     break;
                 case SURFTYPE:
                     EnsureCode(pair, 70);
-                    header.PEditSmoothSurfaceType = (pair.ShortValue);
+                    header.PEditSmoothSurfaceType = (DxfPolylineCurvedAndSmoothSurfaceType)(pair.ShortValue);
                     break;
                 case SURFU:
                     EnsureCode(pair, 70);
@@ -5191,7 +5192,7 @@ namespace IxMilia.Dxf
                     this.LineSegmentsPerSplinePatch = (short)value;
                     break;
                 case SPLINETYPE:
-                    this.PEditSplineCurveType = (short)value;
+                    this.PEditSplineCurveType = (DxfPolylineCurvedAndSmoothSurfaceType)value;
                     break;
                 case SURFTAB1:
                     this.MeshTabulationsInFirstDirection = (short)value;
@@ -5200,7 +5201,7 @@ namespace IxMilia.Dxf
                     this.MeshTabulationsInSecondDirection = (short)value;
                     break;
                 case SURFTYPE:
-                    this.PEditSmoothSurfaceType = (short)value;
+                    this.PEditSmoothSurfaceType = (DxfPolylineCurvedAndSmoothSurfaceType)value;
                     break;
                 case SURFU:
                     this.PEditSmoothMDensith = (short)value;

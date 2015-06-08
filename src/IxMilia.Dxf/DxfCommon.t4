@@ -68,6 +68,17 @@ string WriteConverter(XElement property)
     return att == null ? string.Empty : att.Value;
 }
 
+string CustomValidator(XElement property)
+{
+    var att = property.Attribute("CustomValidator");
+    return att == null ? null : att.Value;
+}
+
+string BackingFieldName(string propertyName)
+{
+    return "_" + char.ToLower(propertyName[0]) + propertyName.Substring(1);
+}
+
 string Name(XElement property)
 {
     return property.Attribute("Name").Value;

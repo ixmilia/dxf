@@ -1109,8 +1109,11 @@ namespace IxMilia.Dxf
 
         protected override DxfTableType TableType { get { return DxfTableType.Layer; } }
 
+        // backing fields
+        private DxfColor _color;
+
         // properties
-        public DxfColor Color { get; set; }
+        public DxfColor Color { get { return _color; } set { ValidateColor(value); _color = value; } }
         public string LinetypeName { get; set; }
         public bool IsLayerPlotted { get; set; }
         public DxfLineWeight LineWeight { get; set; }
@@ -1120,7 +1123,7 @@ namespace IxMilia.Dxf
         public DxfLayer()
             : base()
         {
-            Color = DxfColor.ByBlock;
+            Color = DxfColor.FromIndex(1);
             LinetypeName = null;
             IsLayerPlotted = true;
             LineWeight = new DxfLineWeight();

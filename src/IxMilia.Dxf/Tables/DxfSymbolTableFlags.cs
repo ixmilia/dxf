@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Tables;
 
@@ -130,6 +131,17 @@ namespace IxMilia.Dxf
             var hex = string.Join(string.Empty, BitmapPreviewData);
             BitmapPreviewData.Clear(); // don't keep this around
             BitmapData = DxfCommonConverters.HexBytes(hex);
+        }
+    }
+
+    public partial class DxfLayer
+    {
+        private void ValidateColor(DxfColor value)
+        {
+            if (!value.IsIndex)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "Layer colors must be an indexable value: [1, 255]");
+            }
         }
     }
 }

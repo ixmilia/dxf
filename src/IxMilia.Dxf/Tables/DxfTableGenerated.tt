@@ -96,6 +96,27 @@ foreach (var table in tables)
         internal const string AcDbText = "<#= ClassName(tableItem) #>";
 
         protected override DxfTableType TableType { get { return DxfTableType.<#= Type(table) #>; } }
+<#
+    var backingFields = properties.Where(p => CustomValidator(p) != null);
+    if (backingFields.Any())
+    {
+#>
+
+        // backing fields
+<#
+        foreach (var field in backingFields)
+        {
+            var fieldType = Type(field);
+            if (AllowMultiples(field))
+            {
+                fieldType = string.Format("List<{0}>", fieldType);
+            }
+#>
+        private <#= fieldType #> <#= BackingFieldName(Name(field)) #>;
+<#
+        }
+    }
+#>
 
         // properties
 <#
@@ -112,9 +133,18 @@ foreach (var table in tables)
             seenProperties.Add(name);
             var propertyType = Type(property);
             if (AllowMultiples(property))
+            {
                 propertyType = string.Format("List<{0}>", propertyType);
+            }
+
+            var getset = "{ get; set; }";
+            var customValidator = CustomValidator(property);
+            if (customValidator != null)
+            {
+                getset = string.Format("{{ get {{ return {0}; }} set {{ {1}(value); {0} = value; }} }}", BackingFieldName(name), customValidator);
+            }
 #>
-        <#= Accessibility(property) #> <#= propertyType #> <#= name #> { get; set; }
+        <#= Accessibility(property) #> <#= propertyType #> <#= name #> <#= getset #>
 <#
         } // else
     } // foreach (var property in properties)

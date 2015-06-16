@@ -284,7 +284,7 @@
   
   -->
   <!-- the class from which all dimensions inherit -->
-  <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected">
+  <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected" HasXData="true">
     <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion)" WriteConverter="(short)" MinVersion="R2010" />
     <Property Name="BlockName" Code="2" Type="string" DefaultValue="null" />
     <Property Name="DefinitionPoint1" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
@@ -457,7 +457,7 @@
   LEADER
   
   -->
-  <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13">
+  <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" HasXData="true">
     <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
     <Property Name="UseArrowheads" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
     <Property Name="PathType" Code="72" Type="DxfLeaderPathType" DefaultValue="DxfLeaderPathType.StraightLineSegments" ReadConverter="(DxfLeaderPathType)" WriteConverter="(short)" />
@@ -588,7 +588,7 @@
   MTEXT
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=, HasXData="true" -->
   <!--
   
   OLEFRAME
@@ -656,7 +656,7 @@
   POLYLINE
   
   -->
-  <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE">
+  <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE" HasXData="true">
     <Property Name="ContainsVertices" Code="66" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R13" />
     <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R12" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />

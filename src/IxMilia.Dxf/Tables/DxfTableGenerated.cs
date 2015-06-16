@@ -364,6 +364,8 @@ namespace IxMilia.Dxf
 
         // properties
 
+        public DxfXData XData { get; set; }
+
         public DxfAppId()
             : base()
         {
@@ -378,6 +380,10 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfAppId FromBuffer(DxfCodePairBufferReader buffer)
@@ -398,6 +404,9 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);
@@ -421,8 +430,8 @@ namespace IxMilia.Dxf
         public bool Explodability { get; set; }
         public bool Scalability { get; set; }
         private List<string> BitmapPreviewData { get; set; }
-        public string XDataApplicationName { get; set; }
-        public string XDataStringData { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfBlockRecord()
             : base()
@@ -432,8 +441,6 @@ namespace IxMilia.Dxf
             Explodability = true;
             Scalability = true;
             BitmapPreviewData = new List<string>();
-            XDataApplicationName = null;
-            XDataStringData = null;
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -469,16 +476,10 @@ namespace IxMilia.Dxf
                 pairs.AddRange(BitmapPreviewData.Select(value => new DxfCodePair(310, value)));
             }
 
-            if (XDataApplicationName != null && version >= DxfAcadVersion.R2000)
+            if (XData != null)
             {
-                pairs.Add(new DxfCodePair(1001, (XDataApplicationName)));
+                XData.AddValuePairs(pairs, version, outputHandles);
             }
-
-            if (XDataStringData != null && version >= DxfAcadVersion.R2000)
-            {
-                pairs.Add(new DxfCodePair(1000, (XDataStringData)));
-            }
-
         }
 
         internal static DxfBlockRecord FromBuffer(DxfCodePairBufferReader buffer)
@@ -512,11 +513,8 @@ namespace IxMilia.Dxf
                     case 310:
                         item.BitmapPreviewData.Add((pair.StringValue));
                         break;
-                    case 1001:
-                        item.XDataApplicationName = (pair.StringValue);
-                        break;
-                    case 1000:
-                        item.XDataStringData = (pair.StringValue);
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);
@@ -598,6 +596,8 @@ namespace IxMilia.Dxf
         public string DimensionLeaderBlockName { get; set; }
         public DxfLineWeight DimensionLineWeight { get; set; }
         public DxfLineWeight DimensionExtensionLineWeight { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfDimStyle()
             : base()
@@ -871,6 +871,10 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(372, DxfLineWeight.GetRawValue(DimensionExtensionLineWeight)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfDimStyle FromBuffer(DxfCodePairBufferReader buffer)
@@ -1093,6 +1097,9 @@ namespace IxMilia.Dxf
                     case 372:
                         item.DimensionExtensionLineWeight = DxfLineWeight.FromRawValue(pair.ShortValue);
                         break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -1119,6 +1126,8 @@ namespace IxMilia.Dxf
         public DxfLineWeight LineWeight { get; set; }
         public uint PlotStylePointer { get; set; }
         public uint MaterialHandle { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfLayer()
             : base()
@@ -1162,6 +1171,10 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(347, UIntHandle(MaterialHandle)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfLayer FromBuffer(DxfCodePairBufferReader buffer)
@@ -1201,6 +1214,9 @@ namespace IxMilia.Dxf
                     case 347:
                         item.MaterialHandle = UIntHandle(pair.StringValue);
                         break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -1231,6 +1247,8 @@ namespace IxMilia.Dxf
         public List<double> XOffsets { get; set; }
         public List<double> YOffsets { get; set; }
         public List<string> TextStrings { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfLineType()
             : base()
@@ -1304,6 +1322,10 @@ namespace IxMilia.Dxf
                 pairs.AddRange(TextStrings.Select(value => new DxfCodePair(9, value)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfLineType FromBuffer(DxfCodePairBufferReader buffer)
@@ -1364,6 +1386,9 @@ namespace IxMilia.Dxf
                     case 9:
                         item.TextStrings.Add((pair.StringValue));
                         break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -1388,6 +1413,8 @@ namespace IxMilia.Dxf
         public double LastHeightUsed { get; set; }
         public string PrimaryFontFileName { get; set; }
         public string BigFontFileName { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfStyle()
             : base()
@@ -1417,6 +1444,10 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(42, (LastHeightUsed)));
             pairs.Add(new DxfCodePair(3, (PrimaryFontFileName)));
             pairs.Add(new DxfCodePair(4, (BigFontFileName)));
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfStyle FromBuffer(DxfCodePairBufferReader buffer)
@@ -1459,6 +1490,9 @@ namespace IxMilia.Dxf
                     case 4:
                         item.BigFontFileName = (pair.StringValue);
                         break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -1484,6 +1518,8 @@ namespace IxMilia.Dxf
         public uint BaseUcsHandle { get; set; }
         public DxfOrthographicViewType OrthographicType { get; set; }
         public DxfPoint OrthographicOrigin { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfUcs()
             : base()
@@ -1551,6 +1587,10 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(33, OrthographicOrigin.Z));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfUcs FromBuffer(DxfCodePairBufferReader buffer)
@@ -1620,6 +1660,9 @@ namespace IxMilia.Dxf
                     case 33:
                         item.OrthographicOrigin.Z = (pair.DoubleValue);
                         break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -1661,6 +1704,8 @@ namespace IxMilia.Dxf
         public double UCSElevation { get; set; }
         public uint UCSHandle { get; set; }
         public uint BaseUCSHandle { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfView()
             : base()
@@ -1815,6 +1860,10 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(346, UIntHandle(BaseUCSHandle)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfView FromBuffer(DxfCodePairBufferReader buffer)
@@ -1941,6 +1990,9 @@ namespace IxMilia.Dxf
                     case 346:
                         item.BaseUCSHandle = UIntHandle(pair.StringValue);
                         break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;
@@ -2005,6 +2057,8 @@ namespace IxMilia.Dxf
         public DxfColor AmbientColor { get; set; }
         public int AmbientColorInt { get; set; }
         public string AmbientColorName { get; set; }
+
+        public DxfXData XData { get; set; }
 
         public DxfViewPort()
             : base()
@@ -2284,6 +2338,10 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(431, (AmbientColorName)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static DxfViewPort FromBuffer(DxfCodePairBufferReader buffer)
@@ -2496,6 +2554,9 @@ namespace IxMilia.Dxf
                         break;
                     case 431:
                         item.AmbientColorName = (pair.StringValue);
+                        break;
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);

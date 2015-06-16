@@ -25,6 +25,7 @@ namespace IxMilia.Dxf.Blocks
         public List<DxfEntity> Entities { get; private set; }
         public uint OwnerHandle { get; set; }
         public string Description { get; set; }
+        public DxfXData XData { get; set; }
 
         public bool IsAnonymous
         {
@@ -125,6 +126,11 @@ namespace IxMilia.Dxf.Blocks
                 list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(list, version, outputHandles);
+            }
+
             // TODO: application-defined 102 codes for R14+
 
             if (version >= DxfAcadVersion.R2000)
@@ -221,6 +227,9 @@ namespace IxMilia.Dxf.Blocks
                                 break;
                             case 330:
                                 block.OwnerHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                                break;
+                            case (int)DxfXDataType.ApplicationName:
+                                block.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
                                 break;
                         }
                     }

@@ -324,6 +324,13 @@ foreach (var entity in entities)
         } // if
     } // foreach property
 
+    if (HasXData(entity))
+    {
+#>
+        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
+<#
+    }
+
     var defaultConstructorType = DefaultConstructor(entity);
     if (defaultConstructorType != null)
     {
@@ -450,6 +457,16 @@ foreach (var entity in entities)
 <#
                 }
             } // foreach
+
+            if (HasXData(entity))
+            {
+#>
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
+<#
+            }
 #>
         }
 <#

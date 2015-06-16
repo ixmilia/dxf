@@ -349,6 +349,11 @@ bool HasFlags(XElement xml)
     return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true"));
 }
 
+bool HasXData(XElement xml)
+{
+    return bool.Parse(AttributeOrDefault(xml, "HasXData", "false"));
+}
+
 string ClassName(XElement xml)
 {
     return AttributeOrDefault(xml, "ClassName");

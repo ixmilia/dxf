@@ -1865,6 +1865,7 @@ namespace IxMilia.Dxf.Entities
         public double HorizontalDirectionAngle { get; set; }
         public DxfVector Normal { get; set; }
         public string DimensionStyleName { get; set; }
+        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
 
         internal DxfDimensionBase()
             : base()
@@ -1969,6 +1970,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(3, (this.DimensionStyleName)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -3130,6 +3135,7 @@ namespace IxMilia.Dxf.Entities
         public DxfVector Right { get; set; }
         public DxfVector BlockOffset { get; set; }
         public DxfVector AnnotationOffset { get; set; }
+        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
 
         public DxfLeader()
             : base()
@@ -3201,6 +3207,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(233, AnnotationOffset.Z));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -3934,6 +3944,7 @@ namespace IxMilia.Dxf.Entities
                 Flags = flags;
             }
         }
+        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
 
         public DxfPolyline()
             : base()
@@ -4025,6 +4036,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

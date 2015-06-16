@@ -151,6 +151,8 @@ foreach (var table in tables)
 
 #>
 
+        public DxfXData XData { get; set; }
+
         public <#= Name(tableItem) #>()
             : base()
         {
@@ -277,6 +279,10 @@ foreach (var table in tables)
         }
     } // foreach (var property in properties)
 #>
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal static <#= Name(tableItem) #> FromBuffer(DxfCodePairBufferReader buffer)
@@ -345,6 +351,9 @@ foreach (var table in tables)
         }
     } // foreach (var property in properties)
 #>
+                    case (int)DxfXDataType.ApplicationName:
+                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        break;
                     default:
                         item.TrySetPair(pair);
                         break;

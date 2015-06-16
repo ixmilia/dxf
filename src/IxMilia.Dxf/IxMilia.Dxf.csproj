@@ -36,6 +36,7 @@
     <Compile Include="DxfShadowType.cs" />
     <Compile Include="DxfWriter.cs" />
     <Compile Include="Blocks\DxfBlock.cs" />
+    <Compile Include="DxfXData.cs" />
     <Compile Include="Entities\DxfEntity.cs" />
     <Compile Include="Entities\DxfEntityGenerated.cs">
       <AutoGen>True</AutoGen>

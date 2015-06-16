@@ -128,14 +128,14 @@ namespace IxMilia.Dxf
 
         public static bool IsXDataStart(DxfCodePair pair)
         {
-            return (pair.Code == 102 || pair.Code == 1002)
+            return (pair.Code == 102)
                 && pair.StringValue != null
                 && pair.StringValue.StartsWith("{");
         }
 
         public static bool IsXDataEnd(DxfCodePair pair)
         {
-            return (pair.Code == 102 || pair.Code == 1002)
+            return (pair.Code == 102)
                 && pair.StringValue != null
                 && pair.StringValue.StartsWith("}");
         }

@@ -115,6 +115,7 @@ namespace IxMilia.Dxf.Entities
     public abstract partial class DxfEntity
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
+        protected DxfXData XDataProtected { get; set; }
 
         public abstract DxfEntityType EntityType { get; }
 
@@ -157,6 +158,11 @@ namespace IxMilia.Dxf.Entities
                 if (pair.Code == 0)
                 {
                     break;
+                }
+
+                if (pair.Code == (int)DxfXDataType.ApplicationName)
+                {
+                    XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
                 }
 
                 if (!TrySetPair(pair))

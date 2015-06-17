@@ -639,7 +639,6 @@ ENDSEC
         [Fact]
         public void ReadTableTest()
         {
-            // sample pulled from R13 spec
             var file = Parse(@"
   0
 SECTION
@@ -651,6 +650,14 @@ TABLE
 STYLE
   5
 1C
+102
+{ACAD_XDICTIONARY
+360
+AAAA
+360
+BBBB
+102
+}
  70
 3
 1001
@@ -702,6 +709,12 @@ EOF
             Assert.Equal(0x1Cu, styleTable.Handle);
             Assert.Equal(3, styleTable.MaxEntries);
 
+            var extendedDataGroup = styleTable.ExtensionDataGroups.Single();
+            Assert.Equal("ACAD_XDICTIONARY", extendedDataGroup.GroupName);
+            Assert.Equal(2, extendedDataGroup.Items.Count);
+            Assert.Equal(new DxfCodePair(360, "AAAA"), extendedDataGroup.Items[0]);
+            Assert.Equal(new DxfCodePair(360, "BBBB"), extendedDataGroup.Items[1]);
+
             var style1 = file.Styles.First();
             Assert.Equal(0x3Au, style1.Handle);
             Assert.Equal("ENTRY_1", style1.Name);
@@ -717,6 +730,66 @@ EOF
             Assert.Equal(0xC2u, style2.Handle);
             Assert.Equal("ENTRY_2", style2.Name);
             Assert.Equal("BUFONTS.TXT", style2.PrimaryFontFileName);
+        }
+
+        [Fact]
+        public void WriteTableWithoutExtendedDataTest()
+        {
+            var file = new DxfFile();
+            file.Styles.Add(new DxfStyle());
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+TABLES
+  0
+TABLE
+  2
+STYLE
+  5
+6
+100
+AcDbSymbolTable
+ 70
+0
+");
+        }
+
+        [Fact]
+        public void WriteTableWithExtendedDataTest()
+        {
+            var file = new DxfFile();
+            file.TablesSection.StyleTable.ExtensionDataGroups.Add(new DxfCodePairGroup("ACAD_XDICTIONARY",
+                new DxfCodePairOrGroup[]
+                {
+                    new DxfCodePair(360, "AAAA"),
+                    new DxfCodePair(360, "BBBB")
+                }));
+            file.Styles.Add(new DxfStyle());
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+TABLES
+  0
+TABLE
+  2
+STYLE
+  5
+6
+102
+{ACAD_XDICTIONARY
+360
+AAAA
+360
+BBBB
+102
+}
+100
+AcDbSymbolTable
+ 70
+0
+");
         }
 
         [Fact]

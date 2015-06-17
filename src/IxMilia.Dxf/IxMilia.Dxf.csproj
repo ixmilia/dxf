@@ -24,6 +24,7 @@
     <Compile Include="DxfCodePair.cs" />
     <Compile Include="DxfCodePair.ExpectedType.cs" />
     <Compile Include="DxfCodePairBufferReader.cs" />
+    <Compile Include="DxfCodePairGroup.cs" />
     <Compile Include="DxfColor.cs" />
     <Compile Include="DxfCommonConverters.cs" />
     <Compile Include="DxfFile.cs" />

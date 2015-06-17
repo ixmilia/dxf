@@ -39,9 +39,11 @@ namespace IxMilia.Dxf.Tables
         public uint Handle { get; set; }
         public int MaxEntries { get; set; }
         public uint OwnerHandle { get; set; }
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
 
         public DxfTable()
         {
+            ExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
         protected abstract IEnumerable<DxfSymbolTableFlags> GetSymbolItems();
@@ -66,7 +68,11 @@ namespace IxMilia.Dxf.Tables
 
             if (version >= DxfAcadVersion.R13)
             {
-                // 102 ({ACAD_XDICTIONARY) codes surrounding code 360
+                foreach (var group in ExtensionDataGroups)
+                {
+                    group.AddValuePairs(pairs, version, outputHandles);
+                }
+
                 if (version >= DxfAcadVersion.R2000)
                     pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
                 pairs.Add(new DxfCodePair(100, "AcDbSymbolTable"));
@@ -174,11 +180,21 @@ namespace IxMilia.Dxf.Tables
 
             // read common table values
             var commonValues = new List<DxfCodePair>();
+            var groups = new List<DxfCodePairGroup>();
             pair = buffer.Peek();
             while (pair != null && pair.Code != 0)
             {
-                commonValues.Add(pair);
                 buffer.Advance();
+                if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
+                {
+                    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                    groups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                }
+                else
+                {
+                    commonValues.Add(pair);
+                }
+
                 pair = buffer.Peek();
             }
 
@@ -237,6 +253,7 @@ namespace IxMilia.Dxf.Tables
                     }
                 }
 
+                result.ExtensionDataGroups.AddRange(groups);
                 result.AfterRead();
             }
 

@@ -7,11 +7,13 @@ using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf
 {
-    public partial class DxfCodePair
+    public partial class DxfCodePair : DxfCodePairOrGroup
     {
         public const int CommentCode = 999;
 
         private KeyValuePair<int, object> data;
+
+        public bool IsCodePair { get { return true; } }
 
         public int Code
         {
@@ -138,6 +140,38 @@ namespace IxMilia.Dxf
             return (pair.Code == 102)
                 && pair.StringValue != null
                 && pair.StringValue.StartsWith("}");
+        }
+
+        public static bool operator ==(DxfCodePair a, DxfCodePair b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+            if (((object)a) == null || ((object)b) == null)
+                return false;
+            return a.Code == b.Code && a.Value.Equals(b.Value);
+        }
+
+        public static bool operator !=(DxfCodePair a, DxfCodePair b)
+        {
+            return !(a == b);
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = Code.GetHashCode();
+            if (Value != null)
+            {
+                hash ^= Value.GetHashCode();
+            }
+
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is DxfCodePair)
+                return this == (DxfCodePair)obj;
+            return false;
         }
     }
 }

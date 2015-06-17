@@ -128,20 +128,6 @@ namespace IxMilia.Dxf
             return pair.Code == CommentCode;
         }
 
-        public static bool IsXDataStart(DxfCodePair pair)
-        {
-            return (pair.Code == 102)
-                && pair.StringValue != null
-                && pair.StringValue.StartsWith("{");
-        }
-
-        public static bool IsXDataEnd(DxfCodePair pair)
-        {
-            return (pair.Code == 102)
-                && pair.StringValue != null
-                && pair.StringValue.StartsWith("}");
-        }
-
         public static bool operator ==(DxfCodePair a, DxfCodePair b)
         {
             if (ReferenceEquals(a, b))

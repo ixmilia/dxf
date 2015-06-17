@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
+using System.Linq;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -89,7 +90,7 @@ $TDCREATE
         }
 
         [Fact]
-        public void LayerTableTest()
+        public void ReadLayerTableTest()
         {
             var file = Section("TABLES", @"
   0
@@ -104,6 +105,14 @@ a
 12
   0
 LAYER
+102
+{APP_NAME
+  1
+foo
+  2
+bar
+102
+}
   2
 b
  62
@@ -117,6 +126,39 @@ ENDTAB
             Assert.Equal(12, layers[0].Color.RawValue);
             Assert.Equal("b", layers[1].Name);
             Assert.Equal(13, layers[1].Color.RawValue);
+
+            var group = layers[1].ExtensionDataGroups.Single();
+            Assert.Equal("APP_NAME", group.GroupName);
+            Assert.Equal(2, group.Items.Count);
+            Assert.Equal(new DxfCodePair(1, "foo"), group.Items[0]);
+            Assert.Equal(new DxfCodePair(2, "bar"), group.Items[1]);
+        }
+
+        [Fact]
+        public void WriteLayersTableTest()
+        {
+            var layer = new DxfLayer("layer-name");
+            layer.ExtensionDataGroups.Add(new DxfCodePairGroup("APP_NAME", new DxfCodePairOrGroup[]
+            {
+                new DxfCodePair(1, "foo"),
+                new DxfCodePair(2, "bar"),
+            }));
+            var file = new DxfFile();
+            file.Layers.Add(layer);
+            VerifyFileContains(file, @"
+  0
+LAYER
+  5
+A
+102
+{APP_NAME
+  1
+foo
+  2
+bar
+102
+}
+");
         }
 
         [Fact]

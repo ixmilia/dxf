@@ -290,8 +290,6 @@ foreach (var table in tables)
             var item = new <#= Name(tableItem) #>();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -310,6 +308,14 @@ foreach (var table in tables)
                         break;
 <#
     } // has flags
+
+#>
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                        break;
+<#
+
     foreach (var property in properties)
     {
         var codeOverrides = CodeOverrides(property);

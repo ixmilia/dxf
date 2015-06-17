@@ -13,9 +13,11 @@ namespace IxMilia.Dxf
         protected abstract DxfTableType TableType { get; }
         public uint Handle { get; set; }
         public uint OwnerHandle { get; set; }
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
 
         public DxfSymbolTableFlags()
         {
+            ExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
         internal void AddCommonValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -27,19 +29,13 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(Handle)));
             }
 
-            // 102 {<application-name>
-            //   application-specific codes
-            // 102 }
+            foreach (var group in ExtensionDataGroups)
+            {
+                group.AddValuePairs(pairs, version, outputHandles);
+            }
 
             if (version >= DxfAcadVersion.R2000)
             {
-                // 102 {ACAD_REACTORS
-                //   330 owner handle
-                // 102 }
-                // 102 {ACAD_XDICTIONARY
-                //   360 codes
-                // 102 }
-
                 pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
             }
 

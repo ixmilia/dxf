@@ -391,8 +391,6 @@ namespace IxMilia.Dxf
             var item = new DxfAppId();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -404,6 +402,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case (int)DxfXDataType.ApplicationName:
                         item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
@@ -487,8 +489,6 @@ namespace IxMilia.Dxf
             var item = new DxfBlockRecord();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -498,6 +498,10 @@ namespace IxMilia.Dxf
                 buffer.Advance();
                 switch (pair.Code)
                 {
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                        break;
                     case 340:
                         item.LayoutHandle = UIntHandle(pair.StringValue);
                         break;
@@ -882,8 +886,6 @@ namespace IxMilia.Dxf
             var item = new DxfDimStyle();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -895,6 +897,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 3:
                         item.DimensioningSuffix = (pair.StringValue);
@@ -1182,8 +1188,6 @@ namespace IxMilia.Dxf
             var item = new DxfLayer();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1195,6 +1199,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 62:
                         item.Color = DxfColor.FromRawValue(pair.ShortValue);
@@ -1333,8 +1341,6 @@ namespace IxMilia.Dxf
             var item = new DxfLineType();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1346,6 +1352,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 3:
                         item.Description = (pair.StringValue);
@@ -1455,8 +1465,6 @@ namespace IxMilia.Dxf
             var item = new DxfStyle();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1468,6 +1476,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 40:
                         item.TextHeight = (pair.DoubleValue);
@@ -1598,8 +1610,6 @@ namespace IxMilia.Dxf
             var item = new DxfUcs();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1611,6 +1621,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 10:
                         item.Origin.X = (pair.DoubleValue);
@@ -1871,8 +1885,6 @@ namespace IxMilia.Dxf
             var item = new DxfView();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -1884,6 +1896,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 40:
                         item.ViewHeight = (pair.DoubleValue);
@@ -2349,8 +2365,6 @@ namespace IxMilia.Dxf
             var item = new DxfViewPort();
             while (buffer.ItemsRemain)
             {
-                buffer.SwallowXData();
-
                 var pair = buffer.Peek();
                 if (pair.Code == 0)
                 {
@@ -2362,6 +2376,10 @@ namespace IxMilia.Dxf
                 {
                     case 70:
                         item.StandardFlags = (int)pair.ShortValue;
+                        break;
+                    case DxfCodePairGroup.GroupCodeNumber:
+                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 10:
                         item.LowerLeft.X = (pair.DoubleValue);

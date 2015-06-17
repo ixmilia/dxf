@@ -8,11 +8,7 @@
   -->
   <Entity Name="DxfEntity" EntityType="" SubclassMarker="" TypeString="">
     <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" />
-    <!-- 102 codes app defined -->
-    <!-- 102 codes ({ACAD_REACTORS) around code 330 -->
-    <!-- 102 codes ({ACAD_XDICTIONARY) around code 360 -->
     <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
-    <!-- subclass marker 100,AcDbEntity -->
     <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="Layer" Code="8" Type="string" DefaultValue="0" />
     <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" />
@@ -29,6 +25,28 @@
     <Property Name="Transparency" Code="440" Type="int" DefaultValue="0" MinVersion="R2004" />
     <Property Name="PlotStyleHandle" Code="390" Type="string" DefaultValue="null" MinVersion="R2007" />
     <Property Name="ShadowMode" Code="284" Type="DxfShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode)" WriteConverter="(short)" MinVersion="R2007" />
+    <WriteOrder>
+      <WriteProperty Property="Handle" />
+      <WriteExtensionData />
+      <WriteProperty Property="OwnerHandle" />
+      <WriteSpecificValue Code="100" Value="AcDbEntity" />
+      <WriteProperty Property="IsInPaperSpace" />
+      <WriteProperty Property="Layer" />
+      <WriteProperty Property="LinetypeName" />
+      <WriteProperty Property="Elevation" />
+      <WriteProperty Property="MaterialHandle" />
+      <WriteProperty Property="Color" />
+      <WriteProperty Property="LineweightEnumValue" />
+      <WriteProperty Property="LinetypeScale" />
+      <WriteProperty Property="IsVisible" />
+      <WriteProperty Property="ImageByteCount" />
+      <WriteProperty Property="PreviewImageData" />
+      <WriteProperty Property="Color24Bit" />
+      <WriteProperty Property="ColorName" />
+      <WriteProperty Property="Transparency" />
+      <WriteProperty Property="PlotStyleHandle" />
+      <WriteProperty Property="ShadowMode" />
+    </WriteOrder>
   </Entity>
   <!--
   

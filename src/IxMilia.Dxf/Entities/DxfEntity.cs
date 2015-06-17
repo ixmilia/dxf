@@ -116,6 +116,7 @@ namespace IxMilia.Dxf.Entities
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
         protected DxfXData XDataProtected { get; set; }
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
 
         public abstract DxfEntityType EntityType { get; }
 
@@ -127,6 +128,12 @@ namespace IxMilia.Dxf.Entities
         protected virtual DxfAcadVersion MaxVersion
         {
             get { return DxfAcadVersion.Max; }
+        }
+
+        protected DxfEntity()
+        {
+            Initialize();
+            ExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
         protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -150,6 +157,14 @@ namespace IxMilia.Dxf.Entities
             return pairs;
         }
 
+        private void AddExtensionValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            foreach (var group in ExtensionDataGroups)
+            {
+                group.AddValuePairs(pairs, version, outputHandles);
+            }
+        }
+
         internal virtual DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
@@ -159,8 +174,13 @@ namespace IxMilia.Dxf.Entities
                 {
                     break;
                 }
-
-                if (pair.Code == (int)DxfXDataType.ApplicationName)
+                else if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
+                {
+                    buffer.Advance();
+                    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                    ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                }
+                else if (pair.Code == (int)DxfXDataType.ApplicationName)
                 {
                     XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
                 }

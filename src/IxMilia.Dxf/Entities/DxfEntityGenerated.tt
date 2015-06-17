@@ -90,11 +90,6 @@ foreach (var entity in entities)
             }
         }
 
-        protected DxfEntity()
-        {
-            Initialize();
-        }
-
         protected DxfEntity(DxfEntity other)
             : this()
         {

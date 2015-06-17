@@ -81,6 +81,69 @@ ill-placed comment
 
         #endregion
 
+        [Fact]
+        public void ReadEntityExtensionDataTest()
+        {
+            var line = (DxfLine)Entity("LINE", @"
+102
+{APP_NAME
+360
+AAAA
+360
+BBBB
+102
+}
+");
+            var group = line.ExtensionDataGroups.Single();
+            Assert.Equal("APP_NAME", group.GroupName);
+            Assert.Equal(2, group.Items.Count);
+            Assert.Equal(new DxfCodePair(360, "AAAA"), group.Items[0]);
+            Assert.Equal(new DxfCodePair(360, "BBBB"), group.Items[1]);
+        }
+
+        [Fact]
+        public void WriteEntityExtensionDataTest()
+        {
+            var line = new DxfLine();
+            line.ExtensionDataGroups.Add(new DxfCodePairGroup("APP_NAME", new DxfCodePairOrGroup[]
+            {
+                new DxfCodePair(1, "foo"),
+                new DxfCodePair(2, "bar")
+            }));
+            EnsureFileContainsEntity(line, @"
+  0
+LINE
+  5
+A
+102
+{APP_NAME
+  1
+foo
+  2
+bar
+102
+}
+100
+AcDbEntity
+  8
+0
+100
+AcDbLine
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+ 11
+0.0
+ 21
+0.0
+ 31
+0.0
+");
+        }
+
         #region Read default value tests
 
         [Fact]
@@ -676,6 +739,8 @@ SEQEND
 LINE
   5
 A
+100
+AcDbEntity
   8
 0
 100
@@ -704,6 +769,8 @@ AcDbLine
 CIRCLE
   5
 A
+100
+AcDbEntity
   8
 0
 100
@@ -728,6 +795,8 @@ AcDbCircle
 ARC
   5
 A
+100
+AcDbEntity
   8
 0
 100
@@ -758,6 +827,8 @@ AcDbArc
 ELLIPSE
   5
 A
+100
+AcDbEntity
   8
 0
 100
@@ -792,6 +863,8 @@ AcDbEllipse
 TEXT
   5
 A
+100
+AcDbEntity
   8
 0
 100
@@ -824,6 +897,8 @@ AcDbText
 POLYLINE
   5
 A
+100
+AcDbEntity
   8
 0
 100
@@ -838,6 +913,8 @@ AcDb2dPolyline
 SEQEND
   5
 B
+100
+AcDbEntity
   8
 0
   0
@@ -899,6 +976,8 @@ AcDbTrace
 LINE
   5
 42
+100
+AcDbEntity
   8
 bar
  62
@@ -946,6 +1025,8 @@ AcDbLine
 DIMENSION
   5
 42
+100
+AcDbEntity
   8
 bar
  62
@@ -1015,6 +1096,8 @@ POLYLINE
 A
 330
 0
+100
+AcDbEntity
   8
 0
 370
@@ -1033,6 +1116,8 @@ VERTEX
 B
 330
 A
+100
+AcDbEntity
   8
 0
 370
@@ -1055,6 +1140,8 @@ VERTEX
 C
 330
 A
+100
+AcDbEntity
   8
 0
 370
@@ -1077,6 +1164,8 @@ SEQEND
 D
 330
 A
+100
+AcDbEntity
   8
 0
 370

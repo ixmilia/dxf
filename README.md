@@ -76,10 +76,6 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
     - VIEWPORT
 - OBJECTS section - NYI
 
-### TODO
-
-- XDATA (102/1002 codes)
-
 ### DXF reference
 
 See `spec/DXF Specification.md` for links to the full Autodesk DXF specification.

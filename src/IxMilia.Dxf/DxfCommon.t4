@@ -181,6 +181,8 @@ IEnumerable<string> WriteValue(XElement spec, XElement entity)
             lines.Add("}");
             lines.Add("\n");
             return lines;
+        case "WriteExtensionData":
+            return new[] { "AddExtensionValuePairs(pairs, version, outputHandles);" };
         default:
             throw new NotSupportedException();
     }
@@ -347,6 +349,11 @@ string CamlCase(string value)
 bool HasFlags(XElement xml)
 {
     return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true"));
+}
+
+bool HasXData(XElement xml)
+{
+    return bool.Parse(AttributeOrDefault(xml, "HasXData", "false"));
 }
 
 string ClassName(XElement xml)

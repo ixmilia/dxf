@@ -45,31 +45,5 @@ namespace IxMilia.Dxf
             : base(pairs, (pair) => pair.Code == 999)
         {
         }
-
-        public void SwallowXData()
-        {
-            while (ItemsRemain)
-            {
-                var pair = Peek();
-                if (DxfCodePair.IsXDataStart(pair))
-                {
-                    Advance();
-                    while (ItemsRemain && !DxfCodePair.IsSectionEnd(Peek()))
-                    {
-                        Advance();
-                    }
-
-                    if (ItemsRemain)
-                    {
-                        // swallow closing pair
-                        Advance();
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
     }
 }

@@ -151,11 +151,6 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        protected DxfEntity()
-        {
-            Initialize();
-        }
-
         protected DxfEntity(DxfEntity other)
             : this()
         {
@@ -209,11 +204,13 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
             }
 
+            AddExtensionValuePairs(pairs, version, outputHandles);
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(330, UIntHandle(this.OwnerHandle)));
             }
 
+            pairs.Add(new DxfCodePair(100, "AcDbEntity"));
             if (version >= DxfAcadVersion.R12 && this.IsInPaperSpace != false)
             {
                 pairs.Add(new DxfCodePair(67, BoolShort(this.IsInPaperSpace)));
@@ -1865,6 +1862,7 @@ namespace IxMilia.Dxf.Entities
         public double HorizontalDirectionAngle { get; set; }
         public DxfVector Normal { get; set; }
         public string DimensionStyleName { get; set; }
+        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
 
         internal DxfDimensionBase()
             : base()
@@ -1969,6 +1967,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(3, (this.DimensionStyleName)));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -3130,6 +3132,7 @@ namespace IxMilia.Dxf.Entities
         public DxfVector Right { get; set; }
         public DxfVector BlockOffset { get; set; }
         public DxfVector AnnotationOffset { get; set; }
+        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
 
         public DxfLeader()
             : base()
@@ -3201,6 +3204,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(233, AnnotationOffset.Z));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -3934,6 +3941,7 @@ namespace IxMilia.Dxf.Entities
                 Flags = flags;
             }
         }
+        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
 
         public DxfPolyline()
             : base()
@@ -4025,6 +4033,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
+            if (XData != null)
+            {
+                XData.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

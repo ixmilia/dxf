@@ -8,11 +8,7 @@
   -->
   <Entity Name="DxfEntity" EntityType="" SubclassMarker="" TypeString="">
     <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" />
-    <!-- 102 codes app defined -->
-    <!-- 102 codes ({ACAD_REACTORS) around code 330 -->
-    <!-- 102 codes ({ACAD_XDICTIONARY) around code 360 -->
     <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
-    <!-- subclass marker 100,AcDbEntity -->
     <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="Layer" Code="8" Type="string" DefaultValue="0" />
     <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" />
@@ -29,6 +25,28 @@
     <Property Name="Transparency" Code="440" Type="int" DefaultValue="0" MinVersion="R2004" />
     <Property Name="PlotStyleHandle" Code="390" Type="string" DefaultValue="null" MinVersion="R2007" />
     <Property Name="ShadowMode" Code="284" Type="DxfShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode)" WriteConverter="(short)" MinVersion="R2007" />
+    <WriteOrder>
+      <WriteProperty Property="Handle" />
+      <WriteExtensionData />
+      <WriteProperty Property="OwnerHandle" />
+      <WriteSpecificValue Code="100" Value="AcDbEntity" />
+      <WriteProperty Property="IsInPaperSpace" />
+      <WriteProperty Property="Layer" />
+      <WriteProperty Property="LinetypeName" />
+      <WriteProperty Property="Elevation" />
+      <WriteProperty Property="MaterialHandle" />
+      <WriteProperty Property="Color" />
+      <WriteProperty Property="LineweightEnumValue" />
+      <WriteProperty Property="LinetypeScale" />
+      <WriteProperty Property="IsVisible" />
+      <WriteProperty Property="ImageByteCount" />
+      <WriteProperty Property="PreviewImageData" />
+      <WriteProperty Property="Color24Bit" />
+      <WriteProperty Property="ColorName" />
+      <WriteProperty Property="Transparency" />
+      <WriteProperty Property="PlotStyleHandle" />
+      <WriteProperty Property="ShadowMode" />
+    </WriteOrder>
   </Entity>
   <!--
   
@@ -284,7 +302,7 @@
   
   -->
   <!-- the class from which all dimensions inherit -->
-  <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected">
+  <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected" HasXData="true">
     <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion)" WriteConverter="(short)" MinVersion="R2010" />
     <Property Name="BlockName" Code="2" Type="string" DefaultValue="null" />
     <Property Name="DefinitionPoint1" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
@@ -457,7 +475,7 @@
   LEADER
   
   -->
-  <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13">
+  <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" HasXData="true">
     <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
     <Property Name="UseArrowheads" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
     <Property Name="PathType" Code="72" Type="DxfLeaderPathType" DefaultValue="DxfLeaderPathType.StraightLineSegments" ReadConverter="(DxfLeaderPathType)" WriteConverter="(short)" />
@@ -588,7 +606,7 @@
   MTEXT
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=, HasXData="true" -->
   <!--
   
   OLEFRAME
@@ -656,7 +674,7 @@
   POLYLINE
   
   -->
-  <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE">
+  <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE" HasXData="true">
     <Property Name="ContainsVertices" Code="66" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R13" />
     <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R12" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />

@@ -118,6 +118,9 @@
     </xs:complexType>
   </xs:element>
 
+  <xs:element name="WriteExtensionData">
+  </xs:element>
+
   <xs:element name="WriteOrder">
     <xs:complexType>
       <xs:sequence>
@@ -125,6 +128,7 @@
           <xs:element ref="WriteProperty" />
           <xs:element ref="WriteSpecificValue" />
           <xs:element ref="Foreach" />
+          <xs:element ref="WriteExtensionData" />
         </xs:choice>
       </xs:sequence>
     </xs:complexType>

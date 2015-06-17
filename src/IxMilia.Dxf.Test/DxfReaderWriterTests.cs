@@ -252,8 +252,26 @@ ENDTAB
             var blockRecord = file.BlockRecords.Single();
             Assert.Equal("<name>", blockRecord.Name);
             Assert.Equal(0xA1u, blockRecord.LayoutHandle);
-            Assert.Equal("ACAD", blockRecord.XDataApplicationName);
-            Assert.Equal("DesignCenter Data", blockRecord.XDataStringData);
+
+            var xdata = blockRecord.XData;
+            Assert.Equal("ACAD", xdata.ApplicationName);
+            Assert.Equal(2, xdata.Items.Count);
+
+            Assert.Equal(DxfXDataType.String, xdata.Items[0].Type);
+            Assert.Equal("DesignCenter Data", ((DxfXDataString)xdata.Items[0]).Value);
+
+            var group = (DxfXDataControlGroup)xdata.Items[1];
+            Assert.Equal(3, group.Items.Count);
+
+            Assert.Equal(DxfXDataType.Integer, group.Items[0].Type);
+            Assert.Equal((short)0, ((DxfXDataInteger)group.Items[0]).Value);
+
+            Assert.Equal(DxfXDataType.Integer, group.Items[1].Type);
+            Assert.Equal((short)1, ((DxfXDataInteger)group.Items[1]).Value);
+
+            Assert.Equal(DxfXDataType.Integer, group.Items[2].Type);
+            Assert.Equal((short)2, ((DxfXDataInteger)group.Items[2]).Value);
+
             AssertArrayEqual(new byte[]
             {
                 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
@@ -269,8 +287,18 @@ ENDTAB
             var blockRecord = new DxfBlockRecord()
             {
                 Name = "<name>",
-                XDataApplicationName = "ACAD",
-                XDataStringData = "DesignCenter Data",
+                XData = new DxfXData("ACAD",
+                    new DxfXDataItem[]
+                    {
+                        new DxfXDataString("DesignCenter Data"),
+                        new DxfXDataControlGroup(
+                            new []
+                            {
+                                new DxfXDataInteger(0),
+                                new DxfXDataInteger(1),
+                                new DxfXDataInteger(2)
+                            })
+                    }),
                 BitmapData = new byte[]
                 {
                     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
@@ -311,6 +339,16 @@ AcDbBlockTableRecord
 ACAD
 1000
 DesignCenter Data
+1002
+{
+1070
+0
+1070
+1
+1070
+2
+1002
+}
   0
 ENDTAB
 ");
@@ -601,7 +639,6 @@ ENDSEC
         [Fact]
         public void ReadTableTest()
         {
-            // sample pulled from R13 spec
             var file = Parse(@"
   0
 SECTION
@@ -613,6 +650,14 @@ TABLE
 STYLE
   5
 1C
+102
+{ACAD_XDICTIONARY
+360
+AAAA
+360
+BBBB
+102
+}
  70
 3
 1001
@@ -664,6 +709,12 @@ EOF
             Assert.Equal(0x1Cu, styleTable.Handle);
             Assert.Equal(3, styleTable.MaxEntries);
 
+            var extendedDataGroup = styleTable.ExtensionDataGroups.Single();
+            Assert.Equal("ACAD_XDICTIONARY", extendedDataGroup.GroupName);
+            Assert.Equal(2, extendedDataGroup.Items.Count);
+            Assert.Equal(new DxfCodePair(360, "AAAA"), extendedDataGroup.Items[0]);
+            Assert.Equal(new DxfCodePair(360, "BBBB"), extendedDataGroup.Items[1]);
+
             var style1 = file.Styles.First();
             Assert.Equal(0x3Au, style1.Handle);
             Assert.Equal("ENTRY_1", style1.Name);
@@ -679,6 +730,66 @@ EOF
             Assert.Equal(0xC2u, style2.Handle);
             Assert.Equal("ENTRY_2", style2.Name);
             Assert.Equal("BUFONTS.TXT", style2.PrimaryFontFileName);
+        }
+
+        [Fact]
+        public void WriteTableWithoutExtendedDataTest()
+        {
+            var file = new DxfFile();
+            file.Styles.Add(new DxfStyle());
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+TABLES
+  0
+TABLE
+  2
+STYLE
+  5
+6
+100
+AcDbSymbolTable
+ 70
+0
+");
+        }
+
+        [Fact]
+        public void WriteTableWithExtendedDataTest()
+        {
+            var file = new DxfFile();
+            file.TablesSection.StyleTable.ExtensionDataGroups.Add(new DxfCodePairGroup("ACAD_XDICTIONARY",
+                new DxfCodePairOrGroup[]
+                {
+                    new DxfCodePair(360, "AAAA"),
+                    new DxfCodePair(360, "BBBB")
+                }));
+            file.Styles.Add(new DxfStyle());
+            VerifyFileContains(file, @"
+  0
+SECTION
+  2
+TABLES
+  0
+TABLE
+  2
+STYLE
+  5
+6
+102
+{ACAD_XDICTIONARY
+360
+AAAA
+360
+BBBB
+102
+}
+100
+AcDbSymbolTable
+ 70
+0
+");
         }
 
         [Fact]

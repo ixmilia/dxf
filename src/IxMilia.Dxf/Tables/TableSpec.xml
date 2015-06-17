@@ -15,14 +15,6 @@
       <Property Name="Scalability" Code="281" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
 
       <Property Name="BitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
-      <Property Name="XDataApplicationName" Code="1001" Type="string" DefaultValue="null" WriteCondition="XDataApplicationName != null" MinVersion="R2000" />
-      <Property Name="XDataStringData" Code="1000" Type="string" DefaultValue="null" WriteCondition="XDataStringData != null" MinVersion="R2000" />
-      <!-- MinVersion=R2000
-      1002 {
-      1070 AutodeskDesignCenterVersion : short
-      1070 InsertUnits : DxfUnits
-      1002 }
-      -->
     </TableItem>
   </Table>
   <Table Type="DimStyle" TypeString="DimStyleText">

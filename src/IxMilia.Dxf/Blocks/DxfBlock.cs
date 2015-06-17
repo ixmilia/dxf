@@ -26,6 +26,8 @@ namespace IxMilia.Dxf.Blocks
         public uint OwnerHandle { get; set; }
         public string Description { get; set; }
         public DxfXData XData { get; set; }
+        public List<DxfCodePairGroup> StartExtensionDataGroups { get; private set; }
+        public List<DxfCodePairGroup> EndExtensionDataGroups { get; private set; }
 
         public bool IsAnonymous
         {
@@ -73,6 +75,8 @@ namespace IxMilia.Dxf.Blocks
         {
             BasePoint = DxfPoint.Origin;
             Entities = new List<DxfEntity>();
+            StartExtensionDataGroups = new List<DxfCodePairGroup>();
+            EndExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
@@ -84,9 +88,16 @@ namespace IxMilia.Dxf.Blocks
                 list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
             }
 
+            if (version >= DxfAcadVersion.R14)
+            {
+                foreach (var group in StartExtensionDataGroups)
+                {
+                    group.AddValuePairs(list, version, outputHandles);
+                }
+            }
+
             if (version >= DxfAcadVersion.R13)
             {
-                // TODO: application-defined 102 codes for R14+
                 list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
                 list.Add(new DxfCodePair(100, AcDbEntityText));
             }
@@ -131,7 +142,13 @@ namespace IxMilia.Dxf.Blocks
                 XData.AddValuePairs(list, version, outputHandles);
             }
 
-            // TODO: application-defined 102 codes for R14+
+            if (version >= DxfAcadVersion.R14)
+            {
+                foreach (var group in EndExtensionDataGroups)
+                {
+                    group.AddValuePairs(list, version, outputHandles);
+                }
+            }
 
             if (version >= DxfAcadVersion.R2000)
             {
@@ -228,6 +245,10 @@ namespace IxMilia.Dxf.Blocks
                             case 330:
                                 block.OwnerHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
                                 break;
+                            case DxfCodePairGroup.GroupCodeNumber:
+                                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                                block.StartExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                                break;
                             case (int)DxfXDataType.ApplicationName:
                                 block.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
                                 break;
@@ -247,6 +268,10 @@ namespace IxMilia.Dxf.Blocks
                                 break;
                             case 100:
                                 Debug.Assert(pair.StringValue == AcDbEntityText || pair.StringValue == AcDbBlockEndText);
+                                break;
+                            case DxfCodePairGroup.GroupCodeNumber:
+                                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                                block.EndExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                                 break;
                         }
                     }

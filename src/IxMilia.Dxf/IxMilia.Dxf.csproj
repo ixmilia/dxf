@@ -71,10 +71,16 @@
     <Compile Include="Entities\DxfCircle.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DxfDgnUnderlay.cs">
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\DxfDiameterDimension.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfDimensionBase.cs">
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\DxfDwfUnderlay.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfEllipse.cs">
@@ -128,6 +134,9 @@
     <Compile Include="Entities\DxfOrdinateDimension.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DxfPdfUnderlay.cs">
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\DxfPolyline.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
@@ -171,6 +180,9 @@
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfTrace.cs">
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\DxfUnderlay.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfVertex.cs">

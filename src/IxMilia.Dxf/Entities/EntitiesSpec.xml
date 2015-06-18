@@ -1100,7 +1100,29 @@
   UNDERLAY
   
   -->
-  <!-- TODO MinVersion=R2007 -->
+  <Entity Name="DxfUnderlay" EntityType="Underlay" SubclassMarker="AcDbUnderlayReference" TypeString="UNDERLAY" DefaultConstructor="Internal" CopyConstructor="Protected" MinVersion="R2007">
+    <Property Name="ObjectHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="XScale" Code="41" Type="double" DefaultValue="1.0" />
+    <Property Name="YScale" Code="42" Type="double" DefaultValue="1.0" />
+    <Property Name="ZScale" Code="43" Type="double" DefaultValue="1.0" />
+    <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" />
+    <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
+    <Property Name="Flags" Code="280" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
+      <Flag Name="IsClippingOn" Mask="1" />
+      <Flag Name="IsUnderlayOn" Mask="2" />
+      <Flag Name="IsMonochrome" Mask="4" />
+      <Flag Name="AdjustForBackground" Mask="8" />
+      <Flag Name="IsClipInsideMode" Mask="16" />
+    </Property>
+    <Property Name="Contrast" Code="281" Type="short" DefaultValue="100" />
+    <Property Name="Fade" Code="282" Type="short" DefaultValue="0" />
+    <Property Name="PointX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="PointY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+  </Entity>
+  <Entity Name="DxfDgnUnderlay" EntityType="DgnUnderlay" SubclassMarker="null" TypeString="DGNUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DGN" />
+  <Entity Name="DxfDwfUnderlay" EntityType="DwfUnderlay" SubclassMarker="null" TypeString="DWFUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DWF" />
+  <Entity Name="DxfPdfUnderlay" EntityType="PdfUnderlay" SubclassMarker="null" TypeString="PDFUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="PDF" />
   <!--
   
   VERTEX

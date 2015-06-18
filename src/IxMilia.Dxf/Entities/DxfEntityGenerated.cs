@@ -17,7 +17,9 @@ namespace IxMilia.Dxf.Entities
         AttributeDefinition,
         Body,
         Circle,
+        DgnUnderlay,
         Dimension,
+        DwfUnderlay,
         Ellipse,
         Face,
         Helix,
@@ -32,6 +34,7 @@ namespace IxMilia.Dxf.Entities
         ModelerGeometry,
         Ole2Frame,
         OleFrame,
+        PdfUnderlay,
         Point,
         Polyline,
         ProxyEntity,
@@ -47,6 +50,7 @@ namespace IxMilia.Dxf.Entities
         Text,
         Tolerance,
         Trace,
+        Underlay,
         Vertex,
         WipeOut,
         XLine,
@@ -154,6 +158,14 @@ namespace IxMilia.Dxf.Entities
                         return "TOLERANCE";
                     case DxfEntityType.Trace:
                         return "TRACE";
+                    case DxfEntityType.Underlay:
+                        return "UNDERLAY";
+                    case DxfEntityType.DgnUnderlay:
+                        return "DGNUNDERLAY";
+                    case DxfEntityType.DwfUnderlay:
+                        return "DWFUNDERLAY";
+                    case DxfEntityType.PdfUnderlay:
+                        return "PDFUNDERLAY";
                     case DxfEntityType.Vertex:
                         return "VERTEX";
                     case DxfEntityType.WipeOut:
@@ -484,6 +496,18 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case "TRACE":
                     entity = new DxfTrace();
+                    break;
+                case "UNDERLAY":
+                    entity = new DxfUnderlay();
+                    break;
+                case "DGNUNDERLAY":
+                    entity = new DxfDgnUnderlay();
+                    break;
+                case "DWFUNDERLAY":
+                    entity = new DxfDwfUnderlay();
+                    break;
+                case "PDFUNDERLAY":
+                    entity = new DxfPdfUnderlay();
                     break;
                 case "VERTEX":
                     entity = new DxfVertex();

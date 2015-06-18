@@ -1119,6 +1119,23 @@
     <Property Name="Fade" Code="282" Type="short" DefaultValue="0" />
     <Property Name="PointX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
     <Property Name="PointY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <WriteOrder>
+      <WriteSpecificValue Code="100" Value="AcDbUnderlayReference" />
+      <WriteProperty Property="ObjectHandle" />
+      <WriteProperty Property="InsertionPoint" />
+      <WriteProperty Property="XScale" />
+      <WriteProperty Property="YScale" />
+      <WriteProperty Property="ZScale" />
+      <WriteProperty Property="RotationAngle" />
+      <WriteProperty Property="Normal" />
+      <WriteProperty Property="Flags" />
+      <WriteProperty Property="Contrast" />
+      <WriteProperty Property="Fade" />
+      <Foreach Property="BoundaryPoints">
+        <WriteSpecificValue Code="11" Value="item.X" />
+        <WriteSpecificValue Code="12" Value="item.Y" />
+      </Foreach>
+    </WriteOrder>
   </Entity>
   <Entity Name="DxfDgnUnderlay" EntityType="DgnUnderlay" SubclassMarker="null" TypeString="DGNUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DGN" />
   <Entity Name="DxfDwfUnderlay" EntityType="DwfUnderlay" SubclassMarker="null" TypeString="DWFUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DWF" />

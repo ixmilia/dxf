@@ -569,4 +569,23 @@ namespace IxMilia.Dxf.Entities
             return this;
         }
     }
+
+    public partial class DxfUnderlay
+    {
+        public List<DxfPoint> BoundaryPoints { get; } = new List<DxfPoint>();
+
+        protected override DxfEntity PostParse()
+        {
+            Debug.Assert(PointX.Count == PointY.Count);
+            for (int i = 0; i < PointX.Count; i++)
+            {
+                BoundaryPoints.Add(new DxfPoint(PointX[i], PointY[i], 0.0));
+            }
+
+            PointX.Clear();
+            PointY.Clear();
+
+            return this;
+        }
+    }
 }

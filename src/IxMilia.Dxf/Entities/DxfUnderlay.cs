@@ -144,8 +144,12 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(280, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(281, (this.Contrast)));
             pairs.Add(new DxfCodePair(282, (this.Fade)));
-            pairs.AddRange(this.PointX.Select(p => new DxfCodePair(11, p)));
-            pairs.AddRange(this.PointY.Select(p => new DxfCodePair(21, p)));
+            foreach (var item in BoundaryPoints)
+            {
+                pairs.Add(new DxfCodePair(11, item.X));
+                pairs.Add(new DxfCodePair(12, item.Y));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

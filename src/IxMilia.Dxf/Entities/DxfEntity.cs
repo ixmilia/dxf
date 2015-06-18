@@ -484,6 +484,37 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
+    public partial class DxfEntitySection
+    {
+        public List<DxfPoint> Vertices { get; } = new List<DxfPoint>();
+        public List<DxfPoint> BackLineVertices { get; } = new List<DxfPoint>();
+
+        protected override DxfEntity PostParse()
+        {
+            Debug.Assert(VertexCount == VertexX.Count && VertexCount == VertexY.Count && VertexCount == VertexZ.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(VertexX[i], VertexY[i], VertexZ[i]));
+            }
+
+            VertexX.Clear();
+            VertexY.Clear();
+            VertexZ.Clear();
+
+            Debug.Assert(BackLineVertexCount == BackLineVertexX.Count && BackLineVertexCount == BackLineVertexY.Count && BackLineVertexCount == BackLineVertexZ.Count);
+            for (int i = 0; i < BackLineVertexCount; i++)
+            {
+                BackLineVertices.Add(new DxfPoint(BackLineVertexX[i], BackLineVertexY[i], BackLineVertexZ[i]));
+            }
+
+            BackLineVertexX.Clear();
+            BackLineVertexY.Clear();
+            BackLineVertexZ.Clear();
+
+            return this;
+        }
+    }
+
     public partial class DxfSpline
     {
         public int NumberOfKnots

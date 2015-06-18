@@ -38,6 +38,7 @@ namespace IxMilia.Dxf.Entities
         Ray,
         Region,
         RText,
+        Section,
         Seqend,
         Shape,
         Solid,
@@ -135,6 +136,8 @@ namespace IxMilia.Dxf.Entities
                         return "REGION";
                     case DxfEntityType.RText:
                         return "RTEXT";
+                    case DxfEntityType.Section:
+                        return "SECTION";
                     case DxfEntityType.Seqend:
                         return "SEQEND";
                     case DxfEntityType.Shape:
@@ -454,6 +457,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case "RTEXT":
                     entity = new DxfRText();
+                    break;
+                case "SECTION":
+                    entity = new DxfEntitySection();
                     break;
                 case "SEQEND":
                     entity = new DxfSeqend();

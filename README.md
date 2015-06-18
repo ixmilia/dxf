@@ -65,7 +65,6 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
     - MESH
     - MLEADER
     - MTEXT
-    - SECTION
     - SURFACE
     - TABLE
     - UNDERLAY

@@ -689,7 +689,7 @@
   MLEADERSTYLE
   
   -->
-  <Entity Name="DxfMLeaderStyle" EntityType="MLeaderStyle" SubclassMarker="" TypeString="MLEADERSTYLE" MinVersion="R2007">
+  <Entity Name="DxfMLeaderStyle" EntityType="MLeaderStyle" SubclassMarker="null" TypeString="MLEADERSTYLE" MinVersion="R2007">
     <Property Name="ContentType" Code="170" Type="short" DefaultValue="0" />
     <Property Name="DrawMLeaderOrderType" Code="171" Type="short" DefaultValue="0" />
     <Property Name="DrawLeaderOrderType" Code="172" Type="short" DefaultValue="0" />
@@ -876,7 +876,51 @@
   SECTION
   
   -->
-  <!-- TODO MinVersion=R2007 -->
+  <Entity Name="DxfEntitySection" EntityType="Section" SubclassMarker="AcDbSection" TypeString="SECTION" MinVersion="R2007">
+    <Property Name="State" Code="90" Type="int" DefaultValue="0" />
+    <Property Name="Flags" Code="91" Type="int" DefaultValue="0" />
+    <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+    <Property Name="VerticalDirection" Code="10" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="10,20,30" />
+    <Property Name="TopHeight" Code="40" Type="double" DefaultValue="0.0" />
+    <Property Name="BottomHeight" Code="41" Type="double" DefaultValue="0.0" />
+    <Property Name="IndicatorTransparency" Code="70" Type="short" DefaultValue="0" />
+    <Property Name="IndicatorColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+    <Property Name="IndicatorColorName" Code="411" Type="string" DefaultValue="null" />
+    <Property Name="VertexCount" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
+    <Property Name="VertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="BackLineVertexCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
+    <Property Name="BackLineVertexX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="BackLineVertexY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="BackLineVertexZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="GeometrySettingsHandle" Code="360" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <WriteOrder>
+      <WriteSpecificValue Code="100" Value="AcDbSection" />
+      <WriteProperty Property="State" />
+      <WriteProperty Property="Flags" />
+      <WriteProperty Property="Name" />
+      <WriteProperty Property="VerticalDirection" />
+      <WriteProperty Property="TopHeight" />
+      <WriteProperty Property="BottomHeight" />
+      <WriteProperty Property="IndicatorTransparency" />
+      <WriteProperty Property="IndicatorColor" />
+      <WriteProperty Property="IndicatorColorName" />
+      <WriteSpecificValue Code="92" Value="Vertices.Count" />
+      <Foreach Property="Vertices">
+        <WriteSpecificValue Code="11" Value="item.X" />
+        <WriteSpecificValue Code="21" Value="item.Y" />
+        <WriteSpecificValue Code="31" Value="item.Z" />
+      </Foreach>
+      <WriteSpecificValue Code="93" Value="BackLineVertices.Count" />
+      <Foreach Property="BackLineVertices">
+        <WriteSpecificValue Code="12" Value="item.X" />
+        <WriteSpecificValue Code="22" Value="item.Y" />
+        <WriteSpecificValue Code="32" Value="item.Z" />
+      </Foreach>
+      <WriteProperty Property="GeometrySettingsHandle" />
+    </WriteOrder>
+  </Entity>
   <!--
   
   SEQEND

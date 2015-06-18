@@ -86,6 +86,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DxfEntitySection.cs">
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\DxfHelix.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>

@@ -612,7 +612,7 @@
   MESH
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2011 -->
   <!--
   
   MLINE
@@ -683,7 +683,7 @@
   MLEADER
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2007 -->
   <!--
   
   MLEADERSTYLE
@@ -740,7 +740,7 @@
   MTEXT
   
   -->
-  <!-- TODO MinVersion=, HasXData="true" -->
+  <!-- TODO MinVersion=R13, HasXData="true" -->
   <!--
   
   OLEFRAME
@@ -876,7 +876,7 @@
   SECTION
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2007 -->
   <!--
   
   SEQEND
@@ -991,13 +991,13 @@
   SURFACE
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2007 -->
   <!--
   
   TABLE
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2005 -->
   <!--
   
   TEXT
@@ -1056,7 +1056,7 @@
   UNDERLAY
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2007 -->
   <!--
   
   VERTEX

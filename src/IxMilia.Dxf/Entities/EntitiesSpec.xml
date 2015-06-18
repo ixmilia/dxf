@@ -618,7 +618,66 @@
   MLINE
   
   -->
-  <!-- TODO MinVersion= -->
+  <Entity Name="DxfMLine" EntityType="MLine" SubclassMarker="AcDbMline" TypeString="MLINE" MinVersion="R13">
+    <Property Name="StyleName" Code="2" Type="string" DefaultValue="null" />
+    <Property Name="StyleHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="ScaleFactor" Code="40" Type="double" DefaultValue="1.0" />
+    <Property Name="Justification" Code="70" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" />
+    <Property Name="Flags" Code="71" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
+      <Flag Name="HasAtLeastOneVertex" Mask="1" />
+      <Flag Name="IsClosed" Mask="2" />
+      <Flag Name="SuppressStartCaps" Mask="4" />
+      <Flag Name="SuppressEndCaps" Mask="8" />
+    </Property>
+    <Property Name="VertexCount" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="StyleElementCount" Code="73" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
+    <Property Name="StartPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" DisableWritingDefault="true" />
+    <Property Name="VertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="SegmentDirectionX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="SegmentDirectionY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="SegmentDirectionZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="MiterDirectionX" Code="13" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="MiterDirectionY" Code="23" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="MiterDirectionZ" Code="33" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="ParameterCount" Code="74" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="Parameters" Code="41" Type="double" DefaultValue="null" AllowMultiples="true" />
+    <Property Name="AreaFillParameterCount" Code="75" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="AreaFillParameters" Code="42" Type="double" DefaultValue="null" AllowMultiples="true" />
+    <WriteOrder>
+      <WriteSpecificValue Code="100" Value="AcDbMline" />
+      <WriteProperty Property="StyleName" />
+      <WriteProperty Property="StyleHandle" />
+      <WriteProperty Property="ScaleFactor" />
+      <WriteProperty Property="Justification" />
+      <WriteProperty Property="Flags" />
+      <WriteSpecificValue Code="72" Value="(short)Vertices.Count" />
+      <WriteProperty Property="StyleElementCount" />
+      <WriteProperty Property="StartPoint" />
+      <WriteProperty Property="Normal" />
+      <Foreach Property="Vertices">
+        <WriteSpecificValue Code="10" Value="item.X" />
+        <WriteSpecificValue Code="20" Value="item.Y" />
+        <WriteSpecificValue Code="30" Value="item.Z" />
+      </Foreach>
+      <Foreach Property="SegmentDirections">
+        <WriteSpecificValue Code="11" Value="item.X" />
+        <WriteSpecificValue Code="21" Value="item.Y" />
+        <WriteSpecificValue Code="31" Value="item.Z" />
+      </Foreach>
+      <Foreach Property="MiterDirections">
+        <WriteSpecificValue Code="12" Value="item.X" />
+        <WriteSpecificValue Code="22" Value="item.Y" />
+        <WriteSpecificValue Code="32" Value="item.Z" />
+      </Foreach>
+      <WriteSpecificValue Code="74" Value="(short)Parameters.Count" />
+      <WriteProperty Property="Parameters" />
+      <WriteSpecificValue Code="75" Value="(short)AreaFillParameters.Count" />
+      <WriteProperty Property="AreaFillParameters" />
+    </WriteOrder>
+  </Entity>
   <!--
   
   MLEADER

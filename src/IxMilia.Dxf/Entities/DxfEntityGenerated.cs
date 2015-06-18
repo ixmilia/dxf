@@ -27,6 +27,7 @@ namespace IxMilia.Dxf.Entities
         Light,
         Line,
         LwPolyline,
+        MLine,
         ModelerGeometry,
         Ole2Frame,
         OleFrame,
@@ -115,6 +116,8 @@ namespace IxMilia.Dxf.Entities
                         return "LINE";
                     case DxfEntityType.LwPolyline:
                         return "LWPOLYLINE";
+                    case DxfEntityType.MLine:
+                        return "MLINE";
                     case DxfEntityType.OleFrame:
                         return "OLEFRAME";
                     case DxfEntityType.Ole2Frame:
@@ -421,6 +424,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case "LWPOLYLINE":
                     entity = new DxfLwPolyline();
+                    break;
+                case "MLINE":
+                    entity = new DxfMLine();
                     break;
                 case "OLEFRAME":
                     entity = new DxfOleFrame();

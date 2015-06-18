@@ -424,6 +424,48 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
+    public partial class DxfMLine
+    {
+        public List<DxfPoint> Vertices { get; } = new List<DxfPoint>();
+        public List<DxfVector> SegmentDirections { get; } = new List<DxfVector>();
+        public List<DxfVector> MiterDirections { get; } = new List<DxfVector>();
+
+        protected override DxfEntity PostParse()
+        {
+            Debug.Assert(VertexCount == VertexX.Count && VertexCount == VertexY.Count && VertexCount == VertexZ.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(VertexX[i], VertexY[i], VertexZ[i]));
+            }
+
+            VertexX.Clear();
+            VertexY.Clear();
+            VertexZ.Clear();
+
+            Debug.Assert(VertexCount == SegmentDirectionX.Count && VertexCount == SegmentDirectionY.Count && VertexCount == SegmentDirectionY.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(SegmentDirectionX[i], SegmentDirectionY[i], SegmentDirectionY[i]));
+            }
+
+            SegmentDirectionX.Clear();
+            SegmentDirectionY.Clear();
+            SegmentDirectionY.Clear();
+
+            Debug.Assert(VertexCount == MiterDirectionX.Count && VertexCount == MiterDirectionY.Count && VertexCount == MiterDirectionZ.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(MiterDirectionX[i], MiterDirectionY[i], MiterDirectionZ[i]));
+            }
+
+            MiterDirectionX.Clear();
+            MiterDirectionY.Clear();
+            MiterDirectionZ.Clear();
+
+            return this;
+        }
+    }
+
     public partial class DxfSpline
     {
         public int NumberOfKnots

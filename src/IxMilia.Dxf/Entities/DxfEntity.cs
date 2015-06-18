@@ -112,6 +112,27 @@ namespace IxMilia.Dxf.Entities
         R2010 = 0
     }
 
+    public enum DxfHelixConstraint
+    {
+        ConstrainTurnHeight = 0,
+        ConstrainTurns = 1,
+        ConstrainHeight = 2
+    }
+
+    public enum DxfLightType
+    {
+        Distant = 1,
+        Point = 2,
+        Spot = 3
+    }
+
+    public enum DxfLightAttenuationType
+    {
+        None = 0,
+        InverseLinear = 1,
+        InverseSquare = 2
+    }
+
     public abstract partial class DxfEntity
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();

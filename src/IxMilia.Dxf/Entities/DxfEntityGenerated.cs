@@ -20,9 +20,11 @@ namespace IxMilia.Dxf.Entities
         Dimension,
         Ellipse,
         Face,
+        Helix,
         Image,
         Insert,
         Leader,
+        Light,
         Line,
         LwPolyline,
         ModelerGeometry,
@@ -99,12 +101,16 @@ namespace IxMilia.Dxf.Entities
                         return "DIMENSION";
                     case DxfEntityType.Ellipse:
                         return "ELLIPSE";
+                    case DxfEntityType.Helix:
+                        return "HELIX";
                     case DxfEntityType.Image:
                         return "IMAGE";
                     case DxfEntityType.Insert:
                         return "INSERT";
                     case DxfEntityType.Leader:
                         return "LEADER";
+                    case DxfEntityType.Light:
+                        return "LIGHT";
                     case DxfEntityType.Line:
                         return "LINE";
                     case DxfEntityType.LwPolyline:
@@ -394,6 +400,9 @@ namespace IxMilia.Dxf.Entities
                 case "ELLIPSE":
                     entity = new DxfEllipse();
                     break;
+                case "HELIX":
+                    entity = new DxfHelix();
+                    break;
                 case "IMAGE":
                     entity = new DxfImage();
                     break;
@@ -402,6 +411,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case "LEADER":
                     entity = new DxfLeader();
+                    break;
+                case "LIGHT":
+                    entity = new DxfLight();
                     break;
                 case "LINE":
                 case "3DLINE":
@@ -2726,6 +2738,127 @@ namespace IxMilia.Dxf.Entities
     }
 
     /// <summary>
+    /// DxfHelix class
+    /// </summary>
+    public partial class DxfHelix : DxfEntity
+    {
+        public override DxfEntityType EntityType { get { return DxfEntityType.Helix; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
+
+        public int MajorReleaseNumber { get; set; }
+        public int MaintainenceReleaseNumber { get; set; }
+        public DxfPoint AxisBasePoint { get; set; }
+        public DxfPoint StartPoint { get; set; }
+        public DxfVector AxisVector { get; set; }
+        public double Radius { get; set; }
+        public double NumberOfTurns { get; set; }
+        public double TurnHeight { get; set; }
+        public bool IsRightHanded { get; set; }
+        public DxfHelixConstraint Constraint { get; set; }
+
+        public DxfHelix()
+            : base()
+        {
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            this.MajorReleaseNumber = 0;
+            this.MaintainenceReleaseNumber = 0;
+            this.AxisBasePoint = DxfPoint.Origin;
+            this.StartPoint = DxfPoint.Origin;
+            this.AxisVector = DxfVector.ZAxis;
+            this.Radius = 0.0;
+            this.NumberOfTurns = 0.0;
+            this.TurnHeight = 0.0;
+            this.IsRightHanded = false;
+            this.Constraint = DxfHelixConstraint.ConstrainTurnHeight;
+        }
+
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbHelix"));
+            pairs.Add(new DxfCodePair(90, (this.MajorReleaseNumber)));
+            pairs.Add(new DxfCodePair(91, (this.MaintainenceReleaseNumber)));
+            pairs.Add(new DxfCodePair(10, AxisBasePoint.X));
+            pairs.Add(new DxfCodePair(20, AxisBasePoint.Y));
+            pairs.Add(new DxfCodePair(30, AxisBasePoint.Z));
+            pairs.Add(new DxfCodePair(11, StartPoint.X));
+            pairs.Add(new DxfCodePair(21, StartPoint.Y));
+            pairs.Add(new DxfCodePair(31, StartPoint.Z));
+            pairs.Add(new DxfCodePair(12, AxisVector.X));
+            pairs.Add(new DxfCodePair(22, AxisVector.Y));
+            pairs.Add(new DxfCodePair(32, AxisVector.Z));
+            pairs.Add(new DxfCodePair(40, (this.Radius)));
+            pairs.Add(new DxfCodePair(41, (this.NumberOfTurns)));
+            pairs.Add(new DxfCodePair(42, (this.TurnHeight)));
+            pairs.Add(new DxfCodePair(290, (this.IsRightHanded)));
+            pairs.Add(new DxfCodePair(280, (short)(this.Constraint)));
+        }
+
+        internal override bool TrySetPair(DxfCodePair pair)
+        {
+            switch (pair.Code)
+            {
+                case 10:
+                    this.AxisBasePoint.X = pair.DoubleValue;
+                    break;
+                case 20:
+                    this.AxisBasePoint.Y = pair.DoubleValue;
+                    break;
+                case 30:
+                    this.AxisBasePoint.Z = pair.DoubleValue;
+                    break;
+                case 11:
+                    this.StartPoint.X = pair.DoubleValue;
+                    break;
+                case 21:
+                    this.StartPoint.Y = pair.DoubleValue;
+                    break;
+                case 31:
+                    this.StartPoint.Z = pair.DoubleValue;
+                    break;
+                case 12:
+                    this.AxisVector.X = pair.DoubleValue;
+                    break;
+                case 22:
+                    this.AxisVector.Y = pair.DoubleValue;
+                    break;
+                case 32:
+                    this.AxisVector.Z = pair.DoubleValue;
+                    break;
+                case 40:
+                    this.Radius = (pair.DoubleValue);
+                    break;
+                case 41:
+                    this.NumberOfTurns = (pair.DoubleValue);
+                    break;
+                case 42:
+                    this.TurnHeight = (pair.DoubleValue);
+                    break;
+                case 90:
+                    this.MajorReleaseNumber = (pair.IntegerValue);
+                    break;
+                case 91:
+                    this.MaintainenceReleaseNumber = (pair.IntegerValue);
+                    break;
+                case 280:
+                    this.Constraint = (DxfHelixConstraint)(pair.ShortValue);
+                    break;
+                case 290:
+                    this.IsRightHanded = (pair.BoolValue);
+                    break;
+                default:
+                    return base.TrySetPair(pair);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
     /// DxfImage class
     /// </summary>
     public partial class DxfImage : DxfEntity
@@ -3291,6 +3424,167 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 340:
                     this.AssociatedAnnotationReference = (pair.StringValue);
+                    break;
+                default:
+                    return base.TrySetPair(pair);
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// DxfLight class
+    /// </summary>
+    public partial class DxfLight : DxfEntity
+    {
+        public override DxfEntityType EntityType { get { return DxfEntityType.Light; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
+
+        public int VersionNumber { get; set; }
+        public string Name { get; set; }
+        public DxfLightType LightType { get; set; }
+        public bool IsActive { get; set; }
+        public bool PlotGlyph { get; set; }
+        public double Intensity { get; set; }
+        public DxfPoint Position { get; set; }
+        public DxfPoint TargetLocation { get; set; }
+        public DxfLightAttenuationType AttentuationType { get; set; }
+        public bool UseAttenuationLimits { get; set; }
+        public double AttenuationStartLimit { get; set; }
+        public double AttenuationEndLimit { get; set; }
+        public double HotspotAngle { get; set; }
+        public double FalloffAngle { get; set; }
+        public bool CastShadows { get; set; }
+        public DxfShadowType ShadowType { get; set; }
+        public int ShadowMapSize { get; set; }
+        public short ShadowMapSoftness { get; set; }
+
+        public DxfLight()
+            : base()
+        {
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            this.VersionNumber = 0;
+            this.Name = null;
+            this.LightType = DxfLightType.Distant;
+            this.IsActive = true;
+            this.PlotGlyph = true;
+            this.Intensity = 1.0;
+            this.Position = DxfPoint.Origin;
+            this.TargetLocation = DxfPoint.Origin;
+            this.AttentuationType = DxfLightAttenuationType.None;
+            this.UseAttenuationLimits = true;
+            this.AttenuationStartLimit = 0.0;
+            this.AttenuationEndLimit = 1.0;
+            this.HotspotAngle = 0.0;
+            this.FalloffAngle = 0.0;
+            this.CastShadows = true;
+            this.ShadowType = DxfShadowType.RayTraced;
+            this.ShadowMapSize = 0;
+            this.ShadowMapSoftness = 0;
+        }
+
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbLight"));
+            pairs.Add(new DxfCodePair(90, (this.VersionNumber)));
+            pairs.Add(new DxfCodePair(1, (this.Name)));
+            pairs.Add(new DxfCodePair(70, (short)(this.LightType)));
+            pairs.Add(new DxfCodePair(290, (this.IsActive)));
+            pairs.Add(new DxfCodePair(291, (this.PlotGlyph)));
+            pairs.Add(new DxfCodePair(40, (this.Intensity)));
+            pairs.Add(new DxfCodePair(10, Position.X));
+            pairs.Add(new DxfCodePair(20, Position.Y));
+            pairs.Add(new DxfCodePair(30, Position.Z));
+            pairs.Add(new DxfCodePair(11, TargetLocation.X));
+            pairs.Add(new DxfCodePair(21, TargetLocation.Y));
+            pairs.Add(new DxfCodePair(31, TargetLocation.Z));
+            pairs.Add(new DxfCodePair(72, (short)(this.AttentuationType)));
+            pairs.Add(new DxfCodePair(292, (this.UseAttenuationLimits)));
+            pairs.Add(new DxfCodePair(41, (this.AttenuationStartLimit)));
+            pairs.Add(new DxfCodePair(42, (this.AttenuationEndLimit)));
+            pairs.Add(new DxfCodePair(50, (this.HotspotAngle)));
+            pairs.Add(new DxfCodePair(51, (this.FalloffAngle)));
+            pairs.Add(new DxfCodePair(293, (this.CastShadows)));
+            pairs.Add(new DxfCodePair(73, (short)(this.ShadowType)));
+            pairs.Add(new DxfCodePair(91, (this.ShadowMapSize)));
+            pairs.Add(new DxfCodePair(280, (this.ShadowMapSoftness)));
+        }
+
+        internal override bool TrySetPair(DxfCodePair pair)
+        {
+            switch (pair.Code)
+            {
+                case 1:
+                    this.Name = (pair.StringValue);
+                    break;
+                case 10:
+                    this.Position.X = pair.DoubleValue;
+                    break;
+                case 20:
+                    this.Position.Y = pair.DoubleValue;
+                    break;
+                case 30:
+                    this.Position.Z = pair.DoubleValue;
+                    break;
+                case 11:
+                    this.TargetLocation.X = pair.DoubleValue;
+                    break;
+                case 21:
+                    this.TargetLocation.Y = pair.DoubleValue;
+                    break;
+                case 31:
+                    this.TargetLocation.Z = pair.DoubleValue;
+                    break;
+                case 40:
+                    this.Intensity = (pair.DoubleValue);
+                    break;
+                case 41:
+                    this.AttenuationStartLimit = (pair.DoubleValue);
+                    break;
+                case 42:
+                    this.AttenuationEndLimit = (pair.DoubleValue);
+                    break;
+                case 50:
+                    this.HotspotAngle = (pair.DoubleValue);
+                    break;
+                case 51:
+                    this.FalloffAngle = (pair.DoubleValue);
+                    break;
+                case 70:
+                    this.LightType = (DxfLightType)(pair.ShortValue);
+                    break;
+                case 72:
+                    this.AttentuationType = (DxfLightAttenuationType)(pair.ShortValue);
+                    break;
+                case 73:
+                    this.ShadowType = (DxfShadowType)(pair.ShortValue);
+                    break;
+                case 90:
+                    this.VersionNumber = (pair.IntegerValue);
+                    break;
+                case 91:
+                    this.ShadowMapSize = (pair.IntegerValue);
+                    break;
+                case 280:
+                    this.ShadowMapSoftness = (pair.ShortValue);
+                    break;
+                case 290:
+                    this.IsActive = (pair.BoolValue);
+                    break;
+                case 291:
+                    this.PlotGlyph = (pair.BoolValue);
+                    break;
+                case 292:
+                    this.UseAttenuationLimits = (pair.BoolValue);
+                    break;
+                case 293:
+                    this.CastShadows = (pair.BoolValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

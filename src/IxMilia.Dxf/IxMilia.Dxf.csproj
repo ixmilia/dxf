@@ -107,6 +107,9 @@
     <Compile Include="Entities\DxfLwPolyline.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DxfMLeaderStyle.cs">
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\DxfMLine.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>

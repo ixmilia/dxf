@@ -133,6 +133,24 @@ namespace IxMilia.Dxf.Entities
         InverseSquare = 2
     }
 
+    public enum DxfTextAttachmentDirection
+    {
+        Horizontal = 0,
+        Vertical = 1
+    }
+
+    public enum DxfBottomTextAttachmentDirection
+    {
+        Center = 9,
+        UnderlineAndCenter = 10
+    }
+
+    public enum DxfTopTextAttachmentDirection
+    {
+        Center = 9,
+        OverlineAndCenter = 10
+    }
+
     public abstract partial class DxfEntity
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();

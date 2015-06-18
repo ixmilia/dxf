@@ -62,17 +62,11 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
   - still need AcDbXrecord for ATTDEF and ATTRIB
   - entities complete R10 through R2014 _EXCEPT_
     - HATCH
-    - HELIX
-    - LIGHT
     - MESH
-    - MLINE
     - MLEADER
-    - MLEADERSTYLE
     - MTEXT
-    - SECTION
     - SURFACE
     - TABLE
-    - UNDERLAY
     - VIEWPORT
 - OBJECTS section - NYI
 

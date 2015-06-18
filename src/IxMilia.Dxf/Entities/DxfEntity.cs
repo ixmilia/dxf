@@ -112,6 +112,45 @@ namespace IxMilia.Dxf.Entities
         R2010 = 0
     }
 
+    public enum DxfHelixConstraint
+    {
+        ConstrainTurnHeight = 0,
+        ConstrainTurns = 1,
+        ConstrainHeight = 2
+    }
+
+    public enum DxfLightType
+    {
+        Distant = 1,
+        Point = 2,
+        Spot = 3
+    }
+
+    public enum DxfLightAttenuationType
+    {
+        None = 0,
+        InverseLinear = 1,
+        InverseSquare = 2
+    }
+
+    public enum DxfTextAttachmentDirection
+    {
+        Horizontal = 0,
+        Vertical = 1
+    }
+
+    public enum DxfBottomTextAttachmentDirection
+    {
+        Center = 9,
+        UnderlineAndCenter = 10
+    }
+
+    public enum DxfTopTextAttachmentDirection
+    {
+        Center = 9,
+        OverlineAndCenter = 10
+    }
+
     public abstract partial class DxfEntity
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
@@ -403,6 +442,79 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
+    public partial class DxfMLine
+    {
+        public List<DxfPoint> Vertices { get; } = new List<DxfPoint>();
+        public List<DxfVector> SegmentDirections { get; } = new List<DxfVector>();
+        public List<DxfVector> MiterDirections { get; } = new List<DxfVector>();
+
+        protected override DxfEntity PostParse()
+        {
+            Debug.Assert(VertexCount == VertexX.Count && VertexCount == VertexY.Count && VertexCount == VertexZ.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(VertexX[i], VertexY[i], VertexZ[i]));
+            }
+
+            VertexX.Clear();
+            VertexY.Clear();
+            VertexZ.Clear();
+
+            Debug.Assert(VertexCount == SegmentDirectionX.Count && VertexCount == SegmentDirectionY.Count && VertexCount == SegmentDirectionY.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(SegmentDirectionX[i], SegmentDirectionY[i], SegmentDirectionY[i]));
+            }
+
+            SegmentDirectionX.Clear();
+            SegmentDirectionY.Clear();
+            SegmentDirectionY.Clear();
+
+            Debug.Assert(VertexCount == MiterDirectionX.Count && VertexCount == MiterDirectionY.Count && VertexCount == MiterDirectionZ.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(MiterDirectionX[i], MiterDirectionY[i], MiterDirectionZ[i]));
+            }
+
+            MiterDirectionX.Clear();
+            MiterDirectionY.Clear();
+            MiterDirectionZ.Clear();
+
+            return this;
+        }
+    }
+
+    public partial class DxfEntitySection
+    {
+        public List<DxfPoint> Vertices { get; } = new List<DxfPoint>();
+        public List<DxfPoint> BackLineVertices { get; } = new List<DxfPoint>();
+
+        protected override DxfEntity PostParse()
+        {
+            Debug.Assert(VertexCount == VertexX.Count && VertexCount == VertexY.Count && VertexCount == VertexZ.Count);
+            for (int i = 0; i < VertexCount; i++)
+            {
+                Vertices.Add(new DxfPoint(VertexX[i], VertexY[i], VertexZ[i]));
+            }
+
+            VertexX.Clear();
+            VertexY.Clear();
+            VertexZ.Clear();
+
+            Debug.Assert(BackLineVertexCount == BackLineVertexX.Count && BackLineVertexCount == BackLineVertexY.Count && BackLineVertexCount == BackLineVertexZ.Count);
+            for (int i = 0; i < BackLineVertexCount; i++)
+            {
+                BackLineVertices.Add(new DxfPoint(BackLineVertexX[i], BackLineVertexY[i], BackLineVertexZ[i]));
+            }
+
+            BackLineVertexX.Clear();
+            BackLineVertexY.Clear();
+            BackLineVertexZ.Clear();
+
+            return this;
+        }
+    }
+
     public partial class DxfSpline
     {
         public int NumberOfKnots
@@ -453,6 +565,25 @@ namespace IxMilia.Dxf.Entities
             FitPointX.Clear();
             FitPointY.Clear();
             FitPointZ.Clear();
+
+            return this;
+        }
+    }
+
+    public partial class DxfUnderlay
+    {
+        public List<DxfPoint> BoundaryPoints { get; } = new List<DxfPoint>();
+
+        protected override DxfEntity PostParse()
+        {
+            Debug.Assert(PointX.Count == PointY.Count);
+            for (int i = 0; i < PointX.Count; i++)
+            {
+                BoundaryPoints.Add(new DxfPoint(PointX[i], PointY[i], 0.0));
+            }
+
+            PointX.Clear();
+            PointY.Clear();
 
             return this;
         }

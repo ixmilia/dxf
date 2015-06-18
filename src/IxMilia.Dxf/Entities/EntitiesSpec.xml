@@ -399,7 +399,18 @@
   HELIX
   
   -->
-  <!-- TODO MinVersion=R2007 -->
+  <Entity Name="DxfHelix" EntityType="Helix" SubclassMarker="AcDbHelix" TypeString="HELIX" MinVersion="R2007">
+    <Property Name="MajorReleaseNumber" Code="90" Type="int" DefaultValue="0" />
+    <Property Name="MaintainenceReleaseNumber" Code="91" Type="int" DefaultValue="0" />
+    <Property Name="AxisBasePoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="StartPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
+    <Property Name="AxisVector" Code="12" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="12,22,32" />
+    <Property Name="Radius" Code="40" Type="double" DefaultValue="0.0" />
+    <Property Name="NumberOfTurns" Code="41" Type="double" DefaultValue="0.0" />
+    <Property Name="TurnHeight" Code="42" Type="double" DefaultValue="0.0" />
+    <Property Name="IsRightHanded" Code="290" Type="bool" DefaultValue="false" />
+    <Property Name="Constraint" Code="280" Type="DxfHelixConstraint" DefaultValue="DxfHelixConstraint.ConstrainTurnHeight" ReadConverter="(DxfHelixConstraint)" WriteConverter="(short)" />
+  </Entity>
   <!--
   
   IMAGE
@@ -523,7 +534,26 @@
   LIGHT
   
   -->
-  <!-- TODO MinVersion= -->
+  <Entity Name="DxfLight" EntityType="Light" SubclassMarker="AcDbLight" TypeString="LIGHT" MinVersion="R2007">
+    <Property Name="VersionNumber" Code="90" Type="int" DefaultValue="0" />
+    <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+    <Property Name="LightType" Code="70" Type="DxfLightType" DefaultValue="DxfLightType.Distant" ReadConverter="(DxfLightType)" WriteConverter="(short)" />
+    <Property Name="IsActive" Code="290" Type="bool" DefaultValue="true" />
+    <Property Name="PlotGlyph" Code="291" Type="bool" DefaultValue="true" />
+    <Property Name="Intensity" Code="40" Type="double" DefaultValue="1.0" />
+    <Property Name="Position" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="TargetLocation" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
+    <Property Name="AttentuationType" Code="72" Type="DxfLightAttenuationType" DefaultValue="DxfLightAttenuationType.None" ReadConverter="(DxfLightAttenuationType)" WriteConverter="(short)" />
+    <Property Name="UseAttenuationLimits" Code="292" Type="bool" DefaultValue="true" />
+    <Property Name="AttenuationStartLimit" Code="41" Type="double" DefaultValue="0.0" />
+    <Property Name="AttenuationEndLimit" Code="42" Type="double" DefaultValue="1.0" />
+    <Property Name="HotspotAngle" Code="50" Type="double" DefaultValue="0.0" />
+    <Property Name="FalloffAngle" Code="51" Type="double" DefaultValue="0.0" />
+    <Property Name="CastShadows" Code="293" Type="bool" DefaultValue="true" />
+    <Property Name="ShadowType" Code="73" Type="DxfShadowType" DefaultValue="DxfShadowType.RayTraced" ReadConverter="(DxfShadowType)" WriteConverter="(short)" />
+    <Property Name="ShadowMapSize" Code="91" Type="int" DefaultValue="0" />
+    <Property Name="ShadowMapSoftness" Code="280" Type="short" DefaultValue="0" />
+  </Entity>
   <!--
   
   LINE
@@ -582,31 +612,135 @@
   MESH
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2011 -->
   <!--
   
   MLINE
   
   -->
-  <!-- TODO MinVersion= -->
+  <Entity Name="DxfMLine" EntityType="MLine" SubclassMarker="AcDbMline" TypeString="MLINE" MinVersion="R13">
+    <Property Name="StyleName" Code="2" Type="string" DefaultValue="null" />
+    <Property Name="StyleHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="ScaleFactor" Code="40" Type="double" DefaultValue="1.0" />
+    <Property Name="Justification" Code="70" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" />
+    <Property Name="Flags" Code="71" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
+      <Flag Name="HasAtLeastOneVertex" Mask="1" />
+      <Flag Name="IsClosed" Mask="2" />
+      <Flag Name="SuppressStartCaps" Mask="4" />
+      <Flag Name="SuppressEndCaps" Mask="8" />
+    </Property>
+    <Property Name="VertexCount" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="StyleElementCount" Code="73" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
+    <Property Name="StartPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" DisableWritingDefault="true" />
+    <Property Name="VertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="SegmentDirectionX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="SegmentDirectionY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="SegmentDirectionZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="MiterDirectionX" Code="13" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="MiterDirectionY" Code="23" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="MiterDirectionZ" Code="33" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="ParameterCount" Code="74" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="Parameters" Code="41" Type="double" DefaultValue="null" AllowMultiples="true" />
+    <Property Name="AreaFillParameterCount" Code="75" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="AreaFillParameters" Code="42" Type="double" DefaultValue="null" AllowMultiples="true" />
+    <WriteOrder>
+      <WriteSpecificValue Code="100" Value="AcDbMline" />
+      <WriteProperty Property="StyleName" />
+      <WriteProperty Property="StyleHandle" />
+      <WriteProperty Property="ScaleFactor" />
+      <WriteProperty Property="Justification" />
+      <WriteProperty Property="Flags" />
+      <WriteSpecificValue Code="72" Value="(short)Vertices.Count" />
+      <WriteProperty Property="StyleElementCount" />
+      <WriteProperty Property="StartPoint" />
+      <WriteProperty Property="Normal" />
+      <Foreach Property="Vertices">
+        <WriteSpecificValue Code="10" Value="item.X" />
+        <WriteSpecificValue Code="20" Value="item.Y" />
+        <WriteSpecificValue Code="30" Value="item.Z" />
+      </Foreach>
+      <Foreach Property="SegmentDirections">
+        <WriteSpecificValue Code="11" Value="item.X" />
+        <WriteSpecificValue Code="21" Value="item.Y" />
+        <WriteSpecificValue Code="31" Value="item.Z" />
+      </Foreach>
+      <Foreach Property="MiterDirections">
+        <WriteSpecificValue Code="12" Value="item.X" />
+        <WriteSpecificValue Code="22" Value="item.Y" />
+        <WriteSpecificValue Code="32" Value="item.Z" />
+      </Foreach>
+      <WriteSpecificValue Code="74" Value="(short)Parameters.Count" />
+      <WriteProperty Property="Parameters" />
+      <WriteSpecificValue Code="75" Value="(short)AreaFillParameters.Count" />
+      <WriteProperty Property="AreaFillParameters" />
+    </WriteOrder>
+  </Entity>
   <!--
   
   MLEADER
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2007 -->
   <!--
   
   MLEADERSTYLE
   
   -->
-  <!-- TODO MinVersion= -->
+  <Entity Name="DxfMLeaderStyle" EntityType="MLeaderStyle" SubclassMarker="null" TypeString="MLEADERSTYLE" MinVersion="R2007">
+    <Property Name="ContentType" Code="170" Type="short" DefaultValue="0" />
+    <Property Name="DrawMLeaderOrderType" Code="171" Type="short" DefaultValue="0" />
+    <Property Name="DrawLeaderOrderType" Code="172" Type="short" DefaultValue="0" />
+    <Property Name="MaxLeaderSegmentCount" Code="90" Type="int" DefaultValue="0" />
+    <Property Name="FirstSegmentAngleConstraint" Code="40" Type="double" DefaultValue="0.0" />
+    <Property Name="SecondSegmentAngleConstraint" Code="41" Type="double" DefaultValue="0.0" />
+    <Property Name="LeaderLineType" Code="173" Type="short" DefaultValue="0" />
+    <Property Name="LeaderLineColor" Code="91" Type="int" DefaultValue="0" />
+    <Property Name="LeaderLineTypeHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="LeaderLineWeight" Code="92" Type="int" DefaultValue="0" />
+    <Property Name="EnableLanding" Code="290" Type="bool" DefaultValue="true" />
+    <Property Name="LandingGap" Code="42" Type="double" DefaultValue="0.0" />
+    <Property Name="EnableDogleg" Code="291" Type="bool" DefaultValue="true" />
+    <Property Name="DoglegLength" Code="43" Type="double" DefaultValue="0.0" />
+    <Property Name="MLeaderStyleDescription" Code="3" Type="string" DefaultValue="null" />
+    <Property Name="ArrowheadHandle" Code="341" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="ArrowheadSize" Code="44" Type="double" DefaultValue="0.0" />
+    <Property Name="DefaultMTextContents" Code="300" Type="string" DefaultValue="null" />
+    <Property Name="MTextStyleHandle" Code="342" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="TextLeftAttachmentType" Code="174" Type="short" DefaultValue="0" />
+    <Property Name="TextAngleType" Code="175" Type="short" DefaultValue="0" />
+    <Property Name="TextAlignmentType" Code="176" Type="short" DefaultValue="0" />
+    <Property Name="TextRightAttachmentType" Code="178" Type="short" DefaultValue="0" />
+    <Property Name="TextColor" Code="93" Type="int" DefaultValue="0" />
+    <Property Name="TextHeight" Code="45" Type="double" DefaultValue="0.0" />
+    <Property Name="EnableFrameText" Code="292" Type="bool" DefaultValue="true" />
+    <Property Name="AlwaysAlignTextLeft" Code="297" Type="bool" DefaultValue="true" />
+    <Property Name="AlignGap" Code="46" Type="double" DefaultValue="0.0" />
+    <Property Name="BlockContentHandle" Code="343" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="BlockContentColor" Code="94" Type="int" DefaultValue="0" />
+    <Property Name="BlockContentXScale" Code="47" Type="double" DefaultValue="1.0" />
+    <Property Name="BlockContentYScale" Code="49" Type="double" DefaultValue="1.0" />
+    <Property Name="BlockContentZScale" Code="140" Type="double" DefaultValue="1.0" />
+    <Property Name="EnableBlockContentScale" Code="293" Type="bool" DefaultValue="true" />
+    <Property Name="BlockContentRotation" Code="141" Type="double" DefaultValue="0.0" />
+    <Property Name="EnableBlockContentRotation" Code="294" Type="bool" DefaultValue="true" />
+    <Property Name="BlockContentConnectionType" Code="177" Type="short" DefaultValue="0" />
+    <Property Name="Scale" Code="142" Type="double" DefaultValue="1.0" />
+    <Property Name="OverwritePropertyValue" Code="295" Type="bool" DefaultValue="false" />
+    <Property Name="IsAnnotative" Code="296" Type="bool" DefaultValue="true" />
+    <Property Name="BreakGapSize" Code="143" Type="double" DefaultValue="0.0" />
+    <Property Name="TextAttachmentDirection" Code="271" Type="DxfTextAttachmentDirection" DefaultValue="DxfTextAttachmentDirection.Horizontal" ReadConverter="(DxfTextAttachmentDirection)" WriteConverter="(short)" />
+    <Property Name="BottomTextAttachmentDirection" Code="272" Type="DxfBottomTextAttachmentDirection" DefaultValue="DxfBottomTextAttachmentDirection.Center" ReadConverter="(DxfBottomTextAttachmentDirection)" WriteConverter="(short)" />
+    <Property Name="TopTextAttachmentDirection" Code="273" Type="DxfTopTextAttachmentDirection" DefaultValue="DxfTopTextAttachmentDirection.Center" ReadConverter="(DxfTopTextAttachmentDirection)" WriteConverter="(short)" />
+  </Entity>
   <!--
   
   MTEXT
   
   -->
-  <!-- TODO MinVersion=, HasXData="true" -->
+  <!-- TODO MinVersion=R13, HasXData="true" -->
   <!--
   
   OLEFRAME
@@ -742,7 +876,51 @@
   SECTION
   
   -->
-  <!-- TODO MinVersion= -->
+  <Entity Name="DxfEntitySection" EntityType="Section" SubclassMarker="AcDbSection" TypeString="SECTION" MinVersion="R2007">
+    <Property Name="State" Code="90" Type="int" DefaultValue="0" />
+    <Property Name="Flags" Code="91" Type="int" DefaultValue="0" />
+    <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+    <Property Name="VerticalDirection" Code="10" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="10,20,30" />
+    <Property Name="TopHeight" Code="40" Type="double" DefaultValue="0.0" />
+    <Property Name="BottomHeight" Code="41" Type="double" DefaultValue="0.0" />
+    <Property Name="IndicatorTransparency" Code="70" Type="short" DefaultValue="0" />
+    <Property Name="IndicatorColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+    <Property Name="IndicatorColorName" Code="411" Type="string" DefaultValue="null" />
+    <Property Name="VertexCount" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
+    <Property Name="VertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="VertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="BackLineVertexCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
+    <Property Name="BackLineVertexX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="BackLineVertexY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="BackLineVertexZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="GeometrySettingsHandle" Code="360" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <WriteOrder>
+      <WriteSpecificValue Code="100" Value="AcDbSection" />
+      <WriteProperty Property="State" />
+      <WriteProperty Property="Flags" />
+      <WriteProperty Property="Name" />
+      <WriteProperty Property="VerticalDirection" />
+      <WriteProperty Property="TopHeight" />
+      <WriteProperty Property="BottomHeight" />
+      <WriteProperty Property="IndicatorTransparency" />
+      <WriteProperty Property="IndicatorColor" />
+      <WriteProperty Property="IndicatorColorName" />
+      <WriteSpecificValue Code="92" Value="Vertices.Count" />
+      <Foreach Property="Vertices">
+        <WriteSpecificValue Code="11" Value="item.X" />
+        <WriteSpecificValue Code="21" Value="item.Y" />
+        <WriteSpecificValue Code="31" Value="item.Z" />
+      </Foreach>
+      <WriteSpecificValue Code="93" Value="BackLineVertices.Count" />
+      <Foreach Property="BackLineVertices">
+        <WriteSpecificValue Code="12" Value="item.X" />
+        <WriteSpecificValue Code="22" Value="item.Y" />
+        <WriteSpecificValue Code="32" Value="item.Z" />
+      </Foreach>
+      <WriteProperty Property="GeometrySettingsHandle" />
+    </WriteOrder>
+  </Entity>
   <!--
   
   SEQEND
@@ -857,13 +1035,13 @@
   SURFACE
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2007 -->
   <!--
   
   TABLE
   
   -->
-  <!-- TODO MinVersion= -->
+  <!-- TODO MinVersion=R2005 -->
   <!--
   
   TEXT
@@ -922,7 +1100,46 @@
   UNDERLAY
   
   -->
-  <!-- TODO MinVersion= -->
+  <Entity Name="DxfUnderlay" EntityType="Underlay" SubclassMarker="AcDbUnderlayReference" TypeString="UNDERLAY" DefaultConstructor="Internal" CopyConstructor="Protected" MinVersion="R2007">
+    <Property Name="ObjectHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="XScale" Code="41" Type="double" DefaultValue="1.0" />
+    <Property Name="YScale" Code="42" Type="double" DefaultValue="1.0" />
+    <Property Name="ZScale" Code="43" Type="double" DefaultValue="1.0" />
+    <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" />
+    <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
+    <Property Name="Flags" Code="280" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
+      <Flag Name="IsClippingOn" Mask="1" />
+      <Flag Name="IsUnderlayOn" Mask="2" />
+      <Flag Name="IsMonochrome" Mask="4" />
+      <Flag Name="AdjustForBackground" Mask="8" />
+      <Flag Name="IsClipInsideMode" Mask="16" />
+    </Property>
+    <Property Name="Contrast" Code="281" Type="short" DefaultValue="100" />
+    <Property Name="Fade" Code="282" Type="short" DefaultValue="0" />
+    <Property Name="PointX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="PointY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <WriteOrder>
+      <WriteSpecificValue Code="100" Value="AcDbUnderlayReference" />
+      <WriteProperty Property="ObjectHandle" />
+      <WriteProperty Property="InsertionPoint" />
+      <WriteProperty Property="XScale" />
+      <WriteProperty Property="YScale" />
+      <WriteProperty Property="ZScale" />
+      <WriteProperty Property="RotationAngle" />
+      <WriteProperty Property="Normal" />
+      <WriteProperty Property="Flags" />
+      <WriteProperty Property="Contrast" />
+      <WriteProperty Property="Fade" />
+      <Foreach Property="BoundaryPoints">
+        <WriteSpecificValue Code="11" Value="item.X" />
+        <WriteSpecificValue Code="12" Value="item.Y" />
+      </Foreach>
+    </WriteOrder>
+  </Entity>
+  <Entity Name="DxfDgnUnderlay" EntityType="DgnUnderlay" SubclassMarker="null" TypeString="DGNUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DGN" />
+  <Entity Name="DxfDwfUnderlay" EntityType="DwfUnderlay" SubclassMarker="null" TypeString="DWFUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DWF" />
+  <Entity Name="DxfPdfUnderlay" EntityType="PdfUnderlay" SubclassMarker="null" TypeString="PDFUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="PDF" />
   <!--
   
   VERTEX

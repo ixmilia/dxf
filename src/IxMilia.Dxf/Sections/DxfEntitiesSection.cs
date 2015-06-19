@@ -66,11 +66,26 @@ namespace IxMilia.Dxf.Sections
                 buffer.Advance();
                 switch (entity.EntityType)
                 {
+                    case DxfEntityType.Attribute:
+                        var att = (DxfAttribute)entity;
+                        att.MText = GetMText(buffer);
+                        break;
+                    case DxfEntityType.AttributeDefinition:
+                        var attdef = (DxfAttributeDefinition)entity;
+                        attdef.MText = GetMText(buffer);
+                        break;
                     case DxfEntityType.Insert:
                         var insert = (DxfInsert)entity;
                         if (insert.HasAttributes)
                         {
-                            var attribs = CollectWhileType(buffer, DxfEntityType.Attribute).Cast<DxfAttribute>();
+                            var attribs = new List<DxfAttribute>();
+                            while (buffer.ItemsRemain)
+                            {
+                                var nextAtt = GetNextAttribute(buffer);
+                                if (nextAtt == null) break;
+                                attribs.Add(nextAtt);
+                            }
+
                             insert.Attributes.AddRange(attribs);
                             insert.Seqend = GetSeqend(buffer);
                         }
@@ -105,6 +120,38 @@ namespace IxMilia.Dxf.Sections
             }
 
             return result;
+        }
+
+        private static DxfAttribute GetNextAttribute(DxfBufferReader<DxfEntity> buffer)
+        {
+            if (buffer.ItemsRemain)
+            {
+                var entity = buffer.Peek();
+                if (entity.EntityType == DxfEntityType.Attribute)
+                {
+                    buffer.Advance();
+                    var attribute = (DxfAttribute)entity;
+                    attribute.MText = GetMText(buffer);
+                    return attribute;
+                }
+            }
+
+            return null;
+        }
+
+        private static DxfMText GetMText(DxfBufferReader<DxfEntity> buffer)
+        {
+            if (buffer.ItemsRemain)
+            {
+                var entity = buffer.Peek();
+                if (entity.EntityType == DxfEntityType.MText)
+                {
+                    buffer.Advance();
+                    return (DxfMText)entity;
+                }
+            }
+
+            return new DxfMText();
         }
 
         private static DxfSeqend GetSeqend(DxfBufferReader<DxfEntity> buffer)

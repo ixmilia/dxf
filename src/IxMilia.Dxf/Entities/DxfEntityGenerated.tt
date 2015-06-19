@@ -503,7 +503,7 @@ foreach (var entity in entities)
 #>
         }
 <#
-    if (GetProperties(entity).Any())
+    if (GetProperties(entity).Any() && GenerateReaderFunction(entity))
     {
 #>
 

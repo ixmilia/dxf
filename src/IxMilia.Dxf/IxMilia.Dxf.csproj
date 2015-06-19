@@ -125,6 +125,9 @@
     <Compile Include="Entities\DxfModelPoint.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DxfMText.cs">
+      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Entities\DxfOle2Frame.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>

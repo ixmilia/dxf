@@ -32,6 +32,7 @@ namespace IxMilia.Dxf.Entities
         MLeaderStyle,
         MLine,
         ModelerGeometry,
+        MText,
         Ole2Frame,
         OleFrame,
         PdfUnderlay,
@@ -126,6 +127,8 @@ namespace IxMilia.Dxf.Entities
                         return "MLINE";
                     case DxfEntityType.MLeaderStyle:
                         return "MLEADERSTYLE";
+                    case DxfEntityType.MText:
+                        return "MTEXT";
                     case DxfEntityType.OleFrame:
                         return "OLEFRAME";
                     case DxfEntityType.Ole2Frame:
@@ -448,6 +451,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case "MLEADERSTYLE":
                     entity = new DxfMLeaderStyle();
+                    break;
+                case "MTEXT":
+                    entity = new DxfMText();
                     break;
                 case "OLEFRAME":
                     entity = new DxfOleFrame();

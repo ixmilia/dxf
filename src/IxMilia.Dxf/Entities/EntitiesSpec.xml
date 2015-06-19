@@ -159,7 +159,7 @@
   ATTDEF
   
   -->
-  <Entity Name="DxfAttributeDefinition" EntityType="AttributeDefinition" SubclassMarker="null" TypeString="ATTDEF">
+  <Entity Name="DxfAttributeDefinition" EntityType="AttributeDefinition" SubclassMarker="null" TypeString="ATTDEF" GenerateReaderFunction="false">
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="TextHeight" Code="40" Type="double" DefaultValue="1.0" />
@@ -177,7 +177,7 @@
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
     <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion)" WriteConverter="(short)" MinVersion="R2010" />
     <Property Name="Prompt" Code="3" Type="string" DefaultValue="null" />
-    <Property Name="Tag" Code="2" Type="string" DefaultValue="null" />
+    <Property Name="TextTag" Code="2" Type="string" DefaultValue="null" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
       <Flag Name="IsInvisible" Mask="1" />
       <Flag Name="IsConstant" Mask="2" />
@@ -187,7 +187,14 @@
     <Property Name="FieldLength" Code="73" Type="short" DefaultValue="0" DisableWritingDefault="true" />
     <Property Name="VerticalTextJustification" Code="74" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="IsLockedInBlock" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
-    <!-- AcDbXrecord MinVersion=R2007 -->
+    <Property Name="KeepDuplicateRecords" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+    <Property Name="MTextFlag" Code="70" Type="DxfMTextFlag" DefaultValue="DxfMTextFlag.MultilineAttribute" ReadConverter="(DxfMTextFlag)" WriteConverter="(short)" MinVersion="R2007" />
+    <Property Name="IsReallyLocked" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+    <Property Name="SecondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
+    <Property Name="SecondaryAttributeHandles" Code="340" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" MinVersion="R2007" />
+    <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
+    <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
+    <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="AcDbText" MinVersion="R13" />
       <WriteProperty Property="Thickness" />
@@ -206,12 +213,20 @@
       <WriteSpecificValue Code="100" Value="AcDbAttributeDefinition" MinVersion="R13" />
       <WriteProperty Property="Version" />
       <WriteProperty Property="Prompt" />
-      <WriteProperty Property="Tag" />
+      <WriteProperty Property="TextTag" />
       <WriteProperty Property="Flags" />
       <WriteProperty Property="FieldLength" />
       <WriteProperty Property="VerticalTextJustification" />
       <WriteProperty Property="IsLockedInBlock" />
-      <!-- AcDbXrecord MinVersion=R2007 -->
+      <WriteSpecificValue Code="100" Value="AcDbXrecord" MinVersion="R2007" />
+      <WriteProperty Property="KeepDuplicateRecords" />
+      <WriteProperty Property="MTextFlag" />
+      <WriteProperty Property="IsReallyLocked" />
+      <WriteSpecificValue Code="70" Value="(short)SecondaryAttributeHandles.Count" MinVersion="R2007" />
+      <WriteProperty Property="SecondaryAttributeHandles" />
+      <WriteProperty Property="AlignmentPoint" />
+      <WriteProperty Property="AnnotationScale" />
+      <WriteProperty Property="XRecordTag" />
     </WriteOrder>
   </Entity>
   <!--
@@ -219,13 +234,13 @@
   ATTRIB
   
   -->
-  <Entity Name="DxfAttribute" EntityType="Attribute" SubclassMarker="null" TypeString="ATTRIB">
+  <Entity Name="DxfAttribute" EntityType="Attribute" SubclassMarker="null" TypeString="ATTRIB" GenerateReaderFunction="false">
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="TextHeight" Code="40" Type="double" DefaultValue="1.0" />
     <Property Name="Value" Code="1" Type="string" DefaultValue="null" />
     <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion)" WriteConverter="(short)" MinVersion="R2010" />
-    <Property Name="Tag" Code="2" Type="string" DefaultValue="null" />
+    <Property Name="AttributeTag" Code="2" Type="string" DefaultValue="null" />
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
       <Flag Name="IsInvisible" Mask="1" />
       <Flag Name="IsConstant" Mask="2" />
@@ -246,7 +261,14 @@
     <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
     <Property Name="IsLockedInBlock" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
-    <!-- AcDbXrecord MinVersion=R2007 -->
+    <Property Name="KeepDuplicateRecords" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+    <Property Name="MTextFlag" Code="70" Type="DxfMTextFlag" DefaultValue="DxfMTextFlag.MultilineAttribute" ReadConverter="(DxfMTextFlag)" WriteConverter="(short)" MinVersion="R2007" />
+    <Property Name="IsReallyLocked" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
+    <Property Name="SecondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
+    <Property Name="SecondaryAttributeHandles" Code="340" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" MinVersion="R2007" />
+    <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
+    <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
+    <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="AcDbText" MinVersion="R13" />
       <WriteProperty Property="Thickness" />
@@ -255,7 +277,7 @@
       <WriteProperty Property="Value" />
       <WriteSpecificValue Code="100" Value="AcDbAttribute" MinVersion="R13" />
       <WriteProperty Property="Version" />
-      <WriteProperty Property="Tag" />
+      <WriteProperty Property="AttributeTag" />
       <WriteProperty Property="Flags" />
       <WriteProperty Property="FieldLength" />
       <WriteProperty Property="Rotation" />
@@ -268,7 +290,15 @@
       <WriteProperty Property="SecondAlignmentPoint" />
       <WriteProperty Property="Normal" />
       <WriteProperty Property="IsLockedInBlock" />
-      <!-- AcDbXrecord MinVersion=R2007 -->
+      <WriteSpecificValue Code="100" Value="AcDbXrecord" MinVersion="R2007" />
+      <WriteProperty Property="KeepDuplicateRecords" />
+      <WriteProperty Property="MTextFlag" />
+      <WriteProperty Property="IsReallyLocked" />
+      <WriteSpecificValue Code="70" Value="(short)SecondaryAttributeHandles.Count" MinVersion="R2007" />
+      <WriteProperty Property="SecondaryAttributeHandles" />
+      <WriteProperty Property="AlignmentPoint" />
+      <WriteProperty Property="AnnotationScale" />
+      <WriteProperty Property="XRecordTag" />
     </WriteOrder>
   </Entity>
   <!--
@@ -740,7 +770,68 @@
   MTEXT
   
   -->
-  <!-- TODO MinVersion=R13, HasXData="true" -->
+  <Entity Name="DxfMText" EntityType="MText" SubclassMarker="AcDbMText" TypeString="MTEXT" HasXData="true" GenerateReaderFunction="false" MinVersion="R13">
+    <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+    <Property Name="InitialTextHeight" Code="40" Type="double" DefaultValue="1.0" />
+    <Property Name="ReferenceRectangleWidth" Code="41" Type="double" DefaultValue="1.0" />
+    <Property Name="AttachmentPoint" Code="71" Type="DxfAttachmentPoint" DefaultValue="DxfAttachmentPoint.TopLeft" ReadConverter="(DxfAttachmentPoint)" WriteConverter="(short)" />
+    <Property Name="DrawingDirection" Code="72" Type="DxfDrawingDirection" DefaultValue="DxfDrawingDirection.LeftToRight" ReadConverter="(DxfDrawingDirection)" WriteConverter="(short)" />
+    <Property Name="ExtendedText" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
+    <Property Name="Text" Code="1" Type="string" DefaultValue="null" />
+    <Property Name="TextStyleName" Code="7" Type="string" DefaultValue="STANDARD" DisableWritingDefault="true" />
+    <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
+    <Property Name="XAxisDirection" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
+    <Property Name="HorizontalWidth" Code="42" Type="double" DefaultValue="1.0" />
+    <Property Name="VerticalHeight" Code="43" Type="double" DefaultValue="1.0" />
+    <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" />
+    <Property Name="LineSpacingStyle" Code="73" Type="DxfMTextLineSpacingStyle" DefaultValue="DxfMTextLineSpacingStyle.AtLeast" ReadConverter="(DxfMTextLineSpacingStyle)" WriteConverter="(short)" />
+    <Property Name="LineSpacingFactor" Code="44" Type="double" DefaultValue="1.0" />
+    <Property Name="BackgroundFillSetting" Code="90" Type="DxfBackgroundFillSetting" DefaultValue="DxfBackgroundFillSetting.Off" ReadConverter="(DxfBackgroundFillSetting)" WriteConverter="(int)" />
+    <Property Name="BackgroundColorRGB" Code="420" Type="int" DefaultValue="0" />
+    <Property Name="BackgroundColorName" Code="430" Type="string" DefaultValue="null" />
+    <Property Name="FillBoxScale" Code="45" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
+    <Property Name="BackgroundFillColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+    <Property Name="BackgroundFillColorTransparency" Code="441" Type="int" DefaultValue="0" />
+    <Property Name="ColumnType" Code="75" Type="short" DefaultValue="0" />
+    <Property Name="ColumnCount" Code="76" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
+    <Property Name="IsColumnFlowReversed" Code="78" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+    <Property Name="IsColumnAutoHeight" Code="79" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+    <Property Name="ColumnWidth" Code="48" Type="double" DefaultValue="0.0" />
+    <Property Name="ColumnGutter" Code="49" Type="double" DefaultValue="0.0" />
+    <Property Name="ColumnHeights" Code="50" Type="double" DefaultValue="null" AllowMultiples="true" />
+    <WriteOrder>
+      <WriteSpecificValue Code="100" Value="AcDbMText" />
+      <WriteProperty Property="InsertionPoint" />
+      <WriteProperty Property="InitialTextHeight" />
+      <WriteProperty Property="ReferenceRectangleWidth" />
+      <WriteProperty Property="AttachmentPoint" />
+      <WriteProperty Property="DrawingDirection" />
+      <WriteProperty Property="ExtendedText" />
+      <WriteProperty Property="Text" />
+      <WriteProperty Property="TextStyleName" />
+      <WriteProperty Property="ExtrusionDirection" />
+      <WriteProperty Property="XAxisDirection" />
+      <WriteProperty Property="HorizontalWidth" />
+      <WriteProperty Property="VerticalHeight" />
+      <WriteProperty Property="RotationAngle" />
+      <WriteProperty Property="LineSpacingStyle" />
+      <WriteProperty Property="LineSpacingFactor" />
+      <WriteProperty Property="BackgroundFillSetting" />
+      <WriteProperty Property="BackgroundColorRGB" />
+      <WriteProperty Property="BackgroundColorName" />
+      <WriteProperty Property="FillBoxScale" />
+      <WriteProperty Property="BackgroundFillColor" />
+      <WriteProperty Property="BackgroundFillColorTransparency" />
+      <WriteProperty Property="ColumnType" />
+      <WriteProperty Property="ColumnCount" />
+      <WriteProperty Property="IsColumnFlowReversed" />
+      <WriteProperty Property="IsColumnAutoHeight" />
+      <WriteProperty Property="ColumnWidth" />  
+      <WriteProperty Property="ColumnGutter" />
+      <WriteSpecificValue Code="50" Value="(double)ColumnHeights.Count" />
+      <WriteProperty Property="ColumnHeights" />
+    </WriteOrder>
+  </Entity>
   <!--
   
   OLEFRAME

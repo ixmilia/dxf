@@ -30,11 +30,19 @@ namespace IxMilia.Dxf.Entities
         public DxfVector Normal { get; set; }
         public DxfVersion Version { get; set; }
         public string Prompt { get; set; }
-        public string Tag { get; set; }
+        public string TextTag { get; set; }
         public int Flags { get; set; }
         public short FieldLength { get; set; }
         public DxfVerticalTextJustification VerticalTextJustification { get; set; }
         public bool IsLockedInBlock { get; set; }
+        public bool KeepDuplicateRecords { get; set; }
+        public DxfMTextFlag MTextFlag { get; set; }
+        public bool IsReallyLocked { get; set; }
+        private int SecondaryAttributeCount { get; set; }
+        public List<uint> SecondaryAttributeHandles { get; set; }
+        public DxfPoint AlignmentPoint { get; set; }
+        public double AnnotationScale { get; set; }
+        public string XRecordTag { get; set; }
 
         // TextGenerationFlags flags
 
@@ -128,11 +136,19 @@ namespace IxMilia.Dxf.Entities
             this.Normal = DxfVector.ZAxis;
             this.Version = DxfVersion.R2010;
             this.Prompt = null;
-            this.Tag = null;
+            this.TextTag = null;
             this.Flags = 0;
             this.FieldLength = 0;
             this.VerticalTextJustification = DxfVerticalTextJustification.Baseline;
             this.IsLockedInBlock = false;
+            this.KeepDuplicateRecords = false;
+            this.MTextFlag = DxfMTextFlag.MultilineAttribute;
+            this.IsReallyLocked = false;
+            this.SecondaryAttributeCount = 0;
+            this.SecondaryAttributeHandles = new List<uint>();
+            this.AlignmentPoint = DxfPoint.Origin;
+            this.AnnotationScale = 1.0;
+            this.XRecordTag = null;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -206,7 +222,7 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(3, (this.Prompt)));
-            pairs.Add(new DxfCodePair(2, (this.Tag)));
+            pairs.Add(new DxfCodePair(2, (this.TextTag)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
             if (this.FieldLength != 0)
             {
@@ -223,89 +239,51 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(280, BoolShort(this.IsLockedInBlock)));
             }
 
-        }
-
-        internal override bool TrySetPair(DxfCodePair pair)
-        {
-            switch (pair.Code)
+            if (version >= DxfAcadVersion.R2007)
             {
-                case 1:
-                    this.Value = (pair.StringValue);
-                    break;
-                case 2:
-                    this.Tag = (pair.StringValue);
-                    break;
-                case 3:
-                    this.Prompt = (pair.StringValue);
-                    break;
-                case 7:
-                    this.TextStyleName = (pair.StringValue);
-                    break;
-                case 10:
-                    this.Location.X = pair.DoubleValue;
-                    break;
-                case 20:
-                    this.Location.Y = pair.DoubleValue;
-                    break;
-                case 30:
-                    this.Location.Z = pair.DoubleValue;
-                    break;
-                case 11:
-                    this.SecondAlignmentPoint.X = pair.DoubleValue;
-                    break;
-                case 21:
-                    this.SecondAlignmentPoint.Y = pair.DoubleValue;
-                    break;
-                case 31:
-                    this.SecondAlignmentPoint.Z = pair.DoubleValue;
-                    break;
-                case 39:
-                    this.Thickness = (pair.DoubleValue);
-                    break;
-                case 40:
-                    this.TextHeight = (pair.DoubleValue);
-                    break;
-                case 41:
-                    this.RelativeXScaleFactor = (pair.DoubleValue);
-                    break;
-                case 50:
-                    this.Rotation = (pair.DoubleValue);
-                    break;
-                case 51:
-                    this.ObliqueAngle = (pair.DoubleValue);
-                    break;
-                case 70:
-                    this.Flags = (int)(pair.ShortValue);
-                    break;
-                case 71:
-                    this.TextGenerationFlags = (int)(pair.ShortValue);
-                    break;
-                case 72:
-                    this.HorizontalTextJustification = (DxfHorizontalTextJustification)(pair.ShortValue);
-                    break;
-                case 73:
-                    this.FieldLength = (pair.ShortValue);
-                    break;
-                case 74:
-                    this.VerticalTextJustification = (DxfVerticalTextJustification)(pair.ShortValue);
-                    break;
-                case 210:
-                    this.Normal.X = pair.DoubleValue;
-                    break;
-                case 220:
-                    this.Normal.Y = pair.DoubleValue;
-                    break;
-                case 230:
-                    this.Normal.Z = pair.DoubleValue;
-                    break;
-                case 280:
-                    // TODO: code is shared by properties Version, IsLockedInBlock
-                    break;
-                default:
-                    return base.TrySetPair(pair);
+                pairs.Add(new DxfCodePair(100, "AcDbXrecord"));
+            }
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(280, BoolShort(this.KeepDuplicateRecords)));
             }
 
-            return true;
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(70, (short)(this.MTextFlag)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(70, BoolShort(this.IsReallyLocked)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(70, (short)SecondaryAttributeHandles.Count));
+            }
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.AddRange(this.SecondaryAttributeHandles.Select(p => new DxfCodePair(340, p)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(10, AlignmentPoint.X));
+                pairs.Add(new DxfCodePair(20, AlignmentPoint.Y));
+                pairs.Add(new DxfCodePair(30, AlignmentPoint.Z));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(40, (this.AnnotationScale)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(2, (this.XRecordTag)));
+            }
+
         }
     }
 

@@ -154,6 +154,7 @@
       <xs:attribute name="MinVersion" type="VersionType" use="optional" />
       <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
       <xs:attribute name="HasXData" type="xs:boolean" use="optional" />
+      <xs:attribute name="GenerateReaderFunction" type="xs:boolean" use="optional" />
     </xs:complexType>
   </xs:element>
 

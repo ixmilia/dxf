@@ -51,6 +51,11 @@ bool DisableWritingDefault(XElement property)
     return att != null && bool.Parse(att.Value);
 }
 
+bool GenerateReaderFunction(XElement entity)
+{
+    return bool.Parse(AttributeOrDefault(entity, "GenerateReaderFunction", "true"));
+}
+
 string Type(XElement property)
 {
     return property.Attribute("Type").Value;

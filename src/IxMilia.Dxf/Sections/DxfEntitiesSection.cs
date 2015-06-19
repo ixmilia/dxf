@@ -66,6 +66,14 @@ namespace IxMilia.Dxf.Sections
                 buffer.Advance();
                 switch (entity.EntityType)
                 {
+                    case DxfEntityType.Attribute:
+                        var att = (DxfAttribute)entity;
+                        att.MText = GetMText(buffer);
+                        break;
+                    case DxfEntityType.AttributeDefinition:
+                        var attdef = (DxfAttributeDefinition)entity;
+                        attdef.MText = GetMText(buffer);
+                        break;
                     case DxfEntityType.Insert:
                         var insert = (DxfInsert)entity;
                         if (insert.HasAttributes)
@@ -105,6 +113,21 @@ namespace IxMilia.Dxf.Sections
             }
 
             return result;
+        }
+
+        private static DxfMText GetMText(DxfBufferReader<DxfEntity> buffer)
+        {
+            if (buffer.ItemsRemain)
+            {
+                var entity = buffer.Peek();
+                if (entity.EntityType == DxfEntityType.MText)
+                {
+                    buffer.Advance();
+                    return (DxfMText)entity;
+                }
+            }
+
+            return new DxfMText();
         }
 
         private static DxfSeqend GetSeqend(DxfBufferReader<DxfEntity> buffer)

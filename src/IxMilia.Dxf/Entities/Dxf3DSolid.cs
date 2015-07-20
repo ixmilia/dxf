@@ -20,7 +20,7 @@ namespace IxMilia.Dxf.Entities
         public short FormatVersionNumber { get; set; }
         public List<string> CustomData { get; set; }
         public List<string> CustomData2 { get; set; }
-        public uint OwnerHandle { get; set; }
+        public uint HistoryObjectHandle { get; set; }
 
         public Dxf3DSolid()
             : base()
@@ -33,7 +33,7 @@ namespace IxMilia.Dxf.Entities
             this.FormatVersionNumber = 1;
             this.CustomData = new List<string>();
             this.CustomData2 = new List<string>();
-            this.OwnerHandle = 0u;
+            this.HistoryObjectHandle = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -49,7 +49,7 @@ namespace IxMilia.Dxf.Entities
             }
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.Add(new DxfCodePair(350, UIntHandle(this.OwnerHandle)));
+                pairs.Add(new DxfCodePair(350, UIntHandle(this.HistoryObjectHandle)));
             }
 
         }
@@ -68,7 +68,7 @@ namespace IxMilia.Dxf.Entities
                     this.FormatVersionNumber = (pair.ShortValue);
                     break;
                 case 350:
-                    this.OwnerHandle = UIntHandle(pair.StringValue);
+                    this.HistoryObjectHandle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

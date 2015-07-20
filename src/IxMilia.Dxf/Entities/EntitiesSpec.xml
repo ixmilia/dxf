@@ -74,14 +74,14 @@
     <Property Name="FormatVersionNumber" Code="70" Type="short" DefaultValue="1" />
     <Property Name="CustomData" Code="1" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="CustomData2" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
-    <Property Name="OwnerHandle" Code="350" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
+    <Property Name="HistoryObjectHandle" Code="350" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="AcDbModelerGeometry" />
       <WriteProperty Property="FormatVersionNumber" />
       <WriteProperty Property="CustomData" />
       <WriteProperty Property="CustomData2" />
       <WriteSpecificValue Code="100" Value="AcDb3dSolid" MinVersion="R2007" />
-      <WriteProperty Property="OwnerHandle" />
+      <WriteProperty Property="HistoryObjectHandle" />
     </WriteOrder>
   </Entity>
   <!--

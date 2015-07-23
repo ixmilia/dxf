@@ -23,7 +23,7 @@ namespace IxMilia.Dxf
         {
             if (!this.ItemsRemain)
             {
-                throw new DxfReadException("No more items.");
+                throw new IndexOutOfRangeException("No more items.");
             }
 
             return enumerator.Current;

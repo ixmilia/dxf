@@ -39,7 +39,7 @@ namespace IxMilia.Dxf.Sections
 
                 if (pair.Code != 0)
                 {
-                    throw new DxfReadException("Expected new class.");
+                    throw new DxfReadException("Expected new class.", pair);
                 }
 
                 var cls = DxfClass.FromBuffer(buffer, version);

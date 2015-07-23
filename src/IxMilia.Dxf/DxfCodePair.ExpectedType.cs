@@ -10,6 +10,8 @@ namespace IxMilia.Dxf
 #endif
     public partial class DxfCodePair
     {
+        public int Offset { get; internal set; }
+
         public static Type ExpectedType(int code)
         {
             Type expected = typeof(string);
@@ -94,7 +96,7 @@ namespace IxMilia.Dxf
             else if (code == 1071)
                 expected = typeof(int);
             else
-                throw new DxfReadException("Unknown type code " + code);
+                throw new ArgumentOutOfRangeException("code", "Unknown type code " + code);
 
             return expected;
         }

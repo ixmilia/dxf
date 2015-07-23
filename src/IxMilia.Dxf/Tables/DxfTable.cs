@@ -173,7 +173,7 @@ namespace IxMilia.Dxf.Tables
             buffer.Advance();
             if (pair.Code != 2)
             {
-                throw new DxfReadException("Expected table type.");
+                throw new DxfReadException("Expected table type.", pair);
             }
 
             var tableType = pair.StringValue;

@@ -10,19 +10,18 @@ namespace IxMilia.Dxf
 #endif
     public class DxfReadException : Exception
     {
-        public DxfReadException()
-            : base()
-        {
-        }
+        public int Offset { get; private set; }
 
-        public DxfReadException(string message)
+        public DxfReadException(string message, int offset)
             : base(message)
         {
+            Offset = offset;
         }
 
-        public DxfReadException(string message, System.Exception innerException)
-            : base(message, innerException)
+        public DxfReadException(string message, DxfCodePair pair)
+            : base(message)
         {
+            Offset = pair == null ? -1 : pair.Offset;
         }
     }
 

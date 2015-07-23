@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -82,7 +83,7 @@ namespace IxMilia.Dxf
             }
             else
             {
-                throw new DxfReadException("No writer available");
+                throw new InvalidOperationException("No writer available");
             }
         }
 
@@ -102,7 +103,7 @@ namespace IxMilia.Dxf
             else if (type == typeof(bool))
                 WriteBool((bool)value);
             else
-                throw new DxfReadException("No writer available");
+                throw new InvalidOperationException("No writer available");
         }
 
         private void WriteString(string value)

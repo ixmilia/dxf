@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,15 +12,16 @@ namespace IxMilia.Dxf
     {
         public Stream BaseStream { get; private set; }
 
-        private bool readText = false;
-        private string firstLine = null;
-        private StreamReader textReader = null;
-        private BinaryReader binReader = null;
+        private int _line = 1;
+        private bool _readText = false;
+        private string _firstLine = null;
+        private StreamReader _textReader = null;
+        private BinaryReader _binReader = null;
 
         public DxfReader(Stream input)
         {
             this.BaseStream = input;
-            binReader = new BinaryReader(input);
+            _binReader = new BinaryReader(input);
         }
 
         public IEnumerable<DxfCodePair> ReadCodePairs()
@@ -37,11 +39,11 @@ namespace IxMilia.Dxf
         {
             // read first line char-by-char
             var sb = new StringBuilder();
-            char c = binReader.ReadChar();
+            char c = _binReader.ReadChar();
             while (c != '\n')
             {
                 sb.Append(c);
-                c = binReader.ReadChar();
+                c = _binReader.ReadChar();
             }
 
             // trim BOM
@@ -54,26 +56,27 @@ namespace IxMilia.Dxf
             // if sentinel, continue with binary reader
             if (line.StartsWith(DxfFile.BinarySentinel))
             {
-                readText = false;
-                firstLine = null;
+                _readText = false;
+                _firstLine = null;
 
                 // swallow next two characters
-                var sub = binReader.ReadChar();
+                var sub = _binReader.ReadChar();
                 Debug.Assert(sub == 0x1A);
-                var nul = binReader.ReadChar();
+                var nul = _binReader.ReadChar();
                 Debug.Assert(nul == 0x00);
             }
             else
             {
                 // otherwise, first line is data
-                readText = true;
-                firstLine = line;
-                textReader = new StreamReader(this.BaseStream);
+                _readText = true;
+                _firstLine = line;
+                _textReader = new StreamReader(this.BaseStream);
             }
         }
 
         private DxfCodePair ReadCodeValuePair()
         {
+            int offset = _readText ? _line : (int)_binReader.BaseStream.Position;
             int code = ReadCode();
             if (code == -1)
                 return null;
@@ -92,7 +95,9 @@ namespace IxMilia.Dxf
             else if (expectedType == typeof(bool))
                 pair = new DxfCodePair(code, ReadBool());
             else
-                throw new DxfReadException("Reading type not supported: " + expectedType);
+                throw new DxfReadException($"Reading type '{expectedType.Name}' not supported", offset);
+
+            pair.Offset = offset;
 
             return pair;
         }
@@ -100,7 +105,7 @@ namespace IxMilia.Dxf
         private int ReadCode()
         {
             int code = 0;
-            if (readText)
+            if (_readText)
             {
                 var line = ReadLine();
                 if (line == null)
@@ -114,15 +119,15 @@ namespace IxMilia.Dxf
             }
             else
             {
-                if (binReader.BaseStream.Position >= binReader.BaseStream.Length)
+                if (_binReader.BaseStream.Position >= _binReader.BaseStream.Length)
                 {
                     code = -1;
                 }
                 else
                 {
-                    code = binReader.ReadByte();
+                    code = _binReader.ReadByte();
                     if (code == 255)
-                        code = binReader.ReadInt16();
+                        code = _binReader.ReadInt16();
                 }
             }
 
@@ -131,28 +136,28 @@ namespace IxMilia.Dxf
 
         private short ReadShort()
         {
-            return readText
+            return _readText
                 ? short.Parse(ReadLine().Trim())
-                : binReader.ReadInt16();
+                : _binReader.ReadInt16();
         }
 
         private double ReadDouble()
         {
-            return readText
+            return _readText
                 ? double.Parse(ReadLine().Trim())
-                : binReader.ReadDouble();
+                : _binReader.ReadDouble();
         }
 
         private string ReadString()
         {
-            if (readText)
+            if (_readText)
             {
                 return TransformControlCharacters(ReadLine().Trim());
             }
             else
             {
                 var sb = new StringBuilder();
-                for (int b = binReader.Read(); b != 0; b = binReader.Read())
+                for (int b = _binReader.Read(); b != 0; b = _binReader.Read())
                     sb.Append((char)b);
                 return TransformControlCharacters(sb.ToString());
             }
@@ -160,16 +165,16 @@ namespace IxMilia.Dxf
 
         private int ReadInt()
         {
-            return readText
+            return _readText
                 ? int.Parse(ReadLine().Trim())
-                : binReader.ReadInt32();
+                : _binReader.ReadInt32();
         }
 
         private long ReadLong()
         {
-            return readText
+            return _readText
                 ? long.Parse(ReadLine().Trim())
-                : binReader.ReadInt64();
+                : _binReader.ReadInt64();
         }
 
         private bool ReadBool()
@@ -180,14 +185,15 @@ namespace IxMilia.Dxf
         private string ReadLine()
         {
             string result;
-            if (firstLine != null)
+            if (_firstLine != null)
             {
-                result = firstLine;
-                firstLine = null;
+                result = _firstLine;
+                _firstLine = null;
                 return result;
             }
 
-            result = textReader.ReadLine();
+            result = _textReader.ReadLine();
+            _line++;
             return result;
         }
 
@@ -258,7 +264,7 @@ namespace IxMilia.Dxf
                 case '_': return (char)0x1F;
                 case ' ': return '^';
                 default:
-                    throw new DxfReadException("Unexpected ASCII control character: " + c);
+                    throw new ArgumentOutOfRangeException(nameof(c), $"Unexpected ASCII control character: {c}");
             }
         }
     }

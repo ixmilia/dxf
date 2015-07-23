@@ -185,7 +185,7 @@ namespace IxMilia.Dxf
                 case DxfXDataType.Long:
                     return new DxfXDataLong(pair.IntegerValue);
                 default:
-                    throw new DxfReadException("Unexpected XDATA code pair");
+                    throw new DxfReadException("Unexpected XDATA code pair", pair);
             }
         }
 

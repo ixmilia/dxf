@@ -83,7 +83,7 @@ namespace IxMilia.Dxf.Sections
 
                 if (!IsTableStart(pair))
                 {
-                    throw new DxfReadException("Expected start of table.");
+                    throw new DxfReadException("Expected start of table.", pair);
                 }
 
                 var table = DxfTable.FromBuffer(buffer);
@@ -119,7 +119,7 @@ namespace IxMilia.Dxf.Sections
                             section.ViewPortTable = (DxfViewPortTable)table;
                             break;
                         default:
-                            throw new DxfReadException("Unexpected table type " + table.TableType);
+                            throw new DxfReadException($"Unexpected table type {table.TableType}", pair);
                     }
                 }
             }

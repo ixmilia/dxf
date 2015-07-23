@@ -83,7 +83,7 @@ namespace IxMilia.Dxf
                     }
                     else
                     {
-                        throw new DxfReadException("Unexpected code pair group text");
+                        throw new DxfReadException("Unexpected code pair group text", pair);
                     }
                 }
                 else

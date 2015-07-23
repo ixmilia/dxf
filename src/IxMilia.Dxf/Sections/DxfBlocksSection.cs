@@ -45,7 +45,7 @@ namespace IxMilia.Dxf.Sections
 
                 if (pair.Code != 0)
                 {
-                    throw new DxfReadException("Expected new block.");
+                    throw new DxfReadException("Expected new block.", pair);
                 }
 
                 buffer.Advance(); // swallow (0, CLASS)

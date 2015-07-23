@@ -40,7 +40,7 @@ namespace IxMilia.Dxf.Sections
 
                 if (pair.Code != 0)
                 {
-                    throw new DxfReadException("Expected new entity.");
+                    throw new DxfReadException("Expected new entity.", pair);
                 }
 
                 var entity = DxfEntity.FromBuffer(buffer);

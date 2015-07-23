@@ -187,12 +187,12 @@ namespace IxMilia.Dxf.Blocks
                 else if (IsBlockStart(pair))
                 {
                     if (readingBlockStart || !readingBlockEnd)
-                        throw new DxfReadException("Unexpected block start");
+                        throw new DxfReadException("Unexpected block start", pair);
                     break;
                 }
                 else if (IsBlockEnd(pair))
                 {
-                    if (!readingBlockStart) throw new DxfReadException("Unexpected block end");
+                    if (!readingBlockStart) throw new DxfReadException("Unexpected block end", pair);
                     readingBlockStart = false;
                     readingBlockEnd = true;
                     buffer.Advance(); // swallow (0, ENDBLK)
@@ -277,7 +277,7 @@ namespace IxMilia.Dxf.Blocks
                     }
                     else
                     {
-                        throw new DxfReadException("Unexpected pair in block");
+                        throw new DxfReadException("Unexpected pair in block", pair);
                     }
                 }
             }

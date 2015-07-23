@@ -51,7 +51,7 @@ namespace IxMilia.Dxf.Sections
             buffer.Advance();
             if (sectionType.Code != 2)
             {
-                throw new DxfReadException("Expected code 2, got " + sectionType.Code);
+                throw new DxfReadException($"Expected code 2, got {sectionType.Code}", sectionType);
             }
 
             DxfSection section;

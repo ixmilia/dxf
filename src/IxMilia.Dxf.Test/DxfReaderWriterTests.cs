@@ -54,6 +54,23 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void WriteDxbTest()
+        {
+            // write file
+            var file = new DxfFile();
+            file.Entities.Add(new DxfLine(new DxfPoint(1, 2, 3), new DxfPoint(4, 5, 6)));
+            var stream = new MemoryStream();
+            file.SaveDxb(stream);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            // read it back in
+            var dxb = DxfFile.Load(stream);
+            var line = (DxfLine)dxb.Entities.Single();
+            Assert.Equal(new DxfPoint(1, 2, 3), line.P1);
+            Assert.Equal(new DxfPoint(4, 5, 6), line.P2);
+        }
+
+        [Fact]
         public void SkipBomTest()
         {
             using (var stream = new MemoryStream())

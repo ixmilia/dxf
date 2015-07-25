@@ -239,6 +239,11 @@ namespace IxMilia.Dxf
             WriteStream(stream, asText);
         }
 
+        public void SaveDxb(Stream stream)
+        {
+            new DxbWriter(stream).Save(this);
+        }
+
         private void WriteStream(Stream stream, bool asText)
         {
             var writer = new DxfWriter(stream, asText);

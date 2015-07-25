@@ -21,6 +21,7 @@
   <ItemGroup>
     <Compile Include="DxbItemType.cs" />
     <Compile Include="DxbReader.cs" />
+    <Compile Include="DxbWriter.cs" />
     <Compile Include="DxfAcadVersion.cs" />
     <Compile Include="DxfAsciiReader.cs" />
     <Compile Include="DxfBinaryReader.cs" />

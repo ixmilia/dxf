@@ -1,8 +1,8 @@
 ﻿IxMilia.Dxf
 ===========
 
-A portable .NET library for reading and writing DXF files.  Clone and build
-locally or directly consume the
+A portable .NET library for reading and writing DXF and DXB files.  Clone and
+build locally or directly consume the
 [NuGet package](http://www.nuget.org/packages/IxMilia.Dxf/).
 
 ### Usage

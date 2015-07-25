@@ -56,7 +56,7 @@ namespace IxMilia.Dxf.Sections
             return section;
         }
 
-        private static List<DxfEntity> GatherEntities(IEnumerable<DxfEntity> entities)
+        internal static List<DxfEntity> GatherEntities(IEnumerable<DxfEntity> entities)
         {
             var buffer = new DxfBufferReader<DxfEntity>(entities, (e) => e == null);
             var result = new List<DxfEntity>();

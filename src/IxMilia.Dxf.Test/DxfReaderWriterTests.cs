@@ -22,6 +22,38 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadDxbTest()
+        {
+            var data = new byte[]
+            {
+                // DXB sentinel
+                (byte)'A', (byte)'u', (byte)'t', (byte)'o', (byte)'C', (byte)'A', (byte)'D', (byte)' ', (byte)'D', (byte)'X', (byte)'B', (byte)' ', (byte)'1', (byte)'.', (byte)'0', (byte)'\r', (byte)'\n', 0x1A, 0x0,
+
+                // color
+                136, // type specifier for new color
+                0x01, 0x00, // color index 1
+
+                // line
+                0x01, // type specifier
+                0x01, 0x00, // P1.X = 0x0001
+                0x02, 0x00, // P1.Y = 0x0002
+                0x03, 0x00, // P1.Z = 0x0003
+                0x04, 0x00, // P1.X = 0x0004
+                0x05, 0x00, // P1.Y = 0x0005
+                0x06, 0x00, // P1.Z = 0x0006
+
+                // null terminator
+                0x0
+            };
+            var stream = new MemoryStream(data);
+            var file = DxfFile.Load(stream);
+            var line = (DxfLine)file.Entities.Single();
+            Assert.Equal(1, line.Color.RawValue);
+            Assert.Equal(new DxfPoint(1, 2, 3), line.P1);
+            Assert.Equal(new DxfPoint(4, 5, 6), line.P2);
+        }
+
+        [Fact]
         public void SkipBomTest()
         {
             using (var stream = new MemoryStream())

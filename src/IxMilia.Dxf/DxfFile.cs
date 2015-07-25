@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
@@ -129,9 +130,52 @@ namespace IxMilia.Dxf
 
         public static DxfFile Load(Stream stream)
         {
+            var reader = new BinaryReader(stream);
+
+            // read first line char-by-char
+            var sb = new StringBuilder();
+            char c = reader.ReadChar();
+            while (c != '\n')
+            {
+                sb.Append(c);
+                c = reader.ReadChar();
+            }
+
+            // trim BOM
+            var line = sb.ToString().TrimEnd('\r');
+            if (line.Length > 0 && line[0] == 0xFEFF)
+            {
+                line = line.Substring(1);
+            }
+
+            // check for binary sentinels
+            DxfFile file;
+            if (line == DxbReader.BinarySentinel)
+            {
+                file = new DxbReader().ReadFile(reader);
+            }
+            else
+            {
+                IDxfCodePairReader dxfReader;
+                if (line == BinarySentinel)
+                {
+                    dxfReader = new DxfBinaryReader(reader);
+                }
+                else
+                {
+                    dxfReader = new DxfAsciiReader(stream, line);
+                }
+
+                file = LoadFromReader(dxfReader);
+            }
+
+            return file;
+        }
+
+        private static DxfFile LoadFromReader(IDxfCodePairReader reader)
+        {
             var file = new DxfFile();
-            var reader = new DxfReader(stream);
-            var buffer = new DxfCodePairBufferReader(reader.ReadCodePairs());
+            var buffer = new DxfCodePairBufferReader(reader.GetCodePairs());
             var version = DxfAcadVersion.R14;
             while (buffer.ItemsRemain)
             {
@@ -193,6 +237,11 @@ namespace IxMilia.Dxf
         public void Save(Stream stream, bool asText = true)
         {
             WriteStream(stream, asText);
+        }
+
+        public void SaveDxb(Stream stream)
+        {
+            new DxbWriter(stream).Save(this);
         }
 
         private void WriteStream(Stream stream, bool asText)

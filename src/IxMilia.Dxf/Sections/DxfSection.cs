@@ -69,6 +69,9 @@ namespace IxMilia.Dxf.Sections
                 case HeaderSectionText:
                     section = DxfHeaderSection.HeaderSectionFromBuffer(buffer);
                     break;
+                case ObjectsSectionText:
+                    section = DxfObjectsSection.ObjectsSectionFromBuffer(buffer);
+                    break;
                 case TablesSectionText:
                     section = DxfTablesSection.TablesSectionFromBuffer(buffer);
                     break;

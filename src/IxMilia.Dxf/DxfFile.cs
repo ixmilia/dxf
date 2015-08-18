@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Objects;
 using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf
@@ -30,6 +31,8 @@ namespace IxMilia.Dxf
         public List<DxfClass> Classes { get { return ClassSection.Classes; } }
 
         public List<DxfBlock> Blocks { get { return BlocksSection.Blocks; } }
+
+        public List<DxfObject> Objects { get { return ObjectsSection.Objects; } }
 
         public DxfHeader Header { get { return HeaderSection.Header; } }
 
@@ -200,6 +203,9 @@ namespace IxMilia.Dxf
                             case DxfSectionType.Header:
                                 file.HeaderSection = (DxfHeaderSection)section;
                                 version = file.Header.Version;
+                                break;
+                            case DxfSectionType.Objects:
+                                file.ObjectsSection = (DxfObjectsSection)section;
                                 break;
                             case DxfSectionType.Tables:
                                 file.TablesSection = (DxfTablesSection)section;

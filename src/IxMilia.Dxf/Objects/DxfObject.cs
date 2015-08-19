@@ -6,6 +6,10 @@ namespace IxMilia.Dxf.Objects
 {
     public abstract partial class DxfObject
     {
+        protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
+        protected DxfXData XDataProtected { get; set; }
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+
         public abstract DxfObjectType ObjectType { get; }
 
         protected virtual DxfAcadVersion MinVersion
@@ -21,6 +25,16 @@ namespace IxMilia.Dxf.Objects
         protected DxfObject()
         {
             Initialize();
+            ExtensionDataGroups = new List<DxfCodePairGroup>();
+        }
+
+        protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+        }
+
+        protected virtual DxfObject PostParse()
+        {
+            return this;
         }
 
         public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
@@ -29,10 +43,18 @@ namespace IxMilia.Dxf.Objects
             if (version >= MinVersion && version <= MaxVersion)
             {
                 AddValuePairs(pairs, version, outputHandles);
-                //AddTrailingCodePairs(pairs, version, outputHandles);
+                AddTrailingCodePairs(pairs, version, outputHandles);
             }
 
             return pairs;
+        }
+
+        private void AddExtensionValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            foreach (var group in ExtensionDataGroups)
+            {
+                group.AddValuePairs(pairs, version, outputHandles);
+            }
         }
 
         internal virtual DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
@@ -44,27 +66,26 @@ namespace IxMilia.Dxf.Objects
                 {
                     break;
                 }
-                //else if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
-                //{
-                //    buffer.Advance();
-                //    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                //    ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                //}
-                //else if (pair.Code == (int)DxfXDataType.ApplicationName)
-                //{
-                //    XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
-                //}
+                else if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
+                {
+                    buffer.Advance();
+                    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                    ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                }
+                else if (pair.Code == (int)DxfXDataType.ApplicationName)
+                {
+                    XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
+                }
 
                 if (!TrySetPair(pair))
                 {
-                    //ExcessCodePairs.Add(pair);
+                    ExcessCodePairs.Add(pair);
                 }
 
                 buffer.Advance();
             }
 
-            //return PostParse();
-            return this;
+            return PostParse();
         }
 
         protected static uint UIntHandle(string s)

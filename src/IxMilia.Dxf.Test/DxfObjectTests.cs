@@ -17,5 +17,22 @@ ACAD_PROXY_OBJECT
 ");
             Assert.IsType<DxfAcadProxyObject>(file.Objects.Single());
         }
+
+        [Fact]
+        public void WriteSimpleObjectTest()
+        {
+            var file = new DxfFile();
+            file.Objects.Add(new DxfAcadProxyObject());
+            VerifyFileContains(file, @"
+  0
+ACAD_PROXY_OBJECT
+  5
+A
+100
+AcDbProxyObject
+ 90
+499
+");
+        }
     }
 }

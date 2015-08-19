@@ -9,17 +9,40 @@ using System.Linq;
 namespace IxMilia.Dxf.Objects
 {
 
-    public class DxfAcadProxyObject : DxfObject
+    /// <summary>
+    /// DxfAcadProxyObject class
+    /// </summary>
+    public partial class DxfAcadProxyObject : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.AcadProxyObject; } }
+
+        public int ClassId { get; set; }
+
+        public DxfAcadProxyObject()
+            : base()
+        {
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            this.ClassId = 499;
+        }
+
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbProxyObject"));
+            pairs.Add(new DxfCodePair(90, (this.ClassId)));
+        }
 
         internal override bool TrySetPair(DxfCodePair pair)
         {
             switch (pair.Code)
             {
-                //case 5:
-                //    this.Handle = pair.StringValue;
-                //    break;
+                case 90:
+                    this.ClassId = (pair.IntegerValue);
+                    break;
                 default:
                     return base.TrySetPair(pair);
             }
@@ -27,4 +50,5 @@ namespace IxMilia.Dxf.Objects
             return true;
         }
     }
+
 }

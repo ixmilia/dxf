@@ -28,15 +28,20 @@ string EntityType(XElement entity)
     return entity.Attribute("EntityType").Value;
 }
 
+string ObjectType(XElement obj)
+{
+    return obj.Attribute("ObjectType").Value;
+}
+
 string TypeString(XElement entity)
 {
     return entity.Attribute("TypeString").Value;
 }
 
-string BaseClass(XElement entity)
+string BaseClass(XElement entity, string defaultValue)
 {
     var att = entity.Attribute("BaseClass");
-    return att == null ? "DxfEntity" : att.Value;
+    return att == null ? defaultValue : att.Value;
 }
 
 bool SuppressWriting(XElement property)

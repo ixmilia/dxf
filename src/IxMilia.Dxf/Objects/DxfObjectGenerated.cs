@@ -17,8 +17,10 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfObject class
     /// </summary>
-    public partial class DxfObject //: IDxfHasHandle
+    public partial class DxfObject : IDxfHasHandle
     {
+        public uint Handle { get; set; }
+
         public string ObjectTypeString
         {
             get
@@ -33,18 +35,34 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
-        public virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected DxfObject(DxfObject other)
+            : this()
+        {
+            this.Handle = other.Handle;
+        }
+
+        protected virtual void Initialize()
+        {
+            this.Handle = 0u;
+        }
+
+        protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair(0, ObjectTypeString));
+            if (outputHandles)
+            {
+                pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
+            }
+
         }
 
         internal virtual bool TrySetPair(DxfCodePair pair)
         {
             switch (pair.Code)
             {
-                //case 5:
-                //    this.Handle = pair.StringValue;
-                //    break;
+                case 5:
+                    this.Handle = UIntHandle(pair.StringValue);
+                    break;
                 default:
                     return false;
             }
@@ -70,10 +88,19 @@ namespace IxMilia.Dxf.Objects
 
             if (obj != null)
             {
-                obj.PopulateFromBuffer(buffer);
+                obj = obj.PopulateFromBuffer(buffer);
             }
 
             return obj;
         }
     }
+
 }
+
+// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+
+// This line is required for T4 template generation to work. 
+// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+
+// This line is required for T4 template generation to work. 
+

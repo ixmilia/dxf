@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information. -->
+<xs:schema id="DxfSpec"
+    targetNamespace="http://IxMilia.com/Dxf/ObjectsSpec"
+    elementFormDefault="qualified"
+    xmlns="http://IxMilia.com/Dxf/ObjectsSpec"
+    xmlns:mstns="http://IxMilia.com/Dxf/ObjectsSpec"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:simpleType name="VersionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="R10" />
+            <xs:enumeration value="R11" />
+            <xs:enumeration value="R12" />
+            <xs:enumeration value="R13" />
+            <xs:enumeration value="R14" />
+            <xs:enumeration value="R2000" />
+            <xs:enumeration value="R2004" />
+            <xs:enumeration value="R2007" />
+            <xs:enumeration value="R2010" />
+            <xs:enumeration value="R2013" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ConstructorType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="None" />
+            <xs:enumeration value="Public" />
+            <xs:enumeration value="Protected" />
+            <xs:enumeration value="Private" />
+            <xs:enumeration value="Internal" />
+            <xs:enumeration value="Inherited" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="AccessibilityType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="public" />
+            <xs:enumeration value="private" />
+            <xs:enumeration value="protected" />
+            <xs:enumeration value="internal" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="Flag">
+        <xs:complexType>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="Mask" type="xs:int" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Property">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="unbounded" minOccurs="0">
+                    <xs:element ref="Flag" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="Code" type="xs:int" use="required" />
+            <xs:attribute name="Type" type="xs:string" use="required" />
+            <xs:attribute name="DefaultValue" type="xs:string" use="required" />
+            <xs:attribute name="Accessibility" type="AccessibilityType" use="optional" />
+            <xs:attribute name="DisableWritingDefault" type="xs:boolean" use="optional" />
+            <xs:attribute name="AllowMultiples" type="xs:boolean" use="optional" />
+            <xs:attribute name="CodeOverrides" type="xs:string" use="optional" />
+            <xs:attribute name="ReadConverter" type="xs:string" use="optional" />
+            <xs:attribute name="WriteConverter" type="xs:string" use="optional" />
+            <xs:attribute name="ProtectedSet" type="xs:boolean" use="optional" />
+            <xs:attribute name="WriteCondition" type="xs:string" use="optional" />
+            <xs:attribute name="MinVersion" type="VersionType" use="optional" />
+            <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ConstructorParameter">
+        <xs:complexType>
+            <xs:attribute name="Property" type="xs:string" use="required" />
+            <xs:attribute name="Type" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Constructor">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element ref="ConstructorParameter" />
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="WriteProperty">
+        <xs:complexType>
+            <xs:attribute name="Property" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="WriteSpecificValue">
+        <xs:complexType>
+            <xs:attribute name="Code" type="xs:int" use="required" />
+            <xs:attribute name="Value" type="xs:string" use="required" />
+            <xs:attribute name="DontWriteIfValueIs" type="xs:string" use="optional" />
+            <xs:attribute name="MinVersion" type="VersionType" use="optional" />
+            <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Foreach">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="WriteProperty" />
+                    <xs:element ref="WriteSpecificValue" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="Property" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="WriteExtensionData">
+    </xs:element>
+
+    <xs:element name="WriteOrder">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element ref="WriteProperty" />
+                    <xs:element ref="WriteSpecificValue" />
+                    <xs:element ref="Foreach" />
+                    <xs:element ref="WriteExtensionData" />
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Object">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="Constructor" />
+                    <xs:element ref="Property" />
+                    <xs:element ref="WriteOrder" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="ObjectType" type="xs:string" use="required" />
+            <xs:attribute name="TypeString" type="xs:string" use="required" />
+            <xs:attribute name="SubclassMarker" type="xs:string" use="required" />
+            <xs:attribute name="BaseClass" type="xs:string" use="optional" />
+            <xs:attribute name="CopyConstructor" type="ConstructorType" use="optional" />
+            <xs:attribute name="DefaultConstructor" type="ConstructorType" use="optional" />
+            <xs:attribute name="Tag" type="xs:string" use="optional" />
+            <xs:attribute name="MinVersion" type="VersionType" use="optional" />
+            <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
+            <xs:attribute name="HasXData" type="xs:boolean" use="optional" />
+            <xs:attribute name="GenerateReaderFunction" type="xs:boolean" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Spec">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element ref="Object" />
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -254,6 +254,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="MultipleOutputHelper.t4" />
+    <None Include="Objects\ObjectsSpec.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Sections\HeaderVariablesSpec.xml">
       <SubType>Designer</SubType>
     </None>

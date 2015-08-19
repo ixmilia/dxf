@@ -281,6 +281,7 @@ namespace IxMilia.Dxf
                     .Concat(this.Entities.Cast<IDxfHasHandle>())
                     .Concat(this.Layers.Cast<IDxfHasHandle>())
                     .Concat(this.Linetypes.Cast<IDxfHasHandle>())
+                    .Concat(this.Objects.Cast<IDxfHasHandle>())
                     .Concat(this.Styles.Cast<IDxfHasHandle>())
                     .Concat(this.UserCoordinateSystems.Cast<IDxfHasHandle>())
                     .Concat(this.ViewPorts.Cast<IDxfHasHandle>())

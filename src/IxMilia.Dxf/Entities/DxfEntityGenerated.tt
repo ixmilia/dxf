@@ -253,7 +253,7 @@ foreach (var entity in entities)
             switch (DimensionType)
             {
 <#
-foreach (var entity in entities.OrderBy(e => EntityType(e)).Where(e => BaseClass(e) == "DxfDimensionBase"))
+foreach (var entity in entities.OrderBy(e => EntityType(e)).Where(e => BaseClass(e, "DxfEntity") == "DxfDimensionBase"))
 {
 #>
                 case DxfDimensionType.<#= Tag(entity) #>:
@@ -282,7 +282,7 @@ foreach (var entity in entities.OrderBy(e => EntityType(e)).Where(e => BaseClass
 foreach (var entity in entities)
 {
     var className = Name(entity);
-    var baseClass = BaseClass(entity);
+    var baseClass = BaseClass(entity, "DxfEntity");
     manager.StartNewFile(className + ".cs");
 #>
     /// <summary>
@@ -427,7 +427,7 @@ foreach (var entity in entities)
         if (copyConstructorAccessibility == "inherited")
         {
 #>
-        internal <#= className #>(<#= BaseClass(entity) #> other)
+        internal <#= className #>(<#= BaseClass(entity, "DxfEntity") #> other)
             : base(other)
         {
         }

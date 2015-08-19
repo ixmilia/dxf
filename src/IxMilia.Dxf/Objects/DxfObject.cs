@@ -18,6 +18,11 @@ namespace IxMilia.Dxf.Objects
             get { return DxfAcadVersion.Max; }
         }
 
+        protected DxfObject()
+        {
+            Initialize();
+        }
+
         public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
             var pairs = new List<DxfCodePair>();
@@ -30,7 +35,7 @@ namespace IxMilia.Dxf.Objects
             return pairs;
         }
 
-        internal virtual void PopulateFromBuffer(DxfCodePairBufferReader buffer)
+        internal virtual DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
             {
@@ -59,6 +64,17 @@ namespace IxMilia.Dxf.Objects
             }
 
             //return PostParse();
+            return this;
+        }
+
+        protected static uint UIntHandle(string s)
+        {
+            return DxfCommonConverters.UIntHandle(s);
+        }
+
+        protected static string UIntHandle(uint u)
+        {
+            return DxfCommonConverters.UIntHandle(u);
         }
 
         private static void SwallowObject(DxfCodePairBufferReader buffer)

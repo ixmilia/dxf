@@ -20,6 +20,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfObject : IDxfHasHandle
     {
         public uint Handle { get; set; }
+        public uint OwnerHandle { get; set; }
 
         public string ObjectTypeString
         {
@@ -39,11 +40,13 @@ namespace IxMilia.Dxf.Objects
             : this()
         {
             this.Handle = other.Handle;
+            this.OwnerHandle = other.OwnerHandle;
         }
 
         protected virtual void Initialize()
         {
             this.Handle = 0u;
+            this.OwnerHandle = 0u;
         }
 
         protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -54,6 +57,12 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
             }
 
+            AddExtensionValuePairs(pairs, version, outputHandles);
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(330, UIntHandle(this.OwnerHandle)));
+            }
+
         }
 
         internal virtual bool TrySetPair(DxfCodePair pair)
@@ -62,6 +71,9 @@ namespace IxMilia.Dxf.Objects
             {
                 case 5:
                     this.Handle = UIntHandle(pair.StringValue);
+                    break;
+                case 330:
+                    this.OwnerHandle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return false;

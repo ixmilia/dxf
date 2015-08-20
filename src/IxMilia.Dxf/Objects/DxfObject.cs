@@ -88,6 +88,16 @@ namespace IxMilia.Dxf.Objects
             return PostParse();
         }
 
+        protected static bool BoolShort(short s)
+        {
+            return DxfCommonConverters.BoolShort(s);
+        }
+
+        protected static short BoolShort(bool b)
+        {
+            return DxfCommonConverters.BoolShort(b);
+        }
+
         protected static uint UIntHandle(string s)
         {
             return DxfCommonConverters.UIntHandle(s);
@@ -107,6 +117,37 @@ namespace IxMilia.Dxf.Objects
                     break;
                 buffer.Advance();
             }
+        }
+    }
+
+    public partial class DxfAcadProxyObject
+    {
+        public List<string> ObjectIds { get; } = new List<string>();
+
+        public uint DrawingVersion
+        {
+            get { return ObjectDrawingFormat | 0x0000FFFF; }
+            set { ObjectDrawingFormat |= value & 0x0000FFFF; }
+        }
+
+        public uint MaintenenceReleaseVersion
+        {
+            get { return (ObjectDrawingFormat | 0xFFFF0000) >> 16; }
+            set { ObjectDrawingFormat |= (value & 0xFFFF0000) << 16; }
+        }
+
+        protected override DxfObject PostParse()
+        {
+            ObjectIds.AddRange(ObjectIdsA);
+            ObjectIds.AddRange(ObjectIdsB);
+            ObjectIds.AddRange(ObjectIdsC);
+            ObjectIds.AddRange(ObjectIdsD);
+            ObjectIdsA.Clear();
+            ObjectIdsB.Clear();
+            ObjectIdsC.Clear();
+            ObjectIdsD.Clear();
+
+            return this;
         }
     }
 }

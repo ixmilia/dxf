@@ -16,7 +16,16 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.AcadProxyObject; } }
 
-        public int ClassId { get; set; }
+        public int ProxyObjectClassId { get; set; }
+        public int ApplicationObjectClassId { get; set; }
+        public int SizeInBits { get; set; }
+        public List<string> BinaryObjectData { get; protected set; }
+        private List<string> ObjectIdsA { get; set; }
+        private List<string> ObjectIdsB { get; set; }
+        private List<string> ObjectIdsC { get; set; }
+        private List<string> ObjectIdsD { get; set; }
+        private uint ObjectDrawingFormat { get; set; }
+        public bool IsOriginalObjectDxfFormat { get; set; }
 
         public DxfAcadProxyObject()
             : base()
@@ -26,22 +35,69 @@ namespace IxMilia.Dxf.Objects
         protected override void Initialize()
         {
             base.Initialize();
-            this.ClassId = 499;
+            this.ProxyObjectClassId = 499;
+            this.ApplicationObjectClassId = 500;
+            this.SizeInBits = 0;
+            this.BinaryObjectData = new List<string>();
+            this.ObjectIdsA = new List<string>();
+            this.ObjectIdsB = new List<string>();
+            this.ObjectIdsC = new List<string>();
+            this.ObjectIdsD = new List<string>();
+            this.ObjectDrawingFormat = 0;
+            this.IsOriginalObjectDxfFormat = false;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbProxyObject"));
-            pairs.Add(new DxfCodePair(90, (this.ClassId)));
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbProxyObject"));
+            }
+            pairs.Add(new DxfCodePair(90, (this.ProxyObjectClassId)));
+            pairs.Add(new DxfCodePair(91, (this.ApplicationObjectClassId)));
+            pairs.Add(new DxfCodePair(93, (this.SizeInBits)));
+            pairs.AddRange(this.BinaryObjectData.Select(p => new DxfCodePair(310, p)));
+            foreach (var item in ObjectIds)
+            {
+                pairs.Add(new DxfCodePair(330, "item"));
+            }
+
+            pairs.Add(new DxfCodePair(94, 0));
+            pairs.Add(new DxfCodePair(95, (int)(this.ObjectDrawingFormat)));
+            pairs.Add(new DxfCodePair(70, BoolShort(this.IsOriginalObjectDxfFormat)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
         {
             switch (pair.Code)
             {
+                case 70:
+                    this.IsOriginalObjectDxfFormat = BoolShort(pair.ShortValue);
+                    break;
                 case 90:
-                    this.ClassId = (pair.IntegerValue);
+                    this.ProxyObjectClassId = (pair.IntegerValue);
+                    break;
+                case 91:
+                    this.ApplicationObjectClassId = (pair.IntegerValue);
+                    break;
+                case 93:
+                    this.SizeInBits = (pair.IntegerValue);
+                    break;
+                case 95:
+                    this.ObjectDrawingFormat = (uint)(pair.IntegerValue);
+                    break;
+                case 330:
+                    this.ObjectIdsA.Add((pair.StringValue));
+                    break;
+                case 340:
+                    this.ObjectIdsB.Add((pair.StringValue));
+                    break;
+                case 350:
+                    this.ObjectIdsC.Add((pair.StringValue));
+                    break;
+                case 360:
+                    this.ObjectIdsD.Add((pair.StringValue));
                     break;
                 default:
                     return base.TrySetPair(pair);

@@ -1,10 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information. -->
 <Spec xmlns="http://IxMilia.com/Dxf/ObjectsSpec">
+    <!--
+
+    OBJECT - the abstract base of all of the following types
+
+    -->
     <Object Name="DxfObject" ObjectType="" SubclassMarker="" TypeString="">
         <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" />
+        <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
+        <WriteOrder>
+            <WriteProperty Property="Handle" />
+            <WriteExtensionData />
+            <WriteProperty Property="OwnerHandle" />
+        </WriteOrder>
     </Object>
+    <!--
+
+    ACAD_PROXY_OBJECT
+
+    -->
     <Object Name="DxfAcadProxyObject" ObjectType="AcadProxyObject" SubclassMarker="AcDbProxyObject" TypeString="ACAD_PROXY_OBJECT">
-        <Property Name="ClassId" Code="90" Type="int" DefaultValue="499" />
+        <Property Name="ProxyObjectClassId" Code="90" Type="int" DefaultValue="499" />
+        <Property Name="ApplicationObjectClassId" Code="91" Type="int" DefaultValue="500" />
+        <Property Name="SizeInBits" Code="93" Type="int" DefaultValue="0" />
+        <Property Name="BinaryObjectData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" ProtectedSet="true" />
+        <Property Name="ObjectIdsA" Code="330" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="ObjectIdsB" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="ObjectIdsC" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="ObjectIdsD" Code="360" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <!-- a 94/0 code pair is usually read here to indicate the end of the object ids, but the generated reader doesn't depend on this to be present -->
+        <Property Name="ObjectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" />
+        <Property Name="IsOriginalObjectDxfFormat" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="AcDbProxyObject" MinVersion="R13" />
+            <WriteProperty Property="ProxyObjectClassId" />
+            <WriteProperty Property="ApplicationObjectClassId" />
+            <WriteProperty Property="SizeInBits" />
+            <WriteProperty Property="BinaryObjectData" />
+            <Foreach Property="ObjectIds">
+                <WriteSpecificValue Code="330" Value="item" />
+            </Foreach>
+            <WriteSpecificValue Code="94" Value="0" />
+            <WriteProperty Property="ObjectDrawingFormat" />
+            <WriteProperty Property="IsOriginalObjectDxfFormat" />
+        </WriteOrder>
     </Object>
 </Spec>

@@ -117,15 +117,15 @@ namespace IxMilia.Dxf
 
         internal override void BeforeWrite()
         {
-            BitmapPreviewData.Clear();
+            _bitmapPreviewData.Clear();
             var str = DxfCommonConverters.HexBytes(BitmapData);
-            BitmapPreviewData.AddRange(DxfCommonConverters.SplitIntoLines(str));
+            _bitmapPreviewData.AddRange(DxfCommonConverters.SplitIntoLines(str));
         }
 
         internal override void AfterRead()
         {
-            var hex = string.Join(string.Empty, BitmapPreviewData);
-            BitmapPreviewData.Clear(); // don't keep this around
+            var hex = string.Join(string.Empty, _bitmapPreviewData);
+            _bitmapPreviewData.Clear(); // don't keep this around
             BitmapData = DxfCommonConverters.HexBytes(hex);
         }
     }

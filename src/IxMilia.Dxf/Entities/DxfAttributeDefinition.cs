@@ -38,7 +38,7 @@ namespace IxMilia.Dxf.Entities
         public bool KeepDuplicateRecords { get; set; }
         public DxfMTextFlag MTextFlag { get; set; }
         public bool IsReallyLocked { get; set; }
-        private int SecondaryAttributeCount { get; set; }
+        private int _secondaryAttributeCount { get; set; }
         public List<uint> SecondaryAttributeHandles { get; set; }
         public DxfPoint AlignmentPoint { get; set; }
         public double AnnotationScale { get; set; }
@@ -144,7 +144,7 @@ namespace IxMilia.Dxf.Entities
             this.KeepDuplicateRecords = false;
             this.MTextFlag = DxfMTextFlag.MultilineAttribute;
             this.IsReallyLocked = false;
-            this.SecondaryAttributeCount = 0;
+            this._secondaryAttributeCount = 0;
             this.SecondaryAttributeHandles = new List<uint>();
             this.AlignmentPoint = DxfPoint.Origin;
             this.AnnotationScale = 1.0;

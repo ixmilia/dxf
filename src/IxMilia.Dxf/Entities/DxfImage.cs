@@ -31,8 +31,8 @@ namespace IxMilia.Dxf.Entities
         public string ImageDefReactorReference { get; set; }
         public DxfImageClippingBoundaryType ClippingType { get; set; }
         public int ClippingVertexCount { get; set; }
-        private List<double> ClippingVerticesX { get; set; }
-        private List<double> ClippingVerticesY { get; set; }
+        private List<double> _clippingVerticesX { get; set; }
+        private List<double> _clippingVerticesY { get; set; }
         public bool IsInsideClipping { get; set; }
 
         // DisplayOptionsFlags flags
@@ -103,8 +103,8 @@ namespace IxMilia.Dxf.Entities
             this.ImageDefReactorReference = null;
             this.ClippingType = DxfImageClippingBoundaryType.Rectangular;
             this.ClippingVertexCount = 0;
-            this.ClippingVerticesX = new List<double>();
-            this.ClippingVerticesY = new List<double>();
+            this._clippingVerticesX = new List<double>();
+            this._clippingVerticesY = new List<double>();
             this.IsInsideClipping = false;
         }
 
@@ -184,10 +184,10 @@ namespace IxMilia.Dxf.Entities
                     this.ImageSize.Y = pair.DoubleValue;
                     break;
                 case 14:
-                    this.ClippingVerticesX.Add((pair.DoubleValue));
+                    this._clippingVerticesX.Add((pair.DoubleValue));
                     break;
                 case 24:
-                    this.ClippingVerticesY.Add((pair.DoubleValue));
+                    this._clippingVerticesY.Add((pair.DoubleValue));
                     break;
                 case 70:
                     this.DisplayOptionsFlags = (int)(pair.ShortValue);

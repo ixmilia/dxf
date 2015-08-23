@@ -21,12 +21,12 @@ namespace IxMilia.Dxf.Entities
         public int Flags { get; set; }
         public double ConstantWidth { get; set; }
         public double Thickness { get; set; }
-        private List<double> VertexCoordinateX { get; set; }
-        private List<double> VertexCoordinateY { get; set; }
-        private List<int> VertexIdentifier { get; set; }
-        private List<double> StartingWidth { get; set; }
-        private List<double> EndingWidth { get; set; }
-        private List<double> Bulge { get; set; }
+        private List<double> _vertexCoordinateX { get; set; }
+        private List<double> _vertexCoordinateY { get; set; }
+        private List<int> _vertexIdentifier { get; set; }
+        private List<double> _startingWidth { get; set; }
+        private List<double> _endingWidth { get; set; }
+        private List<double> _bulge { get; set; }
         public DxfVector ExtrusionDirection { get; set; }
 
         // Flags flags
@@ -65,12 +65,12 @@ namespace IxMilia.Dxf.Entities
             this.Flags = 0;
             this.ConstantWidth = 0.0;
             this.Thickness = 0.0;
-            this.VertexCoordinateX = new List<double>();
-            this.VertexCoordinateY = new List<double>();
-            this.VertexIdentifier = new List<int>();
-            this.StartingWidth = new List<double>();
-            this.EndingWidth = new List<double>();
-            this.Bulge = new List<double>();
+            this._vertexCoordinateX = new List<double>();
+            this._vertexCoordinateY = new List<double>();
+            this._vertexIdentifier = new List<int>();
+            this._startingWidth = new List<double>();
+            this._endingWidth = new List<double>();
+            this._bulge = new List<double>();
             this.ExtrusionDirection = DxfVector.ZAxis;
         }
 
@@ -130,22 +130,22 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.VertexCoordinateX.Add((pair.DoubleValue));
+                    this._vertexCoordinateX.Add((pair.DoubleValue));
                     break;
                 case 20:
-                    this.VertexCoordinateY.Add((pair.DoubleValue));
+                    this._vertexCoordinateY.Add((pair.DoubleValue));
                     break;
                 case 39:
                     this.Thickness = (pair.DoubleValue);
                     break;
                 case 40:
-                    this.StartingWidth.Add((pair.DoubleValue));
+                    this._startingWidth.Add((pair.DoubleValue));
                     break;
                 case 41:
-                    this.EndingWidth.Add((pair.DoubleValue));
+                    this._endingWidth.Add((pair.DoubleValue));
                     break;
                 case 42:
-                    this.Bulge.Add((pair.DoubleValue));
+                    this._bulge.Add((pair.DoubleValue));
                     break;
                 case 43:
                     this.ConstantWidth = (pair.DoubleValue);
@@ -157,7 +157,7 @@ namespace IxMilia.Dxf.Entities
                     this.VertexCount = (pair.IntegerValue);
                     break;
                 case 91:
-                    this.VertexIdentifier.Add((pair.IntegerValue));
+                    this._vertexIdentifier.Add((pair.IntegerValue));
                     break;
                 case 210:
                     this.ExtrusionDirection.X = pair.DoubleValue;

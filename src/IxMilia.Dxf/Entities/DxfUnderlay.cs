@@ -27,8 +27,8 @@ namespace IxMilia.Dxf.Entities
         public int Flags { get; set; }
         public short Contrast { get; set; }
         public short Fade { get; set; }
-        private List<double> PointX { get; set; }
-        private List<double> PointY { get; set; }
+        private List<double> _pointX { get; set; }
+        private List<double> _pointY { get; set; }
 
         // Flags flags
 
@@ -105,8 +105,8 @@ namespace IxMilia.Dxf.Entities
             this.Flags = other.Flags;
             this.Contrast = other.Contrast;
             this.Fade = other.Fade;
-            this.PointX = other.PointX;
-            this.PointY = other.PointY;
+            this._pointX = other._pointX;
+            this._pointY = other._pointY;
         }
 
         protected override void Initialize()
@@ -122,8 +122,8 @@ namespace IxMilia.Dxf.Entities
             this.Flags = 0;
             this.Contrast = 100;
             this.Fade = 0;
-            this.PointX = new List<double>();
-            this.PointY = new List<double>();
+            this._pointX = new List<double>();
+            this._pointY = new List<double>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -166,10 +166,10 @@ namespace IxMilia.Dxf.Entities
                     this.InsertionPoint.Z = pair.DoubleValue;
                     break;
                 case 11:
-                    this.PointX.Add((pair.DoubleValue));
+                    this._pointX.Add((pair.DoubleValue));
                     break;
                 case 21:
-                    this.PointY.Add((pair.DoubleValue));
+                    this._pointY.Add((pair.DoubleValue));
                     break;
                 case 41:
                     this.XScale = (pair.DoubleValue);

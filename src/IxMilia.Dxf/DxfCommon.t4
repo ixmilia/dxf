@@ -146,7 +146,13 @@ bool ProtectedSet(XElement property)
 string Accessibility(XElement property)
 {
     var att = property.Attribute("Accessibility");
-    return att == null ? "public" : att.Value;
+    var accessibility = att == null ? "public" : att.Value;
+    if (accessibility == "private" && !Name(property).StartsWith("_"))
+    {
+        throw new Exception(string.Format("Improperly named private property '{0}'.  Missing leading underscore.", Name(property)));
+    }
+
+    return accessibility;
 }
 
 List<string> GetWriteCommands(XElement entity)

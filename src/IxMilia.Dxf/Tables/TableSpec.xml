@@ -14,7 +14,7 @@
       <Property Name="Explodability" Code="280" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
       <Property Name="Scalability" Code="281" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
 
-      <Property Name="BitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
+      <Property Name="_bitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
     </TableItem>
   </Table>
   <Table Type="DimStyle" TypeString="DimStyleText">

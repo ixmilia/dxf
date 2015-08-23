@@ -26,14 +26,14 @@ namespace IxMilia.Dxf.Entities
         public short IndicatorTransparency { get; set; }
         public DxfColor IndicatorColor { get; set; }
         public string IndicatorColorName { get; set; }
-        private int VertexCount { get; set; }
-        private List<double> VertexX { get; set; }
-        private List<double> VertexY { get; set; }
-        private List<double> VertexZ { get; set; }
-        private int BackLineVertexCount { get; set; }
-        private List<double> BackLineVertexX { get; set; }
-        private List<double> BackLineVertexY { get; set; }
-        private List<double> BackLineVertexZ { get; set; }
+        private int _vertexCount { get; set; }
+        private List<double> _vertexX { get; set; }
+        private List<double> _vertexY { get; set; }
+        private List<double> _vertexZ { get; set; }
+        private int _backLineVertexCount { get; set; }
+        private List<double> _backLineVertexX { get; set; }
+        private List<double> _backLineVertexY { get; set; }
+        private List<double> _backLineVertexZ { get; set; }
         public uint GeometrySettingsHandle { get; set; }
 
         public DxfEntitySection()
@@ -53,14 +53,14 @@ namespace IxMilia.Dxf.Entities
             this.IndicatorTransparency = 0;
             this.IndicatorColor = DxfColor.ByLayer;
             this.IndicatorColorName = null;
-            this.VertexCount = 0;
-            this.VertexX = new List<double>();
-            this.VertexY = new List<double>();
-            this.VertexZ = new List<double>();
-            this.BackLineVertexCount = 0;
-            this.BackLineVertexX = new List<double>();
-            this.BackLineVertexY = new List<double>();
-            this.BackLineVertexZ = new List<double>();
+            this._vertexCount = 0;
+            this._vertexX = new List<double>();
+            this._vertexY = new List<double>();
+            this._vertexZ = new List<double>();
+            this._backLineVertexCount = 0;
+            this._backLineVertexX = new List<double>();
+            this._backLineVertexY = new List<double>();
+            this._backLineVertexZ = new List<double>();
             this.GeometrySettingsHandle = 0;
         }
 
@@ -115,22 +115,22 @@ namespace IxMilia.Dxf.Entities
                     this.VerticalDirection.Z = pair.DoubleValue;
                     break;
                 case 11:
-                    this.VertexX.Add((pair.DoubleValue));
+                    this._vertexX.Add((pair.DoubleValue));
                     break;
                 case 12:
-                    this.BackLineVertexX.Add((pair.DoubleValue));
+                    this._backLineVertexX.Add((pair.DoubleValue));
                     break;
                 case 21:
-                    this.VertexY.Add((pair.DoubleValue));
+                    this._vertexY.Add((pair.DoubleValue));
                     break;
                 case 22:
-                    this.BackLineVertexY.Add((pair.DoubleValue));
+                    this._backLineVertexY.Add((pair.DoubleValue));
                     break;
                 case 31:
-                    this.VertexZ.Add((pair.DoubleValue));
+                    this._vertexZ.Add((pair.DoubleValue));
                     break;
                 case 32:
-                    this.BackLineVertexZ.Add((pair.DoubleValue));
+                    this._backLineVertexZ.Add((pair.DoubleValue));
                     break;
                 case 40:
                     this.TopHeight = (pair.DoubleValue);
@@ -151,10 +151,10 @@ namespace IxMilia.Dxf.Entities
                     this.Flags = (pair.IntegerValue);
                     break;
                 case 92:
-                    this.VertexCount = (pair.IntegerValue);
+                    this._vertexCount = (pair.IntegerValue);
                     break;
                 case 93:
-                    this.BackLineVertexCount = (pair.IntegerValue);
+                    this._backLineVertexCount = (pair.IntegerValue);
                     break;
                 case 360:
                     this.GeometrySettingsHandle = UIntHandle(pair.StringValue);

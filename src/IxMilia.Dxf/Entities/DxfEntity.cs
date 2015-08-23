@@ -374,7 +374,7 @@ namespace IxMilia.Dxf.Entities
                                 IsReallyLocked = BoolShort(pair.ShortValue);
                                 break;
                             case 2:
-                                SecondaryAttributeCount = pair.ShortValue;
+                                _secondaryAttributeCount = pair.ShortValue;
                                 break;
                             default:
                                 Debug.Assert(false, "Unexpected extra values");
@@ -517,7 +517,7 @@ namespace IxMilia.Dxf.Entities
                                 IsReallyLocked = BoolShort(pair.ShortValue);
                                 break;
                             case 2:
-                                SecondaryAttributeCount = pair.ShortValue;
+                                _secondaryAttributeCount = pair.ShortValue;
                                 break;
                             default:
                                 Debug.Assert(false, "Unexpected extra values");
@@ -738,15 +738,15 @@ namespace IxMilia.Dxf.Entities
         public int ObjectDrawingFormatVersion
         {
             // lower word
-            get { return (int)(ObjectDrawingFormat & 0xFFFF); }
-            set { ObjectDrawingFormat |= (uint)value & 0xFFFF; }
+            get { return (int)(_objectDrawingFormat & 0xFFFF); }
+            set { _objectDrawingFormat |= (uint)value & 0xFFFF; }
         }
 
         public int ObjectMaintenanceReleaseVersion
         {
             // upper word
-            get { return (int)(ObjectDrawingFormat >> 4); }
-            set { ObjectDrawingFormat = (uint)(value << 4) + ObjectDrawingFormat & 0xFFFF; }
+            get { return (int)(_objectDrawingFormat >> 4); }
+            set { _objectDrawingFormat = (uint)(value << 4) + _objectDrawingFormat & 0xFFFF; }
         }
     }
 
@@ -806,15 +806,15 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Debug.Assert((VertexCount == VerticesX.Count) && (VertexCount == VerticesY.Count) && (VertexCount == VerticesZ.Count));
+            Debug.Assert((VertexCount == _verticesX.Count) && (VertexCount == _verticesY.Count) && (VertexCount == _verticesZ.Count));
             for (int i = 0; i < VertexCount; i++)
             {
-                Vertices.Add(new DxfPoint(VerticesX[i], VerticesY[i], VerticesZ[i]));
+                Vertices.Add(new DxfPoint(_verticesX[i], _verticesY[i], _verticesZ[i]));
             }
 
-            VerticesX.Clear();
-            VerticesY.Clear();
-            VerticesZ.Clear();
+            _verticesX.Clear();
+            _verticesY.Clear();
+            _verticesZ.Clear();
             return this;
         }
     }
@@ -829,10 +829,10 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Debug.Assert((ClippingVertexCount == ClippingVerticesX.Count) && (ClippingVertexCount == ClippingVerticesY.Count));
-            clippingVertices.AddRange(ClippingVerticesX.Zip(ClippingVerticesY, (x, y) => new DxfPoint(x, y, 0.0)));
-            ClippingVerticesX.Clear();
-            ClippingVerticesY.Clear();
+            Debug.Assert((ClippingVertexCount == _clippingVerticesX.Count) && (ClippingVertexCount == _clippingVerticesY.Count));
+            clippingVertices.AddRange(_clippingVerticesX.Zip(_clippingVerticesY, (x, y) => new DxfPoint(x, y, 0.0)));
+            _clippingVerticesX.Clear();
+            _clippingVerticesY.Clear();
             return this;
         }
     }
@@ -896,9 +896,9 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Debug.Assert((VertexCount == VertexCoordinateX.Count) && (VertexCount == VertexCoordinateY.Count));
+            Debug.Assert((VertexCount == _vertexCoordinateX.Count) && (VertexCount == _vertexCoordinateY.Count));
             // TODO: how to read optional starting/ending width and bulge in this way?
-            vertices.AddRange(VertexCoordinateX.Zip(VertexCoordinateY, (x, y) => new DxfLwPolylineVertex() { Location = new DxfPoint(x, y, 0.0) }));
+            vertices.AddRange(_vertexCoordinateX.Zip(_vertexCoordinateY, (x, y) => new DxfLwPolylineVertex() { Location = new DxfPoint(x, y, 0.0) }));
             return this;
         }
     }
@@ -911,35 +911,35 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Debug.Assert(VertexCount == VertexX.Count && VertexCount == VertexY.Count && VertexCount == VertexZ.Count);
-            for (int i = 0; i < VertexCount; i++)
+            Debug.Assert(_vertexCount == _vertexX.Count && _vertexCount == _vertexY.Count && _vertexCount == _vertexZ.Count);
+            for (int i = 0; i < _vertexCount; i++)
             {
-                Vertices.Add(new DxfPoint(VertexX[i], VertexY[i], VertexZ[i]));
+                Vertices.Add(new DxfPoint(_vertexX[i], _vertexY[i], _vertexZ[i]));
             }
 
-            VertexX.Clear();
-            VertexY.Clear();
-            VertexZ.Clear();
+            _vertexX.Clear();
+            _vertexY.Clear();
+            _vertexZ.Clear();
 
-            Debug.Assert(VertexCount == SegmentDirectionX.Count && VertexCount == SegmentDirectionY.Count && VertexCount == SegmentDirectionY.Count);
-            for (int i = 0; i < VertexCount; i++)
+            Debug.Assert(_vertexCount == _segmentDirectionX.Count && _vertexCount == _segmentDirectionY.Count && _vertexCount == _segmentDirectionZ.Count);
+            for (int i = 0; i < _vertexCount; i++)
             {
-                Vertices.Add(new DxfPoint(SegmentDirectionX[i], SegmentDirectionY[i], SegmentDirectionY[i]));
+                Vertices.Add(new DxfPoint(_segmentDirectionX[i], _segmentDirectionY[i], _segmentDirectionZ[i]));
             }
 
-            SegmentDirectionX.Clear();
-            SegmentDirectionY.Clear();
-            SegmentDirectionY.Clear();
+            _segmentDirectionX.Clear();
+            _segmentDirectionY.Clear();
+            _segmentDirectionZ.Clear();
 
-            Debug.Assert(VertexCount == MiterDirectionX.Count && VertexCount == MiterDirectionY.Count && VertexCount == MiterDirectionZ.Count);
-            for (int i = 0; i < VertexCount; i++)
+            Debug.Assert(_vertexCount == _miterDirectionX.Count && _vertexCount == _miterDirectionY.Count && _vertexCount == _miterDirectionZ.Count);
+            for (int i = 0; i < _vertexCount; i++)
             {
-                Vertices.Add(new DxfPoint(MiterDirectionX[i], MiterDirectionY[i], MiterDirectionZ[i]));
+                Vertices.Add(new DxfPoint(_miterDirectionX[i], _miterDirectionY[i], _miterDirectionZ[i]));
             }
 
-            MiterDirectionX.Clear();
-            MiterDirectionY.Clear();
-            MiterDirectionZ.Clear();
+            _miterDirectionX.Clear();
+            _miterDirectionY.Clear();
+            _miterDirectionZ.Clear();
 
             return this;
         }
@@ -952,25 +952,25 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Debug.Assert(VertexCount == VertexX.Count && VertexCount == VertexY.Count && VertexCount == VertexZ.Count);
-            for (int i = 0; i < VertexCount; i++)
+            Debug.Assert(_vertexCount == _vertexX.Count && _vertexCount == _vertexY.Count && _vertexCount == _vertexZ.Count);
+            for (int i = 0; i < _vertexCount; i++)
             {
-                Vertices.Add(new DxfPoint(VertexX[i], VertexY[i], VertexZ[i]));
+                Vertices.Add(new DxfPoint(_vertexX[i], _vertexY[i], _vertexZ[i]));
             }
 
-            VertexX.Clear();
-            VertexY.Clear();
-            VertexZ.Clear();
+            _vertexX.Clear();
+            _vertexY.Clear();
+            _vertexZ.Clear();
 
-            Debug.Assert(BackLineVertexCount == BackLineVertexX.Count && BackLineVertexCount == BackLineVertexY.Count && BackLineVertexCount == BackLineVertexZ.Count);
-            for (int i = 0; i < BackLineVertexCount; i++)
+            Debug.Assert(_backLineVertexCount == _backLineVertexX.Count && _backLineVertexCount == _backLineVertexY.Count && _backLineVertexCount == _backLineVertexZ.Count);
+            for (int i = 0; i < _backLineVertexCount; i++)
             {
-                BackLineVertices.Add(new DxfPoint(BackLineVertexX[i], BackLineVertexY[i], BackLineVertexZ[i]));
+                BackLineVertices.Add(new DxfPoint(_backLineVertexX[i], _backLineVertexY[i], _backLineVertexZ[i]));
             }
 
-            BackLineVertexX.Clear();
-            BackLineVertexY.Clear();
-            BackLineVertexZ.Clear();
+            _backLineVertexX.Clear();
+            _backLineVertexY.Clear();
+            _backLineVertexZ.Clear();
 
             return this;
         }
@@ -1007,25 +1007,25 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Debug.Assert((ControlPointX.Count == ControlPointY.Count) && (ControlPointX.Count == ControlPointZ.Count));
-            for (int i = 0; i < ControlPointX.Count; i++)
+            Debug.Assert((_controlPointX.Count == _controlPointY.Count) && (_controlPointX.Count == _controlPointZ.Count));
+            for (int i = 0; i < _controlPointX.Count; i++)
             {
-                controlPoints.Add(new DxfPoint(ControlPointX[i], ControlPointY[i], ControlPointZ[i]));
+                controlPoints.Add(new DxfPoint(_controlPointX[i], _controlPointY[i], _controlPointZ[i]));
             }
 
-            ControlPointX.Clear();
-            ControlPointY.Clear();
-            ControlPointZ.Clear();
+            _controlPointX.Clear();
+            _controlPointY.Clear();
+            _controlPointZ.Clear();
 
-            Debug.Assert((FitPointX.Count == FitPointY.Count) && (FitPointX.Count == FitPointZ.Count));
-            for (int i = 0; i < FitPointX.Count; i++)
+            Debug.Assert((_fitPointX.Count == _fitPointY.Count) && (_fitPointX.Count == _fitPointZ.Count));
+            for (int i = 0; i < _fitPointX.Count; i++)
             {
-                fitPoints.Add(new DxfPoint(FitPointX[i], FitPointY[i], FitPointZ[i]));
+                fitPoints.Add(new DxfPoint(_fitPointX[i], _fitPointY[i], _fitPointZ[i]));
             }
 
-            FitPointX.Clear();
-            FitPointY.Clear();
-            FitPointZ.Clear();
+            _fitPointX.Clear();
+            _fitPointY.Clear();
+            _fitPointZ.Clear();
 
             return this;
         }
@@ -1037,14 +1037,14 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Debug.Assert(PointX.Count == PointY.Count);
-            for (int i = 0; i < PointX.Count; i++)
+            Debug.Assert(_pointX.Count == _pointY.Count);
+            for (int i = 0; i < _pointX.Count; i++)
             {
-                BoundaryPoints.Add(new DxfPoint(PointX[i], PointY[i], 0.0));
+                BoundaryPoints.Add(new DxfPoint(_pointX[i], _pointY[i], 0.0));
             }
 
-            PointX.Clear();
-            PointY.Clear();
+            _pointX.Clear();
+            _pointY.Clear();
 
             return this;
         }

@@ -28,7 +28,7 @@ namespace IxMilia.Dxf.Entities
         public List<string> ObjectID3 { get; set; }
         public List<string> ObjectID4 { get; set; }
         public int Terminator { get; set; }
-        private uint ObjectDrawingFormat { get; set; }
+        private uint _objectDrawingFormat { get; set; }
         public bool OriginalDataFormatIsDxf { get; set; }
 
         public DxfProxyEntity()
@@ -50,7 +50,7 @@ namespace IxMilia.Dxf.Entities
             this.ObjectID3 = new List<string>();
             this.ObjectID4 = new List<string>();
             this.Terminator = 0;
-            this.ObjectDrawingFormat = 0;
+            this._objectDrawingFormat = 0;
             this.OriginalDataFormatIsDxf = true;
         }
 
@@ -71,7 +71,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(94, (this.Terminator)));
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(95, (int)(this.ObjectDrawingFormat)));
+                pairs.Add(new DxfCodePair(95, (int)(this._objectDrawingFormat)));
             }
 
             if (version >= DxfAcadVersion.R2000)
@@ -104,7 +104,7 @@ namespace IxMilia.Dxf.Entities
                     this.Terminator = (pair.IntegerValue);
                     break;
                 case 95:
-                    this.ObjectDrawingFormat = (uint)(pair.IntegerValue);
+                    this._objectDrawingFormat = (uint)(pair.IntegerValue);
                     break;
                 case 310:
                     // TODO: code is shared by properties GraphicsDataString, EntityDataString

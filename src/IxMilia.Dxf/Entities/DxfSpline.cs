@@ -20,9 +20,9 @@ namespace IxMilia.Dxf.Entities
         public DxfVector Normal { get; set; }
         public int Flags { get; set; }
         public int DegreeOfCurve { get; set; }
-        private int NumberOfKnotsIgnored { get; set; }
-        private int NumberOfControlPointsIgnored { get; set; }
-        private int NumberOfFitPointsIgnored { get; set; }
+        private int _numberOfKnotsIgnored { get; set; }
+        private int _numberOfControlPointsIgnored { get; set; }
+        private int _numberOfFitPointsIgnored { get; set; }
         public double KnotTolerance { get; set; }
         public double ControlPointTolerance { get; set; }
         public double FitTolerance { get; set; }
@@ -30,12 +30,12 @@ namespace IxMilia.Dxf.Entities
         public DxfPoint EndTangent { get; set; }
         public List<double> KnotValues { get; set; }
         public double Weight { get; set; }
-        private List<double> ControlPointX { get; set; }
-        private List<double> ControlPointY { get; set; }
-        private List<double> ControlPointZ { get; set; }
-        private List<double> FitPointX { get; set; }
-        private List<double> FitPointY { get; set; }
-        private List<double> FitPointZ { get; set; }
+        private List<double> _controlPointX { get; set; }
+        private List<double> _controlPointY { get; set; }
+        private List<double> _controlPointZ { get; set; }
+        private List<double> _fitPointX { get; set; }
+        private List<double> _fitPointY { get; set; }
+        private List<double> _fitPointZ { get; set; }
 
         // Flags flags
 
@@ -105,9 +105,9 @@ namespace IxMilia.Dxf.Entities
             this.Normal = DxfVector.ZAxis;
             this.Flags = 0;
             this.DegreeOfCurve = 0;
-            this.NumberOfKnotsIgnored = 0;
-            this.NumberOfControlPointsIgnored = 0;
-            this.NumberOfFitPointsIgnored = 0;
+            this._numberOfKnotsIgnored = 0;
+            this._numberOfControlPointsIgnored = 0;
+            this._numberOfFitPointsIgnored = 0;
             this.KnotTolerance = 0.0000001;
             this.ControlPointTolerance = 0.0000001;
             this.FitTolerance = 0.0000000001;
@@ -115,12 +115,12 @@ namespace IxMilia.Dxf.Entities
             this.EndTangent = DxfPoint.Origin;
             this.KnotValues = new List<double>();
             this.Weight = 1.0;
-            this.ControlPointX = new List<double>();
-            this.ControlPointY = new List<double>();
-            this.ControlPointZ = new List<double>();
-            this.FitPointX = new List<double>();
-            this.FitPointY = new List<double>();
-            this.FitPointZ = new List<double>();
+            this._controlPointX = new List<double>();
+            this._controlPointY = new List<double>();
+            this._controlPointZ = new List<double>();
+            this._fitPointX = new List<double>();
+            this._fitPointY = new List<double>();
+            this._fitPointZ = new List<double>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -182,10 +182,10 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.ControlPointX.Add((pair.DoubleValue));
+                    this._controlPointX.Add((pair.DoubleValue));
                     break;
                 case 11:
-                    this.FitPointX.Add((pair.DoubleValue));
+                    this._fitPointX.Add((pair.DoubleValue));
                     break;
                 case 12:
                     this.StartTangent.X = pair.DoubleValue;
@@ -206,16 +206,16 @@ namespace IxMilia.Dxf.Entities
                     this.EndTangent.Z = pair.DoubleValue;
                     break;
                 case 20:
-                    this.ControlPointY.Add((pair.DoubleValue));
+                    this._controlPointY.Add((pair.DoubleValue));
                     break;
                 case 21:
-                    this.FitPointY.Add((pair.DoubleValue));
+                    this._fitPointY.Add((pair.DoubleValue));
                     break;
                 case 30:
-                    this.ControlPointZ.Add((pair.DoubleValue));
+                    this._controlPointZ.Add((pair.DoubleValue));
                     break;
                 case 31:
-                    this.FitPointZ.Add((pair.DoubleValue));
+                    this._fitPointZ.Add((pair.DoubleValue));
                     break;
                 case 40:
                     this.KnotValues.Add((pair.DoubleValue));
@@ -239,13 +239,13 @@ namespace IxMilia.Dxf.Entities
                     this.DegreeOfCurve = (int)(pair.ShortValue);
                     break;
                 case 72:
-                    this.NumberOfKnotsIgnored = (int)(pair.ShortValue);
+                    this._numberOfKnotsIgnored = (int)(pair.ShortValue);
                     break;
                 case 73:
-                    this.NumberOfControlPointsIgnored = (int)(pair.ShortValue);
+                    this._numberOfControlPointsIgnored = (int)(pair.ShortValue);
                     break;
                 case 74:
-                    this.NumberOfFitPointsIgnored = (int)(pair.ShortValue);
+                    this._numberOfFitPointsIgnored = (int)(pair.ShortValue);
                     break;
                 case 210:
                     this.Normal.X = pair.DoubleValue;

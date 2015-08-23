@@ -22,22 +22,22 @@ namespace IxMilia.Dxf.Entities
         public double ScaleFactor { get; set; }
         public DxfJustification Justification { get; set; }
         public int Flags { get; set; }
-        private int VertexCount { get; set; }
+        private int _vertexCount { get; set; }
         public int StyleElementCount { get; set; }
         public DxfPoint StartPoint { get; set; }
         public DxfVector Normal { get; set; }
-        private List<double> VertexX { get; set; }
-        private List<double> VertexY { get; set; }
-        private List<double> VertexZ { get; set; }
-        private List<double> SegmentDirectionX { get; set; }
-        private List<double> SegmentDirectionY { get; set; }
-        private List<double> SegmentDirectionZ { get; set; }
-        private List<double> MiterDirectionX { get; set; }
-        private List<double> MiterDirectionY { get; set; }
-        private List<double> MiterDirectionZ { get; set; }
-        private int ParameterCount { get; set; }
+        private List<double> _vertexX { get; set; }
+        private List<double> _vertexY { get; set; }
+        private List<double> _vertexZ { get; set; }
+        private List<double> _segmentDirectionX { get; set; }
+        private List<double> _segmentDirectionY { get; set; }
+        private List<double> _segmentDirectionZ { get; set; }
+        private List<double> _miterDirectionX { get; set; }
+        private List<double> _miterDirectionY { get; set; }
+        private List<double> _miterDirectionZ { get; set; }
+        private int _parameterCount { get; set; }
         public List<double> Parameters { get; set; }
-        private int AreaFillParameterCount { get; set; }
+        private int _areaFillParameterCount { get; set; }
         public List<double> AreaFillParameters { get; set; }
 
         // Flags flags
@@ -99,22 +99,22 @@ namespace IxMilia.Dxf.Entities
             this.ScaleFactor = 1.0;
             this.Justification = DxfJustification.Top;
             this.Flags = 0;
-            this.VertexCount = 0;
+            this._vertexCount = 0;
             this.StyleElementCount = 0;
             this.StartPoint = DxfPoint.Origin;
             this.Normal = DxfVector.ZAxis;
-            this.VertexX = new List<double>();
-            this.VertexY = new List<double>();
-            this.VertexZ = new List<double>();
-            this.SegmentDirectionX = new List<double>();
-            this.SegmentDirectionY = new List<double>();
-            this.SegmentDirectionZ = new List<double>();
-            this.MiterDirectionX = new List<double>();
-            this.MiterDirectionY = new List<double>();
-            this.MiterDirectionZ = new List<double>();
-            this.ParameterCount = 0;
+            this._vertexX = new List<double>();
+            this._vertexY = new List<double>();
+            this._vertexZ = new List<double>();
+            this._segmentDirectionX = new List<double>();
+            this._segmentDirectionY = new List<double>();
+            this._segmentDirectionZ = new List<double>();
+            this._miterDirectionX = new List<double>();
+            this._miterDirectionY = new List<double>();
+            this._miterDirectionZ = new List<double>();
+            this._parameterCount = 0;
             this.Parameters = new List<double>();
-            this.AreaFillParameterCount = 0;
+            this._areaFillParameterCount = 0;
             this.AreaFillParameters = new List<double>();
         }
 
@@ -183,31 +183,31 @@ namespace IxMilia.Dxf.Entities
                     this.StartPoint.Z = pair.DoubleValue;
                     break;
                 case 11:
-                    this.VertexX.Add((pair.DoubleValue));
+                    this._vertexX.Add((pair.DoubleValue));
                     break;
                 case 12:
-                    this.SegmentDirectionX.Add((pair.DoubleValue));
+                    this._segmentDirectionX.Add((pair.DoubleValue));
                     break;
                 case 13:
-                    this.MiterDirectionX.Add((pair.DoubleValue));
+                    this._miterDirectionX.Add((pair.DoubleValue));
                     break;
                 case 21:
-                    this.VertexY.Add((pair.DoubleValue));
+                    this._vertexY.Add((pair.DoubleValue));
                     break;
                 case 22:
-                    this.SegmentDirectionY.Add((pair.DoubleValue));
+                    this._segmentDirectionY.Add((pair.DoubleValue));
                     break;
                 case 23:
-                    this.MiterDirectionY.Add((pair.DoubleValue));
+                    this._miterDirectionY.Add((pair.DoubleValue));
                     break;
                 case 31:
-                    this.VertexZ.Add((pair.DoubleValue));
+                    this._vertexZ.Add((pair.DoubleValue));
                     break;
                 case 32:
-                    this.SegmentDirectionZ.Add((pair.DoubleValue));
+                    this._segmentDirectionZ.Add((pair.DoubleValue));
                     break;
                 case 33:
-                    this.MiterDirectionZ.Add((pair.DoubleValue));
+                    this._miterDirectionZ.Add((pair.DoubleValue));
                     break;
                 case 40:
                     this.ScaleFactor = (pair.DoubleValue);
@@ -225,16 +225,16 @@ namespace IxMilia.Dxf.Entities
                     this.Flags = (int)(pair.ShortValue);
                     break;
                 case 72:
-                    this.VertexCount = (int)(pair.ShortValue);
+                    this._vertexCount = (int)(pair.ShortValue);
                     break;
                 case 73:
                     this.StyleElementCount = (int)(pair.ShortValue);
                     break;
                 case 74:
-                    this.ParameterCount = (int)(pair.ShortValue);
+                    this._parameterCount = (int)(pair.ShortValue);
                     break;
                 case 75:
-                    this.AreaFillParameterCount = (int)(pair.ShortValue);
+                    this._areaFillParameterCount = (int)(pair.ShortValue);
                     break;
                 case 210:
                     this.Normal.X = pair.DoubleValue;

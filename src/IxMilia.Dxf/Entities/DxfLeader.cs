@@ -26,9 +26,9 @@ namespace IxMilia.Dxf.Entities
         public double TextAnnotationHeight { get; set; }
         public double TextAnnotationWidth { get; set; }
         public int VertexCount { get; set; }
-        private List<double> VerticesX { get; set; }
-        private List<double> VerticesY { get; set; }
-        private List<double> VerticesZ { get; set; }
+        private List<double> _verticesX { get; set; }
+        private List<double> _verticesY { get; set; }
+        private List<double> _verticesZ { get; set; }
         public DxfColor OverrideColor { get; set; }
         public string AssociatedAnnotationReference { get; set; }
         public DxfVector Normal { get; set; }
@@ -54,9 +54,9 @@ namespace IxMilia.Dxf.Entities
             this.TextAnnotationHeight = 1.0;
             this.TextAnnotationWidth = 1.0;
             this.VertexCount = 0;
-            this.VerticesX = new List<double>();
-            this.VerticesY = new List<double>();
-            this.VerticesZ = new List<double>();
+            this._verticesX = new List<double>();
+            this._verticesY = new List<double>();
+            this._verticesZ = new List<double>();
             this.OverrideColor = DxfColor.ByBlock;
             this.AssociatedAnnotationReference = null;
             this.Normal = DxfVector.ZAxis;
@@ -121,13 +121,13 @@ namespace IxMilia.Dxf.Entities
                     this.DimensionStyleName = (pair.StringValue);
                     break;
                 case 10:
-                    this.VerticesX.Add((pair.DoubleValue));
+                    this._verticesX.Add((pair.DoubleValue));
                     break;
                 case 20:
-                    this.VerticesY.Add((pair.DoubleValue));
+                    this._verticesY.Add((pair.DoubleValue));
                     break;
                 case 30:
-                    this.VerticesZ.Add((pair.DoubleValue));
+                    this._verticesZ.Add((pair.DoubleValue));
                     break;
                 case 40:
                     this.TextAnnotationHeight = (pair.DoubleValue);

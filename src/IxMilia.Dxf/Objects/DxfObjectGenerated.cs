@@ -12,6 +12,8 @@ namespace IxMilia.Dxf.Objects
     public enum DxfObjectType
     {
         AcadProxyObject,
+        AcdbDictionaryWithDefault,
+        AcdbPlaceHolder,
     }
 
     /// <summary>
@@ -30,6 +32,10 @@ namespace IxMilia.Dxf.Objects
                 {
                     case DxfObjectType.AcadProxyObject:
                         return "ACAD_PROXY_OBJECT";
+                    case DxfObjectType.AcdbDictionaryWithDefault:
+                        return "ACDBDICTIONARYWDFLT";
+                    case DxfObjectType.AcdbPlaceHolder:
+                        return "ACDBPLACEHOLDER";
                     default:
                         throw new NotImplementedException();
                 }
@@ -91,6 +97,12 @@ namespace IxMilia.Dxf.Objects
             {
                 case "ACAD_PROXY_OBJECT":
                     obj = new DxfAcadProxyObject();
+                    break;
+                case "ACDBDICTIONARYWDFLT":
+                    obj = new DxfAcdbDictionaryWithDefault();
+                    break;
+                case "ACDBPLACEHOLDER":
+                    obj = new DxfAcdbPlaceHolder();
                     break;
                 default:
                     SwallowObject(buffer);

@@ -1,9 +1,22 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace IxMilia.Dxf.Objects
 {
+    public enum DxfDictionaryDuplicateRecordHandling
+    {
+        NotApplicable = 0,
+        KeepExisting = 1,
+        UseClone = 2,
+        UpdateXrefAndName = 3,
+        UpdateName = 4,
+        UnmangleName = 5
+    }
+
     public abstract partial class DxfObject
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
@@ -149,5 +162,65 @@ namespace IxMilia.Dxf.Objects
 
             return this;
         }
+    }
+
+    public partial class DxfAcdbDictionaryWithDefault : IDictionary<string, uint>
+    {
+        public Dictionary<string, uint> Entries { get; } = new Dictionary<string, uint>();
+
+        protected override DxfObject PostParse()
+        {
+            Debug.Assert(EntryNames.Count == EntryHandles.Count);
+            var count = Math.Min(EntryNames.Count, EntryHandles.Count);
+            for (int i = 0; i < count; i++)
+            {
+                Entries[EntryNames[i]] = EntryHandles[i];
+            }
+
+            EntryNames.Clear();
+            EntryHandles.Clear();
+
+            return this;
+        }
+
+        #region IDictionary implementation
+
+        public uint this[string key]
+        {
+            get { return Entries[key]; }
+            set { Entries[key] = value; }
+        }
+
+        public int Count => Entries.Count;
+
+        public bool IsReadOnly => false;
+
+        public ICollection<string> Keys => Entries.Keys;
+
+        public ICollection<uint> Values => Entries.Values;
+
+        public void Add(KeyValuePair<string, uint> item) => ((IDictionary<string, uint>)Entries).Add(item);
+
+        public void Add(string key, uint value) => Entries.Add(key, value);
+
+        public void Clear() => Entries.Clear();
+
+        public bool Contains(KeyValuePair<string, uint> item) => ((IDictionary<string, uint>)Entries).Contains(item);
+
+        public bool ContainsKey(string key) => Entries.ContainsKey(key);
+
+        public void CopyTo(KeyValuePair<string, uint>[] array, int arrayIndex) => ((IDictionary<string, uint>)Entries).CopyTo(array, arrayIndex);
+
+        public IEnumerator<KeyValuePair<string, uint>> GetEnumerator() => ((IDictionary<string, uint>)Entries).GetEnumerator();
+
+        public bool Remove(KeyValuePair<string, uint> item) => ((IDictionary<string, uint>)Entries).Remove(item);
+
+        public bool Remove(string key) => Entries.Remove(key);
+
+        public bool TryGetValue(string key, out uint value) => Entries.TryGetValue(key, out value);
+
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Entries).GetEnumerator();
+
+        #endregion
     }
 }

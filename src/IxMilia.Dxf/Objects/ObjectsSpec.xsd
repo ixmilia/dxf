@@ -124,7 +124,7 @@
     <xs:element name="WriteOrder">
         <xs:complexType>
             <xs:sequence>
-                <xs:choice maxOccurs="unbounded">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element ref="WriteProperty" />
                     <xs:element ref="WriteSpecificValue" />
                     <xs:element ref="Foreach" />

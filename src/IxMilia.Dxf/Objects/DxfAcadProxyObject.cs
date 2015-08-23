@@ -20,11 +20,11 @@ namespace IxMilia.Dxf.Objects
         public int ApplicationObjectClassId { get; set; }
         public int SizeInBits { get; set; }
         public List<string> BinaryObjectData { get; protected set; }
-        private List<string> ObjectIdsA { get; set; }
-        private List<string> ObjectIdsB { get; set; }
-        private List<string> ObjectIdsC { get; set; }
-        private List<string> ObjectIdsD { get; set; }
-        private uint ObjectDrawingFormat { get; set; }
+        private List<string> _objectIdsA { get; set; }
+        private List<string> _objectIdsB { get; set; }
+        private List<string> _objectIdsC { get; set; }
+        private List<string> _objectIdsD { get; set; }
+        private uint _objectDrawingFormat { get; set; }
         public bool IsOriginalObjectDxfFormat { get; set; }
 
         public DxfAcadProxyObject()
@@ -39,11 +39,11 @@ namespace IxMilia.Dxf.Objects
             this.ApplicationObjectClassId = 500;
             this.SizeInBits = 0;
             this.BinaryObjectData = new List<string>();
-            this.ObjectIdsA = new List<string>();
-            this.ObjectIdsB = new List<string>();
-            this.ObjectIdsC = new List<string>();
-            this.ObjectIdsD = new List<string>();
-            this.ObjectDrawingFormat = 0;
+            this._objectIdsA = new List<string>();
+            this._objectIdsB = new List<string>();
+            this._objectIdsC = new List<string>();
+            this._objectIdsD = new List<string>();
+            this._objectDrawingFormat = 0;
             this.IsOriginalObjectDxfFormat = false;
         }
 
@@ -64,7 +64,7 @@ namespace IxMilia.Dxf.Objects
             }
 
             pairs.Add(new DxfCodePair(94, 0));
-            pairs.Add(new DxfCodePair(95, (int)(this.ObjectDrawingFormat)));
+            pairs.Add(new DxfCodePair(95, (int)(this._objectDrawingFormat)));
             pairs.Add(new DxfCodePair(70, BoolShort(this.IsOriginalObjectDxfFormat)));
         }
 
@@ -85,19 +85,19 @@ namespace IxMilia.Dxf.Objects
                     this.SizeInBits = (pair.IntegerValue);
                     break;
                 case 95:
-                    this.ObjectDrawingFormat = (uint)(pair.IntegerValue);
+                    this._objectDrawingFormat = (uint)(pair.IntegerValue);
                     break;
                 case 330:
-                    this.ObjectIdsA.Add((pair.StringValue));
+                    this._objectIdsA.Add((pair.StringValue));
                     break;
                 case 340:
-                    this.ObjectIdsB.Add((pair.StringValue));
+                    this._objectIdsB.Add((pair.StringValue));
                     break;
                 case 350:
-                    this.ObjectIdsC.Add((pair.StringValue));
+                    this._objectIdsC.Add((pair.StringValue));
                     break;
                 case 360:
-                    this.ObjectIdsD.Add((pair.StringValue));
+                    this._objectIdsD.Add((pair.StringValue));
                     break;
                 default:
                     return base.TrySetPair(pair);

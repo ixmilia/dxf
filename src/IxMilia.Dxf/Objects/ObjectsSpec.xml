@@ -25,12 +25,12 @@
         <Property Name="ApplicationObjectClassId" Code="91" Type="int" DefaultValue="500" />
         <Property Name="SizeInBits" Code="93" Type="int" DefaultValue="0" />
         <Property Name="BinaryObjectData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" ProtectedSet="true" />
-        <Property Name="ObjectIdsA" Code="330" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-        <Property Name="ObjectIdsB" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-        <Property Name="ObjectIdsC" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-        <Property Name="ObjectIdsD" Code="360" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_objectIdsA" Code="330" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_objectIdsB" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_objectIdsC" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_objectIdsD" Code="360" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <!-- a 94/0 code pair is usually read here to indicate the end of the object ids, but the generated reader doesn't depend on this to be present -->
-        <Property Name="ObjectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" />
+        <Property Name="_objectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" />
         <Property Name="IsOriginalObjectDxfFormat" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="AcDbProxyObject" MinVersion="R13" />
@@ -42,7 +42,7 @@
                 <WriteSpecificValue Code="330" Value="item" />
             </Foreach>
             <WriteSpecificValue Code="94" Value="0" />
-            <WriteProperty Property="ObjectDrawingFormat" />
+            <WriteProperty Property="_objectDrawingFormat" />
             <WriteProperty Property="IsOriginalObjectDxfFormat" />
         </WriteOrder>
     </Object>
@@ -53,13 +53,13 @@
     -->
     <Object Name="DxfAcdbDictionaryWithDefault" ObjectType="AcdbDictionaryWithDefault" SubclassMarker="AcDbDictionaryWithDefault" TypeString="ACDBDICTIONARYWDFLT">
         <Property Name="DuplicateRecordHandling" Code="281" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" />
-        <Property Name="EntryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-        <Property Name="EntryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_entryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
         <Property Name="DefaultObjectHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="AcDbDictionary" />
             <WriteProperty Property="DuplicateRecordHandling" />
-            <Foreach Property="Entries">
+            <Foreach Property="_entries">
                 <WriteSpecificValue Code="3" Value="item.Key" />
                 <WriteSpecificValue Code="350" Value="item.Value" />
             </Foreach>

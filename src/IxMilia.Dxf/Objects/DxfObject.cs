@@ -139,26 +139,26 @@ namespace IxMilia.Dxf.Objects
 
         public uint DrawingVersion
         {
-            get { return ObjectDrawingFormat | 0x0000FFFF; }
-            set { ObjectDrawingFormat |= value & 0x0000FFFF; }
+            get { return _objectDrawingFormat | 0x0000FFFF; }
+            set { _objectDrawingFormat |= value & 0x0000FFFF; }
         }
 
         public uint MaintenenceReleaseVersion
         {
-            get { return (ObjectDrawingFormat | 0xFFFF0000) >> 16; }
-            set { ObjectDrawingFormat |= (value & 0xFFFF0000) << 16; }
+            get { return (_objectDrawingFormat | 0xFFFF0000) >> 16; }
+            set { _objectDrawingFormat |= (value & 0xFFFF0000) << 16; }
         }
 
         protected override DxfObject PostParse()
         {
-            ObjectIds.AddRange(ObjectIdsA);
-            ObjectIds.AddRange(ObjectIdsB);
-            ObjectIds.AddRange(ObjectIdsC);
-            ObjectIds.AddRange(ObjectIdsD);
-            ObjectIdsA.Clear();
-            ObjectIdsB.Clear();
-            ObjectIdsC.Clear();
-            ObjectIdsD.Clear();
+            ObjectIds.AddRange(_objectIdsA);
+            ObjectIds.AddRange(_objectIdsB);
+            ObjectIds.AddRange(_objectIdsC);
+            ObjectIds.AddRange(_objectIdsD);
+            _objectIdsA.Clear();
+            _objectIdsB.Clear();
+            _objectIdsC.Clear();
+            _objectIdsD.Clear();
 
             return this;
         }
@@ -166,19 +166,19 @@ namespace IxMilia.Dxf.Objects
 
     public partial class DxfAcdbDictionaryWithDefault : IDictionary<string, uint>
     {
-        public Dictionary<string, uint> Entries { get; } = new Dictionary<string, uint>();
+        private IDictionary<string, uint> _entries = new Dictionary<string, uint>();
 
         protected override DxfObject PostParse()
         {
-            Debug.Assert(EntryNames.Count == EntryHandles.Count);
-            var count = Math.Min(EntryNames.Count, EntryHandles.Count);
+            Debug.Assert(_entryNames.Count == _entryHandles.Count);
+            var count = Math.Min(_entryNames.Count, _entryHandles.Count);
             for (int i = 0; i < count; i++)
             {
-                Entries[EntryNames[i]] = EntryHandles[i];
+                _entries[_entryNames[i]] = _entryHandles[i];
             }
 
-            EntryNames.Clear();
-            EntryHandles.Clear();
+            _entryNames.Clear();
+            _entryHandles.Clear();
 
             return this;
         }
@@ -187,39 +187,39 @@ namespace IxMilia.Dxf.Objects
 
         public uint this[string key]
         {
-            get { return Entries[key]; }
-            set { Entries[key] = value; }
+            get { return _entries[key]; }
+            set { _entries[key] = value; }
         }
 
-        public int Count => Entries.Count;
+        public int Count => _entries.Count;
 
         public bool IsReadOnly => false;
 
-        public ICollection<string> Keys => Entries.Keys;
+        public ICollection<string> Keys => _entries.Keys;
 
-        public ICollection<uint> Values => Entries.Values;
+        public ICollection<uint> Values => _entries.Values;
 
-        public void Add(KeyValuePair<string, uint> item) => ((IDictionary<string, uint>)Entries).Add(item);
+        public void Add(KeyValuePair<string, uint> item) => _entries.Add(item);
 
-        public void Add(string key, uint value) => Entries.Add(key, value);
+        public void Add(string key, uint value) => _entries.Add(key, value);
 
-        public void Clear() => Entries.Clear();
+        public void Clear() => _entries.Clear();
 
-        public bool Contains(KeyValuePair<string, uint> item) => ((IDictionary<string, uint>)Entries).Contains(item);
+        public bool Contains(KeyValuePair<string, uint> item) => _entries.Contains(item);
 
-        public bool ContainsKey(string key) => Entries.ContainsKey(key);
+        public bool ContainsKey(string key) => _entries.ContainsKey(key);
 
-        public void CopyTo(KeyValuePair<string, uint>[] array, int arrayIndex) => ((IDictionary<string, uint>)Entries).CopyTo(array, arrayIndex);
+        public void CopyTo(KeyValuePair<string, uint>[] array, int arrayIndex) => _entries.CopyTo(array, arrayIndex);
 
-        public IEnumerator<KeyValuePair<string, uint>> GetEnumerator() => ((IDictionary<string, uint>)Entries).GetEnumerator();
+        public IEnumerator<KeyValuePair<string, uint>> GetEnumerator() => _entries.GetEnumerator();
 
-        public bool Remove(KeyValuePair<string, uint> item) => ((IDictionary<string, uint>)Entries).Remove(item);
+        public bool Remove(KeyValuePair<string, uint> item) => _entries.Remove(item);
 
-        public bool Remove(string key) => Entries.Remove(key);
+        public bool Remove(string key) => _entries.Remove(key);
 
-        public bool TryGetValue(string key, out uint value) => Entries.TryGetValue(key, out value);
+        public bool TryGetValue(string key, out uint value) => _entries.TryGetValue(key, out value);
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Entries).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)_entries).GetEnumerator();
 
         #endregion
     }

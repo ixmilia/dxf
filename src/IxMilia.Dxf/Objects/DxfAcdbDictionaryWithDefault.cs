@@ -17,8 +17,8 @@ namespace IxMilia.Dxf.Objects
         public override DxfObjectType ObjectType { get { return DxfObjectType.AcdbDictionaryWithDefault; } }
 
         public DxfDictionaryDuplicateRecordHandling DuplicateRecordHandling { get; set; }
-        private List<string> EntryNames { get; set; }
-        private List<uint> EntryHandles { get; set; }
+        private List<string> _entryNames { get; set; }
+        private List<uint> _entryHandles { get; set; }
         public uint DefaultObjectHandle { get; set; }
 
         public DxfAcdbDictionaryWithDefault()
@@ -30,8 +30,8 @@ namespace IxMilia.Dxf.Objects
         {
             base.Initialize();
             this.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.NotApplicable;
-            this.EntryNames = new List<string>();
-            this.EntryHandles = new List<uint>();
+            this._entryNames = new List<string>();
+            this._entryHandles = new List<uint>();
             this.DefaultObjectHandle = 0u;
         }
 
@@ -40,7 +40,7 @@ namespace IxMilia.Dxf.Objects
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbDictionary"));
             pairs.Add(new DxfCodePair(281, (short)(this.DuplicateRecordHandling)));
-            foreach (var item in Entries)
+            foreach (var item in _entries)
             {
                 pairs.Add(new DxfCodePair(3, "item.Key"));
                 pairs.Add(new DxfCodePair(350, "item.Value"));
@@ -55,7 +55,7 @@ namespace IxMilia.Dxf.Objects
             switch (pair.Code)
             {
                 case 3:
-                    this.EntryNames.Add((pair.StringValue));
+                    this._entryNames.Add((pair.StringValue));
                     break;
                 case 281:
                     this.DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)(pair.ShortValue);
@@ -64,7 +64,7 @@ namespace IxMilia.Dxf.Objects
                     this.DefaultObjectHandle = UIntHandle(pair.StringValue);
                     break;
                 case 350:
-                    this.EntryHandles.Add(UIntHandle(pair.StringValue));
+                    this._entryHandles.Add(UIntHandle(pair.StringValue));
                     break;
                 default:
                     return base.TrySetPair(pair);

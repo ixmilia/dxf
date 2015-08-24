@@ -283,7 +283,7 @@ foreach (var entity in entities)
 {
     var className = Name(entity);
     var baseClass = BaseClass(entity, "DxfEntity");
-    manager.StartNewFile(className + ".cs");
+    manager.StartNewFile(className + "Generated.cs");
 #>
     /// <summary>
     /// <#= className #> class

@@ -252,7 +252,7 @@ foreach (var obj in objects)
 {
     var className = Name(obj);
     var baseClass = BaseClass(obj, "DxfObject");
-    manager.StartNewFile(className + ".cs");
+    manager.StartNewFile(className + "Generated.cs");
 #>
     /// <summary>
     /// <#= className #> class

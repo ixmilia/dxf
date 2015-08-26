@@ -229,6 +229,10 @@
     <Compile Include="Objects\DxfAcdbPlaceHolderGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfDataTable.cs" />
+    <Compile Include="Objects\DxfDataTableGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfObject.cs" />
     <Compile Include="Objects\DxfObjectGenerated.cs">
       <AutoGen>True</AutoGen>

@@ -14,6 +14,7 @@ namespace IxMilia.Dxf.Objects
         AcadProxyObject,
         AcdbDictionaryWithDefault,
         AcdbPlaceHolder,
+        DataTable,
     }
 
     /// <summary>
@@ -36,6 +37,8 @@ namespace IxMilia.Dxf.Objects
                         return "ACDBDICTIONARYWDFLT";
                     case DxfObjectType.AcdbPlaceHolder:
                         return "ACDBPLACEHOLDER";
+                    case DxfObjectType.DataTable:
+                        return "DATATABLE";
                     default:
                         throw new NotImplementedException();
                 }
@@ -103,6 +106,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "ACDBPLACEHOLDER":
                     obj = new DxfAcdbPlaceHolder();
+                    break;
+                case "DATATABLE":
+                    obj = new DxfDataTable();
                     break;
                 default:
                     SwallowObject(buffer);

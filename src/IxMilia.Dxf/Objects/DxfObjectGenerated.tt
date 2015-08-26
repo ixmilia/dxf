@@ -440,6 +440,10 @@ foreach (var obj in objects)
 #>
         }
 
+<#
+        if (GenerateWriterFunction(obj))
+        {
+#>
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
@@ -472,6 +476,9 @@ foreach (var obj in objects)
 #>
         }
 <#
+
+    } // if (GenerateWriterFunction(obj))
+
     if (GetProperties(obj).Any() && GenerateReaderFunction(obj))
     {
 #>

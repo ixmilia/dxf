@@ -61,6 +61,11 @@ bool GenerateReaderFunction(XElement entity)
     return bool.Parse(AttributeOrDefault(entity, "GenerateReaderFunction", "true"));
 }
 
+bool GenerateWriterFunction(XElement entity)
+{
+    return bool.Parse(AttributeOrDefault(entity, "GenerateWriterFunction", "true"));
+}
+
 string Type(XElement property)
 {
     return property.Attribute("Type").Value;

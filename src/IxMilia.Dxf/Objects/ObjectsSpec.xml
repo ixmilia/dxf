@@ -76,4 +76,16 @@
         <!-- this object has no properties and writes nothing, including the 100-code subclass marker -->
         <WriteOrder />
     </Object>
+    <!--
+
+    DATATABLE
+
+    -->
+    <Object Name="DxfDataTable" ObjectType="DataTable" SubclassMarker="AcDbDataTable" TypeString="DATATABLE" GenerateReaderFunction="false" GenerateWriterFunction="false">
+        <Property Name="Field" Code="70" Type="short" DefaultValue="0" />
+        <Property Name="ColumnCount" Code="90" Type="int" DefaultValue="0" ProtectedSet="true" />
+        <Property Name="RowCount" Code="91" Type="int" DefaultValue="0" ProtectedSet="true" />
+        <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="ColumnNames" Code="2" Type="string" DefaultValue="null" AllowMultiples="true" />
+    </Object>
 </Spec>

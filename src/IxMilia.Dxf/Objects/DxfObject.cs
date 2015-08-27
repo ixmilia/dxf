@@ -14,6 +14,36 @@ namespace IxMilia.Dxf.Objects
         UnmangleName = 5
     }
 
+    public enum DxfRotatedDimensionType
+    {
+        Parallel = 0,
+        Perpendicular = 1
+    }
+
+    public enum DxfObjectOsnapType
+    {
+        None = 0,
+        Endpoint = 1,
+        Midpoint = 2,
+        Center = 3,
+        Node = 4,
+        Quadrant = 5,
+        Intersection = 6,
+        Insertion = 7,
+        Perpendicular = 8,
+        Tangent = 9,
+        Nearest = 10,
+        ApparentIntersection = 11,
+        Parallel = 12,
+        StartPoint = 13
+    }
+
+    public enum DxfSubentityType
+    {
+        Edge = 1,
+        Face = 2
+    }
+
     public abstract partial class DxfObject
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();

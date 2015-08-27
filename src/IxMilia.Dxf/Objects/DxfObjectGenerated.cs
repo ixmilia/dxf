@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
         AcdbDictionaryWithDefault,
         AcdbPlaceHolder,
         DataTable,
+        DimensionAssociativity,
     }
 
     /// <summary>
@@ -42,6 +43,8 @@ namespace IxMilia.Dxf.Objects
                         return "DATATABLE";
                     case DxfObjectType.AcdbDictionary:
                         return "DICTIONARY";
+                    case DxfObjectType.DimensionAssociativity:
+                        return "DIMASSOC";
                     default:
                         throw new NotImplementedException();
                 }
@@ -115,6 +118,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "DICTIONARY":
                     obj = new DxfDictionary();
+                    break;
+                case "DIMASSOC":
+                    obj = new DxfDimensionAssociativity();
                     break;
                 default:
                     SwallowObject(buffer);

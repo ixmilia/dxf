@@ -108,4 +108,39 @@
             </Foreach>
         </WriteOrder>
     </Object>
+    <!--
+
+    DICTIONARYVAR
+
+    -->
+    <!-- TODO: skipped due to unsurety of how it works -->
+    <!--
+
+    DIMASSOC
+
+    -->
+    <Object Name="DxfDimensionAssociativity" ObjectType="DimensionAssociativity" SubclassMarker="AcDbDimAssoc" TypeString="DIMASSOC">
+        <Property Name="DimensionHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="AssociativityFlags" Code="90" Type="int" DefaultValue="0">
+            <Flag Name="IsFirstPointReference" Mask="1" />
+            <Flag Name="IsSecondPointReference" Mask="2" />
+            <Flag Name="IsThirdPointReference" Mask="4" />
+            <Flag Name="IsFourthPointReference" Mask="8" />
+        </Property>
+        <Property Name="IsTransSpace" Code="70" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="RotatedDimensionType" Code="71" Type="DxfRotatedDimensionType" DefaultValue="DxfRotatedDimensionType.Parallel" ReadConverter="(DxfRotatedDimensionType)" WriteConverter="(short)" />
+        <Property Name="ClassName" Code="1" Type="string" DefaultValue="AcDbOsnapPointRef" />
+        <Property Name="ObjectOsnapType" Code="72" Type="DxfObjectOsnapType" DefaultValue="DxfObjectOsnapType.None" ReadConverter="(DxfObjectOsnapType)" WriteConverter="(short)" />
+        <Property Name="MainObjectHandle" Code="331" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="MainObjectSubentityType" Code="73" Type="DxfSubentityType" DefaultValue="DxfSubentityType.Edge" ReadConverter="(DxfSubentityType)" WriteConverter="(short)" />
+        <Property Name="MainObjectGsMarkerIndex" Code="91" Type="int" DefaultValue="0" />
+        <Property Name="MainObjectXrefHandle" Code="301" Type="string" DefaultValue="null" />
+        <Property Name="NearOsnapGeometryParameter" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="OsnapPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+        <Property Name="IntersectionObjectHandle" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="IntersectionSubentityType" Code="74" Type="DxfSubentityType" DefaultValue="DxfSubentityType.Edge" ReadConverter="(DxfSubentityType)" WriteConverter="(short)" />
+        <Property Name="IntersectionObjectGsMarkerIndex" Code="92" Type="int" DefaultValue="0" />
+        <Property Name="IntersectionObjectXrefHandle" Code="302" Type="string" DefaultValue="null" />
+        <Property Name="HasLastPointReference" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+    </Object>
 </Spec>

@@ -144,5 +144,73 @@ string 1
 string 2
 ");
         }
+
+        [Fact]
+        public void ReadDictionaryTest()
+        {
+            var dict = (DxfDictionary)GenObject("DICTIONARY", @"
+100
+AcDbDictionary
+280
+1
+281
+1
+  3
+name-1
+350
+1
+  3
+name-2
+350
+2
+  3
+name-3
+350
+3
+");
+            Assert.True(dict.IsHardOwner);
+            Assert.Equal(DxfDictionaryDuplicateRecordHandling.KeepExisting, dict.DuplicateRecordHandling);
+            Assert.Equal(3, dict.Count);
+            Assert.Equal(1u, dict["name-1"]);
+            Assert.Equal(2u, dict["name-2"]);
+            Assert.Equal(3u, dict["name-3"]);
+        }
+
+        [Fact]
+        public void WriteDictionaryTest()
+        {
+            var dict = new DxfDictionary();
+            dict["name-1"] = 1u;
+            dict["name-2"] = 2u;
+            dict["name-3"] = 3u;
+            dict.IsHardOwner = true;
+            dict.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.KeepExisting;
+            var file = new DxfFile();
+            file.Objects.Add(dict);
+            VerifyFileContains(file, @"
+  0
+DICTIONARY
+  5
+A
+100
+AcDbDictionary
+280
+1
+281
+1
+  3
+name-1
+350
+1
+  3
+name-2
+350
+2
+  3
+name-3
+350
+3
+");
+        }
     }
 }

@@ -233,6 +233,10 @@
     <Compile Include="Objects\DxfDataTableGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfDictionary.cs" />
+    <Compile Include="Objects\DxfDictionaryGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfObject.cs" />
     <Compile Include="Objects\DxfObjectGenerated.cs">
       <AutoGen>True</AutoGen>
@@ -279,6 +283,13 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="MultipleOutputHelper.t4" />
+    <None Include="Objects\DxfObjectGenerated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DxfObjectGenerated.cs</LastGenOutput>
+    </None>
+    <None Include="Objects\ObjectsSpec.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Objects\ObjectsSpec.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -305,13 +316,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Objects\DxfObjectGenerated.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DxfObjectGenerated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Objects\ObjectsSpec.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

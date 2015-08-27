@@ -33,13 +33,13 @@
         <Property Name="_objectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" />
         <Property Name="IsOriginalObjectDxfFormat" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <WriteOrder>
-            <WriteSpecificValue Code="100" Value="AcDbProxyObject" MinVersion="R13" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbProxyObject&quot;" MinVersion="R13" />
             <WriteProperty Property="ProxyObjectClassId" />
             <WriteProperty Property="ApplicationObjectClassId" />
             <WriteProperty Property="SizeInBits" />
             <WriteProperty Property="BinaryObjectData" />
             <Foreach Property="ObjectIds">
-                <WriteSpecificValue Code="330" Value="item" />
+                <WriteSpecificValue Code="330" Value="&quot;item&quot;" />
             </Foreach>
             <WriteSpecificValue Code="94" Value="0" />
             <WriteProperty Property="_objectDrawingFormat" />
@@ -57,13 +57,13 @@
         <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
         <Property Name="DefaultObjectHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
         <WriteOrder>
-            <WriteSpecificValue Code="100" Value="AcDbDictionary" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbDictionary&quot;" />
             <WriteProperty Property="DuplicateRecordHandling" />
             <Foreach Property="_entries">
                 <WriteSpecificValue Code="3" Value="item.Key" />
-                <WriteSpecificValue Code="350" Value="item.Value" />
+                <WriteSpecificValue Code="350" Value="UIntHandle(item.Value)" />
             </Foreach>
-            <WriteSpecificValue Code="100" Value="AcDbDictionaryWithDefault" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbDictionaryWithDefault&quot;" />
             <WriteProperty Property="DefaultObjectHandle" />
         </WriteOrder>
     </Object>
@@ -87,5 +87,25 @@
         <Property Name="RowCount" Code="91" Type="int" DefaultValue="0" ProtectedSet="true" />
         <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
         <Property Name="ColumnNames" Code="2" Type="string" DefaultValue="null" AllowMultiples="true" />
+    </Object>
+<!--
+
+    DICTIONARY
+
+    -->
+    <Object Name="DxfDictionary" ObjectType="AcdbDictionary" SubclassMarker="AcDbDictionary" TypeString="DICTIONARY">
+        <Property Name="IsHardOwner" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="DuplicateRecordHandling" Code="281" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" />
+        <Property Name="_entryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbDictionary&quot;" />
+            <WriteProperty Property="IsHardOwner" />
+            <WriteProperty Property="DuplicateRecordHandling" />
+            <Foreach Property="_entries">
+                <WriteSpecificValue Code="3" Value="item.Key" />
+                <WriteSpecificValue Code="350" Value="UIntHandle(item.Value)" />
+            </Foreach>
+        </WriteOrder>
     </Object>
 </Spec>

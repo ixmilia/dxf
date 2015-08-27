@@ -12,6 +12,7 @@ namespace IxMilia.Dxf.Objects
     public enum DxfObjectType
     {
         AcadProxyObject,
+        AcdbDictionary,
         AcdbDictionaryWithDefault,
         AcdbPlaceHolder,
         DataTable,
@@ -39,6 +40,8 @@ namespace IxMilia.Dxf.Objects
                         return "ACDBPLACEHOLDER";
                     case DxfObjectType.DataTable:
                         return "DATATABLE";
+                    case DxfObjectType.AcdbDictionary:
+                        return "DICTIONARY";
                     default:
                         throw new NotImplementedException();
                 }
@@ -109,6 +112,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "DATATABLE":
                     obj = new DxfDataTable();
+                    break;
+                case "DICTIONARY":
+                    obj = new DxfDictionary();
                     break;
                 default:
                     SwallowObject(buffer);

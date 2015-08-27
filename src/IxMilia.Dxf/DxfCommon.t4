@@ -214,12 +214,8 @@ IEnumerable<string> WriteSpecificValue(XElement spec)
     var code = Code(spec);
     var codeType = DxfCodePair.ExpectedType(code);
     var value = spec.Attribute("Value").Value;
-    var useQuotes = codeType == typeof(string) && value != "null";
-    var writeValue = useQuotes
-        ? string.Format("\"{0}\"", value)
-        : value;
 
-    var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, writeValue);
+    var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, value);
     var minVersion = MinVersion(spec);
     var maxVersion = MaxVersion(spec);
     var defaultValue = spec.Attribute("DontWriteIfValueIs");

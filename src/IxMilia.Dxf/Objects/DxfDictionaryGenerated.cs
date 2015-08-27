@@ -10,18 +10,18 @@ namespace IxMilia.Dxf.Objects
 {
 
     /// <summary>
-    /// DxfAcdbDictionaryWithDefault class
+    /// DxfDictionary class
     /// </summary>
-    public partial class DxfAcdbDictionaryWithDefault : DxfObject
+    public partial class DxfDictionary : DxfObject
     {
-        public override DxfObjectType ObjectType { get { return DxfObjectType.AcdbDictionaryWithDefault; } }
+        public override DxfObjectType ObjectType { get { return DxfObjectType.AcdbDictionary; } }
 
+        public bool IsHardOwner { get; set; }
         public DxfDictionaryDuplicateRecordHandling DuplicateRecordHandling { get; set; }
         private List<string> _entryNames { get; set; }
         private List<uint> _entryHandles { get; set; }
-        public uint DefaultObjectHandle { get; set; }
 
-        public DxfAcdbDictionaryWithDefault()
+        public DxfDictionary()
             : base()
         {
         }
@@ -29,16 +29,17 @@ namespace IxMilia.Dxf.Objects
         protected override void Initialize()
         {
             base.Initialize();
+            this.IsHardOwner = false;
             this.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.NotApplicable;
             this._entryNames = new List<string>();
             this._entryHandles = new List<uint>();
-            this.DefaultObjectHandle = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbDictionary"));
+            pairs.Add(new DxfCodePair(280, BoolShort(this.IsHardOwner)));
             pairs.Add(new DxfCodePair(281, (short)(this.DuplicateRecordHandling)));
             foreach (var item in _entries)
             {
@@ -46,8 +47,6 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(350, UIntHandle(item.Value)));
             }
 
-            pairs.Add(new DxfCodePair(100, "AcDbDictionaryWithDefault"));
-            pairs.Add(new DxfCodePair(340, UIntHandle(this.DefaultObjectHandle)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -57,11 +56,11 @@ namespace IxMilia.Dxf.Objects
                 case 3:
                     this._entryNames.Add((pair.StringValue));
                     break;
+                case 280:
+                    this.IsHardOwner = BoolShort(pair.ShortValue);
+                    break;
                 case 281:
                     this.DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)(pair.ShortValue);
-                    break;
-                case 340:
-                    this.DefaultObjectHandle = UIntHandle(pair.StringValue);
                     break;
                 case 350:
                     this._entryHandles.Add(UIntHandle(pair.StringValue));

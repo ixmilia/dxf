@@ -211,8 +211,7 @@ IEnumerable<string> WriteValue(XElement spec, XElement entity)
 
 IEnumerable<string> WriteSpecificValue(XElement spec)
 {
-    var code = Code(spec);
-    var codeType = DxfCodePair.ExpectedType(code);
+    var code = spec.Attribute("Code").Value;
     var value = spec.Attribute("Value").Value;
 
     var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, value);

@@ -93,6 +93,12 @@ namespace IxMilia.Dxf
             data = new KeyValuePair<int, object>(code, value);
         }
 
+        internal DxfCodePair(int code, object value)
+        {
+            // internal for specific cases where the type isn't known
+            data = new KeyValuePair<int, object>(code, value);
+        }
+
         private bool IsHandle
         {
             get

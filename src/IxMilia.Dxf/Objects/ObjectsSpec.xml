@@ -143,4 +143,51 @@
         <Property Name="IntersectionObjectXrefHandle" Code="302" Type="string" DefaultValue="null" />
         <Property Name="HasLastPointReference" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
     </Object>
+    <!--
+
+    Field
+
+    -->
+    <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="FIELD">
+        <Property Name="EvaluatorId" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="FieldCodeString" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="FieldCodeStringOverflow" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="_childFieldCount" Code="-90" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="ChildFieldHandles" Code="360" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" />
+        <Property Name="_objectIdCount" Code="97" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="ObjectIds" Code="331" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" />
+        <Property Name="_dataSetCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="FieldDataKeys" Code="6" Type="string" DefaultValue="null" AllowMultiples="true" />
+        <Property Name="EvaluatedCacheKey" Code="7" Type="string" DefaultValue="ACFD_FIELD_VALUE" ProtectedSet="true" />
+        <Property Name="_valueTypeCode" Code="-90" Type="int" DefaultValue="0" Accessibility="private" />
+
+        <!-- internal properties -->
+        <Property Name="_longValue" Code="91" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_doubleValue" Code="140" Type="double" DefaultValue="0.0" Accessibility="private" />
+        <Property Name="_idValue" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" Accessibility="private" />
+        <Property Name="_binaryDataBufferSize" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_binaryData" Code="310" Type="string" DefaultValue="null" Accessibility="private" />
+
+        <Property Name="FormatString" Code="301" Type="string" DefaultValue="null" />
+        <Property Name="_formatStringOverflow" Code="9" Type="string" DefaultValue="null" Accessibility="private" />
+        <Property Name="_formatStringLength" Code="98" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_childFieldCount_valueTypeCode" Code="90" Type="int" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <WriteOrder>
+            <WriteProperty Property="EvaluatorId" />
+            <WriteProperty Property="FieldCodeString" />
+            <WriteProperty Property="FieldCodeStringOverflow" />
+            <WriteSpecificValue Code="90" Value="ChildFieldHandles.Count" />
+            <WriteProperty Property="ChildFieldHandles" />
+            <WriteSpecificValue Code="97" Value="ObjectIds.Count" />
+            <WriteProperty Property="ObjectIds" />
+            <WriteSpecificValue Code="93" Value="FieldDataKeys.Count" />
+            <WriteProperty Property="FieldDataKeys" />
+            <WriteProperty Property="EvaluatedCacheKey" />
+            <WriteSpecificValue Code="90" Value="_valueTypeCode" />
+            <WriteSpecificValue Code="_valueTypeCode" Value="Value" />
+            <WriteProperty Property="FormatString" />
+            <WriteProperty Property="_formatStringOverflow" />
+            <WriteSpecificValue Code="98" Value="FormatString.Length" />
+        </WriteOrder>
+    </Object>
 </Spec>

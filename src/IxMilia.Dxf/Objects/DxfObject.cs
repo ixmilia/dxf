@@ -44,6 +44,28 @@ namespace IxMilia.Dxf.Objects
         Face = 2
     }
 
+    public enum DxfGeoDataVersion
+    {
+        R2009 = 1,
+        R2010 = 2
+    }
+
+    public enum DxfDesignCoordinateType
+    {
+        Unknown = 0,
+        LocalGrid = 1,
+        ProjectedGrid = 2,
+        Geographic = 3
+    }
+
+    public enum DxfScaleEstimationMethod
+    {
+        None = 1,
+        UserSpecified = 2,
+        GridAtReferencePoint = 3,
+        Prismoidal = 4
+    }
+
     public abstract partial class DxfObject
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();

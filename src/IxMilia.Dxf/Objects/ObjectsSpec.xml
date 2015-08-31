@@ -190,4 +190,77 @@
             <WriteSpecificValue Code="98" Value="FormatString.Length" />
         </WriteOrder>
     </Object>
+    <!--
+
+    GEODATA
+
+    -->
+    <Object Name="DxfGeoData" ObjectType="GeoData" SubclassMarker="[none]" TypeString="GEODATA">
+        <Property Name="Version" Code="90" Type="DxfGeoDataVersion" DefaultValue="DxfGeoDataVersion.R2009" ReadConverter="(DxfGeoDataVersion)" WriteConverter="(int)" />
+        <Property Name="CoordinateType" Code="70" Type="DxfDesignCoordinateType" DefaultValue="DxfDesignCoordinateType.Unknown" ReadConverter="(DxfDesignCoordinateType)" WriteConverter="(short)" />
+        <Property Name="HostBlockhandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="DesignPoint" Code="-10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+        <Property Name="ReferencePoint" Code="-11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
+        <Property Name="NorthVector" Code="-12" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="12,22" />
+        <Property Name="HorizontalUnitScale" Code="40" Type="double" DefaultValue="1.0" />
+        <Property Name="VerticalUnitScale" Code="41" Type="double" DefaultValue="1.0" />
+        <Property Name="HorizontalUnits" Code="91" Type="DxfUnits" DefaultValue="DxfUnits.Unitless" ReadConverter="(DxfUnits)" WriteConverter="(int)" />
+        <Property Name="VerticalUnits" Code="92" Type="DxfUnits" DefaultValue="DxfUnits.Unitless" ReadConverter="(DxfUnits)" WriteConverter="(int)" />
+        <Property Name="UpDirection" Code="-210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
+        <Property Name="ScaleEstimationMethod" Code="95" Type="DxfScaleEstimationMethod" DefaultValue="DxfScaleEstimationMethod.None" ReadConverter="(DxfScaleEstimationMethod)" WriteConverter="(int)" />
+        <Property Name="UseSeaLevelCorrection" Code="294" Type="bool" DefaultValue="false" />
+        <Property Name="UserSpecifiedScaleFactor" Code="141" Type="double" DefaultValue="1.0" />
+        <Property Name="SeaLevelElevation" Code="142" Type="double" DefaultValue="0.0" />
+        <Property Name="CoordinateProjectionRadius" Code="143" Type="double" DefaultValue="0.0" />
+        <Property Name="CoordinateSystemDefinition" Code="301" Type="string" DefaultValue="null" />
+        <Property Name="GeoRssTag" Code="302" Type="string" DefaultValue="null" />
+        <Property Name="ObservationFromTag" Code="305" Type="string" DefaultValue="null" />
+        <Property Name="ObservationToTag" Code="306" Type="string" DefaultValue="null" />
+        <Property Name="ObservationCoverageTag" Code="307" Type="string" DefaultValue="null" />
+        <Property Name="_geoMeshPointCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_sourceMeshXPoints" Code="13" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_sourceMeshYPoints" Code="23" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_destinationMeshXPoints" Code="14" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_destinationMeshYPoints" Code="24" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_facesCount" Code="96" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_facePointIndexX" Code="97" Type="int" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_facePointIndexY" Code="98" Type="int" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_facePointIndexZ" Code="99" Type="int" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <WriteOrder>
+            <WriteProperty Property="Version" />
+            <WriteProperty Property="CoordinateType" />
+            <WriteProperty Property="HostBlockhandle" />
+            <WriteProperty Property="DesignPoint" />
+            <WriteProperty Property="ReferencePoint" />
+            <WriteProperty Property="NorthVector" />
+            <WriteProperty Property="HorizontalUnitScale" />
+            <WriteProperty Property="VerticalUnitScale" />
+            <WriteProperty Property="HorizontalUnits" />
+            <WriteProperty Property="VerticalUnits" />
+            <WriteProperty Property="UpDirection" />
+            <WriteProperty Property="ScaleEstimationMethod" />
+            <WriteProperty Property="UseSeaLevelCorrection" />
+            <WriteProperty Property="UserSpecifiedScaleFactor" />
+            <WriteProperty Property="SeaLevelElevation" />
+            <WriteProperty Property="CoordinateProjectionRadius" />
+            <WriteProperty Property="CoordinateSystemDefinition" />
+            <WriteProperty Property="GeoRssTag" />
+            <WriteProperty Property="ObservationFromTag" />
+            <WriteProperty Property="ObservationToTag" />
+            <WriteProperty Property="ObservationCoverageTag" />
+            <WriteSpecificValue Code="93" Value="GeoMeshPoints.Count" />
+            <Foreach Property="GeoMeshPoints">
+                <WriteSpecificValue Code="13" Value="item.SourcePoint.X" />
+                <WriteSpecificValue Code="23" Value="item.SourcePoint.Y" />
+                <WriteSpecificValue Code="14" Value="item.DestinationPoint.X" />
+                <WriteSpecificValue Code="24" Value="item.DestinationPoint.Y" />
+            </Foreach>
+            <WriteSpecificValue Code="96" Value="FaceIndices.Count" />
+            <Foreach Property="FaceIndices">
+                <WriteSpecificValue Code="97" Value="item.X" />
+                <WriteSpecificValue Code="98" Value="item.Y" />
+                <WriteSpecificValue Code="99" Value="item.Z" />
+            </Foreach>
+        </WriteOrder>
+    </Object>
 </Spec>

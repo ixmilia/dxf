@@ -18,6 +18,7 @@ namespace IxMilia.Dxf.Objects
         DataTable,
         DimensionAssociativity,
         Field,
+        GeoData,
     }
 
     /// <summary>
@@ -48,6 +49,8 @@ namespace IxMilia.Dxf.Objects
                         return "DIMASSOC";
                     case DxfObjectType.Field:
                         return "FIELD";
+                    case DxfObjectType.GeoData:
+                        return "GEODATA";
                     default:
                         throw new NotImplementedException();
                 }
@@ -127,6 +130,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "FIELD":
                     obj = new DxfField();
+                    break;
+                case "GEODATA":
+                    obj = new DxfGeoData();
                     break;
                 default:
                     SwallowObject(buffer);

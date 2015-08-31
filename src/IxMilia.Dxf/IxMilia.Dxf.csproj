@@ -244,6 +244,10 @@
     <Compile Include="Objects\DxfFieldGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfGeoData.cs" />
+    <Compile Include="Objects\DxfGeoDataGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfObject.cs" />
     <Compile Include="Objects\DxfObjectGenerated.cs">
       <AutoGen>True</AutoGen>

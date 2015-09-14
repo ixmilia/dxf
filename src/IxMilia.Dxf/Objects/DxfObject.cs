@@ -160,6 +160,16 @@ namespace IxMilia.Dxf.Objects
             return DxfCommonConverters.BoolShort(b);
         }
 
+        protected static bool NotBoolShort(short s)
+        {
+            return !BoolShort(s);
+        }
+
+        protected static short NotBoolShort(bool b)
+        {
+            return BoolShort(!b);
+        }
+
         protected static uint UIntHandle(string s)
         {
             return DxfCommonConverters.UIntHandle(s);

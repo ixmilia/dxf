@@ -263,4 +263,15 @@
             </Foreach>
         </WriteOrder>
     </Object>
+    <!--
+
+    GROUP
+
+    -->
+    <Object Name="DxfGroup" ObjectType="Group" SubclassMarker="AcDbGroup" TypeString="GROUP">
+        <Property Name="Description" Code="300" Type="string" DefaultValue="null" />
+        <Property Name="IsNamed" Code="70" Type="bool" DefaultValue="true" ReadConverter="NotBoolShort" WriteConverter="NotBoolShort" />
+        <Property Name="IsSelectable" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="EntityHandles" Code="340" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    </Object>
 </Spec>

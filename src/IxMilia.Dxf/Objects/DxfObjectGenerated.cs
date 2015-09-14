@@ -19,6 +19,7 @@ namespace IxMilia.Dxf.Objects
         DimensionAssociativity,
         Field,
         GeoData,
+        Group,
     }
 
     /// <summary>
@@ -51,6 +52,8 @@ namespace IxMilia.Dxf.Objects
                         return "FIELD";
                     case DxfObjectType.GeoData:
                         return "GEODATA";
+                    case DxfObjectType.Group:
+                        return "GROUP";
                     default:
                         throw new NotImplementedException();
                 }
@@ -133,6 +136,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "GEODATA":
                     obj = new DxfGeoData();
+                    break;
+                case "GROUP":
+                    obj = new DxfGroup();
                     break;
                 default:
                     SwallowObject(buffer);

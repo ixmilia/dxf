@@ -21,6 +21,7 @@ namespace IxMilia.Dxf.Objects
         GeoData,
         Group,
         IdBuffer,
+        ImageDefinition,
     }
 
     /// <summary>
@@ -57,6 +58,8 @@ namespace IxMilia.Dxf.Objects
                         return "GROUP";
                     case DxfObjectType.IdBuffer:
                         return "IDBUFFER";
+                    case DxfObjectType.ImageDefinition:
+                        return "IMAGEDEF";
                     default:
                         throw new NotImplementedException();
                 }
@@ -145,6 +148,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "IDBUFFER":
                     obj = new DxfIdBuffer();
+                    break;
+                case "IMAGEDEF":
+                    obj = new DxfImageDefinition();
                     break;
                 default:
                     SwallowObject(buffer);

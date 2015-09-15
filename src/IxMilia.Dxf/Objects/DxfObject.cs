@@ -66,6 +66,13 @@ namespace IxMilia.Dxf.Objects
         Prismoidal = 4
     }
 
+    public enum DxfImageResolutionUnits
+    {
+        NoUnits = 0,
+        Centimeters = 2,
+        Inches = 5
+    }
+
     public abstract partial class DxfObject
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();

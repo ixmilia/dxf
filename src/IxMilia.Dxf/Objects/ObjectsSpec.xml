@@ -274,4 +274,12 @@
         <Property Name="IsSelectable" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <Property Name="EntityHandles" Code="340" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
     </Object>
+    <!--
+
+    IDBUFFER
+
+    -->
+    <Object Name="DxfIdBuffer" ObjectType="IdBuffer" SubclassMarker="AcDbIdBuffer" TypeString="IDBUFFER" HasXData="false">
+        <Property Name="EntityHandles" Code="330" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    </Object>
 </Spec>

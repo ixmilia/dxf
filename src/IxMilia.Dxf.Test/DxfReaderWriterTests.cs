@@ -1020,8 +1020,10 @@ a^G^ ^^ b
         public void ParseWithInvariantCultureTest()
         {
             // from https://github.com/IxMilia/Dxf/issues/36
+            CultureInfo existingCulture = null;
             try
             {
+                existingCulture = Thread.CurrentThread.CurrentCulture;
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
                 var file = Section("HEADER", @"
   9
@@ -1033,7 +1035,29 @@ $TDCREATE
             }
             finally
             {
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+                Thread.CurrentThread.CurrentCulture = existingCulture;
+            }
+        }
+
+        [Fact]
+        public void WriteWithInvariantCultureTest()
+        {
+            CultureInfo existingCulture = null;
+            try
+            {
+                existingCulture = Thread.CurrentThread.CurrentCulture;
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
+                var file = new DxfFile();
+                file.Header.CreationDate = new DateTime(2013, 7, 4, 14, 9, 48, 355);
+                VerifyFileContains(file, @"
+$TDCREATE
+ 40
+2456478.590143
+");
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = existingCulture;
             }
         }
     }

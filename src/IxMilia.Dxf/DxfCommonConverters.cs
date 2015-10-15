@@ -17,7 +17,7 @@ namespace IxMilia.Dxf
         public static short StringShort(string s)
         {
             short result;
-            short.TryParse(s, out result);
+            short.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out result);
             return result;
         }
 

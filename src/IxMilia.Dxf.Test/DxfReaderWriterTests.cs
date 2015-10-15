@@ -1,7 +1,10 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
@@ -1011,6 +1014,27 @@ a^G^ ^^ b
   1
 a^G^ ^^ b
 ");
+        }
+
+        [Fact]
+        public void ParseWithInvariantCultureTest()
+        {
+            // from https://github.com/IxMilia/Dxf/issues/36
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
+                var file = Section("HEADER", @"
+  9
+$TDCREATE
+ 40
+2456478.590142998
+");
+                Assert.Equal(new DateTime(2013, 7, 4, 14, 9, 48, 355), file.Header.CreationDate);
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            }
         }
     }
 }

@@ -260,10 +260,10 @@ namespace IxMilia.Dxf.Blocks
                         switch (pair.Code)
                         {
                             case 5:
-                                Debug.Assert(DxfCommonConverters.UIntHandle(pair.StringValue) == block.Handle);
+                                // handle
                                 break;
                             case 8:
-                                Debug.Assert(version == DxfAcadVersion.R13);
+                                Debug.Assert(version >= DxfAcadVersion.R13);
                                 Debug.Assert(pair.StringValue == block.Layer);
                                 break;
                             case 100:

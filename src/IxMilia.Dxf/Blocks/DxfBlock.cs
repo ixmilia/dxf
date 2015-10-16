@@ -7,7 +7,7 @@ using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Blocks
 {
-    public class DxfBlock : IDxfHasHandle
+    public partial class DxfBlock : IDxfHasHandle, IDxfHasChildrenWithHandle
     {
         internal const string BlockText = "BLOCK";
         internal const string EndBlockText = "ENDBLK";
@@ -26,8 +26,8 @@ namespace IxMilia.Dxf.Blocks
         public uint OwnerHandle { get; set; }
         public string Description { get; set; }
         public DxfXData XData { get; set; }
-        public List<DxfCodePairGroup> StartExtensionDataGroups { get; private set; }
-        public List<DxfCodePairGroup> EndExtensionDataGroups { get; private set; }
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+        private DxfEndBlock EndBlock { get; set; }
 
         public bool IsAnonymous
         {
@@ -75,8 +75,8 @@ namespace IxMilia.Dxf.Blocks
         {
             BasePoint = DxfPoint.Origin;
             Entities = new List<DxfEntity>();
-            StartExtensionDataGroups = new List<DxfCodePairGroup>();
-            EndExtensionDataGroups = new List<DxfCodePairGroup>();
+            ExtensionDataGroups = new List<DxfCodePairGroup>();
+            EndBlock = new DxfEndBlock(this);
         }
 
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
@@ -90,7 +90,7 @@ namespace IxMilia.Dxf.Blocks
 
             if (version >= DxfAcadVersion.R14)
             {
-                foreach (var group in StartExtensionDataGroups)
+                foreach (var group in ExtensionDataGroups)
                 {
                     group.AddValuePairs(list, version, outputHandles);
                 }
@@ -131,38 +131,14 @@ namespace IxMilia.Dxf.Blocks
             // entities in blocks never have handles
             list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version, outputHandles: false)));
 
-            list.Add(new DxfCodePair(0, EndBlockText));
-            if (outputHandles)
-            {
-                list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
-            }
-
-            if (XData != null)
-            {
-                XData.AddValuePairs(list, version, outputHandles);
-            }
-
-            if (version >= DxfAcadVersion.R14)
-            {
-                foreach (var group in EndExtensionDataGroups)
-                {
-                    group.AddValuePairs(list, version, outputHandles);
-                }
-            }
-
-            if (version >= DxfAcadVersion.R2000)
-            {
-                list.Add(new DxfCodePair(330, 0));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                list.Add(new DxfCodePair(100, AcDbEntityText));
-                list.Add(new DxfCodePair(8, Layer));
-                list.Add(new DxfCodePair(100, AcDbBlockEndText));
-            }
+            list.AddRange(EndBlock.GetValuePairs(version, outputHandles));
 
             return list;
+        }
+
+        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
+        {
+            yield return EndBlock;
         }
 
         internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
@@ -247,7 +223,7 @@ namespace IxMilia.Dxf.Blocks
                                 break;
                             case DxfCodePairGroup.GroupCodeNumber:
                                 var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                                block.StartExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                                block.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                                 break;
                             case (int)DxfXDataType.ApplicationName:
                                 block.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
@@ -256,24 +232,7 @@ namespace IxMilia.Dxf.Blocks
                     }
                     else if (readingBlockEnd)
                     {
-                        buffer.Advance();
-                        switch (pair.Code)
-                        {
-                            case 5:
-                                // handle
-                                break;
-                            case 8:
-                                Debug.Assert(version >= DxfAcadVersion.R13);
-                                Debug.Assert(pair.StringValue == block.Layer);
-                                break;
-                            case 100:
-                                Debug.Assert(pair.StringValue == AcDbEntityText || pair.StringValue == AcDbBlockEndText);
-                                break;
-                            case DxfCodePairGroup.GroupCodeNumber:
-                                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                                block.EndExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                                break;
-                        }
+                        block.EndBlock.ApplyCodePairs(buffer, version);
                     }
                     else
                     {

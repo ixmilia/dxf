@@ -52,7 +52,7 @@ var baseEntity = xml.Elements(XName.Get("Entity", xmlns)).Where(x => Name(x) == 
     /// <summary>
     /// DxfEntity class
     /// </summary>
-    public partial class DxfEntity : IDxfHasHandle
+    public partial class DxfEntity : IDxfHasHandle, IDxfHasOwnerHandle
     {
 <#
 foreach (var property in GetProperties(baseEntity))

@@ -2,10 +2,10 @@
 
 using System.Collections.Generic;
 
-namespace IxMilia.Dxf.Entities
+namespace IxMilia.Dxf
 {
-    internal interface IDxfHasEntityChildren
+    internal interface IDxfHasChildrenWithHandle
     {
-        IEnumerable<DxfEntity> GetChildren();
+        IEnumerable<IDxfHasHandle> GetChildren();
     }
 }

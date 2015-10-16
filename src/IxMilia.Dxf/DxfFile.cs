@@ -289,7 +289,7 @@ namespace IxMilia.Dxf
             foreach (var item in HandleItems)
             {
                 largestHandle = Math.Max(largestHandle, item.Handle);
-                var parent = item as IDxfHasEntityChildren;
+                var parent = item as IDxfHasChildrenWithHandle;
                 if (parent != null)
                 {
                     foreach (var child in parent.GetChildren())
@@ -308,12 +308,16 @@ namespace IxMilia.Dxf
                     item.Handle = nextHandle++;
                 }
 
-                var parent = item as IDxfHasEntityChildren;
+                var parent = item as IDxfHasChildrenWithHandle;
                 if (parent != null)
                 {
                     foreach (var child in parent.GetChildren())
                     {
-                        child.OwnerHandle = item.Handle;
+                        if (child as IDxfHasOwnerHandle != null)
+                        {
+                            ((IDxfHasOwnerHandle)child).OwnerHandle = item.Handle;
+                        }
+
                         if (child.Handle == 0u)
                         {
                             child.Handle = nextHandle++;

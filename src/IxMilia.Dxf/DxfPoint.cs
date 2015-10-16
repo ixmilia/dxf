@@ -34,7 +34,7 @@ namespace IxMilia.Dxf
 
         public static bool operator ==(DxfPoint a, DxfPoint b)
         {
-            if (Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
                 return true;
             if (((object)a) == null || ((object)b) == null)
                 return false;

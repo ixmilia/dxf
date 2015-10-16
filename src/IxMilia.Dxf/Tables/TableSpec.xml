@@ -57,9 +57,9 @@
       <Property Name="UseSeparateArrowBlocksForDimensions" Code="173" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
       <Property Name="ForceDimensionTextInsideExtensions" Code="174" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
       <Property Name="SuppressOutsideExtensionDimensionLines" Code="175" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-      <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
-      <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
-      <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
+      <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" DisableWritingDefault="true" />
+      <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" DisableWritingDefault="true" />
+      <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" DisableWritingDefault="true" />
       <Property Name="AngularDimensionPrecision" Code="179" Type="short" DefaultValue="12" MinVersion="R2000" />
       <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MinVersion="R13" />
       <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" MinVersion="R13" />
@@ -101,8 +101,8 @@
   <Table Type="LType" TypeString="LTypeText">
     <TableItem Name="DxfLineType" ClassName="AcDbLinetypeTableRecord">
       <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
-      <Property Name="AlignmentCode" Code="72" Type="int" DefaultValue="(int)'A'" ReadConverter="(int)" WriteConverter="(int)" />
-      <Property Name="ElementCount" Code="73" Type="int" DefaultValue="0" />
+      <Property Name="AlignmentCode" Code="72" Type="int" DefaultValue="(int)'A'" WriteConverter="(short)" />
+      <Property Name="ElementCount" Code="73" Type="int" DefaultValue="0" WriteConverter="(short)" />
       <Property Name="TotalPatternLength" Code="40" Type="double" DefaultValue="0.0" />
       <Property Name="DashDotSpaceLengths" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" />
       <Property Name="ComplexLinetypeElementTypes" Code="74" Type="short" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />

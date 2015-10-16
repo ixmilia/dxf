@@ -1103,5 +1103,24 @@ AcDbEntity
 AcDbBlockEnd
 ");
         }
+
+        [Fact]
+        public void WritingPartiallyInitializedTablesTest()
+        {
+            var file = new DxfFile();
+            file.ApplicationIds.Add(new DxfAppId());
+            file.BlockRecords.Add(new DxfBlockRecord());
+            file.DimensionStyles.Add(new DxfDimStyle());
+            file.Layers.Add(new DxfLayer());
+            file.Linetypes.Add(new DxfLineType());
+            file.Styles.Add(new DxfStyle());
+            file.UserCoordinateSystems.Add(new DxfUcs());
+            file.Views.Add(new DxfView());
+            file.ViewPorts.Add(new DxfViewPort());
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms);
+            }
+        }
     }
 }

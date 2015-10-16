@@ -742,9 +742,21 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(173, BoolShort(UseSeparateArrowBlocksForDimensions)));
             pairs.Add(new DxfCodePair(174, BoolShort(ForceDimensionTextInsideExtensions)));
             pairs.Add(new DxfCodePair(175, BoolShort(SuppressOutsideExtensionDimensionLines)));
-            pairs.Add(new DxfCodePair(176, DxfColor.GetRawValue(DimensionLineColor)));
-            pairs.Add(new DxfCodePair(177, DxfColor.GetRawValue(DimensionExtensionLineColor)));
-            pairs.Add(new DxfCodePair(178, DxfColor.GetRawValue(DimensionTextColor)));
+            if (DimensionLineColor != null)
+            {
+                pairs.Add(new DxfCodePair(176, DxfColor.GetRawValue(DimensionLineColor)));
+            }
+
+            if (DimensionExtensionLineColor != null)
+            {
+                pairs.Add(new DxfCodePair(177, DxfColor.GetRawValue(DimensionExtensionLineColor)));
+            }
+
+            if (DimensionTextColor != null)
+            {
+                pairs.Add(new DxfCodePair(178, DxfColor.GetRawValue(DimensionTextColor)));
+            }
+
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(179, (AngularDimensionPrecision)));
@@ -1286,8 +1298,8 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(3, (Description)));
-            pairs.Add(new DxfCodePair(72, (int)(AlignmentCode)));
-            pairs.Add(new DxfCodePair(73, (ElementCount)));
+            pairs.Add(new DxfCodePair(72, (short)(AlignmentCode)));
+            pairs.Add(new DxfCodePair(73, (short)(ElementCount)));
             pairs.Add(new DxfCodePair(40, (TotalPatternLength)));
             pairs.AddRange(DashDotSpaceLengths.Select(value => new DxfCodePair(49, value)));
             if (version >= DxfAcadVersion.R13)
@@ -1361,7 +1373,7 @@ namespace IxMilia.Dxf
                         item.Description = (pair.StringValue);
                         break;
                     case 72:
-                        item.AlignmentCode = (int)(pair.ShortValue);
+                        item.AlignmentCode = (pair.ShortValue);
                         break;
                     case 73:
                         item.ElementCount = (pair.ShortValue);

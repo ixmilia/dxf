@@ -37,6 +37,7 @@
       <xs:attribute name="MinVersion" type="VersionType" use="optional" />
       <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
       <xs:attribute name="CustomValidator" type="xs:string" use="optional" />
+      <xs:attribute name="DisableWritingDefault" type="xs:boolean" use="optional" />
     </xs:complexType>
   </xs:element>
 

@@ -77,12 +77,16 @@ namespace IxMilia.Dxf
 
         public static bool operator ==(DxfColor a, DxfColor b)
         {
+            if (ReferenceEquals(a, b))
+                return true;
+            if (((object)a) == null || ((object)b) == null)
+                return false;
             return a.RawValue == b.RawValue;
         }
 
         public static bool operator !=(DxfColor a, DxfColor b)
         {
-            return a.RawValue != b.RawValue;
+            return !(a == b);
         }
 
         public override string ToString()
@@ -157,10 +161,7 @@ namespace IxMilia.Dxf
         public override bool Equals(object obj)
         {
             if (obj is DxfColor)
-            {
-                return this.RawValue == ((DxfColor)obj).RawValue;
-            }
-
+                return this == (DxfColor)obj;
             return false;
         }
 

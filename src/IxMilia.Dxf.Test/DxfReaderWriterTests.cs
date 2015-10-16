@@ -1020,10 +1020,9 @@ a^G^ ^^ b
         public void ParseWithInvariantCultureTest()
         {
             // from https://github.com/IxMilia/Dxf/issues/36
-            CultureInfo existingCulture = null;
+            var existingCulture = Thread.CurrentThread.CurrentCulture;
             try
             {
-                existingCulture = Thread.CurrentThread.CurrentCulture;
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
                 var file = Section("HEADER", @"
   9
@@ -1042,10 +1041,9 @@ $TDCREATE
         [Fact]
         public void WriteWithInvariantCultureTest()
         {
-            CultureInfo existingCulture = null;
+            var existingCulture = Thread.CurrentThread.CurrentCulture;
             try
             {
-                existingCulture = Thread.CurrentThread.CurrentCulture;
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
                 var file = new DxfFile();
                 file.Header.CreationDate = new DateTime(2013, 7, 4, 14, 9, 48, 355);
@@ -1059,6 +1057,51 @@ $TDCREATE
             {
                 Thread.CurrentThread.CurrentCulture = existingCulture;
             }
+        }
+
+        [Fact]
+        public void EndBlockHandleAndVersionCompatabilityTest()
+        {
+            var file = Section("BLOCKS", @"
+  0
+BLOCK
+  5
+20
+330
+1F
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockBegin
+  2
+*Model_Space
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+*Model_Space
+  1
+
+  0
+ENDBLK
+  5
+21
+330
+1F
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockEnd
+");
         }
     }
 }

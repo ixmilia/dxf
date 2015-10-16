@@ -1122,5 +1122,17 @@ AcDbBlockEnd
                 file.Save(ms);
             }
         }
+
+        [Fact]
+        public void WritingEmptyBlockR2000Test()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Blocks.Add(new DxfBlock());
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms);
+            }
+        }
     }
 }

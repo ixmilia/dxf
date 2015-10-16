@@ -1,6 +1,5 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -299,7 +298,7 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
-    public partial class DxfAttribute : IDxfHasEntityChildren
+    public partial class DxfAttribute : IDxfHasChildrenWithHandle
     {
         private const string AcDbXrecordText = "AcDbXrecord";
         private string _lastSubclassMarker;
@@ -433,13 +432,13 @@ namespace IxMilia.Dxf.Entities
             pairs.AddRange(MText.GetValuePairs(version, outputHandles));
         }
 
-        public IEnumerable<DxfEntity> GetChildren()
+        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
         {
-            return new DxfEntity[] { MText };
+            yield return MText;
         }
     }
 
-    public partial class DxfAttributeDefinition : IDxfHasEntityChildren
+    public partial class DxfAttributeDefinition : IDxfHasChildrenWithHandle
     {
         private const string AcDbXrecordText = "AcDbXrecord";
         private string _lastSubclassMarker;
@@ -576,9 +575,9 @@ namespace IxMilia.Dxf.Entities
             pairs.AddRange(MText.GetValuePairs(version, outputHandles));
         }
 
-        public IEnumerable<DxfEntity> GetChildren()
+        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
         {
-            return new DxfEntity[] { MText };
+            yield return MText;
         }
     }
 
@@ -750,7 +749,7 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
-    public partial class DxfPolyline : IDxfHasEntityChildren
+    public partial class DxfPolyline : IDxfHasChildrenWithHandle
     {
         public new double Elevation
         {
@@ -782,7 +781,7 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        public IEnumerable<DxfEntity> GetChildren()
+        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
         {
             foreach (var vertex in vertices)
             {
@@ -837,7 +836,7 @@ namespace IxMilia.Dxf.Entities
         }
     }
 
-    public partial class DxfInsert : IDxfHasEntityChildren
+    public partial class DxfInsert : IDxfHasChildrenWithHandle
     {
         private List<DxfAttribute> attributes = new List<DxfAttribute>();
         private DxfSeqend seqend = new DxfSeqend();
@@ -863,7 +862,7 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        public IEnumerable<DxfEntity> GetChildren()
+        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
         {
             foreach (var attribute in attributes)
             {

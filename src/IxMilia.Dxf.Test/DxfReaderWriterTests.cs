@@ -676,7 +676,7 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-42
+4C
 100
 AcDbEntity
   8

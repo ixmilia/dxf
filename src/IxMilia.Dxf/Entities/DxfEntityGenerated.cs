@@ -60,7 +60,7 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// DxfEntity class
     /// </summary>
-    public partial class DxfEntity : IDxfHasHandle
+    public partial class DxfEntity : IDxfHasHandle, IDxfHasOwnerHandle
     {
         public uint Handle { get; set; }
         public uint OwnerHandle { get; set; }

@@ -222,7 +222,7 @@
       <WriteProperty Property="KeepDuplicateRecords" />
       <WriteProperty Property="MTextFlag" />
       <WriteProperty Property="IsReallyLocked" />
-      <WriteSpecificValue Code="70" Value="(short)SecondaryAttributeHandles.Count" MinVersion="R2007" />
+      <WriteSpecificValue Code="70" Value="(short?)SecondaryAttributeHandles?.Count ?? default(short)" MinVersion="R2007" />
       <WriteProperty Property="SecondaryAttributeHandles" />
       <WriteProperty Property="AlignmentPoint" />
       <WriteProperty Property="AnnotationScale" />
@@ -294,7 +294,7 @@
       <WriteProperty Property="KeepDuplicateRecords" />
       <WriteProperty Property="MTextFlag" />
       <WriteProperty Property="IsReallyLocked" />
-      <WriteSpecificValue Code="70" Value="(short)SecondaryAttributeHandles.Count" MinVersion="R2007" />
+      <WriteSpecificValue Code="70" Value="(short?)SecondaryAttributeHandles?.Count ?? default(short)" MinVersion="R2007" />
       <WriteProperty Property="SecondaryAttributeHandles" />
       <WriteProperty Property="AlignmentPoint" />
       <WriteProperty Property="AnnotationScale" />
@@ -702,9 +702,9 @@
         <WriteSpecificValue Code="22" Value="item.Y" />
         <WriteSpecificValue Code="32" Value="item.Z" />
       </Foreach>
-      <WriteSpecificValue Code="74" Value="(short)Parameters.Count" />
+      <WriteSpecificValue Code="74" Value="(short?)Parameters?.Count ?? default(short)" />
       <WriteProperty Property="Parameters" />
-      <WriteSpecificValue Code="75" Value="(short)AreaFillParameters.Count" />
+      <WriteSpecificValue Code="75" Value="(short?)AreaFillParameters?.Count ?? default(short)" />
       <WriteProperty Property="AreaFillParameters" />
     </WriteOrder>
   </Entity>
@@ -828,7 +828,7 @@
       <WriteProperty Property="IsColumnAutoHeight" />
       <WriteProperty Property="ColumnWidth" />  
       <WriteProperty Property="ColumnGutter" />
-      <WriteSpecificValue Code="50" Value="(double)ColumnHeights.Count" />
+      <WriteSpecificValue Code="50" Value="ColumnHeights?.Count ?? default(double)" />
       <WriteProperty Property="ColumnHeights" />
     </WriteOrder>
   </Entity>
@@ -1081,9 +1081,9 @@
       <WriteSpecificValue Code="100" Value="AcDbSpline" />
       <WriteProperty Property="Normal" />
       <WriteProperty Property="Flags" />
-      <WriteSpecificValue Code="72" Value="(short)KnotValues.Count" />
-      <WriteSpecificValue Code="73" Value="(short)ControlPoints.Count" />
-      <WriteSpecificValue Code="74" Value="(short)FitPoints.Count" />
+      <WriteSpecificValue Code="72" Value="(short?)KnotValues?.Count ?? default(short)" />
+      <WriteSpecificValue Code="73" Value="(short?)ControlPoints?.Count ?? default(short)" />
+      <WriteSpecificValue Code="74" Value="(short?)FitPoints?.Count ?? default(short)" />
       <WriteProperty Property="KnotTolerance" />
       <WriteProperty Property="ControlPointTolerance" />
       <WriteProperty Property="FitTolerance" />

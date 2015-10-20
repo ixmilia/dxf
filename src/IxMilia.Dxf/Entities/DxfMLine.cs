@@ -129,41 +129,58 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(71, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(72, (short)Vertices.Count));
             pairs.Add(new DxfCodePair(73, (short)(this.StyleElementCount)));
-            pairs.Add(new DxfCodePair(10, StartPoint.X));
-            pairs.Add(new DxfCodePair(20, StartPoint.Y));
-            pairs.Add(new DxfCodePair(30, StartPoint.Z));
+            pairs.Add(new DxfCodePair(10, StartPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, StartPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, StartPoint?.Z ?? default(double)));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal.X));
-                pairs.Add(new DxfCodePair(220, Normal.Y));
-                pairs.Add(new DxfCodePair(230, Normal.Z));
+                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
-            foreach (var item in Vertices)
+            if (Vertices != null)
             {
-                pairs.Add(new DxfCodePair(10, item.X));
-                pairs.Add(new DxfCodePair(20, item.Y));
-                pairs.Add(new DxfCodePair(30, item.Z));
+                foreach (var item in Vertices)
+                {
+                    pairs.Add(new DxfCodePair(10, item.X));
+                    pairs.Add(new DxfCodePair(20, item.Y));
+                    pairs.Add(new DxfCodePair(30, item.Z));
+                }
             }
 
-            foreach (var item in SegmentDirections)
+            if (SegmentDirections != null)
             {
-                pairs.Add(new DxfCodePair(11, item.X));
-                pairs.Add(new DxfCodePair(21, item.Y));
-                pairs.Add(new DxfCodePair(31, item.Z));
+                foreach (var item in SegmentDirections)
+                {
+                    pairs.Add(new DxfCodePair(11, item.X));
+                    pairs.Add(new DxfCodePair(21, item.Y));
+                    pairs.Add(new DxfCodePair(31, item.Z));
+                }
             }
 
-            foreach (var item in MiterDirections)
+            if (MiterDirections != null)
             {
-                pairs.Add(new DxfCodePair(12, item.X));
-                pairs.Add(new DxfCodePair(22, item.Y));
-                pairs.Add(new DxfCodePair(32, item.Z));
+                foreach (var item in MiterDirections)
+                {
+                    pairs.Add(new DxfCodePair(12, item.X));
+                    pairs.Add(new DxfCodePair(22, item.Y));
+                    pairs.Add(new DxfCodePair(32, item.Z));
+                }
             }
 
-            pairs.Add(new DxfCodePair(74, (short)Parameters.Count));
-            pairs.AddRange(this.Parameters.Select(p => new DxfCodePair(41, p)));
-            pairs.Add(new DxfCodePair(75, (short)AreaFillParameters.Count));
-            pairs.AddRange(this.AreaFillParameters.Select(p => new DxfCodePair(42, p)));
+            pairs.Add(new DxfCodePair(74, (short?)Parameters?.Count ?? default(short)));
+            if (this.Parameters != null)
+            {
+                pairs.AddRange(this.Parameters.Select(p => new DxfCodePair(41, p)));
+            }
+
+            pairs.Add(new DxfCodePair(75, (short?)AreaFillParameters?.Count ?? default(short)));
+            if (this.AreaFillParameters != null)
+            {
+                pairs.AddRange(this.AreaFillParameters.Select(p => new DxfCodePair(42, p)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

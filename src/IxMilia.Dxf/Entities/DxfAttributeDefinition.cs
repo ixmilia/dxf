@@ -163,9 +163,9 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            pairs.Add(new DxfCodePair(10, Location.X));
-            pairs.Add(new DxfCodePair(20, Location.Y));
-            pairs.Add(new DxfCodePair(30, Location.Z));
+            pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(40, (this.TextHeight)));
             pairs.Add(new DxfCodePair(1, (this.Value)));
             if (version >= DxfAcadVersion.R13)
@@ -202,14 +202,14 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(72, (short)(this.HorizontalTextJustification)));
             }
 
-            pairs.Add(new DxfCodePair(11, SecondAlignmentPoint.X));
-            pairs.Add(new DxfCodePair(21, SecondAlignmentPoint.Y));
-            pairs.Add(new DxfCodePair(31, SecondAlignmentPoint.Z));
+            pairs.Add(new DxfCodePair(11, SecondAlignmentPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, SecondAlignmentPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, SecondAlignmentPoint?.Z ?? default(double)));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal.X));
-                pairs.Add(new DxfCodePair(220, Normal.Y));
-                pairs.Add(new DxfCodePair(230, Normal.Z));
+                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
             if (version >= DxfAcadVersion.R13)
@@ -260,18 +260,18 @@ namespace IxMilia.Dxf.Entities
 
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.Add(new DxfCodePair(70, (short)SecondaryAttributeHandles.Count));
+                pairs.Add(new DxfCodePair(70, (short?)SecondaryAttributeHandles?.Count ?? default(short)));
             }
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.SecondaryAttributeHandles != null)
             {
                 pairs.AddRange(this.SecondaryAttributeHandles.Select(p => new DxfCodePair(340, p)));
             }
 
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.Add(new DxfCodePair(10, AlignmentPoint.X));
-                pairs.Add(new DxfCodePair(20, AlignmentPoint.Y));
-                pairs.Add(new DxfCodePair(30, AlignmentPoint.Z));
+                pairs.Add(new DxfCodePair(10, AlignmentPoint?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(20, AlignmentPoint?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(30, AlignmentPoint?.Z ?? default(double)));
             }
 
             if (version >= DxfAcadVersion.R2007)

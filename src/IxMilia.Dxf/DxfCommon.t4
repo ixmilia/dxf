@@ -179,10 +179,14 @@ IEnumerable<string> WriteValue(XElement spec, XElement entity)
         case "WriteProperty":
             return WriteProperty(spec, entity);
         case "Foreach":
+            var property = spec.Attribute("Property").Value;
             var lines = new List<string>();
-            lines.Add(string.Format("foreach (var item in {0})", spec.Attribute("Property").Value));
+            lines.Add(string.Format("if ({0} != null)", property));
             lines.Add("{");
-            lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => "    " + l));
+            lines.Add(string.Format("    foreach (var item in {0})", property));
+            lines.Add("    {");
+            lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => "        " + l));
+            lines.Add("    }");
             lines.Add("}");
             lines.Add("\n");
             return lines;
@@ -309,6 +313,11 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
     if (DisableWritingDefault(property))
         writePredicates.Add(string.Format("this.{0} != {1}", name, DefaultValue(property)));
 
+    if (codes == null && AllowMultiples(property))
+    {
+        writePredicates.Add(string.Format("this.{0} != null", name));
+    }
+
     string indentPrefix = string.Empty;
     if (writePredicates.Any())
     {
@@ -322,7 +331,8 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
         var suffix = 'X';
         for (int i = 0; i < codes.Length; i++, suffix++)
         {
-            lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}.{3}));", indentPrefix, codes[i], name, suffix));
+            lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}?.{3} ?? default(double)));", indentPrefix, codes[i], name, suffix));
+            // currently all multi-value codes are doubles, so this is ok:         ^^^^^^^^^^^^^^^
         }
     }
     else

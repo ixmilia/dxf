@@ -287,7 +287,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(92, (this.ImageByteCount)));
             }
 
-            if (version >= DxfAcadVersion.R2000)
+            if (version >= DxfAcadVersion.R2000 && this.PreviewImageData != null)
             {
                 pairs.AddRange(this.PreviewImageData.Select(p => new DxfCodePair(310, p)));
             }

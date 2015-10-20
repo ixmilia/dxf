@@ -61,9 +61,9 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(2, (this.Name)));
-            pairs.Add(new DxfCodePair(10, Location.X));
-            pairs.Add(new DxfCodePair(20, Location.Y));
-            pairs.Add(new DxfCodePair(30, Location.Z));
+            pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
             if (this.XScaleFactor != 1.0)
             {
                 pairs.Add(new DxfCodePair(41, (this.XScaleFactor)));
@@ -104,9 +104,9 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(45, (this.RowSpacing)));
             }
 
-            pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
-            pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
-            pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
+            pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

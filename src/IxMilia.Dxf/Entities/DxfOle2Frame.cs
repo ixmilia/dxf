@@ -50,18 +50,21 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(100, "AcDbOle2Frame"));
             pairs.Add(new DxfCodePair(70, (short)(this.VersionNumber)));
             pairs.Add(new DxfCodePair(3, (this.Description)));
-            pairs.Add(new DxfCodePair(10, UpperLeftCorner.X));
-            pairs.Add(new DxfCodePair(20, UpperLeftCorner.Y));
-            pairs.Add(new DxfCodePair(30, UpperLeftCorner.Z));
-            pairs.Add(new DxfCodePair(11, LowerRightCorner.X));
-            pairs.Add(new DxfCodePair(21, LowerRightCorner.Y));
-            pairs.Add(new DxfCodePair(31, LowerRightCorner.Z));
+            pairs.Add(new DxfCodePair(10, UpperLeftCorner?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, UpperLeftCorner?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, UpperLeftCorner?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, LowerRightCorner?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, LowerRightCorner?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, LowerRightCorner?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(71, (short)(this.ObjectType)));
             pairs.Add(new DxfCodePair(72, (short)(this.TileMode)));
             pairs.Add(new DxfCodePair(90, (this.BinaryDataLength)));
-            foreach (var item in BinaryDataStrings)
+            if (BinaryDataStrings != null)
             {
-                pairs.Add(new DxfCodePair(310, "item"));
+                foreach (var item in BinaryDataStrings)
+                {
+                    pairs.Add(new DxfCodePair(310, "item"));
+                }
             }
 
             pairs.Add(new DxfCodePair(1, "OLE"));

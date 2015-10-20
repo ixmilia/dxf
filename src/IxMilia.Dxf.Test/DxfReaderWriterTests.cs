@@ -1134,5 +1134,68 @@ AcDbBlockEnd
                 file.Save(ms);
             }
         }
+
+        [Fact]
+        public void WriteAllDefaultEntitiesTest()
+        {
+            var file = new DxfFile();
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                if (IsEntityOrDerived(type))
+                {
+                    var ctor = type.GetConstructor(Type.EmptyTypes);
+                    if (ctor != null)
+                    {
+                        // all types deriving from DxfEntity with a default constructor
+                        var entity = (DxfEntity)ctor.Invoke(new object[0]);
+
+                        // add the entity with it's default initialized values
+                        file.Entities.Add(entity);
+
+                        // and create a new entity to be nulled out
+                        entity = (DxfEntity)ctor.Invoke(new object[0]);
+
+                        // set all non-indexer properties to `default(t)`
+                        foreach (var property in type.GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
+                        {
+                            var propertyType = property.PropertyType;
+                            var defaultValue = propertyType.IsValueType
+                                ? Activator.CreateInstance(propertyType)
+                                : null;
+                            property.SetValue(entity, defaultValue);
+                        }
+
+                        // add it to the file
+                        file.Entities.Add(entity);
+                    }
+                }
+            }
+
+            // write each version of the entities with default versions
+            foreach (var version in new[] { DxfAcadVersion.R10, DxfAcadVersion.R11, DxfAcadVersion.R12, DxfAcadVersion.R13, DxfAcadVersion.R14, DxfAcadVersion.R2000, DxfAcadVersion.R2004, DxfAcadVersion.R2007, DxfAcadVersion.R2010, DxfAcadVersion.R2013 })
+            {
+                file.Header.Version = version;
+                using (var ms = new MemoryStream())
+                {
+                    file.Save(ms);
+                }
+            }
+        }
+
+        private static bool IsEntityOrDerived(Type type)
+        {
+            if (type == typeof(DxfEntity))
+            {
+                return true;
+            }
+
+            if (type.BaseType != null)
+            {
+                return IsEntityOrDerived(type.BaseType);
+            }
+
+            return false;
+        }
     }
 }

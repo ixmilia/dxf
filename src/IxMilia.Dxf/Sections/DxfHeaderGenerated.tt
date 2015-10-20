@@ -140,13 +140,13 @@ foreach (var property in variables) {
     {
         var prop = property.Attribute("Property").Value;
 #>
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(10, header.<#= prop #>.X));
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(20, header.<#= prop #>.Y));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(10, header.<#= prop #>?.X ?? default(double)));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(20, header.<#= prop #>?.Y ?? default(double)));
 <#
         if (Math.Abs(int.Parse(property.Attribute("Code").Value)) >= 3)
         {
 #>
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(30, header.<#= prop #>.Z));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(30, header.<#= prop #>?.Z ?? default(double)));
 <#
         }
     }

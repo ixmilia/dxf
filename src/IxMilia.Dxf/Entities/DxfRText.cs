@@ -71,14 +71,14 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "RText"));
-            pairs.Add(new DxfCodePair(10, InsertionPoint.X));
-            pairs.Add(new DxfCodePair(20, InsertionPoint.Y));
-            pairs.Add(new DxfCodePair(30, InsertionPoint.Z));
+            pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
             }
 
             pairs.Add(new DxfCodePair(50, (this.RotationAngle)));

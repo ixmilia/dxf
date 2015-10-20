@@ -40,9 +40,9 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbRadialDimension"));
-            pairs.Add(new DxfCodePair(15, DefinitionPoint2.X));
-            pairs.Add(new DxfCodePair(25, DefinitionPoint2.Y));
-            pairs.Add(new DxfCodePair(35, DefinitionPoint2.Z));
+            pairs.Add(new DxfCodePair(15, DefinitionPoint2?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(25, DefinitionPoint2?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(35, DefinitionPoint2?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(40, (this.LeaderLength)));
         }
 

@@ -153,9 +153,9 @@ namespace IxMilia.Dxf.Entities
 
             if (version >= DxfAcadVersion.R12)
             {
-                pairs.Add(new DxfCodePair(10, Location.X));
-                pairs.Add(new DxfCodePair(20, Location.Y));
-                pairs.Add(new DxfCodePair(30, Location.Z));
+                pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
             }
 
             if (this.Thickness != 0.0)
@@ -205,9 +205,9 @@ namespace IxMilia.Dxf.Entities
 
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal.X));
-                pairs.Add(new DxfCodePair(220, Normal.Y));
-                pairs.Add(new DxfCodePair(230, Normal.Z));
+                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
             if (XData != null)

@@ -43,9 +43,9 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbFcf"));
             pairs.Add(new DxfCodePair(3, (this.DimensionStyleName)));
-            pairs.Add(new DxfCodePair(10, InsertionPoint.X));
-            pairs.Add(new DxfCodePair(20, InsertionPoint.Y));
-            pairs.Add(new DxfCodePair(30, InsertionPoint.Z));
+            pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(1, (this.DisplayText)));
@@ -53,14 +53,14 @@ namespace IxMilia.Dxf.Entities
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
             }
 
-            pairs.Add(new DxfCodePair(11, DirectionVector.X));
-            pairs.Add(new DxfCodePair(21, DirectionVector.Y));
-            pairs.Add(new DxfCodePair(31, DirectionVector.Z));
+            pairs.Add(new DxfCodePair(11, DirectionVector?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, DirectionVector?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, DirectionVector?.Z ?? default(double)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

@@ -49,15 +49,15 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(100, "AcDbAlignedDimension"));
             }
-            pairs.Add(new DxfCodePair(12, InsertionPoint.X));
-            pairs.Add(new DxfCodePair(22, InsertionPoint.Y));
-            pairs.Add(new DxfCodePair(32, InsertionPoint.Z));
-            pairs.Add(new DxfCodePair(13, DefinitionPoint2.X));
-            pairs.Add(new DxfCodePair(23, DefinitionPoint2.Y));
-            pairs.Add(new DxfCodePair(33, DefinitionPoint2.Z));
-            pairs.Add(new DxfCodePair(14, DefinitionPoint3.X));
-            pairs.Add(new DxfCodePair(24, DefinitionPoint3.Y));
-            pairs.Add(new DxfCodePair(34, DefinitionPoint3.Z));
+            pairs.Add(new DxfCodePair(12, InsertionPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(22, InsertionPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(32, InsertionPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(13, DefinitionPoint2?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(23, DefinitionPoint2?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(33, DefinitionPoint2?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(14, DefinitionPoint3?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(24, DefinitionPoint3?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(34, DefinitionPoint3?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(50, (this.RotationAngle)));
             pairs.Add(new DxfCodePair(52, (this.ExtensionLineAngle)));
             if (version >= DxfAcadVersion.R13)

@@ -64,7 +64,7 @@ namespace IxMilia.Dxf
 
         internal static short GetRawValue(DxfLineWeight lineWeight)
         {
-            return lineWeight.Value;
+            return lineWeight?.Value ?? 0;
         }
     }
 }

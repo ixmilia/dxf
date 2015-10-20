@@ -138,7 +138,10 @@ namespace IxMilia.Dxf.Blocks
 
         IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
         {
-            yield return EndBlock;
+            if (EndBlock != null)
+            {
+                yield return EndBlock;
+            }
         }
 
         internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)

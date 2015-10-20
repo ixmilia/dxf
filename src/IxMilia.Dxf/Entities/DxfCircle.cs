@@ -54,15 +54,15 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            pairs.Add(new DxfCodePair(10, Center.X));
-            pairs.Add(new DxfCodePair(20, Center.Y));
-            pairs.Add(new DxfCodePair(30, Center.Z));
+            pairs.Add(new DxfCodePair(10, Center?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, Center?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, Center?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(40, (this.Radius)));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal.X));
-                pairs.Add(new DxfCodePair(220, Normal.Y));
-                pairs.Add(new DxfCodePair(230, Normal.Z));
+                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
         }

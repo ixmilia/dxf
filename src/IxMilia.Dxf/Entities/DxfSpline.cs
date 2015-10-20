@@ -127,13 +127,13 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbSpline"));
-            pairs.Add(new DxfCodePair(210, Normal.X));
-            pairs.Add(new DxfCodePair(220, Normal.Y));
-            pairs.Add(new DxfCodePair(230, Normal.Z));
+            pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
-            pairs.Add(new DxfCodePair(72, (short)KnotValues.Count));
-            pairs.Add(new DxfCodePair(73, (short)ControlPoints.Count));
-            pairs.Add(new DxfCodePair(74, (short)FitPoints.Count));
+            pairs.Add(new DxfCodePair(72, (short?)KnotValues?.Count ?? default(short)));
+            pairs.Add(new DxfCodePair(73, (short?)ControlPoints?.Count ?? default(short)));
+            pairs.Add(new DxfCodePair(74, (short?)FitPoints?.Count ?? default(short)));
             if (this.KnotTolerance != 0.0000001)
             {
                 pairs.Add(new DxfCodePair(42, (this.KnotTolerance)));
@@ -149,30 +149,40 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(44, (this.FitTolerance)));
             }
 
-            pairs.Add(new DxfCodePair(12, StartTangent.X));
-            pairs.Add(new DxfCodePair(22, StartTangent.Y));
-            pairs.Add(new DxfCodePair(32, StartTangent.Z));
-            pairs.Add(new DxfCodePair(13, EndTangent.X));
-            pairs.Add(new DxfCodePair(23, EndTangent.Y));
-            pairs.Add(new DxfCodePair(33, EndTangent.Z));
-            pairs.AddRange(this.KnotValues.Select(p => new DxfCodePair(40, p)));
+            pairs.Add(new DxfCodePair(12, StartTangent?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(22, StartTangent?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(32, StartTangent?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(13, EndTangent?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(23, EndTangent?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(33, EndTangent?.Z ?? default(double)));
+            if (this.KnotValues != null)
+            {
+                pairs.AddRange(this.KnotValues.Select(p => new DxfCodePair(40, p)));
+            }
+
             if (this.Weight != 1.0)
             {
                 pairs.Add(new DxfCodePair(41, (this.Weight)));
             }
 
-            foreach (var item in ControlPoints)
+            if (ControlPoints != null)
             {
-                pairs.Add(new DxfCodePair(10, item.X));
-                pairs.Add(new DxfCodePair(20, item.Y));
-                pairs.Add(new DxfCodePair(30, item.Z));
+                foreach (var item in ControlPoints)
+                {
+                    pairs.Add(new DxfCodePair(10, item.X));
+                    pairs.Add(new DxfCodePair(20, item.Y));
+                    pairs.Add(new DxfCodePair(30, item.Z));
+                }
             }
 
-            foreach (var item in FitPoints)
+            if (FitPoints != null)
             {
-                pairs.Add(new DxfCodePair(11, item.X));
-                pairs.Add(new DxfCodePair(21, item.Y));
-                pairs.Add(new DxfCodePair(31, item.Z));
+                foreach (var item in FitPoints)
+                {
+                    pairs.Add(new DxfCodePair(11, item.X));
+                    pairs.Add(new DxfCodePair(21, item.Y));
+                    pairs.Add(new DxfCodePair(31, item.Z));
+                }
             }
 
         }

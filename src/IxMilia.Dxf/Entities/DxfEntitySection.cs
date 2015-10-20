@@ -71,28 +71,34 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(90, (this.State)));
             pairs.Add(new DxfCodePair(91, (this.Flags)));
             pairs.Add(new DxfCodePair(1, (this.Name)));
-            pairs.Add(new DxfCodePair(10, VerticalDirection.X));
-            pairs.Add(new DxfCodePair(20, VerticalDirection.Y));
-            pairs.Add(new DxfCodePair(30, VerticalDirection.Z));
+            pairs.Add(new DxfCodePair(10, VerticalDirection?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, VerticalDirection?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, VerticalDirection?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(40, (this.TopHeight)));
             pairs.Add(new DxfCodePair(41, (this.BottomHeight)));
             pairs.Add(new DxfCodePair(70, (this.IndicatorTransparency)));
             pairs.Add(new DxfCodePair(63, DxfColor.GetRawValue(this.IndicatorColor)));
             pairs.Add(new DxfCodePair(411, (this.IndicatorColorName)));
             pairs.Add(new DxfCodePair(92, Vertices.Count));
-            foreach (var item in Vertices)
+            if (Vertices != null)
             {
-                pairs.Add(new DxfCodePair(11, item.X));
-                pairs.Add(new DxfCodePair(21, item.Y));
-                pairs.Add(new DxfCodePair(31, item.Z));
+                foreach (var item in Vertices)
+                {
+                    pairs.Add(new DxfCodePair(11, item.X));
+                    pairs.Add(new DxfCodePair(21, item.Y));
+                    pairs.Add(new DxfCodePair(31, item.Z));
+                }
             }
 
             pairs.Add(new DxfCodePair(93, BackLineVertices.Count));
-            foreach (var item in BackLineVertices)
+            if (BackLineVertices != null)
             {
-                pairs.Add(new DxfCodePair(12, item.X));
-                pairs.Add(new DxfCodePair(22, item.Y));
-                pairs.Add(new DxfCodePair(32, item.Z));
+                foreach (var item in BackLineVertices)
+                {
+                    pairs.Add(new DxfCodePair(12, item.X));
+                    pairs.Add(new DxfCodePair(22, item.Y));
+                    pairs.Add(new DxfCodePair(32, item.Z));
+                }
             }
 
             pairs.Add(new DxfCodePair(360, UIntHandle(this.GeometrySettingsHandle)));

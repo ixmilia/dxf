@@ -434,7 +434,10 @@ namespace IxMilia.Dxf.Entities
 
         IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
         {
-            yield return MText;
+            if (MText != null)
+            {
+                yield return MText;
+            }
         }
     }
 
@@ -577,7 +580,10 @@ namespace IxMilia.Dxf.Entities
 
         IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
         {
-            yield return MText;
+            if (MText != null)
+            {
+                yield return MText;
+            }
         }
     }
 
@@ -785,7 +791,10 @@ namespace IxMilia.Dxf.Entities
         {
             foreach (var vertex in vertices)
             {
-                yield return vertex;
+                if (vertex != null)
+                {
+                    yield return vertex;
+                }
             }
 
             if (seqend != null)
@@ -866,7 +875,10 @@ namespace IxMilia.Dxf.Entities
         {
             foreach (var attribute in attributes)
             {
-                yield return attribute;
+                if (attribute != null)
+                {
+                    yield return attribute;
+                }
             }
 
             if (seqend != null)

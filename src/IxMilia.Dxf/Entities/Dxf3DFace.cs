@@ -87,18 +87,18 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbFace"));
-            pairs.Add(new DxfCodePair(10, FirstCorner.X));
-            pairs.Add(new DxfCodePair(20, FirstCorner.Y));
-            pairs.Add(new DxfCodePair(30, FirstCorner.Z));
-            pairs.Add(new DxfCodePair(11, SecondCorner.X));
-            pairs.Add(new DxfCodePair(21, SecondCorner.Y));
-            pairs.Add(new DxfCodePair(31, SecondCorner.Z));
-            pairs.Add(new DxfCodePair(12, ThirdCorner.X));
-            pairs.Add(new DxfCodePair(22, ThirdCorner.Y));
-            pairs.Add(new DxfCodePair(32, ThirdCorner.Z));
-            pairs.Add(new DxfCodePair(13, FourthCorner.X));
-            pairs.Add(new DxfCodePair(23, FourthCorner.Y));
-            pairs.Add(new DxfCodePair(33, FourthCorner.Z));
+            pairs.Add(new DxfCodePair(10, FirstCorner?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, FirstCorner?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, FirstCorner?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, SecondCorner?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, SecondCorner?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, SecondCorner?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(12, ThirdCorner?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(22, ThirdCorner?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(32, ThirdCorner?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(13, FourthCorner?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(23, FourthCorner?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(33, FourthCorner?.Z ?? default(double)));
             if (this.EdgeFlags != 0)
             {
                 pairs.Add(new DxfCodePair(70, (short)(this.EdgeFlags)));

@@ -94,33 +94,36 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            foreach (var item in Vertices)
+            if (Vertices != null)
             {
-                pairs.Add(new DxfCodePair(10, item.Location.X));
-                pairs.Add(new DxfCodePair(20, item.Location.Y));
-                if (version >= DxfAcadVersion.R2013)
+                foreach (var item in Vertices)
                 {
-                    pairs.Add(new DxfCodePair(91, item.Identifier));
-                }
-                if (item.StartingWidth != 0.0)
-                {
-                    pairs.Add(new DxfCodePair(40, item.StartingWidth));
-                }
-                if (item.EndingWidth != 0.0)
-                {
-                    pairs.Add(new DxfCodePair(41, item.EndingWidth));
-                }
-                if (item.Bulge != 0.0)
-                {
-                    pairs.Add(new DxfCodePair(42, item.Bulge));
+                    pairs.Add(new DxfCodePair(10, item.Location.X));
+                    pairs.Add(new DxfCodePair(20, item.Location.Y));
+                    if (version >= DxfAcadVersion.R2013)
+                    {
+                        pairs.Add(new DxfCodePair(91, item.Identifier));
+                    }
+                    if (item.StartingWidth != 0.0)
+                    {
+                        pairs.Add(new DxfCodePair(40, item.StartingWidth));
+                    }
+                    if (item.EndingWidth != 0.0)
+                    {
+                        pairs.Add(new DxfCodePair(41, item.EndingWidth));
+                    }
+                    if (item.Bulge != 0.0)
+                    {
+                        pairs.Add(new DxfCodePair(42, item.Bulge));
+                    }
                 }
             }
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
             }
 
         }

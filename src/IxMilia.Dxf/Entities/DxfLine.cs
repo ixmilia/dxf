@@ -54,17 +54,17 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            pairs.Add(new DxfCodePair(10, P1.X));
-            pairs.Add(new DxfCodePair(20, P1.Y));
-            pairs.Add(new DxfCodePair(30, P1.Z));
-            pairs.Add(new DxfCodePair(11, P2.X));
-            pairs.Add(new DxfCodePair(21, P2.Y));
-            pairs.Add(new DxfCodePair(31, P2.Z));
+            pairs.Add(new DxfCodePair(10, P1?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, P1?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, P1?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, P2?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, P2?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, P2?.Z ?? default(double)));
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
             }
 
         }

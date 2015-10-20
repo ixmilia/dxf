@@ -39,8 +39,16 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbModelerGeometry"));
             pairs.Add(new DxfCodePair(70, (this.FormatVersionNumber)));
-            pairs.AddRange(this.CustomData.Select(p => new DxfCodePair(1, p)));
-            pairs.AddRange(this.CustomData2.Select(p => new DxfCodePair(3, p)));
+            if (this.CustomData != null)
+            {
+                pairs.AddRange(this.CustomData.Select(p => new DxfCodePair(1, p)));
+            }
+
+            if (this.CustomData2 != null)
+            {
+                pairs.AddRange(this.CustomData2.Select(p => new DxfCodePair(3, p)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

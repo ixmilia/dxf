@@ -115,7 +115,7 @@ namespace IxMilia.Dxf
 
         public static short GetRawValue(DxfColor color)
         {
-            return color.RawValue;
+            return color?.RawValue ?? 0;
         }
 
         public static DxfColor ByLayer

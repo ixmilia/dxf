@@ -34,14 +34,14 @@ namespace IxMilia.Dxf
             return DxfCommonConverters.StringShort(s);
         }
 
-        private static bool BoolShort(short s)
+        private static bool BoolShort(short? s)
         {
-            return DxfCommonConverters.BoolShort(s);
+            return DxfCommonConverters.BoolShort(s ?? 0);
         }
 
-        private static short BoolShort(bool b)
+        private static short BoolShort(bool? b)
         {
-            return DxfCommonConverters.BoolShort(b);
+            return DxfCommonConverters.BoolShort(b ?? false);
         }
 
         private static string GuidString(Guid g)

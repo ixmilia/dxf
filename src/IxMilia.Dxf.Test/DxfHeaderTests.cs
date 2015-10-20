@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -462,6 +463,38 @@ ENDTAB
   0
 ENDSEC
 ");
+        }
+
+        [Fact]
+        public void WriteAndReadTypeDefaultsTest()
+        {
+            var file = new DxfFile();
+            var headerType = file.Header.GetType();
+            var properties = headerType.GetProperties();
+            foreach (var property in properties.Where(p => p.GetIndexParameters().Length == 0))
+            {
+                // set each non-index header property to `default(T)`
+                var propertyType = property.PropertyType;
+                var defaultValue = propertyType.IsValueType
+                    ? Activator.CreateInstance(propertyType)
+                    : null;
+                property.SetValue(file.Header, defaultValue);
+            }
+
+            // write each version of the header with default values
+            foreach (var version in new[] { DxfAcadVersion.R10, DxfAcadVersion.R11, DxfAcadVersion.R12, DxfAcadVersion.R13, DxfAcadVersion.R14, DxfAcadVersion.R2000, DxfAcadVersion.R2004, DxfAcadVersion.R2007, DxfAcadVersion.R2010, DxfAcadVersion.R2013 })
+            {
+                file.Header.Version = version;
+                using (var ms = new MemoryStream())
+                {
+                    file.Save(ms);
+                    ms.Flush();
+                    ms.Seek(0, SeekOrigin.Begin);
+
+                    // ensure the header can be read back in, too
+                    var file2 = DxfFile.Load(ms);
+                }
+            }
         }
 
         #endregion

@@ -22,6 +22,9 @@ namespace IxMilia.Dxf.Test
             var file = DxfFile.Load(stream);
             Assert.Equal(12, file.Entities.Count);
             Assert.Equal(12, file.Entities.Where(e => e.EntityType == DxfEntityType.Line).Count());
+            var first = (DxfLine)file.Entities.First();
+            Assert.Equal(new DxfPoint(45, 45, 0), first.P1);
+            Assert.Equal(new DxfPoint(45, -45, 0), first.P2);
         }
 
         [Fact]
@@ -54,6 +57,96 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(1, line.Color.RawValue);
             Assert.Equal(new DxfPoint(1, 2, 3), line.P1);
             Assert.Equal(new DxfPoint(4, 5, 6), line.P2);
+        }
+
+        [Fact]
+        public void ReadDxbNoLengthOrPositionStreamTest()
+        {
+            var data = new byte[]
+            {
+                // DXB sentinel
+                (byte)'A', (byte)'u', (byte)'t', (byte)'o', (byte)'C', (byte)'A', (byte)'D', (byte)' ', (byte)'D', (byte)'X', (byte)'B', (byte)' ', (byte)'1', (byte)'.', (byte)'0', (byte)'\r', (byte)'\n', 0x1A, 0x0,
+
+                // color
+                136, // type specifier for new color
+                0x01, 0x00, // color index 1
+
+                // line
+                0x01, // type specifier
+                0x01, 0x00, // P1.X = 0x0001
+                0x02, 0x00, // P1.Y = 0x0002
+                0x03, 0x00, // P1.Z = 0x0003
+                0x04, 0x00, // P1.X = 0x0004
+                0x05, 0x00, // P1.Y = 0x0005
+                0x06, 0x00, // P1.Z = 0x0006
+
+                // null terminator
+                0x0
+            };
+            using (var ms = new MemoryStream(data))
+            using (var stream = new StreamWithNoLengthOrPosition(ms))
+            {
+                var file = DxfFile.Load(stream);
+                var line = (DxfLine)file.Entities.Single();
+                Assert.Equal(1, line.Color.RawValue);
+                Assert.Equal(new DxfPoint(1, 2, 3), line.P1);
+                Assert.Equal(new DxfPoint(4, 5, 6), line.P2);
+            }
+        }
+
+        [Fact]
+        public void ReadBinaryDxfNoLengthOrPositionStreamTest()
+        {
+            // this file contains 12 lines
+            using (var fs = new FileStream("diamond-bin.dxf", FileMode.Open, FileAccess.Read))
+            using (var stream = new StreamWithNoLengthOrPosition(fs))
+            {
+                var file = DxfFile.Load(stream);
+                Assert.Equal(12, file.Entities.Count);
+                Assert.Equal(12, file.Entities.Where(e => e.EntityType == DxfEntityType.Line).Count());
+            }
+        }
+
+        [Fact]
+        public void ReadAsciiDxfNoLengthOrPositionStreamTest()
+        {
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms))
+            {
+                writer.WriteLine(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+LINE
+ 10
+1
+ 20
+2
+ 30
+3
+ 11
+4
+ 21
+5
+ 31
+6
+  0
+ENDSEC
+  0
+EOF
+".Trim());
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                using (var stream = new StreamWithNoLengthOrPosition(ms))
+                {
+                    var file = DxfFile.Load(stream);
+                    var line = (DxfLine)file.Entities.Single();
+                    Assert.Equal(new DxfPoint(1, 2, 3), line.P1);
+                    Assert.Equal(new DxfPoint(4, 5, 6), line.P2);
+                }
+            }
         }
 
         [Fact]

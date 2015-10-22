@@ -36,6 +36,7 @@
     <Compile Include="DxfHeaderTests.cs" />
     <Compile Include="DxfReaderWriterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamWithNoLengthOrPosition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="diamond-bin.dxf">

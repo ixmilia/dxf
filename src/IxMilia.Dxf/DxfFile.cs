@@ -131,14 +131,36 @@ namespace IxMilia.Dxf
         public static DxfFile Load(Stream stream)
         {
             var reader = new BinaryReader(stream);
+            int readBytes;
+            var firstLine = GetFirstLine(reader, out readBytes);
 
+            // check for binary sentinels
+            DxfFile file;
+            if (firstLine == DxbReader.BinarySentinel)
+            {
+                file = new DxbReader().ReadFile(reader);
+            }
+            else
+            {
+                var dxfReader = GetCodePairReader(firstLine, readBytes, reader);
+                file = LoadFromReader(dxfReader);
+            }
+
+            return file;
+        }
+
+        internal static string GetFirstLine(BinaryReader binaryReader, out int readBytes)
+        {
             // read first line char-by-char
+            readBytes = 0;
             var sb = new StringBuilder();
-            char c = reader.ReadChar();
+            var c = binaryReader.ReadChar();
+            readBytes++;
             while (c != '\n')
             {
                 sb.Append(c);
-                c = reader.ReadChar();
+                c = binaryReader.ReadChar();
+                readBytes++;
             }
 
             // trim BOM
@@ -148,28 +170,29 @@ namespace IxMilia.Dxf
                 line = line.Substring(1);
             }
 
-            // check for binary sentinels
-            DxfFile file;
-            if (line == DxbReader.BinarySentinel)
+            return line;
+        }
+
+        internal static IDxfCodePairReader GetCodePairReader(string firstLine, int readBytes, BinaryReader binaryReader)
+        {
+            if (firstLine == DxbReader.BinarySentinel)
             {
-                file = new DxbReader().ReadFile(reader);
+                throw new DxfReadException("DXB files don't support code pairs.  This path should never be hit.", readBytes);
             }
             else
             {
                 IDxfCodePairReader dxfReader;
-                if (line == BinarySentinel)
+                if (firstLine == BinarySentinel)
                 {
-                    dxfReader = new DxfBinaryReader(reader);
+                    dxfReader = new DxfBinaryReader(binaryReader, readBytes);
                 }
                 else
                 {
-                    dxfReader = new DxfAsciiReader(stream, line);
+                    dxfReader = new DxfAsciiReader(binaryReader.BaseStream, firstLine);
                 }
 
-                file = LoadFromReader(dxfReader);
+                return dxfReader;
             }
-
-            return file;
         }
 
         private static DxfFile LoadFromReader(IDxfCodePairReader reader)

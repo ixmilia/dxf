@@ -12,14 +12,18 @@ namespace IxMilia.Dxf
     {
         private BinaryReader _reader;
 
-        public DxfBinaryReader(BinaryReader reader)
+        public DxfBinaryReader(BinaryReader reader, int readBytes)
         {
             _reader = reader;
+            _totalBytesRead = readBytes;
 
             // swallow next two characters
-            var sub = reader.ReadChar();
+            var sub = reader.ReadByte();
+            _totalBytesRead++;
             Debug.Assert(sub == 0x1A);
-            var nul = reader.ReadChar();
+
+            var nul = reader.ReadByte();
+            _totalBytesRead++;
             Debug.Assert(nul == 0x00);
         }
 
@@ -145,7 +149,7 @@ namespace IxMilia.Dxf
         byte[] _miniBuffer = new byte[8];
         int _miniBufferStart = 0;
         int _miniBufferEnd = 0;
-        int _totalBytesRead = 22;
+        int _totalBytesRead = 0;
         byte[] _dataBuffer = new byte[8];
 
         private bool TryReadByte(out byte result)

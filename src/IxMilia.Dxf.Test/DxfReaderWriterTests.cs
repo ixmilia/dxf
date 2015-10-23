@@ -150,6 +150,73 @@ EOF
         }
 
         [Fact]
+        public void ReadAsciiDxfCodePairOffsetTest()
+        {
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms))
+            {
+                writer.WriteLine(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+LINE
+ 10
+1
+ 20
+2
+ 30
+3
+ 11
+4
+ 21
+5
+ 31
+6
+  0
+ENDSEC
+  0
+EOF
+".Trim());
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                using (var binaryReader = new BinaryReader(ms))
+                {
+                    int readBytes;
+                    var firstLine = DxfFile.GetFirstLine(binaryReader, out readBytes);
+                    var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader);
+                    var codePairs = dxfReader.GetCodePairs().ToList();
+
+                    // verify code pair offsets correspond to line numbers
+                    Assert.Equal(11, codePairs.Count);
+                    Assert.Equal(1, codePairs.First().Offset);
+                    Assert.Equal(21, codePairs.Last().Offset);
+                }
+            }
+        }
+
+        [Fact]
+        public void ReadBinaryDxfCodePairOffsetTest()
+        {
+            using (var fs = new FileStream("diamond-bin.dxf", FileMode.Open, FileAccess.Read))
+            {
+                using (var binaryReader = new BinaryReader(fs))
+                {
+                    int readBytes;
+                    var firstLine = DxfFile.GetFirstLine(binaryReader, out readBytes);
+                    var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader);
+                    var codePairs = dxfReader.GetCodePairs().ToList();
+
+                    // verify code pair offsets correspond to line numbers
+                    Assert.Equal(100, codePairs.Count);
+                    Assert.Equal(22, codePairs.First().Offset);
+                    Assert.Equal(805, codePairs.Last().Offset);
+                }
+            }
+        }
+
+        [Fact]
         public void WriteDxbTest()
         {
             // write file

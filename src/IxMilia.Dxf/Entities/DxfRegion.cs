@@ -18,8 +18,8 @@ namespace IxMilia.Dxf.Entities
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public short FormatVersionNumber { get; set; }
-        public List<string> CustomData { get; set; }
-        public List<string> CustomData2 { get; set; }
+        public List<string> CustomData { get; private set; }
+        public List<string> CustomData2 { get; private set; }
 
         public DxfRegion()
             : base()
@@ -39,16 +39,8 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbModelerGeometry"));
             pairs.Add(new DxfCodePair(70, (this.FormatVersionNumber)));
-            if (this.CustomData != null)
-            {
-                pairs.AddRange(this.CustomData.Select(p => new DxfCodePair(1, p)));
-            }
-
-            if (this.CustomData2 != null)
-            {
-                pairs.AddRange(this.CustomData2.Select(p => new DxfCodePair(3, p)));
-            }
-
+            pairs.AddRange(this.CustomData.Select(p => new DxfCodePair(1, p)));
+            pairs.AddRange(this.CustomData2.Select(p => new DxfCodePair(3, p)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

@@ -132,6 +132,13 @@ bool AllowMultiples(XElement property)
     return att != null && bool.Parse(att.Value);
 }
 
+string SetterAccessibility(XElement property)
+{
+    if (AllowMultiples(property) && Accessibility(property) != "private")
+        return "private ";
+    return ProtectedSet(property) ? "protected " : "";
+}
+
 bool ProtectedSet(XElement property)
 {
     var att = property.Attribute("ProtectedSet");
@@ -181,12 +188,9 @@ IEnumerable<string> WriteValue(XElement spec, XElement entity)
         case "Foreach":
             var property = spec.Attribute("Property").Value;
             var lines = new List<string>();
-            lines.Add(string.Format("if ({0} != null)", property));
+            lines.Add(string.Format("foreach (var item in {0})", property));
             lines.Add("{");
-            lines.Add(string.Format("    foreach (var item in {0})", property));
-            lines.Add("    {");
-            lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => "        " + l));
-            lines.Add("    }");
+            lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => "    " + l));
             lines.Add("}");
             lines.Add("\n");
             return lines;
@@ -312,11 +316,6 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
 
     if (DisableWritingDefault(property))
         writePredicates.Add(string.Format("this.{0} != {1}", name, DefaultValue(property)));
-
-    if (codes == null && AllowMultiples(property))
-    {
-        writePredicates.Add(string.Format("this.{0} != null", name));
-    }
 
     string indentPrefix = string.Empty;
     if (writePredicates.Any())

@@ -74,7 +74,7 @@ namespace IxMilia.Dxf.Entities
         public double LinetypeScale { get; set; }
         public bool IsVisible { get; set; }
         public int ImageByteCount { get; set; }
-        public List<string> PreviewImageData { get; set; }
+        public List<string> PreviewImageData { get; private set; }
         public int Color24Bit { get; set; }
         public string ColorName { get; set; }
         public int Transparency { get; set; }
@@ -287,7 +287,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(92, (this.ImageByteCount)));
             }
 
-            if (version >= DxfAcadVersion.R2000 && this.PreviewImageData != null)
+            if (version >= DxfAcadVersion.R2000)
             {
                 pairs.AddRange(this.PreviewImageData.Select(p => new DxfCodePair(310, p)));
             }

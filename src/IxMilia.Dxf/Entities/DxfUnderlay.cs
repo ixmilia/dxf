@@ -144,13 +144,10 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(280, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(281, (this.Contrast)));
             pairs.Add(new DxfCodePair(282, (this.Fade)));
-            if (BoundaryPoints != null)
+            foreach (var item in BoundaryPoints)
             {
-                foreach (var item in BoundaryPoints)
-                {
-                    pairs.Add(new DxfCodePair(11, item.X));
-                    pairs.Add(new DxfCodePair(12, item.Y));
-                }
+                pairs.Add(new DxfCodePair(11, item.X));
+                pairs.Add(new DxfCodePair(12, item.Y));
             }
 
         }

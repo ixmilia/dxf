@@ -604,20 +604,14 @@
   LWPOLYLINE
   
   -->
-  <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE" MinVersion="R14">
-    <Property Name="VertexCount" Code="90" Type="int" DefaultValue="0" />
+  <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE" MinVersion="R14" GenerateReaderFunction="false">
     <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
       <Flag Name="IsClosed" Mask="1" />
       <Flag Name="IsPLineGen" Mask="128" />
     </Property>
     <Property Name="ConstantWidth" Code="43" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
     <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
-    <Property Name="VertexCoordinateX" Code="10" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
-    <Property Name="VertexCoordinateY" Code="20" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
-    <Property Name="VertexIdentifier" Code="91" Type="int" DefaultValue="0" Accessibility="private" AllowMultiples="true" />
-    <Property Name="StartingWidth" Code="40" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" DisableWritingDefault="true" />
-    <Property Name="EndingWidth" Code="41" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" DisableWritingDefault="true" />
-    <Property Name="Bulge" Code="42" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" DisableWritingDefault="true" />
+    <Property Name="Vertices" Code="10" Type="DxfLwPolylineVertex" DefaultValue="null" AllowMultiples="true" />
     <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="AcDbPolyline" />
@@ -627,8 +621,8 @@
       <WriteSpecificValue Code="38" Value="Elevation" DontWriteIfValueIs="0.0" />
       <WriteProperty Property="Thickness" />
       <Foreach Property="Vertices">
-        <WriteSpecificValue Code="10" Value="item.Location.X" />
-        <WriteSpecificValue Code="20" Value="item.Location.Y" />
+        <WriteSpecificValue Code="10" Value="item.X" />
+        <WriteSpecificValue Code="20" Value="item.Y" />
         <WriteSpecificValue Code="91" Value="item.Identifier" MinVersion="R2013" />
         <WriteSpecificValue Code="40" Value="item.StartingWidth" DontWriteIfValueIs="0.0" />
         <WriteSpecificValue Code="41" Value="item.EndingWidth" DontWriteIfValueIs="0.0" />

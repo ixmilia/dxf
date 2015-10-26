@@ -133,13 +133,10 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(360, (this.ImageDefReactorReference)));
             pairs.Add(new DxfCodePair(71, (short)(this.ClippingType)));
             pairs.Add(new DxfCodePair(91, ClippingVertices.Count));
-            if (ClippingVertices != null)
+            foreach (var item in ClippingVertices)
             {
-                foreach (var item in ClippingVertices)
-                {
-                    pairs.Add(new DxfCodePair(14, item.X));
-                    pairs.Add(new DxfCodePair(24, item.Y));
-                }
+                pairs.Add(new DxfCodePair(14, item.X));
+                pairs.Add(new DxfCodePair(24, item.Y));
             }
 
             if (version >= DxfAcadVersion.R2010)

@@ -36,9 +36,9 @@ namespace IxMilia.Dxf.Entities
         private List<double> MiterDirectionY { get; set; }
         private List<double> MiterDirectionZ { get; set; }
         private int ParameterCount { get; set; }
-        public List<double> Parameters { get; set; }
+        public List<double> Parameters { get; private set; }
         private int AreaFillParameterCount { get; set; }
-        public List<double> AreaFillParameters { get; set; }
+        public List<double> AreaFillParameters { get; private set; }
 
         // Flags flags
 
@@ -139,48 +139,31 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
-            if (Vertices != null)
+            foreach (var item in Vertices)
             {
-                foreach (var item in Vertices)
-                {
-                    pairs.Add(new DxfCodePair(10, item.X));
-                    pairs.Add(new DxfCodePair(20, item.Y));
-                    pairs.Add(new DxfCodePair(30, item.Z));
-                }
+                pairs.Add(new DxfCodePair(10, item.X));
+                pairs.Add(new DxfCodePair(20, item.Y));
+                pairs.Add(new DxfCodePair(30, item.Z));
             }
 
-            if (SegmentDirections != null)
+            foreach (var item in SegmentDirections)
             {
-                foreach (var item in SegmentDirections)
-                {
-                    pairs.Add(new DxfCodePair(11, item.X));
-                    pairs.Add(new DxfCodePair(21, item.Y));
-                    pairs.Add(new DxfCodePair(31, item.Z));
-                }
+                pairs.Add(new DxfCodePair(11, item.X));
+                pairs.Add(new DxfCodePair(21, item.Y));
+                pairs.Add(new DxfCodePair(31, item.Z));
             }
 
-            if (MiterDirections != null)
+            foreach (var item in MiterDirections)
             {
-                foreach (var item in MiterDirections)
-                {
-                    pairs.Add(new DxfCodePair(12, item.X));
-                    pairs.Add(new DxfCodePair(22, item.Y));
-                    pairs.Add(new DxfCodePair(32, item.Z));
-                }
+                pairs.Add(new DxfCodePair(12, item.X));
+                pairs.Add(new DxfCodePair(22, item.Y));
+                pairs.Add(new DxfCodePair(32, item.Z));
             }
 
             pairs.Add(new DxfCodePair(74, (short?)Parameters?.Count ?? default(short)));
-            if (this.Parameters != null)
-            {
-                pairs.AddRange(this.Parameters.Select(p => new DxfCodePair(41, p)));
-            }
-
+            pairs.AddRange(this.Parameters.Select(p => new DxfCodePair(41, p)));
             pairs.Add(new DxfCodePair(75, (short?)AreaFillParameters?.Count ?? default(short)));
-            if (this.AreaFillParameters != null)
-            {
-                pairs.AddRange(this.AreaFillParameters.Select(p => new DxfCodePair(42, p)));
-            }
-
+            pairs.AddRange(this.AreaFillParameters.Select(p => new DxfCodePair(42, p)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

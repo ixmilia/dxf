@@ -19,7 +19,7 @@ namespace IxMilia.Dxf.Entities
 
         public int VersionNumber { get; set; }
         public int BinaryDataLength { get; set; }
-        public List<string> BinaryDataStrings { get; set; }
+        public List<string> BinaryDataStrings { get; private set; }
 
         public DxfOleFrame()
             : base()
@@ -40,12 +40,9 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(100, "AcDbOleFrame"));
             pairs.Add(new DxfCodePair(70, (short)(this.VersionNumber)));
             pairs.Add(new DxfCodePair(90, (this.BinaryDataLength)));
-            if (BinaryDataStrings != null)
+            foreach (var item in BinaryDataStrings)
             {
-                foreach (var item in BinaryDataStrings)
-                {
-                    pairs.Add(new DxfCodePair(310, "item"));
-                }
+                pairs.Add(new DxfCodePair(310, "item"));
             }
 
             pairs.Add(new DxfCodePair(1, "OLE"));

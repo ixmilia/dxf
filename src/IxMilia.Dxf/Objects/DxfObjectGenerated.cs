@@ -22,6 +22,7 @@ namespace IxMilia.Dxf.Objects
         Group,
         IdBuffer,
         ImageDefinition,
+        ImageDefinitionReactor,
     }
 
     /// <summary>
@@ -60,6 +61,8 @@ namespace IxMilia.Dxf.Objects
                         return "IDBUFFER";
                     case DxfObjectType.ImageDefinition:
                         return "IMAGEDEF";
+                    case DxfObjectType.ImageDefinitionReactor:
+                        return "IMAGEDEF_REACTOR";
                     default:
                         throw new NotImplementedException();
                 }
@@ -151,6 +154,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "IMAGEDEF":
                     obj = new DxfImageDefinition();
+                    break;
+                case "IMAGEDEF_REACTOR":
+                    obj = new DxfImageDefinitionReactor();
                     break;
                 default:
                     SwallowObject(buffer);

@@ -297,4 +297,12 @@
         <Property Name="IsImageLoaded" Code="280" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <Property Name="ResolutionUnits" Code="281" Type="DxfImageResolutionUnits" DefaultValue="DxfImageResolutionUnits.NoUnits" ReadConverter="(DxfImageResolutionUnits)" WriteConverter="(short)" />
     </Object>
+    <!--
+
+    IMAGEDEF_REACTOR
+
+    -->
+    <Object Name="DxfImageDefinitionReactor" ObjectType="ImageDefinitionReactor" SubclassMarker="AcDbRasterImageDefReactor" TypeString="IMAGEDEF_REACTOR">
+        <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
+    </Object>
 </Spec>

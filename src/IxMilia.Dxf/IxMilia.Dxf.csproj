@@ -257,6 +257,10 @@
     <Compile Include="Objects\DxfImageDefinitionGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfImageDefinitionReactor.cs" />
+    <Compile Include="Objects\DxfImageDefinitionReactorGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfObject.cs" />
     <Compile Include="Objects\DxfObjectGenerated.cs">
       <AutoGen>True</AutoGen>

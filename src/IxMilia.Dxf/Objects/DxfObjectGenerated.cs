@@ -23,6 +23,7 @@ namespace IxMilia.Dxf.Objects
         IdBuffer,
         ImageDefinition,
         ImageDefinitionReactor,
+        LayerFilter,
     }
 
     /// <summary>
@@ -63,6 +64,8 @@ namespace IxMilia.Dxf.Objects
                         return "IMAGEDEF";
                     case DxfObjectType.ImageDefinitionReactor:
                         return "IMAGEDEF_REACTOR";
+                    case DxfObjectType.LayerFilter:
+                        return "LAYER_FILTER";
                     default:
                         throw new NotImplementedException();
                 }
@@ -157,6 +160,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "IMAGEDEF_REACTOR":
                     obj = new DxfImageDefinitionReactor();
+                    break;
+                case "LAYER_FILTER":
+                    obj = new DxfLayerFilter();
                     break;
                 default:
                     SwallowObject(buffer);

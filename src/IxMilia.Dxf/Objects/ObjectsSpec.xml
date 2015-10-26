@@ -305,4 +305,17 @@
     <Object Name="DxfImageDefinitionReactor" ObjectType="ImageDefinitionReactor" SubclassMarker="AcDbRasterImageDefReactor" TypeString="IMAGEDEF_REACTOR">
         <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
     </Object>
+    <!--
+
+    LAYER_FILTER
+
+    -->
+    <Object Name="DxfLayerFilter" ObjectType="LayerFilter" SubclassMarker="AcDbLayerFilter" TypeString="LAYER_FILTER">
+        <Property Name="LayerNames" Code="8" Type="string" DefaultValue="null" AllowMultiples="true" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbFilter&quot;" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbLayerFilter&quot;" />
+            <WriteProperty Property="LayerNames" />
+        </WriteOrder>
+    </Object>
 </Spec>

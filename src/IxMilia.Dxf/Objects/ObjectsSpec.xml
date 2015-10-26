@@ -318,4 +318,23 @@
             <WriteProperty Property="LayerNames" />
         </WriteOrder>
     </Object>
+    <!--
+
+    LAYER_INDEX
+
+    -->
+    <Object Name="DxfLayerIndex" ObjectType="LayerIndex" SubclassMarker="AcDbLayerIndex" TypeString="LAYER_INDEX">
+        <Property Name="TimeStamp" Code="40" Type="DateTime" DefaultValue="DateTime.Now" ReadConverter="DateDouble" WriteConverter="DateDouble" />
+        <Property Name="LayerNames" Code="8" Type="string" DefaultValue="null" AllowMultiples="true" />
+        <Property Name="IdBufferHandles" Code="360" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="IdBufferCounts" Code="90" Type="int" DefaultValue="null" AllowMultiples="true" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbIndex&quot;" />
+            <WriteProperty Property="TimeStamp" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbLayerIndex&quot;" />
+            <WriteProperty Property="LayerNames" />
+            <WriteProperty Property="IdBufferHandles" />
+            <WriteProperty Property="IdBufferCounts" />
+        </WriteOrder>
+    </Object>
 </Spec>

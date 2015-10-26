@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 
 namespace IxMilia.Dxf.Objects
@@ -185,6 +186,16 @@ namespace IxMilia.Dxf.Objects
         protected static string UIntHandle(uint u)
         {
             return DxfCommonConverters.UIntHandle(u);
+        }
+
+        protected static DateTime DateDouble(double date)
+        {
+            return DxfCommonConverters.DateDouble(date);
+        }
+
+        protected static double DateDouble(DateTime date)
+        {
+            return DxfCommonConverters.DateDouble(date);
         }
 
         private static void SwallowObject(DxfCodePairBufferReader buffer)

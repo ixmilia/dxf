@@ -61,7 +61,7 @@ foreach (var property in GetProperties(baseEntity))
     if (AllowMultiples(property))
         typeString = string.Format("List<{0}>", typeString);
 #>
-        public <#= typeString #> <#= Name(property) #> { get; set; }
+        public <#= typeString #> <#= Name(property) #> { get; <#= SetterAccessibility(property) #>set; }
 <#
 } // foreach property
 #>
@@ -319,13 +319,12 @@ foreach (var entity in entities)
     foreach (var property in GetProperties(entity))
     {
         var propertyType = Type(property);
-        var getset = ProtectedSet(property) ? "{ get; protected set; }" : "{ get; set; }";
         if (AllowMultiples(property))
         {
             propertyType = string.Format("List<{0}>", propertyType);
         }
 #>
-        <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> <#= getset #>
+        <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> { get; <#= SetterAccessibility(property) #>set; }
 <#
     } // foreach property
 

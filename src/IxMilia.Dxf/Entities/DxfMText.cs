@@ -22,7 +22,7 @@ namespace IxMilia.Dxf.Entities
         public double ReferenceRectangleWidth { get; set; }
         public DxfAttachmentPoint AttachmentPoint { get; set; }
         public DxfDrawingDirection DrawingDirection { get; set; }
-        public List<string> ExtendedText { get; set; }
+        public List<string> ExtendedText { get; private set; }
         public string Text { get; set; }
         public string TextStyleName { get; set; }
         public DxfVector ExtrusionDirection { get; set; }
@@ -44,7 +44,7 @@ namespace IxMilia.Dxf.Entities
         public bool IsColumnAutoHeight { get; set; }
         public double ColumnWidth { get; set; }
         public double ColumnGutter { get; set; }
-        public List<double> ColumnHeights { get; set; }
+        public List<double> ColumnHeights { get; private set; }
         public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
 
         public DxfMText()
@@ -96,11 +96,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(41, (this.ReferenceRectangleWidth)));
             pairs.Add(new DxfCodePair(71, (short)(this.AttachmentPoint)));
             pairs.Add(new DxfCodePair(72, (short)(this.DrawingDirection)));
-            if (this.ExtendedText != null)
-            {
-                pairs.AddRange(this.ExtendedText.Select(p => new DxfCodePair(3, p)));
-            }
-
+            pairs.AddRange(this.ExtendedText.Select(p => new DxfCodePair(3, p)));
             pairs.Add(new DxfCodePair(1, (this.Text)));
             if (this.TextStyleName != "STANDARD")
             {
@@ -139,11 +135,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(48, (this.ColumnWidth)));
             pairs.Add(new DxfCodePair(49, (this.ColumnGutter)));
             pairs.Add(new DxfCodePair(50, ColumnHeights?.Count ?? default(double)));
-            if (this.ColumnHeights != null)
-            {
-                pairs.AddRange(this.ColumnHeights.Select(p => new DxfCodePair(50, p)));
-            }
-
+            pairs.AddRange(this.ColumnHeights.Select(p => new DxfCodePair(50, p)));
             if (XData != null)
             {
                 XData.AddValuePairs(pairs, version, outputHandles);

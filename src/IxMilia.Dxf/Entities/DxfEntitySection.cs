@@ -80,25 +80,19 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(63, DxfColor.GetRawValue(this.IndicatorColor)));
             pairs.Add(new DxfCodePair(411, (this.IndicatorColorName)));
             pairs.Add(new DxfCodePair(92, Vertices.Count));
-            if (Vertices != null)
+            foreach (var item in Vertices)
             {
-                foreach (var item in Vertices)
-                {
-                    pairs.Add(new DxfCodePair(11, item.X));
-                    pairs.Add(new DxfCodePair(21, item.Y));
-                    pairs.Add(new DxfCodePair(31, item.Z));
-                }
+                pairs.Add(new DxfCodePair(11, item.X));
+                pairs.Add(new DxfCodePair(21, item.Y));
+                pairs.Add(new DxfCodePair(31, item.Z));
             }
 
             pairs.Add(new DxfCodePair(93, BackLineVertices.Count));
-            if (BackLineVertices != null)
+            foreach (var item in BackLineVertices)
             {
-                foreach (var item in BackLineVertices)
-                {
-                    pairs.Add(new DxfCodePair(12, item.X));
-                    pairs.Add(new DxfCodePair(22, item.Y));
-                    pairs.Add(new DxfCodePair(32, item.Z));
-                }
+                pairs.Add(new DxfCodePair(12, item.X));
+                pairs.Add(new DxfCodePair(22, item.Y));
+                pairs.Add(new DxfCodePair(32, item.Z));
             }
 
             pairs.Add(new DxfCodePair(360, UIntHandle(this.GeometrySettingsHandle)));

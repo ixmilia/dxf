@@ -38,7 +38,7 @@ namespace IxMilia.Dxf.Entities
         public DxfMTextFlag MTextFlag { get; set; }
         public bool IsReallyLocked { get; set; }
         private int SecondaryAttributeCount { get; set; }
-        public List<uint> SecondaryAttributeHandles { get; set; }
+        public List<uint> SecondaryAttributeHandles { get; private set; }
         public DxfPoint AlignmentPoint { get; set; }
         public double AnnotationScale { get; set; }
         public string XRecordTag { get; set; }
@@ -255,7 +255,7 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(70, (short?)SecondaryAttributeHandles?.Count ?? default(short)));
             }
-            if (version >= DxfAcadVersion.R2007 && this.SecondaryAttributeHandles != null)
+            if (version >= DxfAcadVersion.R2007)
             {
                 pairs.AddRange(this.SecondaryAttributeHandles.Select(p => new DxfCodePair(340, p)));
             }

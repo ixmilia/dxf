@@ -28,7 +28,7 @@ namespace IxMilia.Dxf.Entities
         public double FitTolerance { get; set; }
         public DxfPoint StartTangent { get; set; }
         public DxfPoint EndTangent { get; set; }
-        public List<double> KnotValues { get; set; }
+        public List<double> KnotValues { get; private set; }
         public double Weight { get; set; }
         private List<double> ControlPointX { get; set; }
         private List<double> ControlPointY { get; set; }
@@ -155,34 +155,24 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(13, EndTangent?.X ?? default(double)));
             pairs.Add(new DxfCodePair(23, EndTangent?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(33, EndTangent?.Z ?? default(double)));
-            if (this.KnotValues != null)
-            {
-                pairs.AddRange(this.KnotValues.Select(p => new DxfCodePair(40, p)));
-            }
-
+            pairs.AddRange(this.KnotValues.Select(p => new DxfCodePair(40, p)));
             if (this.Weight != 1.0)
             {
                 pairs.Add(new DxfCodePair(41, (this.Weight)));
             }
 
-            if (ControlPoints != null)
+            foreach (var item in ControlPoints)
             {
-                foreach (var item in ControlPoints)
-                {
-                    pairs.Add(new DxfCodePair(10, item.X));
-                    pairs.Add(new DxfCodePair(20, item.Y));
-                    pairs.Add(new DxfCodePair(30, item.Z));
-                }
+                pairs.Add(new DxfCodePair(10, item.X));
+                pairs.Add(new DxfCodePair(20, item.Y));
+                pairs.Add(new DxfCodePair(30, item.Z));
             }
 
-            if (FitPoints != null)
+            foreach (var item in FitPoints)
             {
-                foreach (var item in FitPoints)
-                {
-                    pairs.Add(new DxfCodePair(11, item.X));
-                    pairs.Add(new DxfCodePair(21, item.Y));
-                    pairs.Add(new DxfCodePair(31, item.Z));
-                }
+                pairs.Add(new DxfCodePair(11, item.X));
+                pairs.Add(new DxfCodePair(21, item.Y));
+                pairs.Add(new DxfCodePair(31, item.Z));
             }
 
         }

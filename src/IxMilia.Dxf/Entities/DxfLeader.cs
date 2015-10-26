@@ -78,14 +78,11 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(40, (this.TextAnnotationHeight)));
             pairs.Add(new DxfCodePair(41, (this.TextAnnotationWidth)));
             pairs.Add(new DxfCodePair(76, (short)Vertices.Count));
-            if (Vertices != null)
+            foreach (var item in Vertices)
             {
-                foreach (var item in Vertices)
-                {
-                    pairs.Add(new DxfCodePair(10, item.X));
-                    pairs.Add(new DxfCodePair(20, item.Y));
-                    pairs.Add(new DxfCodePair(30, item.Z));
-                }
+                pairs.Add(new DxfCodePair(10, item.X));
+                pairs.Add(new DxfCodePair(20, item.Y));
+                pairs.Add(new DxfCodePair(30, item.Z));
             }
 
             if (this.OverrideColor != DxfColor.ByBlock)

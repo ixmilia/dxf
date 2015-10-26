@@ -727,6 +727,52 @@ SEQEND
             Assert.Equal(new DxfVector(14, 15, 16), solid.ExtrusionDirection);
         }
 
+        [Fact]
+        public void ReadLwPolylineWithOptionalValuesTest()
+        {
+            var lwpolyline = (DxfLwPolyline)Entity("LWPOLYLINE", @"
+ 90
+4
+ 10
+2.0
+ 20
+0.0
+ 42
+0.7
+ 10
+1.0
+ 20
+2.5
+ 10
+-1.0
+ 20
+2.5
+ 42
+0.7
+ 10
+-2.0
+ 20
+0.0
+");
+            Assert.Equal(4, lwpolyline.Vertices.Count);
+
+            Assert.Equal(2.0, lwpolyline.Vertices[0].X);
+            Assert.Equal(0.0, lwpolyline.Vertices[0].Y);
+            Assert.Equal(0.7, lwpolyline.Vertices[0].Bulge);
+
+            Assert.Equal(1.0, lwpolyline.Vertices[1].X);
+            Assert.Equal(2.5, lwpolyline.Vertices[1].Y);
+            Assert.Equal(0.0, lwpolyline.Vertices[1].Bulge);
+
+            Assert.Equal(-1.0, lwpolyline.Vertices[2].X);
+            Assert.Equal(2.5, lwpolyline.Vertices[2].Y);
+            Assert.Equal(0.7, lwpolyline.Vertices[2].Bulge);
+
+            Assert.Equal(-2.0, lwpolyline.Vertices[3].X);
+            Assert.Equal(0.0, lwpolyline.Vertices[3].Y);
+            Assert.Equal(0.0, lwpolyline.Vertices[3].Bulge);
+        }
+
         #endregion
 
         #region Write default value tests
@@ -959,7 +1005,7 @@ AcDbTrace
 
         #endregion
 
-        #region Write specific value tests TODO
+        #region Write specific value tests
 
         [Fact]
         public void WriteLineTest()
@@ -1172,6 +1218,52 @@ AcDbEntity
 0
   0
 ENDSEC
+");
+        }
+
+        [Fact]
+        public void WriteLwPolylineWithOptionalValuesTest()
+        {
+            var lwpolyline = new DxfLwPolyline();
+            lwpolyline.Vertices.Add(new DxfLwPolylineVertex() { X = 2.0, Y = 0.0, Bulge = 0.7 });
+            lwpolyline.Vertices.Add(new DxfLwPolylineVertex() { X = 1.0, Y = 2.5 });
+            lwpolyline.Vertices.Add(new DxfLwPolylineVertex() { X = -1.0, Y = 2.5, Bulge = 0.7 });
+            lwpolyline.Vertices.Add(new DxfLwPolylineVertex() { X = -2.0, Y = 0.0 });
+            EnsureFileContainsEntity(lwpolyline, @"
+  0
+LWPOLYLINE
+  5
+A
+100
+AcDbEntity
+  8
+0
+100
+AcDbPolyline
+ 90
+4
+ 70
+0
+ 10
+2.0
+ 20
+0.0
+ 42
+0.7
+ 10
+1.0
+ 20
+2.5
+ 10
+-1.0
+ 20
+2.5
+ 42
+0.7
+ 10
+-2.0
+ 20
+0.0
 ");
         }
 

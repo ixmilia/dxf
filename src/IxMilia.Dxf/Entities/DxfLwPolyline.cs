@@ -17,16 +17,10 @@ namespace IxMilia.Dxf.Entities
         public override DxfEntityType EntityType { get { return DxfEntityType.LwPolyline; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
-        public int VertexCount { get; set; }
         public int Flags { get; set; }
         public double ConstantWidth { get; set; }
         public double Thickness { get; set; }
-        private List<double> VertexCoordinateX { get; set; }
-        private List<double> VertexCoordinateY { get; set; }
-        private List<int> VertexIdentifier { get; set; }
-        private List<double> StartingWidth { get; set; }
-        private List<double> EndingWidth { get; set; }
-        private List<double> Bulge { get; set; }
+        public List<DxfLwPolylineVertex> Vertices { get; private set; }
         public DxfVector ExtrusionDirection { get; set; }
 
         // Flags flags
@@ -61,16 +55,10 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
-            this.VertexCount = 0;
             this.Flags = 0;
             this.ConstantWidth = 0.0;
             this.Thickness = 0.0;
-            this.VertexCoordinateX = new List<double>();
-            this.VertexCoordinateY = new List<double>();
-            this.VertexIdentifier = new List<int>();
-            this.StartingWidth = new List<double>();
-            this.EndingWidth = new List<double>();
-            this.Bulge = new List<double>();
+            this.Vertices = new List<DxfLwPolylineVertex>();
             this.ExtrusionDirection = DxfVector.ZAxis;
         }
 
@@ -94,28 +82,25 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            if (Vertices != null)
+            foreach (var item in Vertices)
             {
-                foreach (var item in Vertices)
+                pairs.Add(new DxfCodePair(10, item.X));
+                pairs.Add(new DxfCodePair(20, item.Y));
+                if (version >= DxfAcadVersion.R2013)
                 {
-                    pairs.Add(new DxfCodePair(10, item.Location.X));
-                    pairs.Add(new DxfCodePair(20, item.Location.Y));
-                    if (version >= DxfAcadVersion.R2013)
-                    {
-                        pairs.Add(new DxfCodePair(91, item.Identifier));
-                    }
-                    if (item.StartingWidth != 0.0)
-                    {
-                        pairs.Add(new DxfCodePair(40, item.StartingWidth));
-                    }
-                    if (item.EndingWidth != 0.0)
-                    {
-                        pairs.Add(new DxfCodePair(41, item.EndingWidth));
-                    }
-                    if (item.Bulge != 0.0)
-                    {
-                        pairs.Add(new DxfCodePair(42, item.Bulge));
-                    }
+                    pairs.Add(new DxfCodePair(91, item.Identifier));
+                }
+                if (item.StartingWidth != 0.0)
+                {
+                    pairs.Add(new DxfCodePair(40, item.StartingWidth));
+                }
+                if (item.EndingWidth != 0.0)
+                {
+                    pairs.Add(new DxfCodePair(41, item.EndingWidth));
+                }
+                if (item.Bulge != 0.0)
+                {
+                    pairs.Add(new DxfCodePair(42, item.Bulge));
                 }
             }
 
@@ -126,56 +111,6 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
             }
 
-        }
-
-        internal override bool TrySetPair(DxfCodePair pair)
-        {
-            switch (pair.Code)
-            {
-                case 10:
-                    this.VertexCoordinateX.Add((pair.DoubleValue));
-                    break;
-                case 20:
-                    this.VertexCoordinateY.Add((pair.DoubleValue));
-                    break;
-                case 39:
-                    this.Thickness = (pair.DoubleValue);
-                    break;
-                case 40:
-                    this.StartingWidth.Add((pair.DoubleValue));
-                    break;
-                case 41:
-                    this.EndingWidth.Add((pair.DoubleValue));
-                    break;
-                case 42:
-                    this.Bulge.Add((pair.DoubleValue));
-                    break;
-                case 43:
-                    this.ConstantWidth = (pair.DoubleValue);
-                    break;
-                case 70:
-                    this.Flags = (int)(pair.ShortValue);
-                    break;
-                case 90:
-                    this.VertexCount = (pair.IntegerValue);
-                    break;
-                case 91:
-                    this.VertexIdentifier.Add((pair.IntegerValue));
-                    break;
-                case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
-                    break;
-                case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
-                    break;
-                case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
-                    break;
-                default:
-                    return base.TrySetPair(pair);
-            }
-
-            return true;
         }
     }
 

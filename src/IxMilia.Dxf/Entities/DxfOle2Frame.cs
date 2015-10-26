@@ -24,7 +24,7 @@ namespace IxMilia.Dxf.Entities
         public DxfOleObjectType ObjectType { get; set; }
         public DxfTileModeDescriptor TileMode { get; set; }
         public int BinaryDataLength { get; set; }
-        public List<string> BinaryDataStrings { get; set; }
+        public List<string> BinaryDataStrings { get; private set; }
 
         public DxfOle2Frame()
             : base()
@@ -59,12 +59,9 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(71, (short)(this.ObjectType)));
             pairs.Add(new DxfCodePair(72, (short)(this.TileMode)));
             pairs.Add(new DxfCodePair(90, (this.BinaryDataLength)));
-            if (BinaryDataStrings != null)
+            foreach (var item in BinaryDataStrings)
             {
-                foreach (var item in BinaryDataStrings)
-                {
-                    pairs.Add(new DxfCodePair(310, "item"));
-                }
+                pairs.Add(new DxfCodePair(310, "item"));
             }
 
             pairs.Add(new DxfCodePair(1, "OLE"));

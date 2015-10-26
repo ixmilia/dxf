@@ -230,6 +230,24 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
+        internal virtual bool TrySetExtensionData(DxfCodePair pair, DxfCodePairBufferReader buffer)
+        {
+            if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
+            {
+                buffer.Advance();
+                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                return true;
+            }
+            else if (pair.Code == (int)DxfXDataType.ApplicationName)
+            {
+                XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
+                return true;
+            }
+
+            return false;
+        }
+
         internal virtual DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
@@ -239,15 +257,10 @@ namespace IxMilia.Dxf.Entities
                 {
                     break;
                 }
-                else if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
+
+                if (TrySetExtensionData(pair, buffer))
                 {
-                    buffer.Advance();
-                    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                    ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                }
-                else if (pair.Code == (int)DxfXDataType.ApplicationName)
-                {
-                    XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
+                    pair = buffer.Peek();
                 }
 
                 if (!TrySetPair(pair))
@@ -890,27 +903,55 @@ namespace IxMilia.Dxf.Entities
 
     public partial class DxfLwPolyline
     {
-        public class DxfLwPolylineVertex
+        internal override DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
-            public DxfPoint Location { get; set; }
-            public int Identifier { get; set; }
-            public double StartingWidth { get; set; }
-            public double EndingWidth { get; set; }
-            public double Bulge { get; set; }
-        }
+            while (buffer.ItemsRemain)
+            {
+                var pair = buffer.Peek();
+                if (pair.Code == 0)
+                {
+                    break;
+                }
 
-        private List<DxfLwPolylineVertex> vertices = new List<DxfLwPolylineVertex>();
-        public List<DxfLwPolylineVertex> Vertices
-        {
-            get { return vertices; }
-        }
+                if (TrySetExtensionData(pair, buffer))
+                {
+                    pair = buffer.Peek();
+                }
 
-        protected override DxfEntity PostParse()
-        {
-            Debug.Assert((VertexCount == VertexCoordinateX.Count) && (VertexCount == VertexCoordinateY.Count));
-            // TODO: how to read optional starting/ending width and bulge in this way?
-            vertices.AddRange(VertexCoordinateX.Zip(VertexCoordinateY, (x, y) => new DxfLwPolylineVertex() { Location = new DxfPoint(x, y, 0.0) }));
-            return this;
+                switch (pair.Code)
+                {
+                    case 10:
+                        // start a new vertex
+                        Vertices.Add(new DxfLwPolylineVertex());
+                        Vertices.Last().X = pair.DoubleValue;
+                        break;
+                    case 20:
+                        Vertices.Last().Y = pair.DoubleValue;
+                        break;
+                    case 40:
+                        Vertices.Last().StartingWidth = pair.DoubleValue;
+                        break;
+                    case 41:
+                        Vertices.Last().EndingWidth = pair.DoubleValue;
+                        break;
+                    case 42:
+                        Vertices.Last().Bulge = pair.DoubleValue;
+                        break;
+                    case 91:
+                        Vertices.Last().Identifier = pair.IntegerValue;
+                        break;
+                    default:
+                        if (!base.TrySetPair(pair))
+                        {
+                            ExcessCodePairs.Add(pair);
+                        }
+                        break;
+                }
+
+                buffer.Advance();
+            }
+
+            return PostParse();
         }
     }
 

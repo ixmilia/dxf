@@ -20,13 +20,13 @@ namespace IxMilia.Dxf.Entities
         public int ProxyEntityClassId { get; set; }
         public int ApplicationEntityClassId { get; set; }
         public int GraphicsDataSize { get; set; }
-        public List<string> GraphicsDataString { get; set; }
+        public List<string> GraphicsDataString { get; private set; }
         public int EntityDataSize { get; set; }
-        public List<string> EntityDataString { get; set; }
-        public List<string> ObjectID1 { get; set; }
-        public List<string> ObjectID2 { get; set; }
-        public List<string> ObjectID3 { get; set; }
-        public List<string> ObjectID4 { get; set; }
+        public List<string> EntityDataString { get; private set; }
+        public List<string> ObjectID1 { get; private set; }
+        public List<string> ObjectID2 { get; private set; }
+        public List<string> ObjectID3 { get; private set; }
+        public List<string> ObjectID4 { get; private set; }
         public int Terminator { get; set; }
         private uint ObjectDrawingFormat { get; set; }
         public bool OriginalDataFormatIsDxf { get; set; }
@@ -61,37 +61,13 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(90, (this.ProxyEntityClassId)));
             pairs.Add(new DxfCodePair(91, (this.ApplicationEntityClassId)));
             pairs.Add(new DxfCodePair(92, (this.GraphicsDataSize)));
-            if (this.GraphicsDataString != null)
-            {
-                pairs.AddRange(this.GraphicsDataString.Select(p => new DxfCodePair(310, p)));
-            }
-
+            pairs.AddRange(this.GraphicsDataString.Select(p => new DxfCodePair(310, p)));
             pairs.Add(new DxfCodePair(93, (this.EntityDataSize)));
-            if (this.EntityDataString != null)
-            {
-                pairs.AddRange(this.EntityDataString.Select(p => new DxfCodePair(310, p)));
-            }
-
-            if (this.ObjectID1 != null)
-            {
-                pairs.AddRange(this.ObjectID1.Select(p => new DxfCodePair(330, p)));
-            }
-
-            if (this.ObjectID2 != null)
-            {
-                pairs.AddRange(this.ObjectID2.Select(p => new DxfCodePair(340, p)));
-            }
-
-            if (this.ObjectID3 != null)
-            {
-                pairs.AddRange(this.ObjectID3.Select(p => new DxfCodePair(350, p)));
-            }
-
-            if (this.ObjectID4 != null)
-            {
-                pairs.AddRange(this.ObjectID4.Select(p => new DxfCodePair(360, p)));
-            }
-
+            pairs.AddRange(this.EntityDataString.Select(p => new DxfCodePair(310, p)));
+            pairs.AddRange(this.ObjectID1.Select(p => new DxfCodePair(330, p)));
+            pairs.AddRange(this.ObjectID2.Select(p => new DxfCodePair(340, p)));
+            pairs.AddRange(this.ObjectID3.Select(p => new DxfCodePair(350, p)));
+            pairs.AddRange(this.ObjectID4.Select(p => new DxfCodePair(360, p)));
             pairs.Add(new DxfCodePair(94, (this.Terminator)));
             if (version >= DxfAcadVersion.R2000)
             {

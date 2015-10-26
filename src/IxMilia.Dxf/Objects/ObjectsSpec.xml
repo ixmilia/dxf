@@ -337,4 +337,57 @@
             <WriteProperty Property="IdBufferCounts" />
         </WriteOrder>
     </Object>
+    <!--
+
+    PLOTSETTINGS
+
+    -->
+    <Object Name="DxfPlotSettings" ObjectType="PlotSettings" SubclassMarker="AcDbPlotSettings" TypeString="PLOTSETTINGS">
+        <Property Name="PageSetupName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="PrinterName" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="PaperSize" Code="4" Type="string" DefaultValue="null" />
+        <Property Name="PlotViewName" Code="6" Type="string" DefaultValue="null" />
+        <Property Name="UnprintableLeftMarginSize" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="UnprintableBottomMarginSize" Code="41" Type="double" DefaultValue="0.0" />
+        <Property Name="UnprintableRightMarginSize" Code="42" Type="double" DefaultValue="0.0" />
+        <Property Name="UnprintableTopMarginSize" Code="43" Type="double" DefaultValue="0.0" />
+        <Property Name="PaperWidth" Code="44" Type="double" DefaultValue="0.0" />
+        <Property Name="PaperHeight" Code="45" Type="double" DefaultValue="0.0" />
+        <Property Name="PlotOriginXValue" Code="46" Type="double" DefaultValue="0.0" />
+        <Property Name="PlotOriginYValue" Code="47" Type="double" DefaultValue="0.0" />
+        <Property Name="PlotWindowLowerLeftXValue" Code="48" Type="double" DefaultValue="0.0" />
+        <Property Name="PlotWindowLowerLeftYValue" Code="49" Type="double" DefaultValue="0.0" />
+        <Property Name="PlotWindowUpperRightXValue" Code="140" Type="double" DefaultValue="0.0" />
+        <Property Name="PlotWindowUpperRightYValue" Code="141" Type="double" DefaultValue="0.0" />
+        <Property Name="CustomPrintScaleNumerator" Code="142" Type="double" DefaultValue="0.0" />
+        <Property Name="CustomPrintScaleDenominator" Code="143" Type="double" DefaultValue="0.0" />
+        <Property Name="PlotLayoutFlags" Code="70" Type="int" DefaultValue="0" WriteConverter="(short)">
+            <Flag Name="PlotViewportBorders" Mask="1" />
+            <Flag Name="ShowPlotStyles" Mask="2" />
+            <Flag Name="PlotCentered" Mask="4" />
+            <Flag Name="PlotHidden" Mask="8" />
+            <Flag Name="UseStandardScale" Mask="16" />
+            <Flag Name="PlotPlotStyles" Mask="32" />
+            <Flag Name="ScaleLineweights" Mask="64" />
+            <Flag Name="PrintLineweights" Mask="128" />
+            <Flag Name="DrawViewportsFirst" Mask="512" />
+            <Flag Name="ModelType" Mask="1024" />
+            <Flag Name="UpdatePaper" Mask="2048" />
+            <Flag Name="ZoomToPaperOnUpdate" Mask="4096" />
+            <Flag Name="Initializing" Mask="8192" />
+            <Flag Name="PrevPlotInit" Mask="16384" />
+        </Property>
+        <Property Name="PlotPaperUnits" Code="72" Type="DxfPlotPaperUnits" DefaultValue="DxfPlotPaperUnits.Inches" ReadConverter="(DxfPlotPaperUnits)" WriteConverter="(short)" />
+        <Property Name="PlotRotation" Code="73" Type="DxfPlotRotation" DefaultValue="DxfPlotRotation.NoRotation" ReadConverter="(DxfPlotRotation)" WriteConverter="(short)" />
+        <Property Name="PlotType" Code="74" Type="DxfPlotType" DefaultValue="DxfPlotType.DrawingExtents" ReadConverter="(DxfPlotType)" WriteConverter="(short)" />
+        <Property Name="CurrentStyleSheet" Code="7" Type="string" DefaultValue="null" />
+        <Property Name="StandardScale" Code="75" Type="DxfStandardScale" DefaultValue="DxfStandardScale.ScaledToFit" ReadConverter="(DxfStandardScale)" WriteConverter="(short)" />
+        <Property Name="ShadePlotMode" Code="76" Type="DxfShadePlotMode" DefaultValue="DxfShadePlotMode.AsDisplayed" ReadConverter="(DxfShadePlotMode)" WriteConverter="(short)" />
+        <Property Name="ShadePlotResolutionLevel" Code="77" Type="DxfShadePlotResolutionLevel" DefaultValue="DxfShadePlotResolutionLevel.Normal" ReadConverter="(DxfShadePlotResolutionLevel)" WriteConverter="(short)" />
+        <Property Name="ShadePlotCustomDPI" Code="78" Type="int" DefaultValue="100" WriteConverter="(short)" />
+        <Property Name="StandardScaleValue" Code="147" Type="double" DefaultValue="1.0" />
+        <Property Name="PaperImageOriginX" Code="148" Type="double" DefaultValue="0.0" />
+        <Property Name="PaperImageOriginY" Code="149" Type="double" DefaultValue="0.0" />
+        <Property Name="ShadePlotHandle" Code="333" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    </Object>
 </Spec>

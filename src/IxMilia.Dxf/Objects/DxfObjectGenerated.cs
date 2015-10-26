@@ -25,6 +25,7 @@ namespace IxMilia.Dxf.Objects
         ImageDefinitionReactor,
         LayerFilter,
         LayerIndex,
+        PlotSettings,
     }
 
     /// <summary>
@@ -69,6 +70,8 @@ namespace IxMilia.Dxf.Objects
                         return "LAYER_FILTER";
                     case DxfObjectType.LayerIndex:
                         return "LAYER_INDEX";
+                    case DxfObjectType.PlotSettings:
+                        return "PLOTSETTINGS";
                     default:
                         throw new NotImplementedException();
                 }
@@ -169,6 +172,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "LAYER_INDEX":
                     obj = new DxfLayerIndex();
+                    break;
+                case "PLOTSETTINGS":
+                    obj = new DxfPlotSettings();
                     break;
                 default:
                     SwallowObject(buffer);

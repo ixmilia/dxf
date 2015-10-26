@@ -44,18 +44,18 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDb3PointAngularDimension"));
-            pairs.Add(new DxfCodePair(13, DefinitionPoint2.X));
-            pairs.Add(new DxfCodePair(23, DefinitionPoint2.Y));
-            pairs.Add(new DxfCodePair(33, DefinitionPoint2.Z));
-            pairs.Add(new DxfCodePair(14, DefinitionPoint3.X));
-            pairs.Add(new DxfCodePair(24, DefinitionPoint3.Y));
-            pairs.Add(new DxfCodePair(34, DefinitionPoint3.Z));
-            pairs.Add(new DxfCodePair(15, DefinitionPoint4.X));
-            pairs.Add(new DxfCodePair(25, DefinitionPoint4.Y));
-            pairs.Add(new DxfCodePair(35, DefinitionPoint4.Z));
-            pairs.Add(new DxfCodePair(16, DefinitionPoint5.X));
-            pairs.Add(new DxfCodePair(26, DefinitionPoint5.Y));
-            pairs.Add(new DxfCodePair(36, DefinitionPoint5.Z));
+            pairs.Add(new DxfCodePair(13, DefinitionPoint2?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(23, DefinitionPoint2?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(33, DefinitionPoint2?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(14, DefinitionPoint3?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(24, DefinitionPoint3?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(34, DefinitionPoint3?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(15, DefinitionPoint4?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(25, DefinitionPoint4?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(35, DefinitionPoint4?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(16, DefinitionPoint5?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(26, DefinitionPoint5?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(36, DefinitionPoint5?.Z ?? default(double)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

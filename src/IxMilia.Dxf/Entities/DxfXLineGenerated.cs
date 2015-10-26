@@ -46,12 +46,12 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbXline"));
-            pairs.Add(new DxfCodePair(10, FirstPoint.X));
-            pairs.Add(new DxfCodePair(20, FirstPoint.Y));
-            pairs.Add(new DxfCodePair(30, FirstPoint.Z));
-            pairs.Add(new DxfCodePair(11, UnitDirectionVector.X));
-            pairs.Add(new DxfCodePair(21, UnitDirectionVector.Y));
-            pairs.Add(new DxfCodePair(31, UnitDirectionVector.Z));
+            pairs.Add(new DxfCodePair(10, FirstPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, FirstPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, FirstPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, UnitDirectionVector?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, UnitDirectionVector?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, UnitDirectionVector?.Z ?? default(double)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

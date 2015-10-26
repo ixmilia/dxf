@@ -20,11 +20,11 @@ namespace IxMilia.Dxf.Objects
         public string FieldCodeString { get; set; }
         public string FieldCodeStringOverflow { get; set; }
         private int _childFieldCount { get; set; }
-        public List<uint> ChildFieldHandles { get; set; }
+        public List<uint> ChildFieldHandles { get; private set; }
         private int _objectIdCount { get; set; }
-        public List<uint> ObjectIds { get; set; }
+        public List<uint> ObjectIds { get; private set; }
         private int _dataSetCount { get; set; }
-        public List<string> FieldDataKeys { get; set; }
+        public List<string> FieldDataKeys { get; private set; }
         public string EvaluatedCacheKey { get; protected set; }
         private int _valueTypeCode { get; set; }
         private int _longValue { get; set; }
@@ -84,7 +84,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(_valueTypeCode, Value));
             pairs.Add(new DxfCodePair(301, (this.FormatString)));
             pairs.Add(new DxfCodePair(9, (this._formatStringOverflow)));
-            pairs.Add(new DxfCodePair(98, FormatString.Length));
+            pairs.Add(new DxfCodePair(98, FormatString?.Length ?? default(int)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

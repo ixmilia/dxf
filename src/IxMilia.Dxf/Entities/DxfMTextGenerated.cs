@@ -89,9 +89,9 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbMText"));
-            pairs.Add(new DxfCodePair(10, InsertionPoint.X));
-            pairs.Add(new DxfCodePair(20, InsertionPoint.Y));
-            pairs.Add(new DxfCodePair(30, InsertionPoint.Z));
+            pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(40, (this.InitialTextHeight)));
             pairs.Add(new DxfCodePair(41, (this.ReferenceRectangleWidth)));
             pairs.Add(new DxfCodePair(71, (short)(this.AttachmentPoint)));
@@ -105,14 +105,14 @@ namespace IxMilia.Dxf.Entities
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
             }
 
-            pairs.Add(new DxfCodePair(11, XAxisDirection.X));
-            pairs.Add(new DxfCodePair(21, XAxisDirection.Y));
-            pairs.Add(new DxfCodePair(31, XAxisDirection.Z));
+            pairs.Add(new DxfCodePair(11, XAxisDirection?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, XAxisDirection?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, XAxisDirection?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(42, (this.HorizontalWidth)));
             pairs.Add(new DxfCodePair(43, (this.VerticalHeight)));
             pairs.Add(new DxfCodePair(50, (this.RotationAngle)));

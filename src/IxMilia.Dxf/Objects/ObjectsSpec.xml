@@ -24,7 +24,7 @@
         <Property Name="ProxyObjectClassId" Code="90" Type="int" DefaultValue="499" />
         <Property Name="ApplicationObjectClassId" Code="91" Type="int" DefaultValue="500" />
         <Property Name="SizeInBits" Code="93" Type="int" DefaultValue="0" />
-        <Property Name="BinaryObjectData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" ProtectedSet="true" />
+        <Property Name="BinaryObjectData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" />
         <Property Name="_objectIdsA" Code="330" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_objectIdsB" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_objectIdsC" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
@@ -187,7 +187,7 @@
             <WriteSpecificValue Code="_valueTypeCode" Value="Value" />
             <WriteProperty Property="FormatString" />
             <WriteProperty Property="_formatStringOverflow" />
-            <WriteSpecificValue Code="98" Value="FormatString.Length" />
+            <WriteSpecificValue Code="98" Value="FormatString?.Length ?? default(int)" />
         </WriteOrder>
     </Object>
     <!--

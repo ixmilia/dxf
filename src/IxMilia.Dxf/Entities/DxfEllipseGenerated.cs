@@ -55,17 +55,17 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbEllipse"));
-            pairs.Add(new DxfCodePair(10, Center.X));
-            pairs.Add(new DxfCodePair(20, Center.Y));
-            pairs.Add(new DxfCodePair(30, Center.Z));
-            pairs.Add(new DxfCodePair(11, MajorAxis.X));
-            pairs.Add(new DxfCodePair(21, MajorAxis.Y));
-            pairs.Add(new DxfCodePair(31, MajorAxis.Z));
+            pairs.Add(new DxfCodePair(10, Center?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, Center?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, Center?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, MajorAxis?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, MajorAxis?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, MajorAxis?.Z ?? default(double)));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal.X));
-                pairs.Add(new DxfCodePair(220, Normal.Y));
-                pairs.Add(new DxfCodePair(230, Normal.Z));
+                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
             pairs.Add(new DxfCodePair(40, (this.MinorAxisRatio)));

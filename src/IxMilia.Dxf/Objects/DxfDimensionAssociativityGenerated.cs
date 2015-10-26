@@ -122,9 +122,9 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(91, (this.MainObjectGsMarkerIndex)));
             pairs.Add(new DxfCodePair(301, (this.MainObjectXrefHandle)));
             pairs.Add(new DxfCodePair(40, (this.NearOsnapGeometryParameter)));
-            pairs.Add(new DxfCodePair(10, OsnapPoint.X));
-            pairs.Add(new DxfCodePair(20, OsnapPoint.Y));
-            pairs.Add(new DxfCodePair(30, OsnapPoint.Z));
+            pairs.Add(new DxfCodePair(10, OsnapPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, OsnapPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, OsnapPoint?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(332, UIntHandle(this.IntersectionObjectHandle)));
             pairs.Add(new DxfCodePair(74, (short)(this.IntersectionSubentityType)));
             pairs.Add(new DxfCodePair(92, (this.IntersectionObjectGsMarkerIndex)));

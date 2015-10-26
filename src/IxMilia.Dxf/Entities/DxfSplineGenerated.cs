@@ -127,9 +127,9 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbSpline"));
-            pairs.Add(new DxfCodePair(210, Normal.X));
-            pairs.Add(new DxfCodePair(220, Normal.Y));
-            pairs.Add(new DxfCodePair(230, Normal.Z));
+            pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(72, (short)KnotValues.Count));
             pairs.Add(new DxfCodePair(73, (short)ControlPoints.Count));
@@ -149,12 +149,12 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(44, (this.FitTolerance)));
             }
 
-            pairs.Add(new DxfCodePair(12, StartTangent.X));
-            pairs.Add(new DxfCodePair(22, StartTangent.Y));
-            pairs.Add(new DxfCodePair(32, StartTangent.Z));
-            pairs.Add(new DxfCodePair(13, EndTangent.X));
-            pairs.Add(new DxfCodePair(23, EndTangent.Y));
-            pairs.Add(new DxfCodePair(33, EndTangent.Z));
+            pairs.Add(new DxfCodePair(12, StartTangent?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(22, StartTangent?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(32, StartTangent?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(13, EndTangent?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(23, EndTangent?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(33, EndTangent?.Z ?? default(double)));
             pairs.AddRange(this.KnotValues.Select(p => new DxfCodePair(40, p)));
             if (this.Weight != 1.0)
             {

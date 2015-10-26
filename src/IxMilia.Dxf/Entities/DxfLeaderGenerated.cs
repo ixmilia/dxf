@@ -91,20 +91,20 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(340, (this.AssociatedAnnotationReference)));
-            pairs.Add(new DxfCodePair(210, Normal.X));
-            pairs.Add(new DxfCodePair(220, Normal.Y));
-            pairs.Add(new DxfCodePair(230, Normal.Z));
-            pairs.Add(new DxfCodePair(211, Right.X));
-            pairs.Add(new DxfCodePair(221, Right.Y));
-            pairs.Add(new DxfCodePair(231, Right.Z));
-            pairs.Add(new DxfCodePair(212, BlockOffset.X));
-            pairs.Add(new DxfCodePair(222, BlockOffset.Y));
-            pairs.Add(new DxfCodePair(232, BlockOffset.Z));
+            pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(211, Right?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(221, Right?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(231, Right?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(212, BlockOffset?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(222, BlockOffset?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(232, BlockOffset?.Z ?? default(double)));
             if (version >= DxfAcadVersion.R14)
             {
-                pairs.Add(new DxfCodePair(213, AnnotationOffset.X));
-                pairs.Add(new DxfCodePair(223, AnnotationOffset.Y));
-                pairs.Add(new DxfCodePair(233, AnnotationOffset.Z));
+                pairs.Add(new DxfCodePair(213, AnnotationOffset?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(223, AnnotationOffset?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(233, AnnotationOffset?.Z ?? default(double)));
             }
 
             if (XData != null)

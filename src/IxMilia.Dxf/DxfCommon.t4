@@ -142,6 +142,13 @@ bool AllowMultiples(XElement property)
     return att != null && bool.Parse(att.Value);
 }
 
+string SetterAccessibility(XElement property)
+{
+    if (AllowMultiples(property) && Accessibility(property) != "private")
+        return "private ";
+    return ProtectedSet(property) ? "protected " : "";
+}
+
 bool ProtectedSet(XElement property)
 {
     var att = property.Attribute("ProtectedSet");
@@ -333,7 +340,8 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
         var suffix = 'X';
         for (int i = 0; i < codes.Length; i++, suffix++)
         {
-            lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}.{3}));", indentPrefix, codes[i], name, suffix));
+            lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}?.{3} ?? default(double)));", indentPrefix, codes[i], name, suffix));
+            // currently all multi-value codes are doubles, so this is ok:         ^^^^^^^^^^^^^^^
         }
     }
     else

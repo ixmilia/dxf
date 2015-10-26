@@ -52,9 +52,9 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            pairs.Add(new DxfCodePair(10, Location.X));
-            pairs.Add(new DxfCodePair(20, Location.Y));
-            pairs.Add(new DxfCodePair(30, Location.Z));
+            pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(40, (this.Size)));
             pairs.Add(new DxfCodePair(2, (this.Name)));
             if (this.RotationAngle != 0.0)
@@ -74,9 +74,9 @@ namespace IxMilia.Dxf.Entities
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
             }
 
         }

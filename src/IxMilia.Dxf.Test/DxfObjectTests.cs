@@ -1,5 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
+using System.IO;
 using System.Linq;
 using IxMilia.Dxf.Objects;
 using Xunit;
@@ -211,6 +213,69 @@ name-3
 350
 3
 ");
+        }
+
+        [Fact]
+        public void WriteAllDefaultObjectsTest()
+        {
+            var file = new DxfFile();
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                if (IsDxfObjectOrDerived(type))
+                {
+                    var ctor = type.GetConstructor(Type.EmptyTypes);
+                    if (ctor != null)
+                    {
+                        // all types deriving from DxfObject with a default constructor
+                        var obj = (DxfObject)ctor.Invoke(new object[0]);
+
+                        // add the object with its default initialized values
+                        file.Objects.Add(obj);
+
+                        // and create a new object to be nulled out
+                        obj = (DxfObject)ctor.Invoke(new object[0]);
+
+                        // set all non-indexer properties to `default(T)`
+                        foreach (var property in type.GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
+                        {
+                            var propertyType = property.PropertyType;
+                            var defaultValue = propertyType.IsValueType
+                                ? Activator.CreateInstance(propertyType)
+                                : null;
+                            property.SetValue(obj, defaultValue);
+                        }
+
+                        // add it to the file
+                        file.Objects.Add(obj);
+                    }
+                }
+            }
+
+            // write each version of the objects with default versions
+            foreach (var version in new[] { DxfAcadVersion.R10, DxfAcadVersion.R11, DxfAcadVersion.R12, DxfAcadVersion.R13, DxfAcadVersion.R14, DxfAcadVersion.R2000, DxfAcadVersion.R2004, DxfAcadVersion.R2007, DxfAcadVersion.R2010, DxfAcadVersion.R2013 })
+            {
+                file.Header.Version = version;
+                using (var ms = new MemoryStream())
+                {
+                    file.Save(ms);
+                }
+            }
+        }
+
+        private static bool IsDxfObjectOrDerived(Type type)
+        {
+            if (type == typeof(DxfObject))
+            {
+                return true;
+            }
+
+            if (type.BaseType != null)
+            {
+                return IsDxfObjectOrDerived(type.BaseType);
+            }
+
+            return false;
         }
     }
 }

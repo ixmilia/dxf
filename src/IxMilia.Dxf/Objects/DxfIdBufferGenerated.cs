@@ -16,7 +16,7 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.IdBuffer; } }
 
-        public List<uint> EntityHandles { get; set; }
+        public List<uint> EntityHandles { get; private set; }
 
         public DxfIdBuffer()
             : base()

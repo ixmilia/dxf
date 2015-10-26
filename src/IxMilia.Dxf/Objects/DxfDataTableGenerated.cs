@@ -20,7 +20,7 @@ namespace IxMilia.Dxf.Objects
         public int ColumnCount { get; protected set; }
         public int RowCount { get; protected set; }
         public string Name { get; set; }
-        public List<string> ColumnNames { get; set; }
+        public List<string> ColumnNames { get; private set; }
 
         public DxfDataTable()
             : base()

@@ -16,7 +16,7 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LayerFilter; } }
 
-        public List<string> LayerNames { get; set; }
+        public List<string> LayerNames { get; private set; }
 
         public DxfLayerFilter()
             : base()

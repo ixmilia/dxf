@@ -129,14 +129,14 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(71, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(72, (short)Vertices.Count));
             pairs.Add(new DxfCodePair(73, (short)(this.StyleElementCount)));
-            pairs.Add(new DxfCodePair(10, StartPoint.X));
-            pairs.Add(new DxfCodePair(20, StartPoint.Y));
-            pairs.Add(new DxfCodePair(30, StartPoint.Z));
+            pairs.Add(new DxfCodePair(10, StartPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, StartPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, StartPoint?.Z ?? default(double)));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal.X));
-                pairs.Add(new DxfCodePair(220, Normal.Y));
-                pairs.Add(new DxfCodePair(230, Normal.Z));
+                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
             foreach (var item in Vertices)

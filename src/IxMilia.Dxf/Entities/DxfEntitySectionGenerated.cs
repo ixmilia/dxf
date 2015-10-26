@@ -71,9 +71,9 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(90, (this.State)));
             pairs.Add(new DxfCodePair(91, (this.Flags)));
             pairs.Add(new DxfCodePair(1, (this.Name)));
-            pairs.Add(new DxfCodePair(10, VerticalDirection.X));
-            pairs.Add(new DxfCodePair(20, VerticalDirection.Y));
-            pairs.Add(new DxfCodePair(30, VerticalDirection.Z));
+            pairs.Add(new DxfCodePair(10, VerticalDirection?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, VerticalDirection?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, VerticalDirection?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(40, (this.TopHeight)));
             pairs.Add(new DxfCodePair(41, (this.BottomHeight)));
             pairs.Add(new DxfCodePair(70, (this.IndicatorTransparency)));

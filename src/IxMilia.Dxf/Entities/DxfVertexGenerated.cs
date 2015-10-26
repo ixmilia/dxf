@@ -141,9 +141,9 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbVertex"));
-            pairs.Add(new DxfCodePair(10, Location.X));
-            pairs.Add(new DxfCodePair(20, Location.Y));
-            pairs.Add(new DxfCodePair(30, Location.Z));
+            pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
             if (this.StartingWidth != 0.0)
             {
                 pairs.Add(new DxfCodePair(40, (this.StartingWidth)));

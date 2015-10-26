@@ -74,12 +74,12 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(290, (this.IsActive)));
             pairs.Add(new DxfCodePair(291, (this.PlotGlyph)));
             pairs.Add(new DxfCodePair(40, (this.Intensity)));
-            pairs.Add(new DxfCodePair(10, Position.X));
-            pairs.Add(new DxfCodePair(20, Position.Y));
-            pairs.Add(new DxfCodePair(30, Position.Z));
-            pairs.Add(new DxfCodePair(11, TargetLocation.X));
-            pairs.Add(new DxfCodePair(21, TargetLocation.Y));
-            pairs.Add(new DxfCodePair(31, TargetLocation.Z));
+            pairs.Add(new DxfCodePair(10, Position?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, Position?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, Position?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, TargetLocation?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, TargetLocation?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, TargetLocation?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(72, (short)(this.AttentuationType)));
             pairs.Add(new DxfCodePair(292, (this.UseAttenuationLimits)));
             pairs.Add(new DxfCodePair(41, (this.AttenuationStartLimit)));

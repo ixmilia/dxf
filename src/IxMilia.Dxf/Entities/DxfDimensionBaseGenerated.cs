@@ -85,12 +85,12 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(2, (this.BlockName)));
-            pairs.Add(new DxfCodePair(10, DefinitionPoint1.X));
-            pairs.Add(new DxfCodePair(20, DefinitionPoint1.Y));
-            pairs.Add(new DxfCodePair(30, DefinitionPoint1.Z));
-            pairs.Add(new DxfCodePair(11, TextMidPoint.X));
-            pairs.Add(new DxfCodePair(21, TextMidPoint.Y));
-            pairs.Add(new DxfCodePair(31, TextMidPoint.Z));
+            pairs.Add(new DxfCodePair(10, DefinitionPoint1?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(20, DefinitionPoint1?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(30, DefinitionPoint1?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, TextMidPoint?.X ?? default(double)));
+            pairs.Add(new DxfCodePair(21, TextMidPoint?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(31, TextMidPoint?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(70, (short)(this.DimensionType)));
             if (version >= DxfAcadVersion.R2000)
             {
@@ -125,9 +125,9 @@ namespace IxMilia.Dxf.Entities
 
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal.X));
-                pairs.Add(new DxfCodePair(220, Normal.Y));
-                pairs.Add(new DxfCodePair(230, Normal.Z));
+                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             }
 
             if (version >= DxfAcadVersion.R12)

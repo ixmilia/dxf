@@ -19,7 +19,7 @@ namespace IxMilia.Dxf.Objects
         public string Description { get; set; }
         public bool IsNamed { get; set; }
         public bool IsSelectable { get; set; }
-        public List<uint> EntityHandles { get; set; }
+        public List<uint> EntityHandles { get; private set; }
 
         public DxfGroup()
             : base()

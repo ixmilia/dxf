@@ -19,7 +19,7 @@ namespace IxMilia.Dxf.Objects
         public int ProxyObjectClassId { get; set; }
         public int ApplicationObjectClassId { get; set; }
         public int SizeInBits { get; set; }
-        public List<string> BinaryObjectData { get; protected set; }
+        public List<string> BinaryObjectData { get; private set; }
         private List<string> _objectIdsA { get; set; }
         private List<string> _objectIdsB { get; set; }
         private List<string> _objectIdsC { get; set; }
@@ -86,6 +86,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case 95:
                     this._objectDrawingFormat = (uint)(pair.IntegerValue);
+                    break;
+                case 310:
+                    this.BinaryObjectData.Add((pair.StringValue));
                     break;
                 case 330:
                     this._objectIdsA.Add((pair.StringValue));

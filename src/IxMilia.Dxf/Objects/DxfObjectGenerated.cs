@@ -26,6 +26,7 @@ namespace IxMilia.Dxf.Objects
         LayerFilter,
         LayerIndex,
         Layout,
+        LightList,
         PlotSettings,
     }
 
@@ -73,6 +74,8 @@ namespace IxMilia.Dxf.Objects
                         return "LAYER_INDEX";
                     case DxfObjectType.Layout:
                         return "LAYOUT";
+                    case DxfObjectType.LightList:
+                        return "LIGHTLIST";
                     case DxfObjectType.PlotSettings:
                         return "PLOTSETTINGS";
                     default:
@@ -178,6 +181,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "LAYOUT":
                     obj = new DxfLayout();
+                    break;
+                case "LIGHTLIST":
+                    obj = new DxfLightList();
                     break;
                 case "PLOTSETTINGS":
                     obj = new DxfPlotSettings();

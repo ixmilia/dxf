@@ -271,6 +271,68 @@ layout-name
         }
 
         [Fact]
+        public void ReadLightListTest()
+        {
+            var lightList = (DxfLightList)GenObject("LIGHTLIST", @"
+ 90
+42
+ 90
+3
+  5
+111
+  1
+uno
+  5
+222
+  1
+dos
+  5
+333
+  1
+tres
+");
+            Assert.Equal(42, lightList.Version);
+            Assert.Equal(3, lightList.Lights.Count);
+
+            Assert.Equal(0x111u, lightList.Lights[0].Handle);
+            Assert.Equal("uno", lightList.Lights[0].Name);
+            Assert.Equal(0x222u, lightList.Lights[1].Handle);
+            Assert.Equal("dos", lightList.Lights[1].Name);
+            Assert.Equal(0x333u, lightList.Lights[2].Handle);
+            Assert.Equal("tres", lightList.Lights[2].Name);
+        }
+
+        [Fact]
+        public void WriteLightListTest()
+        {
+            var lightList = new DxfLightList();
+            lightList.Version = 42;
+            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x111, Name = "uno" });
+            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x222, Name = "dos" });
+            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x333, Name = "tres" });
+            var file = new DxfFile();
+            file.Objects.Add(lightList);
+            VerifyFileContains(file, @"
+ 90
+42
+ 90
+3
+  5
+111
+  1
+uno
+  5
+222
+  1
+dos
+  5
+333
+  1
+tres
+");
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

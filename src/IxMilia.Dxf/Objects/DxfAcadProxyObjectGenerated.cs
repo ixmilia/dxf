@@ -43,7 +43,7 @@ namespace IxMilia.Dxf.Objects
             this._objectIdsB = new List<string>();
             this._objectIdsC = new List<string>();
             this._objectIdsD = new List<string>();
-            this._objectDrawingFormat = 0;
+            this._objectDrawingFormat = 0u;
             this.IsOriginalObjectDxfFormat = false;
         }
 

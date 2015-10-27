@@ -216,6 +216,61 @@ name-3
         }
 
         [Fact]
+        public void ReadLayoutTest()
+        {
+            var layout = (DxfLayout)GenObject("LAYOUT", @"
+  1
+page-setup-name
+100
+AcDbLayout
+  1
+layout-name
+");
+            Assert.Equal("page-setup-name", layout.PageSetupName);
+            Assert.Equal("layout-name", layout.LayoutName);
+        }
+
+        [Fact]
+        public void WriteLayoutTest()
+        {
+            var layout = new DxfLayout();
+            layout.PageSetupName = "page-setup-name";
+            layout.LayoutName = "layout-name";
+            var file = new DxfFile();
+            file.Objects.Add(layout);
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                using (var reader = new StreamReader(ms))
+                {
+                    var contents = reader.ReadToEnd();
+
+                    // verify the plot settings were written
+                    var plotSettingsOffset = contents.IndexOf(@"
+100
+AcDbPlotSettings
+  1
+page-setup-name
+".Trim());
+                    Assert.True(plotSettingsOffset > 0);
+
+                    // verify the layout settings were written
+                    var layoutOffset = contents.IndexOf(@"
+100
+AcDbLayout
+  1
+layout-name
+".Trim());
+                    Assert.True(layoutOffset > 0);
+
+                    // verify that the layout settings were written after the plot settings
+                    Assert.True(layoutOffset > plotSettingsOffset);
+                }
+            }
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

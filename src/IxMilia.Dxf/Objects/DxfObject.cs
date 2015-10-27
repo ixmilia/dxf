@@ -127,6 +127,24 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
+        internal virtual bool TrySetExtensionData(DxfCodePair pair, DxfCodePairBufferReader buffer)
+        {
+            if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
+            {
+                buffer.Advance();
+                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
+                ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                return true;
+            }
+            else if (pair.Code == (int)DxfXDataType.ApplicationName)
+            {
+                XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
+                return true;
+            }
+
+            return false;
+        }
+
         internal virtual DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
@@ -136,15 +154,10 @@ namespace IxMilia.Dxf.Objects
                 {
                     break;
                 }
-                else if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
+
+                if (TrySetExtensionData(pair, buffer))
                 {
-                    buffer.Advance();
-                    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                    ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                }
-                else if (pair.Code == (int)DxfXDataType.ApplicationName)
-                {
-                    XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
+                    pair = buffer.Peek();
                 }
 
                 if (!TrySetPair(pair))

@@ -242,7 +242,7 @@ namespace IxMilia.Dxf.Objects
             this.StandardScaleValue = 1.0;
             this.PaperImageOriginX = 0.0;
             this.PaperImageOriginY = 0.0;
-            this.ShadePlotHandle = 0;
+            this.ShadePlotHandle = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

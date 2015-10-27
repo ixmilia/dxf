@@ -30,7 +30,7 @@
         <Property Name="_objectIdsC" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_objectIdsD" Code="360" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <!-- a 94/0 code pair is usually read here to indicate the end of the object ids, but the generated reader doesn't depend on this to be present -->
-        <Property Name="_objectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" />
+        <Property Name="_objectDrawingFormat" Code="95" Type="uint" DefaultValue="0u" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" />
         <Property Name="IsOriginalObjectDxfFormat" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbProxyObject&quot;" MinVersion="R13" />
@@ -339,6 +339,32 @@
     </Object>
     <!--
 
+    LAYOUT
+
+    -->
+    <Object Name="DxfLayout" ObjectType="Layout" SubclassMarker="AcDbLayout" TypeString="LAYOUT" BaseClass="DxfPlotSettings" GenerateReaderFunction="false">
+        <Property Name="LayoutName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="LayoutFlags" Code="70" Type="int" DefaultValue="0" WriteConverter="(short)">
+            <Flag Name="IsPsLtScale" Mask="1" />
+            <Flag Name="IsLimCheck" Mask="2" />
+        </Property>
+        <Property Name="TabOrder" Code="71" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="MinimumLimits" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20" />
+        <Property Name="MaximumLimits" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21" />
+        <Property Name="InsertionBasePoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
+        <Property Name="MinimumExtents" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
+        <Property Name="MaximumExtents" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
+        <Property Name="Elevation" Code="146" Type="double" DefaultValue="0.0" />
+        <Property Name="UcsOrigin" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
+        <Property Name="UcsXAxis" Code="16" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="16,26,36" />
+        <Property Name="UcsYAxis" Code="17" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="17,27,37" />
+        <Property Name="UcsOrthographicType" Code="76" Type="DxfUcsOrthographicType" DefaultValue="DxfUcsOrthographicType.NotOrthographic" ReadConverter="(DxfUcsOrthographicType)" WriteConverter="(short)" />
+        <Property Name="ViewportHandle" Code="331" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="TableRecordHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="TableRecordBaseHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    </Object>
+    <!--
+
     PLOTSETTINGS
 
     -->
@@ -388,6 +414,6 @@
         <Property Name="StandardScaleValue" Code="147" Type="double" DefaultValue="1.0" />
         <Property Name="PaperImageOriginX" Code="148" Type="double" DefaultValue="0.0" />
         <Property Name="PaperImageOriginY" Code="149" Type="double" DefaultValue="0.0" />
-        <Property Name="ShadePlotHandle" Code="333" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="ShadePlotHandle" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
     </Object>
 </Spec>

@@ -267,6 +267,10 @@
     <Compile Include="Objects\DxfLayerIndexGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfLayout.cs" />
+    <Compile Include="Objects\DxfLayoutGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfObject.cs" />
     <Compile Include="Objects\DxfObjectGenerated.cs">
       <AutoGen>True</AutoGen>

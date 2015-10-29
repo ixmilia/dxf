@@ -333,6 +333,116 @@ tres
         }
 
         [Fact]
+        public void ReadMaterialTest()
+        {
+            var material = (DxfMaterial)GenObject("MATERIAL", @"
+ 75
+1
+ 43
+1
+ 43
+2
+ 43
+3
+ 43
+4
+ 43
+5
+ 43
+6
+ 43
+7
+ 43
+8
+ 43
+9
+ 43
+10
+ 43
+11
+ 43
+12
+ 43
+13
+ 43
+14
+ 43
+15
+ 43
+16
+ 75
+2
+ 43
+10
+ 43
+20
+ 43
+30
+ 43
+40
+ 43
+50
+ 43
+60
+ 43
+70
+ 43
+80
+ 43
+90
+ 43
+100
+ 43
+110
+ 43
+120
+ 43
+130
+ 43
+140
+ 43
+150
+ 43
+160
+");
+            Assert.Equal(DxfMapAutoTransformMethod.NoAutoTransform, material.DiffuseMapAutoTransformMethod);
+            Assert.Equal(1.0, material.DiffuseMapTransformMatrix.M11);
+            Assert.Equal(2.0, material.DiffuseMapTransformMatrix.M12);
+            Assert.Equal(3.0, material.DiffuseMapTransformMatrix.M13);
+            Assert.Equal(4.0, material.DiffuseMapTransformMatrix.M14);
+            Assert.Equal(5.0, material.DiffuseMapTransformMatrix.M21);
+            Assert.Equal(6.0, material.DiffuseMapTransformMatrix.M22);
+            Assert.Equal(7.0, material.DiffuseMapTransformMatrix.M23);
+            Assert.Equal(8.0, material.DiffuseMapTransformMatrix.M24);
+            Assert.Equal(9.0, material.DiffuseMapTransformMatrix.M31);
+            Assert.Equal(10.0, material.DiffuseMapTransformMatrix.M32);
+            Assert.Equal(11.0, material.DiffuseMapTransformMatrix.M33);
+            Assert.Equal(12.0, material.DiffuseMapTransformMatrix.M34);
+            Assert.Equal(13.0, material.DiffuseMapTransformMatrix.M41);
+            Assert.Equal(14.0, material.DiffuseMapTransformMatrix.M42);
+            Assert.Equal(15.0, material.DiffuseMapTransformMatrix.M43);
+            Assert.Equal(16.0, material.DiffuseMapTransformMatrix.M44);
+
+            Assert.Equal(DxfMapAutoTransformMethod.ScaleToCurrentEntity, material.NormalMapAutoTransformMethod);
+            Assert.Equal(10.0, material.NormalMapTransformMatrix.M11);
+            Assert.Equal(20.0, material.NormalMapTransformMatrix.M12);
+            Assert.Equal(30.0, material.NormalMapTransformMatrix.M13);
+            Assert.Equal(40.0, material.NormalMapTransformMatrix.M14);
+            Assert.Equal(50.0, material.NormalMapTransformMatrix.M21);
+            Assert.Equal(60.0, material.NormalMapTransformMatrix.M22);
+            Assert.Equal(70.0, material.NormalMapTransformMatrix.M23);
+            Assert.Equal(80.0, material.NormalMapTransformMatrix.M24);
+            Assert.Equal(90.0, material.NormalMapTransformMatrix.M31);
+            Assert.Equal(100.0, material.NormalMapTransformMatrix.M32);
+            Assert.Equal(110.0, material.NormalMapTransformMatrix.M33);
+            Assert.Equal(120.0, material.NormalMapTransformMatrix.M34);
+            Assert.Equal(130.0, material.NormalMapTransformMatrix.M41);
+            Assert.Equal(140.0, material.NormalMapTransformMatrix.M42);
+            Assert.Equal(150.0, material.NormalMapTransformMatrix.M43);
+            Assert.Equal(160.0, material.NormalMapTransformMatrix.M44);
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

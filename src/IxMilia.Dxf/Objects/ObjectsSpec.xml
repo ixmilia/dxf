@@ -382,6 +382,232 @@
     </Object>
     <!--
 
+    MATERIAL
+
+    -->
+    <Object Name="DxfMaterial" ObjectType="Material" SubclassMarker="AcDbMaterial" TypeString="MATERIAL" GenerateReaderFunction="false">
+        <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Description" Code="2" Type="string" DefaultValue="null" />
+
+        <Property Name="OverrideAmbientColor" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="AmbientColorFactor" Code="40" Type="double" DefaultValue="1.0" />
+        <Property Name="AmbientColorValue" Code="90" Type="int" DefaultValue="0" />
+
+        <Property Name="OverrideDiffuseColor" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="DiffuseColorFactor" Code="41" Type="double" DefaultValue="1.0" />
+        <Property Name="DiffuseColorValue" Code="91" Type="int" DefaultValue="0" />
+        <Property Name="DiffuseMapBlendFactor" Code="42" Type="double" DefaultValue="1.0" />
+        <Property Name="UseImageFileForDiffuseMap" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="DiffuseMapFileName" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="DiffuseMapProjectionMethod" Code="73" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" ReadConverter="(DxfMapProjectionMethod)" WriteConverter="(short)" />
+        <Property Name="DiffuseMapTilingMethod" Code="74" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" ReadConverter="(DxfMapTilingMethod)" WriteConverter="(short)" />
+        <Property Name="DiffuseMapAutoTransformMethod" Code="75" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" ReadConverter="(DxfMapAutoTransformMethod)" WriteConverter="(short)" />
+        <Property Name="_diffuseMapTransformMatrixValues" Code="43" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <Property Name="SpecularGlossFactor" Code="44" Type="double" DefaultValue="0.5" />
+        <Property Name="OverrideSpecularColor" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="SpecularColorFactor" Code="45" Type="double" DefaultValue="1.0" />
+        <Property Name="SpecularColorValue" Code="92" Type="int" DefaultValue="0" />
+        <Property Name="SpecularMapBlendFactor" Code="46" Type="double" DefaultValue="1.0" />
+        <Property Name="UseImageFileForSpecularMap" Code="77" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="SpecularMapFileName" Code="4" Type="string" DefaultValue="null" />
+        <Property Name="SpecularMapProjectionMethod" Code="78" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" ReadConverter="(DxfMapProjectionMethod)" WriteConverter="(short)" />
+        <Property Name="SpecularMapTilingMethod" Code="79" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" ReadConverter="(DxfMapTilingMethod)" WriteConverter="(short)" />
+        <Property Name="SpecularMapAutoTransformMethod" Code="170" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" ReadConverter="(DxfMapAutoTransformMethod)" WriteConverter="(short)" />
+        <Property Name="_specularMapTransformMatrixValues" Code="47" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <Property Name="ReflectionMapBlendFactor" Code="48" Type="double" DefaultValue="1.0" />
+        <Property Name="UseImageFileForReflectionMap" Code="171" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="ReflectionMapFileName" Code="6" Type="string" DefaultValue="null" />
+        <Property Name="ReflectionMapProjectionMethod" Code="172" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" ReadConverter="(DxfMapProjectionMethod)" WriteConverter="(short)" />
+        <Property Name="ReflectionMapTilingMethod" Code="173" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" ReadConverter="(DxfMapTilingMethod)" WriteConverter="(short)" />
+        <Property Name="ReflectionMapAutoTransformMethod" Code="174" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" ReadConverter="(DxfMapAutoTransformMethod)" WriteConverter="(short)" />
+        <Property Name="_reflectionMapTransformMatrixValues" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <Property Name="OpacityFactor" Code="140" Type="double" DefaultValue="1.0" />
+        <Property Name="OpacityMapBlendFactor" Code="141" Type="double" DefaultValue="1.0" />
+        <Property Name="UseImageFileForOpacityMap" Code="175" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="OpacityMapFileName" Code="7" Type="string" DefaultValue="null" />
+        <Property Name="OpacityMapProjectionMethod" Code="176" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" ReadConverter="(DxfMapProjectionMethod)" WriteConverter="(short)" />
+        <Property Name="OpacityMapTilingMethod" Code="177" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" ReadConverter="(DxfMapTilingMethod)" WriteConverter="(short)" />
+        <Property Name="OpacityMapAutoTransformMethod" Code="178" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" ReadConverter="(DxfMapAutoTransformMethod)" WriteConverter="(short)" />
+        <Property Name="_opacityMapTransformMatrixValues" Code="142" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <Property Name="BumpMapBlendFactor" Code="143" Type="double" DefaultValue="1.0" />
+        <Property Name="UseImageFileForBumpMap" Code="179" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="BumpMapFileName" Code="8" Type="string" DefaultValue="null" />
+        <Property Name="BumpMapProjectionMethod" Code="270" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" ReadConverter="(DxfMapProjectionMethod)" WriteConverter="(short)" />
+        <Property Name="BumpMapTilingMethod" Code="271" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" ReadConverter="(DxfMapTilingMethod)" WriteConverter="(short)" />
+        <Property Name="BumpMapAutoTransformMethod" Code="272" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" ReadConverter="(DxfMapAutoTransformMethod)" WriteConverter="(short)" />
+        <Property Name="_bumpMapTransformMatrixValues" Code="144" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <Property Name="RefractionIndex" Code="145" Type="double" DefaultValue="1.0" />
+        <Property Name="RefractionMapBlendFactor" Code="146" Type="double" DefaultValue="1.0" />
+        <Property Name="UseImageFileForRefractionMap" Code="273" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="RefractionMapFileName" Code="9" Type="string" DefaultValue="null" />
+        <Property Name="RefractionMapProjectionMethod" Code="274" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" ReadConverter="(DxfMapProjectionMethod)" WriteConverter="(short)" />
+        <Property Name="RefractionMapTilingMethod" Code="275" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" ReadConverter="(DxfMapTilingMethod)" WriteConverter="(short)" />
+        <Property Name="RefractionMapAutoTransformMethod" Code="276" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" ReadConverter="(DxfMapAutoTransformMethod)" WriteConverter="(short)" />
+        <Property Name="_refractionMapTransformMatrixValues" Code="147" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <Property Name="ColorBleedScale" Code="460" Type="double" DefaultValue="0.0" />
+        <Property Name="IndirectDumpScale" Code="461" Type="double" DefaultValue="0.0" />
+        <Property Name="ReflectanceScale" Code="462" Type="double" DefaultValue="0.0" />
+        <Property Name="TransmittanceScale" Code="463" Type="double" DefaultValue="0.0" />
+        <Property Name="IsTwoSided" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="Luminance" Code="464" Type="double" DefaultValue="0.0" />
+        <Property Name="LuminanceMode" Code="270" Type="short" DefaultValue="0" />
+        <Property Name="NormalMapMethod" Code="271" Type="short" DefaultValue="0" />
+
+        <Property Name="NormalMapStrength" Code="465" Type="double" DefaultValue="1.0" />
+        <Property Name="NormalMapBlendFactor" Code="42" Type="double" DefaultValue="1.0" />
+        <Property Name="UseImageFileForNormalMap" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="NormalMapFileName" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="NormalMapProjectionMethod" Code="73" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" ReadConverter="(DxfMapProjectionMethod)" WriteConverter="(short)" />
+        <Property Name="NormalMapTilingMethod" Code="74" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" ReadConverter="(DxfMapTilingMethod)" WriteConverter="(short)" />
+        <Property Name="NormalMapAutoTransformMethod" Code="75" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" ReadConverter="(DxfMapAutoTransformMethod)" WriteConverter="(short)" />
+        <Property Name="_normalMapTransformMatrixValues" Code="43" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <Property Name="IsAnonymous" Code="293" Type="bool" DefaultValue="false" />
+        <Property Name="GlobalIlluminationMode" Code="272" Type="short" DefaultValue="0" />
+        <Property Name="FinalGatherMode" Code="273" Type="short" DefaultValue="0" />
+        <Property Name="GenProcName" Code="300" Type="string" DefaultValue="null" />
+        <Property Name="GenProcBooleanValue" Code="291" Type="bool" DefaultValue="false" />
+        <Property Name="GenProcIntegerValue" Code="271" Type="short" DefaultValue="0" />
+        <Property Name="GenProcRealValue" Code="469" Type="double" DefaultValue="0.0" />
+        <Property Name="GenProcTextValue" Code="301" Type="string" DefaultValue="null" />
+        <Property Name="GenProcTableEnd" Code="292" Type="bool" DefaultValue="false" />
+        <Property Name="GenProcColorIndexValue" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByLayer" WriteConverter="GetRawValue" />
+        <Property Name="GenProcColorRGBValue" Code="420" Type="int" DefaultValue="0" />
+        <Property Name="GenProcColorName" Code="430" Type="string" DefaultValue="null" />
+
+        <Property Name="MapUTile" Code="270" Type="short" DefaultValue="0" />
+        <Property Name="Translucence" Code="148" Type="double" DefaultValue="0.0" />
+        <Property Name="SelfIllumination" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="Reflectivity" Code="468" Type="double" DefaultValue="0.0" />
+        <Property Name="IlluminationModel" Code="93" Type="int" DefaultValue="0" />
+        <Property Name="ChannelFlags" Code="94" Type="int" DefaultValue="0" />
+
+        <WriteOrder>
+            <WriteProperty Property="Name" />
+            <WriteProperty Property="Description" />
+
+            <WriteProperty Property="OverrideAmbientColor" />
+            <WriteProperty Property="AmbientColorFactor" />
+            <WriteProperty Property="AmbientColorValue" />
+
+            <WriteProperty Property="OverrideDiffuseColor" />
+            <WriteProperty Property="DiffuseColorFactor" />
+            <WriteProperty Property="DiffuseColorValue" />
+            <WriteProperty Property="DiffuseMapBlendFactor" />
+            <WriteProperty Property="UseImageFileForDiffuseMap" />
+            <WriteProperty Property="DiffuseMapFileName" />
+            <WriteProperty Property="DiffuseMapProjectionMethod" />
+            <WriteProperty Property="DiffuseMapTilingMethod" />
+            <WriteProperty Property="DiffuseMapAutoTransformMethod" />
+            <Foreach Property="DiffuseMapTransformMatrix?.GetValues() ?? new double[0]">
+                <WriteSpecificValue Code="43" Value="item" />
+            </Foreach>
+
+            <WriteProperty Property="SpecularGlossFactor" />
+            <WriteProperty Property="OverrideSpecularColor" />
+            <WriteProperty Property="SpecularColorFactor" />
+            <WriteProperty Property="SpecularColorValue" />
+            <WriteProperty Property="SpecularMapBlendFactor" />
+            <WriteProperty Property="UseImageFileForSpecularMap" />
+            <WriteProperty Property="SpecularMapFileName" />
+            <WriteProperty Property="SpecularMapProjectionMethod" />
+            <WriteProperty Property="SpecularMapTilingMethod" />
+            <WriteProperty Property="SpecularMapAutoTransformMethod" />
+            <Foreach Property="SpecularMapTransformMatrix?.GetValues() ?? new double[0]">
+                <WriteSpecificValue Code="47" Value="item" />
+            </Foreach>
+
+            <WriteProperty Property="ReflectionMapBlendFactor" />
+            <WriteProperty Property="UseImageFileForReflectionMap" />
+            <WriteProperty Property="ReflectionMapFileName" />
+            <WriteProperty Property="ReflectionMapProjectionMethod" />
+            <WriteProperty Property="ReflectionMapTilingMethod" />
+            <WriteProperty Property="ReflectionMapAutoTransformMethod" />
+            <Foreach Property="ReflectionMapTransformMatrix?.GetValues() ?? new double[0]">
+                <WriteSpecificValue Code="49" Value="item" />
+            </Foreach>
+
+            <WriteProperty Property="OpacityFactor" />
+            <WriteProperty Property="OpacityMapBlendFactor" />
+            <WriteProperty Property="UseImageFileForOpacityMap" />
+            <WriteProperty Property="OpacityMapFileName" />
+            <WriteProperty Property="OpacityMapProjectionMethod" />
+            <WriteProperty Property="OpacityMapTilingMethod" />
+            <WriteProperty Property="OpacityMapAutoTransformMethod" />
+            <Foreach Property="OpacityMapTransformMatrix?.GetValues() ?? new double[0]">
+                <WriteSpecificValue Code="142" Value="item" />
+            </Foreach>
+
+            <WriteProperty Property="BumpMapBlendFactor" />
+            <WriteProperty Property="UseImageFileForBumpMap" />
+            <WriteProperty Property="BumpMapFileName" />
+            <WriteProperty Property="BumpMapProjectionMethod" />
+            <WriteProperty Property="BumpMapTilingMethod" />
+            <WriteProperty Property="BumpMapAutoTransformMethod" />
+            <Foreach Property="BumpMapTransformMatrix?.GetValues() ?? new double[0]">
+                <WriteSpecificValue Code="144" Value="item" />
+            </Foreach>
+
+            <WriteProperty Property="RefractionIndex" />
+            <WriteProperty Property="RefractionMapBlendFactor" />
+            <WriteProperty Property="UseImageFileForRefractionMap" />
+            <WriteProperty Property="RefractionMapFileName" />
+            <WriteProperty Property="RefractionMapProjectionMethod" />
+            <WriteProperty Property="RefractionMapTilingMethod" />
+            <WriteProperty Property="RefractionMapAutoTransformMethod" />
+            <Foreach Property="RefractionMapTransformMatrix?.GetValues() ?? new double[0]">
+                <WriteSpecificValue Code="147" Value="item" />
+            </Foreach>
+
+            <WriteProperty Property="ColorBleedScale" />
+            <WriteProperty Property="IndirectDumpScale" />
+            <WriteProperty Property="ReflectanceScale" />
+            <WriteProperty Property="TransmittanceScale" />
+            <WriteProperty Property="IsTwoSided" />
+            <WriteProperty Property="Luminance" />
+            <WriteProperty Property="LuminanceMode" />
+            <WriteProperty Property="NormalMapMethod" />
+
+            <WriteProperty Property="NormalMapStrength" />
+            <WriteProperty Property="NormalMapBlendFactor" />
+            <WriteProperty Property="UseImageFileForNormalMap" />
+            <WriteProperty Property="NormalMapFileName" />
+            <WriteProperty Property="NormalMapProjectionMethod" />
+            <WriteProperty Property="NormalMapTilingMethod" />
+            <WriteProperty Property="NormalMapAutoTransformMethod" />
+            <Foreach Property="NormalMapTransformMatrix?.GetValues() ?? new double[0]">
+                <WriteSpecificValue Code="43" Value="item" />
+            </Foreach>
+
+            <WriteProperty Property="IsAnonymous" />
+            <WriteProperty Property="GlobalIlluminationMode" />
+            <WriteProperty Property="FinalGatherMode" />
+            <WriteProperty Property="GenProcName" />
+            <WriteProperty Property="GenProcBooleanValue" />
+            <WriteProperty Property="GenProcIntegerValue" />
+            <WriteProperty Property="GenProcRealValue" />
+            <WriteProperty Property="GenProcTextValue" />
+            <WriteProperty Property="GenProcTableEnd" />
+            <WriteProperty Property="GenProcColorIndexValue" />
+            <WriteProperty Property="GenProcColorRGBValue" />
+            <WriteProperty Property="GenProcColorName" />
+
+            <WriteProperty Property="MapUTile" />
+            <WriteProperty Property="Translucence" />
+            <WriteProperty Property="SelfIllumination" />
+            <WriteProperty Property="Reflectivity" />
+            <WriteProperty Property="IlluminationModel" />
+            <WriteProperty Property="ChannelFlags" />
+        </WriteOrder>
+    </Object>
+    <!--
+
     PLOTSETTINGS
 
     -->

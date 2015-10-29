@@ -480,6 +480,27 @@ foreach (var obj in objects)
 
     if (GetProperties(obj).Any() && GenerateReaderFunction(obj))
     {
+        // handle codes with multiple values (but only positive codes (negative codes mean special handling))
+        var multiCodeProperties = GetProperties(obj)
+            .Where(p => !ProtectedSet(p))
+            .GroupBy(p => Code(p))
+            .Where(p => p.Key > 0 && p.Count() > 1)
+            .OrderBy(p => p.Key);
+        if (multiCodeProperties.Any())
+        {
+#>
+
+        // This object has vales that share codes between properties and these counters are used to know which property to
+        // assign to in TrySetPair() below.
+<#
+        }
+
+        foreach (var propertyGroup in multiCodeProperties)
+        {
+#>
+        private int _code_<#= propertyGroup.Key #>_index = 0; // shared by properties <#= string.Join(", ", propertyGroup.Select(p => Name(p))) #>
+<#
+        }
 #>
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -528,7 +549,37 @@ foreach (var obj in objects)
             {
 #>
                 case <#= code #>:
-                    // TODO: code is shared by properties <#= string.Join(", ", propertyGroup.Select(p => Name(p))) #>
+<#
+                if (code > 0)
+                {
+#>
+                    switch (_code_<#= code #>_index)
+                    {
+<#
+                    for (int i = 0; i < propertyGroup.Count(); i++)
+                    {
+                        var property = propertyGroup.Skip(i).First();
+#>
+                        case <#= i #>:
+                            this.<#= Name(property) #> = <#= ReadConverter(property) #>(pair.<#= TypeToString(DxfCodePair.ExpectedType(code)) #>);
+                            _code_<#= code #>_index++;
+                            break;
+<#
+                    }
+#>
+                        default:
+                            System.Diagnostics.Debug.Assert(false, "Unexpected extra values for code <#= code #>");
+                            break;
+                    }
+<#
+                } // code > 0
+                else
+                {
+#>
+                    // code is custom-handled and shared by properties <#= string.Join(", ", propertyGroup.Select(p => Name(p))) #>
+<#
+                } // else code > 0
+#>
                     break;
 <#
             } // else multiple properties per code

@@ -211,6 +211,11 @@ namespace IxMilia.Dxf.Objects
             return DxfCommonConverters.DateDouble(date);
         }
 
+        protected static short GetRawValue(DxfColor color)
+        {
+            return color?.RawValue ?? 0;
+        }
+
         private static void SwallowObject(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)

@@ -92,7 +92,7 @@ namespace IxMilia.Dxf.Objects
             switch (pair.Code)
             {
                 case -90:
-                    // TODO: code is shared by properties _childFieldCount, _valueTypeCode
+                    // code is custom-handled and shared by properties _childFieldCount, _valueTypeCode
                     break;
                 case 1:
                     this.EvaluatorId = (pair.StringValue);

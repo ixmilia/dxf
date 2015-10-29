@@ -61,7 +61,7 @@
         </xs:choice>
       </xs:sequence>
       <xs:attribute name="Type" type="xs:string" use="required" />
-      <xs:attribute name="TypeString" type="xs:string" use="required" />
+      <xs:attribute name="TypeStringVariable" type="xs:string" use="required" />
     </xs:complexType>
   </xs:element>
 

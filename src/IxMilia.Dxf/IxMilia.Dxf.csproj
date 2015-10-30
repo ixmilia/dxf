@@ -289,8 +289,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfObjectPointerGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfPlotSettings.cs" />
     <Compile Include="Objects\DxfPlotSettingsGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfRasterVariables.cs" />
+    <Compile Include="Objects\DxfRasterVariablesGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfTransformationMatrix.cs" />

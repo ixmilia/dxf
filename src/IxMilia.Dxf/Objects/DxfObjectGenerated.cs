@@ -31,6 +31,7 @@ namespace IxMilia.Dxf.Objects
         MLineStyle,
         ObjectPointer,
         PlotSettings,
+        RasterVariables,
     }
 
     /// <summary>
@@ -87,6 +88,8 @@ namespace IxMilia.Dxf.Objects
                         return "OBJECT_PTR";
                     case DxfObjectType.PlotSettings:
                         return "PLOTSETTINGS";
+                    case DxfObjectType.RasterVariables:
+                        return "RASTERVARIABLES";
                     default:
                         throw new NotImplementedException();
                 }
@@ -205,6 +208,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "PLOTSETTINGS":
                     obj = new DxfPlotSettings();
+                    break;
+                case "RASTERVARIABLES":
+                    obj = new DxfRasterVariables();
                     break;
                 default:
                     SwallowObject(buffer);

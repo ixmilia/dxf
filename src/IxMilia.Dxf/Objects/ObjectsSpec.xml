@@ -711,4 +711,15 @@
         <Property Name="PaperImageOriginY" Code="149" Type="double" DefaultValue="0.0" />
         <Property Name="ShadePlotHandle" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
     </Object>
+    <!--
+
+    RASTERVARIABLES
+
+    -->
+    <Object Name="DxfRasterVariables" ObjectType="RasterVariables" SubclassMarker="AcDbRasterVariables" TypeString="RASTERVARIABLES">
+        <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="IsDisplayFrameImage" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="IsHighDisplayQuality" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="ImageUnits" Code="72" Type="DxfRasterImageUnits" DefaultValue="DxfRasterImageUnits.None" ReadConverter="(DxfRasterImageUnits)" WriteConverter="(short)" />
+    </Object>
 </Spec>

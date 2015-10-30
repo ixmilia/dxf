@@ -29,6 +29,7 @@ namespace IxMilia.Dxf.Objects
         LightList,
         Material,
         MLineStyle,
+        ObjectPointer,
         PlotSettings,
     }
 
@@ -82,6 +83,8 @@ namespace IxMilia.Dxf.Objects
                         return "MATERIAL";
                     case DxfObjectType.MLineStyle:
                         return "MLINESTYLE";
+                    case DxfObjectType.ObjectPointer:
+                        return "OBJECT_PTR";
                     case DxfObjectType.PlotSettings:
                         return "PLOTSETTINGS";
                     default:
@@ -196,6 +199,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "MLINESTYLE":
                     obj = new DxfMLineStyle();
+                    break;
+                case "OBJECT_PTR":
+                    obj = new DxfObjectPointer();
                     break;
                 case "PLOTSETTINGS":
                     obj = new DxfPlotSettings();

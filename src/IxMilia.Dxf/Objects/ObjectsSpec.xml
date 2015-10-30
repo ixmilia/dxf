@@ -649,6 +649,17 @@
     </Object>
     <!--
 
+    OBJECT_PTR
+
+    -->
+    <Object Name="DxfObjectPointer" ObjectType="ObjectPointer" SubclassMarker="null" TypeString="OBJECT_PTR">
+        <Property Name="AseXData" Code="1001" Type="string" DefaultValue="null" />
+        <WriteOrder>
+            <WriteProperty Property="AseXData" />
+        </WriteOrder>
+    </Object>
+    <!--
+
     PLOTSETTINGS
 
     -->

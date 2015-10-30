@@ -608,6 +608,47 @@
     </Object>
     <!--
 
+    MLINESTYLE
+
+    -->
+    <Object Name="DxfMLineStyle" ObjectType="MLineStyle" SubclassMarker="AcDbMlineStyle" TypeString="MLINESTYLE" GenerateReaderFunction="false">
+        <Property Name="StyleName" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="_flags" Code="70" Type="int" DefaultValue="0" WriteConverter="(short)" Accessibility="private">
+            <Flag Name="FillOn" Mask="1" />
+            <Flag Name="DisplayMiters" Mask="2" />
+            <Flag Name="StartSquareEndCap" Mask="16" />
+            <Flag Name="StartInnerArcsCap" Mask="32" />
+            <Flag Name="StartRoundCap" Mask="64" />
+            <Flag Name="EndSquareCap" Mask="256" />
+            <Flag Name="EndInnerArcsCap" Mask="512" />
+            <Flag Name="EndRoundCap" Mask="1024" />
+        </Property>
+        <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="FillColor" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
+        <Property Name="StartAngle" Code="51" Type="double" DefaultValue="90.0" />
+        <Property Name="EndAngle" Code="52" Type="double" DefaultValue="90.0" />
+        <Property Name="_elementCount" Code="71" Type="int" DefaultValue="0" WriteConverter="(short)" Accessibility="private" />
+        <Property Name="_elementOffsets" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_elementColors" Code="62" Type="DxfColor" DefaultValue="null" AllowMultiples="true" ReadConverter="FromRawValue" WriteConverter="GetRawValue" Accessibility="private" />
+        <Property Name="_elementLinetypes" Code="6" Type="string" DefaultValue="&quot;BYLAYER&quot;" AllowMultiples="true" Accessibility="private" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbMlineStyle&quot;" />
+            <WriteProperty Property="StyleName" />
+            <WriteProperty Property="_flags" />
+            <WriteProperty Property="Description" />
+            <WriteProperty Property="FillColor" />
+            <WriteProperty Property="StartAngle" />
+            <WriteProperty Property="EndAngle" />
+            <WriteSpecificValue Code="71" Value="(short)Elements.Count"/>
+            <Foreach Property="Elements">
+                <WriteSpecificValue Code="49" Value="item.Offset" />
+                <WriteSpecificValue Code="62" Value="GetRawValue(item.Color)" />
+                <WriteSpecificValue Code="6" Value="item.Linetype" />
+            </Foreach>
+        </WriteOrder>
+    </Object>
+    <!--
+
     PLOTSETTINGS
 
     -->

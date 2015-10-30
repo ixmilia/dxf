@@ -443,6 +443,96 @@ tres
         }
 
         [Fact]
+        public void ReadMLineStyleTest()
+        {
+            var mlineStyle = (DxfMLineStyle)GenObject("MLINESTYLE", @"
+  2
+<name>
+  3
+<description>
+ 62
+1
+ 51
+99.0
+ 52
+100.0
+ 71
+2
+ 49
+3.0
+ 62
+3
+  6
+tres
+ 49
+4.0
+ 62
+4
+  6
+quatro
+");
+            Assert.Equal("<name>", mlineStyle.StyleName);
+            Assert.Equal("<description>", mlineStyle.Description);
+            Assert.Equal(1, mlineStyle.FillColor.RawValue);
+            Assert.Equal(99.0, mlineStyle.StartAngle);
+            Assert.Equal(100.0, mlineStyle.EndAngle);
+            Assert.Equal(2, mlineStyle.Elements.Count);
+
+            Assert.Equal(3.0, mlineStyle.Elements[0].Offset);
+            Assert.Equal(3, mlineStyle.Elements[0].Color.RawValue);
+            Assert.Equal("tres", mlineStyle.Elements[0].Linetype);
+
+            Assert.Equal(4.0, mlineStyle.Elements[1].Offset);
+            Assert.Equal(4, mlineStyle.Elements[1].Color.RawValue);
+            Assert.Equal("quatro", mlineStyle.Elements[1].Linetype);
+        }
+
+        [Fact]
+        public void WriteMLineStyleTest()
+        {
+            var mlineStyle = new DxfMLineStyle();
+            mlineStyle.StyleName = "<name>";
+            mlineStyle.Description = "<description>";
+            mlineStyle.FillColor = DxfColor.FromRawValue(1);
+            mlineStyle.StartAngle = 99.9;
+            mlineStyle.EndAngle = 100.0;
+            mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 3.0, Color = DxfColor.FromRawValue(3), Linetype = "tres" });
+            mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 4.0, Color = DxfColor.FromRawValue(4), Linetype = "quatro" });
+            var file = new DxfFile();
+            file.Objects.Add(mlineStyle);
+            VerifyFileContains(file, @"
+100
+AcDbMlineStyle
+  2
+<name>
+ 70
+0
+  3
+<description>
+ 62
+1
+ 51
+99.9
+ 52
+100.0
+ 71
+2
+ 49
+3.0
+ 62
+3
+  6
+tres
+ 49
+4.0
+ 62
+4
+  6
+quatro
+");
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

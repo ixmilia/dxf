@@ -722,4 +722,114 @@
         <Property Name="IsHighDisplayQuality" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <Property Name="ImageUnits" Code="72" Type="DxfRasterImageUnits" DefaultValue="DxfRasterImageUnits.None" ReadConverter="(DxfRasterImageUnits)" WriteConverter="(short)" />
     </Object>
+    <!--
+
+    MENTALRAYRENDERSETTINGS
+
+    -->
+    <Object Name="DxfMentalRayRenderSettings" ObjectType="MentalRayRenderSettings" SubclassMarker="AcDbRenderSettings" TypeString="MENTALRAYRENDERSETTINGS">
+        <Property Name="ClassVersion_1" Code="90" Type="int" DefaultValue="1" />
+        <Property Name="PresetName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="RenderMaterials" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="TextureSamplingQuality" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="RenderBackFaces" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="RenderShadows" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="PreviewFileName" Code="1" Type="string" DefaultValue="null" />
+
+        <Property Name="ClassVersion_2" Code="90" Type="int" DefaultValue="1" />
+        <Property Name="MinimumSamplingRate" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="MaximumSamplingRate" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="SamplingFilterType" Code="70" Type="DxfSamplingFilterType" DefaultValue="DxfSamplingFilterType.Box" ReadConverter="(DxfSamplingFilterType)" WriteConverter="(short)" />
+        <Property Name="FilterWidth" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="FilterHeight" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="SamplingContrastColor_Red" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="SamplingContrastColor_Green" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="SamplingContrastColor_Blue" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="SamplingContrastColor_Alpha" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="ShadowMode" Code="70" Type="DxfRenderShadowMode" DefaultValue="DxfRenderShadowMode.Simple" ReadConverter="(DxfRenderShadowMode)" WriteConverter="(short)" />
+        <Property Name="MapShadows" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="RayTracing" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="RayTracingDepth_Reflections" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="RayTracingDepth_Refractions" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="RayTracingDepth_Maximum" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="UseGlobalIllumination" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="SampleCount" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="UseGlobalIlluminationRadius" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="GlobalIlluminationRadius" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="PhotonsPerLight" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="GlobalIlluminationDepth_Reflections" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="GlobalIlluminationDepth_Refractions" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="GlobalIlluminationDepth_Maximum" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="UseFinalGather" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="FinalGatherRayCount" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="UseFinalGatherMinimumRadius" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="UseFinalGatherMaximumRadius" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="UseFinalGatherPixels" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="FinalGatherSampleRadius_Minimum" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="FinalGatherSampleRadius_Maximum" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="LuminanceScale" Code="40" Type="double" DefaultValue="1.0" />
+        <Property Name="DiagnosticMode" Code="70" Type="DxfRenderDiagnosticMode" DefaultValue="DxfRenderDiagnosticMode.Off" ReadConverter="(DxfRenderDiagnosticMode)" WriteConverter="(short)" />
+        <Property Name="DiagnosticGridMode" Code="70" Type="DxfRenderDiagnosticGridMode" DefaultValue="DxfRenderDiagnosticGridMode.Object" ReadConverter="(DxfRenderDiagnosticGridMode)" WriteConverter="(short)" />
+        <Property Name="GridSize" Code="40" Type="double" DefaultValue="1.0" />
+        <Property Name="DiagnosticPhotonMode" Code="70" Type="DxfDiagnosticPhotonMode" DefaultValue="DxfDiagnosticPhotonMode.Density" ReadConverter="(DxfDiagnosticPhotonMode)" WriteConverter="(short)" />
+        <Property Name="DiagnosticBSPMode" Code="70" Type="DxfDiagnosticBSPMode" DefaultValue="DxfDiagnosticBSPMode.Depth" ReadConverter="(DxfDiagnosticBSPMode)" WriteConverter="(short)" />
+        <Property Name="ExportMIStatistics" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="MIStatisticsFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="TileSize" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="TileOrder" Code="70" Type="DxfTileOrder" DefaultValue="DxfTileOrder.Hilbert" ReadConverter="(DxfTileOrder)" WriteConverter="(short)" />
+        <Property Name="MemoryLimit" Code="90" Type="int" DefaultValue="0" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbRenderSettings&quot;" />
+            <WriteProperty Property="ClassVersion_1" />
+            <WriteProperty Property="PresetName" />
+            <WriteProperty Property="RenderMaterials" />
+            <WriteProperty Property="TextureSamplingQuality" />
+            <WriteProperty Property="RenderBackFaces" />
+            <WriteProperty Property="RenderShadows" />
+            <WriteProperty Property="PreviewFileName" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbMentalRayRenderSettings&quot;" />
+            <WriteProperty Property="ClassVersion_2" />
+            <WriteProperty Property="MinimumSamplingRate" />
+            <WriteProperty Property="MaximumSamplingRate" />
+            <WriteProperty Property="SamplingFilterType" />
+            <WriteProperty Property="FilterWidth" />
+            <WriteProperty Property="FilterHeight" />
+            <WriteProperty Property="SamplingContrastColor_Red" />
+            <WriteProperty Property="SamplingContrastColor_Green" />
+            <WriteProperty Property="SamplingContrastColor_Blue" />
+            <WriteProperty Property="SamplingContrastColor_Alpha" />
+            <WriteProperty Property="ShadowMode" />
+            <WriteProperty Property="MapShadows" />
+            <WriteProperty Property="RayTracing" />
+            <WriteProperty Property="RayTracingDepth_Reflections" />
+            <WriteProperty Property="RayTracingDepth_Refractions" />
+            <WriteProperty Property="RayTracingDepth_Maximum" />
+            <WriteProperty Property="UseGlobalIllumination" />
+            <WriteProperty Property="SampleCount" />
+            <WriteProperty Property="UseGlobalIlluminationRadius" />
+            <WriteProperty Property="GlobalIlluminationRadius" />
+            <WriteProperty Property="PhotonsPerLight" />
+            <WriteProperty Property="GlobalIlluminationDepth_Reflections" />
+            <WriteProperty Property="GlobalIlluminationDepth_Refractions" />
+            <WriteProperty Property="GlobalIlluminationDepth_Maximum" />
+            <WriteProperty Property="UseFinalGather" />
+            <WriteProperty Property="FinalGatherRayCount" />
+            <WriteProperty Property="UseFinalGatherMinimumRadius" />
+            <WriteProperty Property="UseFinalGatherMaximumRadius" />
+            <WriteProperty Property="UseFinalGatherPixels" />
+            <WriteProperty Property="FinalGatherSampleRadius_Minimum" />
+            <WriteProperty Property="FinalGatherSampleRadius_Maximum" />
+            <WriteProperty Property="LuminanceScale" />
+            <WriteProperty Property="DiagnosticMode" />
+            <WriteProperty Property="DiagnosticGridMode" />
+            <WriteProperty Property="GridSize" />
+            <WriteProperty Property="DiagnosticPhotonMode" />
+            <WriteProperty Property="DiagnosticBSPMode" />
+            <WriteProperty Property="ExportMIStatistics" />
+            <WriteProperty Property="MIStatisticsFileName" />
+            <WriteProperty Property="TileSize" />
+            <WriteProperty Property="TileOrder" />
+            <WriteProperty Property="MemoryLimit" />
+        </WriteOrder>
+    </Object>
 </Spec>

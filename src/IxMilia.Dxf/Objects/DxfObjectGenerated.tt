@@ -22,6 +22,7 @@ var objects = xml.Elements(XName.Get("Object", xmlns)).Where(x => x.Attribute("N
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace IxMilia.Dxf.Objects
@@ -568,7 +569,7 @@ foreach (var obj in objects)
                     }
 #>
                         default:
-                            System.Diagnostics.Debug.Assert(false, "Unexpected extra values for code <#= code #>");
+                            Debug.Assert(false, "Unexpected extra values for code <#= code #>");
                             break;
                     }
 <#

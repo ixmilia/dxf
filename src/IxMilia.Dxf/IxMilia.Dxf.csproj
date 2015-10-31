@@ -279,6 +279,10 @@
     <Compile Include="Objects\DxfMaterialGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfMentalRayRenderSettings.cs" />
+    <Compile Include="Objects\DxfMentalRayRenderSettingsGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfMLineStyle.cs" />
     <Compile Include="Objects\DxfMLineStyleGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>

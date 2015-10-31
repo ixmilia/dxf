@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace IxMilia.Dxf.Objects
@@ -28,6 +29,7 @@ namespace IxMilia.Dxf.Objects
         Layout,
         LightList,
         Material,
+        MentalRayRenderSettings,
         MLineStyle,
         ObjectPointer,
         PlotSettings,
@@ -90,6 +92,8 @@ namespace IxMilia.Dxf.Objects
                         return "PLOTSETTINGS";
                     case DxfObjectType.RasterVariables:
                         return "RASTERVARIABLES";
+                    case DxfObjectType.MentalRayRenderSettings:
+                        return "MENTALRAYRENDERSETTINGS";
                     default:
                         throw new NotImplementedException();
                 }
@@ -211,6 +215,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "RASTERVARIABLES":
                     obj = new DxfRasterVariables();
+                    break;
+                case "MENTALRAYRENDERSETTINGS":
+                    obj = new DxfMentalRayRenderSettings();
                     break;
                 default:
                     SwallowObject(buffer);

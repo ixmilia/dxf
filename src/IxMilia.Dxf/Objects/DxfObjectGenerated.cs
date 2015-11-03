@@ -35,6 +35,7 @@ namespace IxMilia.Dxf.Objects
         PlotSettings,
         RasterVariables,
         RenderEnvironment,
+        RenderGlobal,
     }
 
     /// <summary>
@@ -97,6 +98,8 @@ namespace IxMilia.Dxf.Objects
                         return "MENTALRAYRENDERSETTINGS";
                     case DxfObjectType.RenderEnvironment:
                         return "RENDERENVIRONMENT";
+                    case DxfObjectType.RenderGlobal:
+                        return "RENDERGLOBAL";
                     default:
                         throw new NotImplementedException();
                 }
@@ -224,6 +227,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "RENDERENVIRONMENT":
                     obj = new DxfRenderEnvironment();
+                    break;
+                case "RENDERGLOBAL":
+                    obj = new DxfRenderGlobal();
                     break;
                 default:
                     SwallowObject(buffer);

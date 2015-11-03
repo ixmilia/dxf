@@ -851,4 +851,20 @@
         <Property Name="UseEnvironmentImage" Code="290" Type="bool" DefaultValue="false" />
         <Property Name="EnvironmentImageFileName" Code="1" Type="string" DefaultValue="null" />
     </Object>
+    <!--
+
+    RENDERGLOBAL
+
+    -->
+    <Object Name="DxfRenderGlobal" ObjectType="RenderGlobal" SubclassMarker="AcDbRenderGlobal" TypeString="RENDERGLOBAL">
+        <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="2" />
+        <Property Name="RenderProcedure" Code="90" Type="DxfRenderProcedure" DefaultValue="DxfRenderProcedure.View" ReadConverter="(DxfRenderProcedure)" WriteConverter="(int)" />
+        <Property Name="RenderDestination" Code="90" Type="DxfRenderDestination" DefaultValue="DxfRenderDestination.RenderWindow" ReadConverter="(DxfRenderDestination)" WriteConverter="(int)" />
+        <Property Name="SaveToFile" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="SaveToFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="ImageWidth" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="ImageHeight" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="UsePredefinedPresetsFirst" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="UseHighInfoLevel" Code="290" Type="bool" DefaultValue="false" />
+    </Object>
 </Spec>

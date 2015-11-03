@@ -867,4 +867,20 @@
         <Property Name="UsePredefinedPresetsFirst" Code="290" Type="bool" DefaultValue="false" />
         <Property Name="UseHighInfoLevel" Code="290" Type="bool" DefaultValue="false" />
     </Object>
+    <!--
+
+    SECTIONMANAGER
+
+    -->
+    <Object Name="DxfSectionManager" ObjectType="SectionManager" SubclassMarker="AcDbSectionManager" TypeString="SECTIONMANAGER">
+        <Property Name="RequiresFullUpdate" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="_sectionCount" Code="90" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="SectionEntities" Code="330" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbSectionManager&quot;" />
+            <WriteProperty Property="RequiresFullUpdate" />
+            <WriteSpecificValue Code="90" Value="SectionEntities.Count" />
+            <WriteProperty Property="SectionEntities" />
+        </WriteOrder>
+    </Object>
 </Spec>

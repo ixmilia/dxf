@@ -36,6 +36,7 @@ namespace IxMilia.Dxf.Objects
         RasterVariables,
         RenderEnvironment,
         RenderGlobal,
+        SectionManager,
     }
 
     /// <summary>
@@ -100,6 +101,8 @@ namespace IxMilia.Dxf.Objects
                         return "RENDERENVIRONMENT";
                     case DxfObjectType.RenderGlobal:
                         return "RENDERGLOBAL";
+                    case DxfObjectType.SectionManager:
+                        return "SECTIONMANAGER";
                     default:
                         throw new NotImplementedException();
                 }
@@ -230,6 +233,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "RENDERGLOBAL":
                     obj = new DxfRenderGlobal();
+                    break;
+                case "SECTIONMANAGER":
+                    obj = new DxfSectionManager();
                     break;
                 default:
                     SwallowObject(buffer);

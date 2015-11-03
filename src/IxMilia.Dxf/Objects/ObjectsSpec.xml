@@ -832,4 +832,23 @@
             <WriteProperty Property="MemoryLimit" />
         </WriteOrder>
     </Object>
+    <!--
+
+    RENDERENVIRONMENT
+
+    -->
+    <Object Name="DxfRenderEnvironment" ObjectType="RenderEnvironment" SubclassMarker="AcDbRenderEnvironment" TypeString="RENDERENVIRONMENT">
+        <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="1" />
+        <Property Name="IsFogEnabled" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="IsBackgroundFogEnabled" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="FogColor_Red" Code="280" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="FogColor_Green" Code="280" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="FogColor_Blue" Code="280" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="NearFogDensityPercent" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="FarFogDensityPercent" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="NearClippingPlaneDistancePercent" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="FarClippingPlaneDistancePercent" Code="40" Type="double" DefaultValue="1.0" />
+        <Property Name="UseEnvironmentImage" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="EnvironmentImageFileName" Code="1" Type="string" DefaultValue="null" />
+    </Object>
 </Spec>

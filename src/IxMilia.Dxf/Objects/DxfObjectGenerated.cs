@@ -34,6 +34,7 @@ namespace IxMilia.Dxf.Objects
         ObjectPointer,
         PlotSettings,
         RasterVariables,
+        RenderEnvironment,
     }
 
     /// <summary>
@@ -94,6 +95,8 @@ namespace IxMilia.Dxf.Objects
                         return "RASTERVARIABLES";
                     case DxfObjectType.MentalRayRenderSettings:
                         return "MENTALRAYRENDERSETTINGS";
+                    case DxfObjectType.RenderEnvironment:
+                        return "RENDERENVIRONMENT";
                     default:
                         throw new NotImplementedException();
                 }
@@ -218,6 +221,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "MENTALRAYRENDERSETTINGS":
                     obj = new DxfMentalRayRenderSettings();
+                    break;
+                case "RENDERENVIRONMENT":
+                    obj = new DxfRenderEnvironment();
                     break;
                 default:
                     SwallowObject(buffer);

@@ -75,9 +75,9 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(2, (this.FieldCodeString)));
             pairs.Add(new DxfCodePair(3, (this.FieldCodeStringOverflow)));
             pairs.Add(new DxfCodePair(90, ChildFieldHandles.Count));
-            pairs.AddRange(this.ChildFieldHandles.Select(p => new DxfCodePair(360, p)));
+            pairs.AddRange(this.ChildFieldHandles.Select(p => new DxfCodePair(360, UIntHandle(p))));
             pairs.Add(new DxfCodePair(97, ObjectIds.Count));
-            pairs.AddRange(this.ObjectIds.Select(p => new DxfCodePair(331, p)));
+            pairs.AddRange(this.ObjectIds.Select(p => new DxfCodePair(331, UIntHandle(p))));
             pairs.Add(new DxfCodePair(93, FieldDataKeys.Count));
             pairs.AddRange(this.FieldDataKeys.Select(p => new DxfCodePair(6, p)));
             pairs.Add(new DxfCodePair(7, (this.EvaluatedCacheKey)));

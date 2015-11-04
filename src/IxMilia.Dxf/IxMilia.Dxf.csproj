@@ -318,6 +318,10 @@
     <Compile Include="Objects\DxfSectionSettingsGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfSortentsTable.cs" />
+    <Compile Include="Objects\DxfSortentsTableGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfTransformationMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sections\DxfBlocksSection.cs" />

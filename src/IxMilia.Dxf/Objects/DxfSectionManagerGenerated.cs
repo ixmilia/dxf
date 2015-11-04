@@ -40,7 +40,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(100, "AcDbSectionManager"));
             pairs.Add(new DxfCodePair(70, BoolShort(this.RequiresFullUpdate)));
             pairs.Add(new DxfCodePair(90, SectionEntities.Count));
-            pairs.AddRange(this.SectionEntities.Select(p => new DxfCodePair(330, p)));
+            pairs.AddRange(this.SectionEntities.Select(p => new DxfCodePair(330, UIntHandle(p))));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

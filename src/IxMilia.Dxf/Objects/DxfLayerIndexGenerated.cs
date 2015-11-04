@@ -43,7 +43,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(40, DateDouble(this.TimeStamp)));
             pairs.Add(new DxfCodePair(100, "AcDbLayerIndex"));
             pairs.AddRange(this.LayerNames.Select(p => new DxfCodePair(8, p)));
-            pairs.AddRange(this.IdBufferHandles.Select(p => new DxfCodePair(360, p)));
+            pairs.AddRange(this.IdBufferHandles.Select(p => new DxfCodePair(360, UIntHandle(p))));
             pairs.AddRange(this.IdBufferCounts.Select(p => new DxfCodePair(90, p)));
         }
 

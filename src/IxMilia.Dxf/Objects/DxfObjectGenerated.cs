@@ -38,6 +38,7 @@ namespace IxMilia.Dxf.Objects
         RenderGlobal,
         SectionManager,
         SectionSettings,
+        SortentsTable,
     }
 
     /// <summary>
@@ -106,6 +107,8 @@ namespace IxMilia.Dxf.Objects
                         return "SECTIONMANAGER";
                     case DxfObjectType.SectionSettings:
                         return "SECTIONSETTINGS";
+                    case DxfObjectType.SortentsTable:
+                        return "SORTENTSTABLE";
                     default:
                         throw new NotImplementedException();
                 }
@@ -242,6 +245,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "SECTIONSETTINGS":
                     obj = new DxfSectionSettings();
+                    break;
+                case "SORTENTSTABLE":
+                    obj = new DxfSortentsTable();
                     break;
                 default:
                     SwallowObject(buffer);

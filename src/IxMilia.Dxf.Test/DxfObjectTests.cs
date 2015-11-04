@@ -775,6 +775,71 @@ SectionTypeSettingsEnd
         }
 
         [Fact]
+        public void ReadSortentsTableTest()
+        {
+            var sortents = (DxfSortentsTable)GenObject("SORTENTSTABLE", @"
+  5
+A
+100
+AcDbSortentsTable
+331
+2000
+331
+2001
+331
+2002
+  5
+3000
+  5
+3001
+  5
+3002
+");
+            Assert.Equal(0xAu, sortents.Handle);
+            Assert.Equal(3, sortents.EntityHandles.Count);
+            Assert.Equal(0x2000u, sortents.EntityHandles[0]);
+            Assert.Equal(0x2001u, sortents.EntityHandles[1]);
+            Assert.Equal(0x2002u, sortents.EntityHandles[2]);
+            Assert.Equal(0x3000u, sortents.SortHandles[0]);
+            Assert.Equal(0x3001u, sortents.SortHandles[1]);
+            Assert.Equal(0x3002u, sortents.SortHandles[2]);
+        }
+
+        [Fact]
+        public void WriteSortentsTableTest()
+        {
+            var sortents = new DxfSortentsTable();
+            sortents.EntityHandles.Add(0x2000u);
+            sortents.EntityHandles.Add(0x2001u);
+            sortents.EntityHandles.Add(0x2002u);
+            sortents.SortHandles.Add(0x3000u);
+            sortents.SortHandles.Add(0x3001u);
+            sortents.SortHandles.Add(0x3002u);
+            var file = new DxfFile();
+            file.Objects.Add(sortents);
+            VerifyFileContains(file, @"
+  0
+SORTENTSTABLE
+  5
+A
+100
+AcDbSortentsTable
+331
+2000
+331
+2001
+331
+2002
+  5
+3000
+  5
+3001
+  5
+3002
+");
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

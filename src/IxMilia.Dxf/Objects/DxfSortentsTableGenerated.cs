@@ -11,15 +11,16 @@ namespace IxMilia.Dxf.Objects
 {
 
     /// <summary>
-    /// DxfIdBuffer class
+    /// DxfSortentsTable class
     /// </summary>
-    public partial class DxfIdBuffer : DxfObject
+    public partial class DxfSortentsTable : DxfObject
     {
-        public override DxfObjectType ObjectType { get { return DxfObjectType.IdBuffer; } }
+        public override DxfObjectType ObjectType { get { return DxfObjectType.SortentsTable; } }
 
         public List<uint> EntityHandles { get; private set; }
+        public List<uint> SortHandles { get; private set; }
 
-        public DxfIdBuffer()
+        public DxfSortentsTable()
             : base()
         {
         }
@@ -28,27 +29,15 @@ namespace IxMilia.Dxf.Objects
         {
             base.Initialize();
             this.EntityHandles = new List<uint>();
+            this.SortHandles = new List<uint>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbIdBuffer"));
-            pairs.AddRange(this.EntityHandles.Select(p => new DxfCodePair(330, UIntHandle(p))));
-        }
-
-        internal override bool TrySetPair(DxfCodePair pair)
-        {
-            switch (pair.Code)
-            {
-                case 330:
-                    this.EntityHandles.Add(UIntHandle(pair.StringValue));
-                    break;
-                default:
-                    return base.TrySetPair(pair);
-            }
-
-            return true;
+            pairs.Add(new DxfCodePair(100, "AcDbSortentsTable"));
+            pairs.AddRange(this.EntityHandles.Select(p => new DxfCodePair(331, UIntHandle(p))));
+            pairs.AddRange(this.SortHandles.Select(p => new DxfCodePair(5, UIntHandle(p))));
         }
     }
 

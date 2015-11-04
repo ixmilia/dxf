@@ -359,7 +359,11 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
     {
         if (AllowMultiples(property))
         {
-            lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, p)));", indentPrefix, name, code));
+            var writeConverter = WriteConverter(property);
+            var value = string.IsNullOrEmpty(writeConverter)
+                ? "p"
+                : string.Format("{0}(p)", writeConverter);
+            lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, {3})));", indentPrefix, name, code, value));
         }
         else
         {

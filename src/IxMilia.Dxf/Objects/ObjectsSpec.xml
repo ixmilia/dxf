@@ -940,4 +940,17 @@
             </Foreach>
         </WriteOrder>
     </Object>
+    <!--
+
+    SPATIAL_INDEX
+
+    -->
+    <Object Name="DxfSpatialIndex" ObjectType="SpatialIndex" SubclassMarker="AcDbIndex" TypeString="SPATIAL_INDEX">
+        <Property Name="Timestamp" Code="40" Type="DateTime" DefaultValue="DateTime.Now" ReadConverter="DateDouble" WriteConverter="DateDouble" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbIndex&quot;" />
+            <WriteProperty Property="Timestamp" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbSpatialIndex&quot;" />
+        </WriteOrder>
+    </Object>
 </Spec>

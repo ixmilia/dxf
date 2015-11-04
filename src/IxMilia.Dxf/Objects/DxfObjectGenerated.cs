@@ -39,6 +39,7 @@ namespace IxMilia.Dxf.Objects
         SectionManager,
         SectionSettings,
         SortentsTable,
+        SpatialFilter,
     }
 
     /// <summary>
@@ -109,6 +110,8 @@ namespace IxMilia.Dxf.Objects
                         return "SECTIONSETTINGS";
                     case DxfObjectType.SortentsTable:
                         return "SORTENTSTABLE";
+                    case DxfObjectType.SpatialFilter:
+                        return "SPATIAL_FILTER";
                     default:
                         throw new NotImplementedException();
                 }
@@ -248,6 +251,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "SORTENTSTABLE":
                     obj = new DxfSortentsTable();
+                    break;
+                case "SPATIAL_FILTER":
+                    obj = new DxfSpatialFilter();
                     break;
                 default:
                     SwallowObject(buffer);

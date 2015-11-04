@@ -83,6 +83,23 @@ namespace IxMilia.Dxf.Objects
             yield return M44;
         }
 
+        internal IEnumerable<double> Get4x3ValuesRowMajor()
+        {
+            // similar to GetValues() but it returns the 4x3 matrix values
+            yield return M11;
+            yield return M21;
+            yield return M31;
+            yield return M12;
+            yield return M22;
+            yield return M32;
+            yield return M13;
+            yield return M23;
+            yield return M33;
+            yield return M14;
+            yield return M24;
+            yield return M34;
+        }
+
         public static DxfTransformationMatrix Identity
         {
             get

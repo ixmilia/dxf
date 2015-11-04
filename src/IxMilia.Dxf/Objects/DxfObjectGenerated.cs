@@ -37,6 +37,7 @@ namespace IxMilia.Dxf.Objects
         RenderEnvironment,
         RenderGlobal,
         SectionManager,
+        SectionSettings,
     }
 
     /// <summary>
@@ -103,6 +104,8 @@ namespace IxMilia.Dxf.Objects
                         return "RENDERGLOBAL";
                     case DxfObjectType.SectionManager:
                         return "SECTIONMANAGER";
+                    case DxfObjectType.SectionSettings:
+                        return "SECTIONSETTINGS";
                     default:
                         throw new NotImplementedException();
                 }
@@ -236,6 +239,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "SECTIONMANAGER":
                     obj = new DxfSectionManager();
+                    break;
+                case "SECTIONSETTINGS":
+                    obj = new DxfSectionSettings();
                     break;
                 default:
                     SwallowObject(buffer);

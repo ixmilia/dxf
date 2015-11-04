@@ -314,6 +314,10 @@
     <Compile Include="Objects\DxfSectionManagerGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfSectionSettings.cs" />
+    <Compile Include="Objects\DxfSectionSettingsGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfTransformationMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sections\DxfBlocksSection.cs" />

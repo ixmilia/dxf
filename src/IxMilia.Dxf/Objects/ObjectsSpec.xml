@@ -883,4 +883,12 @@
             <WriteProperty Property="SectionEntities" />
         </WriteOrder>
     </Object>
+    <!--
+
+    SECTIONSETTINGS
+
+    -->
+    <Object Name="DxfSectionSettings" ObjectType="SectionSettings" SubclassMarker="AcDbSectionSettings" TypeString="SECTIONSETTINGS" GenerateReaderFunction="false" GenerateWriterFunction="false">
+        <Property Name="SectionType" Code="90" Type="int" DefaultValue="0" />
+    </Object>
 </Spec>

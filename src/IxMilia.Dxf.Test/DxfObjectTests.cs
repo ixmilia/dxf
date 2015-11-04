@@ -533,6 +533,248 @@ quatro
         }
 
         [Fact]
+        public void ReadSectionSettingsTest()
+        {
+            var settings = (DxfSectionSettings)GenObject("SECTIONSETTINGS", @"
+  5
+A
+100
+AcDbSectionSettings
+ 90
+42
+ 91
+1
+  1
+SectionTypeSettings
+ 90
+43
+ 91
+1
+ 92
+2
+330
+100
+330
+101
+331
+FF
+  1
+file-name
+ 93
+2
+  2
+SectionGeometrySettings
+ 90
+1001
+ 91
+0
+ 92
+0
+ 63
+0
+  8
+
+  6
+
+ 40
+1.0
+  1
+
+370
+0
+ 70
+0
+ 71
+0
+ 72
+0
+  2
+
+ 41
+0.0
+ 42
+1.0
+ 43
+0.0
+  3
+SectionGeometrySettingsEnd
+ 90
+1002
+ 91
+0
+ 92
+0
+ 63
+0
+  8
+
+  6
+
+ 40
+1.0
+  1
+
+370
+0
+ 70
+0
+ 71
+0
+ 72
+0
+  2
+
+ 41
+0.0
+ 42
+1.0
+ 43
+0.0
+  3
+SectionGeometrySettingsEnd
+  3
+SectionTypeSettingsEnd
+");
+            Assert.Equal(42, settings.SectionType);
+            var typeSettings = settings.SectionTypeSettings.Single();
+            Assert.Equal(43, typeSettings.SectionType);
+            Assert.True(typeSettings.IsGenerationOption);
+            Assert.Equal(0xFFu, typeSettings.DestinationObjectHandle);
+            Assert.Equal("file-name", typeSettings.DestinationFileName);
+
+            Assert.Equal(2, typeSettings.SourceObjectHandles.Count);
+            Assert.Equal(0x100u, typeSettings.SourceObjectHandles[0]);
+            Assert.Equal(0x101u, typeSettings.SourceObjectHandles[1]);
+
+            Assert.Equal(2, typeSettings.GeometrySettings.Count);
+            Assert.Equal(1001, typeSettings.GeometrySettings[0].SectionType);
+            Assert.Equal(1002, typeSettings.GeometrySettings[1].SectionType);
+        }
+
+        [Fact]
+        public void WriteSectionSettingsTest()
+        {
+            var settings = new DxfSectionSettings();
+            settings.SectionType = 42;
+            var typeSettings = new DxfSectionTypeSettings()
+            {
+                SectionType = 43,
+                IsGenerationOption = true,
+                DestinationObjectHandle = 0xFFu,
+                DestinationFileName = "file-name",
+            };
+            typeSettings.SourceObjectHandles.Add(0x100u);
+            typeSettings.SourceObjectHandles.Add(0x101u);
+            typeSettings.GeometrySettings.Add(new DxfSectionGeometrySettings() { SectionType = 1001 });
+            typeSettings.GeometrySettings.Add(new DxfSectionGeometrySettings() { SectionType = 1002 });
+            settings.SectionTypeSettings.Add(typeSettings);
+            var file = new DxfFile();
+            file.Objects.Add(settings);
+            VerifyFileContains(file, @"
+  0
+SECTIONSETTINGS
+  5
+A
+100
+AcDbSectionSettings
+ 90
+42
+ 91
+1
+  1
+SectionTypeSettings
+ 90
+43
+ 91
+1
+ 92
+2
+330
+100
+330
+101
+331
+FF
+  1
+file-name
+ 93
+2
+  2
+SectionGeometrySettings
+ 90
+1001
+ 91
+0
+ 92
+0
+ 63
+0
+  8
+
+  6
+
+ 40
+1.0
+  1
+
+370
+0
+ 70
+0
+ 71
+0
+ 72
+0
+  2
+
+ 41
+0.0
+ 42
+1.0
+ 43
+0.0
+  3
+SectionGeometrySettingsEnd
+ 90
+1002
+ 91
+0
+ 92
+0
+ 63
+0
+  8
+
+  6
+
+ 40
+1.0
+  1
+
+370
+0
+ 70
+0
+ 71
+0
+ 72
+0
+  2
+
+ 41
+0.0
+ 42
+1.0
+ 43
+0.0
+  3
+SectionGeometrySettingsEnd
+  3
+SectionTypeSettingsEnd
+");
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

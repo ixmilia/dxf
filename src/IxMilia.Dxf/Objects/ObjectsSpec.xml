@@ -1139,4 +1139,13 @@
         <Property Name="ShadowType" Code="173" Type="short" DefaultValue="0" />
         <Property Name="InternalFlag" Code="291" Type="bool" DefaultValue="false" />
     </Object>
+    <!--
+
+    WIPEOUTVARIABLES
+
+    -->
+    <Object Name="DxfWipeoutVariables" ObjectType="WipeoutVariables" SubclassMarker="AcDbRasterVariables" TypeString="WIPEOUTVARIABLES">
+        <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="DisplayImageFrame" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+    </Object>
 </Spec>

@@ -46,6 +46,7 @@ namespace IxMilia.Dxf.Objects
         UnderlayDefinition,
         VbaProject,
         VisualStyle,
+        WipeoutVariables,
     }
 
     /// <summary>
@@ -130,6 +131,8 @@ namespace IxMilia.Dxf.Objects
                         return "VBA_PROJECT";
                     case DxfObjectType.VisualStyle:
                         return "VISUALSTYLE";
+                    case DxfObjectType.WipeoutVariables:
+                        return "WIPEOUTVARIABLES";
                     default:
                         throw new NotImplementedException();
                 }
@@ -290,6 +293,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "VISUALSTYLE":
                     obj = new DxfVisualStyle();
+                    break;
+                case "WIPEOUTVARIABLES":
+                    obj = new DxfWipeoutVariables();
                     break;
                 default:
                     SwallowObject(buffer);

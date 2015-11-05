@@ -47,6 +47,7 @@ namespace IxMilia.Dxf.Objects
         VbaProject,
         VisualStyle,
         WipeoutVariables,
+        XRecord,
     }
 
     /// <summary>
@@ -133,6 +134,8 @@ namespace IxMilia.Dxf.Objects
                         return "VISUALSTYLE";
                     case DxfObjectType.WipeoutVariables:
                         return "WIPEOUTVARIABLES";
+                    case DxfObjectType.XRecord:
+                        return "XRECORD";
                     default:
                         throw new NotImplementedException();
                 }
@@ -296,6 +299,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "WIPEOUTVARIABLES":
                     obj = new DxfWipeoutVariables();
+                    break;
+                case "XRECORD":
+                    obj = new DxfXRecordObject();
                     break;
                 default:
                     SwallowObject(buffer);

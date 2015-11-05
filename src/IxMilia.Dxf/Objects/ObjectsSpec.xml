@@ -1148,4 +1148,12 @@
         <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
         <Property Name="DisplayImageFrame" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
     </Object>
+    <!--
+
+    XRECORD
+
+    -->
+    <Object Name="DxfXRecordObject" ObjectType="XRecord" SubclassMarker="AcDbXrecord" TypeString="XRECORD" GenerateReaderFunction="false" GenerateWriterFunction="false">
+        <Property Name="DuplicateRecordHandling" Code="280" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" />
+    </Object>
 </Spec>

@@ -54,7 +54,13 @@ namespace IxMilia.Dxf
 
         public bool BoolValue
         {
-            get { return (bool)Value; }
+            get
+            {
+                // some intances of code 290 are actually shorts
+                return IsPotentialShortAsBool(Code)
+                    ? (short)Value != 0
+                    : (bool)Value;
+            }
         }
 
         public DxfCodePair(int code, string value)
@@ -71,7 +77,10 @@ namespace IxMilia.Dxf
 
         public DxfCodePair(int code, short value)
         {
-            Debug.Assert(ExpectedType(code) == typeof(short));
+            // some code pairs in the spec expect code 290 shorts even though the spec says code 290
+            // should really be a bool
+            if (!IsPotentialShortAsBool(code))
+                Debug.Assert(ExpectedType(code) == typeof(short));
             data = new KeyValuePair<int, object>(code, value);
         }
 
@@ -97,6 +106,11 @@ namespace IxMilia.Dxf
         {
             // internal for specific cases where the type isn't known
             data = new KeyValuePair<int, object>(code, value);
+        }
+
+        internal static bool IsPotentialShortAsBool(int code)
+        {
+            return code >= 290 && code <= 299;
         }
 
         private bool IsHandle

@@ -840,6 +840,121 @@ AcDbSortentsTable
         }
 
         [Fact]
+        public void ReadSunStudyTest()
+        {
+            // with subset
+            var sun = (DxfSunStudy)GenObject("SUNSTUDY", @"
+290
+1
+ 73
+3
+290
+42
+290
+43
+290
+44
+");
+            Assert.True(sun.UseSubset);
+            Assert.Equal(3, sun.Hours.Count);
+            Assert.Equal(42, sun.Hours[0]);
+            Assert.Equal(43, sun.Hours[1]);
+            Assert.Equal(44, sun.Hours[2]);
+
+            // without subset
+            sun = (DxfSunStudy)GenObject("SUNSTUDY", @"
+ 73
+3
+290
+42
+290
+43
+290
+44
+");
+            Assert.False(sun.UseSubset);
+            Assert.Equal(3, sun.Hours.Count);
+            Assert.Equal(42, sun.Hours[0]);
+            Assert.Equal(43, sun.Hours[1]);
+            Assert.Equal(44, sun.Hours[2]);
+        }
+
+        [Fact]
+        public void WriteSunStudyTest()
+        {
+            var sun = new DxfSunStudy();
+            sun.Hours.Add(42);
+            sun.Hours.Add(43);
+            sun.Hours.Add(44);
+            var file = new DxfFile();
+            file.Objects.Add(sun);
+            VerifyFileContains(file, @"
+  0
+SUNSTUDY
+  5
+A
+100
+AcDbSunStudy
+ 90
+0
+  1
+
+  2
+
+ 70
+0
+  3
+
+290
+0
+  4
+
+291
+0
+ 91
+0
+292
+0
+ 73
+3
+290
+42
+290
+43
+290
+44
+340
+0
+341
+0
+342
+0
+ 74
+0
+ 75
+0
+ 76
+0
+ 77
+0
+ 40
+0.0
+293
+0
+294
+0
+343
+0
+");
+
+            // verify writing as binary doesn't crash
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms, asText: false);
+            }
+        }
+
+        [Fact]
         public void ReadTableStyleTest()
         {
             var table = (DxfTableStyle)GenObject("TABLESTYLE", @"

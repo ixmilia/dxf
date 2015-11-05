@@ -972,8 +972,7 @@
         <Property Name="StartTime_SecondsPastMidnight" Code="93" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
         <Property Name="EndTime_SecondsPastMidnight" Code="94" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
         <Property Name="IntervalInSeconds" Code="95" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
-        <!-- the dxf spec lists this as a code 290, but that's only allowed to be boolean values (1 or 0) so using code 280 is a best guess -->
-        <Property Name="Hours" Code="280" Type="int" DefaultValue="null" AllowMultiples="true" WriteConverter="(short)" />
+        <Property Name="Hours" Code="290" Type="int" DefaultValue="null" AllowMultiples="true" WriteConverter="(short)" />
         <Property Name="PageSetupWizardPointer" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
         <Property Name="ViewPointer" Code="341" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
         <Property Name="VisualStyleID" Code="342" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />

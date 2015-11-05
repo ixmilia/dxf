@@ -7,6 +7,7 @@ namespace IxMilia.Dxf.Objects
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             bool seenVersion = false;
+            bool readingHours = false;
             int julianDay = -1;
             while (buffer.ItemsRemain)
             {
@@ -40,6 +41,9 @@ namespace IxMilia.Dxf.Objects
                         break;
                     case 70:
                         this.OutputType = (pair.ShortValue);
+                        break;
+                    case 73:
+                        readingHours = true;
                         break;
                     case 74:
                         this.ShadePlotType = (pair.ShortValue);
@@ -84,11 +88,16 @@ namespace IxMilia.Dxf.Objects
                     case 95:
                         this.IntervalInSeconds = (pair.IntegerValue);
                         break;
-                    case 280:
-                        this.Hours.Add(pair.ShortValue);
-                        break;
                     case 290:
-                        this.UseSubset = (pair.BoolValue);
+                        if (!readingHours)
+                        {
+                            this.UseSubset = (pair.BoolValue);
+                            readingHours = true;
+                        }
+                        else
+                        {
+                            this.Hours.Add(pair.ShortValue);
+                        }
                         break;
                     case 291:
                         this.SelectDatesFromCalendar = (pair.BoolValue);

@@ -101,7 +101,12 @@ namespace IxMilia.Dxf
             else if (type == typeof(long))
                 WriteLong((long)value);
             else if (type == typeof(bool))
-                WriteBool((bool)value);
+            {
+                if (DxfCodePair.IsPotentialShortAsBool(code) && value.GetType() == typeof(short))
+                    WriteShort((short)value);
+                else
+                    WriteBool((bool)value);
+            }
             else
                 throw new InvalidOperationException("No writer available");
         }

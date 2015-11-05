@@ -114,7 +114,7 @@ namespace IxMilia.Dxf.Objects
             }
 
             pairs.Add(new DxfCodePair(73, (short)Hours.Count));
-            pairs.AddRange(this.Hours.Select(p => new DxfCodePair(280, (short)(p))));
+            pairs.AddRange(this.Hours.Select(p => new DxfCodePair(290, (short)(p))));
             pairs.Add(new DxfCodePair(340, UIntHandle(this.PageSetupWizardPointer)));
             pairs.Add(new DxfCodePair(341, UIntHandle(this.ViewPointer)));
             pairs.Add(new DxfCodePair(342, UIntHandle(this.VisualStyleID)));

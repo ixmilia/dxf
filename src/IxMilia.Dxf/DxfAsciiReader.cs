@@ -76,7 +76,9 @@ namespace IxMilia.Dxf
                             short result;
                             if (short.TryParse(_lineEnumerator.Current, out result))
                             {
-                                pair = new DxfCodePair(code, result != 0);
+                                pair = DxfCodePair.IsPotentialShortAsBool(code)
+                                    ? new DxfCodePair(code, result)
+                                    : new DxfCodePair(code, result != 0);
                             }
                             else
                             {

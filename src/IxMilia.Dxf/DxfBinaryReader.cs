@@ -64,7 +64,10 @@ namespace IxMilia.Dxf
                 }
                 else if (expectedType == typeof(bool))
                 {
-                    pair = new DxfCodePair(code, _reader.ReadInt16() != 0);
+                    var value = _reader.ReadInt16();
+                    pair = DxfCodePair.IsPotentialShortAsBool(code)
+                        ? new DxfCodePair(code, value)
+                        : new DxfCodePair(code, value != 0);
                 }
                 else
                 {

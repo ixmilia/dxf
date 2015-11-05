@@ -44,6 +44,7 @@ namespace IxMilia.Dxf.Objects
         SunStudy,
         TableStyle,
         UnderlayDefinition,
+        VbaProject,
     }
 
     /// <summary>
@@ -124,6 +125,8 @@ namespace IxMilia.Dxf.Objects
                         return "TABLESTYLE";
                     case DxfObjectType.UnderlayDefinition:
                         return "UNDERLAYDEFINITION";
+                    case DxfObjectType.VbaProject:
+                        return "VBA_PROJECT";
                     default:
                         throw new NotImplementedException();
                 }
@@ -278,6 +281,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "UNDERLAYDEFINITION":
                     obj = new DxfUnderlayDefinition();
+                    break;
+                case "VBA_PROJECT":
+                    obj = new DxfVbaProject();
                     break;
                 default:
                     SwallowObject(buffer);

@@ -1083,4 +1083,19 @@
         <Property Name="FileName" Code="1" Type="string" DefaultValue="null" />
         <Property Name="Name" Code="2" Type="string" DefaultValue="null" />
     </Object>
+    <!--
+
+    VBA_PROJECT
+
+    -->
+    <Object Name="DxfVbaProject" ObjectType="VbaProject" SubclassMarker="AcDbVbaProject" TypeString="VBA_PROJECT">
+        <Property Name="_hexData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbVbaProject&quot;" />
+            <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
+            <Foreach Property="GetHexStrings()">
+                <WriteSpecificValue Code="310" Value="item" />
+            </Foreach>
+        </WriteOrder>
+    </Object>
 </Spec>

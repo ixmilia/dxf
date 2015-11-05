@@ -43,6 +43,7 @@ namespace IxMilia.Dxf.Objects
         SpatialIndex,
         SunStudy,
         TableStyle,
+        UnderlayDefinition,
     }
 
     /// <summary>
@@ -121,6 +122,8 @@ namespace IxMilia.Dxf.Objects
                         return "SUNSTUDY";
                     case DxfObjectType.TableStyle:
                         return "TABLESTYLE";
+                    case DxfObjectType.UnderlayDefinition:
+                        return "UNDERLAYDEFINITION";
                     default:
                         throw new NotImplementedException();
                 }
@@ -272,6 +275,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "TABLESTYLE":
                     obj = new DxfTableStyle();
+                    break;
+                case "UNDERLAYDEFINITION":
+                    obj = new DxfUnderlayDefinition();
                     break;
                 default:
                     SwallowObject(buffer);

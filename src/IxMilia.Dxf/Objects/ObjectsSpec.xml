@@ -1074,4 +1074,13 @@
             </Foreach>
         </WriteOrder>
     </Object>
+    <!--
+
+    UNDERLAYDEFINITION
+
+    -->
+    <Object Name="DxfUnderlayDefinition" ObjectType="UnderlayDefinition" SubclassMarker="AcDbUnderlayDefinition" TypeString="UNDERLAYDEFINITION">
+        <Property Name="FileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Name" Code="2" Type="string" DefaultValue="null" />
+    </Object>
 </Spec>

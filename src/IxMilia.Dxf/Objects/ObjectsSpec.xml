@@ -953,4 +953,70 @@
             <WriteSpecificValue Code="100" Value="&quot;AcDbSpatialIndex&quot;" />
         </WriteOrder>
     </Object>
+    <!--
+
+    SUNSTUDY
+
+    -->
+    <Object Name="DxfSunStudy" ObjectType="SunStudy" SubclassMarker="AcDbSunStudy" TypeString="SUNSTUDY" GenerateReaderFunction="false">
+        <Property Name="Version" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="SunSetupName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Description" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="OutputType" Code="70" Type="short" DefaultValue="0" />
+        <Property Name="SheetSetName" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="UseSubset" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="SheetSubsetName" Code="4" Type="string" DefaultValue="null" />
+        <Property Name="SelectDatesFromCalendar" Code="291" Type="bool" DefaultValue="false" />
+        <Property Name="Dates" Code="90" Type="DateTime" DefaultValue="null" AllowMultiples="true" />
+        <Property Name="SelectRangeOfDates" Code="292" Type="bool" DefaultValue="false" />
+        <Property Name="StartTime_SecondsPastMidnight" Code="93" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
+        <Property Name="EndTime_SecondsPastMidnight" Code="94" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
+        <Property Name="IntervalInSeconds" Code="95" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
+        <!-- the dxf spec lists this as a code 290, but that's only allowed to be boolean values (1 or 0) so using code 280 is a best guess -->
+        <Property Name="Hours" Code="280" Type="int" DefaultValue="null" AllowMultiples="true" WriteConverter="(short)" />
+        <Property Name="PageSetupWizardPointer" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="ViewPointer" Code="341" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="VisualStyleID" Code="342" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="ShadePlotType" Code="74" Type="short" DefaultValue="0" />
+        <Property Name="ViewportsPerPage" Code="75" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="ViewportDistributionRowCount" Code="76" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="ViewportDistributionColumnCount" Code="77" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="Spacing" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="LockViewports" Code="293" Type="bool" DefaultValue="false" />
+        <Property Name="LabelViewports" Code="294" Type="bool" DefaultValue="false" />
+        <Property Name="TextStyleID" Code="343" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbSunStudy&quot;" />
+            <WriteProperty Property="Version" />
+            <WriteProperty Property="SunSetupName" />
+            <WriteProperty Property="Description" />
+            <WriteProperty Property="OutputType" />
+            <WriteProperty Property="SheetSetName" />
+            <WriteProperty Property="UseSubset" />
+            <WriteProperty Property="SheetSubsetName" />
+            <WriteProperty Property="SelectDatesFromCalendar" />
+            <WriteSpecificValue Code="91" Value="Dates.Count" />
+            <Foreach Property="Dates">
+                <WriteSpecificValue Code="90" Value="(int)DxfCommonConverters.DateDouble(item)" />
+                <WriteSpecificValue Code="90" Value="DxfCommonConverters.DateDouble(item)" />
+            </Foreach>
+            <WriteProperty Property="SelectRangeOfDates" />
+            <WriteProperty Property="StartTime_SecondsPastMidnight" />
+            <WriteProperty Property="EndTime_SecondsPastMidnight" />
+            <WriteProperty Property="IntervalInSeconds" />
+            <WriteSpecificValue Code="73" Value="(short)Hours.Count" />
+            <WriteProperty Property="Hours" />
+            <WriteProperty Property="PageSetupWizardPointer" />
+            <WriteProperty Property="ViewPointer" />
+            <WriteProperty Property="VisualStyleID" />
+            <WriteProperty Property="ShadePlotType" />
+            <WriteProperty Property="ViewportsPerPage" />
+            <WriteProperty Property="ViewportDistributionRowCount" />
+            <WriteProperty Property="ViewportDistributionColumnCount" />
+            <WriteProperty Property="Spacing" />
+            <WriteProperty Property="LockViewports" />
+            <WriteProperty Property="LabelViewports" />
+            <WriteProperty Property="TextStyleID" />
+        </WriteOrder>
+    </Object>
 </Spec>

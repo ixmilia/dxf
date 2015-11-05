@@ -41,6 +41,7 @@ namespace IxMilia.Dxf.Objects
         SortentsTable,
         SpatialFilter,
         SpatialIndex,
+        SunStudy,
     }
 
     /// <summary>
@@ -115,6 +116,8 @@ namespace IxMilia.Dxf.Objects
                         return "SPATIAL_FILTER";
                     case DxfObjectType.SpatialIndex:
                         return "SPATIAL_INDEX";
+                    case DxfObjectType.SunStudy:
+                        return "SUNSTUDY";
                     default:
                         throw new NotImplementedException();
                 }
@@ -260,6 +263,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "SPATIAL_INDEX":
                     obj = new DxfSpatialIndex();
+                    break;
+                case "SUNSTUDY":
+                    obj = new DxfSunStudy();
                     break;
                 default:
                     SwallowObject(buffer);

@@ -1019,4 +1019,59 @@
             <WriteProperty Property="TextStyleID" />
         </WriteOrder>
     </Object>
+    <!--
+
+    TABLESYLE
+
+    -->
+    <Object Name="DxfTableStyle" ObjectType="TableStyle" SubclassMarker="AcDbTableStyle" TypeString="TABLESTYLE" GenerateReaderFunction="false">
+        <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion)" WriteConverter="(short)" />
+        <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="FlowDirection" Code="70" Type="DxfFlowDirection" DefaultValue="DxfFlowDirection.Down" ReadConverter="(DxfFlowDirection)" WriteConverter="(short)" />
+        <Property Name="Flags" Code="71" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="HorizontalCellMargin" Code="40" Type="double" DefaultValue="0.06" />
+        <Property Name="VerticalCellMargin" Code="41" Type="double" DefaultValue="0.06" />
+        <Property Name="IsTitleSuppressed" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="IsColumnHeadingSuppressed" Code="281" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+        <Property Name="CellStyles" Code="0" Type="DxfTableCellStyle" DefaultValue="null" AllowMultiples="true" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbTableStyle&quot;" />
+            <WriteProperty Property="Version" />
+            <WriteProperty Property="Description" />
+            <WriteProperty Property="FlowDirection" />
+            <WriteProperty Property="Flags" />
+            <WriteProperty Property="HorizontalCellMargin" />
+            <WriteProperty Property="VerticalCellMargin" />
+            <WriteProperty Property="IsTitleSuppressed" />
+            <WriteProperty Property="IsColumnHeadingSuppressed" />
+            <Foreach Property="CellStyles">
+                <WriteSpecificValue Code="7" Value="item.Name" />
+                <WriteSpecificValue Code="140" Value="item.TextHeight" />
+                <WriteSpecificValue Code="170" Value="item.CellAlignment" />
+                <WriteSpecificValue Code="62" Value="item.TextColor?.RawValue ?? 0" />
+                <WriteSpecificValue Code="63" Value="item.CellFillColor?.RawValue ?? 7" />
+                <WriteSpecificValue Code="283" Value="BoolShort(item.IsBackgroundColorEnabled)" />
+                <WriteSpecificValue Code="90" Value="item.CellDataType" />
+                <WriteSpecificValue Code="91" Value="item.CellUnitType" />
+                <WriteSpecificValue Code="274" Value="item.BorderLineweight1" />
+                <WriteSpecificValue Code="275" Value="item.BorderLineweight2" />
+                <WriteSpecificValue Code="276" Value="item.BorderLineweight3" />
+                <WriteSpecificValue Code="277" Value="item.BorderLineweight4" />
+                <WriteSpecificValue Code="278" Value="item.BorderLineweight5" />
+                <WriteSpecificValue Code="279" Value="item.BorderLineweight6" />
+                <WriteSpecificValue Code="284" Value="BoolShort(item.IsBorder1Visible)" />
+                <WriteSpecificValue Code="285" Value="BoolShort(item.IsBorder2Visible)" />
+                <WriteSpecificValue Code="286" Value="BoolShort(item.IsBorder3Visible)" />
+                <WriteSpecificValue Code="287" Value="BoolShort(item.IsBorder4Visible)" />
+                <WriteSpecificValue Code="288" Value="BoolShort(item.IsBorder5Visible)" />
+                <WriteSpecificValue Code="289" Value="BoolShort(item.IsBorder6Visible)" />
+                <WriteSpecificValue Code="64" Value="item.Border1Color?.RawValue ?? 0" />
+                <WriteSpecificValue Code="65" Value="item.Border2Color?.RawValue ?? 0" />
+                <WriteSpecificValue Code="66" Value="item.Border3Color?.RawValue ?? 0" />
+                <WriteSpecificValue Code="67" Value="item.Border4Color?.RawValue ?? 0" />
+                <WriteSpecificValue Code="68" Value="item.Border5Color?.RawValue ?? 0" />
+                <WriteSpecificValue Code="69" Value="item.Border6Color?.RawValue ?? 0" />
+            </Foreach>
+        </WriteOrder>
+    </Object>
 </Spec>

@@ -105,11 +105,6 @@ namespace IxMilia.Dxf.Entities
         Exact = 2
     }
 
-    public enum DxfVersion
-    {
-        R2010 = 0
-    }
-
     public enum DxfHelixConstraint
     {
         ConstrainTurnHeight = 0,

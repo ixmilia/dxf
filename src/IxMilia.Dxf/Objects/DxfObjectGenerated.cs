@@ -42,6 +42,7 @@ namespace IxMilia.Dxf.Objects
         SpatialFilter,
         SpatialIndex,
         SunStudy,
+        TableStyle,
     }
 
     /// <summary>
@@ -118,6 +119,8 @@ namespace IxMilia.Dxf.Objects
                         return "SPATIAL_INDEX";
                     case DxfObjectType.SunStudy:
                         return "SUNSTUDY";
+                    case DxfObjectType.TableStyle:
+                        return "TABLESTYLE";
                     default:
                         throw new NotImplementedException();
                 }
@@ -266,6 +269,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "SUNSTUDY":
                     obj = new DxfSunStudy();
+                    break;
+                case "TABLESTYLE":
+                    obj = new DxfTableStyle();
                     break;
                 default:
                     SwallowObject(buffer);

@@ -40,6 +40,7 @@
     <Compile Include="DxfReadException.cs" />
     <Compile Include="DxfShadowMode.cs" />
     <Compile Include="DxfShadowType.cs" />
+    <Compile Include="DxfVersion.cs" />
     <Compile Include="DxfWriter.cs" />
     <Compile Include="Blocks\DxfBlock.cs" />
     <Compile Include="DxfXData.cs" />
@@ -331,6 +332,10 @@
     </Compile>
     <Compile Include="Objects\DxfSunStudy.cs" />
     <Compile Include="Objects\DxfSunStudyGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfTableStyle.cs" />
+    <Compile Include="Objects\DxfTableStyleGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfTransformationMatrix.cs" />

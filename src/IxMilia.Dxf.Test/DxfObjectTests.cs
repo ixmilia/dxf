@@ -840,6 +840,278 @@ AcDbSortentsTable
         }
 
         [Fact]
+        public void ReadTableStyleTest()
+        {
+            var table = (DxfTableStyle)GenObject("TABLESTYLE", @"
+  5
+A
+100
+AcDbTableStyle
+280
+0
+  3
+
+ 70
+0
+ 71
+0
+ 40
+0.06
+ 41
+0.06
+280
+0
+281
+0
+  7
+one
+140
+0.0
+170
+0
+ 62
+0
+ 63
+7
+283
+0
+ 90
+0
+ 91
+0
+274
+0
+275
+0
+276
+0
+277
+0
+278
+0
+279
+0
+284
+1
+285
+1
+286
+1
+287
+1
+288
+1
+289
+1
+ 64
+0
+ 65
+0
+ 66
+0
+ 67
+0
+ 68
+0
+ 69
+0
+  7
+two
+140
+0.0
+170
+0
+ 62
+0
+ 63
+7
+283
+0
+ 90
+0
+ 91
+0
+274
+0
+275
+0
+276
+0
+277
+0
+278
+0
+279
+0
+284
+1
+285
+1
+286
+1
+287
+1
+288
+1
+289
+1
+ 64
+0
+ 65
+0
+ 66
+0
+ 67
+0
+ 68
+0
+ 69
+0
+");
+            Assert.Equal(2, table.CellStyles.Count);
+            Assert.Equal("one", table.CellStyles[0].Name);
+            Assert.Equal("two", table.CellStyles[1].Name);
+        }
+
+        [Fact]
+        public void WriteTableStyleTest()
+        {
+            var table = new DxfTableStyle();
+            table.CellStyles.Add(new DxfTableCellStyle() { Name = "one" });
+            table.CellStyles.Add(new DxfTableCellStyle() { Name = "two" });
+            var file = new DxfFile();
+            file.Objects.Add(table);
+            VerifyFileContains(file, @"
+  0
+TABLESTYLE
+  5
+A
+100
+AcDbTableStyle
+280
+0
+  3
+
+ 70
+0
+ 71
+0
+ 40
+0.06
+ 41
+0.06
+280
+0
+281
+0
+  7
+one
+140
+0.0
+170
+0
+ 62
+0
+ 63
+7
+283
+0
+ 90
+0
+ 91
+0
+274
+0
+275
+0
+276
+0
+277
+0
+278
+0
+279
+0
+284
+1
+285
+1
+286
+1
+287
+1
+288
+1
+289
+1
+ 64
+0
+ 65
+0
+ 66
+0
+ 67
+0
+ 68
+0
+ 69
+0
+  7
+two
+140
+0.0
+170
+0
+ 62
+0
+ 63
+7
+283
+0
+ 90
+0
+ 91
+0
+274
+0
+275
+0
+276
+0
+277
+0
+278
+0
+279
+0
+284
+1
+285
+1
+286
+1
+287
+1
+288
+1
+289
+1
+ 64
+0
+ 65
+0
+ 66
+0
+ 67
+0
+ 68
+0
+ 69
+0
+");
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

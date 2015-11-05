@@ -346,6 +346,10 @@
     <Compile Include="Objects\DxfVbaProjectGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfVisualStyle.cs" />
+    <Compile Include="Objects\DxfVisualStyleGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sections\DxfBlocksSection.cs" />
     <Compile Include="Sections\DxfClassesSection.cs" />

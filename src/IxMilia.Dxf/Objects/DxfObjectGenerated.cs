@@ -45,6 +45,7 @@ namespace IxMilia.Dxf.Objects
         TableStyle,
         UnderlayDefinition,
         VbaProject,
+        VisualStyle,
     }
 
     /// <summary>
@@ -127,6 +128,8 @@ namespace IxMilia.Dxf.Objects
                         return "UNDERLAYDEFINITION";
                     case DxfObjectType.VbaProject:
                         return "VBA_PROJECT";
+                    case DxfObjectType.VisualStyle:
+                        return "VISUALSTYLE";
                     default:
                         throw new NotImplementedException();
                 }
@@ -284,6 +287,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "VBA_PROJECT":
                     obj = new DxfVbaProject();
+                    break;
+                case "VISUALSTYLE":
+                    obj = new DxfVisualStyle();
                     break;
                 default:
                     SwallowObject(buffer);

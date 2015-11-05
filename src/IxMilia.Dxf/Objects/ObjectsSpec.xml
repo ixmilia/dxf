@@ -1098,4 +1098,45 @@
             </Foreach>
         </WriteOrder>
     </Object>
+    <!--
+
+    VISUALSTYLE
+
+    -->
+    <Object Name="DxfVisualStyle" ObjectType="VisualStyle" SubclassMarker="AcDbVisualStyle" TypeString="VISUALSTYLE">
+        <Property Name="Description" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="Type" Code="70" Type="short" DefaultValue="0" />
+        <Property Name="FaceLightingModel" Code="71" Type="DxfFaceLightingModel" DefaultValue="DxfFaceLightingModel.Visible" ReadConverter="(DxfFaceLightingModel)" WriteConverter="(short)" />
+        <Property Name="FaceLightingQuality" Code="72" Type="DxfFaceLightingQuality" DefaultValue="DxfFaceLightingQuality.PerFace" ReadConverter="(DxfFaceLightingQuality)" WriteConverter="(short)" />
+        <Property Name="FaceColorMode" Code="73" Type="DxfFaceColorMode" DefaultValue="DxfFaceColorMode.ObjectColor" ReadConverter="(DxfFaceColorMode)" WriteConverter="(short)" />
+        <Property Name="FaceModifier" Code="90" Type="DxfFaceModifier" DefaultValue="DxfFaceModifier.None" ReadConverter="(DxfFaceModifier)" WriteConverter="(int)" />
+        <Property Name="FaceOpacityLevel" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="FaceSpecularLevel" Code="41" Type="double" DefaultValue="0.0" />
+        <Property Name="Color1" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
+        <Property Name="Color2" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
+        <Property Name="FaceStyleMonoColor" Code="421" Type="int" DefaultValue="0" />
+        <Property Name="EdgeStyleModel" Code="74" Type="DxfEdgeStyleModel" DefaultValue="DxfEdgeStyleModel.NoEdges" ReadConverter="(DxfEdgeStyleModel)" WriteConverter="(short)" />
+        <Property Name="EdgeStyle" Code="91" Type="int" DefaultValue="0" />
+        <Property Name="EdgeIntersectionColor" Code="64" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
+        <Property Name="EdgeObscuredColor" Code="65" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
+        <Property Name="EdgeObscuredLinetype" Code="75" Type="short" DefaultValue="0" />
+        <Property Name="EdgeIntersectionLinetype" Code="175" Type="short" DefaultValue="0" />
+        <Property Name="EdgeCreaseAngle" Code="42" Type="double" DefaultValue="0.0" />
+        <Property Name="EdgeModifiers" Code="92" Type="int" DefaultValue="0" />
+        <Property Name="EdgeColor" Code="66" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />\ 
+        <Property Name="EdgeOpacityLevel" Code="43" Type="double" DefaultValue="0.0" />
+        <Property Name="EdgeWidth" Code="76" Type="short" DefaultValue="0" />
+        <Property Name="EdgeOverhang" Code="77" Type="short" DefaultValue="0" />
+        <Property Name="EdgeJitter" Code="78" Type="short" DefaultValue="0" />
+        <Property Name="EdgeSilhouetteColor" Code="67" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
+        <Property Name="EdgeSilhouetteWidth" Code="79" Type="short" DefaultValue="0" />
+        <Property Name="EdgeHaloGap" Code="170" Type="short" DefaultValue="0" />
+        <Property Name="EdgeIsoLineCount" Code="171" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="HideEdgeLinePrecision" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="EdgeStyleApplyFlags" Code="174" Type="int" DefaultValue="0" WriteConverter="(short)" />
+        <Property Name="DisplayStyleSettings" Code="93" Type="int" DefaultValue="0" />
+        <Property Name="Brightness" Code="44" Type="double" DefaultValue="0.0" />
+        <Property Name="ShadowType" Code="173" Type="short" DefaultValue="0" />
+        <Property Name="InternalFlag" Code="291" Type="bool" DefaultValue="false" />
+    </Object>
 </Spec>

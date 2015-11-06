@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfDimensionAssociativity : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.DimensionAssociativity; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2004; } }
 
         public uint DimensionHandle { get; set; }
         public int AssociativityFlags { get; set; }

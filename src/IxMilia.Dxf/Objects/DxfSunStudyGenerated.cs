@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSunStudy : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SunStudy; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2013; } }
 
         public int Version { get; set; }
         public string SunSetupName { get; set; }

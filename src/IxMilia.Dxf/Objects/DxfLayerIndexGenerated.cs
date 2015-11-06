@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfLayerIndex : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LayerIndex; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
 
         public DateTime TimeStamp { get; set; }
         public List<string> LayerNames { get; private set; }

@@ -30,12 +30,15 @@ namespace IxMilia.Dxf.Test
         public void WriteSimpleObjectTest()
         {
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(new DxfAcadProxyObject());
             VerifyFileContains(file, @"
   0
 ACAD_PROXY_OBJECT
   5
 A
+330
+0
 100
 AcDbProxyObject
  90
@@ -104,12 +107,15 @@ string 2
             table[0, 1] = "string 1";
             table[1, 1] = "string 2";
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2007;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
   0
 DATATABLE
   5
 A
+330
+0
 100
 AcDbDataTable
  70

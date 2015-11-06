@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfDataTable : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.DataTable; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
 
         public short Field { get; set; }
         public int ColumnCount { get; protected set; }

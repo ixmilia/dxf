@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfField : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.Field; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2004; } }
 
         public string EvaluatorId { get; set; }
         public string FieldCodeString { get; set; }

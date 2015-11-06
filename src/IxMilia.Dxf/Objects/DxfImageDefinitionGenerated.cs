@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfImageDefinition : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.ImageDefinition; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         public int ClassVersion { get; set; }
         public string FilePath { get; set; }

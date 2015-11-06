@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfTableStyle : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.TableStyle; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2004; } }
 
         public DxfVersion Version { get; set; }
         public string Description { get; set; }

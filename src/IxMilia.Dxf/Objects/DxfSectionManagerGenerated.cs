@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSectionManager : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SectionManager; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
 
         public bool RequiresFullUpdate { get; set; }
         private int _sectionCount { get; set; }

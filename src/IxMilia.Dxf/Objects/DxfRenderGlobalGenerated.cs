@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfRenderGlobal : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.RenderGlobal; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
 
         public int ClassVersion { get; set; }
         public DxfRenderProcedure RenderProcedure { get; set; }

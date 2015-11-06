@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfGeoData : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.GeoData; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2010; } }
 
         public DxfGeoDataVersion Version { get; set; }
         public DxfDesignCoordinateType CoordinateType { get; set; }

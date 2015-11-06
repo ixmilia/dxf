@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfObjectPointer : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.ObjectPointer; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
 
         public string AseXData { get; set; }
 

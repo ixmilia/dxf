@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfIdBuffer : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.IdBuffer; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         public List<uint> EntityHandles { get; private set; }
 

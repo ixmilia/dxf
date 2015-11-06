@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfLayout : DxfPlotSettings
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.Layout; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
 
         public string LayoutName { get; set; }
         public int LayoutFlags { get; set; }

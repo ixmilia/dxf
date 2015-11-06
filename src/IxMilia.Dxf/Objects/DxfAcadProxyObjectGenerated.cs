@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfAcadProxyObject : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.AcadProxyObject; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
 
         public int ProxyObjectClassId { get; set; }
         public int ApplicationObjectClassId { get; set; }

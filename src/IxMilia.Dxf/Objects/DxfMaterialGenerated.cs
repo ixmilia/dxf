@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfMaterial : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.Material; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2004; } }
 
         public string Name { get; set; }
         public string Description { get; set; }

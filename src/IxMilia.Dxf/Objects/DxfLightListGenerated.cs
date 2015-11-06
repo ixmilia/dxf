@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfLightList : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LightList; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
 
         public int Version { get; set; }
 

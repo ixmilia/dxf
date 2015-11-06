@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSortentsTable : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SortentsTable; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
 
         public List<uint> EntityHandles { get; private set; }
         public List<uint> SortHandles { get; private set; }

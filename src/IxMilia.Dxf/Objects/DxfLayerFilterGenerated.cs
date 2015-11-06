@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfLayerFilter : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LayerFilter; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2004; } }
 
         public List<string> LayerNames { get; private set; }
 

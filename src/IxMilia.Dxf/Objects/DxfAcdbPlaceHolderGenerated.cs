@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfAcdbPlaceHolder : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.AcdbPlaceHolder; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
 
 
         public DxfAcdbPlaceHolder()

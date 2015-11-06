@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfVbaProject : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.VbaProject; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
 
         private List<string> _hexData { get; set; }
 

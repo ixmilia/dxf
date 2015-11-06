@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfRasterVariables : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.RasterVariables; } }
+        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
 
         public int ClassVersion { get; set; }
         public bool IsDisplayFrameImage { get; set; }

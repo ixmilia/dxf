@@ -275,13 +275,29 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(74, (short)(this.PlotType)));
             pairs.Add(new DxfCodePair(7, (this.CurrentStyleSheet)));
             pairs.Add(new DxfCodePair(75, (short)(this.StandardScale)));
-            pairs.Add(new DxfCodePair(76, (short)(this.ShadePlotMode)));
-            pairs.Add(new DxfCodePair(77, (short)(this.ShadePlotResolutionLevel)));
-            pairs.Add(new DxfCodePair(78, (short)(this.ShadePlotCustomDPI)));
+            if (version >= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(76, (short)(this.ShadePlotMode)));
+            }
+
+            if (version >= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(77, (short)(this.ShadePlotResolutionLevel)));
+            }
+
+            if (version >= DxfAcadVersion.R2004)
+            {
+                pairs.Add(new DxfCodePair(78, (short)(this.ShadePlotCustomDPI)));
+            }
+
             pairs.Add(new DxfCodePair(147, (this.StandardScaleValue)));
             pairs.Add(new DxfCodePair(148, (this.PaperImageOriginX)));
             pairs.Add(new DxfCodePair(149, (this.PaperImageOriginY)));
-            pairs.Add(new DxfCodePair(333, UIntHandle(this.ShadePlotHandle)));
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(333, UIntHandle(this.ShadePlotHandle)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

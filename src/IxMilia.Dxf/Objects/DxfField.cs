@@ -6,6 +6,8 @@ namespace IxMilia.Dxf.Objects
 {
     public partial class DxfField
     {
+        public string FormatString { get; set; }
+
         public object Value
         {
             get
@@ -67,7 +69,7 @@ namespace IxMilia.Dxf.Objects
             _childFieldCount_valueTypeCode.Clear();
 
             // rebuild format string
-            FormatString = FormatString + _formatStringOverflow;
+            FormatString = _formatStringCode4 ?? (_formatStringCode301 + _formatStringOverflow);
             _formatStringOverflow = null;
 
             return this;

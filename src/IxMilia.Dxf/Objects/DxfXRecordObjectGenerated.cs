@@ -16,6 +16,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfXRecordObject : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.XRecord; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         public DxfDictionaryDuplicateRecordHandling DuplicateRecordHandling { get; set; }
 

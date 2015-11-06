@@ -51,7 +51,11 @@ namespace IxMilia.Dxf.Objects
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbTableStyle"));
-            pairs.Add(new DxfCodePair(280, (short)(this.Version)));
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(280, (short)(this.Version)));
+            }
+
             pairs.Add(new DxfCodePair(3, (this.Description)));
             pairs.Add(new DxfCodePair(70, (short)(this.FlowDirection)));
             pairs.Add(new DxfCodePair(71, (short)(this.Flags)));

@@ -21,8 +21,15 @@ namespace IxMilia.Dxf.Objects
         public string EvaluatorId { get; set; }
         public string FieldCodeString { get; set; }
         public string FieldCodeStringOverflow { get; set; }
+        private string _formatStringCode4 { get; set; }
+        public string EvaluationErrorMessage { get; set; }
         private int _childFieldCount { get; set; }
         public List<uint> ChildFieldHandles { get; private set; }
+        public int EvaluationOption { get; set; }
+        public int FillingOption { get; set; }
+        public int FieldState { get; set; }
+        public int EvaluationStatus { get; set; }
+        public int EvaluationErrorCode { get; set; }
         private int _objectIdCount { get; set; }
         public List<uint> ObjectIds { get; private set; }
         private int _dataSetCount { get; set; }
@@ -34,7 +41,7 @@ namespace IxMilia.Dxf.Objects
         private uint _idValue { get; set; }
         private int _binaryDataBufferSize { get; set; }
         private string _binaryData { get; set; }
-        public string FormatString { get; set; }
+        private string _formatStringCode301 { get; set; }
         private string _formatStringOverflow { get; set; }
         private int _formatStringLength { get; set; }
         private List<int> _childFieldCount_valueTypeCode { get; set; }
@@ -50,8 +57,15 @@ namespace IxMilia.Dxf.Objects
             this.EvaluatorId = null;
             this.FieldCodeString = null;
             this.FieldCodeStringOverflow = null;
+            this._formatStringCode4 = null;
+            this.EvaluationErrorMessage = null;
             this._childFieldCount = 0;
             this.ChildFieldHandles = new List<uint>();
+            this.EvaluationOption = 0;
+            this.FillingOption = 0;
+            this.FieldState = 0;
+            this.EvaluationStatus = 0;
+            this.EvaluationErrorCode = 0;
             this._objectIdCount = 0;
             this.ObjectIds = new List<uint>();
             this._dataSetCount = 0;
@@ -63,7 +77,7 @@ namespace IxMilia.Dxf.Objects
             this._idValue = 0u;
             this._binaryDataBufferSize = 0;
             this._binaryData = null;
-            this.FormatString = null;
+            this._formatStringCode301 = null;
             this._formatStringOverflow = null;
             this._formatStringLength = 0;
             this._childFieldCount_valueTypeCode = new List<int>();
@@ -75,19 +89,72 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(1, (this.EvaluatorId)));
             pairs.Add(new DxfCodePair(2, (this.FieldCodeString)));
             pairs.Add(new DxfCodePair(3, (this.FieldCodeStringOverflow)));
+            if (version <= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(4, FormatString));
+            }
+            if (version <= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(300, (this.EvaluationErrorMessage)));
+            }
+
             pairs.Add(new DxfCodePair(90, ChildFieldHandles.Count));
             pairs.AddRange(this.ChildFieldHandles.Select(p => new DxfCodePair(360, UIntHandle(p))));
+            if (version <= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(91, (this.EvaluationOption)));
+            }
+
+            if (version <= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(92, (this.FillingOption)));
+            }
+
+            if (version <= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(94, (this.FieldState)));
+            }
+
+            if (version <= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(95, (this.EvaluationStatus)));
+            }
+
+            if (version <= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(96, (this.EvaluationErrorCode)));
+            }
+
             pairs.Add(new DxfCodePair(97, ObjectIds.Count));
-            pairs.AddRange(this.ObjectIds.Select(p => new DxfCodePair(331, UIntHandle(p))));
+            foreach (var item in ObjectIds)
+            {
+                if (version <= DxfAcadVersion.R2007)
+                {
+                    pairs.Add(new DxfCodePair(330, UIntHandle(item)));
+                }
+                if (version >= DxfAcadVersion.R2010)
+                {
+                    pairs.Add(new DxfCodePair(331, UIntHandle(item)));
+                }
+            }
+
             pairs.Add(new DxfCodePair(93, FieldDataKeys.Count));
             pairs.AddRange(this.FieldDataKeys.Select(p => new DxfCodePair(6, p)));
             pairs.Add(new DxfCodePair(7, (this.EvaluatedCacheKey)));
             pairs.Add(new DxfCodePair(90, _valueTypeCode));
             pairs.Add(new DxfCodePair(_valueTypeCode, Value));
-            pairs.Add(new DxfCodePair(301, (this.FormatString)));
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(301, FormatString));
+            }
             pairs.Add(new DxfCodePair(9, (this._formatStringOverflow)));
             pairs.Add(new DxfCodePair(98, FormatString?.Length ?? default(int)));
         }
+
+        // This object has vales that share codes between properties and these counters are used to know which property to
+        // assign to in TrySetPair() below.
+        private int _code_91_index = 0; // shared by properties EvaluationOption, _longValue
+        private int _code_92_index = 0; // shared by properties FillingOption, _binaryDataBufferSize
 
         internal override bool TrySetPair(DxfCodePair pair)
         {
@@ -105,6 +172,9 @@ namespace IxMilia.Dxf.Objects
                 case 3:
                     this.FieldCodeStringOverflow = (pair.StringValue);
                     break;
+                case 4:
+                    this._formatStringCode4 = (pair.StringValue);
+                    break;
                 case 6:
                     this.FieldDataKeys.Add((pair.StringValue));
                     break;
@@ -115,13 +185,48 @@ namespace IxMilia.Dxf.Objects
                     this._childFieldCount_valueTypeCode.Add((pair.IntegerValue));
                     break;
                 case 91:
-                    this._longValue = (pair.IntegerValue);
+                    switch (_code_91_index)
+                    {
+                        case 0:
+                            this.EvaluationOption = (pair.IntegerValue);
+                            _code_91_index++;
+                            break;
+                        case 1:
+                            this._longValue = (pair.IntegerValue);
+                            _code_91_index++;
+                            break;
+                        default:
+                            Debug.Assert(false, "Unexpected extra values for code 91");
+                            break;
+                    }
                     break;
                 case 92:
-                    this._binaryDataBufferSize = (pair.IntegerValue);
+                    switch (_code_92_index)
+                    {
+                        case 0:
+                            this.FillingOption = (pair.IntegerValue);
+                            _code_92_index++;
+                            break;
+                        case 1:
+                            this._binaryDataBufferSize = (pair.IntegerValue);
+                            _code_92_index++;
+                            break;
+                        default:
+                            Debug.Assert(false, "Unexpected extra values for code 92");
+                            break;
+                    }
                     break;
                 case 93:
                     this._dataSetCount = (pair.IntegerValue);
+                    break;
+                case 94:
+                    this.FieldState = (pair.IntegerValue);
+                    break;
+                case 95:
+                    this.EvaluationStatus = (pair.IntegerValue);
+                    break;
+                case 96:
+                    this.EvaluationErrorCode = (pair.IntegerValue);
                     break;
                 case 97:
                     this._objectIdCount = (pair.IntegerValue);
@@ -132,8 +237,11 @@ namespace IxMilia.Dxf.Objects
                 case 140:
                     this._doubleValue = (pair.DoubleValue);
                     break;
+                case 300:
+                    this.EvaluationErrorMessage = (pair.StringValue);
+                    break;
                 case 301:
-                    this.FormatString = (pair.StringValue);
+                    this._formatStringCode301 = (pair.StringValue);
                     break;
                 case 310:
                     this._binaryData = (pair.StringValue);

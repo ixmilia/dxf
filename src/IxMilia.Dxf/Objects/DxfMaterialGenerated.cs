@@ -103,6 +103,7 @@ namespace IxMilia.Dxf.Objects
         public int GenProcColorRGBValue { get; set; }
         public string GenProcColorName { get; set; }
         public short MapUTile { get; set; }
+        public short MapVTile { get; set; }
         public double Translucence { get; set; }
         public int SelfIllumination { get; set; }
         public double Reflectivity { get; set; }
@@ -202,6 +203,7 @@ namespace IxMilia.Dxf.Objects
             this.GenProcColorRGBValue = 0;
             this.GenProcColorName = null;
             this.MapUTile = 0;
+            this.MapVTile = 0;
             this.Translucence = 0.0;
             this.SelfIllumination = 0;
             this.Reflectivity = 0.0;
@@ -292,44 +294,176 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(147, item));
             }
 
-            pairs.Add(new DxfCodePair(460, (this.ColorBleedScale)));
-            pairs.Add(new DxfCodePair(461, (this.IndirectDumpScale)));
-            pairs.Add(new DxfCodePair(462, (this.ReflectanceScale)));
-            pairs.Add(new DxfCodePair(463, (this.TransmittanceScale)));
-            pairs.Add(new DxfCodePair(290, (this.IsTwoSided)));
-            pairs.Add(new DxfCodePair(464, (this.Luminance)));
-            pairs.Add(new DxfCodePair(270, (this.LuminanceMode)));
-            pairs.Add(new DxfCodePair(271, (this.NormalMapMethod)));
-            pairs.Add(new DxfCodePair(465, (this.NormalMapStrength)));
-            pairs.Add(new DxfCodePair(42, (this.NormalMapBlendFactor)));
-            pairs.Add(new DxfCodePair(72, BoolShort(this.UseImageFileForNormalMap)));
-            pairs.Add(new DxfCodePair(3, (this.NormalMapFileName)));
-            pairs.Add(new DxfCodePair(73, (short)(this.NormalMapProjectionMethod)));
-            pairs.Add(new DxfCodePair(74, (short)(this.NormalMapTilingMethod)));
-            pairs.Add(new DxfCodePair(75, (short)(this.NormalMapAutoTransformMethod)));
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(460, (this.ColorBleedScale)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(461, (this.IndirectDumpScale)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(462, (this.ReflectanceScale)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(463, (this.TransmittanceScale)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(290, (this.IsTwoSided)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(464, (this.Luminance)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(270, (this.LuminanceMode)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(271, (this.NormalMapMethod)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(465, (this.NormalMapStrength)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(42, (this.NormalMapBlendFactor)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(72, BoolShort(this.UseImageFileForNormalMap)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(3, (this.NormalMapFileName)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(73, (short)(this.NormalMapProjectionMethod)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(74, (short)(this.NormalMapTilingMethod)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(75, (short)(this.NormalMapAutoTransformMethod)));
+            }
+
             foreach (var item in NormalMapTransformMatrix?.GetValues() ?? new double[0])
             {
                 pairs.Add(new DxfCodePair(43, item));
             }
 
-            pairs.Add(new DxfCodePair(293, (this.IsAnonymous)));
-            pairs.Add(new DxfCodePair(272, (this.GlobalIlluminationMode)));
-            pairs.Add(new DxfCodePair(273, (this.FinalGatherMode)));
-            pairs.Add(new DxfCodePair(300, (this.GenProcName)));
-            pairs.Add(new DxfCodePair(291, (this.GenProcBooleanValue)));
-            pairs.Add(new DxfCodePair(271, (this.GenProcIntegerValue)));
-            pairs.Add(new DxfCodePair(469, (this.GenProcRealValue)));
-            pairs.Add(new DxfCodePair(301, (this.GenProcTextValue)));
-            pairs.Add(new DxfCodePair(292, (this.GenProcTableEnd)));
-            pairs.Add(new DxfCodePair(62, GetRawValue(this.GenProcColorIndexValue)));
-            pairs.Add(new DxfCodePair(420, (this.GenProcColorRGBValue)));
-            pairs.Add(new DxfCodePair(430, (this.GenProcColorName)));
-            pairs.Add(new DxfCodePair(270, (this.MapUTile)));
-            pairs.Add(new DxfCodePair(148, (this.Translucence)));
-            pairs.Add(new DxfCodePair(90, (this.SelfIllumination)));
-            pairs.Add(new DxfCodePair(468, (this.Reflectivity)));
-            pairs.Add(new DxfCodePair(93, (this.IlluminationModel)));
-            pairs.Add(new DxfCodePair(94, (this.ChannelFlags)));
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(293, (this.IsAnonymous)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(272, (this.GlobalIlluminationMode)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(273, (this.FinalGatherMode)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(300, (this.GenProcName)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(291, (this.GenProcBooleanValue)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(271, (this.GenProcIntegerValue)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(469, (this.GenProcRealValue)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(301, (this.GenProcTextValue)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(292, (this.GenProcTableEnd)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(62, GetRawValue(this.GenProcColorIndexValue)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(420, (this.GenProcColorRGBValue)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(430, (this.GenProcColorName)));
+            }
+
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(270, (this.MapUTile)));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(148, (this.Translucence)));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(90, (this.SelfIllumination)));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(468, (this.Reflectivity)));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(93, (this.IlluminationModel)));
+            }
+
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(94, (this.ChannelFlags)));
+            }
+
         }
     }
 

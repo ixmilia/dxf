@@ -202,10 +202,6 @@ DICTIONARY
 A
 100
 AcDbDictionary
-280
-1
-281
-1
   3
 name-1
 350
@@ -1109,8 +1105,6 @@ TABLESTYLE
 A
 100
 AcDbTableStyle
-280
-0
   3
 
  70

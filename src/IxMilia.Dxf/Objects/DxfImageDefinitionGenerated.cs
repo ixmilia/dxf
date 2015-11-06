@@ -53,8 +53,8 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(1, (this.FilePath)));
             pairs.Add(new DxfCodePair(10, (double)(this.ImageWidth)));
             pairs.Add(new DxfCodePair(20, (double)(this.ImageHeight)));
-            pairs.Add(new DxfCodePair(12, (this.PixelWidth)));
-            pairs.Add(new DxfCodePair(22, (this.PixelHeight)));
+            pairs.Add(new DxfCodePair(11, (this.PixelWidth)));
+            pairs.Add(new DxfCodePair(12, (this.PixelHeight)));
             pairs.Add(new DxfCodePair(280, BoolShort(this.IsImageLoaded)));
             pairs.Add(new DxfCodePair(281, (short)(this.ResolutionUnits)));
         }
@@ -69,14 +69,14 @@ namespace IxMilia.Dxf.Objects
                 case 10:
                     this.ImageWidth = (int)(pair.DoubleValue);
                     break;
-                case 12:
+                case 11:
                     this.PixelWidth = (pair.DoubleValue);
+                    break;
+                case 12:
+                    this.PixelHeight = (pair.DoubleValue);
                     break;
                 case 20:
                     this.ImageHeight = (int)(pair.DoubleValue);
-                    break;
-                case 22:
-                    this.PixelHeight = (pair.DoubleValue);
                     break;
                 case 90:
                     this.ClassVersion = (pair.IntegerValue);

@@ -7,8 +7,9 @@
 
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
-    <DxfSolution>$(MSBuildThisFileDirectory)\src\IxMilia.Dxf.sln</DxfSolution>
-    <TestAssembly>$(MSBuildThisFileDirectory)\src\Binaries\$(Configuration)\IxMilia.Dxf.Test.dll</TestAssembly>
+    <SolutionDir>$(MSBuildThisFileDirectory)\src</SolutionDir>
+    <SolutionFile>$(SolutionDir)\IxMilia.Dxf.sln</SolutionFile>
+    <TestAssembly>$(SolutionDir)\Binaries\$(Configuration)\IxMilia.Dxf.Test.dll</TestAssembly>
     <NuGetExe>$(MSBuildThisFileDirectory)\src\.nuget\NuGet.exe</NuGetExe>
   </PropertyGroup>
 
@@ -28,26 +29,27 @@
   </UsingTask>
 
   <Target Name="RestorePackages">
-    <DownloadFile Url="https://www.nuget.org/nuget.exe" Destination="$(NuGetExe)" />
-    <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(DxfSolution)&quot;" />
+    <DownloadFile Url="https://www.nuget.org/nuget.exe" Destination="$(NuGetExe)" Condition="!Exists('$(NuGetExe)')" />
+    <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(SolutionFile)&quot;" />
+    <Exec Command="&quot;$(NuGetExe)&quot; install gitlink -SolutionDir &quot;$(SolutionDir)&quot; -Verbosity quiet -ExcludeVersion" Condition="!Exists('$(SolutionDir)\packages\gitlink\')" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="RestorePackages">
     <MSBuild BuildInParallel="true"
-             Projects="$(DxfSolution)"
+             Projects="$(SolutionFile)"
              Properties="TreatWarningsAsErrors=true"
              Targets="Build" />
   </Target>
 
   <Target Name="Clean">
     <MSBuild BuildInParallel="true"
-             Projects="$(DxfSolution)"
+             Projects="$(SolutionFile)"
              Targets="Clean" />
   </Target>
 
   <Target Name="Rebuild">
     <MSBuild BuildInParallel="true"
-             Projects="$(DxfSolution)"
+             Projects="$(SolutionFile)"
              Properties="TreatWarningsAsErrors=true"
              Targets="Rebuild" />
   </Target>

@@ -64,23 +64,14 @@ namespace IxMilia.Dxf
             return DxfCommonConverters.UIntHandle(u);
         }
 
-        // the Dublin Julian date epoch is December 31, 1899, and defined as the Julian day 2415020
-        // see http://en.wikipedia.org/wiki/Julian_day
-        private static DateTime JulianDublinBase = new DateTime(1899, 12, 31, 0, 0, 0);
-        private const double JulianDublinOffset = 2415020.0;
-
         private static DateTime DateDouble(double date)
         {
-            if (date == 0.0)
-                return JulianDublinBase;
-            var daysFromDublin = date - JulianDublinOffset;
-            return JulianDublinBase.AddDays(daysFromDublin);
+            return DxfCommonConverters.DateDouble(date);
         }
 
         private static double DateDouble(DateTime date)
         {
-            var daysFromDublin = (date - JulianDublinBase).TotalDays;
-            return JulianDublinOffset + daysFromDublin;
+            return DxfCommonConverters.DateDouble(date);
         }
 
         private static TimeSpan TimeSpanDouble(double d)

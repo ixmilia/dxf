@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information. -->
 <Tables xmlns="http://IxMilia.com/Dxf/TableSpec">
-  <Table Type="AppId" TypeString="AppIdText">
+  <Table Type="AppId" TypeStringVariable="AppIdText">
     <TableItem Name="DxfAppId" ClassName="AcDbRegAppTableRecord">
     </TableItem>
   </Table>
-  <Table Type="BlockRecord" TypeString="BlockRecordText">
+  <Table Type="BlockRecord" TypeStringVariable="BlockRecordText">
     <TableItem Name="DxfBlockRecord" ClassName="AcDbBlockTableRecord" HasFlags="false">
       <Property Name="LayoutHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
 
@@ -14,10 +14,10 @@
       <Property Name="Explodability" Code="280" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
       <Property Name="Scalability" Code="281" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
 
-      <Property Name="BitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
+      <Property Name="_bitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
     </TableItem>
   </Table>
-  <Table Type="DimStyle" TypeString="DimStyleText">
+  <Table Type="DimStyle" TypeStringVariable="DimStyleText">
     <TableItem Name="DxfDimStyle" ClassName="AcDbDimStyleTableRecord">
       <Property Name="DimensioningSuffix" Code="3" Type="string" DefaultValue="null" />
       <Property Name="AlternateDimensioningSuffix" Code="4" Type="string" DefaultValue="null" />
@@ -88,7 +88,7 @@
       <Property Name="DimensionExtensionLineWeight" Code="372" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue" WriteConverter="DxfLineWeight.GetRawValue" MinVersion="R2000" />
     </TableItem>
   </Table>
-  <Table Type="Layer" TypeString="LayerText">
+  <Table Type="Layer" TypeStringVariable="LayerText">
     <TableItem Name="DxfLayer" ClassName="AcDbLayerTableRecord">
       <Property Name="Color" Code="62" Type="DxfColor" DefaultValue="DxfColor.FromIndex(1)" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" CustomValidator="ValidateColor" />
       <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="null" />
@@ -98,7 +98,7 @@
       <Property Name="MaterialHandle" Code="347" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
     </TableItem>
   </Table>
-  <Table Type="LType" TypeString="LTypeText">
+  <Table Type="LType" TypeStringVariable="LTypeText">
     <TableItem Name="DxfLineType" ClassName="AcDbLinetypeTableRecord">
       <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
       <Property Name="AlignmentCode" Code="72" Type="int" DefaultValue="(int)'A'" WriteConverter="(short)" />
@@ -115,7 +115,7 @@
       <Property Name="TextStrings" Code="9" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
     </TableItem>
   </Table>
-  <Table Type="Style" TypeString="StyleText">
+  <Table Type="Style" TypeStringVariable="StyleText">
     <TableItem Name="DxfStyle" ClassName="AcDbTextStyleTableRecord">
       <Property Name="TextHeight" Code="40" Type="double" DefaultValue="0.0" />
       <Property Name="WidthFactor" Code="41" Type="double" DefaultValue="1.0" />
@@ -126,7 +126,7 @@
       <Property Name="BigFontFileName" Code="4" Type="string" DefaultValue="null" />
     </TableItem>
   </Table>
-  <Table Type="Ucs" TypeString="UcsText">
+  <Table Type="Ucs" TypeStringVariable="UcsText">
     <TableItem Name="DxfUcs" ClassName="AcDbUCSTableRecord">
       <Property Name="Origin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
       <Property Name="XAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
@@ -138,7 +138,7 @@
       <Property Name="OrthographicOrigin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" MinVersion="R2000" />
     </TableItem>
   </Table>
-  <Table Type="View" TypeString="ViewText">
+  <Table Type="View" TypeStringVariable="ViewText">
     <TableItem Name="DxfView" ClassName="AcDbViewTableRecord">
       <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" />
       <Property Name="ViewCenterPoint" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20" />
@@ -166,7 +166,7 @@
       <Property Name="BaseUCSHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
     </TableItem>
   </Table>
-  <Table Type="ViewPort" TypeString="ViewPortText">
+  <Table Type="ViewPort" TypeStringVariable="ViewPortText">
     <TableItem Name="DxfViewPort" ClassName="AcDbViewportTableRecord">
       <Property Name="LowerLeft" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20" />
       <Property Name="UpperRight" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21" />

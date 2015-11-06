@@ -41,55 +41,58 @@
     <Compile Include="DxfReadException.cs" />
     <Compile Include="DxfShadowMode.cs" />
     <Compile Include="DxfShadowType.cs" />
+    <Compile Include="DxfVersion.cs" />
     <Compile Include="DxfWriter.cs" />
     <Compile Include="Blocks\DxfBlock.cs" />
     <Compile Include="DxfXData.cs" />
-    <Compile Include="Entities\Dxf3DFace.cs">
+    <Compile Include="Entities\Dxf3DFaceGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\Dxf3DSolid.cs">
+    <Compile Include="Entities\Dxf3DSolidGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfAlignedDimension.cs">
+    <Compile Include="Entities\DxfAlignedDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfAngularDimension.cs">
+    <Compile Include="Entities\DxfAngularDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfAngularThreePointDimension.cs">
+    <Compile Include="Entities\DxfAngularThreePointDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfArc.cs">
+    <Compile Include="Entities\DxfArcAlignedTextGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfArcAlignedText.cs">
+    <Compile Include="Entities\DxfArcGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfAttribute.cs">
+    <Compile Include="Entities\DxfAttribute.cs" />
+    <Compile Include="Entities\DxfAttributeDefinition.cs" />
+    <Compile Include="Entities\DxfAttributeDefinitionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfAttributeDefinition.cs">
+    <Compile Include="Entities\DxfAttributeGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfBody.cs">
+    <Compile Include="Entities\DxfBodyGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfCircle.cs">
+    <Compile Include="Entities\DxfCircleGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfDgnUnderlay.cs">
+    <Compile Include="Entities\DxfDgnUnderlayGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfDiameterDimension.cs">
+    <Compile Include="Entities\DxfDiameterDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfDimensionBase.cs">
+    <Compile Include="Entities\DxfDimensionBaseGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfDwfUnderlay.cs">
+    <Compile Include="Entities\DxfDwfUnderlayGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfEllipse.cs">
+    <Compile Include="Entities\DxfEllipseGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfEntity.cs" />
@@ -98,116 +101,265 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfEntitySection.cs">
+    <Compile Include="Entities\DxfEntitySection.cs" />
+    <Compile Include="Entities\DxfEntitySectionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfHelix.cs">
+    <Compile Include="Entities\DxfHelixGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfImage.cs">
+    <Compile Include="Entities\DxfImage.cs" />
+    <Compile Include="Entities\DxfImageGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfInsert.cs">
+    <Compile Include="Entities\DxfInsert.cs" />
+    <Compile Include="Entities\DxfInsertGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfLeader.cs">
+    <Compile Include="Entities\DxfLeader.cs" />
+    <Compile Include="Entities\DxfLeaderGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfLight.cs">
+    <Compile Include="Entities\DxfLightGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfLine.cs">
+    <Compile Include="Entities\DxfLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfLwPolyline.cs">
+    <Compile Include="Entities\DxfLwPolyline.cs" />
+    <Compile Include="Entities\DxfLwPolylineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfLwPolylineVertex.cs" />
-    <Compile Include="Entities\DxfMLeaderStyle.cs">
+    <Compile Include="Entities\DxfMLeaderStyleGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfMLine.cs">
+    <Compile Include="Entities\DxfMLine.cs" />
+    <Compile Include="Entities\DxfMLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfModelPoint.cs">
+    <Compile Include="Entities\DxfModelPointGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfMText.cs">
+    <Compile Include="Entities\DxfMText.cs" />
+    <Compile Include="Entities\DxfMTextGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfOle2Frame.cs">
+    <Compile Include="Entities\DxfOle2FrameGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfOleFrame.cs">
+    <Compile Include="Entities\DxfOleFrameGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfOrdinateDimension.cs">
+    <Compile Include="Entities\DxfOrdinateDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfPdfUnderlay.cs">
+    <Compile Include="Entities\DxfPdfUnderlayGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfPolyline.cs">
+    <Compile Include="Entities\DxfPolyline.cs" />
+    <Compile Include="Entities\DxfPolylineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfProxyEntity.cs">
+    <Compile Include="Entities\DxfProxyEntity.cs" />
+    <Compile Include="Entities\DxfProxyEntityGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfRadialDimension.cs">
+    <Compile Include="Entities\DxfRadialDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfRay.cs">
+    <Compile Include="Entities\DxfRayGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfRegion.cs">
+    <Compile Include="Entities\DxfRegionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfRotatedDimension.cs">
+    <Compile Include="Entities\DxfRotatedDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfRText.cs">
+    <Compile Include="Entities\DxfRTextGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfSeqend.cs">
+    <Compile Include="Entities\DxfSeqendGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfShape.cs">
+    <Compile Include="Entities\DxfShapeGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfSolid.cs">
+    <Compile Include="Entities\DxfSolidGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfSpline.cs">
+    <Compile Include="Entities\DxfSpline.cs" />
+    <Compile Include="Entities\DxfSplineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfSun.cs">
+    <Compile Include="Entities\DxfSunGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfText.cs">
+    <Compile Include="Entities\DxfTextGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfTolerance.cs">
+    <Compile Include="Entities\DxfToleranceGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfTrace.cs">
+    <Compile Include="Entities\DxfTraceGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfUnderlay.cs">
+    <Compile Include="Entities\DxfUnderlay.cs" />
+    <Compile Include="Entities\DxfUnderlayGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfVertex.cs">
+    <Compile Include="Entities\DxfVertexGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfWipeout.cs">
+    <Compile Include="Entities\DxfWipeoutGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfXLine.cs">
+    <Compile Include="Entities\DxfXLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="IDxfHasChildrenWithHandle.cs" />
     <Compile Include="IDxfHasHandle.cs" />
     <Compile Include="IDxfCodePairReader.cs" />
     <Compile Include="IDxfHasOwnerHandle.cs" />
+    <Compile Include="Objects\DxfAcadProxyObject.cs" />
+    <Compile Include="Objects\DxfAcadProxyObjectGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfAcdbDictionaryWithDefault.cs" />
+    <Compile Include="Objects\DxfAcdbDictionaryWithDefaultGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfAcdbPlaceHolderGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfDataTable.cs" />
+    <Compile Include="Objects\DxfDataTableGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfDictionary.cs" />
+    <Compile Include="Objects\DxfDictionaryGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfDimensionAssociativityGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfField.cs" />
+    <Compile Include="Objects\DxfFieldGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfGeoData.cs" />
+    <Compile Include="Objects\DxfGeoDataGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfGroupGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfIdBufferGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfImageDefinitionGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfImageDefinitionReactor.cs" />
+    <Compile Include="Objects\DxfImageDefinitionReactorGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfLayerFilterGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfLayerIndexGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfLayout.cs" />
+    <Compile Include="Objects\DxfLayoutGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfLightList.cs" />
+    <Compile Include="Objects\DxfLightListGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfMaterial.cs" />
+    <Compile Include="Objects\DxfMaterialGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfMentalRayRenderSettings.cs" />
+    <Compile Include="Objects\DxfMentalRayRenderSettingsGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfMLineStyle.cs" />
+    <Compile Include="Objects\DxfMLineStyleGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfObject.cs" />
+    <Compile Include="Objects\DxfObjectGenerated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfObjectPointerGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfPlotSettings.cs" />
+    <Compile Include="Objects\DxfPlotSettingsGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfRasterVariables.cs" />
+    <Compile Include="Objects\DxfRasterVariablesGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfRenderEnvironmentGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfRenderGlobal.cs" />
+    <Compile Include="Objects\DxfRenderGlobalGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfSectionManagerGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfSectionSettings.cs" />
+    <Compile Include="Objects\DxfSectionSettingsGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfSortentsTable.cs" />
+    <Compile Include="Objects\DxfSortentsTableGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfSpatialFilter.cs" />
+    <Compile Include="Objects\DxfSpatialFilterGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfSpatialIndexGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfSunStudy.cs" />
+    <Compile Include="Objects\DxfSunStudyGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfTableStyle.cs" />
+    <Compile Include="Objects\DxfTableStyleGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfTransformationMatrix.cs" />
+    <Compile Include="Objects\DxfUnderlayDefinitionGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfVbaProject.cs" />
+    <Compile Include="Objects\DxfVbaProjectGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfVisualStyle.cs" />
+    <Compile Include="Objects\DxfVisualStyleGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfWipeoutVariablesGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfXRecordObject.cs" />
+    <Compile Include="Objects\DxfXRecordObjectGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sections\DxfBlocksSection.cs" />
     <Compile Include="Sections\DxfClassesSection.cs" />
@@ -248,6 +400,16 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="MultipleOutputHelper.t4" />
+    <None Include="Objects\DxfObjectGenerated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DxfObjectGenerated.cs</LastGenOutput>
+    </None>
+    <None Include="Objects\ObjectsSpec.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Objects\ObjectsSpec.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Sections\HeaderVariablesSpec.xml">
       <SubType>Designer</SubType>
     </None>

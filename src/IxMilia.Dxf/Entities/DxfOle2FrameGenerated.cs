@@ -61,7 +61,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(90, (this.BinaryDataLength)));
             foreach (var item in BinaryDataStrings)
             {
-                pairs.Add(new DxfCodePair(310, "item"));
+                pairs.Add(new DxfCodePair(310, item));
             }
 
             pairs.Add(new DxfCodePair(1, "OLE"));

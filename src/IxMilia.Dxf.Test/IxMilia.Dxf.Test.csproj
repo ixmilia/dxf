@@ -34,6 +34,7 @@
     <Compile Include="AbstractDxfTests.cs" />
     <Compile Include="DxfEntityTests.cs" />
     <Compile Include="DxfHeaderTests.cs" />
+    <Compile Include="DxfObjectTests.cs" />
     <Compile Include="DxfReaderWriterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamWithNoLengthOrPosition.cs" />

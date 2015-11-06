@@ -29,7 +29,7 @@
       <WriteProperty Property="Handle" />
       <WriteExtensionData />
       <WriteProperty Property="OwnerHandle" />
-      <WriteSpecificValue Code="100" Value="AcDbEntity" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbEntity&quot;" />
       <WriteProperty Property="IsInPaperSpace" />
       <WriteProperty Property="Layer" />
       <WriteProperty Property="LinetypeName" />
@@ -76,11 +76,11 @@
     <Property Name="CustomData2" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="HistoryObjectHandle" Code="350" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbModelerGeometry" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbModelerGeometry&quot;" />
       <WriteProperty Property="FormatVersionNumber" />
       <WriteProperty Property="CustomData" />
       <WriteProperty Property="CustomData2" />
-      <WriteSpecificValue Code="100" Value="AcDb3dSolid" MinVersion="R2007" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDb3dSolid&quot;" MinVersion="R2007" />
       <WriteProperty Property="HistoryObjectHandle" />
     </WriteOrder>
   </Entity>
@@ -101,7 +101,7 @@
     <Property Name="ObjectID3" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="ObjectID4" Code="360" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="Terminator" Code="94" Type="int" DefaultValue="0" />
-    <Property Name="ObjectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" MinVersion="R2000" />
+    <Property Name="_objectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint)" WriteConverter="(int)" Accessibility="private" MinVersion="R2000" />
     <Property Name="OriginalDataFormatIsDxf" Code="70" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" />
   </Entity>
   <!--
@@ -190,18 +190,18 @@
     <Property Name="KeepDuplicateRecords" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
     <Property Name="MTextFlag" Code="70" Type="DxfMTextFlag" DefaultValue="DxfMTextFlag.MultilineAttribute" ReadConverter="(DxfMTextFlag)" WriteConverter="(short)" MinVersion="R2007" />
     <Property Name="IsReallyLocked" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
-    <Property Name="SecondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
+    <Property Name="_secondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
     <Property Name="SecondaryAttributeHandles" Code="340" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" MinVersion="R2007" />
     <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
     <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
     <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbText" MinVersion="R13" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" MinVersion="R13" />
       <WriteProperty Property="Thickness" />
       <WriteProperty Property="Location" />
       <WriteProperty Property="TextHeight" />
       <WriteProperty Property="Value" />
-      <WriteSpecificValue Code="100" Value="AcDbAttributeDefinition" MinVersion="R13" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbAttributeDefinition&quot;" MinVersion="R13" />
       <WriteProperty Property="Rotation" />
       <WriteProperty Property="RelativeXScaleFactor" />
       <WriteProperty Property="ObliqueAngle" />
@@ -210,7 +210,7 @@
       <WriteProperty Property="HorizontalTextJustification" />
       <WriteProperty Property="SecondAlignmentPoint" />
       <WriteProperty Property="Normal" />
-      <WriteSpecificValue Code="100" Value="AcDbAttributeDefinition" MinVersion="R13" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbAttributeDefinition&quot;" MinVersion="R13" />
       <WriteProperty Property="Version" />
       <WriteProperty Property="Prompt" />
       <WriteProperty Property="TextTag" />
@@ -218,7 +218,7 @@
       <WriteProperty Property="FieldLength" />
       <WriteProperty Property="VerticalTextJustification" />
       <WriteProperty Property="IsLockedInBlock" />
-      <WriteSpecificValue Code="100" Value="AcDbXrecord" MinVersion="R2007" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbXrecord&quot;" MinVersion="R2007" />
       <WriteProperty Property="KeepDuplicateRecords" />
       <WriteProperty Property="MTextFlag" />
       <WriteProperty Property="IsReallyLocked" />
@@ -264,18 +264,18 @@
     <Property Name="KeepDuplicateRecords" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
     <Property Name="MTextFlag" Code="70" Type="DxfMTextFlag" DefaultValue="DxfMTextFlag.MultilineAttribute" ReadConverter="(DxfMTextFlag)" WriteConverter="(short)" MinVersion="R2007" />
     <Property Name="IsReallyLocked" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
-    <Property Name="SecondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
+    <Property Name="_secondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
     <Property Name="SecondaryAttributeHandles" Code="340" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" MinVersion="R2007" />
     <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
     <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
     <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbText" MinVersion="R13" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" MinVersion="R13" />
       <WriteProperty Property="Thickness" />
       <WriteProperty Property="Location" />
       <WriteProperty Property="TextHeight" />
       <WriteProperty Property="Value" />
-      <WriteSpecificValue Code="100" Value="AcDbAttribute" MinVersion="R13" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbAttribute&quot;" MinVersion="R13" />
       <WriteProperty Property="Version" />
       <WriteProperty Property="AttributeTag" />
       <WriteProperty Property="Flags" />
@@ -290,7 +290,7 @@
       <WriteProperty Property="SecondAlignmentPoint" />
       <WriteProperty Property="Normal" />
       <WriteProperty Property="IsLockedInBlock" />
-      <WriteSpecificValue Code="100" Value="AcDbXrecord" MinVersion="R2007" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbXrecord&quot;" MinVersion="R2007" />
       <WriteProperty Property="KeepDuplicateRecords" />
       <WriteProperty Property="MTextFlag" />
       <WriteProperty Property="IsReallyLocked" />
@@ -356,13 +356,13 @@
     <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" />
     <Property Name="ExtensionLineAngle" Code="52" Type="double" DefaultValue="0.0" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbAlignedDimension" MinVersion="R13" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbAlignedDimension&quot;" MinVersion="R13" />
       <WriteProperty Property="InsertionPoint" />
       <WriteProperty Property="DefinitionPoint2" />
       <WriteProperty Property="DefinitionPoint3" />
       <WriteProperty Property="RotationAngle" />
       <WriteProperty Property="ExtensionLineAngle" />
-      <WriteSpecificValue Code="100" Value="AcDbRotatedDimension" MinVersion="R13" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbRotatedDimension&quot;" MinVersion="R13" />
     </WriteOrder>
   </Entity>
   <!-- aligned; type 1 -->
@@ -466,11 +466,11 @@
     <Property Name="ImageDefReactorReference" Code="360" Type="string" DefaultValue="null" />
     <Property Name="ClippingType" Code="71" Type="DxfImageClippingBoundaryType" DefaultValue="DxfImageClippingBoundaryType.Rectangular" ReadConverter="(DxfImageClippingBoundaryType)" WriteConverter="(short)" />
     <Property Name="ClippingVertexCount" Code="91" Type="int" DefaultValue="0" />
-    <Property Name="ClippingVerticesX" Code="14" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
-    <Property Name="ClippingVerticesY" Code="24" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
+    <Property Name="_clippingVerticesX" Code="14" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
+    <Property Name="_clippingVerticesY" Code="24" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
     <Property Name="IsInsideClipping" Code="290" Type="bool" DefaultValue="false" MinVersion="R2010" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbRasterImage" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbRasterImage&quot;" />
       <WriteProperty Property="ClassVersion" />
       <WriteProperty Property="Location" />
       <WriteProperty Property="UVector" />
@@ -526,9 +526,9 @@
     <Property Name="TextAnnotationHeight" Code="40" Type="double" DefaultValue="1.0" />
     <Property Name="TextAnnotationWidth" Code="41" Type="double" DefaultValue="1.0" />
     <Property Name="VertexCount" Code="76" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
-    <Property Name="VerticesX" Code="10" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
-    <Property Name="VerticesY" Code="20" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
-    <Property Name="VerticesZ" Code="30" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
+    <Property Name="_verticesX" Code="10" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
+    <Property Name="_verticesY" Code="20" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
+    <Property Name="_verticesZ" Code="30" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
     <Property Name="OverrideColor" Code="77" Type="DxfColor" DefaultValue="DxfColor.ByBlock" DisableWritingDefault="true" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
     <Property Name="AssociatedAnnotationReference" Code="340" Type="string" DefaultValue="null" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
@@ -536,7 +536,7 @@
     <Property Name="BlockOffset" Code="212" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="212,222,232" />
     <Property Name="AnnotationOffset" Code="213" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="213,223,233" MinVersion="R14" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbLeader" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbLeader&quot;" />
       <WriteProperty Property="DimensionStyleName" />
       <WriteProperty Property="UseArrowheads" />
       <WriteProperty Property="PathType" />
@@ -614,7 +614,7 @@
     <Property Name="Vertices" Code="10" Type="DxfLwPolylineVertex" DefaultValue="null" AllowMultiples="true" />
     <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbPolyline" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbPolyline&quot;" />
       <WriteSpecificValue Code="90" Value="Vertices.Count" />
       <WriteProperty Property="Flags" />
       <WriteProperty Property="ConstantWidth" />
@@ -653,25 +653,25 @@
       <Flag Name="SuppressStartCaps" Mask="4" />
       <Flag Name="SuppressEndCaps" Mask="8" />
     </Property>
-    <Property Name="VertexCount" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="_vertexCount" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
     <Property Name="StyleElementCount" Code="73" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
     <Property Name="StartPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" DisableWritingDefault="true" />
-    <Property Name="VertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="VertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="VertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="SegmentDirectionX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="SegmentDirectionY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="SegmentDirectionZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="MiterDirectionX" Code="13" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="MiterDirectionY" Code="23" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="MiterDirectionZ" Code="33" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="ParameterCount" Code="74" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="_vertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_vertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_vertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_segmentDirectionX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_segmentDirectionY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_segmentDirectionZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_miterDirectionX" Code="13" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_miterDirectionY" Code="23" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_miterDirectionZ" Code="33" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_parameterCount" Code="74" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
     <Property Name="Parameters" Code="41" Type="double" DefaultValue="null" AllowMultiples="true" />
-    <Property Name="AreaFillParameterCount" Code="75" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="_areaFillParameterCount" Code="75" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
     <Property Name="AreaFillParameters" Code="42" Type="double" DefaultValue="null" AllowMultiples="true" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbMline" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbMline&quot;" />
       <WriteProperty Property="StyleName" />
       <WriteProperty Property="StyleHandle" />
       <WriteProperty Property="ScaleFactor" />
@@ -794,7 +794,7 @@
     <Property Name="ColumnGutter" Code="49" Type="double" DefaultValue="0.0" />
     <Property Name="ColumnHeights" Code="50" Type="double" DefaultValue="null" AllowMultiples="true" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbMText" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbMText&quot;" />
       <WriteProperty Property="InsertionPoint" />
       <WriteProperty Property="InitialTextHeight" />
       <WriteProperty Property="ReferenceRectangleWidth" />
@@ -836,13 +836,13 @@
     <Property Name="BinaryDataLength" Code="90" Type="int" DefaultValue="0" />
     <Property Name="BinaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbOleFrame" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbOleFrame&quot;" />
       <WriteProperty Property="VersionNumber" />
       <WriteProperty Property="BinaryDataLength" />
       <Foreach Property="BinaryDataStrings">
         <WriteSpecificValue Code="310" Value="item" />
       </Foreach>
-      <WriteSpecificValue Code="1" Value="OLE" />
+      <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />
     </WriteOrder>
   </Entity>
   <!--
@@ -860,7 +860,7 @@
     <Property Name="BinaryDataLength" Code="90" Type="int" DefaultValue="0" />
     <Property Name="BinaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbOle2Frame" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbOle2Frame&quot;" />
       <WriteProperty Property="VersionNumber" />
       <WriteProperty Property="Description" />
       <WriteProperty Property="UpperLeftCorner" />
@@ -871,7 +871,7 @@
       <Foreach Property="BinaryDataStrings">
         <WriteSpecificValue Code="310" Value="item" />
       </Foreach>
-      <WriteSpecificValue Code="1" Value="OLE" />
+      <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />
     </WriteOrder>
   </Entity>
   <!--
@@ -971,17 +971,17 @@
     <Property Name="IndicatorTransparency" Code="70" Type="short" DefaultValue="0" />
     <Property Name="IndicatorColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
     <Property Name="IndicatorColorName" Code="411" Type="string" DefaultValue="null" />
-    <Property Name="VertexCount" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
-    <Property Name="VertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="VertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="VertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="BackLineVertexCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
-    <Property Name="BackLineVertexX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="BackLineVertexY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="BackLineVertexZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_vertexCount" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
+    <Property Name="_vertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_vertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_vertexZ" Code="31" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_backLineVertexCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
+    <Property Name="_backLineVertexX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_backLineVertexY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_backLineVertexZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
     <Property Name="GeometrySettingsHandle" Code="360" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbSection" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbSection&quot;" />
       <WriteProperty Property="State" />
       <WriteProperty Property="Flags" />
       <WriteProperty Property="Name" />
@@ -1055,9 +1055,9 @@
       <Flag Name="IsLinear" Mask="16" />
     </Property>
     <Property Name="DegreeOfCurve" Code="71" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" />
-    <Property Name="NumberOfKnotsIgnored" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
-    <Property Name="NumberOfControlPointsIgnored" Code="73" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
-    <Property Name="NumberOfFitPointsIgnored" Code="74" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="_numberOfKnotsIgnored" Code="72" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="_numberOfControlPointsIgnored" Code="73" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
+    <Property Name="_numberOfFitPointsIgnored" Code="74" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" />
     <Property Name="KnotTolerance" Code="42" Type="double" DefaultValue="0.0000001" DisableWritingDefault="true" />
     <Property Name="ControlPointTolerance" Code="43" Type="double" DefaultValue="0.0000001" DisableWritingDefault="true" />
     <Property Name="FitTolerance" Code="44" Type="double" DefaultValue="0.0000000001" DisableWritingDefault="true" />
@@ -1065,14 +1065,14 @@
     <Property Name="EndTangent" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
     <Property Name="KnotValues" Code="40" Type="double" DefaultValue="" AllowMultiples="true" />
     <Property Name="Weight" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
-    <Property Name="ControlPointX" Code="10" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
-    <Property Name="ControlPointY" Code="20" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
-    <Property Name="ControlPointZ" Code="30" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
-    <Property Name="FitPointX" Code="11" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
-    <Property Name="FitPointY" Code="21" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
-    <Property Name="FitPointZ" Code="31" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_controlPointX" Code="10" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_controlPointY" Code="20" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_controlPointZ" Code="30" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_fitPointX" Code="11" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_fitPointY" Code="21" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_fitPointZ" Code="31" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbSpline" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbSpline&quot;" />
       <WriteProperty Property="Normal" />
       <WriteProperty Property="Flags" />
       <WriteSpecificValue Code="72" Value="(short?)KnotValues?.Count ?? default(short)" />
@@ -1202,10 +1202,10 @@
     </Property>
     <Property Name="Contrast" Code="281" Type="short" DefaultValue="100" />
     <Property Name="Fade" Code="282" Type="short" DefaultValue="0" />
-    <Property Name="PointX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="PointY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_pointX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+    <Property Name="_pointY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
     <WriteOrder>
-      <WriteSpecificValue Code="100" Value="AcDbUnderlayReference" />
+      <WriteSpecificValue Code="100" Value="&quot;AcDbUnderlayReference&quot;" />
       <WriteProperty Property="ObjectHandle" />
       <WriteProperty Property="InsertionPoint" />
       <WriteProperty Property="XScale" />

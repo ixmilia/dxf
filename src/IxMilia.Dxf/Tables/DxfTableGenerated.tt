@@ -62,7 +62,7 @@ foreach (var table in tables)
                     break;
                 }
 
-                if (pair.Code == 0 && pair.StringValue == DxfTable.<#= TypeString(table) #>)
+                if (pair.Code == 0 && pair.StringValue == DxfTable.<#= TypeStringVariable(table) #>)
                 {
                     var item = <#= tableItem #>.FromBuffer(buffer);
                     table.Items.Add(item);

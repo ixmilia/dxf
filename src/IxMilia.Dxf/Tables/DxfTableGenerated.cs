@@ -431,7 +431,7 @@ namespace IxMilia.Dxf
         public DxfUnits InsertionUnits { get; set; }
         public bool Explodability { get; set; }
         public bool Scalability { get; set; }
-        private List<string> BitmapPreviewData { get; set; }
+        private List<string> _bitmapPreviewData { get; set; }
 
         public DxfXData XData { get; set; }
 
@@ -442,7 +442,7 @@ namespace IxMilia.Dxf
             InsertionUnits = DxfUnits.Unitless;
             Explodability = true;
             Scalability = true;
-            BitmapPreviewData = new List<string>();
+            _bitmapPreviewData = new List<string>();
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -475,7 +475,7 @@ namespace IxMilia.Dxf
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.AddRange(BitmapPreviewData.Select(value => new DxfCodePair(310, value)));
+                pairs.AddRange(_bitmapPreviewData.Select(value => new DxfCodePair(310, value)));
             }
 
             if (XData != null)
@@ -515,7 +515,7 @@ namespace IxMilia.Dxf
                         item.Scalability = BoolShort(pair.ShortValue);
                         break;
                     case 310:
-                        item.BitmapPreviewData.Add((pair.StringValue));
+                        item._bitmapPreviewData.Add((pair.StringValue));
                         break;
                     case (int)DxfXDataType.ApplicationName:
                         item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);

@@ -28,15 +28,31 @@ string EntityType(XElement entity)
     return entity.Attribute("EntityType").Value;
 }
 
-string TypeString(XElement entity)
+string ObjectType(XElement obj)
 {
-    return entity.Attribute("TypeString").Value;
+    return obj.Attribute("ObjectType").Value;
 }
 
-string BaseClass(XElement entity)
+string TypeStringVariable(XElement entity)
+{
+    return entity.Attribute("TypeStringVariable").Value;
+}
+
+string TypeString(XElement entity)
+{
+    var typeString = entity.Attribute("TypeString").Value;
+    if (typeString.Any(c => char.IsLower(c)))
+    {
+        throw new InvalidOperationException(string.Format("TypeString value '{0}' must be all upper case.", typeString));
+    }
+
+    return typeString;
+}
+
+string BaseClass(XElement entity, string defaultValue)
 {
     var att = entity.Attribute("BaseClass");
-    return att == null ? "DxfEntity" : att.Value;
+    return att == null ? defaultValue : att.Value;
 }
 
 bool SuppressWriting(XElement property)
@@ -54,6 +70,11 @@ bool DisableWritingDefault(XElement property)
 bool GenerateReaderFunction(XElement entity)
 {
     return bool.Parse(AttributeOrDefault(entity, "GenerateReaderFunction", "true"));
+}
+
+bool GenerateWriterFunction(XElement entity)
+{
+    return bool.Parse(AttributeOrDefault(entity, "GenerateWriterFunction", "true"));
 }
 
 string Type(XElement property)
@@ -148,7 +169,13 @@ bool ProtectedSet(XElement property)
 string Accessibility(XElement property)
 {
     var att = property.Attribute("Accessibility");
-    return att == null ? "public" : att.Value;
+    var accessibility = att == null ? "public" : att.Value;
+    if (accessibility == "private" && !Name(property).StartsWith("_"))
+    {
+        throw new Exception(string.Format("Improperly named private property '{0}'.  Missing leading underscore.", Name(property)));
+    }
+
+    return accessibility;
 }
 
 List<string> GetWriteCommands(XElement entity)
@@ -203,15 +230,10 @@ IEnumerable<string> WriteValue(XElement spec, XElement entity)
 
 IEnumerable<string> WriteSpecificValue(XElement spec)
 {
-    var code = Code(spec);
-    var codeType = DxfCodePair.ExpectedType(code);
+    var code = spec.Attribute("Code").Value;
     var value = spec.Attribute("Value").Value;
-    var useQuotes = codeType == typeof(string) && value != "null";
-    var writeValue = useQuotes
-        ? string.Format("\"{0}\"", value)
-        : value;
 
-    var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, writeValue);
+    var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, value);
     var minVersion = MinVersion(spec);
     var maxVersion = MaxVersion(spec);
     var defaultValue = spec.Attribute("DontWriteIfValueIs");
@@ -338,7 +360,11 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
     {
         if (AllowMultiples(property))
         {
-            lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, p)));", indentPrefix, name, code));
+            var writeConverter = WriteConverter(property);
+            var value = string.IsNullOrEmpty(writeConverter)
+                ? "p"
+                : string.Format("{0}(p)", writeConverter);
+            lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, {3})));", indentPrefix, name, code, value));
         }
         else
         {

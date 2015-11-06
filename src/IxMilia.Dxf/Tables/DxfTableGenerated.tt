@@ -137,11 +137,11 @@ foreach (var table in tables)
                 propertyType = string.Format("List<{0}>", propertyType);
             }
 
-            var getset = "{ get; set; }";
+            var getset = string.Format("{{ get; {0}set; }}", SetterAccessibility(property));
             var customValidator = CustomValidator(property);
             if (customValidator != null)
             {
-                getset = string.Format("{{ get {{ return {0}; }} set {{ {1}(value); {0} = value; }} }}", BackingFieldName(name), customValidator);
+                getset = string.Format("{{ get {{ return {0}; }} {1}set {{ {2}(value); {0} = value; }} }}", BackingFieldName(name), SetterAccessibility(property), customValidator);
             }
 #>
         <#= Accessibility(property) #> <#= propertyType #> <#= name #> <#= getset #>
@@ -247,7 +247,7 @@ foreach (var table in tables)
 <#
                     } // if
 #>
-            <#= indent #>pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= Name(property) #>.<#= prop #>));
+            <#= indent #>pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= Name(property) #>?.<#= prop #> ?? 0.0));
 <#
                     if (hasPredicate)
                     {

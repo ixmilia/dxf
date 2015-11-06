@@ -53,7 +53,7 @@ namespace IxMilia.Dxf.Tables
             BeforeWrite();
 
             var pairs = new List<DxfCodePair>();
-            var symbolItems = GetSymbolItems();
+            var symbolItems = GetSymbolItems().Where(item => item != null);
             if (!symbolItems.Any())
                 return pairs;
 
@@ -284,7 +284,7 @@ namespace IxMilia.Dxf.Tables
     {
         protected override void BeforeWrite()
         {
-            foreach (var blockRecord in Items)
+            foreach (var blockRecord in Items.Where(item => item != null))
             {
                 blockRecord.BeforeWrite();
             }
@@ -292,7 +292,7 @@ namespace IxMilia.Dxf.Tables
 
         protected override void AfterRead()
         {
-            foreach (var blockRecord in Items)
+            foreach (var blockRecord in Items.Where(item => item != null))
             {
                 blockRecord.AfterRead();
             }

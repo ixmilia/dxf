@@ -22,7 +22,7 @@ namespace IxMilia.Dxf.Sections
 
         protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
         {
-            return this.Blocks.SelectMany(e => e.GetValuePairs(version, outputHandles));
+            return this.Blocks.Where(block => block != null).SelectMany(e => e.GetValuePairs(version, outputHandles));
         }
 
         internal static DxfBlocksSection BlocksSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)

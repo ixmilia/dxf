@@ -308,7 +308,8 @@ namespace IxMilia.Dxf
                     .Concat(this.Styles.Cast<IDxfHasHandle>())
                     .Concat(this.UserCoordinateSystems.Cast<IDxfHasHandle>())
                     .Concat(this.ViewPorts.Cast<IDxfHasHandle>())
-                    .Concat(this.Views.Cast<IDxfHasHandle>());
+                    .Concat(this.Views.Cast<IDxfHasHandle>())
+                    .Where(item => item != null);
             }
         }
 

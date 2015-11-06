@@ -213,7 +213,7 @@
       <Property Name="DefaultLightingType" Code="282" Type="DxfDefaultLightingType" DefaultValue="DxfDefaultLightingType.OneDistantLight" ReadConverter="(DxfDefaultLightingType)" WriteConverter="(short)" MinVersion="R2007" />
       <Property Name="Brightness" Code="141" Type="double" DefaultValue="0.0" MinVersion="R2007" />
       <Property Name="Contrast" Code="142" Type="double" DefaultValue="0.0" MinVersion="R2007" />
-      <Property Name="AmbientColor" Code="62" Type="DxfColor" DefaultValue="DxfColor.FromRawValue(7)" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" WriteCondition="AmbientColor.RawValue != 7" MinVersion="R2007" />
+      <Property Name="AmbientColor" Code="62" Type="DxfColor" DefaultValue="DxfColor.FromRawValue(7)" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" WriteCondition="AmbientColor?.RawValue != 7" MinVersion="R2007" />
       <Property Name="AmbientColorInt" Code="421" Type="int" DefaultValue="0" WriteCondition="AmbientColorInt != 0" MinVersion="R2007" />
       <Property Name="AmbientColorName" Code="431" Type="string" DefaultValue="BLACK" WriteCondition="AmbientColorName != &quot;BLACK&quot;" MinVersion="R2007" />
     </TableItem>

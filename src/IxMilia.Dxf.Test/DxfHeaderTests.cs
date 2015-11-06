@@ -469,17 +469,7 @@ ENDSEC
         public void WriteAndReadTypeDefaultsTest()
         {
             var file = new DxfFile();
-            var headerType = file.Header.GetType();
-            var properties = headerType.GetProperties();
-            foreach (var property in properties.Where(p => p.GetIndexParameters().Length == 0))
-            {
-                // set each non-index header property to `default(T)`
-                var propertyType = property.PropertyType;
-                var defaultValue = propertyType.IsValueType
-                    ? Activator.CreateInstance(propertyType)
-                    : null;
-                property.SetValue(file.Header, defaultValue);
-            }
+            SetAllPropertiesToDefault(file.Header);
 
             // write each version of the header with default values
             foreach (var version in new[] { DxfAcadVersion.R10, DxfAcadVersion.R11, DxfAcadVersion.R12, DxfAcadVersion.R13, DxfAcadVersion.R14, DxfAcadVersion.R2000, DxfAcadVersion.R2004, DxfAcadVersion.R2007, DxfAcadVersion.R2010, DxfAcadVersion.R2013 })

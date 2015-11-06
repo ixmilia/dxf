@@ -1265,18 +1265,46 @@ AcDbBlockEnd
         }
 
         [Fact]
-        public void WritingPartiallyInitializedTablesTest()
+        public void WriteTablesWithDefaultValuesTest()
         {
             var file = new DxfFile();
+
             file.ApplicationIds.Add(new DxfAppId());
+            file.ApplicationIds.Add(SetAllPropertiesToDefault(new DxfAppId()));
+            file.ApplicationIds.Add(null);
+
             file.BlockRecords.Add(new DxfBlockRecord());
+            file.BlockRecords.Add(SetAllPropertiesToDefault(new DxfBlockRecord()));
+            file.BlockRecords.Add(null);
+
             file.DimensionStyles.Add(new DxfDimStyle());
+            file.DimensionStyles.Add(SetAllPropertiesToDefault(new DxfDimStyle()));
+            file.DimensionStyles.Add(null);
+
             file.Layers.Add(new DxfLayer());
+            file.Layers.Add(SetAllPropertiesToDefault(new DxfLayer()));
+            file.Layers.Add(null);
+
             file.Linetypes.Add(new DxfLineType());
+            file.Linetypes.Add(SetAllPropertiesToDefault(new DxfLineType()));
+            file.Linetypes.Add(null);
+
             file.Styles.Add(new DxfStyle());
+            file.Styles.Add(SetAllPropertiesToDefault(new DxfStyle()));
+            file.Styles.Add(null);
+
             file.UserCoordinateSystems.Add(new DxfUcs());
+            file.UserCoordinateSystems.Add(SetAllPropertiesToDefault(new DxfUcs()));
+            file.UserCoordinateSystems.Add(null);
+
             file.Views.Add(new DxfView());
+            file.Views.Add(SetAllPropertiesToDefault(new DxfView()));
+            file.Views.Add(null);
+
             file.ViewPorts.Add(new DxfViewPort());
+            file.ViewPorts.Add(SetAllPropertiesToDefault(new DxfViewPort()));
+            file.ViewPorts.Add(null);
+
             using (var ms = new MemoryStream())
             {
                 file.Save(ms);
@@ -1289,6 +1317,8 @@ AcDbBlockEnd
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Blocks.Add(new DxfBlock());
+            file.Blocks.Add(SetAllPropertiesToDefault(new DxfBlock()));
+            file.Blocks.Add(null);
             using (var ms = new MemoryStream())
             {
                 file.Save(ms);
@@ -1307,26 +1337,26 @@ AcDbBlockEnd
                     var ctor = type.GetConstructor(Type.EmptyTypes);
                     if (ctor != null)
                     {
-                        // all types deriving from DxfEntity with a default constructor
+                        // add the entity with its default initialized values
                         var entity = (DxfEntity)ctor.Invoke(new object[0]);
-
-                        // add the entity with it's default initialized values
                         file.Entities.Add(entity);
 
-                        // and create a new entity to be nulled out
+                        // add the entity with its default values and 2 items added to each List<T> collection
                         entity = (DxfEntity)ctor.Invoke(new object[0]);
-
-                        // set all non-indexer properties to `default(t)`
-                        foreach (var property in type.GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
+                        foreach (var property in type.GetProperties().Where(p => IsListOfT(p.PropertyType)))
                         {
-                            var propertyType = property.PropertyType;
-                            var defaultValue = propertyType.IsValueType
-                                ? Activator.CreateInstance(propertyType)
+                            var itemType = property.PropertyType.GenericTypeArguments.Single();
+                            var itemValue = itemType.IsValueType
+                                ? Activator.CreateInstance(itemType)
                                 : null;
-                            property.SetValue(entity, defaultValue);
+                            var addMethod = property.PropertyType.GetMethod("Add");
+                            var propertyValue = property.GetValue(entity);
+                            addMethod.Invoke(propertyValue, new object[] { itemValue });
+                            addMethod.Invoke(propertyValue, new object[] { itemValue });
                         }
 
-                        // add it to the file
+                        // add an entity with all non-indexer properties set to `default(T)`
+                        entity = (DxfEntity)SetAllPropertiesToDefault(ctor.Invoke(new object[0]));
                         file.Entities.Add(entity);
                     }
                 }

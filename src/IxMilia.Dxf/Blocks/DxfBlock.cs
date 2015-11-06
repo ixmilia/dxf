@@ -110,9 +110,9 @@ namespace IxMilia.Dxf.Blocks
 
             list.Add(new DxfCodePair(2, Name));
             list.Add(new DxfCodePair(70, (short)Flags));
-            list.Add(new DxfCodePair(10, BasePoint.X));
-            list.Add(new DxfCodePair(20, BasePoint.Y));
-            list.Add(new DxfCodePair(30, BasePoint.Z));
+            list.Add(new DxfCodePair(10, BasePoint?.X ?? 0.0));
+            list.Add(new DxfCodePair(20, BasePoint?.Y ?? 0.0));
+            list.Add(new DxfCodePair(30, BasePoint?.Z ?? 0.0));
             if (version >= DxfAcadVersion.R12)
             {
                 list.Add(new DxfCodePair(3, Name));

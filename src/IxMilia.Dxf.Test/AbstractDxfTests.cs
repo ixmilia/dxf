@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -82,6 +83,25 @@ EOF
             {
                 Assert.Equal(expected[i], actual[i]);
             }
+        }
+
+        protected static bool IsListOfT(Type type)
+        {
+            return type.IsGenericType && type.GenericTypeArguments.Length == 1 && type.Name == "List`1";
+        }
+
+        protected static T SetAllPropertiesToDefault<T>(T item)
+        {
+            foreach (var property in item.GetType().GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
+            {
+                var propertyType = property.PropertyType;
+                var defaultValue = propertyType.IsValueType
+                    ? Activator.CreateInstance(propertyType)
+                    : null;
+                property.SetValue(item, defaultValue);
+            }
+
+            return item;
         }
     }
 }

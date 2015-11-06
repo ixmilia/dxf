@@ -1238,26 +1238,26 @@ two
                     var ctor = type.GetConstructor(Type.EmptyTypes);
                     if (ctor != null)
                     {
-                        // all types deriving from DxfObject with a default constructor
-                        var obj = (DxfObject)ctor.Invoke(new object[0]);
-
                         // add the object with its default initialized values
+                        var obj = (DxfObject)ctor.Invoke(new object[0]);
                         file.Objects.Add(obj);
 
-                        // and create a new object to be nulled out
+                        // add the entity with its default values and 2 items added to each List<T> collection
                         obj = (DxfObject)ctor.Invoke(new object[0]);
-
-                        // set all non-indexer properties to `default(T)`
-                        foreach (var property in type.GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
+                        foreach (var property in type.GetProperties().Where(p => IsListOfT(p.PropertyType)))
                         {
-                            var propertyType = property.PropertyType;
-                            var defaultValue = propertyType.IsValueType
-                                ? Activator.CreateInstance(propertyType)
+                            var itemType = property.PropertyType.GenericTypeArguments.Single();
+                            var itemValue = itemType.IsValueType
+                                ? Activator.CreateInstance(itemType)
                                 : null;
-                            property.SetValue(obj, defaultValue);
+                            var addMethod = property.PropertyType.GetMethod("Add");
+                            var propertyValue = property.GetValue(obj);
+                            addMethod.Invoke(propertyValue, new object[] { itemValue });
+                            addMethod.Invoke(propertyValue, new object[] { itemValue });
                         }
 
-                        // add it to the file
+                        // add an object with all non-indexer properties set to `default(T)`
+                        obj = (DxfObject)SetAllPropertiesToDefault(ctor.Invoke(new object[0]));
                         file.Objects.Add(obj);
                     }
                 }

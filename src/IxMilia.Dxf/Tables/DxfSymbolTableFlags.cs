@@ -134,7 +134,8 @@ namespace IxMilia.Dxf
     {
         private void ValidateColor(DxfColor value)
         {
-            if (!value.IsIndex)
+            // null is OK
+            if (!value?.IsIndex ?? false)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), "Layer colors must be an indexable value: [1, 255]");
             }

@@ -61,7 +61,7 @@ namespace IxMilia.Dxf.Objects
             pairs.AddRange(this.BinaryObjectData.Select(p => new DxfCodePair(310, p)));
             foreach (var item in ObjectIds)
             {
-                pairs.Add(new DxfCodePair(330, "item"));
+                pairs.Add(new DxfCodePair(330, item));
             }
 
             pairs.Add(new DxfCodePair(94, 0));

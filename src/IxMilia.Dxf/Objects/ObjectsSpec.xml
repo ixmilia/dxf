@@ -39,7 +39,7 @@
             <WriteProperty Property="SizeInBits" />
             <WriteProperty Property="BinaryObjectData" />
             <Foreach Property="ObjectIds">
-                <WriteSpecificValue Code="330" Value="&quot;item&quot;" />
+                <WriteSpecificValue Code="330" Value="item" />
             </Foreach>
             <WriteSpecificValue Code="94" Value="0" />
             <WriteProperty Property="_objectDrawingFormat" />
@@ -630,7 +630,7 @@
         <Property Name="_elementCount" Code="71" Type="int" DefaultValue="0" WriteConverter="(short)" Accessibility="private" />
         <Property Name="_elementOffsets" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_elementColors" Code="62" Type="DxfColor" DefaultValue="null" AllowMultiples="true" ReadConverter="FromRawValue" WriteConverter="GetRawValue" Accessibility="private" />
-        <Property Name="_elementLinetypes" Code="6" Type="string" DefaultValue="&quot;BYLAYER&quot;" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_elementLinetypes" Code="6" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbMlineStyle&quot;" />
             <WriteProperty Property="StyleName" />

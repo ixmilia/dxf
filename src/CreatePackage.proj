@@ -8,14 +8,27 @@
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
     <ProjectFile>$(MSBuildThisFileDirectory)\IxMilia.Dxf\IxMilia.Dxf.csproj</ProjectFile>
+    <GitLinkExe>$(MSBuildThisFileDirectory)\packages\gitlink\lib\net45\GitLink.exe</GitLinkExe>
+    <GitHubUrl>https://github.com/IxMilia/Dxf</GitHubUrl>
   </PropertyGroup>
 
-  <Target Name="Build">
+  <Target Name="BuildAndTest">
     <MSBuild BuildInParallel="true"
              Projects="$(MSBuildThisFileDirectory)\..\BuildAndTest.proj"
              Properties="TreatWarningsAsErrors=true;Configuration=$(Configuration)"
              Targets="BuildAndTest" />
+  </Target>
+
+  <Target Name="GitLink">
+    <Warning Text="No CommitHash specified; skipping GitLink" Condition="'$(CommitHash)' == ''" />
+    <Exec Command="&quot;$(GitLinkExe)&quot; &quot;$(MSBuildThisFileDirectory)\..&quot; -u $(GitHubUrl) -s $(CommitHash)" IgnoreExitCode="true" Condition="'$(CommitHash)' != ''" />
+  </Target>
+
+  <Target Name="CreatePackage">
     <Exec Command="$(MSBuildThisFileDirectory)\.nuget\NuGet.exe pack $(ProjectFile) -Prop Configuration=$(Configuration) -OutputDirectory $(MSBuildThisFileDirectory)\Binaries\$(Configuration) -Symbols" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="BuildAndTest;GitLink;CreatePackage">
   </Target>
 
 </Project>

@@ -1138,7 +1138,7 @@ namespace IxMilia.Dxf
         private DxfColor _color;
 
         // properties
-        public DxfColor Color { get { return _color; } set { ValidateColor(value); _color = value; } }
+        public DxfColor Color { get { return _color; } set { _color = ConvertColor(value); } }
         public string LinetypeName { get; set; }
         public bool IsLayerPlotted { get; set; }
         public DxfLineWeight LineWeight { get; set; }
@@ -1167,7 +1167,7 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
-            pairs.Add(new DxfCodePair(62, DxfColor.GetRawValue(Color)));
+            pairs.Add(new DxfCodePair(62, GetWritableColorValue(Color)));
             pairs.Add(new DxfCodePair(6, (LinetypeName)));
             if (version >= DxfAcadVersion.R2000)
             {

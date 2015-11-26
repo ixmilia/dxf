@@ -1326,6 +1326,112 @@ AcDbBlockEnd
         }
 
         [Fact]
+        public void ReadZeroLayerColorTest()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+LAYER
+  0
+LAYER
+  2
+name
+ 62
+0
+");
+            var layer = file.Layers.Single();
+            Assert.True(layer.IsLayerOn);
+            Assert.Equal((short)0, layer.Color.RawValue);
+        }
+
+        [Fact]
+        public void ReadNormalLayerColorTest()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+LAYER
+  0
+LAYER
+  2
+name
+ 62
+5
+");
+            var layer = file.Layers.Single();
+            Assert.True(layer.IsLayerOn);
+            Assert.Equal((short)5, layer.Color.RawValue);
+        }
+
+        [Fact]
+        public void ReadNegativeLayerColorTest()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+LAYER
+  0
+LAYER
+  2
+name
+ 62
+-5
+");
+            var layer = file.Layers.Single();
+            Assert.False(layer.IsLayerOn);
+            Assert.Equal((short)5, layer.Color.RawValue);
+        }
+
+        [Fact]
+        public void WriteNormalLayerColorTest()
+        {
+            var file = new DxfFile();
+            file.Layers.Add(new DxfLayer("name", DxfColor.FromIndex(5)) { IsLayerOn = true });
+            VerifyFileContains(file, @"
+  0
+LAYER
+  5
+A
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+name
+ 70
+0
+ 62
+5
+");
+        }
+
+        [Fact]
+        public void WriteNegativeLayerColorTest()
+        {
+            var file = new DxfFile();
+            file.Layers.Add(new DxfLayer("name", DxfColor.FromIndex(5)) { IsLayerOn = false });
+            VerifyFileContains(file, @"
+  0
+LAYER
+  5
+A
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+name
+ 70
+0
+ 62
+-5
+");
+        }
+
+        [Fact]
         public void WriteAllDefaultEntitiesTest()
         {
             var file = new DxfFile();

@@ -94,9 +94,9 @@ string WriteConverter(XElement property)
     return att == null ? string.Empty : att.Value;
 }
 
-string CustomValidator(XElement property)
+string SetConverter(XElement property)
 {
-    var att = property.Attribute("CustomValidator");
+    var att = property.Attribute("SetConverter");
     return att == null ? null : att.Value;
 }
 

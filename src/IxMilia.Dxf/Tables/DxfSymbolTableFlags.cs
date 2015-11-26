@@ -132,13 +132,28 @@ namespace IxMilia.Dxf
 
     public partial class DxfLayer
     {
-        private void ValidateColor(DxfColor value)
+        public bool IsLayerOn { get; set; } = true;
+
+        private DxfColor ConvertColor(DxfColor value)
         {
-            // null is OK
-            if (!value?.IsIndex ?? false)
+            if (value?.RawValue < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), "Layer colors must be an indexable value: [1, 255]");
+                IsLayerOn = false;
+                return DxfColor.FromRawValue((short)-value.RawValue);
             }
+            else
+            {
+                IsLayerOn = true;
+                return value;
+            }
+        }
+
+        private short GetWritableColorValue(DxfColor color)
+        {
+            var value = color?.RawValue ?? 0;
+            return IsLayerOn
+                ? value
+                : (short)-value;
         }
     }
 }

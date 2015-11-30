@@ -134,23 +134,15 @@ namespace IxMilia.Dxf
     {
         public bool IsLayerOn { get; set; } = true;
 
-        private DxfColor ConvertColor(DxfColor value)
+        private DxfColor ReadColorValue(short value)
         {
-            if (value?.RawValue < 0)
-            {
-                IsLayerOn = false;
-                return DxfColor.FromRawValue((short)-value.RawValue);
-            }
-            else
-            {
-                IsLayerOn = true;
-                return value;
-            }
+            IsLayerOn = value >= 0;
+            return DxfColor.FromRawValue(Math.Abs(value));
         }
 
         private short GetWritableColorValue(DxfColor color)
         {
-            var value = color?.RawValue ?? 0;
+            var value = Math.Abs(color?.RawValue ?? 0);
             return IsLayerOn
                 ? value
                 : (short)-value;

@@ -94,12 +94,6 @@ string WriteConverter(XElement property)
     return att == null ? string.Empty : att.Value;
 }
 
-string SetConverter(XElement property)
-{
-    var att = property.Attribute("SetConverter");
-    return att == null ? null : att.Value;
-}
-
 string BackingFieldName(string propertyName)
 {
     return "_" + char.ToLower(propertyName[0]) + propertyName.Substring(1);

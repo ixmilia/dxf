@@ -1134,11 +1134,8 @@ namespace IxMilia.Dxf
 
         protected override DxfTableType TableType { get { return DxfTableType.Layer; } }
 
-        // backing fields
-        private DxfColor _color;
-
         // properties
-        public DxfColor Color { get { return _color; } set { _color = ConvertColor(value); } }
+        public DxfColor Color { get; set; }
         public string LinetypeName { get; set; }
         public bool IsLayerPlotted { get; set; }
         public DxfLineWeight LineWeight { get; set; }
@@ -1217,7 +1214,7 @@ namespace IxMilia.Dxf
                         item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 62:
-                        item.Color = DxfColor.FromRawValue(pair.ShortValue);
+                        item.Color = item.ReadColorValue(pair.ShortValue);
                         break;
                     case 6:
                         item.LinetypeName = (pair.StringValue);

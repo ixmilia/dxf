@@ -7,10 +7,10 @@
 
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
-    <SolutionDir>$(MSBuildThisFileDirectory)\src</SolutionDir>
+    <SolutionDir>$(MSBuildThisFileDirectory)src</SolutionDir>
     <SolutionFile>$(SolutionDir)\IxMilia.Dxf.sln</SolutionFile>
     <TestAssembly>$(SolutionDir)\Binaries\$(Configuration)\IxMilia.Dxf.Test.dll</TestAssembly>
-    <NuGetExe>$(MSBuildThisFileDirectory)\src\.nuget\NuGet.exe</NuGetExe>
+    <NuGetExe>$(MSBuildThisFileDirectory)src\.nuget\NuGet.exe</NuGetExe>
   </PropertyGroup>
 
   <UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -55,7 +55,7 @@
   </Target>
 
   <Target Name="Test">
-    <Exec Command="$(MSBuildThisFileDirectory)\src\packages\xunit.runners.1.9.2\tools\xunit.console.clr4.exe $(TestAssembly)" />
+    <Exec Command="$(MSBuildThisFileDirectory)src\packages\xunit.runners.1.9.2\tools\xunit.console.clr4.exe $(TestAssembly)" />
   </Target>
 
   <Target Name="BuildAndTest"

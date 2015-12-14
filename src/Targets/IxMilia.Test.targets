@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <StartAction Condition="'$(StartActions)' == ''">Program</StartAction>
-    <StartProgram Condition="'$(StartProgram)' == ''">$(MSBuildThisFileDirectory)\..\packages\xunit.runners.1.9.2\tools\xunit.gui.clr4.x86.exe</StartProgram>
+    <StartProgram Condition="'$(StartProgram)' == ''">$(MSBuildThisFileDirectory)..\packages\xunit.runners.1.9.2\tools\xunit.gui.clr4.x86.exe</StartProgram>
     <StartArguments Condition="'$(StartArguments)' == ''">$(AssemblyName).dll</StartArguments>
     <StartWorkingDirectory Condition="'$(StartWorkingDirectory)' == ''">$(OutputPath)</StartWorkingDirectory>
   </PropertyGroup>

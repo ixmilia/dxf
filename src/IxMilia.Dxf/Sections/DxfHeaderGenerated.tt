@@ -39,7 +39,7 @@ namespace IxMilia.Dxf
         {
             seenKeys.Add(name);
 #>
-        private const string <#= name #> = "$<#= name #>";
+        private const string <#= Identifier(name) #> = "$<#= name #>";
 <#      }
     } // foreach
 
@@ -134,7 +134,7 @@ foreach (var property in variables) {
 <#
     } // if
 #>
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(9, <#= property.Attribute("Name").Value #>));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(9, <#= Identifier(property.Attribute("Name").Value) #>));
 <#
     if (type == "DxfPoint" || type == "DxfVector")
     {
@@ -177,7 +177,7 @@ foreach (var property in variables) {
     foreach (var propertyGroup in variables.GroupBy(v => v.Attribute("Name").Value))
     {
 #>
-                case <#= propertyGroup.Key #>:
+                case <#= Identifier(propertyGroup.Key) #>:
 <#
         var type = propertyGroup.First().Attribute("Type").Value;
         var prop = propertyGroup.First().Attribute("Property").Value;
@@ -282,7 +282,7 @@ foreach (var property in variables) {
         {
             seenProperties.Add(propertyName);
 #>
-                case <#= propertyName #>:
+                case <#= Identifier(propertyName) #>:
                     return this.<#= property.Attribute("Property").Value #>;
 <#
         } // if
@@ -310,7 +310,7 @@ foreach (var property in variables) {
         {
             seenProperties.Add(propertyName);
 #>
-                case <#= propertyName #>:
+                case <#= Identifier(propertyName) #>:
                     this.<#= property.Attribute("Property").Value #> = (<#= property.Attribute("Type").Value #>)value;
                     break;
 <#

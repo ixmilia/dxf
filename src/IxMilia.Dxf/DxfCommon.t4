@@ -380,6 +380,11 @@ string CamlCase(string value)
     return char.ToLower(value[0]) + value.Substring(1);
 }
 
+string Identifier(string value)
+{
+    return value[0] >= '0' && value[0] <= '9' ? "_" + value : value;
+}
+
 bool HasFlags(XElement xml)
 {
     return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true"));

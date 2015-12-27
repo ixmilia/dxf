@@ -33,12 +33,12 @@ namespace IxMilia.Dxf
 
         public static string GuidString(Guid g)
         {
-            return g.ToString();
+            return g.ToString("B").ToUpper();
         }
 
         public static Guid GuidString(string s)
         {
-            return new Guid(s);
+            return Guid.Parse(s);
         }
 
         public static uint UIntHandle(string s)

@@ -712,7 +712,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $DIMFRAC header variable.
         /// </summary>
-        public double DimensionTextHeightScaleFactor { get; set; }
+        public DxfDimensionFractionFormat DimensionTextHeightScaleFactor { get; set; }
 
         /// <summary>
         /// The $DIMLDRBLK header variable.
@@ -1287,7 +1287,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $CELWEIGHT header variable.
         /// </summary>
-        public short NewObjectLineWeight { get; set; }
+        public DxfLineWeight NewObjectLineWeight { get; set; }
 
         /// <summary>
         /// The $ENDCAPS header variable.
@@ -1377,7 +1377,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $XCLIPFRAME header variable.
         /// </summary>
-        public bool IsXRefClippingBoundaryVisible { get; set; }
+        public DxfXrefClippingBoundaryVisibility IsXRefClippingBoundaryVisible { get; set; }
 
         /// <summary>
         /// The $HALOGAP header variable.
@@ -1517,7 +1517,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $CMATERIAL header variable.
         /// </summary>
-        public string CurrentMaterial { get; set; }
+        public uint CurrentMaterialHandle { get; set; }
 
         /// <summary>
         /// The $SOLIDHIST header variable.
@@ -1552,12 +1552,12 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $INTERFEREOBJVS header variable.
         /// </summary>
-        public string InterferenceObjectVisualStylePointer { get; set; }
+        public uint InterferenceObjectVisualStylePointer { get; set; }
 
         /// <summary>
         /// The $INTERFEREVPVS header variable.
         /// </summary>
-        public string InterferenceViewPortVisualStylePointer { get; set; }
+        public uint InterferenceViewPortVisualStylePointer { get; set; }
 
         /// <summary>
         /// The $CSHADOW header variable.
@@ -1606,40 +1606,40 @@ namespace IxMilia.Dxf
             this.MinimumDrawingExtents = DxfPoint.Origin; // EXTMIN
             this.MaximumDrawingExtents = DxfPoint.Origin; // EXTMAX
             this.MinimumDrawingLimits = DxfPoint.Origin; // LIMMIN
-            this.MaximumDrawingLimits = DxfPoint.Origin; // LIMMAX
+            this.MaximumDrawingLimits = new DxfPoint(12.0, 9.0, 0.0); // LIMMAX
             this.DrawOrthoganalLines = false; // ORTHOMODE
             this.UseRegenMode = true; // REGENMODE
             this.FillModeOn = true; // FILLMODE
-            this.UseQuickTextMode = true; // QTEXTMODE
+            this.UseQuickTextMode = false; // QTEXTMODE
             this.MirrorText = false; // MIRRTEXT
             this.DragMode = DxfDragMode.Auto; // DRAGMODE
             this.LinetypeScale = 1.0; // LTSCALE
-            this.ObjectSnapFlags = 4133; // OSMODE
-            this.AttributeVisibility = DxfAttributeVisibility.None; // ATTMODE
-            this.DefaultTextHeight = 0.0; // TEXTSIZE
-            this.TraceWidth = 0.0; // TRACEWID
+            this.ObjectSnapFlags = 37; // OSMODE
+            this.AttributeVisibility = DxfAttributeVisibility.Normal; // ATTMODE
+            this.DefaultTextHeight = 0.2; // TEXTSIZE
+            this.TraceWidth = 0.05; // TRACEWID
             this.TextStyle = "STANDARD"; // TEXTSTYLE
             this.CurrentLayer = "0"; // CLAYER
-            this.CurrentEntityLinetype = "BYBLOCK"; // CELTYPE
-            this.CurrentEntityColor = DxfColor.ByBlock; // CECOLOR
+            this.CurrentEntityLinetype = "BYLAYER"; // CELTYPE
+            this.CurrentEntityColor = DxfColor.ByLayer; // CECOLOR
             this.CurrentEntityLinetypeScale = 1.0; // CELTSCALE
             this.DisplaySilhouetteCurvesInWireframeMode = false; // DISPSILH
             this.DimensioningScaleFactor = 1.0; // DIMSCALE
-            this.DimensioningArrowSize = 1.0; // DIMASZ
-            this.DimensionExtensionLineOffset = 0.0; // DIMEXO
-            this.DimensionLineIncrement = 0.0; // DIMDLI
-            this.DimensionDistanceRoundingValue = 0.001; // DIMRND
+            this.DimensioningArrowSize = 0.18; // DIMASZ
+            this.DimensionExtensionLineOffset = 0.0625; // DIMEXO
+            this.DimensionLineIncrement = 0.38; // DIMDLI
+            this.DimensionDistanceRoundingValue = 0.0; // DIMRND
             this.DimensionLineExtension = 0.0; // DIMDLE
-            this.DimensionExtensionLineExtension = 0.0; // DIMEXE
+            this.DimensionExtensionLineExtension = 0.18; // DIMEXE
             this.DimensionPlusTolerance = 0.0; // DIMTP
             this.DimensionMinusTolerance = 0.0; // DIMTM
-            this.DimensioningTextHeight = 10.0; // DIMTXT
-            this.CenterMarkSize = 1.0; // DIMCEN
+            this.DimensioningTextHeight = 0.18; // DIMTXT
+            this.CenterMarkSize = 0.09; // DIMCEN
             this.DimensioningTickSize = 0.0; // DIMTSZ
             this.GenerateDimensionTolerances = false; // DIMTOL
             this.GenerateDimensionLimits = false; // DIMLIM
-            this.DimensionTextInsideHorizontal = false; // DIMTIH
-            this.DimensionTextOutsideHorizontal = false; // DIMTOH
+            this.DimensionTextInsideHorizontal = true; // DIMTIH
+            this.DimensionTextOutsideHorizontal = true; // DIMTOH
             this.SuppressFirstDimensionExtensionLine = false; // DIMSE1
             this.SuppressSecondDimensionExtensionLine = false; // DIMSE2
             this.TextAboveDimensionLine = false; // DIMTAD
@@ -1650,8 +1650,8 @@ namespace IxMilia.Dxf
             this.DimensioningSuffix = null; // DIMPOST
             this.AlternateDimensioningSuffix = null; // DIMAPOST
             this.UseAlternateDimensioning = false; // DIMALT
-            this.AlternateDimensioningDecimalPlaces = 0; // DIMALTD
-            this.AlternateDimensioningScaleFactor = 1.0; // DIMALTF
+            this.AlternateDimensioningDecimalPlaces = 2; // DIMALTD
+            this.AlternateDimensioningScaleFactor = 25.4; // DIMALTF
             this.DimensionLinearMeasurementsScaleFactor = 1.0; // DIMLFAC
             this.ForceDimensionLineExtensionsOutsideIfTextIs = false; // DIMTOFL
             this.DimensionVerticalTextPosition = 0.0; // DIMTVP
@@ -1665,29 +1665,29 @@ namespace IxMilia.Dxf
             this.DimensionExtensionLineColor = DxfColor.ByBlock; // DIMCLRE
             this.DimensionTextColor = DxfColor.ByBlock; // DIMCLRT
             this.DimensionToleranceDisplayScaleFactor = 1.0; // DIMTFAC
-            this.DimensionLineGap = 0.0; // DIMGAP
+            this.DimensionLineGap = 0.09; // DIMGAP
             this.DimensionTextJustification = DxfDimensionTextJustification.AboveLineCenter; // DIMJUST
-            this.DimensionToleranceVerticalJustification = DxfJustification.Top; // DIMTOLJ
+            this.DimensionToleranceVerticalJustification = DxfJustification.Middle; // DIMTOLJ
             this.DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMTZIN
             this.AlternateDimensioningZeroSupression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMALTZ
             this.AlternateDimensioningToleranceZeroSupression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMALTTZ
-            this.DimensionCursorControlsTextPosition = true; // DIMUPT
+            this.DimensionCursorControlsTextPosition = false; // DIMUPT
             this.DimensionUnitToleranceDecimalPlaces = 4; // DIMDEC
             this.DimensionToleranceDecimalPlaces = 4; // DIMTDEC
-            this.AlternateDimensioningUnits = DxfUnitFormat.Scientific; // DIMALTU
-            this.AlternateDimensioningToleranceDecimalPlaces = 0; // DIMALTTD
+            this.AlternateDimensioningUnits = DxfUnitFormat.Decimal; // DIMALTU
+            this.AlternateDimensioningToleranceDecimalPlaces = 2; // DIMALTTD
             this.DimensionTextStyle = "STANDARD"; // DIMTXSTY
             this.DimensioningAngleFormat = DxfAngleFormat.DecimalDegrees; // DIMAUNIT
-            this.AngularDimensionPrecision = 12; // DIMADEC
+            this.AngularDimensionPrecision = 0; // DIMADEC
             this.AlternateDimensioningUnitRounding = 0.0; // DIMALTRND
             this.DimensionAngleZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMAZIN
             this.DimensionDecimalSeparatorChar = '.'; // DIMDSEP
-            this.DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines; // DIMATFIT
-            this.DimensionTextHeightScaleFactor = 1.0; // DIMFRAC
+            this.DimensionTextAndArrowPlacement = DxfDimensionFit.MoveEitherForBestFit; // DIMATFIT
+            this.DimensionTextHeightScaleFactor = DxfDimensionFractionFormat.HorizontalStacking; // DIMFRAC
             this.DimensionLeaderBlockName = null; // DIMLDRBLK
-            this.DimensionNonAngularUnits = DxfNonAngularUnits.Scientific; // DIMLUNIT
-            this.DimensionLineWeight = new DxfLineWeight(); // DIMLWD
-            this.DimensionExtensionLineWeight = new DxfLineWeight(); // DIMLWE
+            this.DimensionNonAngularUnits = DxfNonAngularUnits.Decimal; // DIMLUNIT
+            this.DimensionLineWeight = DxfLineWeight.ByLayer; // DIMLWD
+            this.DimensionExtensionLineWeight = DxfLineWeight.ByLayer; // DIMLWE
             this.DimensionTextMovementRule = DxfDimensionTextMovementRule.MoveLineWithText; // DIMTMOVE
             this.DimensionLineFixedLength = 1.0; // DIMFXL
             this.DimensionLineFixedLengthOn = false; // DIMFXLON
@@ -1699,9 +1699,9 @@ namespace IxMilia.Dxf
             this.DimensionFirstExtensionLineType = null; // DIMLTEX1
             this.DimensionSecondExtensionLineType = null; // DIMLTEX2
             this.DimensionTextDirection = DxfTextDirection.LeftToRight; // DIMTXTDIRECTION
-            this.UnitFormat = DxfUnitFormat.Scientific; // LUNITS
+            this.UnitFormat = DxfUnitFormat.Decimal; // LUNITS
             this.UnitPrecision = 4; // LUPREC
-            this.SketchRecordIncrement = 0.0; // SKETCHINC
+            this.SketchRecordIncrement = 0.1; // SKETCHINC
             this.FilletRadius = 0.0; // FILLETRAD
             this.AngleUnitFormat = DxfAngleFormat.DecimalDegrees; // AUNITS
             this.AngleUnitPrecision = 0; // AUPREC
@@ -1722,25 +1722,25 @@ namespace IxMilia.Dxf
             this.UpdateDateUniversal = DateTime.UtcNow; // TDUUPDATE
             this.TimeInDrawing = TimeSpan.Zero; // TDINDWG
             this.UserElapsedTimer = TimeSpan.Zero; // TDUSRTIMER
-            this.UserTimerOn = false; // USRTIMER
+            this.UserTimerOn = true; // USRTIMER
             this.AngleZeroDirection = 0.0; // ANGBASE
             this.AngleDirection = DxfAngleDirection.CounterClockwise; // ANGDIR
             this.PointDisplayMode = 0; // PDMODE
             this.PointDisplaySize = 0.0; // PDSIZE
             this.DefaultPolylineWidth = 0.0; // PLINEWID
-            this.CoordinateDisplay = DxfCoordinateDisplay.Static; // COORDS
-            this.DisplaySplinePolygonControl = true; // SPLFRAME
-            this.PEditSplineCurveType = DxfPolylineCurvedAndSmoothSurfaceType.QuadraticBSpline; // SPLINETYPE
+            this.CoordinateDisplay = DxfCoordinateDisplay.ContinuousUpdate; // COORDS
+            this.DisplaySplinePolygonControl = false; // SPLFRAME
+            this.PEditSplineCurveType = DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline; // SPLINETYPE
             this.LineSegmentsPerSplinePatch = 8; // SPLINESEGS
-            this.ShowAttributeEntryDialogs = false; // ATTDIA
+            this.ShowAttributeEntryDialogs = true; // ATTDIA
             this.PromptForAttributeOnInsert = true; // ATTREQ
             this.HandlesEnabled = true; // HANDLING
             this.NextAvailableHandle = 0; // HANDSEED
-            this.MeshTabulationsInFirstDirection = 0; // SURFTAB1
-            this.MeshTabulationsInSecondDirection = 0; // SURFTAB2
-            this.PEditSmoothSurfaceType = DxfPolylineCurvedAndSmoothSurfaceType.QuadraticBSpline; // SURFTYPE
-            this.PEditSmoothMDensith = 0; // SURFU
-            this.PEditSmoothNDensith = 0; // SURFV
+            this.MeshTabulationsInFirstDirection = 6; // SURFTAB1
+            this.MeshTabulationsInSecondDirection = 6; // SURFTAB2
+            this.PEditSmoothSurfaceType = DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline; // SURFTYPE
+            this.PEditSmoothMDensith = 6; // SURFU
+            this.PEditSmoothNDensith = 6; // SURFV
             this.UCSDefinitionName = null; // UCSBASE
             this.UCSName = null; // UCSNAME
             this.UCSOrigin = DxfPoint.Origin; // UCSORG
@@ -1778,51 +1778,51 @@ namespace IxMilia.Dxf
             this.UserReal4 = 0.0; // USERR4
             this.UserReal5 = 0.0; // USERR5
             this.SetUCSToWCSInDViewOrVPoint = true; // WORLDVIEW
-            this.EdgeShading = DxfShadeEdgeMode.FacesShadedEdgeNotHighlighted; // SHADEDGE
+            this.EdgeShading = DxfShadeEdgeMode.FacesInEntityColorEdgesInBlack; // SHADEDGE
             this.PercentAmbientToDiffuse = 70; // SHADEDIF
-            this.PreviousReleaseTileCompatability = false; // TILEMODE
-            this.MaximumActiveViewports = 3; // MAXACTVP
+            this.PreviousReleaseTileCompatability = true; // TILEMODE
+            this.MaximumActiveViewports = 64; // MAXACTVP
             this.PaperspaceInsertionBase = DxfPoint.Origin; // PINSBASE
             this.LimitCheckingInPaperspace = false; // PLIMCHECK
-            this.PaperspaceMinimumDrawingExtents = DxfPoint.Origin; // PEXTMIN
-            this.PaperspaceMaximumDrawingExtents = DxfPoint.Origin; // PEXTMAX
+            this.PaperspaceMinimumDrawingExtents = new DxfPoint(1.0e20, 1.0e20, 1.0e20); // PEXTMIN
+            this.PaperspaceMaximumDrawingExtents = new DxfPoint(-1.0e20, -1.0e20, -1.0e20); // PEXTMAX
             this.PaperspaceMinimumDrawingLimits = DxfPoint.Origin; // PLIMMIN
-            this.PaperspaceMaximumDrawingLimits = DxfPoint.Origin; // PLIMMAX
-            this.DisplayFractionsInInput = true; // UNITMODE
-            this.RetainXRefDependentVisibilitySettings = false; // VISRETAIN
-            this.IsPolylineContinuousAroundVerticies = true; // PLINEGEN
+            this.PaperspaceMaximumDrawingLimits = new DxfPoint(12.0, 9.0, 0.0); // PLIMMAX
+            this.DisplayFractionsInInput = false; // UNITMODE
+            this.RetainXRefDependentVisibilitySettings = true; // VISRETAIN
+            this.IsPolylineContinuousAroundVerticies = false; // PLINEGEN
             this.ScaleLinetypesInPaperspace = true; // PSLTSCALE
-            this.SpacialIndexMaxDepth = 0; // TREEDEPTH
+            this.SpacialIndexMaxDepth = 3020; // TREEDEPTH
             this.CurrentMultilineStyle = "STANDARD"; // CMLSTYLE
             this.CurrentMultilineJustification = DxfJustification.Top; // CMLJUST
             this.CurrentMultilineScale = 1.0; // CMLSCALE
             this.SaveProxyGraphics = true; // PROXYGRAPHICS
             this.DrawingUnits = DxfDrawingUnits.English; // MEASUREMENT
-            this.NewObjectLineWeight = 0; // CELWEIGHT
+            this.NewObjectLineWeight = DxfLineWeight.ByBlock; // CELWEIGHT
             this.EndCapSetting = DxfEndCapSetting.None; // ENDCAPS
             this.LineweightJointSetting = DxfJoinStyle.None; // JOINSTYLE
             this.DisplayLinewieghtInModelAndLayoutTab = false; // LWDISPLAY
             this.DefaultDrawingUnits = DxfUnits.Unitless; // INSUNITS
             this.HyperlinkBase = null; // HYPERLINKBASE
             this.Stylesheet = null; // STYLESHEET
-            this.CanUseInPlaceReferenceEditing = false; // XEDIT
+            this.CanUseInPlaceReferenceEditing = true; // XEDIT
             this.NewObjectPlotStyle = DxfPlotStyle.ByLayer; // CEPSNTYPE
-            this.UsesColorDependentPlotStyleTables = false; // PSTYLEMODE
+            this.UsesColorDependentPlotStyleTables = true; // PSTYLEMODE
             this.FingerprintGuid = Guid.NewGuid(); // FINGERPRINTGUID
             this.VersionGuid = Guid.NewGuid(); // VERSIONGUID
-            this.UseACad2000SymbolTableNaming = false; // EXTNAMES
+            this.UseACad2000SymbolTableNaming = true; // EXTNAMES
             this.ViewportViewScaleFactor = 0.0; // PSVPSCALE
             this.OleStartup = false; // OLESTARTUP
-            this.ObjectSortingMethodsFlags = 0; // SORTENTS
+            this.ObjectSortingMethodsFlags = 127; // SORTENTS
             this.LayerAndSpatialIndexSaveMode = DxfLayerAndSpatialIndexSaveMode.None; // INDEXCTL
             this.HideTextObjectsWhenProducintHiddenView = false; // HIDETEXT
-            this.IsXRefClippingBoundaryVisible = false; // XCLIPFRAME
+            this.IsXRefClippingBoundaryVisible = DxfXrefClippingBoundaryVisibility.DisplayedNotPlotted; // XCLIPFRAME
             this.HaloGapPercent = 0.0; // HALOGAP
-            this.ObscuredLineColor = DxfColor.ByLayer; // OBSCOLOR
+            this.ObscuredLineColor = DxfColor.ByEntity; // OBSCOLOR
             this.ObscuredLineTypeStyle = DxfLinetypeStyle.Off; // OBSLTYPE
             this.DisplayIntersectionPolylines = false; // INTERSECTIONDISPLAY
             this.IntersectionPolylineColor = DxfColor.ByEntity; // INTERSECTIONCOLOR
-            this.DimensionObjectAssociativity = DxfDimensionAssociativity.AssociativeObjects; // DIMASSOC
+            this.DimensionObjectAssociativity = DxfDimensionAssociativity.NonAssociativeObjects; // DIMASSOC
             this.ProjectName = null; // PROJECTNAME
             this.UseCameraDisplay = false; // CAMERADISPLAY
             this.LensLength = 50.0; // LENSLENGTH
@@ -1844,15 +1844,15 @@ namespace IxMilia.Dxf
             this.TimeZone = DxfTimeZone.PacificTime_US_Canada_SanFrancisco_Vancouver; // TIMEZONE
             this.UseLightGlyphDisplay = true; // LIGHTGLYPHDISPLAY
             this.UseTileModeLightSync = true; // TILEMODELIGHTSYNCH
-            this.CurrentMaterial = "BYLAYER"; // CMATERIAL
+            this.CurrentMaterialHandle = 0; // CMATERIAL
             this.NewSolidsContainHistory = false; // SOLIDHIST
             this.SolidHistoryMode = DxfSolidHistoryMode.DoesNotOverride; // SHOWHIST
-            this.DwfUnderlayFrameMode = DxfUnderlayFrameMode.DisplayAndPlot; // DWFFRAME
-            this.DgnUnderlayFrameMode = DxfUnderlayFrameMode.DisplayAndPlot; // DGNFRAME
+            this.DwfUnderlayFrameMode = DxfUnderlayFrameMode.DisplayNoPlot; // DWFFRAME
+            this.DgnUnderlayFrameMode = DxfUnderlayFrameMode.None; // DGNFRAME
             this.UseRealWorldScale = true; // REALWORLDSCALE
             this.InterferenceObjectColor = DxfColor.FromIndex(1); // INTERFERECOLOR
-            this.InterferenceObjectVisualStylePointer = "Conceptual"; // INTERFEREOBJVS
-            this.InterferenceViewPortVisualStylePointer = "3d Wireframe"; // INTERFEREVPVS
+            this.InterferenceObjectVisualStylePointer = 0; // INTERFEREOBJVS
+            this.InterferenceViewPortVisualStylePointer = 0; // INTERFEREVPVS
             this.ShadowMode = DxfShadowMode.CastsAndReceivesShadows; // CSHADOW
             this.ShadowPlaneZOffset = 0.0; // SHADOWPLANELOCATION
             this.AxisOn = false; // AXISMODE
@@ -2092,18 +2092,8 @@ namespace IxMilia.Dxf
             list.Add(new DxfCodePair(70, (short)(header.DimensionUnitZeroSuppression)));
 
             // DIMBLK
-            if (version <= DxfAcadVersion.R13)
-            {
-                list.Add(new DxfCodePair(9, DIMBLK));
-                list.Add(new DxfCodePair(2, (header.ArrowBlockName)));
-            }
-
-            // DIMBLK
-            if (version >= DxfAcadVersion.R14)
-            {
-                list.Add(new DxfCodePair(9, DIMBLK));
-                list.Add(new DxfCodePair(1, (header.ArrowBlockName)));
-            }
+            list.Add(new DxfCodePair(9, DIMBLK));
+            list.Add(new DxfCodePair(1, (header.ArrowBlockName)));
 
             // DIMASO
             list.Add(new DxfCodePair(9, DIMASO));
@@ -2341,7 +2331,7 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, DIMFRAC));
-                list.Add(new DxfCodePair(40, (header.DimensionTextHeightScaleFactor)));
+                list.Add(new DxfCodePair(70, (short)(header.DimensionTextHeightScaleFactor)));
             }
 
             // DIMLDRBLK
@@ -3069,7 +3059,7 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, CELWEIGHT));
-                list.Add(new DxfCodePair(370, (header.NewObjectLineWeight)));
+                list.Add(new DxfCodePair(370, DxfLineWeight.GetRawValue(header.NewObjectLineWeight)));
             }
 
             // ENDCAPS
@@ -3188,14 +3178,21 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2004)
             {
                 list.Add(new DxfCodePair(9, HIDETEXT));
-                list.Add(new DxfCodePair(290, (header.HideTextObjectsWhenProducintHiddenView)));
+                list.Add(new DxfCodePair(280, BoolShort(header.HideTextObjectsWhenProducintHiddenView)));
             }
 
             // XCLIPFRAME
-            if (version >= DxfAcadVersion.R2004)
+            if (version >= DxfAcadVersion.R2004 && version <= DxfAcadVersion.R2007)
             {
                 list.Add(new DxfCodePair(9, XCLIPFRAME));
-                list.Add(new DxfCodePair(290, (header.IsXRefClippingBoundaryVisible)));
+                list.Add(new DxfCodePair(290, EnumBool<DxfXrefClippingBoundaryVisibility>(header.IsXRefClippingBoundaryVisible)));
+            }
+
+            // XCLIPFRAME
+            if (version >= DxfAcadVersion.R2010)
+            {
+                list.Add(new DxfCodePair(9, XCLIPFRAME));
+                list.Add(new DxfCodePair(280, (short)(header.IsXRefClippingBoundaryVisible)));
             }
 
             // HALOGAP
@@ -3223,7 +3220,7 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2004)
             {
                 list.Add(new DxfCodePair(9, INTERSECTIONDISPLAY));
-                list.Add(new DxfCodePair(290, (header.DisplayIntersectionPolylines)));
+                list.Add(new DxfCodePair(280, BoolShort(header.DisplayIntersectionPolylines)));
             }
 
             // INTERSECTIONCOLOR
@@ -3391,7 +3388,7 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2007)
             {
                 list.Add(new DxfCodePair(9, CMATERIAL));
-                list.Add(new DxfCodePair(347, (header.CurrentMaterial)));
+                list.Add(new DxfCodePair(347, UIntHandle(header.CurrentMaterialHandle)));
             }
 
             // SOLIDHIST
@@ -3440,14 +3437,14 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2007)
             {
                 list.Add(new DxfCodePair(9, INTERFEREOBJVS));
-                list.Add(new DxfCodePair(345, (header.InterferenceObjectVisualStylePointer)));
+                list.Add(new DxfCodePair(345, UIntHandle(header.InterferenceObjectVisualStylePointer)));
             }
 
             // INTERFEREVPVS
             if (version >= DxfAcadVersion.R2007)
             {
                 list.Add(new DxfCodePair(9, INTERFEREVPVS));
-                list.Add(new DxfCodePair(346, (header.InterferenceViewPortVisualStylePointer)));
+                list.Add(new DxfCodePair(346, UIntHandle(header.InterferenceViewPortVisualStylePointer)));
             }
 
             // CSHADOW
@@ -3698,18 +3695,8 @@ namespace IxMilia.Dxf
                     header.DimensionUnitZeroSuppression = (DxfUnitZeroSuppression)(pair.ShortValue);
                     break;
                 case DIMBLK:
-                    switch (pair.Code)
-                    {
-                        case 2:
-                            header.ArrowBlockName = (pair.StringValue);
-                            break;
-                        case 1:
-                            header.ArrowBlockName = (pair.StringValue);
-                            break;
-                        default:
-                            Debug.Assert(false, string.Format("Expected code [2, 1], got {0}", pair.Code));
-                            break;
-                    }
+                    EnsureCode(pair, 1);
+                    header.ArrowBlockName = (pair.StringValue);
                     break;
                 case DIMASO:
                     EnsureCode(pair, 70);
@@ -3872,8 +3859,8 @@ namespace IxMilia.Dxf
                     header.DimensionTextAndArrowPlacement = (DxfDimensionFit)(pair.ShortValue);
                     break;
                 case DIMFRAC:
-                    EnsureCode(pair, 40);
-                    header.DimensionTextHeightScaleFactor = (pair.DoubleValue);
+                    EnsureCode(pair, 70);
+                    header.DimensionTextHeightScaleFactor = (DxfDimensionFractionFormat)(pair.ShortValue);
                     break;
                 case DIMLDRBLK:
                     EnsureCode(pair, 1);
@@ -4330,7 +4317,7 @@ namespace IxMilia.Dxf
                     break;
                 case CELWEIGHT:
                     EnsureCode(pair, 370);
-                    header.NewObjectLineWeight = (pair.ShortValue);
+                    header.NewObjectLineWeight = DxfLineWeight.FromRawValue(pair.ShortValue);
                     break;
                 case ENDCAPS:
                     EnsureCode(pair, 280);
@@ -4399,14 +4386,14 @@ namespace IxMilia.Dxf
                 case HIDETEXT:
                     switch (pair.Code)
                     {
-                        case 290:
-                            header.HideTextObjectsWhenProducintHiddenView = (pair.BoolValue);
-                            break;
                         case 280:
                             header.HideTextObjectsWhenProducintHiddenView = BoolShort(pair.ShortValue);
                             break;
+                        case 290:
+                            header.HideTextObjectsWhenProducintHiddenView = (pair.BoolValue);
+                            break;
                         default:
-                            Debug.Assert(false, string.Format("Expected code [290, 280], got {0}", pair.Code));
+                            Debug.Assert(false, string.Format("Expected code [280, 290], got {0}", pair.Code));
                             break;
                     }
                     break;
@@ -4414,10 +4401,10 @@ namespace IxMilia.Dxf
                     switch (pair.Code)
                     {
                         case 290:
-                            header.IsXRefClippingBoundaryVisible = (pair.BoolValue);
+                            header.IsXRefClippingBoundaryVisible = EnumBool<DxfXrefClippingBoundaryVisibility>(pair.BoolValue);
                             break;
                         case 280:
-                            header.IsXRefClippingBoundaryVisible = BoolShort(pair.ShortValue);
+                            header.IsXRefClippingBoundaryVisible = (DxfXrefClippingBoundaryVisibility)(pair.ShortValue);
                             break;
                         default:
                             Debug.Assert(false, string.Format("Expected code [290, 280], got {0}", pair.Code));
@@ -4439,14 +4426,14 @@ namespace IxMilia.Dxf
                 case INTERSECTIONDISPLAY:
                     switch (pair.Code)
                     {
-                        case 290:
-                            header.DisplayIntersectionPolylines = (pair.BoolValue);
-                            break;
                         case 280:
                             header.DisplayIntersectionPolylines = BoolShort(pair.ShortValue);
                             break;
+                        case 290:
+                            header.DisplayIntersectionPolylines = (pair.BoolValue);
+                            break;
                         default:
-                            Debug.Assert(false, string.Format("Expected code [290, 280], got {0}", pair.Code));
+                            Debug.Assert(false, string.Format("Expected code [280, 290], got {0}", pair.Code));
                             break;
                     }
                     break;
@@ -4544,7 +4531,7 @@ namespace IxMilia.Dxf
                     break;
                 case CMATERIAL:
                     EnsureCode(pair, 347);
-                    header.CurrentMaterial = (pair.StringValue);
+                    header.CurrentMaterialHandle = UIntHandle(pair.StringValue);
                     break;
                 case SOLIDHIST:
                     EnsureCode(pair, 280);
@@ -4572,11 +4559,11 @@ namespace IxMilia.Dxf
                     break;
                 case INTERFEREOBJVS:
                     EnsureCode(pair, 345);
-                    header.InterferenceObjectVisualStylePointer = (pair.StringValue);
+                    header.InterferenceObjectVisualStylePointer = UIntHandle(pair.StringValue);
                     break;
                 case INTERFEREVPVS:
                     EnsureCode(pair, 346);
-                    header.InterferenceViewPortVisualStylePointer = (pair.StringValue);
+                    header.InterferenceViewPortVisualStylePointer = UIntHandle(pair.StringValue);
                     break;
                 case CSHADOW:
                     EnsureCode(pair, 280);
@@ -5386,7 +5373,7 @@ namespace IxMilia.Dxf
                 case TILEMODELIGHTSYNCH:
                     return this.UseTileModeLightSync;
                 case CMATERIAL:
-                    return this.CurrentMaterial;
+                    return this.CurrentMaterialHandle;
                 case SOLIDHIST:
                     return this.NewSolidsContainHistory;
                 case SHOWHIST:
@@ -5693,7 +5680,7 @@ namespace IxMilia.Dxf
                     this.DimensionTextAndArrowPlacement = (DxfDimensionFit)value;
                     break;
                 case DIMFRAC:
-                    this.DimensionTextHeightScaleFactor = (double)value;
+                    this.DimensionTextHeightScaleFactor = (DxfDimensionFractionFormat)value;
                     break;
                 case DIMLDRBLK:
                     this.DimensionLeaderBlockName = (string)value;
@@ -6038,7 +6025,7 @@ namespace IxMilia.Dxf
                     this.DrawingUnits = (DxfDrawingUnits)value;
                     break;
                 case CELWEIGHT:
-                    this.NewObjectLineWeight = (short)value;
+                    this.NewObjectLineWeight = (DxfLineWeight)value;
                     break;
                 case ENDCAPS:
                     this.EndCapSetting = (DxfEndCapSetting)value;
@@ -6092,7 +6079,7 @@ namespace IxMilia.Dxf
                     this.HideTextObjectsWhenProducintHiddenView = (bool)value;
                     break;
                 case XCLIPFRAME:
-                    this.IsXRefClippingBoundaryVisible = (bool)value;
+                    this.IsXRefClippingBoundaryVisible = (DxfXrefClippingBoundaryVisibility)value;
                     break;
                 case HALOGAP:
                     this.HaloGapPercent = (double)value;
@@ -6176,7 +6163,7 @@ namespace IxMilia.Dxf
                     this.UseTileModeLightSync = (bool)value;
                     break;
                 case CMATERIAL:
-                    this.CurrentMaterial = (string)value;
+                    this.CurrentMaterialHandle = (uint)value;
                     break;
                 case SOLIDHIST:
                     this.NewSolidsContainHistory = (bool)value;
@@ -6197,10 +6184,10 @@ namespace IxMilia.Dxf
                     this.InterferenceObjectColor = (DxfColor)value;
                     break;
                 case INTERFEREOBJVS:
-                    this.InterferenceObjectVisualStylePointer = (string)value;
+                    this.InterferenceObjectVisualStylePointer = (uint)value;
                     break;
                 case INTERFEREVPVS:
-                    this.InterferenceViewPortVisualStylePointer = (string)value;
+                    this.InterferenceViewPortVisualStylePointer = (uint)value;
                     break;
                 case CSHADOW:
                     this.ShadowMode = (DxfShadowMode)value;

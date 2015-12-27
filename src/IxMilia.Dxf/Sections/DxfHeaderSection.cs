@@ -355,6 +355,20 @@ namespace IxMilia.Dxf
         LeftToRight = 0,
         RightToLeft = 1
     }
+
+    public enum DxfXrefClippingBoundaryVisibility
+    {
+        NotDisplayedNotPlotted = 0,
+        DisplayedAndPlotted = 1,
+        DisplayedNotPlotted = 2
+    }
+
+    public enum DxfDimensionFractionFormat
+    {
+        HorizontalStacking = 0,
+        DiagonalStacking = 1,
+        NotStacked = 2
+    }
 }
 
 namespace IxMilia.Dxf.Sections

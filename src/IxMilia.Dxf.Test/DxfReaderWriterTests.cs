@@ -1112,7 +1112,7 @@ $XCLIPFRAME
 ");
             Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
-            Assert.True(file.Header.IsXRefClippingBoundaryVisible);
+            Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
 
             // now test code 280 short
             file = Section("HEADER", @"
@@ -1135,7 +1135,7 @@ $XCLIPFRAME
 ");
             Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
-            Assert.True(file.Header.IsXRefClippingBoundaryVisible);
+            Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
 
             // verify that these variables aren't written twice
             file = new DxfFile();

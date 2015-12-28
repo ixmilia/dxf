@@ -524,17 +524,17 @@ TABLE
   2
 BLOCK_RECORD
   5
-2
+9
 330
 0
 100
 AcDbSymbolTable
  70
-0
+1
   0
 BLOCK_RECORD
   5
-A
+E
 330
 0
 100
@@ -836,7 +836,7 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-4C
+50
 100
 AcDbEntity
   8
@@ -919,7 +919,7 @@ EOF
 ");
             var styleTable = file.TablesSection.StyleTable;
             Assert.Equal(0x1Cu, styleTable.Handle);
-            Assert.Equal(3, styleTable.MaxEntries);
+            Assert.Equal(2, styleTable.Items.Count);
 
             var extendedDataGroup = styleTable.ExtensionDataGroups.Single();
             Assert.Equal("ACAD_XDICTIONARY", extendedDataGroup.GroupName);
@@ -952,19 +952,15 @@ EOF
             file.Styles.Add(new DxfStyle());
             VerifyFileContains(file, @"
   0
-SECTION
-  2
-TABLES
-  0
 TABLE
   2
 STYLE
   5
-6
+4
 100
 AcDbSymbolTable
  70
-0
+3
 ");
         }
 
@@ -982,15 +978,11 @@ AcDbSymbolTable
             file.Styles.Add(new DxfStyle());
             VerifyFileContains(file, @"
   0
-SECTION
-  2
-TABLES
-  0
 TABLE
   2
 STYLE
   5
-6
+4
 102
 {ACAD_XDICTIONARY
 360
@@ -1001,8 +993,6 @@ BBBB
 }
 100
 AcDbSymbolTable
- 70
-0
 ");
         }
 
@@ -1396,7 +1386,7 @@ name
   0
 LAYER
   5
-9
+10
 100
 AcDbSymbolTableRecord
   2
@@ -1417,7 +1407,7 @@ name
   0
 LAYER
   5
-9
+10
 100
 AcDbSymbolTableRecord
   2

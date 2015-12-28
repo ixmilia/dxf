@@ -34,6 +34,7 @@ namespace IxMilia.Dxf.Sections
         }
 
         protected internal abstract IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles);
+        protected internal abstract void Clear();
 
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {

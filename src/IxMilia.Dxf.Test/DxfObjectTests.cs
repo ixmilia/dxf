@@ -36,7 +36,7 @@ namespace IxMilia.Dxf.Test
   0
 ACAD_PROXY_OBJECT
   5
-A
+12
 330
 0
 100
@@ -110,10 +110,6 @@ string 2
             file.Header.Version = DxfAcadVersion.R2007;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
-  0
-DATATABLE
-  5
-A
 330
 0
 100
@@ -197,10 +193,6 @@ name-3
             file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(dict);
             VerifyFileContains(file, @"
-  0
-DICTIONARY
-  5
-A
 100
 AcDbDictionary
   3
@@ -678,10 +670,6 @@ SectionTypeSettingsEnd
             file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(settings);
             VerifyFileContains(file, @"
-  0
-SECTIONSETTINGS
-  5
-A
 100
 AcDbSectionSettings
  90
@@ -829,7 +817,7 @@ AcDbSortentsTable
   0
 SORTENTSTABLE
   5
-A
+12
 100
 AcDbSortentsTable
 331
@@ -901,7 +889,7 @@ AcDbSortentsTable
   0
 SUNSTUDY
   5
-A
+12
 100
 AcDbSunStudy
  90
@@ -1107,10 +1095,6 @@ two
             file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
-  0
-TABLESTYLE
-  5
-A
 100
 AcDbTableStyle
   3

@@ -24,9 +24,15 @@ namespace IxMilia.Dxf.Sections
            return this.Classes.SelectMany(e => e.GetValuePairs(version, outputHandles));
         }
 
+        protected internal override void Clear()
+        {
+            Classes.Clear();
+        }
+
         internal static DxfClassesSection ClassesSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
             var section = new DxfClassesSection();
+            section.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

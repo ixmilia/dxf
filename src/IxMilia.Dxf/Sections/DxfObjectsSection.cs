@@ -22,9 +22,15 @@ namespace IxMilia.Dxf.Sections
             return Objects.SelectMany(o => o.GetValuePairs(version, outputHandles));
         }
 
+        protected internal override void Clear()
+        {
+            Objects.Clear();
+        }
+
         internal static DxfObjectsSection ObjectsSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             var objects = new List<DxfObject>();
+            objects.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

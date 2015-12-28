@@ -394,6 +394,10 @@ namespace IxMilia.Dxf.Sections
             return values;
         }
 
+        protected internal override void Clear()
+        {
+        }
+
         internal static DxfHeaderSection HeaderSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             var section = new DxfHeaderSection();

@@ -25,9 +25,15 @@ namespace IxMilia.Dxf.Sections
             return this.Entities.SelectMany(e => e.GetValuePairs(version, outputHandles));
         }
 
+        protected internal override void Clear()
+        {
+            Entities.Clear();
+        }
+
         internal static DxfEntitiesSection EntitiesSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             var entities = new List<DxfEntity>();
+            entities.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

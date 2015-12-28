@@ -150,7 +150,7 @@ ENDTAB
   0
 LAYER
   5
-9
+10
 102
 {APP_NAME
   1
@@ -236,14 +236,14 @@ ENDTAB
             Assert.Equal(null, viewPorts[0].Name);
             Assert.Equal(0.0, viewPorts[0].LowerLeft.X);
             Assert.Equal(0.0, viewPorts[0].LowerLeft.Y);
-            Assert.Equal(0.0, viewPorts[0].UpperRight.X);
-            Assert.Equal(0.0, viewPorts[0].UpperRight.Y);
+            Assert.Equal(1.0, viewPorts[0].UpperRight.X);
+            Assert.Equal(1.0, viewPorts[0].UpperRight.Y);
             Assert.Equal(0.0, viewPorts[0].ViewCenter.X);
             Assert.Equal(0.0, viewPorts[0].ViewCenter.Y);
             Assert.Equal(0.0, viewPorts[0].SnapBasePoint.X);
             Assert.Equal(0.0, viewPorts[0].SnapBasePoint.Y);
-            Assert.Equal(0.0, viewPorts[0].SnapSpacing.X);
-            Assert.Equal(0.0, viewPorts[0].SnapSpacing.Y);
+            Assert.Equal(1.0, viewPorts[0].SnapSpacing.X);
+            Assert.Equal(1.0, viewPorts[0].SnapSpacing.Y);
             Assert.Equal(0.0, viewPorts[0].GridSpacing.X);
             Assert.Equal(0.0, viewPorts[0].GridSpacing.Y);
             Assert.Equal(0.0, viewPorts[0].ViewDirection.X);
@@ -253,8 +253,8 @@ ENDTAB
             Assert.Equal(0.0, viewPorts[0].TargetViewPoint.Y);
             Assert.Equal(0.0, viewPorts[0].TargetViewPoint.Z);
             Assert.Equal(0.0, viewPorts[0].ViewHeight);
-            Assert.Equal(0.0, viewPorts[0].ViewPortAspectRatio);
-            Assert.Equal(0.0, viewPorts[0].LensLength);
+            Assert.Equal(1.0, viewPorts[0].ViewPortAspectRatio);
+            Assert.Equal(50.0, viewPorts[0].LensLength);
             Assert.Equal(0.0, viewPorts[0].FrontClippingPlane);
             Assert.Equal(0.0, viewPorts[0].BackClippingPlane);
             Assert.Equal(0.0, viewPorts[0].SnapRotationAngle);
@@ -324,21 +324,9 @@ $DIMGAP
             file.Layers.Add(new DxfLayer("default"));
             VerifyFileContains(file, @"
   0
-SECTION
-  2
-TABLES
-  0
-TABLE
-  2
 LAYER
   5
-4
- 70
-0
-  0
-LAYER
-  5
-9
+10
 100
 AcDbSymbolTableRecord
   2
@@ -346,13 +334,9 @@ default
  70
 0
  62
-1
+7
   6
 
-  0
-ENDTAB
-  0
-ENDSEC
 ");
         }
 
@@ -363,21 +347,9 @@ ENDSEC
             file.ViewPorts.Add(new DxfViewPort());
             VerifyFileContains(file, @"
   0
-SECTION
-  2
-TABLES
-  0
-TABLE
-  2
 VPORT
   5
-8
- 70
-0
-  0
-VPORT
-  5
-9
+14
 100
 AcDbSymbolTableRecord
   2
@@ -389,9 +361,9 @@ AcDbSymbolTableRecord
  20
 0.0
  11
-0.0
+1.0
  21
-0.0
+1.0
  12
 0.0
  22
@@ -401,9 +373,9 @@ AcDbSymbolTableRecord
  23
 0.0
  14
-0.0
+1.0
  24
-0.0
+1.0
  15
 0.0
  25
@@ -423,9 +395,9 @@ AcDbSymbolTableRecord
  40
 0.0
  41
-0.0
+1.0
  42
-0.0
+50.0
  43
 0.0
  44
@@ -434,14 +406,10 @@ AcDbSymbolTableRecord
 0.0
  51
 0.0
- 68
-0
- 69
-0
  71
 0
  72
-0
+1000
  73
 1
  74
@@ -454,10 +422,6 @@ AcDbSymbolTableRecord
 0
  78
 0
-  0
-ENDTAB
-  0
-ENDSEC
 ");
         }
 

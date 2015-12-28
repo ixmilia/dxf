@@ -201,6 +201,7 @@ namespace IxMilia.Dxf
         private static DxfFile LoadFromReader(IDxfCodePairReader reader)
         {
             var file = new DxfFile();
+            file.Clear();
             var buffer = new DxfCodePairBufferReader(reader.GetCodePairs());
             var version = DxfAcadVersion.R14;
             while (buffer.ItemsRemain)
@@ -358,6 +359,14 @@ namespace IxMilia.Dxf
             }
 
             return nextHandle;
+        }
+
+        public void Clear()
+        {
+            foreach (var section in Sections)
+            {
+                section.Clear();
+            }
         }
     }
 }

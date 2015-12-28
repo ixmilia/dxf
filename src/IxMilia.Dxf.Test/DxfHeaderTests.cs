@@ -1792,6 +1792,9 @@ $SHADOWPLANELOCATION";
         {
             var file = new DxfFile();
             file.Header.Version = version;
+            file.Header.CurrentMaterialHandle = 100u;
+            file.Header.InterferenceObjectVisualStylePointer = 101u;
+            file.Header.InterferenceViewPortVisualStylePointer = 102u;
             var contents = ToString(file);
             var headerEndSec = contents.IndexOf("ENDSEC");
             contents = contents.Substring(0, headerEndSec);

@@ -1844,15 +1844,15 @@ namespace IxMilia.Dxf
             this.TimeZone = DxfTimeZone.PacificTime_US_Canada_SanFrancisco_Vancouver; // TIMEZONE
             this.UseLightGlyphDisplay = true; // LIGHTGLYPHDISPLAY
             this.UseTileModeLightSync = true; // TILEMODELIGHTSYNCH
-            this.CurrentMaterialHandle = 0; // CMATERIAL
+            this.CurrentMaterialHandle = 0u; // CMATERIAL
             this.NewSolidsContainHistory = false; // SOLIDHIST
             this.SolidHistoryMode = DxfSolidHistoryMode.DoesNotOverride; // SHOWHIST
             this.DwfUnderlayFrameMode = DxfUnderlayFrameMode.DisplayNoPlot; // DWFFRAME
             this.DgnUnderlayFrameMode = DxfUnderlayFrameMode.None; // DGNFRAME
             this.UseRealWorldScale = true; // REALWORLDSCALE
             this.InterferenceObjectColor = DxfColor.FromIndex(1); // INTERFERECOLOR
-            this.InterferenceObjectVisualStylePointer = 0; // INTERFEREOBJVS
-            this.InterferenceViewPortVisualStylePointer = 0; // INTERFEREVPVS
+            this.InterferenceObjectVisualStylePointer = 0u; // INTERFEREOBJVS
+            this.InterferenceViewPortVisualStylePointer = 0u; // INTERFEREVPVS
             this.ShadowMode = DxfShadowMode.CastsAndReceivesShadows; // CSHADOW
             this.ShadowPlaneZOffset = 0.0; // SHADOWPLANELOCATION
             this.AxisOn = false; // AXISMODE
@@ -3385,7 +3385,7 @@ namespace IxMilia.Dxf
             }
 
             // CMATERIAL
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && header.CurrentMaterialHandle != 0u)
             {
                 list.Add(new DxfCodePair(9, CMATERIAL));
                 list.Add(new DxfCodePair(347, UIntHandle(header.CurrentMaterialHandle)));
@@ -3434,14 +3434,14 @@ namespace IxMilia.Dxf
             }
 
             // INTERFEREOBJVS
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && header.InterferenceObjectVisualStylePointer != 0u)
             {
                 list.Add(new DxfCodePair(9, INTERFEREOBJVS));
                 list.Add(new DxfCodePair(345, UIntHandle(header.InterferenceObjectVisualStylePointer)));
             }
 
             // INTERFEREVPVS
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && header.InterferenceViewPortVisualStylePointer != 0u)
             {
                 list.Add(new DxfCodePair(9, INTERFEREVPVS));
                 list.Add(new DxfCodePair(346, UIntHandle(header.InterferenceViewPortVisualStylePointer)));

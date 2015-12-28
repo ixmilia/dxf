@@ -104,30 +104,32 @@ foreach (var property in variables) {
     var converterAtt = property.Attribute("WriteConverter");
     var converter = converterAtt == null ? string.Empty : converterAtt.Value;
     var type = property.Attribute("Type").Value;
+    var dontWriteDefaultAtt = property.Attribute("DontWriteDefault");
     var minVersionAtt = property.Attribute("MinVersion");
     var maxVersionAtt = property.Attribute("MaxVersion");
-    var minVersion = minVersionAtt == null ? "Min" : minVersionAtt.Value;
-    var maxVersion = maxVersionAtt == null ? "Max" : maxVersionAtt.Value;
-    var usingIf = minVersionAtt != null || maxVersionAtt != null;
+    var dontWriteDefault = dontWriteDefaultAtt == null ? false : bool.Parse(dontWriteDefaultAtt.Value);
+    var usingIf = dontWriteDefault || minVersionAtt != null || maxVersionAtt != null;
 #>
             // <#= property.Attribute("Name").Value #>
 <#
     if (usingIf) {
-        var minIfText = "version >= DxfAcadVersion." + minVersion;
-        var maxIfText = "version <= DxfAcadVersion." + maxVersion;
-        string allIfText;
-        if (minVersion == maxVersion) {
-            allIfText = "version == DxfAcadVersion." + minVersion;
-        }
-        else if (minVersionAtt != null && maxVersionAtt != null) {
-            allIfText = minIfText + " && " + maxIfText;
-        }
-        else if (minVersionAtt != null) {
-            allIfText = minIfText;
+        var ifParts = new List<string>();
+        if (minVersionAtt != null && maxVersionAtt != null && minVersionAtt.Value == maxVersionAtt.Value)
+        {
+            ifParts.Add(string.Format("version == DxfAcadVersion.{0}", minVersionAtt.Value));
         }
         else {
-            allIfText = maxIfText;
+            if (minVersionAtt != null) {
+                ifParts.Add(string.Format("version >= DxfAcadVersion.{0}", minVersionAtt.Value));
+            }
+            if (maxVersionAtt != null) {
+                ifParts.Add(string.Format("version <= DxfAcadVersion.{0}", maxVersionAtt.Value));
+            }
         }
+        if (dontWriteDefault) {
+            ifParts.Add(string.Format("header.{0} != {1}", property.Attribute("Property").Value, property.Attribute("DefaultValue").Value));
+        }
+        var allIfText = string.Join(" && ", ifParts);
 #>
             if (<#= allIfText #>)
             {

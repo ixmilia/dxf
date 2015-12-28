@@ -299,15 +299,15 @@
     <Variable Name="TIMEZONE" Code="70" Type="DxfTimeZone" Property="TimeZone" DefaultValue="DxfTimeZone.PacificTime_US_Canada_SanFrancisco_Vancouver" ReadConverter="(DxfTimeZone)" WriteConverter="(short)" MinVersion="R2007" />
     <Variable Name="LIGHTGLYPHDISPLAY" Code="280" Type="bool" Property="UseLightGlyphDisplay" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
     <Variable Name="TILEMODELIGHTSYNCH" Code="280" Type="bool" Property="UseTileModeLightSync" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
-    <Variable Name="CMATERIAL" Code="347" Type="uint" Property="CurrentMaterialHandle" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
+    <Variable Name="CMATERIAL" Code="347" Type="uint" Property="CurrentMaterialHandle" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DontWriteDefault="true" MinVersion="R2007" />
     <Variable Name="SOLIDHIST" Code="280" Type="bool" Property="NewSolidsContainHistory" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
     <Variable Name="SHOWHIST" Code="280" Type="DxfSolidHistoryMode" Property="SolidHistoryMode" DefaultValue="DxfSolidHistoryMode.DoesNotOverride" ReadConverter="(DxfSolidHistoryMode)" WriteConverter="(short)" MinVersion="R2007" />
     <Variable Name="DWFFRAME" Code="280" Type="DxfUnderlayFrameMode" Property="DwfUnderlayFrameMode" DefaultValue="DxfUnderlayFrameMode.DisplayNoPlot" ReadConverter="(DxfUnderlayFrameMode)" WriteConverter="(short)" MinVersion="R2007" />
     <Variable Name="DGNFRAME" Code="280" Type="DxfUnderlayFrameMode" Property="DgnUnderlayFrameMode" DefaultValue="DxfUnderlayFrameMode.None" ReadConverter="(DxfUnderlayFrameMode)" WriteConverter="(short)" MinVersion="R2007" />
     <Variable Name="REALWORLDSCALE" Code="290" Type="bool" Property="UseRealWorldScale" DefaultValue="true" MinVersion="R2007" />
     <Variable Name="INTERFERECOLOR" Code="62" Type="DxfColor" Property="InterferenceObjectColor" DefaultValue="DxfColor.FromIndex(1)" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R2007" />
-    <Variable Name="INTERFEREOBJVS" Code="345" Type="uint" Property="InterferenceObjectVisualStylePointer" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
-    <Variable Name="INTERFEREVPVS" Code="346" Type="uint" Property="InterferenceViewPortVisualStylePointer" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
+    <Variable Name="INTERFEREOBJVS" Code="345" Type="uint" Property="InterferenceObjectVisualStylePointer" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DontWriteDefault="true" MinVersion="R2007" />
+    <Variable Name="INTERFEREVPVS" Code="346" Type="uint" Property="InterferenceViewPortVisualStylePointer" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DontWriteDefault="true" MinVersion="R2007" />
     <Variable Name="CSHADOW" Code="280" Type="DxfShadowMode" Property="ShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode)" WriteConverter="(short)" MinVersion="R2007" />
     <Variable Name="SHADOWPLANELOCATION" Code="40" Type="double" Property="ShadowPlaneZOffset" DefaultValue="0.0" MinVersion="R2007" />
 

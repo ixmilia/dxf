@@ -948,6 +948,7 @@ EOF
         public void WriteTableWithoutExtendedDataTest()
         {
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Styles.Add(new DxfStyle());
             VerifyFileContains(file, @"
   0
@@ -971,6 +972,7 @@ AcDbSymbolTable
         public void WriteTableWithExtendedDataTest()
         {
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.TablesSection.StyleTable.ExtensionDataGroups.Add(new DxfCodePairGroup("ACAD_XDICTIONARY",
                 new DxfCodePairOrGroup[]
                 {
@@ -1394,11 +1396,9 @@ name
   0
 LAYER
   5
-A
+9
 100
 AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
   2
 name
  70
@@ -1417,11 +1417,9 @@ name
   0
 LAYER
   5
-A
+9
 100
 AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
   2
 name
  70

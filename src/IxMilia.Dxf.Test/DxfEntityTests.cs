@@ -62,9 +62,10 @@ ill-placed comment
             return entity;
         }
 
-        private static void EnsureFileContainsEntity(DxfEntity entity, string text)
+        private static void EnsureFileContainsEntity(DxfEntity entity, string text, DxfAcadVersion version = DxfAcadVersion.R12)
         {
             var file = new DxfFile();
+            file.Header.Version = version;
             file.Entities.Add(entity);
             using (var stream = new MemoryStream())
             {
@@ -141,7 +142,7 @@ AcDbLine
 0.0
  31
 0.0
-");
+", DxfAcadVersion.R14);
         }
 
         #region Read default value tests
@@ -784,7 +785,7 @@ SEQEND
   0
 LINE
   5
-A
+9
 100
 AcDbEntity
   8
@@ -814,7 +815,7 @@ AcDbLine
   0
 CIRCLE
   5
-A
+9
 100
 AcDbEntity
   8
@@ -840,7 +841,7 @@ AcDbCircle
   0
 ARC
   5
-A
+9
 100
 AcDbEntity
   8
@@ -898,7 +899,7 @@ AcDbEllipse
  42
 6.28318530717959
   0
-");
+", DxfAcadVersion.R13);
         }
 
         [Fact]
@@ -908,7 +909,7 @@ AcDbEllipse
   0
 TEXT
   5
-A
+9
 100
 AcDbEntity
   8
@@ -942,13 +943,15 @@ AcDbText
   0
 POLYLINE
   5
-A
+9
 100
 AcDbEntity
   8
 0
 100
 AcDb2dPolyline
+ 66
+1
  10
 0.0
  20
@@ -958,7 +961,7 @@ AcDb2dPolyline
   0
 SEQEND
   5
-B
+A
 100
 AcDbEntity
   8
@@ -1264,7 +1267,7 @@ AcDbPolyline
 -2.0
  20
 0.0
-");
+", DxfAcadVersion.R14);
         }
 
         #endregion

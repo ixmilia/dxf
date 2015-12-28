@@ -150,7 +150,7 @@ ENDTAB
   0
 LAYER
   5
-A
+9
 102
 {APP_NAME
   1
@@ -332,19 +332,15 @@ TABLE
   2
 LAYER
   5
-5
-100
-AcDbSymbolTable
+4
  70
 0
   0
 LAYER
   5
-A
+9
 100
 AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
   2
 default
  70
@@ -375,19 +371,15 @@ TABLE
   2
 VPORT
   5
-9
-100
-AcDbSymbolTable
+8
  70
 0
   0
 VPORT
   5
-A
+9
 100
 AcDbSymbolTableRecord
-100
-AcDbViewportTableRecord
   2
 
  70
@@ -442,6 +434,10 @@ AcDbViewportTableRecord
 0.0
  51
 0.0
+ 68
+0
+ 69
+0
  71
 0
  72

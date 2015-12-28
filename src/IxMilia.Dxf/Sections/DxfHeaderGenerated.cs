@@ -1597,7 +1597,7 @@ namespace IxMilia.Dxf
         // set defaults
         private void SetDefaults()
         {
-            this.Version = DxfAcadVersion.R14; // ACADVER
+            this.Version = DxfAcadVersion.R12; // ACADVER
             this.MaintenenceVersion = 0; // ACADMAINTVER
             this.DrawingCodePage = "ANSI_1252"; // DWGCODEPAGE
             this.LastSavedBy = null; // LASTSAVEDBY

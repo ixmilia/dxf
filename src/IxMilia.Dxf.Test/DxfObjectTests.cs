@@ -194,6 +194,7 @@ name-3
             dict.IsHardOwner = true;
             dict.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.KeepExisting;
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(dict);
             VerifyFileContains(file, @"
   0
@@ -239,6 +240,7 @@ layout-name
             layout.PageSetupName = "page-setup-name";
             layout.LayoutName = "layout-name";
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(layout);
             using (var ms = new MemoryStream())
             {
@@ -313,6 +315,7 @@ tres
             lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x222, Name = "dos" });
             lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x333, Name = "tres" });
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(lightList);
             VerifyFileContains(file, @"
  90
@@ -501,6 +504,7 @@ quatro
             mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 3.0, Color = DxfColor.FromRawValue(3), Linetype = "tres" });
             mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 4.0, Color = DxfColor.FromRawValue(4), Linetype = "quatro" });
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(mlineStyle);
             VerifyFileContains(file, @"
 100
@@ -671,6 +675,7 @@ SectionTypeSettingsEnd
             typeSettings.GeometrySettings.Add(new DxfSectionGeometrySettings() { SectionType = 1002 });
             settings.SectionTypeSettings.Add(typeSettings);
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(settings);
             VerifyFileContains(file, @"
   0
@@ -818,6 +823,7 @@ AcDbSortentsTable
             sortents.SortHandles.Add(0x3001u);
             sortents.SortHandles.Add(0x3002u);
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(sortents);
             VerifyFileContains(file, @"
   0
@@ -889,6 +895,7 @@ AcDbSortentsTable
             sun.Hours.Add(43);
             sun.Hours.Add(44);
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(sun);
             VerifyFileContains(file, @"
   0
@@ -1097,6 +1104,7 @@ two
             table.CellStyles.Add(new DxfTableCellStyle() { Name = "one" });
             table.CellStyles.Add(new DxfTableCellStyle() { Name = "two" });
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
   0

@@ -118,10 +118,7 @@ namespace IxMilia.Dxf.Blocks
                 list.Add(new DxfCodePair(3, Name));
             }
 
-            if (!string.IsNullOrEmpty(XrefName))
-            {
-                list.Add(new DxfCodePair(1, XrefName));
-            }
+            list.Add(new DxfCodePair(1, XrefName));
 
             if (!string.IsNullOrEmpty(Description))
             {

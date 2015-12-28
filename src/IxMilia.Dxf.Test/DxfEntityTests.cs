@@ -115,7 +115,7 @@ BBBB
   0
 LINE
   5
-10
+14
 102
 {APP_NAME
   1
@@ -785,7 +785,7 @@ SEQEND
   0
 LINE
   5
-F
+13
 100
 AcDbEntity
   8
@@ -815,7 +815,7 @@ AcDbLine
   0
 CIRCLE
   5
-F
+13
 100
 AcDbEntity
   8
@@ -841,7 +841,7 @@ AcDbCircle
   0
 ARC
   5
-F
+13
 100
 AcDbEntity
   8
@@ -873,7 +873,7 @@ AcDbArc
   0
 ELLIPSE
   5
-10
+14
 100
 AcDbEntity
   8
@@ -909,7 +909,7 @@ AcDbEllipse
   0
 TEXT
   5
-F
+13
 100
 AcDbEntity
   8
@@ -943,7 +943,7 @@ AcDbText
   0
 POLYLINE
   5
-F
+13
 100
 AcDbEntity
   8
@@ -961,7 +961,7 @@ AcDb2dPolyline
   0
 SEQEND
   5
-10
+14
 100
 AcDbEntity
   8
@@ -1142,7 +1142,7 @@ ENTITIES
   0
 POLYLINE
   5
-10
+14
 330
 0
 100
@@ -1162,9 +1162,9 @@ AcDb2dPolyline
   0
 VERTEX
   5
-11
+15
 330
-10
+14
 100
 AcDbEntity
   8
@@ -1186,9 +1186,9 @@ AcDbVertex
   0
 VERTEX
   5
-12
+16
 330
-10
+14
 100
 AcDbEntity
   8
@@ -1210,9 +1210,9 @@ AcDbVertex
   0
 SEQEND
   5
-13
+17
 330
-10
+14
 100
 AcDbEntity
   8
@@ -1236,7 +1236,7 @@ ENDSEC
   0
 LWPOLYLINE
   5
-10
+14
 100
 AcDbEntity
   8

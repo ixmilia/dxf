@@ -36,7 +36,7 @@ namespace IxMilia.Dxf.Test
   0
 ACAD_PROXY_OBJECT
   5
-12
+16
 330
 0
 100
@@ -817,7 +817,7 @@ AcDbSortentsTable
   0
 SORTENTSTABLE
   5
-12
+16
 100
 AcDbSortentsTable
 331
@@ -889,7 +889,7 @@ AcDbSortentsTable
   0
 SUNSTUDY
   5
-12
+16
 100
 AcDbSunStudy
  90

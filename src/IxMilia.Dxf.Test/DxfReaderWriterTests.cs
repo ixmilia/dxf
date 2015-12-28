@@ -794,10 +794,6 @@ EOF
             file.Blocks.Add(block);
             VerifyFileContains(file, @"
   0
-SECTION
-  2
-BLOCKS
-  0
 BLOCK
   5
 42
@@ -836,7 +832,7 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-50
+54
 100
 AcDbEntity
   8
@@ -1386,7 +1382,7 @@ name
   0
 LAYER
   5
-10
+14
 100
 AcDbSymbolTableRecord
   2
@@ -1407,7 +1403,7 @@ name
   0
 LAYER
   5
-10
+14
 100
 AcDbSymbolTableRecord
   2

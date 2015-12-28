@@ -29,7 +29,7 @@ namespace IxMilia.Dxf.Blocks
                         Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                         break;
                     case 8:
-                        Debug.Assert(version >= DxfAcadVersion.R13);
+                        // just a re-iteration of the layer
                         break;
                     case 100:
                         Debug.Assert(pair.StringValue == AcDbEntityText || pair.StringValue == AcDbBlockEndText);
@@ -71,7 +71,12 @@ namespace IxMilia.Dxf.Blocks
                 if (version >= DxfAcadVersion.R13)
                 {
                     list.Add(new DxfCodePair(100, AcDbEntityText));
-                    list.Add(new DxfCodePair(8, Parent.Layer));
+                }
+
+                list.Add(new DxfCodePair(8, Parent.Layer));
+
+                if (version >= DxfAcadVersion.R13)
+                {
                     list.Add(new DxfCodePair(100, AcDbBlockEndText));
                 }
                 return list;

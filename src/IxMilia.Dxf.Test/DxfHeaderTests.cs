@@ -150,7 +150,7 @@ ENDTAB
   0
 LAYER
   5
-10
+14
 102
 {APP_NAME
   1
@@ -326,7 +326,7 @@ $DIMGAP
   0
 LAYER
   5
-10
+14
 100
 AcDbSymbolTableRecord
   2
@@ -349,7 +349,7 @@ default
   0
 VPORT
   5
-14
+18
 100
 AcDbSymbolTableRecord
   2

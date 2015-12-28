@@ -158,13 +158,13 @@ namespace IxMilia.Dxf.Objects
         protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair(0, ObjectTypeString));
-            if (outputHandles)
+            if (outputHandles && this.Handle != 0u)
             {
                 pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
             }
 
             AddExtensionValuePairs(pairs, version, outputHandles);
-            if (version >= DxfAcadVersion.R2000)
+            if (version >= DxfAcadVersion.R2000 && this.OwnerHandle != 0u)
             {
                 pairs.Add(new DxfCodePair(330, UIntHandle(this.OwnerHandle)));
             }

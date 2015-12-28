@@ -49,7 +49,11 @@ namespace IxMilia.Dxf.Objects
             }
 
             pairs.Add(new DxfCodePair(100, "AcDbDictionaryWithDefault"));
-            pairs.Add(new DxfCodePair(340, UIntHandle(this.DefaultObjectHandle)));
+            if (this.DefaultObjectHandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(340, UIntHandle(this.DefaultObjectHandle)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

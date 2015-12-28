@@ -57,7 +57,7 @@ namespace IxMilia.Dxf.Tables
             // common pairs
             pairs.Add(new DxfCodePair(0, DxfSection.TableText));
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
-            if (outputHandles)
+            if (outputHandles && Handle != 0u)
             {
                 int code = TableType == DxfTableType.DimStyle ? 105 : 5;
                 pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(Handle)));
@@ -70,8 +70,11 @@ namespace IxMilia.Dxf.Tables
                     group.AddValuePairs(pairs, version, outputHandles);
                 }
 
-                if (version >= DxfAcadVersion.R2000)
+                if (version >= DxfAcadVersion.R2000 && OwnerHandle != 0u)
+                {
                     pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+                }
+
                 pairs.Add(new DxfCodePair(100, "AcDbSymbolTable"));
             }
 

@@ -123,7 +123,11 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbMline"));
             pairs.Add(new DxfCodePair(2, (this.StyleName)));
-            pairs.Add(new DxfCodePair(340, UIntHandle(this.StyleHandle)));
+            if (this.StyleHandle != 0)
+            {
+                pairs.Add(new DxfCodePair(340, UIntHandle(this.StyleHandle)));
+            }
+
             pairs.Add(new DxfCodePair(40, (this.ScaleFactor)));
             pairs.Add(new DxfCodePair(70, (short)(this.Justification)));
             pairs.Add(new DxfCodePair(71, (short)(this.Flags)));

@@ -293,7 +293,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(147, (this.StandardScaleValue)));
             pairs.Add(new DxfCodePair(148, (this.PaperImageOriginX)));
             pairs.Add(new DxfCodePair(149, (this.PaperImageOriginY)));
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.ShadePlotHandle != 0u)
             {
                 pairs.Add(new DxfCodePair(333, UIntHandle(this.ShadePlotHandle)));
             }

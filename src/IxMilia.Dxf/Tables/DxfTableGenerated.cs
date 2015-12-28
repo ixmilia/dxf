@@ -471,7 +471,7 @@ namespace IxMilia.Dxf
             }
 
             pairs.Add(new DxfCodePair(2, Name));
-            if (version >= DxfAcadVersion.R2000)
+            if (LayoutHandle != 0u && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(340, UIntHandle(LayoutHandle)));
             }
@@ -1182,12 +1182,12 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(370, DxfLineWeight.GetRawValue(LineWeight)));
             }
 
-            if (version >= DxfAcadVersion.R2000)
+            if (PlotStylePointer != 0u && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(390, UIntHandle(PlotStylePointer)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (MaterialHandle != 0u && version >= DxfAcadVersion.R2007)
             {
                 pairs.Add(new DxfCodePair(347, UIntHandle(MaterialHandle)));
             }
@@ -1589,7 +1589,7 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(146, (Elevation)));
             }
 
-            if (version >= DxfAcadVersion.R2000)
+            if (BaseUcsHandle != 0u && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(346, UIntHandle(BaseUcsHandle)));
             }
@@ -1819,7 +1819,7 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(348, UIntHandle(VisualStyleObjectPointer)));
             }
 
-            if (version >= DxfAcadVersion.R2010)
+            if (SunOwnershipPointer != 0u && version >= DxfAcadVersion.R2010)
             {
                 pairs.Add(new DxfCodePair(361, UIntHandle(SunOwnershipPointer)));
             }
@@ -1879,12 +1879,12 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(146, (UCSElevation)));
             }
 
-            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            if (UCSHandle != 0u && IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(345, UIntHandle(UCSHandle)));
             }
 
-            if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
+            if (BaseUCSHandle != 0u && IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(346, UIntHandle(BaseUCSHandle)));
             }
@@ -2285,12 +2285,12 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(146, (UCSElevation)));
             }
 
-            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            if (UCSHandle != 0u && HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(345, UIntHandle(UCSHandle)));
             }
 
-            if (HasOwnUCS && version >= DxfAcadVersion.R2000)
+            if (BaseUCSHandle != 0u && HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(346, UIntHandle(BaseUCSHandle)));
             }

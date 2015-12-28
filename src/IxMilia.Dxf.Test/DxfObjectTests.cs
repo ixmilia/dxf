@@ -31,14 +31,14 @@ namespace IxMilia.Dxf.Test
         {
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
-            file.Objects.Add(new DxfAcadProxyObject());
+            file.Objects.Add(new DxfAcadProxyObject() { OwnerHandle = 0x42u });
             VerifyFileContains(file, @"
   0
 ACAD_PROXY_OBJECT
   5
 16
 330
-0
+42
 100
 AcDbProxyObject
  90
@@ -99,6 +99,7 @@ string 2
         {
             var table = new DxfDataTable();
             table.Name = "table-name";
+            table.OwnerHandle = 0x42u;
             table.SetSize(2, 2);
             table.ColumnNames.Add("column-of-points");
             table.ColumnNames.Add("column-of-strings");
@@ -111,7 +112,7 @@ string 2
             file.Objects.Add(table);
             VerifyFileContains(file, @"
 330
-0
+42
 100
 AcDbDataTable
  70
@@ -882,6 +883,10 @@ AcDbSortentsTable
             sun.Hours.Add(42);
             sun.Hours.Add(43);
             sun.Hours.Add(44);
+            sun.PageSetupWizardPointer = 0x42u;
+            sun.ViewPointer = 0x43u;
+            sun.VisualStyleID = 0x44u;
+            sun.TextStyleID = 0x45u;
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(sun);
@@ -921,11 +926,11 @@ AcDbSunStudy
 290
 44
 340
-0
+42
 341
-0
+43
 342
-0
+44
  74
 0
  75
@@ -941,7 +946,7 @@ AcDbSunStudy
 294
 0
 343
-0
+45
 ");
 
             // verify writing as binary doesn't crash

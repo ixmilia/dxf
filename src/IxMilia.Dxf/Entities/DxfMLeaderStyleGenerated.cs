@@ -127,17 +127,29 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(41, (this.SecondSegmentAngleConstraint)));
             pairs.Add(new DxfCodePair(173, (this.LeaderLineType)));
             pairs.Add(new DxfCodePair(91, (this.LeaderLineColor)));
-            pairs.Add(new DxfCodePair(340, UIntHandle(this.LeaderLineTypeHandle)));
+            if (this.LeaderLineTypeHandle != 0)
+            {
+                pairs.Add(new DxfCodePair(340, UIntHandle(this.LeaderLineTypeHandle)));
+            }
+
             pairs.Add(new DxfCodePair(92, (this.LeaderLineWeight)));
             pairs.Add(new DxfCodePair(290, (this.EnableLanding)));
             pairs.Add(new DxfCodePair(42, (this.LandingGap)));
             pairs.Add(new DxfCodePair(291, (this.EnableDogleg)));
             pairs.Add(new DxfCodePair(43, (this.DoglegLength)));
             pairs.Add(new DxfCodePair(3, (this.MLeaderStyleDescription)));
-            pairs.Add(new DxfCodePair(341, UIntHandle(this.ArrowheadHandle)));
+            if (this.ArrowheadHandle != 0)
+            {
+                pairs.Add(new DxfCodePair(341, UIntHandle(this.ArrowheadHandle)));
+            }
+
             pairs.Add(new DxfCodePair(44, (this.ArrowheadSize)));
             pairs.Add(new DxfCodePair(300, (this.DefaultMTextContents)));
-            pairs.Add(new DxfCodePair(342, UIntHandle(this.MTextStyleHandle)));
+            if (this.MTextStyleHandle != 0)
+            {
+                pairs.Add(new DxfCodePair(342, UIntHandle(this.MTextStyleHandle)));
+            }
+
             pairs.Add(new DxfCodePair(174, (this.TextLeftAttachmentType)));
             pairs.Add(new DxfCodePair(175, (this.TextAngleType)));
             pairs.Add(new DxfCodePair(176, (this.TextAlignmentType)));
@@ -147,7 +159,11 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(292, (this.EnableFrameText)));
             pairs.Add(new DxfCodePair(297, (this.AlwaysAlignTextLeft)));
             pairs.Add(new DxfCodePair(46, (this.AlignGap)));
-            pairs.Add(new DxfCodePair(343, UIntHandle(this.BlockContentHandle)));
+            if (this.BlockContentHandle != 0)
+            {
+                pairs.Add(new DxfCodePair(343, UIntHandle(this.BlockContentHandle)));
+            }
+
             pairs.Add(new DxfCodePair(94, (this.BlockContentColor)));
             pairs.Add(new DxfCodePair(47, (this.BlockContentXScale)));
             pairs.Add(new DxfCodePair(49, (this.BlockContentYScale)));

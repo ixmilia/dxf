@@ -113,13 +113,21 @@ namespace IxMilia.Dxf.Objects
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbDimAssoc"));
-            pairs.Add(new DxfCodePair(330, UIntHandle(this.DimensionHandle)));
+            if (this.DimensionHandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(330, UIntHandle(this.DimensionHandle)));
+            }
+
             pairs.Add(new DxfCodePair(90, (this.AssociativityFlags)));
             pairs.Add(new DxfCodePair(70, BoolShort(this.IsTransSpace)));
             pairs.Add(new DxfCodePair(71, (short)(this.RotatedDimensionType)));
             pairs.Add(new DxfCodePair(1, (this.ClassName)));
             pairs.Add(new DxfCodePair(72, (short)(this.ObjectOsnapType)));
-            pairs.Add(new DxfCodePair(331, UIntHandle(this.MainObjectHandle)));
+            if (this.MainObjectHandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(331, UIntHandle(this.MainObjectHandle)));
+            }
+
             pairs.Add(new DxfCodePair(73, (short)(this.MainObjectSubentityType)));
             pairs.Add(new DxfCodePair(91, (this.MainObjectGsMarkerIndex)));
             pairs.Add(new DxfCodePair(301, (this.MainObjectXrefHandle)));
@@ -127,7 +135,11 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(10, OsnapPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, OsnapPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, OsnapPoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(332, UIntHandle(this.IntersectionObjectHandle)));
+            if (this.IntersectionObjectHandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(332, UIntHandle(this.IntersectionObjectHandle)));
+            }
+
             pairs.Add(new DxfCodePair(74, (short)(this.IntersectionSubentityType)));
             pairs.Add(new DxfCodePair(92, (this.IntersectionObjectGsMarkerIndex)));
             pairs.Add(new DxfCodePair(302, (this.IntersectionObjectXrefHandle)));

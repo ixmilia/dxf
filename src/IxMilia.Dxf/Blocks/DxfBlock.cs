@@ -83,7 +83,7 @@ namespace IxMilia.Dxf.Blocks
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(0, BlockText));
-            if (outputHandles)
+            if (outputHandles && Handle != 0u)
             {
                 list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
             }
@@ -98,7 +98,11 @@ namespace IxMilia.Dxf.Blocks
 
             if (version >= DxfAcadVersion.R13)
             {
-                list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+                if (OwnerHandle != 0u)
+                {
+                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+                }
+
                 list.Add(new DxfCodePair(100, AcDbEntityText));
             }
 

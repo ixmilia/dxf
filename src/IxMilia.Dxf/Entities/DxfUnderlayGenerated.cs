@@ -130,7 +130,11 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbUnderlayReference"));
-            pairs.Add(new DxfCodePair(340, UIntHandle(this.ObjectHandle)));
+            if (this.ObjectHandle != 0)
+            {
+                pairs.Add(new DxfCodePair(340, UIntHandle(this.ObjectHandle)));
+            }
+
             pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));

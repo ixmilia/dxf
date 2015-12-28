@@ -95,7 +95,11 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(32, item.Z));
             }
 
-            pairs.Add(new DxfCodePair(360, UIntHandle(this.GeometrySettingsHandle)));
+            if (this.GeometrySettingsHandle != 0)
+            {
+                pairs.Add(new DxfCodePair(360, UIntHandle(this.GeometrySettingsHandle)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

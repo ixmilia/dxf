@@ -124,7 +124,11 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(280, (this.WizardFlag)));
-            pairs.Add(new DxfCodePair(330, UIntHandle(this.HandleId)));
+            if (this.HandleId != 0u)
+            {
+                pairs.Add(new DxfCodePair(330, UIntHandle(this.HandleId)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

@@ -78,7 +78,7 @@ namespace IxMilia.Dxf.Entities
         public int Color24Bit { get; set; }
         public string ColorName { get; set; }
         public int Transparency { get; set; }
-        public string PlotStyleHandle { get; set; }
+        public uint PlotStyleHandle { get; set; }
         public DxfShadowMode ShadowMode { get; set; }
 
         public string EntityTypeString
@@ -222,20 +222,20 @@ namespace IxMilia.Dxf.Entities
             this.Color24Bit = 0;
             this.ColorName = null;
             this.Transparency = 0;
-            this.PlotStyleHandle = null;
+            this.PlotStyleHandle = 0u;
             this.ShadowMode = DxfShadowMode.CastsAndReceivesShadows;
         }
 
         protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair(0, EntityTypeString));
-            if (outputHandles)
+            if (outputHandles && this.Handle != 0u)
             {
                 pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
             }
 
             AddExtensionValuePairs(pairs, version, outputHandles);
-            if (version >= DxfAcadVersion.R2000)
+            if (version >= DxfAcadVersion.R2000 && this.OwnerHandle != 0u)
             {
                 pairs.Add(new DxfCodePair(330, UIntHandle(this.OwnerHandle)));
             }
@@ -307,9 +307,9 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(440, (this.Transparency)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.PlotStyleHandle != 0u)
             {
-                pairs.Add(new DxfCodePair(390, (this.PlotStyleHandle)));
+                pairs.Add(new DxfCodePair(390, UIntHandle(this.PlotStyleHandle)));
             }
 
             if (version >= DxfAcadVersion.R2007)
@@ -366,7 +366,7 @@ namespace IxMilia.Dxf.Entities
                     this.LineweightEnumValue = (pair.ShortValue);
                     break;
                 case 390:
-                    this.PlotStyleHandle = (pair.StringValue);
+                    this.PlotStyleHandle = UIntHandle(pair.StringValue);
                     break;
                 case 420:
                     this.Color24Bit = (pair.IntegerValue);

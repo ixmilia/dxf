@@ -1143,8 +1143,6 @@ ENTITIES
 POLYLINE
   5
 14
-330
-0
 100
 AcDbEntity
   8

@@ -45,7 +45,7 @@ namespace IxMilia.Dxf.Blocks
             {
                 var list = new List<DxfCodePair>();
                 list.Add(new DxfCodePair(0, EndBlockText));
-                if (outputHandles)
+                if (outputHandles && Handle != 0u)
                 {
                     list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
                 }

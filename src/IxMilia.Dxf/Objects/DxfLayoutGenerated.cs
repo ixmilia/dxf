@@ -116,9 +116,21 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(27, UcsYAxis?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(37, UcsYAxis?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(76, (short)(this.UcsOrthographicType)));
-            pairs.Add(new DxfCodePair(331, UIntHandle(this.ViewportHandle)));
-            pairs.Add(new DxfCodePair(345, UIntHandle(this.TableRecordHandle)));
-            pairs.Add(new DxfCodePair(346, UIntHandle(this.TableRecordBaseHandle)));
+            if (this.ViewportHandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(331, UIntHandle(this.ViewportHandle)));
+            }
+
+            if (this.TableRecordHandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(345, UIntHandle(this.TableRecordHandle)));
+            }
+
+            if (this.TableRecordBaseHandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(346, UIntHandle(this.TableRecordBaseHandle)));
+            }
+
         }
     }
 

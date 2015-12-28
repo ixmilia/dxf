@@ -163,15 +163,17 @@ foreach (var table in tables)
     } // has flags
     foreach (var property in properties)
     {
+        var disableWritingDefault = DisableWritingDefault(property);
         var writeCondition = WriteCondition(property);
         var minVersion = MinVersion(property);
         var maxVersion = MaxVersion(property);
-        var hasPredicate = writeCondition != null || minVersion != null || maxVersion != null;
+        var hasPredicate = disableWritingDefault || writeCondition != null || minVersion != null || maxVersion != null;
         var indent = hasPredicate ? "    " : "";
         string predicate = null;
         if (hasPredicate)
         {
             var parts = new List<string>();
+            if (disableWritingDefault) parts.Add(string.Format("{0} != {1}", Name(property), DefaultValue(property)));
             if (writeCondition != null) parts.Add(writeCondition);
             if ((minVersion != null || maxVersion != null) && minVersion == maxVersion)
             {

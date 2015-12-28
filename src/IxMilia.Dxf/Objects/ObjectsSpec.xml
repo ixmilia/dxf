@@ -7,8 +7,8 @@
 
     -->
     <Object Name="DxfObject" ObjectType="" SubclassMarker="" TypeString="">
-        <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" />
-        <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
+        <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" DisableWritingDefault="true" />
+        <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2000" />
         <WriteOrder>
             <WriteProperty Property="Handle" />
             <WriteExtensionData />
@@ -55,7 +55,7 @@
         <Property Name="DuplicateRecordHandling" Code="281" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" />
         <Property Name="_entryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
-        <Property Name="DefaultObjectHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="DefaultObjectHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbDictionary&quot;" />
             <WriteProperty Property="DuplicateRecordHandling" />
@@ -120,7 +120,7 @@
 
     -->
     <Object Name="DxfDimensionAssociativity" ObjectType="DimensionAssociativity" SubclassMarker="AcDbDimAssoc" TypeString="DIMASSOC" MinVersion="R2004">
-        <Property Name="DimensionHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="DimensionHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <Property Name="AssociativityFlags" Code="90" Type="int" DefaultValue="0">
             <Flag Name="IsFirstPointReference" Mask="1" />
             <Flag Name="IsSecondPointReference" Mask="2" />
@@ -131,13 +131,13 @@
         <Property Name="RotatedDimensionType" Code="71" Type="DxfRotatedDimensionType" DefaultValue="DxfRotatedDimensionType.Parallel" ReadConverter="(DxfRotatedDimensionType)" WriteConverter="(short)" />
         <Property Name="ClassName" Code="1" Type="string" DefaultValue="AcDbOsnapPointRef" />
         <Property Name="ObjectOsnapType" Code="72" Type="DxfObjectOsnapType" DefaultValue="DxfObjectOsnapType.None" ReadConverter="(DxfObjectOsnapType)" WriteConverter="(short)" />
-        <Property Name="MainObjectHandle" Code="331" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="MainObjectHandle" Code="331" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <Property Name="MainObjectSubentityType" Code="73" Type="DxfSubentityType" DefaultValue="DxfSubentityType.Edge" ReadConverter="(DxfSubentityType)" WriteConverter="(short)" />
         <Property Name="MainObjectGsMarkerIndex" Code="91" Type="int" DefaultValue="0" />
         <Property Name="MainObjectXrefHandle" Code="301" Type="string" DefaultValue="null" />
         <Property Name="NearOsnapGeometryParameter" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="OsnapPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
-        <Property Name="IntersectionObjectHandle" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="IntersectionObjectHandle" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <Property Name="IntersectionSubentityType" Code="74" Type="DxfSubentityType" DefaultValue="DxfSubentityType.Edge" ReadConverter="(DxfSubentityType)" WriteConverter="(short)" />
         <Property Name="IntersectionObjectGsMarkerIndex" Code="92" Type="int" DefaultValue="0" />
         <Property Name="IntersectionObjectXrefHandle" Code="302" Type="string" DefaultValue="null" />
@@ -215,7 +215,7 @@
     <Object Name="DxfGeoData" ObjectType="GeoData" SubclassMarker="[none]" TypeString="GEODATA" MinVersion="R2010">
         <Property Name="Version" Code="90" Type="DxfGeoDataVersion" DefaultValue="DxfGeoDataVersion.R2009" ReadConverter="(DxfGeoDataVersion)" WriteConverter="(int)" />
         <Property Name="CoordinateType" Code="70" Type="DxfDesignCoordinateType" DefaultValue="DxfDesignCoordinateType.Unknown" ReadConverter="(DxfDesignCoordinateType)" WriteConverter="(short)" />
-        <Property Name="HostBlockhandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="HostBlockhandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <Property Name="DesignPoint" Code="-10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="ReferencePoint" Code="-11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="NorthVector" Code="-12" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="12,22" />
@@ -376,9 +376,9 @@
         <Property Name="UcsXAxis" Code="16" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="16,26,36" />
         <Property Name="UcsYAxis" Code="17" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="17,27,37" />
         <Property Name="UcsOrthographicType" Code="76" Type="DxfUcsOrthographicType" DefaultValue="DxfUcsOrthographicType.NotOrthographic" ReadConverter="(DxfUcsOrthographicType)" WriteConverter="(short)" />
-        <Property Name="ViewportHandle" Code="331" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
-        <Property Name="TableRecordHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
-        <Property Name="TableRecordBaseHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="ViewportHandle" Code="331" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
+        <Property Name="TableRecordHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
+        <Property Name="TableRecordBaseHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     </Object>
     <!--
 
@@ -727,7 +727,7 @@
         <Property Name="StandardScaleValue" Code="147" Type="double" DefaultValue="1.0" />
         <Property Name="PaperImageOriginX" Code="148" Type="double" DefaultValue="0.0" />
         <Property Name="PaperImageOriginY" Code="149" Type="double" DefaultValue="0.0" />
-        <Property Name="ShadePlotHandle" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
+        <Property Name="ShadePlotHandle" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
     </Object>
     <!--
 
@@ -991,9 +991,9 @@
         <Property Name="EndTime_SecondsPastMidnight" Code="94" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
         <Property Name="IntervalInSeconds" Code="95" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
         <Property Name="Hours" Code="290" Type="int" DefaultValue="null" AllowMultiples="true" WriteConverter="(short)" />
-        <Property Name="PageSetupWizardPointer" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
-        <Property Name="ViewPointer" Code="341" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
-        <Property Name="VisualStyleID" Code="342" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="PageSetupWizardPointer" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
+        <Property Name="ViewPointer" Code="341" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
+        <Property Name="VisualStyleID" Code="342" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <Property Name="ShadePlotType" Code="74" Type="short" DefaultValue="0" />
         <Property Name="ViewportsPerPage" Code="75" Type="int" DefaultValue="0" WriteConverter="(short)" />
         <Property Name="ViewportDistributionRowCount" Code="76" Type="int" DefaultValue="0" WriteConverter="(short)" />
@@ -1001,7 +1001,7 @@
         <Property Name="Spacing" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="LockViewports" Code="293" Type="bool" DefaultValue="false" />
         <Property Name="LabelViewports" Code="294" Type="bool" DefaultValue="false" />
-        <Property Name="TextStyleID" Code="343" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Property Name="TextStyleID" Code="343" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbSunStudy&quot;" />
             <WriteProperty Property="Version" />

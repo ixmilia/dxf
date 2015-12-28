@@ -7,7 +7,7 @@
     </Table>
     <Table Type="BlockRecord" TypeStringVariable="BlockRecordText">
         <TableItem Name="DxfBlockRecord" ClassName="AcDbBlockTableRecord" HasFlags="false">
-            <Property Name="LayoutHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
+            <Property Name="LayoutHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2000" />
 
             <!-- The following three properties aren't well defined in the spec, so this is a best-guess implementation. -->
             <Property Name="InsertionUnits" Code="70" Type="DxfUnits" DefaultValue="DxfUnits.Unitless" ReadConverter="(DxfUnits)" WriteConverter="(short)" MinVersion="R2007" />
@@ -94,8 +94,8 @@
             <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="CONTINUOUS" />
             <Property Name="IsLayerPlotted" Code="290" Type="bool" DefaultValue="true" MinVersion="R2000" />
             <Property Name="LineWeight" Code="370" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue" WriteConverter="DxfLineWeight.GetRawValue" MinVersion="R2000" />
-            <Property Name="PlotStylePointer" Code="390" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
-            <Property Name="MaterialHandle" Code="347" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
+            <Property Name="PlotStylePointer" Code="390" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2000" />
+            <Property Name="MaterialHandle" Code="347" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
         </TableItem>
     </Table>
     <Table Type="LType" TypeStringVariable="LTypeText">
@@ -133,7 +133,7 @@
             <Property Name="YAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="12,22,32" />
             <Property Name="OrthographicViewType" Code="79" Type="DxfOrthographicViewType" DefaultValue="DxfOrthographicViewType.None" ReadConverter="(DxfOrthographicViewType)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="Elevation" Code="146" Type="double" DefaultValue="0.0" MinVersion="R2000" />
-            <Property Name="BaseUcsHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
+            <Property Name="BaseUcsHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2000" />
             <Property Name="OrthographicType" Code="71" Type="DxfOrthographicViewType" DefaultValue="DxfOrthographicViewType.Top" ReadConverter="(DxfOrthographicViewType)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="OrthographicOrigin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" MinVersion="R2000" />
         </TableItem>
@@ -153,17 +153,17 @@
             <Property Name="RenderMode" Code="281" Type="DxfViewRenderMode" DefaultValue="DxfViewRenderMode.Classic2D" ReadConverter="(DxfViewRenderMode)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="IsAssociatedUCSPresent" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" />
             <Property Name="IsCameraPlottable" Code="73" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
-            <Property Name="BackgroundObjectPointer" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="BackgroundObjectPointer != 0u" MinVersion="R2007" />
-            <Property Name="SelectionObjectPointer" Code="334" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="SelectionObjectPointer != 0u" MinVersion="R2007" />
-            <Property Name="VisualStyleObjectPointer" Code="348" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="VisualStyleObjectPointer != 0u" MinVersion="R2007" />
-            <Property Name="SunOwnershipPointer" Code="361" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2010" />
+            <Property Name="BackgroundObjectPointer" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
+            <Property Name="SelectionObjectPointer" Code="334" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
+            <Property Name="VisualStyleObjectPointer" Code="348" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
+            <Property Name="SunOwnershipPointer" Code="361" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2010" />
             <Property Name="UCSOrigin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="110,120,130" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
             <Property Name="UCSXAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="111,121,131" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
             <Property Name="UCSYAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="112,122,132" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
             <Property Name="OrthographicViewType" Code="79" Type="DxfOrthographicViewType" DefaultValue="DxfOrthographicViewType.None" ReadConverter="(DxfOrthographicViewType)" WriteConverter="(short)" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
             <Property Name="UCSElevation" Code="146" Type="double" DefaultValue="0.0" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
-            <Property Name="UCSHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
-            <Property Name="BaseUCSHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="IsAssociatedUCSPresent" MinVersion="R2000" />
+            <Property Name="UCSHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="IsAssociatedUCSPresent" DisableWritingDefault="true" MinVersion="R2000" />
+            <Property Name="BaseUCSHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="IsAssociatedUCSPresent" DisableWritingDefault="true" MinVersion="R2000" />
         </TableItem>
     </Table>
     <Table Type="ViewPort" TypeStringVariable="ViewPortText">
@@ -200,13 +200,13 @@
             <Property Name="UCSYAxis" Code="-3" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="112,122,132" WriteCondition="HasOwnUCS" MinVersion="R2000" />
             <Property Name="OrthographicViewType" Code="79" Type="DxfOrthographicViewType" DefaultValue="DxfOrthographicViewType.None" ReadConverter="(DxfOrthographicViewType)" WriteConverter="(short)" WriteCondition="HasOwnUCS" MinVersion="R2000" />
             <Property Name="UCSElevation" Code="146" Type="double" DefaultValue="0.0" WriteCondition="HasOwnUCS" MinVersion="R2000" />
-            <Property Name="UCSHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="HasOwnUCS" MinVersion="R2000" />
-            <Property Name="BaseUCSHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="HasOwnUCS" MinVersion="R2000" />
+            <Property Name="UCSHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="HasOwnUCS" DisableWritingDefault="true" MinVersion="R2000" />
+            <Property Name="BaseUCSHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="HasOwnUCS" DisableWritingDefault="true" MinVersion="R2000" />
             <Property Name="ShadePlotSetting" Code="170" Type="DxfShadeEdgeMode" DefaultValue="DxfShadeEdgeMode.FacesShadedEdgeNotHighlighted" ReadConverter="(DxfShadeEdgeMode)" WriteConverter="(short)" MinVersion="R2007" />
             <Property Name="MajorGridLines" Code="61" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
-            <Property Name="BackgroundObjectPointer" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="BackgroundObjectPointer != 0u" MinVersion="R2007" />
-            <Property Name="ShadePlotObjectPointer" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="ShadePlotObjectPointer != 0u" MinVersion="R2007" />
-            <Property Name="VisualStyleObjectPointer" Code="348" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="VisualStyleObjectPointer != 0u" MinVersion="R2007" />
+            <Property Name="BackgroundObjectPointer" Code="332" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
+            <Property Name="ShadePlotObjectPointer" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
+            <Property Name="VisualStyleObjectPointer" Code="348" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
             <Property Name="IsDefaultLightingOn" Code="292" Type="bool" DefaultValue="true" MinVersion="R2007" />
             <Property Name="DefaultLightingType" Code="282" Type="DxfDefaultLightingType" DefaultValue="DxfDefaultLightingType.OneDistantLight" ReadConverter="(DxfDefaultLightingType)" WriteConverter="(short)" MinVersion="R2007" />
             <Property Name="Brightness" Code="141" Type="double" DefaultValue="0.0" MinVersion="R2007" />

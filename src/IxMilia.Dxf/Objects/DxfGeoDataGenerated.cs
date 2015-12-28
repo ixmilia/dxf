@@ -94,7 +94,11 @@ namespace IxMilia.Dxf.Objects
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(90, (int)(this.Version)));
             pairs.Add(new DxfCodePair(70, (short)(this.CoordinateType)));
-            pairs.Add(new DxfCodePair(330, UIntHandle(this.HostBlockhandle)));
+            if (this.HostBlockhandle != 0u)
+            {
+                pairs.Add(new DxfCodePair(330, UIntHandle(this.HostBlockhandle)));
+            }
+
             pairs.Add(new DxfCodePair(10, DesignPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, DesignPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, DesignPoint?.Z ?? default(double)));

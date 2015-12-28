@@ -7,8 +7,8 @@
   
   -->
   <Entity Name="DxfEntity" EntityType="" SubclassMarker="" TypeString="">
-    <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" />
-    <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
+    <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" DisableWritingDefault="true" />
+    <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2000" />
     <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" MinVersion="R12" />
     <Property Name="Layer" Code="8" Type="string" DefaultValue="0" />
     <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" />
@@ -23,7 +23,7 @@
     <Property Name="Color24Bit" Code="420" Type="int" DefaultValue="0" MinVersion="R2004" />
     <Property Name="ColorName" Code="430" Type="string" DefaultValue="null" MinVersion="R2004" />
     <Property Name="Transparency" Code="440" Type="int" DefaultValue="0" MinVersion="R2004" />
-    <Property Name="PlotStyleHandle" Code="390" Type="string" DefaultValue="null" MinVersion="R2007" />
+    <Property Name="PlotStyleHandle" Code="390" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
     <Property Name="ShadowMode" Code="284" Type="DxfShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode)" WriteConverter="(short)" MinVersion="R2007" />
     <WriteOrder>
       <WriteProperty Property="Handle" />
@@ -74,7 +74,7 @@
     <Property Name="FormatVersionNumber" Code="70" Type="short" DefaultValue="1" />
     <Property Name="CustomData" Code="1" Type="string" DefaultValue="null" AllowMultiples="true" />
     <Property Name="CustomData2" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
-    <Property Name="HistoryObjectHandle" Code="350" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2007" />
+    <Property Name="HistoryObjectHandle" Code="350" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="&quot;AcDbModelerGeometry&quot;" />
       <WriteProperty Property="FormatVersionNumber" />
@@ -152,7 +152,7 @@
     <Property Name="ColorIndex" Code="90" Type="int" DefaultValue="0" />
     <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
     <Property Name="WizardFlag" Code="280" Type="short" DefaultValue="0" />
-    <Property Name="HandleId" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="HandleId" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
   </Entity>
   <!--
   
@@ -644,7 +644,7 @@
   -->
   <Entity Name="DxfMLine" EntityType="MLine" SubclassMarker="AcDbMline" TypeString="MLINE" MinVersion="R13">
     <Property Name="StyleName" Code="2" Type="string" DefaultValue="null" />
-    <Property Name="StyleHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="StyleHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     <Property Name="ScaleFactor" Code="40" Type="double" DefaultValue="1.0" />
     <Property Name="Justification" Code="70" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" />
     <Property Name="Flags" Code="71" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
@@ -722,17 +722,17 @@
     <Property Name="SecondSegmentAngleConstraint" Code="41" Type="double" DefaultValue="0.0" />
     <Property Name="LeaderLineType" Code="173" Type="short" DefaultValue="0" />
     <Property Name="LeaderLineColor" Code="91" Type="int" DefaultValue="0" />
-    <Property Name="LeaderLineTypeHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="LeaderLineTypeHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     <Property Name="LeaderLineWeight" Code="92" Type="int" DefaultValue="0" />
     <Property Name="EnableLanding" Code="290" Type="bool" DefaultValue="true" />
     <Property Name="LandingGap" Code="42" Type="double" DefaultValue="0.0" />
     <Property Name="EnableDogleg" Code="291" Type="bool" DefaultValue="true" />
     <Property Name="DoglegLength" Code="43" Type="double" DefaultValue="0.0" />
     <Property Name="MLeaderStyleDescription" Code="3" Type="string" DefaultValue="null" />
-    <Property Name="ArrowheadHandle" Code="341" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="ArrowheadHandle" Code="341" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     <Property Name="ArrowheadSize" Code="44" Type="double" DefaultValue="0.0" />
     <Property Name="DefaultMTextContents" Code="300" Type="string" DefaultValue="null" />
-    <Property Name="MTextStyleHandle" Code="342" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="MTextStyleHandle" Code="342" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     <Property Name="TextLeftAttachmentType" Code="174" Type="short" DefaultValue="0" />
     <Property Name="TextAngleType" Code="175" Type="short" DefaultValue="0" />
     <Property Name="TextAlignmentType" Code="176" Type="short" DefaultValue="0" />
@@ -742,7 +742,7 @@
     <Property Name="EnableFrameText" Code="292" Type="bool" DefaultValue="true" />
     <Property Name="AlwaysAlignTextLeft" Code="297" Type="bool" DefaultValue="true" />
     <Property Name="AlignGap" Code="46" Type="double" DefaultValue="0.0" />
-    <Property Name="BlockContentHandle" Code="343" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="BlockContentHandle" Code="343" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     <Property Name="BlockContentColor" Code="94" Type="int" DefaultValue="0" />
     <Property Name="BlockContentXScale" Code="47" Type="double" DefaultValue="1.0" />
     <Property Name="BlockContentYScale" Code="49" Type="double" DefaultValue="1.0" />
@@ -979,7 +979,7 @@
     <Property Name="_backLineVertexX" Code="12" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
     <Property Name="_backLineVertexY" Code="22" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
     <Property Name="_backLineVertexZ" Code="32" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-    <Property Name="GeometrySettingsHandle" Code="360" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="GeometrySettingsHandle" Code="360" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     <WriteOrder>
       <WriteSpecificValue Code="100" Value="&quot;AcDbSection&quot;" />
       <WriteProperty Property="State" />
@@ -1186,7 +1186,7 @@
   
   -->
   <Entity Name="DxfUnderlay" EntityType="Underlay" SubclassMarker="AcDbUnderlayReference" TypeString="UNDERLAY" DefaultConstructor="Internal" CopyConstructor="Protected" MinVersion="R2007">
-    <Property Name="ObjectHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+    <Property Name="ObjectHandle" Code="340" Type="uint" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
     <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
     <Property Name="XScale" Code="41" Type="double" DefaultValue="1.0" />
     <Property Name="YScale" Code="42" Type="double" DefaultValue="1.0" />

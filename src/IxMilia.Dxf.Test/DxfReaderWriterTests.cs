@@ -499,6 +499,8 @@ ENDTAB
             var blockRecord = new DxfBlockRecord()
             {
                 Name = "<name>",
+                OwnerHandle = 0x42u,
+                LayoutHandle = 0x43u,
                 XData = new DxfXData("ACAD",
                     new DxfXDataItem[]
                     {
@@ -525,8 +527,6 @@ TABLE
 BLOCK_RECORD
   5
 9
-330
-0
 100
 AcDbSymbolTable
  70
@@ -536,7 +536,7 @@ BLOCK_RECORD
   5
 E
 330
-0
+42
 100
 AcDbSymbolTableRecord
 100
@@ -544,7 +544,7 @@ AcDbBlockTableRecord
   2
 <name>
 340
-0
+43
 310
 010203040506070809010203040506070809
 1001
@@ -787,6 +787,7 @@ EOF
             var block = new DxfBlock();
             block.Name = "<block name>";
             block.Handle = 0x42u;
+            block.OwnerHandle = 0x43u;
             block.Layer = "<layer>";
             block.XrefName = "<xref>";
             block.BasePoint = new DxfPoint(11, 22, 33);
@@ -798,7 +799,7 @@ BLOCK
   5
 42
 330
-0
+43
 100
 AcDbEntity
   8

@@ -116,9 +116,21 @@ namespace IxMilia.Dxf.Objects
 
             pairs.Add(new DxfCodePair(73, (short)Hours.Count));
             pairs.AddRange(this.Hours.Select(p => new DxfCodePair(290, (short)(p))));
-            pairs.Add(new DxfCodePair(340, UIntHandle(this.PageSetupWizardPointer)));
-            pairs.Add(new DxfCodePair(341, UIntHandle(this.ViewPointer)));
-            pairs.Add(new DxfCodePair(342, UIntHandle(this.VisualStyleID)));
+            if (this.PageSetupWizardPointer != 0u)
+            {
+                pairs.Add(new DxfCodePair(340, UIntHandle(this.PageSetupWizardPointer)));
+            }
+
+            if (this.ViewPointer != 0u)
+            {
+                pairs.Add(new DxfCodePair(341, UIntHandle(this.ViewPointer)));
+            }
+
+            if (this.VisualStyleID != 0u)
+            {
+                pairs.Add(new DxfCodePair(342, UIntHandle(this.VisualStyleID)));
+            }
+
             pairs.Add(new DxfCodePair(74, (this.ShadePlotType)));
             pairs.Add(new DxfCodePair(75, (short)(this.ViewportsPerPage)));
             pairs.Add(new DxfCodePair(76, (short)(this.ViewportDistributionRowCount)));
@@ -126,7 +138,11 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(40, (this.Spacing)));
             pairs.Add(new DxfCodePair(293, (this.LockViewports)));
             pairs.Add(new DxfCodePair(294, (this.LabelViewports)));
-            pairs.Add(new DxfCodePair(343, UIntHandle(this.TextStyleID)));
+            if (this.TextStyleID != 0u)
+            {
+                pairs.Add(new DxfCodePair(343, UIntHandle(this.TextStyleID)));
+            }
+
         }
     }
 

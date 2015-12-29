@@ -67,17 +67,7 @@ ill-placed comment
             var file = new DxfFile();
             file.Header.Version = version;
             file.Entities.Add(entity);
-            using (var stream = new MemoryStream())
-            {
-                file.Save(stream);
-                stream.Flush();
-                stream.Seek(0, SeekOrigin.Begin);
-                using (var reader = new StreamReader(stream))
-                {
-                    var actual = reader.ReadToEnd();
-                    Assert.Contains(text.Trim(), actual);
-                }
-            }
+            VerifyFileContains(file, text);
         }
 
         #endregion

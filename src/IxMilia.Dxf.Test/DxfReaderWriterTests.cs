@@ -276,7 +276,8 @@ THUMBNAILIMAGE");
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.RawThumbnail = new byte[] { 0x01, 0x23, 0x45 };
-            VerifyFileContains(file, @"  0
+            VerifyFileContains(file, @"
+  0
 SECTION
   2
 THUMBNAILIMAGE

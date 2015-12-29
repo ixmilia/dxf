@@ -52,7 +52,15 @@ EOF
         protected static void VerifyFileContents(DxfFile file, string expected, Action<string, string> predicate)
         {
             var actual = ToString(file);
-            predicate(expected, actual);
+            predicate(
+                RemoveLeadingAndTrailingWhitespaceFromLines(expected),
+                RemoveLeadingAndTrailingWhitespaceFromLines(actual));
+        }
+
+        private static string RemoveLeadingAndTrailingWhitespaceFromLines(string s)
+        {
+            var lines = s.Split("\n".ToCharArray()).Select(l => l.Trim());
+            return string.Join("\r\n", lines);
         }
 
         protected static void VerifyFileContains(DxfFile file, string expected)

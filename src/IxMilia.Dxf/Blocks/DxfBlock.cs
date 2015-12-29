@@ -18,6 +18,7 @@ namespace IxMilia.Dxf.Blocks
         private int Flags = 0;
 
         public uint Handle { get; set; }
+        public bool IsInPaperSpace { get; set; }
         public string Layer { get; set; }
         public string Name { get; set; }
         public DxfPoint BasePoint { get; set; }
@@ -104,6 +105,11 @@ namespace IxMilia.Dxf.Blocks
                 }
 
                 list.Add(new DxfCodePair(100, AcDbEntityText));
+            }
+
+            if (IsInPaperSpace)
+            {
+                list.Add(new DxfCodePair(67, DxfCommonConverters.BoolShort(IsInPaperSpace)));
             }
 
             list.Add(new DxfCodePair(8, Layer));
@@ -218,6 +224,9 @@ namespace IxMilia.Dxf.Blocks
                                 break;
                             case 30:
                                 block.BasePoint.Z = pair.DoubleValue;
+                                break;
+                            case 67:
+                                block.IsInPaperSpace = DxfCommonConverters.BoolShort(pair.ShortValue);
                                 break;
                             case 70:
                                 block.Flags = pair.ShortValue;

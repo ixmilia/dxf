@@ -59,8 +59,7 @@ namespace IxMilia.Dxf.Tables
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
             if (outputHandles && Handle != 0u)
             {
-                int code = TableType == DxfTableType.DimStyle ? 105 : 5;
-                pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(Handle)));
+                pairs.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
             }
 
             if (version >= DxfAcadVersion.R13)

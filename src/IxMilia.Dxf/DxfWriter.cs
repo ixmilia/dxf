@@ -134,7 +134,7 @@ namespace IxMilia.Dxf
         private void WriteShort(short value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
+                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(6));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -142,7 +142,7 @@ namespace IxMilia.Dxf
         private void WriteInt(int value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
+                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(9));
             else if (binWriter != null)
                 binWriter.Write(value);
         }

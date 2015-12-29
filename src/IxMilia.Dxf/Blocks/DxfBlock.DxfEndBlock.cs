@@ -31,6 +31,9 @@ namespace IxMilia.Dxf.Blocks
                     case 8:
                         // just a re-iteration of the layer
                         break;
+                    case 67:
+                        // just a re-iteration of the paper space setting
+                        break;
                     case 100:
                         Debug.Assert(pair.StringValue == AcDbEntityText || pair.StringValue == AcDbBlockEndText);
                         break;
@@ -71,6 +74,11 @@ namespace IxMilia.Dxf.Blocks
                 if (version >= DxfAcadVersion.R13)
                 {
                     list.Add(new DxfCodePair(100, AcDbEntityText));
+                }
+
+                if (Parent.IsInPaperSpace)
+                {
+                    list.Add(new DxfCodePair(67, DxfCommonConverters.BoolShort(Parent.IsInPaperSpace)));
                 }
 
                 list.Add(new DxfCodePair(8, Parent.Layer));

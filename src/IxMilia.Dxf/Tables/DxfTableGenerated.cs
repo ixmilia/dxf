@@ -569,15 +569,6 @@ namespace IxMilia.Dxf
         public double DimensionLineExtension { get; set; }
         public double DimensionPlusTolerance { get; set; }
         public double DimensionMinusTolerance { get; set; }
-        public double DimensioningTextHeight { get; set; }
-        public double CenterMarkSize { get; set; }
-        public double DimensioningTickSize { get; set; }
-        public double AlternateDimensioningScaleFactor { get; set; }
-        public double DimensionLinearMeasurementScaleFactor { get; set; }
-        public double DimensionVerticalTextPosition { get; set; }
-        public double DimensionToleranceDisplacScaleFactor { get; set; }
-        public double DimensionLineGap { get; set; }
-        public double AlternateDimensioningUnitRounding { get; set; }
         public bool GenerateDimensionTolerances { get; set; }
         public bool GenerateDimensionLimits { get; set; }
         public bool DimensionTextInsideHorizontal { get; set; }
@@ -587,6 +578,15 @@ namespace IxMilia.Dxf
         public bool TextAboveDimensionLine { get; set; }
         public DxfUnitZeroSuppression DimensionUnitZeroSuppression { get; set; }
         public DxfUnitZeroSuppression DimensionAngleZeroSuppression { get; set; }
+        public double DimensioningTextHeight { get; set; }
+        public double CenterMarkSize { get; set; }
+        public double DimensioningTickSize { get; set; }
+        public double AlternateDimensioningScaleFactor { get; set; }
+        public double DimensionLinearMeasurementScaleFactor { get; set; }
+        public double DimensionVerticalTextPosition { get; set; }
+        public double DimensionToleranceDisplacScaleFactor { get; set; }
+        public double DimensionLineGap { get; set; }
+        public double AlternateDimensioningUnitRounding { get; set; }
         public bool UseAlternateDimensioning { get; set; }
         public short AlternateDimensioningDecimalPlaces { get; set; }
         public bool ForceDimensionLineExtensionsOutsideIfTextExists { get; set; }
@@ -638,15 +638,6 @@ namespace IxMilia.Dxf
             DimensionLineExtension = 0.0;
             DimensionPlusTolerance = 0.0;
             DimensionMinusTolerance = 0.0;
-            DimensioningTextHeight = 0.18;
-            CenterMarkSize = 0.09;
-            DimensioningTickSize = 0.0;
-            AlternateDimensioningScaleFactor = 25.4;
-            DimensionLinearMeasurementScaleFactor = 1.0;
-            DimensionVerticalTextPosition = 0.0;
-            DimensionToleranceDisplacScaleFactor = 1.0;
-            DimensionLineGap = 0.09;
-            AlternateDimensioningUnitRounding = 0.0;
             GenerateDimensionTolerances = false;
             GenerateDimensionLimits = false;
             DimensionTextInsideHorizontal = true;
@@ -656,6 +647,15 @@ namespace IxMilia.Dxf
             TextAboveDimensionLine = false;
             DimensionUnitZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
             DimensionAngleZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
+            DimensioningTextHeight = 0.18;
+            CenterMarkSize = 0.09;
+            DimensioningTickSize = 0.0;
+            AlternateDimensioningScaleFactor = 25.4;
+            DimensionLinearMeasurementScaleFactor = 1.0;
+            DimensionVerticalTextPosition = 0.0;
+            DimensionToleranceDisplacScaleFactor = 1.0;
+            DimensionLineGap = 0.09;
+            AlternateDimensioningUnitRounding = 0.0;
             UseAlternateDimensioning = false;
             AlternateDimensioningDecimalPlaces = 2;
             ForceDimensionLineExtensionsOutsideIfTextExists = false;
@@ -677,6 +677,8 @@ namespace IxMilia.Dxf
             DimensionDecimalSeparatorChar = '.';
             DimensionTextMovementRule = DxfDimensionTextMovementRule.MoveLineWithText;
             DimensionTextJustification = DxfDimensionTextJustification.AboveLineCenter;
+            SuppressFirstDimensionExtensionLine = false;
+            SuppressSecondDimensionExtensionLine = false;
             DimensionToleranceVerticalJustification = DxfJustification.Top;
             DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
             AlternateDimensioningZeroSupression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches;
@@ -728,19 +730,6 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(46, (DimensionLineExtension)));
             pairs.Add(new DxfCodePair(47, (DimensionPlusTolerance)));
             pairs.Add(new DxfCodePair(48, (DimensionMinusTolerance)));
-            pairs.Add(new DxfCodePair(140, (DimensioningTextHeight)));
-            pairs.Add(new DxfCodePair(141, (CenterMarkSize)));
-            pairs.Add(new DxfCodePair(142, (DimensioningTickSize)));
-            pairs.Add(new DxfCodePair(143, (AlternateDimensioningScaleFactor)));
-            pairs.Add(new DxfCodePair(144, (DimensionLinearMeasurementScaleFactor)));
-            pairs.Add(new DxfCodePair(145, (DimensionVerticalTextPosition)));
-            pairs.Add(new DxfCodePair(146, (DimensionToleranceDisplacScaleFactor)));
-            pairs.Add(new DxfCodePair(147, (DimensionLineGap)));
-            if (version >= DxfAcadVersion.R2000)
-            {
-                pairs.Add(new DxfCodePair(148, (AlternateDimensioningUnitRounding)));
-            }
-
             pairs.Add(new DxfCodePair(71, BoolShort(GenerateDimensionTolerances)));
             pairs.Add(new DxfCodePair(72, BoolShort(GenerateDimensionLimits)));
             pairs.Add(new DxfCodePair(73, BoolShort(DimensionTextInsideHorizontal)));
@@ -752,6 +741,19 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(79, (short)(DimensionAngleZeroSuppression)));
+            }
+
+            pairs.Add(new DxfCodePair(140, (DimensioningTextHeight)));
+            pairs.Add(new DxfCodePair(141, (CenterMarkSize)));
+            pairs.Add(new DxfCodePair(142, (DimensioningTickSize)));
+            pairs.Add(new DxfCodePair(143, (AlternateDimensioningScaleFactor)));
+            pairs.Add(new DxfCodePair(144, (DimensionLinearMeasurementScaleFactor)));
+            pairs.Add(new DxfCodePair(145, (DimensionVerticalTextPosition)));
+            pairs.Add(new DxfCodePair(146, (DimensionToleranceDisplacScaleFactor)));
+            pairs.Add(new DxfCodePair(147, (DimensionLineGap)));
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(148, (AlternateDimensioningUnitRounding)));
             }
 
             pairs.Add(new DxfCodePair(170, BoolShort(UseAlternateDimensioning)));
@@ -821,6 +823,16 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R13)
             {
                 pairs.Add(new DxfCodePair(280, (short)(DimensionTextJustification)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(281, BoolShort(SuppressFirstDimensionExtensionLine)));
+            }
+
+            if (version >= DxfAcadVersion.R13)
+            {
+                pairs.Add(new DxfCodePair(282, BoolShort(SuppressSecondDimensionExtensionLine)));
             }
 
             if (version >= DxfAcadVersion.R13)
@@ -962,33 +974,6 @@ namespace IxMilia.Dxf
                     case 48:
                         item.DimensionMinusTolerance = (pair.DoubleValue);
                         break;
-                    case 140:
-                        item.DimensioningTextHeight = (pair.DoubleValue);
-                        break;
-                    case 141:
-                        item.CenterMarkSize = (pair.DoubleValue);
-                        break;
-                    case 142:
-                        item.DimensioningTickSize = (pair.DoubleValue);
-                        break;
-                    case 143:
-                        item.AlternateDimensioningScaleFactor = (pair.DoubleValue);
-                        break;
-                    case 144:
-                        item.DimensionLinearMeasurementScaleFactor = (pair.DoubleValue);
-                        break;
-                    case 145:
-                        item.DimensionVerticalTextPosition = (pair.DoubleValue);
-                        break;
-                    case 146:
-                        item.DimensionToleranceDisplacScaleFactor = (pair.DoubleValue);
-                        break;
-                    case 147:
-                        item.DimensionLineGap = (pair.DoubleValue);
-                        break;
-                    case 148:
-                        item.AlternateDimensioningUnitRounding = (pair.DoubleValue);
-                        break;
                     case 71:
                         item.GenerateDimensionTolerances = BoolShort(pair.ShortValue);
                         break;
@@ -1015,6 +1000,33 @@ namespace IxMilia.Dxf
                         break;
                     case 79:
                         item.DimensionAngleZeroSuppression = (DxfUnitZeroSuppression)(pair.ShortValue);
+                        break;
+                    case 140:
+                        item.DimensioningTextHeight = (pair.DoubleValue);
+                        break;
+                    case 141:
+                        item.CenterMarkSize = (pair.DoubleValue);
+                        break;
+                    case 142:
+                        item.DimensioningTickSize = (pair.DoubleValue);
+                        break;
+                    case 143:
+                        item.AlternateDimensioningScaleFactor = (pair.DoubleValue);
+                        break;
+                    case 144:
+                        item.DimensionLinearMeasurementScaleFactor = (pair.DoubleValue);
+                        break;
+                    case 145:
+                        item.DimensionVerticalTextPosition = (pair.DoubleValue);
+                        break;
+                    case 146:
+                        item.DimensionToleranceDisplacScaleFactor = (pair.DoubleValue);
+                        break;
+                    case 147:
+                        item.DimensionLineGap = (pair.DoubleValue);
+                        break;
+                    case 148:
+                        item.AlternateDimensioningUnitRounding = (pair.DoubleValue);
                         break;
                     case 170:
                         item.UseAlternateDimensioning = BoolShort(pair.ShortValue);
@@ -1078,6 +1090,12 @@ namespace IxMilia.Dxf
                         break;
                     case 280:
                         item.DimensionTextJustification = (DxfDimensionTextJustification)(pair.ShortValue);
+                        break;
+                    case 281:
+                        item.SuppressFirstDimensionExtensionLine = BoolShort(pair.ShortValue);
+                        break;
+                    case 282:
+                        item.SuppressSecondDimensionExtensionLine = BoolShort(pair.ShortValue);
                         break;
                     case 283:
                         item.DimensionToleranceVerticalJustification = (DxfJustification)(pair.ShortValue);

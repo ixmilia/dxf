@@ -33,15 +33,6 @@
             <Property Name="DimensionLineExtension" Code="46" Type="double" DefaultValue="0.0" />
             <Property Name="DimensionPlusTolerance" Code="47" Type="double" DefaultValue="0.0" />
             <Property Name="DimensionMinusTolerance" Code="48" Type="double" DefaultValue="0.0" />
-            <Property Name="DimensioningTextHeight" Code="140" Type="double" DefaultValue="0.18" />
-            <Property Name="CenterMarkSize" Code="141" Type="double" DefaultValue="0.09" />
-            <Property Name="DimensioningTickSize" Code="142" Type="double" DefaultValue="0.0" />
-            <Property Name="AlternateDimensioningScaleFactor" Code="143" Type="double" DefaultValue="25.4" />
-            <Property Name="DimensionLinearMeasurementScaleFactor" Code="144" Type="double" DefaultValue="1.0" />
-            <Property Name="DimensionVerticalTextPosition" Code="145" Type="double" DefaultValue="0.0" />
-            <Property Name="DimensionToleranceDisplacScaleFactor" Code="146" Type="double" DefaultValue="1.0" />
-            <Property Name="DimensionLineGap" Code="147" Type="double" DefaultValue="0.09" />
-            <Property Name="AlternateDimensioningUnitRounding" Code="148" Type="double" DefaultValue="0.0" MinVersion="R2000" />
             <Property Name="GenerateDimensionTolerances" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
             <Property Name="GenerateDimensionLimits" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
             <Property Name="DimensionTextInsideHorizontal" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
@@ -51,6 +42,15 @@
             <Property Name="TextAboveDimensionLine" Code="77" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
             <Property Name="DimensionUnitZeroSuppression" Code="78" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" />
             <Property Name="DimensionAngleZeroSuppression" Code="79" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R2000" />
+            <Property Name="DimensioningTextHeight" Code="140" Type="double" DefaultValue="0.18" />
+            <Property Name="CenterMarkSize" Code="141" Type="double" DefaultValue="0.09" />
+            <Property Name="DimensioningTickSize" Code="142" Type="double" DefaultValue="0.0" />
+            <Property Name="AlternateDimensioningScaleFactor" Code="143" Type="double" DefaultValue="25.4" />
+            <Property Name="DimensionLinearMeasurementScaleFactor" Code="144" Type="double" DefaultValue="1.0" />
+            <Property Name="DimensionVerticalTextPosition" Code="145" Type="double" DefaultValue="0.0" />
+            <Property Name="DimensionToleranceDisplacScaleFactor" Code="146" Type="double" DefaultValue="1.0" />
+            <Property Name="DimensionLineGap" Code="147" Type="double" DefaultValue="0.09" />
+            <Property Name="AlternateDimensioningUnitRounding" Code="148" Type="double" DefaultValue="0.0" MinVersion="R2000" />
             <Property Name="UseAlternateDimensioning" Code="170" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
             <Property Name="AlternateDimensioningDecimalPlaces" Code="171" Type="short" DefaultValue="2" />
             <Property Name="ForceDimensionLineExtensionsOutsideIfTextExists" Code="172" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
@@ -72,6 +72,8 @@
             <Property Name="DimensionDecimalSeparatorChar" Code="278" Type="char" DefaultValue="'.'" ReadConverter="(char)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="DimensionTextMovementRule" Code="279" Type="DxfDimensionTextMovementRule" DefaultValue="DxfDimensionTextMovementRule.MoveLineWithText" ReadConverter="(DxfDimensionTextMovementRule)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="DimensionTextJustification" Code="280" Type="DxfDimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification)" WriteConverter="(short)" MinVersion="R13" />
+            <Property Name="SuppressFirstDimensionExtensionLine" Code="281" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
+            <Property Name="SuppressSecondDimensionExtensionLine" Code="282" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" />
             <Property Name="DimensionToleranceVerticalJustification" Code="283" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification)" WriteConverter="(short)" MinVersion="R13" />
             <Property Name="DimensionToleranceZeroSuppression" Code="284" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />
             <Property Name="AlternateDimensioningZeroSupression" Code="285" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression)" WriteConverter="(short)" MinVersion="R13" />

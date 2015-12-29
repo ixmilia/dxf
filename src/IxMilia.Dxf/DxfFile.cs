@@ -259,7 +259,7 @@ namespace IxMilia.Dxf
             }
 
             Debug.Assert(!buffer.ItemsRemain);
-            file.SetHandles();
+            file.Header.NextAvailableHandle = file.SetHandles();
 
             return file;
         }

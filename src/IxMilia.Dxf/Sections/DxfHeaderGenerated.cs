@@ -38,6 +38,7 @@ namespace IxMilia.Dxf
         private const string CELTYPE = "$CELTYPE";
         private const string CECOLOR = "$CECOLOR";
         private const string CELTSCALE = "$CELTSCALE";
+        private const string DELOBJ = "$DELOBJ";
         private const string DISPSILH = "$DISPSILH";
         private const string DIMSCALE = "$DIMSCALE";
         private const string DIMASZ = "$DIMASZ";
@@ -88,7 +89,9 @@ namespace IxMilia.Dxf
         private const string DIMTZIN = "$DIMTZIN";
         private const string DIMALTZ = "$DIMALTZ";
         private const string DIMALTTZ = "$DIMALTTZ";
+        private const string DIMFIT = "$DIMFIT";
         private const string DIMUPT = "$DIMUPT";
+        private const string DIMUNIT = "$DIMUNIT";
         private const string DIMDEC = "$DIMDEC";
         private const string DIMTDEC = "$DIMTDEC";
         private const string DIMALTU = "$DIMALTU";
@@ -210,6 +213,7 @@ namespace IxMilia.Dxf
         private const string PLINEGEN = "$PLINEGEN";
         private const string PSLTSCALE = "$PSLTSCALE";
         private const string TREEDEPTH = "$TREEDEPTH";
+        private const string PICKSTYLE = "$PICKSTYLE";
         private const string CMLSTYLE = "$CMLSTYLE";
         private const string CMLJUST = "$CMLJUST";
         private const string CMLSCALE = "$CMLSCALE";
@@ -274,10 +278,6 @@ namespace IxMilia.Dxf
         private const string SHADOWPLANELOCATION = "$SHADOWPLANELOCATION";
         private const string AXISMODE = "$AXISMODE";
         private const string AXISUNIT = "$AXISUNIT";
-        private const string DELOBJ = "$DELOBJ";
-        private const string DIMFIT = "$DIMFIT";
-        private const string DIMUNIT = "$DIMUNIT";
-        private const string PICKSTYLE = "$PICKSTYLE";
 
         /// <summary>
         /// The $ACADVER header variable.
@@ -408,6 +408,11 @@ namespace IxMilia.Dxf
         /// The $CELTSCALE header variable.
         /// </summary>
         public double CurrentEntityLinetypeScale { get; set; }
+
+        /// <summary>
+        /// The $DELOBJ header variable.
+        /// </summary>
+        public bool RetainDeletedObjects { get; set; }
 
         /// <summary>
         /// The $DISPSILH header variable.
@@ -650,9 +655,19 @@ namespace IxMilia.Dxf
         public DxfUnitZeroSuppression AlternateDimensioningToleranceZeroSupression { get; set; }
 
         /// <summary>
+        /// The $DIMFIT header variable.
+        /// </summary>
+        public DxfDimensionFit DimensionTextAndArrowPlacement { get; set; }
+
+        /// <summary>
         /// The $DIMUPT header variable.
         /// </summary>
         public bool DimensionCursorControlsTextPosition { get; set; }
+
+        /// <summary>
+        /// The $DIMUNIT header variable.
+        /// </summary>
+        public DxfUnitFormat DimensionUnitFormat { get; set; }
 
         /// <summary>
         /// The $DIMDEC header variable.
@@ -703,11 +718,6 @@ namespace IxMilia.Dxf
         /// The $DIMDSEP header variable.
         /// </summary>
         public char DimensionDecimalSeparatorChar { get; set; }
-
-        /// <summary>
-        /// The $DIMATFIT header variable.
-        /// </summary>
-        public DxfDimensionFit DimensionTextAndArrowPlacement { get; set; }
 
         /// <summary>
         /// The $DIMFRAC header variable.
@@ -1260,6 +1270,11 @@ namespace IxMilia.Dxf
         public short SpacialIndexMaxDepth { get; set; }
 
         /// <summary>
+        /// The $PICKSTYLE header variable.
+        /// </summary>
+        public DxfPickStyle PickStyle { get; set; }
+
+        /// <summary>
         /// The $CMLSTYLE header variable.
         /// </summary>
         public string CurrentMultilineStyle { get; set; }
@@ -1579,21 +1594,6 @@ namespace IxMilia.Dxf
         /// </summary>
         public DxfVector AxisTickSpacing { get; set; }
 
-        /// <summary>
-        /// The $DELOBJ header variable.
-        /// </summary>
-        public bool RetainDeletedObjects { get; set; }
-
-        /// <summary>
-        /// The $DIMUNIT header variable.
-        /// </summary>
-        public DxfUnitFormat DimensionUnitFormat { get; set; }
-
-        /// <summary>
-        /// The $PICKSTYLE header variable.
-        /// </summary>
-        public DxfPickStyle PickStyle { get; set; }
-
         // set defaults
         public void SetDefaults()
         {
@@ -1623,6 +1623,7 @@ namespace IxMilia.Dxf
             this.CurrentEntityLinetype = "BYLAYER"; // CELTYPE
             this.CurrentEntityColor = DxfColor.ByLayer; // CECOLOR
             this.CurrentEntityLinetypeScale = 1.0; // CELTSCALE
+            this.RetainDeletedObjects = true; // DELOBJ
             this.DisplaySilhouetteCurvesInWireframeMode = false; // DISPSILH
             this.DimensioningScaleFactor = 1.0; // DIMSCALE
             this.DimensioningArrowSize = 0.18; // DIMASZ
@@ -1671,7 +1672,9 @@ namespace IxMilia.Dxf
             this.DimensionToleranceZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMTZIN
             this.AlternateDimensioningZeroSupression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMALTZ
             this.AlternateDimensioningToleranceZeroSupression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMALTTZ
+            this.DimensionTextAndArrowPlacement = DxfDimensionFit.TextAndArrowsOutsideLines; // DIMFIT
             this.DimensionCursorControlsTextPosition = false; // DIMUPT
+            this.DimensionUnitFormat = DxfUnitFormat.Decimal; // DIMUNIT
             this.DimensionUnitToleranceDecimalPlaces = 4; // DIMDEC
             this.DimensionToleranceDecimalPlaces = 4; // DIMTDEC
             this.AlternateDimensioningUnits = DxfUnitFormat.Decimal; // DIMALTU
@@ -1682,7 +1685,6 @@ namespace IxMilia.Dxf
             this.AlternateDimensioningUnitRounding = 0.0; // DIMALTRND
             this.DimensionAngleZeroSuppression = DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches; // DIMAZIN
             this.DimensionDecimalSeparatorChar = '.'; // DIMDSEP
-            this.DimensionTextAndArrowPlacement = DxfDimensionFit.MoveEitherForBestFit; // DIMATFIT
             this.DimensionTextHeightScaleFactor = DxfDimensionFractionFormat.HorizontalStacking; // DIMFRAC
             this.DimensionLeaderBlockName = null; // DIMLDRBLK
             this.DimensionNonAngularUnits = DxfNonAngularUnits.Decimal; // DIMLUNIT
@@ -1793,6 +1795,7 @@ namespace IxMilia.Dxf
             this.IsPolylineContinuousAroundVerticies = false; // PLINEGEN
             this.ScaleLinetypesInPaperspace = true; // PSLTSCALE
             this.SpacialIndexMaxDepth = 3020; // TREEDEPTH
+            this.PickStyle = DxfPickStyle.Group; // PICKSTYLE
             this.CurrentMultilineStyle = "STANDARD"; // CMLSTYLE
             this.CurrentMultilineJustification = DxfJustification.Top; // CMLJUST
             this.CurrentMultilineScale = 1.0; // CMLSCALE
@@ -1857,9 +1860,6 @@ namespace IxMilia.Dxf
             this.ShadowPlaneZOffset = 0.0; // SHADOWPLANELOCATION
             this.AxisOn = false; // AXISMODE
             this.AxisTickSpacing = DxfVector.Zero; // AXISUNIT
-            this.RetainDeletedObjects = false; // DELOBJ
-            this.DimensionUnitFormat = DxfUnitFormat.Scientific; // DIMUNIT
-            this.PickStyle = DxfPickStyle.None; // PICKSTYLE
         }
 
         // build list of code value pairs
@@ -1996,6 +1996,13 @@ namespace IxMilia.Dxf
             {
                 list.Add(new DxfCodePair(9, CELTSCALE));
                 list.Add(new DxfCodePair(40, (header.CurrentEntityLinetypeScale)));
+            }
+
+            // DELOBJ
+            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, DELOBJ));
+                list.Add(new DxfCodePair(70, BoolShort(header.RetainDeletedObjects)));
             }
 
             // DISPSILH
@@ -2243,11 +2250,25 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(70, (short)(header.AlternateDimensioningToleranceZeroSupression)));
             }
 
+            // DIMFIT
+            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, DIMFIT));
+                list.Add(new DxfCodePair(70, (short)(header.DimensionTextAndArrowPlacement)));
+            }
+
             // DIMUPT
             if (version >= DxfAcadVersion.R13)
             {
                 list.Add(new DxfCodePair(9, DIMUPT));
                 list.Add(new DxfCodePair(70, BoolShort(header.DimensionCursorControlsTextPosition)));
+            }
+
+            // DIMUNIT
+            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, DIMUNIT));
+                list.Add(new DxfCodePair(70, (short)(header.DimensionUnitFormat)));
             }
 
             // DIMDEC
@@ -3013,6 +3034,13 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(70, (header.SpacialIndexMaxDepth)));
             }
 
+            // PICKSTYLE
+            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
+            {
+                list.Add(new DxfCodePair(9, PICKSTYLE));
+                list.Add(new DxfCodePair(70, (short)(header.PickStyle)));
+            }
+
             // CMLSTYLE
             if (version == DxfAcadVersion.R13)
             {
@@ -3476,34 +3504,6 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(20, header.AxisTickSpacing?.Y ?? default(double)));
             }
 
-            // DELOBJ
-            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
-            {
-                list.Add(new DxfCodePair(9, DELOBJ));
-                list.Add(new DxfCodePair(70, BoolShort(header.RetainDeletedObjects)));
-            }
-
-            // DIMFIT
-            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
-            {
-                list.Add(new DxfCodePair(9, DIMFIT));
-                list.Add(new DxfCodePair(70, (short)(header.DimensionTextAndArrowPlacement)));
-            }
-
-            // DIMUNIT
-            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
-            {
-                list.Add(new DxfCodePair(9, DIMUNIT));
-                list.Add(new DxfCodePair(70, (short)(header.DimensionUnitFormat)));
-            }
-
-            // PICKSTYLE
-            if (version >= DxfAcadVersion.R13 && version <= DxfAcadVersion.R14)
-            {
-                list.Add(new DxfCodePair(9, PICKSTYLE));
-                list.Add(new DxfCodePair(70, (short)(header.PickStyle)));
-            }
-
         }
 
         // setter method
@@ -3609,6 +3609,10 @@ namespace IxMilia.Dxf
                 case CELTSCALE:
                     EnsureCode(pair, 40);
                     header.CurrentEntityLinetypeScale = (pair.DoubleValue);
+                    break;
+                case DELOBJ:
+                    EnsureCode(pair, 70);
+                    header.RetainDeletedObjects = BoolShort(pair.ShortValue);
                     break;
                 case DISPSILH:
                     EnsureCode(pair, 70);
@@ -3810,9 +3814,17 @@ namespace IxMilia.Dxf
                     EnsureCode(pair, 70);
                     header.AlternateDimensioningToleranceZeroSupression = (DxfUnitZeroSuppression)(pair.ShortValue);
                     break;
+                case DIMFIT:
+                    EnsureCode(pair, 70);
+                    header.DimensionTextAndArrowPlacement = (DxfDimensionFit)(pair.ShortValue);
+                    break;
                 case DIMUPT:
                     EnsureCode(pair, 70);
                     header.DimensionCursorControlsTextPosition = BoolShort(pair.ShortValue);
+                    break;
+                case DIMUNIT:
+                    EnsureCode(pair, 70);
+                    header.DimensionUnitFormat = (DxfUnitFormat)(pair.ShortValue);
                     break;
                 case DIMDEC:
                     EnsureCode(pair, 70);
@@ -4285,6 +4297,10 @@ namespace IxMilia.Dxf
                     EnsureCode(pair, 70);
                     header.SpacialIndexMaxDepth = (pair.ShortValue);
                     break;
+                case PICKSTYLE:
+                    EnsureCode(pair, 70);
+                    header.PickStyle = (DxfPickStyle)(pair.ShortValue);
+                    break;
                 case CMLSTYLE:
                     switch (pair.Code)
                     {
@@ -4579,22 +4595,6 @@ namespace IxMilia.Dxf
                     break;
                 case AXISUNIT:
                     SetPoint(pair, header.AxisTickSpacing);
-                    break;
-                case DELOBJ:
-                    EnsureCode(pair, 70);
-                    header.RetainDeletedObjects = BoolShort(pair.ShortValue);
-                    break;
-                case DIMFIT:
-                    EnsureCode(pair, 70);
-                    header.DimensionTextAndArrowPlacement = (DxfDimensionFit)(pair.ShortValue);
-                    break;
-                case DIMUNIT:
-                    EnsureCode(pair, 70);
-                    header.DimensionUnitFormat = (DxfUnitFormat)(pair.ShortValue);
-                    break;
-                case PICKSTYLE:
-                    EnsureCode(pair, 70);
-                    header.PickStyle = (DxfPickStyle)(pair.ShortValue);
                     break;
                 default:
                     // unsupported variable
@@ -4926,6 +4926,8 @@ namespace IxMilia.Dxf
                     return this.CurrentEntityColor;
                 case CELTSCALE:
                     return this.CurrentEntityLinetypeScale;
+                case DELOBJ:
+                    return this.RetainDeletedObjects;
                 case DISPSILH:
                     return this.DisplaySilhouetteCurvesInWireframeMode;
                 case DIMSCALE:
@@ -5026,8 +5028,12 @@ namespace IxMilia.Dxf
                     return this.AlternateDimensioningZeroSupression;
                 case DIMALTTZ:
                     return this.AlternateDimensioningToleranceZeroSupression;
+                case DIMFIT:
+                    return this.DimensionTextAndArrowPlacement;
                 case DIMUPT:
                     return this.DimensionCursorControlsTextPosition;
+                case DIMUNIT:
+                    return this.DimensionUnitFormat;
                 case DIMDEC:
                     return this.DimensionUnitToleranceDecimalPlaces;
                 case DIMTDEC:
@@ -5270,6 +5276,8 @@ namespace IxMilia.Dxf
                     return this.ScaleLinetypesInPaperspace;
                 case TREEDEPTH:
                     return this.SpacialIndexMaxDepth;
+                case PICKSTYLE:
+                    return this.PickStyle;
                 case CMLSTYLE:
                     return this.CurrentMultilineStyle;
                 case CMLJUST:
@@ -5398,14 +5406,6 @@ namespace IxMilia.Dxf
                     return this.AxisOn;
                 case AXISUNIT:
                     return this.AxisTickSpacing;
-                case DELOBJ:
-                    return this.RetainDeletedObjects;
-                case DIMFIT:
-                    return this.DimensionTextAndArrowPlacement;
-                case DIMUNIT:
-                    return this.DimensionUnitFormat;
-                case PICKSTYLE:
-                    return this.PickStyle;
                 default:
                     throw new ArgumentException("Unrecognized variable", "variableName");
             }
@@ -5492,6 +5492,9 @@ namespace IxMilia.Dxf
                     break;
                 case CELTSCALE:
                     this.CurrentEntityLinetypeScale = (double)value;
+                    break;
+                case DELOBJ:
+                    this.RetainDeletedObjects = (bool)value;
                     break;
                 case DISPSILH:
                     this.DisplaySilhouetteCurvesInWireframeMode = (bool)value;
@@ -5643,8 +5646,14 @@ namespace IxMilia.Dxf
                 case DIMALTTZ:
                     this.AlternateDimensioningToleranceZeroSupression = (DxfUnitZeroSuppression)value;
                     break;
+                case DIMFIT:
+                    this.DimensionTextAndArrowPlacement = (DxfDimensionFit)value;
+                    break;
                 case DIMUPT:
                     this.DimensionCursorControlsTextPosition = (bool)value;
+                    break;
+                case DIMUNIT:
+                    this.DimensionUnitFormat = (DxfUnitFormat)value;
                     break;
                 case DIMDEC:
                     this.DimensionUnitToleranceDecimalPlaces = (short)value;
@@ -6009,6 +6018,9 @@ namespace IxMilia.Dxf
                 case TREEDEPTH:
                     this.SpacialIndexMaxDepth = (short)value;
                     break;
+                case PICKSTYLE:
+                    this.PickStyle = (DxfPickStyle)value;
+                    break;
                 case CMLSTYLE:
                     this.CurrentMultilineStyle = (string)value;
                     break;
@@ -6200,18 +6212,6 @@ namespace IxMilia.Dxf
                     break;
                 case AXISUNIT:
                     this.AxisTickSpacing = (DxfVector)value;
-                    break;
-                case DELOBJ:
-                    this.RetainDeletedObjects = (bool)value;
-                    break;
-                case DIMFIT:
-                    this.DimensionTextAndArrowPlacement = (DxfDimensionFit)value;
-                    break;
-                case DIMUNIT:
-                    this.DimensionUnitFormat = (DxfUnitFormat)value;
-                    break;
-                case PICKSTYLE:
-                    this.PickStyle = (DxfPickStyle)value;
                     break;
                 default:
                     throw new ArgumentException("Unrecognized variable", "variableName");

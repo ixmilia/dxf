@@ -64,7 +64,7 @@ foreach (var property in variables) {
 #>
 
         // set defaults
-        private void SetDefaults()
+        public void SetDefaults()
         {
 <#
     seenProperties.Clear();

@@ -1595,7 +1595,7 @@ namespace IxMilia.Dxf
         public DxfPickStyle PickStyle { get; set; }
 
         // set defaults
-        private void SetDefaults()
+        public void SetDefaults()
         {
             this.Version = DxfAcadVersion.R12; // ACADVER
             this.MaintenenceVersion = 0; // ACADMAINTVER

@@ -2077,7 +2077,7 @@ namespace IxMilia.Dxf
         public DxfViewMode ViewMode { get; set; }
         public int CircleZoomPercent { get; set; }
         public bool FastZoom { get; set; }
-        public bool UCSIcon { get; set; }
+        public short UCSIcon { get; set; }
         public bool SnapOn { get; set; }
         public bool GridOn { get; set; }
         public short SnapStyle { get; set; }
@@ -2129,7 +2129,7 @@ namespace IxMilia.Dxf
             ViewMode = 0;
             CircleZoomPercent = 1000;
             FastZoom = true;
-            UCSIcon = false;
+            UCSIcon = 3;
             SnapOn = false;
             GridOn = false;
             SnapStyle = 0;
@@ -2212,7 +2212,7 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
             }
 
-            pairs.Add(new DxfCodePair(74, BoolShort(UCSIcon)));
+            pairs.Add(new DxfCodePair(74, (UCSIcon)));
             if (version <= DxfAcadVersion.R2004)
             {
                 pairs.Add(new DxfCodePair(75, BoolShort(SnapOn)));
@@ -2488,7 +2488,7 @@ namespace IxMilia.Dxf
                         item.FastZoom = BoolShort(pair.ShortValue);
                         break;
                     case 74:
-                        item.UCSIcon = BoolShort(pair.ShortValue);
+                        item.UCSIcon = (pair.ShortValue);
                         break;
                     case 75:
                         item.SnapOn = BoolShort(pair.ShortValue);

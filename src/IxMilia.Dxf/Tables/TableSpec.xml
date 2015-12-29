@@ -189,7 +189,7 @@
             <Property Name="ViewMode" Code="71" Type="DxfViewMode" DefaultValue="0" ReadConverter="(DxfViewMode)" WriteConverter="(short)" />
             <Property Name="CircleZoomPercent" Code="72" Type="int" DefaultValue="1000" ReadConverter="(int)" WriteConverter="(short)" />
             <Property Name="FastZoom" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
-            <Property Name="UCSIcon" Code="74" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
+            <Property Name="UCSIcon" Code="74" Type="short" DefaultValue="3" />
             <Property Name="SnapOn" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
             <Property Name="GridOn" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
             <Property Name="SnapStyle" Code="77" Type="short" DefaultValue="0" MaxVersion="R2004" />

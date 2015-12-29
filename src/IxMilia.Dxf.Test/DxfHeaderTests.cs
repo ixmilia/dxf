@@ -413,7 +413,7 @@ AcDbSymbolTableRecord
  73
 1
  74
-0
+3
  75
 0
  76

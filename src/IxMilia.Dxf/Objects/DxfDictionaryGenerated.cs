@@ -36,27 +36,6 @@ namespace IxMilia.Dxf.Objects
             this._entryHandles = new List<uint>();
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
-        {
-            base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbDictionary"));
-            if (version >= DxfAcadVersion.R2000)
-            {
-                pairs.Add(new DxfCodePair(280, BoolShort(this.IsHardOwner)));
-            }
-
-            if (version >= DxfAcadVersion.R2000)
-            {
-                pairs.Add(new DxfCodePair(281, (short)(this.DuplicateRecordHandling)));
-            }
-
-            foreach (var item in _entries)
-            {
-                pairs.Add(new DxfCodePair(3, item.Key));
-                pairs.Add(new DxfCodePair(360, UIntHandle(item.Value)));
-            }
-
-        }
 
         internal override bool TrySetPair(DxfCodePair pair)
         {

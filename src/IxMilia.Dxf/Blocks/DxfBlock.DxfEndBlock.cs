@@ -68,7 +68,7 @@ namespace IxMilia.Dxf.Blocks
 
                 if (version >= DxfAcadVersion.R2000)
                 {
-                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(0)));
+                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(Parent.OwnerHandle)));
                 }
 
                 if (version >= DxfAcadVersion.R13)

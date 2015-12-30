@@ -26,6 +26,29 @@ namespace IxMilia.Dxf.Objects
             return this;
         }
 
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbDictionary"));
+            if (version >= DxfAcadVersion.R2000 && this.IsHardOwner != false)
+            {
+                pairs.Add(new DxfCodePair(280, BoolShort(this.IsHardOwner)));
+            }
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(281, (short)(this.DuplicateRecordHandling)));
+            }
+
+            var code = IsHardOwner ? 360 : 350;
+            foreach (var item in _entries)
+            {
+                pairs.Add(new DxfCodePair(3, item.Key));
+                pairs.Add(new DxfCodePair(code, UIntHandle(item.Value)));
+            }
+
+        }
+
         #region IDictionary implementation
 
         public uint this[string key]

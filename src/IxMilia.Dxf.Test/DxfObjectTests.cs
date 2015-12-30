@@ -182,7 +182,37 @@ name-3
         }
 
         [Fact]
-        public void WriteDictionaryTest()
+        public void WriteDictionaryTest1()
+        {
+            var dict = new DxfDictionary();
+            dict["name-1"] = 1u;
+            dict["name-2"] = 2u;
+            dict["name-3"] = 3u;
+            dict.IsHardOwner = false;
+            dict.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.KeepExisting;
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Objects.Add(dict);
+            VerifyFileContains(file, @"
+100
+AcDbDictionary
+  3
+name-1
+350
+1
+  3
+name-2
+350
+2
+  3
+name-3
+350
+3
+");
+        }
+
+        [Fact]
+        public void WriteDictionaryTest2()
         {
             var dict = new DxfDictionary();
             dict["name-1"] = 1u;

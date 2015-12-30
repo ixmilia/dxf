@@ -36,7 +36,7 @@ namespace IxMilia.Dxf.Test
   0
 ACAD_PROXY_OBJECT
   5
-16
+#
 330
 42
 100
@@ -536,7 +536,7 @@ quatro
         {
             var settings = (DxfSectionSettings)GenObject("SECTIONSETTINGS", @"
   5
-A
+#
 100
 AcDbSectionSettings
  90
@@ -818,7 +818,7 @@ AcDbSortentsTable
   0
 SORTENTSTABLE
   5
-16
+#
 100
 AcDbSortentsTable
 331
@@ -894,7 +894,7 @@ AcDbSortentsTable
   0
 SUNSTUDY
   5
-16
+#
 100
 AcDbSunStudy
  90
@@ -961,7 +961,7 @@ AcDbSunStudy
         {
             var table = (DxfTableStyle)GenObject("TABLESTYLE", @"
   5
-A
+#
 100
 AcDbTableStyle
 280

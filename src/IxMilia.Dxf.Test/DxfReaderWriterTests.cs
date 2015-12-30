@@ -527,7 +527,7 @@ TABLE
   2
 BLOCK_RECORD
   5
-9
+#
 100
 AcDbSymbolTable
  70
@@ -535,7 +535,7 @@ AcDbSymbolTable
   0
 BLOCK_RECORD
   5
-E
+#
 330
 42
 100
@@ -834,7 +834,7 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-54
+#
 100
 AcDbEntity
   8
@@ -954,7 +954,7 @@ TABLE
   2
 STYLE
   5
-4
+#
 100
 AcDbSymbolTable
  70
@@ -980,7 +980,7 @@ TABLE
   2
 STYLE
   5
-4
+#
 102
 {ACAD_XDICTIONARY
 360
@@ -1384,7 +1384,7 @@ name
   0
 LAYER
   5
-14
+#
 100
 AcDbSymbolTableRecord
   2
@@ -1405,7 +1405,7 @@ name
   0
 LAYER
   5
-14
+#
 100
 AcDbSymbolTableRecord
   2

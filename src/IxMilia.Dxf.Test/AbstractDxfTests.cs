@@ -3,6 +3,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -65,7 +67,7 @@ EOF
 
         protected static void VerifyFileContains(DxfFile file, string expected)
         {
-            VerifyFileContents(file, expected, (ex, ac) => Assert.Contains(ex.Trim(), ac));
+            VerifyFileContents(file, expected, (ex, ac) => AssertRegexContains(ex.Trim(), ac));
         }
 
         protected static void VerifyFileDoesNotContain(DxfFile file, string unexpected)
@@ -110,6 +112,48 @@ EOF
             }
 
             return item;
+        }
+
+        private static void AssertRegexContains(string expected, string actual)
+        {
+            var regex = CreateMatcherRegex(expected);
+            if (!regex.IsMatch(actual))
+            {
+                throw new Exception($"Unable to find\r\n{expected}\r\nin\r\n{actual}");
+            }
+        }
+
+        private static Regex CreateMatcherRegex(string text)
+        {
+            var sb = new StringBuilder();
+            foreach (var c in text)
+            {
+                switch (c)
+                {
+                    case '#':
+                        // the character '#' will match any hex number (item handle)
+                        sb.Append(@"[A-Fa-f0-9]+");
+                        break;
+                    case '.':
+                    case '\\':
+                    case '[':
+                    case ']':
+                    case '(':
+                    case ')':
+                    case '?':
+                    case '*':
+                    case '$':
+                    case '^':
+                        // escape special characters
+                        sb.Append("\\" + c);
+                        break;
+                    default:
+                        sb.Append(c);
+                        break;
+                }
+            }
+
+            return new Regex(sb.ToString(), RegexOptions.Multiline);
         }
     }
 }

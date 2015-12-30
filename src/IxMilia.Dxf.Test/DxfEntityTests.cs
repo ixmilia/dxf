@@ -105,7 +105,7 @@ BBBB
   0
 LINE
   5
-14
+#
 102
 {APP_NAME
   1
@@ -775,7 +775,7 @@ SEQEND
   0
 LINE
   5
-13
+#
 100
 AcDbEntity
   8
@@ -805,7 +805,7 @@ AcDbLine
   0
 CIRCLE
   5
-13
+#
 100
 AcDbEntity
   8
@@ -831,7 +831,7 @@ AcDbCircle
   0
 ARC
   5
-13
+#
 100
 AcDbEntity
   8
@@ -863,7 +863,7 @@ AcDbArc
   0
 ELLIPSE
   5
-14
+#
 100
 AcDbEntity
   8
@@ -899,7 +899,7 @@ AcDbEllipse
   0
 TEXT
   5
-13
+#
 100
 AcDbEntity
   8
@@ -933,7 +933,7 @@ AcDbText
   0
 POLYLINE
   5
-13
+#
 100
 AcDbEntity
   8
@@ -951,7 +951,7 @@ AcDb2dPolyline
   0
 SEQEND
   5
-14
+#
 100
 AcDbEntity
   8
@@ -1132,7 +1132,7 @@ ENTITIES
   0
 POLYLINE
   5
-14
+#
 100
 AcDbEntity
   8
@@ -1150,9 +1150,9 @@ AcDb2dPolyline
   0
 VERTEX
   5
-15
+#
 330
-14
+#
 100
 AcDbEntity
   8
@@ -1174,9 +1174,9 @@ AcDbVertex
   0
 VERTEX
   5
-16
+#
 330
-14
+#
 100
 AcDbEntity
   8
@@ -1198,9 +1198,9 @@ AcDbVertex
   0
 SEQEND
   5
-17
+#
 330
-14
+#
 100
 AcDbEntity
   8
@@ -1224,7 +1224,7 @@ ENDSEC
   0
 LWPOLYLINE
   5
-14
+#
 100
 AcDbEntity
   8
@@ -1273,7 +1273,7 @@ BLOCKS
   0
 BLOCK
   2
-block #1
+block 1
  10
 1
  20
@@ -1299,7 +1299,7 @@ ENDBLK
   0
 BLOCK
   2
-block #2
+block 2
   0
 CIRCLE
  40
@@ -1320,7 +1320,7 @@ EOF");
 
             // first block
             var first = file.Blocks[0];
-            Assert.Equal("block #1", first.Name);
+            Assert.Equal("block 1", first.Name);
             Assert.Equal(new DxfPoint(1, 2, 3), first.BasePoint);
             Assert.Equal(1, first.Entities.Count);
             var entity = first.Entities.First();
@@ -1331,7 +1331,7 @@ EOF");
 
             // second block
             var second = file.Blocks[1];
-            Assert.Equal("block #2", second.Name);
+            Assert.Equal("block 2", second.Name);
             Assert.Equal(2, second.Entities.Count);
             Assert.Equal(DxfEntityType.Circle, second.Entities[0].EntityType);
             Assert.Equal(40.0, ((DxfCircle)second.Entities[0]).Radius);

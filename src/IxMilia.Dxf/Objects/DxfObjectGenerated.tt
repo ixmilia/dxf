@@ -286,15 +286,23 @@ foreach (var obj in objects)
     //
     // Properties
     //
+    var seenProperties = new HashSet<string>();
     foreach (var property in GetProperties(obj))
     {
+        var propertyName = Name(property);
+        if (seenProperties.Contains(propertyName))
+        {
+            continue;
+        }
+
+        seenProperties.Add(propertyName);
         var propertyType = Type(property);
         if (AllowMultiples(property))
         {
             propertyType = string.Format("List<{0}>", propertyType);
         }
 #>
-        <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> { get; <#= SetterAccessibility(property) #>set; }
+        <#= Accessibility(property) #> <#= propertyType #> <#= propertyName #> { get; <#= SetterAccessibility(property) #>set; }
 <#
     } // foreach property
 
@@ -428,13 +436,21 @@ foreach (var obj in objects)
         {
             base.Initialize();
 <#
+        seenProperties = new HashSet<string>();
         foreach (var property in GetProperties(obj))
         {
+            var propertyName = Name(property);
+            if (seenProperties.Contains(propertyName))
+            {
+                continue;
+            }
+
+            seenProperties.Add(propertyName);
             var defaultValue = AllowMultiples(property)
                 ? string.Format("new List<{0}>()", Type(property))
                 : DefaultValue(property);
 #>
-            this.<#= Name(property) #> = <#= defaultValue #>;
+            this.<#= propertyName #> = <#= defaultValue #>;
 <#
         } // foreach property
 #>

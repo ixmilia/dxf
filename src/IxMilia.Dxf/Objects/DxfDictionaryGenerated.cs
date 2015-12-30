@@ -53,7 +53,7 @@ namespace IxMilia.Dxf.Objects
             foreach (var item in _entries)
             {
                 pairs.Add(new DxfCodePair(3, item.Key));
-                pairs.Add(new DxfCodePair(350, UIntHandle(item.Value)));
+                pairs.Add(new DxfCodePair(360, UIntHandle(item.Value)));
             }
 
         }
@@ -72,6 +72,9 @@ namespace IxMilia.Dxf.Objects
                     this.DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)(pair.ShortValue);
                     break;
                 case 350:
+                    this._entryHandles.Add(UIntHandle(pair.StringValue));
+                    break;
+                case 360:
                     this._entryHandles.Add(UIntHandle(pair.StringValue));
                     break;
                 default:

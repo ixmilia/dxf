@@ -97,14 +97,17 @@
         <Property Name="IsHardOwner" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" />
         <Property Name="DuplicateRecordHandling" Code="281" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" MinVersion="R2000" />
         <Property Name="_entryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+
+        <!-- the spec says the handles will be code 350, but files produced by AutoCAD use 360 -->
         <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_entryHandles" Code="360" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbDictionary&quot;" />
             <WriteProperty Property="IsHardOwner" />
             <WriteProperty Property="DuplicateRecordHandling" />
             <Foreach Property="_entries">
                 <WriteSpecificValue Code="3" Value="item.Key" />
-                <WriteSpecificValue Code="350" Value="UIntHandle(item.Value)" />
+                <WriteSpecificValue Code="360" Value="UIntHandle(item.Value)" />
             </Foreach>
         </WriteOrder>
     </Object>

@@ -3143,7 +3143,7 @@ namespace IxMilia.Dxf
             if (version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, CEPSNTYPE));
-                list.Add(new DxfCodePair(380, (double)(header.NewObjectPlotStyle)));
+                list.Add(new DxfCodePair(380, (short)(header.NewObjectPlotStyle)));
             }
 
             // PSTYLEMODE
@@ -4365,7 +4365,7 @@ namespace IxMilia.Dxf
                     break;
                 case CEPSNTYPE:
                     EnsureCode(pair, 380);
-                    header.NewObjectPlotStyle = (DxfPlotStyle)(pair.DoubleValue);
+                    header.NewObjectPlotStyle = (DxfPlotStyle)(pair.ShortValue);
                     break;
                 case PSTYLEMODE:
                     EnsureCode(pair, 290);

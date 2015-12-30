@@ -241,7 +241,7 @@
     <Variable Name="HYPERLINKBASE" Code="1" Type="string" Property="HyperlinkBase" DefaultValue="null" MinVersion="R2000" />
     <Variable Name="STYLESHEET" Code="1" Type="string" Property="Stylesheet" DefaultValue="null" MinVersion="R2000" />
     <Variable Name="XEDIT" Code="290" Type="bool" Property="CanUseInPlaceReferenceEditing" DefaultValue="true" MinVersion="R2000" />
-    <Variable Name="CEPSNTYPE" Code="380" Type="DxfPlotStyle" Property="NewObjectPlotStyle" DefaultValue="DxfPlotStyle.ByLayer" ReadConverter="(DxfPlotStyle)" WriteConverter="(double)" MinVersion="R2000" />
+    <Variable Name="CEPSNTYPE" Code="380" Type="DxfPlotStyle" Property="NewObjectPlotStyle" DefaultValue="DxfPlotStyle.ByLayer" ReadConverter="(DxfPlotStyle)" WriteConverter="(short)" MinVersion="R2000" />
     <Variable Name="PSTYLEMODE" Code="290" Type="bool" Property="UsesColorDependentPlotStyleTables" DefaultValue="true" MinVersion="R2000" />
     <Variable Name="FINGERPRINTGUID" Code="2" Type="Guid" Property="FingerprintGuid" DefaultValue="Guid.NewGuid()" ReadConverter="GuidString" WriteConverter="GuidString" MinVersion="R2000" />
     <Variable Name="VERSIONGUID" Code="2" Type="Guid" Property="VersionGuid" DefaultValue="Guid.NewGuid()" ReadConverter="GuidString" WriteConverter="GuidString" MinVersion="R2000" />

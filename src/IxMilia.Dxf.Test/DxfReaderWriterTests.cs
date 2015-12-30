@@ -968,7 +968,7 @@ AcDbSymbolTable
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.TablesSection.StyleTable.ExtensionDataGroups.Add(new DxfCodePairGroup("ACAD_XDICTIONARY",
-                new DxfCodePairOrGroup[]
+                new IDxfCodePairOrGroup[]
                 {
                     new DxfCodePair(360, "AAAA"),
                     new DxfCodePair(360, "BBBB")

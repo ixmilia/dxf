@@ -96,7 +96,7 @@ BBBB
         public void WriteEntityExtensionDataTest()
         {
             var line = new DxfLine();
-            line.ExtensionDataGroups.Add(new DxfCodePairGroup("APP_NAME", new DxfCodePairOrGroup[]
+            line.ExtensionDataGroups.Add(new DxfCodePairGroup("APP_NAME", new IDxfCodePairOrGroup[]
             {
                 new DxfCodePair(1, "foo"),
                 new DxfCodePair(2, "bar")

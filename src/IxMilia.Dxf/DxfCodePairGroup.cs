@@ -6,29 +6,32 @@ using System.Linq;
 
 namespace IxMilia.Dxf
 {
-    public interface DxfCodePairOrGroup
+    public interface IDxfCodePairOrGroup
     {
         bool IsCodePair { get; }
     }
 
-    public class DxfCodePairGroup : DxfCodePairOrGroup
+    public class DxfCodePairGroup : IDxfCodePairOrGroup
     {
         internal const int GroupCodeNumber = 102;
 
         public string GroupName { get; set; }
-        public List<DxfCodePairOrGroup> Items { get; private set; }
+
+        public List<IDxfCodePairOrGroup> Items { get; private set; }
 
         public bool IsCodePair { get { return false; } }
+
+        public bool IsSingleton { get; private set; }
 
         public DxfCodePairGroup()
             : this(null, null)
         {
         }
 
-        public DxfCodePairGroup(string groupName, IEnumerable<DxfCodePairOrGroup> items)
+        public DxfCodePairGroup(string groupName, IEnumerable<IDxfCodePairOrGroup> items)
         {
             GroupName = groupName;
-            Items = items == null ? new List<DxfCodePairOrGroup>() : items.ToList();
+            Items = items == null ? new List<IDxfCodePairOrGroup>() : items.ToList();
         }
 
         internal void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -38,25 +41,34 @@ namespace IxMilia.Dxf
                 return;
             }
 
-            pairs.Add(new DxfCodePair(GroupCodeNumber, "{" + GroupName));
-            foreach (var item in Items)
+            if (IsSingleton)
             {
-                if (item.IsCodePair)
-                {
-                    pairs.Add((DxfCodePair)item);
-                }
-                else
-                {
-                    ((DxfCodePairGroup)item).AddValuePairs(pairs, version, outputHandles);
-                }
+                pairs.Add(new DxfCodePair(GroupCodeNumber, GroupName));
+                pairs.Add((DxfCodePair)Items.Single());
             }
+            else
+            {
 
-            pairs.Add(new DxfCodePair(GroupCodeNumber, "}"));
+                pairs.Add(new DxfCodePair(GroupCodeNumber, "{" + GroupName));
+                foreach (var item in Items)
+                {
+                    if (item.IsCodePair)
+                    {
+                        pairs.Add((DxfCodePair)item);
+                    }
+                    else
+                    {
+                        ((DxfCodePairGroup)item).AddValuePairs(pairs, version, outputHandles);
+                    }
+                }
+
+                pairs.Add(new DxfCodePair(GroupCodeNumber, "}"));
+            }
         }
 
         internal static DxfCodePairGroup FromBuffer(DxfCodePairBufferReader buffer, string groupName)
         {
-            var items = new List<DxfCodePairOrGroup>();
+            var items = new List<IDxfCodePairOrGroup>();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
@@ -95,9 +107,19 @@ namespace IxMilia.Dxf
             return new DxfCodePairGroup(groupName, items);
         }
 
+        public static DxfCodePairGroup CreateSingletonGroup(string controlString, DxfCodePair pair)
+        {
+            return new DxfCodePairGroup(controlString, new[] { pair }) { IsSingleton = true };
+        }
+
+        internal static bool IsSingletonGroup(string controlString)
+        {
+            return controlString.StartsWith("{");
+        }
+
         internal static string GetGroupName(string controlString)
         {
-            Debug.Assert(controlString.StartsWith("{"));
+            Debug.Assert(IsSingletonGroup(controlString));
             return controlString.Substring(1);
         }
     }

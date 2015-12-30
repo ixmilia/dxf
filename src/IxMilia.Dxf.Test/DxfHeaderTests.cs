@@ -139,7 +139,7 @@ ENDTAB
         public void WriteLayersTableTest()
         {
             var layer = new DxfLayer("layer-name");
-            layer.ExtensionDataGroups.Add(new DxfCodePairGroup("APP_NAME", new DxfCodePairOrGroup[]
+            layer.ExtensionDataGroups.Add(new DxfCodePairGroup("APP_NAME", new IDxfCodePairOrGroup[]
             {
                 new DxfCodePair(1, "foo"),
                 new DxfCodePair(2, "bar"),

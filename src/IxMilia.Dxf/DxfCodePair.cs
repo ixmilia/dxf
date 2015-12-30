@@ -7,7 +7,7 @@ using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf
 {
-    public partial class DxfCodePair : DxfCodePairOrGroup
+    public partial class DxfCodePair : IDxfCodePairOrGroup
     {
         public const int CommentCode = 999;
 

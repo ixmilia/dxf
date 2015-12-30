@@ -132,8 +132,21 @@ namespace IxMilia.Dxf.Objects
             if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
             {
                 buffer.Advance();
-                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
+                var groupName = pair.StringValue;
+                DxfCodePairGroup group;
+                if (DxfCodePairGroup.IsSingletonGroup(groupName))
+                {
+                    groupName = DxfCodePairGroup.GetGroupName(groupName);
+                    group = DxfCodePairGroup.FromBuffer(buffer, groupName);
+                }
+                else
+                {
+                    // single-value group
+                    group = DxfCodePairGroup.CreateSingletonGroup(groupName, buffer.Peek());
+                    buffer.Advance();
+                }
+
+                ExtensionDataGroups.Add(group);
                 return true;
             }
             else if (pair.Code == (int)DxfXDataType.ApplicationName)

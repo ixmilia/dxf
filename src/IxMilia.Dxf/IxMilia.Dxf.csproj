@@ -222,6 +222,7 @@
     <Compile Include="IDxfHasHandle.cs" />
     <Compile Include="IDxfCodePairReader.cs" />
     <Compile Include="IDxfHasOwnerHandle.cs" />
+    <Compile Include="IDxfHasXData.cs" />
     <Compile Include="Objects\DxfAcadProxyObject.cs" />
     <Compile Include="Objects\DxfAcadProxyObjectGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>

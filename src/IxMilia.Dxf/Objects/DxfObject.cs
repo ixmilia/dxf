@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -74,11 +75,13 @@ namespace IxMilia.Dxf.Objects
         Inches = 5
     }
 
-    public abstract partial class DxfObject
+    public abstract partial class DxfObject : IDxfHasXData, IDxfHasXDataHidden
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
-        protected DxfXData XDataProtected { get; set; }
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; } = new List<DxfCodePairGroup>();
+
+        DxfXData IDxfHasXDataHidden.XDataHidden { get; set; }
 
         public abstract DxfObjectType ObjectType { get; }
 
@@ -95,7 +98,6 @@ namespace IxMilia.Dxf.Objects
         protected DxfObject()
         {
             Initialize();
-            ExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
         protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -127,37 +129,6 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
-        internal virtual bool TrySetExtensionData(DxfCodePair pair, DxfCodePairBufferReader buffer)
-        {
-            if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
-            {
-                buffer.Advance();
-                var groupName = pair.StringValue;
-                DxfCodePairGroup group;
-                if (DxfCodePairGroup.IsSingletonGroup(groupName))
-                {
-                    groupName = DxfCodePairGroup.GetGroupName(groupName);
-                    group = DxfCodePairGroup.FromBuffer(buffer, groupName);
-                }
-                else
-                {
-                    // single-value group
-                    group = DxfCodePairGroup.CreateSingletonGroup(groupName, buffer.Peek());
-                    buffer.Advance();
-                }
-
-                ExtensionDataGroups.Add(group);
-                return true;
-            }
-            else if (pair.Code == (int)DxfXDataType.ApplicationName)
-            {
-                XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
-                return true;
-            }
-
-            return false;
-        }
-
         internal virtual DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
@@ -168,7 +139,7 @@ namespace IxMilia.Dxf.Objects
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                while (this.TrySetExtensionData(pair, buffer))
                 {
                     pair = buffer.Peek();
                 }

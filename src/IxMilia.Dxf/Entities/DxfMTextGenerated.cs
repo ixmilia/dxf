@@ -45,7 +45,7 @@ namespace IxMilia.Dxf.Entities
         public double ColumnWidth { get; set; }
         public double ColumnGutter { get; set; }
         public List<double> ColumnHeights { get; private set; }
-        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
+        public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }
 
         public DxfMText()
             : base()

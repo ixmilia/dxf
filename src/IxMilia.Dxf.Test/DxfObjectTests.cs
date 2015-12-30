@@ -1254,6 +1254,71 @@ two
         }
 
         [Fact]
+        public void ReadXRecordWithMultipleXDataTest()
+        {
+            var xrecord = (DxfXRecordObject)GenObject("XRECORD", @"
+102
+{ACAD_REACTORS_1
+330
+111
+102
+}
+102
+{ACAD_REACTORS_2
+330
+222
+102
+}
+102
+{ACAD_REACTORS_3
+330
+333
+102
+}
+100
+AcDbXrecord
+280
+     1
+102
+VTR_0.000_0.000_1.000_1.000_VISUALSTYLE
+340
+195
+102
+VTR_0.000_0.000_1.000_1.000_GRIDDISPLAY
+ 70
+     3
+102
+VTR_0.000_0.000_1.000_1.000_GRIDMAJOR
+ 70
+     5
+102
+VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING
+280
+     1
+102
+VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTINGTYPE
+ 70
+     1
+102
+VTR_0.000_0.000_1.000_1.000_BRIGHTNESS
+141
+0.0
+102
+VTR_0.000_0.000_1.000_1.000_CONTRAST
+142
+0.0
+");
+            Assert.Equal(3, xrecord.ExtensionDataGroups.Count);
+            Assert.Equal("ACAD_REACTORS_1", xrecord.ExtensionDataGroups[0].GroupName);
+            Assert.Equal("ACAD_REACTORS_2", xrecord.ExtensionDataGroups[1].GroupName);
+            Assert.Equal("ACAD_REACTORS_3", xrecord.ExtensionDataGroups[2].GroupName);
+            Assert.Equal(DxfDictionaryDuplicateRecordHandling.KeepExisting, xrecord.DuplicateRecordHandling);
+            Assert.Equal(14, xrecord.DataPairs.Count);
+            Assert.Equal(102, xrecord.DataPairs[0].Code);
+            Assert.Equal("VTR_0.000_0.000_1.000_1.000_VISUALSTYLE", xrecord.DataPairs[0].StringValue);
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();

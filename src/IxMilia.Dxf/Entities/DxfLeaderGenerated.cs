@@ -35,7 +35,7 @@ namespace IxMilia.Dxf.Entities
         public DxfVector Right { get; set; }
         public DxfVector BlockOffset { get; set; }
         public DxfVector AnnotationOffset { get; set; }
-        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
+        public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }
 
         public DxfLeader()
             : base()

@@ -118,7 +118,7 @@ namespace IxMilia.Dxf.Entities
                 Flags = flags;
             }
         }
-        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
+        public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }
 
         public DxfPolyline()
             : base()

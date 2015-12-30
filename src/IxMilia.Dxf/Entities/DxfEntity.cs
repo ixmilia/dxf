@@ -170,11 +170,13 @@ namespace IxMilia.Dxf.Entities
         ConstantMultilineAttributeDefinition = 4
     }
 
-    public abstract partial class DxfEntity
+    public abstract partial class DxfEntity : IDxfHasXData, IDxfHasXDataHidden
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
-        protected DxfXData XDataProtected { get; set; }
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; } = new List<DxfCodePairGroup>();
+
+        DxfXData IDxfHasXDataHidden.XDataHidden{ get; set; }
 
         public abstract DxfEntityType EntityType { get; }
 
@@ -223,24 +225,6 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        internal virtual bool TrySetExtensionData(DxfCodePair pair, DxfCodePairBufferReader buffer)
-        {
-            if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
-            {
-                buffer.Advance();
-                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                return true;
-            }
-            else if (pair.Code == (int)DxfXDataType.ApplicationName)
-            {
-                XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
-                return true;
-            }
-
-            return false;
-        }
-
         internal virtual DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
@@ -251,7 +235,7 @@ namespace IxMilia.Dxf.Entities
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                while (this.TrySetExtensionData(pair, buffer))
                 {
                     pair = buffer.Peek();
                 }

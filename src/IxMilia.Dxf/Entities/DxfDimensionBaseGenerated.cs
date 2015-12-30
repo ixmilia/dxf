@@ -30,7 +30,7 @@ namespace IxMilia.Dxf.Entities
         public double HorizontalDirectionAngle { get; set; }
         public DxfVector Normal { get; set; }
         public string DimensionStyleName { get; set; }
-        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
+        public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }
 
         internal DxfDimensionBase()
             : base()

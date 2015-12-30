@@ -21,8 +21,6 @@ namespace IxMilia.Dxf
 
         public bool IsCodePair { get { return false; } }
 
-        public bool IsSingleton { get; private set; }
-
         public DxfCodePairGroup()
             : this(null, null)
         {
@@ -41,29 +39,20 @@ namespace IxMilia.Dxf
                 return;
             }
 
-            if (IsSingleton)
+            pairs.Add(new DxfCodePair(GroupCodeNumber, "{" + GroupName));
+            foreach (var item in Items)
             {
-                pairs.Add(new DxfCodePair(GroupCodeNumber, GroupName));
-                pairs.Add((DxfCodePair)Items.Single());
-            }
-            else
-            {
-
-                pairs.Add(new DxfCodePair(GroupCodeNumber, "{" + GroupName));
-                foreach (var item in Items)
+                if (item.IsCodePair)
                 {
-                    if (item.IsCodePair)
-                    {
-                        pairs.Add((DxfCodePair)item);
-                    }
-                    else
-                    {
-                        ((DxfCodePairGroup)item).AddValuePairs(pairs, version, outputHandles);
-                    }
+                    pairs.Add((DxfCodePair)item);
                 }
-
-                pairs.Add(new DxfCodePair(GroupCodeNumber, "}"));
+                else
+                {
+                    ((DxfCodePairGroup)item).AddValuePairs(pairs, version, outputHandles);
+                }
             }
+
+            pairs.Add(new DxfCodePair(GroupCodeNumber, "}"));
         }
 
         internal static DxfCodePairGroup FromBuffer(DxfCodePairBufferReader buffer, string groupName)
@@ -107,19 +96,9 @@ namespace IxMilia.Dxf
             return new DxfCodePairGroup(groupName, items);
         }
 
-        public static DxfCodePairGroup CreateSingletonGroup(string controlString, DxfCodePair pair)
-        {
-            return new DxfCodePairGroup(controlString, new[] { pair }) { IsSingleton = true };
-        }
-
-        internal static bool IsSingletonGroup(string controlString)
-        {
-            return controlString.StartsWith("{");
-        }
-
         internal static string GetGroupName(string controlString)
         {
-            Debug.Assert(IsSingletonGroup(controlString));
+            Debug.Assert(controlString.StartsWith("{"));
             return controlString.Substring(1);
         }
     }

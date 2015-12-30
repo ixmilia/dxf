@@ -13,10 +13,11 @@ namespace IxMilia.Dxf.Objects
     public enum DxfObjectType
     {
         AcadProxyObject,
-        AcdbDictionary,
-        AcdbDictionaryWithDefault,
         AcdbPlaceHolder,
         DataTable,
+        Dictionary,
+        DictionaryVariable,
+        DictionaryWithDefault,
         DimensionAssociativity,
         Field,
         GeoData,
@@ -66,14 +67,16 @@ namespace IxMilia.Dxf.Objects
                 {
                     case DxfObjectType.AcadProxyObject:
                         return "ACAD_PROXY_OBJECT";
-                    case DxfObjectType.AcdbDictionaryWithDefault:
+                    case DxfObjectType.DictionaryWithDefault:
                         return "ACDBDICTIONARYWDFLT";
                     case DxfObjectType.AcdbPlaceHolder:
                         return "ACDBPLACEHOLDER";
                     case DxfObjectType.DataTable:
                         return "DATATABLE";
-                    case DxfObjectType.AcdbDictionary:
+                    case DxfObjectType.Dictionary:
                         return "DICTIONARY";
+                    case DxfObjectType.DictionaryVariable:
+                        return "DICTIONARYVAR";
                     case DxfObjectType.DimensionAssociativity:
                         return "DIMASSOC";
                     case DxfObjectType.Field:
@@ -209,6 +212,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "DICTIONARY":
                     obj = new DxfDictionary();
+                    break;
+                case "DICTIONARYVAR":
+                    obj = new DxfDictionaryVariable();
                     break;
                 case "DIMASSOC":
                     obj = new DxfDimensionAssociativity();

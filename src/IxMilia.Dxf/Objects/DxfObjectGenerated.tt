@@ -258,7 +258,7 @@ foreach (var obj in objects)
     /// <summary>
     /// <#= className #> class
     /// </summary>
-    public partial class <#= className #> : <#= baseClass #>
+    <#= Accessibility(obj) #> partial class <#= className #> : <#= baseClass #>
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.<#= ObjectType(obj) #>; } }
 <#

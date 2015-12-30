@@ -15,12 +15,10 @@ namespace IxMilia.Dxf.Objects
     /// </summary>
     public partial class DxfDictionary : DxfObject
     {
-        public override DxfObjectType ObjectType { get { return DxfObjectType.AcdbDictionary; } }
+        public override DxfObjectType ObjectType { get { return DxfObjectType.Dictionary; } }
 
         public bool IsHardOwner { get; set; }
         public DxfDictionaryDuplicateRecordHandling DuplicateRecordHandling { get; set; }
-        private List<string> _entryNames { get; set; }
-        private List<uint> _entryHandles { get; set; }
 
         public DxfDictionary()
             : base()
@@ -32,36 +30,8 @@ namespace IxMilia.Dxf.Objects
             base.Initialize();
             this.IsHardOwner = false;
             this.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.NotApplicable;
-            this._entryNames = new List<string>();
-            this._entryHandles = new List<uint>();
         }
 
-
-        internal override bool TrySetPair(DxfCodePair pair)
-        {
-            switch (pair.Code)
-            {
-                case 3:
-                    this._entryNames.Add((pair.StringValue));
-                    break;
-                case 280:
-                    this.IsHardOwner = BoolShort(pair.ShortValue);
-                    break;
-                case 281:
-                    this.DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)(pair.ShortValue);
-                    break;
-                case 350:
-                    this._entryHandles.Add(UIntHandle(pair.StringValue));
-                    break;
-                case 360:
-                    this._entryHandles.Add(UIntHandle(pair.StringValue));
-                    break;
-                default:
-                    return base.TrySetPair(pair);
-            }
-
-            return true;
-        }
     }
 
 }

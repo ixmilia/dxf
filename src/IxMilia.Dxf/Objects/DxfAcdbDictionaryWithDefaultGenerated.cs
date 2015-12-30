@@ -15,7 +15,7 @@ namespace IxMilia.Dxf.Objects
     /// </summary>
     public partial class DxfAcdbDictionaryWithDefault : DxfObject
     {
-        public override DxfObjectType ObjectType { get { return DxfObjectType.AcdbDictionaryWithDefault; } }
+        public override DxfObjectType ObjectType { get { return DxfObjectType.DictionaryWithDefault; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
 
         public DxfDictionaryDuplicateRecordHandling DuplicateRecordHandling { get; set; }

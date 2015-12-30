@@ -51,7 +51,7 @@
     ACDBDICTIONARYWDFLT
 
     -->
-    <Object Name="DxfAcdbDictionaryWithDefault" ObjectType="AcdbDictionaryWithDefault" SubclassMarker="AcDbDictionaryWithDefault" TypeString="ACDBDICTIONARYWDFLT" MinVersion="R2000">
+    <Object Name="DxfAcdbDictionaryWithDefault" ObjectType="DictionaryWithDefault" SubclassMarker="AcDbDictionaryWithDefault" TypeString="ACDBDICTIONARYWDFLT" MinVersion="R2000">
         <Property Name="DuplicateRecordHandling" Code="281" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" />
         <Property Name="_entryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
@@ -93,21 +93,19 @@
     DICTIONARY
 
     -->
-    <Object Name="DxfDictionary" ObjectType="AcdbDictionary" SubclassMarker="AcDbDictionary" TypeString="DICTIONARY" GenerateWriterFunction="false">
+    <Object Name="DxfDictionary" ObjectType="Dictionary" SubclassMarker="AcDbDictionary" TypeString="DICTIONARY" GenerateReaderFunction="false" GenerateWriterFunction="false">
         <Property Name="IsHardOwner" Code="280" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" />
         <Property Name="DuplicateRecordHandling" Code="281" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" MinVersion="R2000" />
-        <Property Name="_entryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-
-        <!-- handles will either be 350 if `IsHardOwner` is false, or 360 if `IsHardOwner` is true, so we have to be able to read both -->
-        <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
-        <Property Name="_entryHandles" Code="360" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
     </Object>
     <!--
 
     DICTIONARYVAR
 
     -->
-    <!-- TODO: skipped due to unsurety of how it works -->
+    <Object Name="DxfDictionaryVariable" ObjectType="DictionaryVariable" SubclassMarker="DictionaryVariables" TypeString="DICTIONARYVAR" Accessibility="internal">
+        <Property Name="ObjectSchemaNumber" Code="280" Type="short" DefaultValue="0" />
+        <Property Name="Value" Code="1" Type="string" DefaultValue="null" />
+    </Object>
     <!--
 
     DIMASSOC

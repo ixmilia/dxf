@@ -156,6 +156,7 @@
             <xs:attribute name="HasXData" type="xs:boolean" use="optional" />
             <xs:attribute name="GenerateReaderFunction" type="xs:boolean" use="optional" />
             <xs:attribute name="GenerateWriterFunction" type="xs:boolean" use="optional" />
+            <xs:attribute name="Accessibility" type="AccessibilityType" use="optional" />
         </xs:complexType>
     </xs:element>
 

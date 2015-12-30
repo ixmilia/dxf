@@ -19,6 +19,14 @@ namespace IxMilia.Dxf.Test
 ").Objects.Single();
         }
 
+        private static void EnsureFileContainsObject(DxfObject obj, string text, DxfAcadVersion version = DxfAcadVersion.R12)
+        {
+            var file = new DxfFile();
+            file.Header.Version = version;
+            file.Objects.Add(obj);
+            VerifyFileContains(file, text);
+        }
+
         [Fact]
         public void ReadSimpleObjectTest()
         {
@@ -151,94 +159,177 @@ string 2
         }
 
         [Fact]
-        public void ReadDictionaryTest()
+        public void ReadDictionaryTest1()
         {
-            var dict = (DxfDictionary)GenObject("DICTIONARY", @"
-100
-AcDbDictionary
+            // single dictionary
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  3
+key-1
+360
+111
+  3
+key-2
+360
+222
+  0
+DICTIONARYVAR
+  5
+111
 280
+     0
 1
+value-1
+  0
+DICTIONARYVAR
+  5
+222
+280
+     0
+1
+value-2
+");
+            var dict = (DxfDictionary)file.Objects.Single();
+            Assert.Equal("value-1", dict["key-1"]);
+            Assert.Equal("value-2", dict["key-2"]);
+        }
+
+        [Fact]
+        public void ReadDictionaryTest2()
+        {
+            // multiple dictionaries
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  3
+key-1
+360
+111
+  3
+key-2
+360
+222
+  0
+DICTIONARYVAR
+  5
+111
+280
+     0
+1
+value-1
+  0
+DICTIONARYVAR
+  5
+222
+280
+     0
+1
+value-2
+  0
+DICTIONARY
+  3
+key-11
+360
+1111
+  3
+key-22
+360
+2222
+  0
+DICTIONARYVAR
+  5
+1111
+280
+     0
+1
+value-11
+  0
+DICTIONARYVAR
+  5
+2222
+280
+     0
+1
+value-22
+");
+            Assert.Equal(2, file.Objects.Count);
+
+            var dict = (DxfDictionary)file.Objects[0];
+            Assert.Equal("value-1", dict["key-1"]);
+            Assert.Equal("value-2", dict["key-2"]);
+
+            dict = (DxfDictionary)file.Objects[1];
+            Assert.Equal("value-11", dict["key-11"]);
+            Assert.Equal("value-22", dict["key-22"]);
+        }
+
+        [Fact]
+        public void WriteDictionaryTest()
+        {
+            var dict = new DxfDictionary();
+            dict["key-1"] = "value-1";
+            dict["key-2"] = "value-2";
+
+            // handles aren't verified here because they're indirectly verified in `ReadDictionaryTest1`, `ReadDictionaryTest2`, and `DictionaryRoundTripTest`
+            EnsureFileContainsObject(dict, @"
+  0
+DICTIONARY
+  5
+#
+100
+AcDbDictionary
 281
-1
+0
   3
-name-1
+key-1
 350
-1
+#
   3
-name-2
+key-2
 350
-2
-  3
-name-3
-350
-3
-");
-            Assert.True(dict.IsHardOwner);
-            Assert.Equal(DxfDictionaryDuplicateRecordHandling.KeepExisting, dict.DuplicateRecordHandling);
-            Assert.Equal(3, dict.Count);
-            Assert.Equal(1u, dict["name-1"]);
-            Assert.Equal(2u, dict["name-2"]);
-            Assert.Equal(3u, dict["name-3"]);
+#
+  0
+DICTIONARYVAR
+  5
+#
+330
+#
+100
+DictionaryVariables
+280
+0
+  1
+value-1
+  0
+DICTIONARYVAR
+  5
+#
+330
+#
+100
+DictionaryVariables
+280
+0
+  1
+value-2
+", DxfAcadVersion.R2000);
         }
 
         [Fact]
-        public void WriteDictionaryTest1()
+        public void DictionaryRoundTripTest()
         {
             var dict = new DxfDictionary();
-            dict["name-1"] = 1u;
-            dict["name-2"] = 2u;
-            dict["name-3"] = 3u;
-            dict.IsHardOwner = false;
-            dict.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.KeepExisting;
+            dict["key-1"] = "value-1";
+            dict["key-2"] = "value-2";
             var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
+            file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(dict);
-            VerifyFileContains(file, @"
-100
-AcDbDictionary
-  3
-name-1
-350
-1
-  3
-name-2
-350
-2
-  3
-name-3
-350
-3
-");
-        }
-
-        [Fact]
-        public void WriteDictionaryTest2()
-        {
-            var dict = new DxfDictionary();
-            dict["name-1"] = 1u;
-            dict["name-2"] = 2u;
-            dict["name-3"] = 3u;
-            dict.IsHardOwner = true;
-            dict.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.KeepExisting;
-            var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
-            file.Objects.Add(dict);
-            VerifyFileContains(file, @"
-100
-AcDbDictionary
-  3
-name-1
-360
-1
-  3
-name-2
-360
-2
-  3
-name-3
-360
-3
-");
+            var text = ToString(file);
+            var file2 = Parse(text);
+            var dict2 = file2.Objects.OfType<DxfDictionary>().Single();
+            Assert.Equal("value-1", dict2["key-1"]);
+            Assert.Equal("value-2", dict2["key-2"]);
         }
 
         [Fact]

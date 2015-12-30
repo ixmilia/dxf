@@ -242,6 +242,9 @@
     <Compile Include="Objects\DxfDictionaryGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfDictionaryVariableGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfDimensionAssociativityGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>

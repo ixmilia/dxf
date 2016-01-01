@@ -22,6 +22,7 @@ namespace IxMilia.Dxf.Test
         private static void EnsureFileContainsObject(DxfObject obj, string text, DxfAcadVersion version = DxfAcadVersion.R12)
         {
             var file = new DxfFile();
+            file.Clear();
             file.Header.Version = version;
             file.Objects.Add(obj);
             VerifyFileContains(file, text);
@@ -161,7 +162,7 @@ string 2
         [Fact]
         public void ReadDictionaryTest1()
         {
-            // single dictionary
+            // dictionary with simple DICTIONARYVAR values
             var file = Section("OBJECTS", @"
   0
 DICTIONARY
@@ -190,146 +191,180 @@ DICTIONARYVAR
 1
 value-2
 ");
-            var dict = (DxfDictionary)file.Objects.Single();
-            Assert.Equal("value-1", dict["key-1"]);
-            Assert.Equal("value-2", dict["key-2"]);
+            var dict = file.Objects.OfType<DxfDictionary>().Single();
+            Assert.Equal(dict, ((IDxfHasOwner)dict["key-1"]).Owner);
+            Assert.Equal(dict, ((IDxfHasOwner)dict["key-2"]).Owner);
+            Assert.Equal("value-1", ((DxfDictionaryVariable)dict["key-1"]).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict["key-2"]).Value);
         }
 
         [Fact]
         public void ReadDictionaryTest2()
         {
-            // multiple dictionaries
+            // dictionary with sub-dictionary with DICTIONARYVAR value
             var file = Section("OBJECTS", @"
   0
 DICTIONARY
   3
 key-1
 360
-111
+1000
+  0
+DICTIONARY
+  5
+1000
   3
 key-2
 360
-222
+2000
   0
 DICTIONARYVAR
   5
-111
-280
-     0
-1
-value-1
-  0
-DICTIONARYVAR
-  5
-222
+2000
 280
      0
 1
 value-2
-  0
-DICTIONARY
-  3
-key-11
-360
-1111
-  3
-key-22
-360
-2222
-  0
-DICTIONARYVAR
-  5
-1111
-280
-     0
-1
-value-11
-  0
-DICTIONARYVAR
-  5
-2222
-280
-     0
-1
-value-22
 ");
-            Assert.Equal(2, file.Objects.Count);
-
-            var dict = (DxfDictionary)file.Objects[0];
-            Assert.Equal("value-1", dict["key-1"]);
-            Assert.Equal("value-2", dict["key-2"]);
-
-            dict = (DxfDictionary)file.Objects[1];
-            Assert.Equal("value-11", dict["key-11"]);
-            Assert.Equal("value-22", dict["key-22"]);
+            var dict1 = file.Objects.OfType<DxfDictionary>().First();
+            var dict2 = (DxfDictionary)dict1["key-1"];
+            Assert.Equal(dict1, ((IDxfHasOwner)dict2).Owner);
+            Assert.Equal(dict2, ((IDxfHasOwner)dict2["key-2"]).Owner);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]).Value);
         }
 
         [Fact]
-        public void WriteDictionaryTest()
+        public void WriteDictionaryTest1()
         {
+            // dictionary with simple DICTIONARYVAR values
             var dict = new DxfDictionary();
-            dict["key-1"] = "value-1";
-            dict["key-2"] = "value-2";
-
-            // handles aren't verified here because they're indirectly verified in `ReadDictionaryTest1`, `ReadDictionaryTest2`, and `DictionaryRoundTripTest`
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+            dict["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
             EnsureFileContainsObject(dict, @"
   0
 DICTIONARY
   5
-#
+1
 100
 AcDbDictionary
 281
-0
+     0
   3
 key-1
 350
-#
+2
   3
 key-2
 350
-#
+3
   0
 DICTIONARYVAR
   5
-#
-330
-#
+2
 100
 DictionaryVariables
 280
-0
-  1
+     0
+1
 value-1
   0
 DICTIONARYVAR
   5
-#
-330
-#
+3
 100
 DictionaryVariables
 280
-0
-  1
+     0
+1
 value-2
 ", DxfAcadVersion.R2000);
         }
 
         [Fact]
-        public void DictionaryRoundTripTest()
+        public void WriteDictionaryTest2()
         {
+            // dictionary with sub-dictionary with DICTIONARYVAR value
+            var dict1 = new DxfDictionary();
+            var dict2 = new DxfDictionary();
+            dict1["key-1"] = dict2;
+            dict2["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
+            EnsureFileContainsObject(dict1, @"
+  0
+DICTIONARY
+  5
+1
+100
+AcDbDictionary
+281
+     0
+  3
+key-1
+350
+2
+  0
+DICTIONARY
+  5
+2
+100
+AcDbDictionary
+281
+     0
+  3
+key-2
+350
+3
+  0
+DICTIONARYVAR
+  5
+3
+100
+DictionaryVariables
+280
+     0
+1
+value-2
+", DxfAcadVersion.R2000);
+        }
+
+        [Fact]
+        public void DictionaryRoundTripTest1()
+        {
+            // dictionary with DICTIONARYVAR values
             var dict = new DxfDictionary();
-            dict["key-1"] = "value-1";
-            dict["key-2"] = "value-2";
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+            dict["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
+
             var file = new DxfFile();
+            file.Clear();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(dict);
             var text = ToString(file);
-            var file2 = Parse(text);
-            var dict2 = file2.Objects.OfType<DxfDictionary>().Single();
-            Assert.Equal("value-1", dict2["key-1"]);
-            Assert.Equal("value-2", dict2["key-2"]);
+
+            var parsedFile = Parse(text);
+            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionary>().Single();
+            Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict["key-2"]).Value);
+        }
+
+        [Fact]
+        public void DictionaryRoundTripTest2()
+        {
+            // dictionary with sub-dictionary wit DICTIONARYVAR value
+            var dict1 = new DxfDictionary();
+            var dict2 = new DxfDictionary();
+            dict1["key-1"] = dict2;
+            dict2["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
+
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Objects.Add(dict1);
+            var text = ToString(file);
+
+            var parsedFile = Parse(text);
+            var roundTrippedDict1 = parsedFile.Objects.OfType<DxfDictionary>().First();
+            var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"];
+            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]).Value);
         }
 
         [Fact]

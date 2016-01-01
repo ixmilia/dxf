@@ -37,6 +37,7 @@
     <Compile Include="DxfHelpers.cs" />
     <Compile Include="DxfLineWeight.cs" />
     <Compile Include="DxfPoint.cs" />
+    <Compile Include="DxfPointer.cs" />
     <Compile Include="DxfReader.cs" />
     <Compile Include="DxfReadException.cs" />
     <Compile Include="DxfShadowMode.cs" />
@@ -218,11 +219,16 @@
     <Compile Include="Entities\DxfXLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="IDxfHasChildPointers.cs" />
+    <Compile Include="IDxfHasChildren.cs" />
     <Compile Include="IDxfHasChildrenWithHandle.cs" />
     <Compile Include="IDxfHasHandle.cs" />
     <Compile Include="IDxfCodePairReader.cs" />
     <Compile Include="IDxfHasOwnerHandle.cs" />
+    <Compile Include="IDxfHasOwner.cs" />
+    <Compile Include="IDxfHasOwnerInternal.cs" />
     <Compile Include="IDxfHasXData.cs" />
+    <Compile Include="IDxfItem.cs" />
     <Compile Include="Objects\DxfAcadProxyObject.cs" />
     <Compile Include="Objects\DxfAcadProxyObjectGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>

@@ -2,8 +2,8 @@
 
 namespace IxMilia.Dxf
 {
-    internal interface IDxfHasOwnerHandle : IDxfHasHandle
+    internal interface IDxfHasOwnerInternal : IDxfHasOwner
     {
-        uint OwnerHandle { get; set; }
+        void SetOwner(IDxfItem owner);
     }
 }

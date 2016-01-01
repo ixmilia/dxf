@@ -8,18 +8,13 @@ using System.Linq;
 
 namespace IxMilia.Dxf.Objects
 {
-    public partial class DxfDictionary : IDxfHasChildrenWithHandle, IDictionary<string, string>
+    public partial class DxfDictionary : IDictionary<string, IDxfItem>, IDxfHasChildren, IDxfHasChildPointers
     {
-        internal Dictionary<string, uint> Handles { get; } = new Dictionary<string, uint>();
-        private IDictionary<string, string> _values = new Dictionary<string, string>();
+        private IDictionary<string, DxfPointer> _items = new Dictionary<string, DxfPointer>();
         private string _lastEntryName;
-        private List<DxfDictionaryVariable> _children = new List<DxfDictionaryVariable>();
-        private bool _childrenAreDirty;
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
-            PopulateHandles();
-
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbDictionary"));
             if (version >= DxfAcadVersion.R2000 && this.IsHardOwner != false)
@@ -33,31 +28,18 @@ namespace IxMilia.Dxf.Objects
             }
 
             var code = IsHardOwner ? 360 : 350;
-            foreach (var item in Handles)
+            foreach (var item in _items.OrderBy(kvp => kvp.Key))
             {
                 pairs.Add(new DxfCodePair(3, item.Key));
-                pairs.Add(new DxfCodePair(code, UIntHandle(item.Value)));
+                pairs.Add(new DxfCodePair(code, UIntHandle(item.Value.Handle)));
             }
         }
 
         protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
-            foreach (var child in ((IDxfHasChildrenWithHandle)this).GetChildren().Cast<DxfDictionaryVariable>())
+            foreach (var child in GetChildren())
             {
-                pairs.AddRange(child.GetValuePairs(version, outputHandles));
-            }
-        }
-
-        private void PopulateHandles()
-        {
-            Handles.Clear();
-            var children = ((IDxfHasChildrenWithHandle)this).GetChildren().Cast<DxfDictionaryVariable>().ToList();
-            var keys = _values.Keys.OrderBy(k => k).ToList();
-            Debug.Assert(children.Count == keys.Count);
-            foreach (var pair in keys.Zip(children, Tuple.Create))
-            {
-                Handles[pair.Item1] = pair.Item2.Handle;
-                pair.Item2.OwnerHandle = this.Handle;
+                pairs.AddRange(((DxfObject)child).GetValuePairs(version, outputHandles));
             }
         }
 
@@ -78,7 +60,7 @@ namespace IxMilia.Dxf.Objects
                 case 360:
                     Debug.Assert(_lastEntryName != null);
                     var handle = DxfCommonConverters.UIntHandle(pair.StringValue);
-                    Handles[_lastEntryName] = handle;
+                    _items[_lastEntryName] = new DxfPointer(handle);
                     _lastEntryName = null;
                     break;
                 default:
@@ -88,82 +70,102 @@ namespace IxMilia.Dxf.Objects
             return true;
         }
 
-        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
+        public IEnumerable<IDxfItem> GetChildren()
         {
-            if (_childrenAreDirty)
-            {
-                _childrenAreDirty = false;
-                _children.Clear();
-                foreach (var kvp in _values.OrderBy(k => k.Key))
-                {
-                    _children.Add(new DxfDictionaryVariable() { Value = kvp.Value });
-                }
-            }
+            return _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item);
+        }
 
-            return _children;
+        IEnumerable<DxfPointer> IDxfHasChildPointers.GetChildPointers()
+        {
+            return _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value);
         }
 
         #region IDictionary implementation
 
-        public string this[string key]
+        public IDxfItem this[string key]
         {
-            get { return _values[key]; }
-            set
-            {
-                _childrenAreDirty = true;
-                _values[key] = value;
-            }
+            get { return _items[key].Item; }
+            set { _items[key] = new DxfPointer(value); }
         }
 
-        public int Count => _values.Count;
+        public int Count => _items.Count;
 
         public bool IsReadOnly => false;
 
-        public ICollection<string> Keys => _values.Keys;
+        public ICollection<string> Keys => _items.Keys;
 
-        public ICollection<string> Values => _values.Values;
+        public ICollection<IDxfItem> Values => _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item).ToList();
 
-        public void Add(KeyValuePair<string, string> item)
+        public void Add(KeyValuePair<string, IDxfItem> item) => _items.Add(new KeyValuePair<string, DxfPointer>(item.Key, new DxfPointer(item.Value)));
+
+        public void Add(string key, IDxfItem value) => _items.Add(key, new DxfPointer(value));
+
+        public void Clear() => _items.Clear();
+
+        public bool Contains(KeyValuePair<string, IDxfItem> item) => _items.ContainsKey(item.Key) && _items[item.Key].Item == item.Value;
+
+        public bool ContainsKey(string key) => _items.ContainsKey(key);
+
+        public void CopyTo(KeyValuePair<string, IDxfItem>[] array, int arrayIndex)
         {
-            _childrenAreDirty = true;
-            _values.Add(item);
+            foreach (var value in _items)
+            {
+                array[arrayIndex++] = new KeyValuePair<string, IDxfItem>(value.Key, value.Value.Item);
+            }
         }
 
-        public void Add(string key, string value)
+        public IEnumerator<KeyValuePair<string, IDxfItem>> GetEnumerator() => new Enumerator(_items);
+
+        public bool Remove(KeyValuePair<string, IDxfItem> item)
         {
-            _childrenAreDirty = true;
-            _values.Add(key, value);
+            DxfPointer pointer;
+            if (_items.TryGetValue(item.Key, out pointer) && pointer.Item == item.Value)
+            {
+                _items.Remove(item.Key);
+                return true;
+            }
+
+            return false;
         }
 
-        public void Clear()
+        public bool Remove(string key) => _items.Remove(key);
+
+        public bool TryGetValue(string key, out IDxfItem value)
         {
-            _childrenAreDirty = true;
-            _values.Clear();
+            if (_items.ContainsKey(key))
+            {
+                value = _items[key].Item;
+                return true;
+            }
+            else
+            {
+                value = default(IDxfItem);
+                return false;
+            }
         }
 
-        public bool Contains(KeyValuePair<string, string> item) => _values.Contains(item);
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)_items).GetEnumerator();
 
-        public bool ContainsKey(string key) => _values.ContainsKey(key);
-
-        public void CopyTo(KeyValuePair<string, string>[] array, int arrayIndex) => _values.CopyTo(array, arrayIndex);
-
-        public IEnumerator<KeyValuePair<string, string>> GetEnumerator() => _values.GetEnumerator();
-
-        public bool Remove(KeyValuePair<string, string> item)
+        private struct Enumerator : IEnumerator<KeyValuePair<string, IDxfItem>>
         {
-            _childrenAreDirty = true;
-            return _values.Remove(item);
+            IEnumerator<KeyValuePair<string, DxfPointer>> _enumerator;
+
+            public Enumerator(IEnumerable<KeyValuePair<string, DxfPointer>> items)
+                : this()
+            {
+                _enumerator = items.GetEnumerator();
+            }
+
+            public KeyValuePair<string, IDxfItem> Current => new KeyValuePair<string, IDxfItem>(_enumerator.Current.Key, _enumerator.Current.Value.Item);
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose() => _enumerator.Dispose();
+
+            public bool MoveNext() => _enumerator.MoveNext();
+
+            public void Reset() => _enumerator.Reset();
         }
-
-        public bool Remove(string key)
-        {
-            _childrenAreDirty = true;
-            return _values.Remove(key);
-        }
-
-        public bool TryGetValue(string key, out string value) => _values.TryGetValue(key, out value);
-
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)_values).GetEnumerator();
 
         #endregion
     }

@@ -75,7 +75,7 @@ namespace IxMilia.Dxf.Objects
         Inches = 5
     }
 
-    public abstract partial class DxfObject : IDxfHasXData, IDxfHasXDataHidden
+    public abstract partial class DxfObject : IDxfItem, IDxfHasXData, IDxfHasXDataHidden
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
 

@@ -54,50 +54,8 @@ namespace IxMilia.Dxf.Sections
             }
 
             var section = new DxfObjectsSection();
-            var collected = GatherObjects(objects);
-            section.Objects.AddRange(collected);
+            section.Objects.AddRange(objects);
             return section;
-        }
-
-        internal static List<DxfObject> GatherObjects(IEnumerable<DxfObject> objects)
-        {
-            var result = new List<DxfObject>();
-            var dictionaries = new List<DxfDictionary>();
-            var variables = new Dictionary<uint, DxfDictionaryVariable>();
-            foreach (var obj in objects)
-            {
-                switch (obj.ObjectType)
-                {
-                    case DxfObjectType.Dictionary:
-                        dictionaries.Add((DxfDictionary)obj);
-                        result.Add(obj);
-                        break;
-                    case DxfObjectType.DictionaryVariable:
-                        variables[obj.Handle] = (DxfDictionaryVariable)obj;
-                        break;
-                    default:
-                        result.Add(obj);
-                        break;
-                }
-            }
-
-            foreach (var dict in dictionaries)
-            {
-                foreach (var kvp in dict.Handles)
-                {
-                    if (variables.ContainsKey(kvp.Value))
-                    {
-                        dict[kvp.Key] = variables[kvp.Value].Value;
-                    }
-                    else
-                    {
-                        // TODO: dictionary values aren't just limited to strings from DxfDictionaryVariables; they can
-                        // be any item with a handle
-                    }
-                }
-            }
-
-            return result;
         }
     }
 }

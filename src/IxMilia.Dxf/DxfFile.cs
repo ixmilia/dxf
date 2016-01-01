@@ -261,6 +261,8 @@ namespace IxMilia.Dxf
             Debug.Assert(!buffer.ItemsRemain);
             file.Header.NextAvailableHandle = file.SetHandles();
 
+            DxfPointer.BindPointers(file);
+
             return file;
         }
 
@@ -282,6 +284,8 @@ namespace IxMilia.Dxf
             var nextHandle = SetHandles();
             Header.NextAvailableHandle = nextHandle;
 
+            DxfPointer.AssignPointers(this);
+
             // write sections
             var outputHandles = Header.Version >= DxfAcadVersion.R13 || Header.HandlesEnabled; // handles are always enabled on R13+
             foreach (var section in Sections)
@@ -291,6 +295,11 @@ namespace IxMilia.Dxf
             }
 
             writer.Close();
+        }
+
+        internal IEnumerable<IDxfItem> GetFileItems()
+        {
+            return Objects;
         }
 
         private IEnumerable<IDxfHasHandle> HandleItems

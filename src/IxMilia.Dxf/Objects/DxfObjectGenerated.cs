@@ -54,17 +54,20 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfObject class
     /// </summary>
-    public partial class DxfObject :
-        IDxfHasHandle,
-        IDxfHasOwner,
-        IDxfHasOwnerInternal
+    public partial class DxfObject : IDxfItemInternal
     {
 
-#region IDxfHasOwner and IDxfHasOwnerInternal implementation
+#region IDxfItem and IDxfItemInternal
         public IDxfItem Owner { get; private set;}
-        void IDxfHasOwnerInternal.SetOwner(IDxfItem owner)
+
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
         {
             Owner = owner;
+        }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield break;
         }
 #endregion
 

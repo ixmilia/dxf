@@ -8,7 +8,9 @@ using System.Linq;
 
 namespace IxMilia.Dxf.Objects
 {
-    public partial class DxfDictionary : IDictionary<string, IDxfItem>, IDxfHasChildren, IDxfHasChildPointers
+    public partial class DxfDictionary :
+        IDictionary<string, IDxfItem>,
+        IDxfItemInternal
     {
         private IDictionary<string, DxfPointer> _items = new Dictionary<string, DxfPointer>();
         private string _lastEntryName;
@@ -75,7 +77,7 @@ namespace IxMilia.Dxf.Objects
             return _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item);
         }
 
-        IEnumerable<DxfPointer> IDxfHasChildPointers.GetChildPointers()
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {
             return _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value);
         }

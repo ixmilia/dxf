@@ -192,8 +192,8 @@ DICTIONARYVAR
 value-2
 ");
             var dict = file.Objects.OfType<DxfDictionary>().Single();
-            Assert.Equal(dict, ((IDxfHasOwner)dict["key-1"]).Owner);
-            Assert.Equal(dict, ((IDxfHasOwner)dict["key-2"]).Owner);
+            Assert.Equal(dict, dict["key-1"].Owner);
+            Assert.Equal(dict, dict["key-2"].Owner);
             Assert.Equal("value-1", ((DxfDictionaryVariable)dict["key-1"]).Value);
             Assert.Equal("value-2", ((DxfDictionaryVariable)dict["key-2"]).Value);
         }
@@ -228,8 +228,8 @@ value-2
 ");
             var dict1 = file.Objects.OfType<DxfDictionary>().First();
             var dict2 = (DxfDictionary)dict1["key-1"];
-            Assert.Equal(dict1, ((IDxfHasOwner)dict2).Owner);
-            Assert.Equal(dict2, ((IDxfHasOwner)dict2["key-2"]).Owner);
+            Assert.Equal(dict1, dict2.Owner);
+            Assert.Equal(dict2, dict2["key-2"].Owner);
             Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]).Value);
         }
 
@@ -261,6 +261,8 @@ key-2
 DICTIONARYVAR
   5
 2
+330
+1
 100
 DictionaryVariables
 280
@@ -271,6 +273,8 @@ value-1
 DICTIONARYVAR
   5
 3
+330
+1
 100
 DictionaryVariables
 280
@@ -305,6 +309,8 @@ key-1
 DICTIONARY
   5
 2
+330
+1
 100
 AcDbDictionary
 281
@@ -317,6 +323,8 @@ key-2
 DICTIONARYVAR
   5
 3
+330
+2
 100
 DictionaryVariables
 280

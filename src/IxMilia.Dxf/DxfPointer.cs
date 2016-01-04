@@ -1,7 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
-using System.Linq;
 
 namespace IxMilia.Dxf
 {
@@ -29,13 +28,12 @@ namespace IxMilia.Dxf
         public static void BindPointers(DxfFile file)
         {
             // gather all items by handle
-            var handleMap = new Dictionary<uint, IDxfItem>();
+            var handleMap = new Dictionary<uint, IDxfItemInternal>();
             foreach (var item in file.GetFileItems())
             {
-                var hasHandle = item as IDxfHasHandle;
-                if (hasHandle?.Handle != 0u)
+                if (item.Handle != 0u)
                 {
-                    handleMap[hasHandle.Handle] = item;
+                    handleMap[item.Handle] = item;
                 }
             }
 
@@ -46,61 +44,45 @@ namespace IxMilia.Dxf
             }
         }
 
-        private static void BindPointers(IDxfItem item, Dictionary<uint, IDxfItem> handleMap)
+        private static void BindPointers(IDxfItemInternal item, Dictionary<uint, IDxfItemInternal> handleMap)
         {
-            var hasChildren = item as IDxfHasChildPointers;
-            if (hasChildren != null)
+            foreach (var child in item.GetPointers())
             {
-                foreach (var child in hasChildren.GetChildPointers())
+                if (handleMap.ContainsKey(child.Handle))
                 {
-                    if (handleMap.ContainsKey(child.Handle))
-                    {
-                        child.Item = handleMap[child.Handle];
-                        BindPointers(child.Item, handleMap);
-                        var hasOwner = child.Item as IDxfHasOwnerInternal;
-                        if (hasOwner != null)
-                        {
-                            hasOwner.SetOwner(item);
-                        }
-                    }
+                    child.Item = handleMap[child.Handle];
+                    BindPointers((IDxfItemInternal)child.Item, handleMap);
+                    ((IDxfItemInternal)child.Item).SetOwner(item);
                 }
             }
         }
 
         public static void AssignPointers(DxfFile file)
         {
-            foreach (var item in file.GetFileItems().Cast<IDxfHasHandle>())
+            foreach (var item in file.GetFileItems())
             {
                 item.Handle = 0u;
             }
 
             uint nextPointer = 1u;
-            foreach (var item in file.GetFileItems().Cast<IDxfHasHandle>())
+            foreach (var item in file.GetFileItems())
             {
                 nextPointer = AssignPointers(item, nextPointer);
             }
         }
 
-        private static uint AssignPointers(IDxfHasHandle item, uint nextHandle)
+        private static uint AssignPointers(IDxfItemInternal item, uint nextHandle)
         {
             if (item.Handle == 0u)
             {
                 item.Handle = nextHandle++;
             }
 
-            var hasChildren = item as IDxfHasChildPointers;
-            if (hasChildren != null)
+            foreach (var child in item.GetPointers())
             {
-                foreach (var child in hasChildren.GetChildPointers())
-                {
-                    nextHandle = AssignPointers((IDxfHasHandle)child.Item, nextHandle);
-                    child.Handle = ((IDxfHasHandle)child.Item).Handle;
-                    var hasOwnerHandle = child.Item as IDxfHasOwnerHandle;
-                    if (hasOwnerHandle != null)
-                    {
-                        hasOwnerHandle.OwnerHandle = item.Handle;
-                    }
-                }
+                nextHandle = AssignPointers((IDxfItemInternal)child.Item, nextHandle);
+                child.Handle = ((IDxfItemInternal)child.Item).Handle;
+                ((IDxfItemInternal)child.Item).OwnerHandle = item.Handle;
             }
 
             return nextHandle++;

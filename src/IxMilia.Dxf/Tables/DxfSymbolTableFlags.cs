@@ -6,8 +6,18 @@ using IxMilia.Dxf.Tables;
 
 namespace IxMilia.Dxf
 {
-    public abstract class DxfSymbolTableFlags : IDxfHasHandle
+    public abstract class DxfSymbolTableFlags : IDxfItemInternal
     {
+        public IDxfItem Owner { get; private set; }
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield break;
+        }
+
         public int StandardFlags;
         public string Name { get; set; }
         protected abstract DxfTableType TableType { get; }

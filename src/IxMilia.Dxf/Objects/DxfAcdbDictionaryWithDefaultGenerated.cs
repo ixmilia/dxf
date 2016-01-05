@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,7 +18,6 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.DictionaryWithDefault; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
-
         public DxfDictionaryDuplicateRecordHandling DuplicateRecordHandling { get; set; }
         private List<string> _entryNames { get; set; }
         private List<uint> _entryHandles { get; set; }

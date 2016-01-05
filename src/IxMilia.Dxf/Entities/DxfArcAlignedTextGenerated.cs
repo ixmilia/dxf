@@ -45,7 +45,6 @@ namespace IxMilia.Dxf.Entities
         public int ColorIndex { get; set; }
         public DxfVector ExtrusionDirection { get; set; }
         public short WizardFlag { get; set; }
-        public uint HandleId { get; set; }
 
         public DxfArcAlignedText()
             : base()
@@ -82,7 +81,6 @@ namespace IxMilia.Dxf.Entities
             this.ColorIndex = 0;
             this.ExtrusionDirection = DxfVector.ZAxis;
             this.WizardFlag = 0;
-            this.HandleId = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -124,11 +122,6 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(280, (this.WizardFlag)));
-            if (this.HandleId != 0u)
-            {
-                pairs.Add(new DxfCodePair(330, UIntHandle(this.HandleId)));
-            }
-
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -227,9 +220,6 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 280:
                     this.WizardFlag = (pair.ShortValue);
-                    break;
-                case 330:
-                    this.HandleId = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

@@ -7,15 +7,30 @@ namespace IxMilia.Dxf.Blocks
 {
     public partial class DxfBlock
     {
-        private class DxfEndBlock : IDxfHasHandle
+        private class DxfEndBlock : IDxfItemInternal
         {
-            public DxfBlock Parent { get; }
-            public uint Handle { get; set; }
+            #region IDxfItem and IDxfItemInternal
+            uint IDxfItemInternal.Handle { get; set; }
+            uint IDxfItemInternal.OwnerHandle { get; set; }
+            public IDxfItem Owner { get; private set; }
+
+            void IDxfItemInternal.SetOwner(IDxfItem owner)
+            {
+                Owner = owner;
+            }
+
+            IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+            {
+                yield break;
+            }
+            #endregion
+
+            public DxfBlock Parent => (DxfBlock)Owner;
             public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
 
             public DxfEndBlock(DxfBlock parent)
             {
-                Parent = parent;
+                Owner = parent;
                 ExtensionDataGroups = new List<DxfCodePairGroup>();
             }
 
@@ -26,7 +41,7 @@ namespace IxMilia.Dxf.Blocks
                 switch (pair.Code)
                 {
                     case 5:
-                        Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                        ((IDxfItemInternal)this).Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                         break;
                     case 8:
                         // just a re-iteration of the layer
@@ -48,9 +63,9 @@ namespace IxMilia.Dxf.Blocks
             {
                 var list = new List<DxfCodePair>();
                 list.Add(new DxfCodePair(0, EndBlockText));
-                if (outputHandles && Handle != 0u)
+                if (outputHandles && ((IDxfItemInternal)this).Handle != 0u)
                 {
-                    list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
+                    list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(((IDxfItemInternal)this).Handle)));
                 }
 
                 if (Parent.XData != null)
@@ -68,7 +83,7 @@ namespace IxMilia.Dxf.Blocks
 
                 if (version >= DxfAcadVersion.R2000)
                 {
-                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(Parent.OwnerHandle)));
+                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(((IDxfItemInternal)Parent).OwnerHandle)));
                 }
 
                 if (version >= DxfAcadVersion.R13)

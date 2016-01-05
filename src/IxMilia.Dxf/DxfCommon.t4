@@ -84,14 +84,28 @@ string Type(XElement property)
 
 string ReadConverter(XElement property)
 {
-    var att = property.Attribute("ReadConverter");
-    return att == null ? string.Empty : att.Value;
+    if (IsPointer(property))
+    {
+        return "DxfCommonConverters.UIntHandle";
+    }
+    else
+    {
+        var att = property.Attribute("ReadConverter");
+        return att == null ? string.Empty : att.Value;
+    }
 }
 
 string WriteConverter(XElement property)
 {
-    var att = property.Attribute("WriteConverter");
-    return att == null ? string.Empty : att.Value;
+    if (IsPointer(property))
+    {
+        return "DxfCommonConverters.UIntHandle";
+    }
+    else
+    {
+        var att = property.Attribute("WriteConverter");
+        return att == null ? string.Empty : att.Value;
+    }
 }
 
 string BackingFieldName(string propertyName)
@@ -117,6 +131,21 @@ string Property(XElement flag)
 IEnumerable<XElement> GetProperties(XElement entity)
 {
     return entity.Elements(XName.Get("Property", entity.Name.NamespaceName));
+}
+
+IEnumerable<XElement> GetPointers(XElement entity)
+{
+    return entity.Elements(XName.Get("Pointer", entity.Name.NamespaceName));
+}
+
+IEnumerable<XElement> GetPropertiesAndPointers(XElement entity)
+{
+    return entity.Elements().Where(e => e.Name.LocalName == "Property" || e.Name.LocalName == "Pointer");
+}
+
+bool IsPointer(XElement entity)
+{
+    return entity.Name.LocalName == "Pointer";
 }
 
 int Mask(XElement flag)
@@ -181,7 +210,7 @@ List<string> GetWriteCommands(XElement entity)
         // default order
         if (!string.IsNullOrEmpty(SubclassMarker(entity)))
             lines.Add(string.Format("pairs.Add(new DxfCodePair(100, \"{0}\"));", SubclassMarker(entity)));
-        foreach (var property in GetProperties(entity))
+        foreach (var property in GetPropertiesAndPointers(entity))
         {
             lines.AddRange(GetPropertyWriteLines(property));
         }
@@ -226,11 +255,18 @@ IEnumerable<string> WriteSpecificValue(XElement spec)
 {
     var code = spec.Attribute("Code").Value;
     var value = spec.Attribute("Value").Value;
+    var originalValue = value;
+    var writeConverter = WriteConverter(spec);
+    if (!string.IsNullOrEmpty(writeConverter))
+    {
+        value = string.Format("{0}({1})", writeConverter, value);
+    }
 
     var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, value);
     var minVersion = MinVersion(spec);
     var maxVersion = MaxVersion(spec);
     var defaultValue = spec.Attribute("DontWriteIfValueIs");
+    var condition = WriteCondition(spec);
     var predicate = new List<string>();
     if (minVersion != null || maxVersion != null)
     {
@@ -253,7 +289,12 @@ IEnumerable<string> WriteSpecificValue(XElement spec)
 
     if (defaultValue != null)
     {
-        predicate.Add(string.Format("{0} != {1}", value, defaultValue.Value));
+        predicate.Add(string.Format("{0} != {1}", originalValue, defaultValue.Value));
+    }
+
+    if (condition != null)
+    {
+        predicate.Add(condition);
     }
 
     if (predicate.Any())
@@ -271,7 +312,7 @@ IEnumerable<string> WriteSpecificValue(XElement spec)
 
 IEnumerable<string> WriteProperty(XElement spec, XElement entity)
 {
-    var property = GetProperties(entity).Single(p => Name(p) == spec.Attribute("Property").Value);
+    var property = GetPropertiesAndPointers(entity).Single(p => Name(p) == spec.Attribute("Property").Value);
     return GetPropertyWriteLines(property);
 }
 
@@ -339,6 +380,11 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
         lines.Add(string.Format("if ({0})", string.Join(" && ", writePredicates)));
         lines.Add("{");
         indentPrefix = "    ";
+    }
+
+    if (IsPointer(property))
+    {
+        name += "Pointer.Handle";
     }
 
     if (codes != null)

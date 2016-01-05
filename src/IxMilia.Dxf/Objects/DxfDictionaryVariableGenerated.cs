@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -16,7 +17,6 @@ namespace IxMilia.Dxf.Objects
     internal partial class DxfDictionaryVariable : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.DictionaryVariable; } }
-
         public short ObjectSchemaNumber { get; set; }
         public string Value { get; set; }
 

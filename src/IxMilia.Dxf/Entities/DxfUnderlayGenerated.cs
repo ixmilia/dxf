@@ -12,12 +12,20 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// DxfUnderlay class
     /// </summary>
-    public partial class DxfUnderlay : DxfEntity
+    public partial class DxfUnderlay : DxfEntity, IDxfItemInternal
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Underlay; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
 
-        public uint ObjectHandle { get; set; }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return ObjectPointer;
+        }
+
+        internal DxfPointer ObjectPointer { get; } = new DxfPointer();
+
+        public IDxfItem Object { get { return ObjectPointer.Item as IDxfItem; } set { ObjectPointer.Item = value; } }
         public DxfPoint InsertionPoint { get; set; }
         public double XScale { get; set; }
         public double YScale { get; set; }
@@ -95,7 +103,8 @@ namespace IxMilia.Dxf.Entities
         protected DxfUnderlay(DxfUnderlay other)
             : base(other)
         {
-            this.ObjectHandle = other.ObjectHandle;
+            this.ObjectPointer.Handle = other.ObjectPointer.Handle;
+            this.ObjectPointer.Item = other.ObjectPointer.Item;
             this.InsertionPoint = other.InsertionPoint;
             this.XScale = other.XScale;
             this.YScale = other.YScale;
@@ -112,7 +121,6 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
-            this.ObjectHandle = 0;
             this.InsertionPoint = DxfPoint.Origin;
             this.XScale = 1.0;
             this.YScale = 1.0;
@@ -130,11 +138,7 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbUnderlayReference"));
-            if (this.ObjectHandle != 0)
-            {
-                pairs.Add(new DxfCodePair(340, UIntHandle(this.ObjectHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.ObjectPointer.Handle)));
             pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));
@@ -206,7 +210,7 @@ namespace IxMilia.Dxf.Entities
                     this.Fade = (pair.ShortValue);
                     break;
                 case 340:
-                    this.ObjectHandle = UIntHandle(pair.StringValue);
+                    this.ObjectPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

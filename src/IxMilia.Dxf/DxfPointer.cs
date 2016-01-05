@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IxMilia.Dxf
 {
@@ -8,6 +9,11 @@ namespace IxMilia.Dxf
     {
         public uint Handle { get; set; }
         public IDxfItem Item { get; set; }
+
+        public DxfPointer()
+            : this(0u, null)
+        {
+        }
 
         public DxfPointer(uint handle)
             : this(handle, null)
@@ -57,7 +63,7 @@ namespace IxMilia.Dxf
             }
         }
 
-        public static void AssignPointers(DxfFile file)
+        public static uint AssignPointers(DxfFile file)
         {
             foreach (var item in file.GetFileItems())
             {
@@ -65,10 +71,12 @@ namespace IxMilia.Dxf
             }
 
             uint nextPointer = 1u;
-            foreach (var item in file.GetFileItems())
+            foreach (var item in file.GetFileItems().Where(i => i != null))
             {
                 nextPointer = AssignPointers(item, nextPointer);
             }
+
+            return nextPointer;
         }
 
         private static uint AssignPointers(IDxfItemInternal item, uint nextHandle)
@@ -78,11 +86,12 @@ namespace IxMilia.Dxf
                 item.Handle = nextHandle++;
             }
 
-            foreach (var child in item.GetPointers())
+            foreach (var child in item.GetPointers().Where(c => c.Item != null))
             {
-                nextHandle = AssignPointers((IDxfItemInternal)child.Item, nextHandle);
-                child.Handle = ((IDxfItemInternal)child.Item).Handle;
-                ((IDxfItemInternal)child.Item).OwnerHandle = item.Handle;
+                var childItem = (IDxfItemInternal)child.Item;
+                nextHandle = AssignPointers(childItem, nextHandle);
+                child.Handle = childItem.Handle;
+                childItem.OwnerHandle = item.Handle;
             }
 
             return nextHandle++;

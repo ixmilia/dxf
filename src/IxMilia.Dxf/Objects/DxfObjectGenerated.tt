@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -268,6 +269,7 @@ foreach (var obj in objects)
 {
     var className = Name(obj);
     var baseClass = BaseClass(obj, "DxfObject");
+    if (GetPointers(obj).Any()) baseClass += ", IDxfItemInternal";
     manager.StartNewFile(className + "Generated.cs");
 #>
     /// <summary>
@@ -294,15 +296,44 @@ foreach (var obj in objects)
 <#
     } // if
 
+    //
+    // Pointers
+    //
+    var pointers = GetPointers(obj);
+    if (pointers.Any())
+    {
+#>
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+<#
+        foreach (var pointer in pointers)
+        {
+#>
+            yield return <#= Name(pointer) #>Pointer;
+<#
+        }
+#>
+        }
+
+<#
+
+        foreach (var pointer in pointers)
+        {
+#>
+        internal DxfPointer <#= Name(pointer) #>Pointer { get; } = new DxfPointer();
+<#
+        }
 #>
 
 <#
+    } // end if pointers.Any()
 
     //
     // Properties
     //
     var seenProperties = new HashSet<string>();
-    foreach (var property in GetProperties(obj))
+    foreach (var property in GetPropertiesAndPointers(obj))
     {
         var propertyName = Name(property);
         if (seenProperties.Contains(propertyName))
@@ -312,6 +343,21 @@ foreach (var obj in objects)
 
         seenProperties.Add(propertyName);
         var propertyType = Type(property);
+
+        // special-case pointers
+        if (IsPointer(property))
+        {
+            var pointerName = propertyName + "Pointer";
+#>
+        public <#= Type(property) #> <#= propertyName #>
+        {
+            get { return <#= pointerName #>.Item as <#= Type(property) #>; }
+            set { <#= pointerName #>.Item = value as IDxfItem; }
+        }
+<#
+            continue;
+        }
+
         if (AllowMultiples(property))
         {
             propertyType = string.Format("List<{0}>", propertyType);
@@ -540,7 +586,7 @@ foreach (var obj in objects)
             switch (pair.Code)
             {
 <#
-        foreach (var propertyGroup in GetProperties(obj).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
+        foreach (var propertyGroup in GetPropertiesAndPointers(obj).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
         {
             var code = propertyGroup.Key;
             if (propertyGroup.Count() == 1)
@@ -564,9 +610,10 @@ foreach (var obj in objects)
                 {
                     var codeType = DxfCodePair.ExpectedType(code);
                     var codeTypeValue = TypeToString(codeType);
+                    if (IsPointer(property)) name += "Pointer.Handle";
                     var assignCode = AllowMultiples(property)
-                        ? string.Format("this.{0}.Add(", Name(property))
-                        : string.Format("this.{0} = ", Name(property));
+                        ? string.Format("this.{0}.Add(", name)
+                        : string.Format("this.{0} = ", name);
                     var assignSuffix = AllowMultiples(property)
                         ? ")"
                         : "";

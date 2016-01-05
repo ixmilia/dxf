@@ -12,13 +12,21 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// DxfMLine class
     /// </summary>
-    public partial class DxfMLine : DxfEntity
+    public partial class DxfMLine : DxfEntity, IDxfItemInternal
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.MLine; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return StylePointer;
+        }
+
+        internal DxfPointer StylePointer { get; } = new DxfPointer();
+
         public string StyleName { get; set; }
-        public uint StyleHandle { get; set; }
+        public IDxfItem Style { get { return StylePointer.Item as IDxfItem; } set { StylePointer.Item = value; } }
         public double ScaleFactor { get; set; }
         public DxfJustification Justification { get; set; }
         public int Flags { get; set; }
@@ -95,7 +103,6 @@ namespace IxMilia.Dxf.Entities
         {
             base.Initialize();
             this.StyleName = null;
-            this.StyleHandle = 0;
             this.ScaleFactor = 1.0;
             this.Justification = DxfJustification.Top;
             this.Flags = 0;
@@ -123,11 +130,7 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbMline"));
             pairs.Add(new DxfCodePair(2, (this.StyleName)));
-            if (this.StyleHandle != 0)
-            {
-                pairs.Add(new DxfCodePair(340, UIntHandle(this.StyleHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.StylePointer.Handle)));
             pairs.Add(new DxfCodePair(40, (this.ScaleFactor)));
             pairs.Add(new DxfCodePair(70, (short)(this.Justification)));
             pairs.Add(new DxfCodePair(71, (short)(this.Flags)));
@@ -250,7 +253,7 @@ namespace IxMilia.Dxf.Entities
                     this.Normal.Z = pair.DoubleValue;
                     break;
                 case 340:
-                    this.StyleHandle = UIntHandle(pair.StringValue);
+                    this.StylePointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

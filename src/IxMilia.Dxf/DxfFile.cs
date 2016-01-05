@@ -259,8 +259,6 @@ namespace IxMilia.Dxf
             }
 
             Debug.Assert(!buffer.ItemsRemain);
-            file.Header.NextAvailableHandle = file.SetHandles();
-
             DxfPointer.BindPointers(file);
 
             return file;
@@ -281,10 +279,8 @@ namespace IxMilia.Dxf
             var writer = new DxfWriter(stream, asText);
             writer.Open();
 
-            var nextHandle = SetHandles();
+            var nextHandle = DxfPointer.AssignPointers(this);
             Header.NextAvailableHandle = nextHandle;
-
-            DxfPointer.AssignPointers(this);
 
             // write sections
             var outputHandles = Header.Version >= DxfAcadVersion.R13 || Header.HandlesEnabled; // handles are always enabled on R13+
@@ -299,75 +295,20 @@ namespace IxMilia.Dxf
 
         internal IEnumerable<IDxfItemInternal> GetFileItems()
         {
-            return Objects;
-        }
-
-        private IEnumerable<IDxfHasHandle> HandleItems
-        {
-            get
-            {
-                return this.TablesSection.GetTables(Header.Version).Cast<IDxfHasHandle>()
-                    .Concat(this.ApplicationIds.Cast<IDxfHasHandle>())
-                    .Concat(this.BlockRecords.Cast<IDxfHasHandle>())
-                    .Concat(this.Blocks.Cast<IDxfHasHandle>())
-                    .Concat(this.DimensionStyles.Cast<IDxfHasHandle>())
-                    .Concat(this.Entities.Cast<IDxfHasHandle>())
-                    .Concat(this.Layers.Cast<IDxfHasHandle>())
-                    .Concat(this.Linetypes.Cast<IDxfHasHandle>())
-                    //.Concat(this.Objects.Cast<IDxfHasHandle>())
-                    .Concat(this.Styles.Cast<IDxfHasHandle>())
-                    .Concat(this.UserCoordinateSystems.Cast<IDxfHasHandle>())
-                    .Concat(this.ViewPorts.Cast<IDxfHasHandle>())
-                    .Concat(this.Views.Cast<IDxfHasHandle>())
-                    .Where(item => item != null);
-            }
-        }
-
-        private uint SetHandles()
-        {
-            uint largestHandle = 0u;
-
-            foreach (var item in HandleItems)
-            {
-                largestHandle = Math.Max(largestHandle, item.Handle);
-                var parent = item as IDxfHasChildrenWithHandle;
-                if (parent != null)
-                {
-                    foreach (var child in parent.GetChildren())
-                    {
-                        largestHandle = Math.Max(largestHandle, child.Handle);
-                    }
-                }
-            }
-
-            var nextHandle = largestHandle + 1;
-
-            foreach (var item in HandleItems)
-            {
-                if (item.Handle == 0u)
-                {
-                    item.Handle = nextHandle++;
-                }
-
-                var parent = item as IDxfHasChildrenWithHandle;
-                if (parent != null)
-                {
-                    foreach (var child in parent.GetChildren())
-                    {
-                        if (child as IDxfHasOwnerHandle != null)
-                        {
-                            ((IDxfHasOwnerHandle)child).OwnerHandle = item.Handle;
-                        }
-
-                        if (child.Handle == 0u)
-                        {
-                            child.Handle = nextHandle++;
-                        }
-                    }
-                }
-            }
-
-            return nextHandle;
+            return this.TablesSection.GetTables(Header.Version).Cast<IDxfItemInternal>()
+                .Concat(this.ApplicationIds.Cast<IDxfItemInternal>())
+                .Concat(this.BlockRecords.Cast<IDxfItemInternal>())
+                .Concat(this.Blocks.Cast<IDxfItemInternal>())
+                .Concat(this.DimensionStyles.Cast<IDxfItemInternal>())
+                .Concat(this.Entities.Cast<IDxfItemInternal>())
+                .Concat(this.Layers.Cast<IDxfItemInternal>())
+                .Concat(this.Linetypes.Cast<IDxfItemInternal>())
+                .Concat(this.Objects.Cast<IDxfItemInternal>())
+                .Concat(this.Styles.Cast<IDxfItemInternal>())
+                .Concat(this.UserCoordinateSystems.Cast<IDxfItemInternal>())
+                .Concat(this.ViewPorts.Cast<IDxfItemInternal>())
+                .Concat(this.Views.Cast<IDxfItemInternal>())
+                .Where(item => item != null);
         }
 
         public void Clear()

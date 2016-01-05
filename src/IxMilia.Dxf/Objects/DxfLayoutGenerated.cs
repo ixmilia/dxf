@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,7 +18,6 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.Layout; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
-
         public string LayoutName { get; set; }
         public int LayoutFlags { get; set; }
         public int TabOrder { get; set; }

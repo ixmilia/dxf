@@ -5,14 +5,25 @@ using System.Diagnostics;
 
 namespace IxMilia.Dxf.Entities
 {
-    public partial class DxfAttributeDefinition : IDxfHasChildrenWithHandle
+    public partial class DxfAttributeDefinition : IDxfItemInternal
     {
         private const string AcDbXrecordText = "AcDbXrecord";
         private string _lastSubclassMarker;
         private bool _isVersionSet;
         private int _xrecCode70Count = 0;
 
-        public DxfMText MText { get; internal set; } = new DxfMText();
+        private DxfPointer _mtextPointer = new DxfPointer(new DxfMText());
+
+        public DxfMText MText
+        {
+            get { return _mtextPointer.Item as DxfMText; }
+            internal set { _mtextPointer.Item = value; }
+        }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return _mtextPointer;
+        }
 
         internal override bool TrySetPair(DxfCodePair pair)
         {
@@ -142,14 +153,6 @@ namespace IxMilia.Dxf.Entities
             if (MText != null)
             {
                 pairs.AddRange(MText.GetValuePairs(version, outputHandles));
-            }
-        }
-
-        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
-        {
-            if (MText != null)
-            {
-                yield return MText;
             }
         }
     }

@@ -20,6 +20,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
   <ItemGroup>
     <Compile Include="Blocks\DxfBlock.DxfEndBlock.cs" />
+    <Compile Include="Collections\DxfPointerList.cs" />
     <Compile Include="DxbItemType.cs" />
     <Compile Include="DxbReader.cs" />
     <Compile Include="DxbWriter.cs" />
@@ -219,12 +220,7 @@
     <Compile Include="Entities\DxfXLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="IDxfHasChildPointers.cs" />
-    <Compile Include="IDxfHasChildren.cs" />
-    <Compile Include="IDxfHasChildrenWithHandle.cs" />
-    <Compile Include="IDxfHasHandle.cs" />
     <Compile Include="IDxfCodePairReader.cs" />
-    <Compile Include="IDxfHasOwnerHandle.cs" />
     <Compile Include="IDxfHasXData.cs" />
     <Compile Include="IDxfItem.cs" />
     <Compile Include="IDxfItemInternal.cs" />

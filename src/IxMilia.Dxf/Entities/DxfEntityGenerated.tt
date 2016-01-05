@@ -52,16 +52,69 @@ var baseEntity = xml.Elements(XName.Get("Entity", xmlns)).Where(x => Name(x) == 
     /// <summary>
     /// DxfEntity class
     /// </summary>
-    public partial class DxfEntity : IDxfHasHandle, IDxfHasOwnerHandle
+    public partial class DxfEntity : IDxfItemInternal
     {
+        uint IDxfItemInternal.Handle { get; set; }
+        uint IDxfItemInternal.OwnerHandle { get; set; }
+        public IDxfItem Owner { get; private set;}
+
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+
 <#
-foreach (var property in GetProperties(baseEntity))
+
+//
+// Pointers
+//
+var pointers = GetPointers(baseEntity);
+if (pointers.Any())
+{
+#>
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+<#
+    foreach (var pointer in pointers)
+    {
+#>
+            yield return <#= Name(pointer) #>Pointer;
+<#
+    } // foreach pointer
+#>
+        }
+
+<#
+
+    foreach (var pointer in pointers)
+    {
+#>
+        internal DxfPointer <#= Name(pointer) #>Pointer { get; } = new DxfPointer();
+<#
+    }
+#>
+
+<#
+} // end if pointers.Any()
+
+//
+// Properties
+//
+foreach (var property in GetPropertiesAndPointers(baseEntity))
 {
     var typeString = Type(property);
     if (AllowMultiples(property))
+    {
         typeString = string.Format("List<{0}>", typeString);
+    }
+
+    var getset = string.Format("{{ get; {0}set; }}", SetterAccessibility(property));
+    if (IsPointer(property))
+    {
+        getset = string.Format("{{ get {{ return {0}.Item as {1}; }} set {{ {0}.Item = value; }} }}", Name(property) + "Pointer", typeString);
+    }
 #>
-        public <#= typeString #> <#= Name(property) #> { get; <#= SetterAccessibility(property) #>set; }
+        public <#= typeString #> <#= Name(property) #> <#= getset #>
 <#
 } // foreach property
 #>
@@ -97,12 +150,27 @@ foreach (var entity in entities)
         protected DxfEntity(DxfEntity other)
             : this()
         {
+            ((IDxfItemInternal)this).Handle = ((IDxfItemInternal)other).Handle;
+            ((IDxfItemInternal)this).OwnerHandle = ((IDxfItemInternal)other).OwnerHandle;
+            ((IDxfItemInternal)this).SetOwner(((IDxfItemInternal)other).Owner);
 <#
-foreach (var property in GetProperties(baseEntity))
+foreach (var property in GetPropertiesAndPointers(baseEntity))
 {
+    var name = Name(property);
+    if (IsPointer(property))
+    {
+        name += "Pointer";
 #>
-            this.<#= Name(property) #> = other.<#= Name(property) #>;
+            this.<#= name #>.Handle = other.<#= name #>.Handle;
+            this.<#= name #>.Item = other.<#= name #>.Item;
 <#
+    }
+    else
+    {
+#>
+            this.<#= name #> = other.<#= name #>;
+<#
+    }
 } // foreach property
 #>
         }
@@ -148,8 +216,14 @@ foreach (var property in GetProperties(baseEntity))
         {
             switch (pair.Code)
             {
+                case 5:
+                    ((IDxfItemInternal)this).Handle = UIntHandle(pair.StringValue);
+                    break;
+                case 330:
+                    ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);
+                    break;
 <#
-        foreach (var propertyGroup in GetProperties(baseEntity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
+        foreach (var propertyGroup in GetPropertiesAndPointers(baseEntity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
         {
             var code = propertyGroup.Key;
             if (propertyGroup.Count() == 1)
@@ -171,11 +245,12 @@ foreach (var property in GetProperties(baseEntity))
                 } // if
                 else
                 {
+                    if (IsPointer(property)) name += "Pointer.Handle";
                     var codeType = DxfCodePair.ExpectedType(code);
                     var codeTypeValue = TypeToString(codeType);
                     var assignCode = AllowMultiples(property)
-                        ? string.Format("this.{0}.Add(", Name(property))
-                        : string.Format("this.{0} = ", Name(property));
+                        ? string.Format("this.{0}.Add(", name)
+                        : string.Format("this.{0} = ", name);
                     var assignSuffix = AllowMultiples(property)
                         ? ")"
                         : "";
@@ -283,6 +358,7 @@ foreach (var entity in entities)
 {
     var className = Name(entity);
     var baseClass = BaseClass(entity, "DxfEntity");
+    if (GetPointers(entity).Any()) baseClass += ", IDxfItemInternal";
     manager.StartNewFile(className + "Generated.cs");
 #>
     /// <summary>
@@ -314,17 +390,56 @@ foreach (var entity in entities)
 <#
 
     //
+    // Pointers
+    //
+    pointers = GetPointers(entity);
+    if (pointers.Any())
+    {
+#>
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+<#
+        foreach (var pointer in pointers)
+        {
+#>
+            yield return <#= Name(pointer) #>Pointer;
+<#
+        }
+#>
+        }
+
+<#
+
+        foreach (var pointer in pointers)
+        {
+#>
+        internal DxfPointer <#= Name(pointer) #>Pointer { get; } = new DxfPointer();
+<#
+        }
+#>
+
+<#
+    } // end if pointers.Any()
+
+    //
     // Properties
     //
-    foreach (var property in GetProperties(entity))
+    foreach (var property in GetPropertiesAndPointers(entity))
     {
         var propertyType = Type(property);
+        var getset = string.Format("{{ get; {0}set; }}", SetterAccessibility(property));
+        if (IsPointer(property))
+        {
+            getset = string.Format("{{ get {{ return {0}Pointer.Item as {1}; }} set {{ {0}Pointer.Item = value; }} }}", Name(property), propertyType);
+        }
+
         if (AllowMultiples(property))
         {
             propertyType = string.Format("List<{0}>", propertyType);
         }
 #>
-        <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> { get; <#= SetterAccessibility(property) #>set; }
+        <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> <#= getset #>
 <#
     } // foreach property
 
@@ -439,11 +554,23 @@ foreach (var entity in entities)
             : base(other)
         {
 <#
-        foreach (var property in GetProperties(entity))
+        foreach (var property in GetPropertiesAndPointers(entity))
         {
+            var name = Name(property);
+            if (IsPointer(property))
+            {
+                name += "Pointer";
 #>
-            this.<#= Name(property) #> = other.<#= Name(property) #>;
+            this.<#= name #>.Handle = other.<#= name #>.Handle;
+            this.<#= name #>.Item = other.<#= name #>.Item;
 <#
+            }
+            else
+            {
+#>
+            this.<#= name #> = other.<#= name #>;
+<#
+            }
         } // foreach property
 #>
         }
@@ -502,7 +629,7 @@ foreach (var entity in entities)
 #>
         }
 <#
-    if (GetProperties(entity).Any() && GenerateReaderFunction(entity))
+    if (GetPropertiesAndPointers(entity).Any() && GenerateReaderFunction(entity))
     {
 #>
 
@@ -511,7 +638,7 @@ foreach (var entity in entities)
             switch (pair.Code)
             {
 <#
-        foreach (var propertyGroup in GetProperties(entity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
+        foreach (var propertyGroup in GetPropertiesAndPointers(entity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
         {
             var code = propertyGroup.Key;
             if (propertyGroup.Count() == 1)
@@ -535,9 +662,10 @@ foreach (var entity in entities)
                 {
                     var codeType = DxfCodePair.ExpectedType(code);
                     var codeTypeValue = TypeToString(codeType);
+                    if (IsPointer(property)) name += "Pointer.Handle";
                     var assignCode = AllowMultiples(property)
-                        ? string.Format("this.{0}.Add(", Name(property))
-                        : string.Format("this.{0} = ", Name(property));
+                        ? string.Format("this.{0}.Add(", name)
+                        : string.Format("this.{0} = ", name);
                     var assignSuffix = AllowMultiples(property)
                         ? ")"
                         : "";

@@ -244,7 +244,7 @@ value-2
   0
 DICTIONARY
   5
-1
+A
 100
 AcDbDictionary
 281
@@ -252,17 +252,17 @@ AcDbDictionary
   3
 key-1
 350
-2
+B
   3
 key-2
 350
-3
+C
   0
 DICTIONARYVAR
   5
-2
+B
 330
-1
+A
 100
 DictionaryVariables
 280
@@ -272,9 +272,9 @@ value-1
   0
 DICTIONARYVAR
   5
-3
+C
 330
-1
+A
 100
 DictionaryVariables
 280
@@ -296,7 +296,7 @@ value-2
   0
 DICTIONARY
   5
-1
+A
 100
 AcDbDictionary
 281
@@ -304,13 +304,13 @@ AcDbDictionary
   3
 key-1
 350
-2
+B
   0
 DICTIONARY
   5
-2
+B
 330
-1
+A
 100
 AcDbDictionary
 281
@@ -318,13 +318,13 @@ AcDbDictionary
   3
 key-2
 350
-3
+C
   0
 DICTIONARYVAR
   5
-3
+C
 330
-2
+B
 100
 DictionaryVariables
 280
@@ -373,6 +373,46 @@ value-2
             var roundTrippedDict1 = parsedFile.Objects.OfType<DxfDictionary>().First();
             var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"];
             Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]).Value);
+        }
+
+        [Fact]
+        public void ReadDimensionAssociativityTest()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+DIMENSION
+  5
+1
+  1
+dimension-text
+ 70
+     1
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+DIMASSOC
+330
+1
+  1
+class-name
+  0
+ENDSEC
+  0
+EOF
+");
+            var dimassoc = (Objects.DxfDimensionAssociativity)file.Objects.Single();
+            Assert.Equal("class-name", dimassoc.ClassName);
+            var dim = (Entities.DxfAlignedDimension)dimassoc.Dimension;
+            Assert.Equal(dimassoc, dim.Owner);
+            Assert.Equal("dimension-text", dim.Text);
         }
 
         [Fact]

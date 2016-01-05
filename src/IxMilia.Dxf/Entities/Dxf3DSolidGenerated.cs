@@ -12,15 +12,23 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// Dxf3DSolid class
     /// </summary>
-    public partial class Dxf3DSolid : DxfEntity
+    public partial class Dxf3DSolid : DxfEntity, IDxfItemInternal
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.ModelerGeometry; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return HistoryObjectPointer;
+        }
+
+        internal DxfPointer HistoryObjectPointer { get; } = new DxfPointer();
+
         public short FormatVersionNumber { get; set; }
         public List<string> CustomData { get; private set; }
         public List<string> CustomData2 { get; private set; }
-        public uint HistoryObjectHandle { get; set; }
+        public IDxfItem HistoryObject { get { return HistoryObjectPointer.Item as IDxfItem; } set { HistoryObjectPointer.Item = value; } }
 
         public Dxf3DSolid()
             : base()
@@ -33,7 +41,6 @@ namespace IxMilia.Dxf.Entities
             this.FormatVersionNumber = 1;
             this.CustomData = new List<string>();
             this.CustomData2 = new List<string>();
-            this.HistoryObjectHandle = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -47,11 +54,7 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(100, "AcDb3dSolid"));
             }
-            if (version >= DxfAcadVersion.R2007 && this.HistoryObjectHandle != 0u)
-            {
-                pairs.Add(new DxfCodePair(350, UIntHandle(this.HistoryObjectHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(350, DxfCommonConverters.UIntHandle(this.HistoryObjectPointer.Handle)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -68,7 +71,7 @@ namespace IxMilia.Dxf.Entities
                     this.FormatVersionNumber = (pair.ShortValue);
                     break;
                 case 350:
-                    this.HistoryObjectHandle = UIntHandle(pair.StringValue);
+                    this.HistoryObjectPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

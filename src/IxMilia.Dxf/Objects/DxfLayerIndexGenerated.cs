@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,7 +18,6 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LayerIndex; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
-
         public DateTime TimeStamp { get; set; }
         public List<string> LayerNames { get; private set; }
         public List<uint> IdBufferHandles { get; private set; }

@@ -23,7 +23,7 @@ namespace IxMilia.Dxf.Tables
         TwoDistantLights = 1
     }
 
-    public abstract partial class DxfTable : IDxfHasHandle
+    public abstract partial class DxfTable : IDxfItemInternal
     {
         public const string AppIdText = "APPID";
         public const string BlockRecordText = "BLOCK_RECORD";
@@ -34,6 +34,16 @@ namespace IxMilia.Dxf.Tables
         public const string UcsText = "UCS";
         public const string ViewText = "VIEW";
         public const string ViewPortText = "VPORT";
+
+        public IDxfItem Owner { get; private set; }
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield break;
+        }
 
         internal abstract DxfTableType TableType { get; }
         public uint Handle { get; set; }

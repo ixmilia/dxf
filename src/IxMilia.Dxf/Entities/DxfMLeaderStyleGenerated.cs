@@ -12,10 +12,24 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// DxfMLeaderStyle class
     /// </summary>
-    public partial class DxfMLeaderStyle : DxfEntity
+    public partial class DxfMLeaderStyle : DxfEntity, IDxfItemInternal
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.MLeaderStyle; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
+
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return LineLeaderTypePointer;
+            yield return ArrowheadPointer;
+            yield return MTextStylePointer;
+            yield return BlockContentPointer;
+        }
+
+        internal DxfPointer LineLeaderTypePointer { get; } = new DxfPointer();
+        internal DxfPointer ArrowheadPointer { get; } = new DxfPointer();
+        internal DxfPointer MTextStylePointer { get; } = new DxfPointer();
+        internal DxfPointer BlockContentPointer { get; } = new DxfPointer();
 
         public short ContentType { get; set; }
         public short DrawMLeaderOrderType { get; set; }
@@ -25,17 +39,17 @@ namespace IxMilia.Dxf.Entities
         public double SecondSegmentAngleConstraint { get; set; }
         public short LeaderLineType { get; set; }
         public int LeaderLineColor { get; set; }
-        public uint LeaderLineTypeHandle { get; set; }
+        public IDxfItem LineLeaderType { get { return LineLeaderTypePointer.Item as IDxfItem; } set { LineLeaderTypePointer.Item = value; } }
         public int LeaderLineWeight { get; set; }
         public bool EnableLanding { get; set; }
         public double LandingGap { get; set; }
         public bool EnableDogleg { get; set; }
         public double DoglegLength { get; set; }
         public string MLeaderStyleDescription { get; set; }
-        public uint ArrowheadHandle { get; set; }
+        public IDxfItem Arrowhead { get { return ArrowheadPointer.Item as IDxfItem; } set { ArrowheadPointer.Item = value; } }
         public double ArrowheadSize { get; set; }
         public string DefaultMTextContents { get; set; }
-        public uint MTextStyleHandle { get; set; }
+        public IDxfItem MTextStyle { get { return MTextStylePointer.Item as IDxfItem; } set { MTextStylePointer.Item = value; } }
         public short TextLeftAttachmentType { get; set; }
         public short TextAngleType { get; set; }
         public short TextAlignmentType { get; set; }
@@ -45,7 +59,7 @@ namespace IxMilia.Dxf.Entities
         public bool EnableFrameText { get; set; }
         public bool AlwaysAlignTextLeft { get; set; }
         public double AlignGap { get; set; }
-        public uint BlockContentHandle { get; set; }
+        public IDxfItem BlockContent { get { return BlockContentPointer.Item as IDxfItem; } set { BlockContentPointer.Item = value; } }
         public int BlockContentColor { get; set; }
         public double BlockContentXScale { get; set; }
         public double BlockContentYScale { get; set; }
@@ -78,17 +92,14 @@ namespace IxMilia.Dxf.Entities
             this.SecondSegmentAngleConstraint = 0.0;
             this.LeaderLineType = 0;
             this.LeaderLineColor = 0;
-            this.LeaderLineTypeHandle = 0;
             this.LeaderLineWeight = 0;
             this.EnableLanding = true;
             this.LandingGap = 0.0;
             this.EnableDogleg = true;
             this.DoglegLength = 0.0;
             this.MLeaderStyleDescription = null;
-            this.ArrowheadHandle = 0;
             this.ArrowheadSize = 0.0;
             this.DefaultMTextContents = null;
-            this.MTextStyleHandle = 0;
             this.TextLeftAttachmentType = 0;
             this.TextAngleType = 0;
             this.TextAlignmentType = 0;
@@ -98,7 +109,6 @@ namespace IxMilia.Dxf.Entities
             this.EnableFrameText = true;
             this.AlwaysAlignTextLeft = true;
             this.AlignGap = 0.0;
-            this.BlockContentHandle = 0;
             this.BlockContentColor = 0;
             this.BlockContentXScale = 1.0;
             this.BlockContentYScale = 1.0;
@@ -127,29 +137,17 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(41, (this.SecondSegmentAngleConstraint)));
             pairs.Add(new DxfCodePair(173, (this.LeaderLineType)));
             pairs.Add(new DxfCodePair(91, (this.LeaderLineColor)));
-            if (this.LeaderLineTypeHandle != 0)
-            {
-                pairs.Add(new DxfCodePair(340, UIntHandle(this.LeaderLineTypeHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.LineLeaderTypePointer.Handle)));
             pairs.Add(new DxfCodePair(92, (this.LeaderLineWeight)));
             pairs.Add(new DxfCodePair(290, (this.EnableLanding)));
             pairs.Add(new DxfCodePair(42, (this.LandingGap)));
             pairs.Add(new DxfCodePair(291, (this.EnableDogleg)));
             pairs.Add(new DxfCodePair(43, (this.DoglegLength)));
             pairs.Add(new DxfCodePair(3, (this.MLeaderStyleDescription)));
-            if (this.ArrowheadHandle != 0)
-            {
-                pairs.Add(new DxfCodePair(341, UIntHandle(this.ArrowheadHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(341, DxfCommonConverters.UIntHandle(this.ArrowheadPointer.Handle)));
             pairs.Add(new DxfCodePair(44, (this.ArrowheadSize)));
             pairs.Add(new DxfCodePair(300, (this.DefaultMTextContents)));
-            if (this.MTextStyleHandle != 0)
-            {
-                pairs.Add(new DxfCodePair(342, UIntHandle(this.MTextStyleHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(342, DxfCommonConverters.UIntHandle(this.MTextStylePointer.Handle)));
             pairs.Add(new DxfCodePair(174, (this.TextLeftAttachmentType)));
             pairs.Add(new DxfCodePair(175, (this.TextAngleType)));
             pairs.Add(new DxfCodePair(176, (this.TextAlignmentType)));
@@ -159,11 +157,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(292, (this.EnableFrameText)));
             pairs.Add(new DxfCodePair(297, (this.AlwaysAlignTextLeft)));
             pairs.Add(new DxfCodePair(46, (this.AlignGap)));
-            if (this.BlockContentHandle != 0)
-            {
-                pairs.Add(new DxfCodePair(343, UIntHandle(this.BlockContentHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(343, DxfCommonConverters.UIntHandle(this.BlockContentPointer.Handle)));
             pairs.Add(new DxfCodePair(94, (this.BlockContentColor)));
             pairs.Add(new DxfCodePair(47, (this.BlockContentXScale)));
             pairs.Add(new DxfCodePair(49, (this.BlockContentYScale)));
@@ -306,16 +300,16 @@ namespace IxMilia.Dxf.Entities
                     this.DefaultMTextContents = (pair.StringValue);
                     break;
                 case 340:
-                    this.LeaderLineTypeHandle = UIntHandle(pair.StringValue);
+                    this.LineLeaderTypePointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 341:
-                    this.ArrowheadHandle = UIntHandle(pair.StringValue);
+                    this.ArrowheadPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 342:
-                    this.MTextStyleHandle = UIntHandle(pair.StringValue);
+                    this.MTextStylePointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 343:
-                    this.BlockContentHandle = UIntHandle(pair.StringValue);
+                    this.BlockContentPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

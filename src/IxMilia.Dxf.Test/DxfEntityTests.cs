@@ -36,7 +36,7 @@ ill-placed comment
 {1}
 ", entityType, data.Trim()));
             var entity = file.Entities.Single();
-            Assert.Equal(0x42u, entity.Handle);
+            Assert.Equal(0x42u, ((IDxfItemInternal)entity).Handle);
             Assert.Equal("<linetype-name>", entity.LinetypeName);
             Assert.Equal("<layer>", entity.Layer);
             Assert.Equal(3.14159, entity.LinetypeScale);
@@ -52,7 +52,6 @@ ill-placed comment
   0
 {0}", entityType));
             var entity = file.Entities.Single();
-            Assert.NotEqual(0x0u, entity.Handle);
             Assert.Equal("0", entity.Layer);
             Assert.Equal("BYLAYER", entity.LinetypeName);
             Assert.Equal(1.0, entity.LinetypeScale);
@@ -666,6 +665,8 @@ SEQEND
             Assert.Equal(33.0, poly.Normal.Y);
             Assert.Equal(44.0, poly.Normal.Z);
             Assert.Equal(2, poly.Vertices.Count);
+            Assert.Equal(poly, poly.Vertices[0].Owner);
+            Assert.Equal(poly, poly.Vertices[1].Owner);
             Assert.Equal(12.0, poly.Vertices[0].Location.X);
             Assert.Equal(23.0, poly.Vertices[0].Location.Y);
             Assert.Equal(34.0, poly.Vertices[0].Location.Z);
@@ -762,6 +763,32 @@ SEQEND
             Assert.Equal(-2.0, lwpolyline.Vertices[3].X);
             Assert.Equal(0.0, lwpolyline.Vertices[3].Y);
             Assert.Equal(0.0, lwpolyline.Vertices[3].Bulge);
+        }
+
+        [Fact]
+        public void ReadAttributeTest()
+        {
+            var att = (DxfAttribute)Entity("ATTRIB", @"
+  0
+MTEXT
+  1
+mtext-value
+");
+            Assert.Equal(att, att.MText.Owner);
+            Assert.Equal("mtext-value", att.MText.Text);
+        }
+
+        [Fact]
+        public void ReadAttributeDefinitionTest()
+        {
+            var attdef = (DxfAttributeDefinition)Entity("ATTDEF", @"
+  0
+MTEXT
+  1
+mtext-value
+");
+            Assert.Equal(attdef, attdef.MText.Owner);
+            Assert.Equal("mtext-value", attdef.MText.Text);
         }
 
         #endregion
@@ -952,6 +979,8 @@ AcDb2dPolyline
 SEQEND
   5
 #
+330
+#
 100
 AcDbEntity
   8
@@ -1006,7 +1035,6 @@ AcDbTrace
             EnsureFileContainsEntity(new DxfLine(new DxfPoint(1, 2, 3), new DxfPoint(4, 5, 6))
                 {
                     Color = DxfColor.FromIndex(7),
-                    Handle = 0x42u,
                     Layer = "bar",
                     Thickness = 7,
                     ExtrusionDirection = new DxfVector(8, 9, 10)
@@ -1014,7 +1042,7 @@ AcDbTrace
   0
 LINE
   5
-42
+#
 100
 AcDbEntity
   8
@@ -1056,14 +1084,13 @@ AcDbLine
                 DefinitionPoint1 = new DxfPoint(330.25, 1310.0, 330.25),
                 DefinitionPoint2 = new DxfPoint(330.25, 1282.0, 0.0),
                 DefinitionPoint3 = new DxfPoint(319.75, 1282.0, 0.0),
-                Handle = 0x42u,
                 Layer = "bar",
                 Text = "text"
             }, @"
   0
 DIMENSION
   5
-42
+#
 100
 AcDbEntity
   8
@@ -1256,6 +1283,21 @@ AcDbPolyline
  20
 0.0
 ", DxfAcadVersion.R14);
+        }
+
+        [Fact]
+        public void WriteAttributeTest()
+        {
+            var att = new DxfAttribute();
+            att.MText.Text = "mtext-value";
+            EnsureFileContainsEntity(att, @"
+  0
+ATTRIB
+", DxfAcadVersion.R13);
+            EnsureFileContainsEntity(att, @"
+  0
+MTEXT
+", DxfAcadVersion.R13);
         }
 
         #endregion

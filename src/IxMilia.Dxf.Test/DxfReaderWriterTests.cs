@@ -693,7 +693,7 @@ EOF
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal(0x42u, block.Handle);
+            Assert.Equal(0x42u, ((IDxfItemInternal)block).Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal(11, block.BasePoint.X);
             Assert.Equal(22, block.BasePoint.Y);
@@ -768,7 +768,6 @@ EOF
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal(0x42u, block.Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal("<xref>", block.XrefName);
             Assert.Equal(11, block.BasePoint.X);
@@ -787,8 +786,6 @@ EOF
             file.Header.Version = DxfAcadVersion.R13;
             var block = new DxfBlock();
             block.Name = "<block name>";
-            block.Handle = 0x42u;
-            block.OwnerHandle = 0x43u;
             block.Layer = "<layer>";
             block.XrefName = "<xref>";
             block.BasePoint = new DxfPoint(11, 22, 33);
@@ -798,9 +795,7 @@ EOF
   0
 BLOCK
   5
-42
-330
-43
+#
 100
 AcDbEntity
   8

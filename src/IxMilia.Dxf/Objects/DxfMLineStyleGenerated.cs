@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -16,7 +17,6 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfMLineStyle : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.MLineStyle; } }
-
         public string StyleName { get; set; }
         private int _flags { get; set; }
         public string Description { get; set; }

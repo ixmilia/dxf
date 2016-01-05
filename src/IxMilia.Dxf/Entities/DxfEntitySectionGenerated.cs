@@ -12,10 +12,18 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// DxfEntitySection class
     /// </summary>
-    public partial class DxfEntitySection : DxfEntity
+    public partial class DxfEntitySection : DxfEntity, IDxfItemInternal
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Section; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
+
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return GeometrySettingsPointer;
+        }
+
+        internal DxfPointer GeometrySettingsPointer { get; } = new DxfPointer();
 
         public int State { get; set; }
         public int Flags { get; set; }
@@ -34,7 +42,7 @@ namespace IxMilia.Dxf.Entities
         private List<double> _backLineVertexX { get; set; }
         private List<double> _backLineVertexY { get; set; }
         private List<double> _backLineVertexZ { get; set; }
-        public uint GeometrySettingsHandle { get; set; }
+        public IDxfItem GeometrySettings { get { return GeometrySettingsPointer.Item as IDxfItem; } set { GeometrySettingsPointer.Item = value; } }
 
         public DxfEntitySection()
             : base()
@@ -61,7 +69,6 @@ namespace IxMilia.Dxf.Entities
             this._backLineVertexX = new List<double>();
             this._backLineVertexY = new List<double>();
             this._backLineVertexZ = new List<double>();
-            this.GeometrySettingsHandle = 0;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -95,11 +102,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(32, item.Z));
             }
 
-            if (this.GeometrySettingsHandle != 0)
-            {
-                pairs.Add(new DxfCodePair(360, UIntHandle(this.GeometrySettingsHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(360, DxfCommonConverters.UIntHandle(this.GeometrySettingsPointer.Handle)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -161,7 +164,7 @@ namespace IxMilia.Dxf.Entities
                     this._backLineVertexCount = (pair.IntegerValue);
                     break;
                 case 360:
-                    this.GeometrySettingsHandle = UIntHandle(pair.StringValue);
+                    this.GeometrySettingsPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 411:
                     this.IndicatorColorName = (pair.StringValue);

@@ -278,7 +278,7 @@ namespace IxMilia.Dxf.Entities
             }
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.AddRange(this.SecondaryAttributesPointers.Pointers.Select(p => new DxfCodePair(340, p.Handle)));
+                pairs.AddRange(this.SecondaryAttributesPointers.Pointers.Select(p => new DxfCodePair(340, DxfCommonConverters.UIntHandle(p.Handle))));
             }
 
             if (version >= DxfAcadVersion.R2007)

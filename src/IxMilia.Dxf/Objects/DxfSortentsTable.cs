@@ -25,7 +25,7 @@ namespace IxMilia.Dxf.Objects
                     case 5:
                         if (isReadyForSortHandles)
                         {
-                            SortHandles.Add(DxfCommonConverters.UIntHandle(pair.StringValue));
+                            SortItemsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
                         }
                         else
                         {
@@ -41,7 +41,7 @@ namespace IxMilia.Dxf.Objects
                         isReadyForSortHandles = true;
                         break;
                     case 331:
-                        EntityHandles.Add(DxfCommonConverters.UIntHandle(pair.StringValue));
+                        EntitiesPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
                         isReadyForSortHandles = true;
                         break;
                     default:

@@ -15,13 +15,24 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfSectionManager class
     /// </summary>
-    public partial class DxfSectionManager : DxfObject
+    public partial class DxfSectionManager : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SectionManager; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            foreach (var pointer in SectionEntitiesPointers.Pointers)
+            {
+                yield return pointer;
+            }
+        }
+
+        internal DxfPointerList<DxfEntity> SectionEntitiesPointers { get; } = new DxfPointerList<DxfEntity>();
+
         public bool RequiresFullUpdate { get; set; }
         private int _sectionCount { get; set; }
-        public IList<uint> SectionEntities { get; private set; }
+        public IList<DxfEntity> SectionEntities { get { return SectionEntitiesPointers; } }
 
         public DxfSectionManager()
             : base()
@@ -33,7 +44,6 @@ namespace IxMilia.Dxf.Objects
             base.Initialize();
             this.RequiresFullUpdate = false;
             this._sectionCount = 0;
-            this.SectionEntities = new List<uint>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -42,7 +52,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(100, "AcDbSectionManager"));
             pairs.Add(new DxfCodePair(70, BoolShort(this.RequiresFullUpdate)));
             pairs.Add(new DxfCodePair(90, SectionEntities.Count));
-            pairs.AddRange(this.SectionEntities.Select(p => new DxfCodePair(330, UIntHandle(p))));
+            pairs.AddRange(this.SectionEntitiesPointers.Pointers.Select(p => new DxfCodePair(330, DxfCommonConverters.UIntHandle(p.Handle))));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -56,7 +66,7 @@ namespace IxMilia.Dxf.Objects
                     this._sectionCount = (pair.IntegerValue);
                     break;
                 case 330:
-                    this.SectionEntities.Add(UIntHandle(pair.StringValue));
+                    this.SectionEntitiesPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
                     break;
                 default:
                     return base.TrySetPair(pair);

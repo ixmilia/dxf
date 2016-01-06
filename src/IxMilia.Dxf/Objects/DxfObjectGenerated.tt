@@ -586,7 +586,7 @@ foreach (var obj in objects)
 
     } // if (GenerateWriterFunction(obj))
 
-    if (GetProperties(obj).Any() && GenerateReaderFunction(obj))
+    if (GetPropertiesAndPointers(obj).Any() && GenerateReaderFunction(obj))
     {
         // handle codes with multiple values (but only positive codes (negative codes mean special handling))
         var multiCodeProperties = GetProperties(obj)
@@ -640,16 +640,25 @@ foreach (var obj in objects)
                 {
                     var codeType = DxfCodePair.ExpectedType(code);
                     var codeTypeValue = TypeToString(codeType);
-                    if (IsPointer(property)) name += "Pointer.Handle";
+                    if (IsPointer(property))
+                    {
+                        if (AllowMultiples(property)) name += "Pointers.Pointers";
+                        else name += "Pointer.Handle";
+                    }
                     var assignCode = AllowMultiples(property)
                         ? string.Format("this.{0}.Add(", name)
                         : string.Format("this.{0} = ", name);
                     var assignSuffix = AllowMultiples(property)
                         ? ")"
                         : "";
+                    var value = string.Format("{0}(pair.{1})", ReadConverter(property), codeTypeValue);
+                    if (IsPointer(property) && AllowMultiples(property))
+                    {
+                        value = "new DxfPointer(" + value + ")";
+                    }
 #>
                 case <#= code #>:
-                    <#= assignCode #><#= ReadConverter(property) #>(pair.<#= codeTypeValue #>)<#= assignSuffix #>;
+                    <#= assignCode #><#= value #><#= assignSuffix #>;
                     break;
 <#
                 } // else

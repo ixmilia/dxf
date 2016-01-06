@@ -402,7 +402,7 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
             if (IsPointer(property))
             {
                 name += "Pointers.Pointers";
-                value = "p.Handle";
+                value = "DxfCommonConverters.UIntHandle(p.Handle)";
             }
             lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, {3})));", indentPrefix, name, code, value));
         }

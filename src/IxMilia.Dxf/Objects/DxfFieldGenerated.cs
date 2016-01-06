@@ -15,24 +15,40 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfField class
     /// </summary>
-    public partial class DxfField : DxfObject
+    public partial class DxfField : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.Field; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2004; } }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            foreach (var pointer in ChildFieldsPointers.Pointers)
+            {
+                yield return pointer;
+            }
+            foreach (var pointer in ObjectsPointers.Pointers)
+            {
+                yield return pointer;
+            }
+        }
+
+        internal DxfPointerList<DxfField> ChildFieldsPointers { get; } = new DxfPointerList<DxfField>();
+        internal DxfPointerList<DxfObject> ObjectsPointers { get; } = new DxfPointerList<DxfObject>();
+
         public string EvaluatorId { get; set; }
         public string FieldCodeString { get; set; }
         public string FieldCodeStringOverflow { get; set; }
         private string _formatStringCode4 { get; set; }
         public string EvaluationErrorMessage { get; set; }
         private int _childFieldCount { get; set; }
-        public IList<uint> ChildFieldHandles { get; private set; }
+        public IList<DxfField> ChildFields { get { return ChildFieldsPointers; } }
         public int EvaluationOption { get; set; }
         public int FillingOption { get; set; }
         public int FieldState { get; set; }
         public int EvaluationStatus { get; set; }
         public int EvaluationErrorCode { get; set; }
         private int _objectIdCount { get; set; }
-        public IList<uint> ObjectIds { get; private set; }
+        public IList<DxfObject> Objects { get { return ObjectsPointers; } }
         private int _dataSetCount { get; set; }
         public IList<string> FieldDataKeys { get; private set; }
         public string EvaluatedCacheKey { get; protected set; }
@@ -61,14 +77,12 @@ namespace IxMilia.Dxf.Objects
             this._formatStringCode4 = null;
             this.EvaluationErrorMessage = null;
             this._childFieldCount = 0;
-            this.ChildFieldHandles = new List<uint>();
             this.EvaluationOption = 0;
             this.FillingOption = 0;
             this.FieldState = 0;
             this.EvaluationStatus = 0;
             this.EvaluationErrorCode = 0;
             this._objectIdCount = 0;
-            this.ObjectIds = new List<uint>();
             this._dataSetCount = 0;
             this.FieldDataKeys = new List<string>();
             this.EvaluatedCacheKey = "ACFD_FIELD_VALUE";
@@ -99,8 +113,8 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(300, (this.EvaluationErrorMessage)));
             }
 
-            pairs.Add(new DxfCodePair(90, ChildFieldHandles.Count));
-            pairs.AddRange(this.ChildFieldHandles.Select(p => new DxfCodePair(360, UIntHandle(p))));
+            pairs.Add(new DxfCodePair(90, ChildFields.Count));
+            pairs.AddRange(this.ChildFieldsPointers.Pointers.Select(p => new DxfCodePair(360, DxfCommonConverters.UIntHandle(p.Handle))));
             if (version <= DxfAcadVersion.R2007)
             {
                 pairs.Add(new DxfCodePair(91, (this.EvaluationOption)));
@@ -126,16 +140,16 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(96, (this.EvaluationErrorCode)));
             }
 
-            pairs.Add(new DxfCodePair(97, ObjectIds.Count));
-            foreach (var item in ObjectIds)
+            pairs.Add(new DxfCodePair(97, Objects.Count));
+            foreach (var item in ObjectsPointers.Pointers)
             {
                 if (version <= DxfAcadVersion.R2007)
                 {
-                    pairs.Add(new DxfCodePair(330, UIntHandle(item)));
+                    pairs.Add(new DxfCodePair(330, UIntHandle(item.Handle)));
                 }
                 if (version >= DxfAcadVersion.R2010)
                 {
-                    pairs.Add(new DxfCodePair(331, UIntHandle(item)));
+                    pairs.Add(new DxfCodePair(331, UIntHandle(item.Handle)));
                 }
             }
 
@@ -251,10 +265,10 @@ namespace IxMilia.Dxf.Objects
                     this._idValue = UIntHandle(pair.StringValue);
                     break;
                 case 331:
-                    this.ObjectIds.Add(UIntHandle(pair.StringValue));
+                    this.ObjectsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
                     break;
                 case 360:
-                    this.ChildFieldHandles.Add(UIntHandle(pair.StringValue));
+                    this.ChildFieldsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
                     break;
                 default:
                     return base.TrySetPair(pair);

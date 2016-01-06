@@ -132,14 +132,14 @@
         <Property Name="_formatStringCode4" Code="4" Type="string" DefaultValue="null" Accessibility="private" />
         <Property Name="EvaluationErrorMessage" Code="300" Type="string" DefaultValue="null" MaxVersion="R2007" />
         <Property Name="_childFieldCount" Code="-90" Type="int" DefaultValue="0" Accessibility="private" />
-        <Property Name="ChildFieldHandles" Code="360" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" />
+        <Pointer Name="ChildFields" Code="360" Type="DxfField" AllowMultiples="true" />
         <Property Name="EvaluationOption" Code="91" Type="int" DefaultValue="0" MaxVersion="R2007" />
         <Property Name="FillingOption" Code="92" Type="int" DefaultValue="0" MaxVersion="R2007" />
         <Property Name="FieldState" Code="94" Type="int" DefaultValue="0" MaxVersion="R2007" />
         <Property Name="EvaluationStatus" Code="95" Type="int" DefaultValue="0" MaxVersion="R2007" />
         <Property Name="EvaluationErrorCode" Code="96" Type="int" DefaultValue="0" MaxVersion="R2007" />
         <Property Name="_objectIdCount" Code="97" Type="int" DefaultValue="0" Accessibility="private" />
-        <Property Name="ObjectIds" Code="331" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" />
+        <Pointer Name="Objects" Code="331" Type="DxfObject" AllowMultiples="true" />
         <Property Name="_dataSetCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
         <Property Name="FieldDataKeys" Code="6" Type="string" DefaultValue="null" AllowMultiples="true" />
         <Property Name="EvaluatedCacheKey" Code="7" Type="string" DefaultValue="ACFD_FIELD_VALUE" ProtectedSet="true" />
@@ -162,17 +162,17 @@
             <WriteProperty Property="FieldCodeStringOverflow" />
             <WriteSpecificValue Code="4" Value="FormatString" MaxVersion="R2007" />
             <WriteProperty Property="EvaluationErrorMessage" />
-            <WriteSpecificValue Code="90" Value="ChildFieldHandles.Count" />
-            <WriteProperty Property="ChildFieldHandles" />
+            <WriteSpecificValue Code="90" Value="ChildFields.Count" />
+            <WriteProperty Property="ChildFields" />
             <WriteProperty Property="EvaluationOption" />
             <WriteProperty Property="FillingOption" />
             <WriteProperty Property="FieldState" />
             <WriteProperty Property="EvaluationStatus" />
             <WriteProperty Property="EvaluationErrorCode" />
-            <WriteSpecificValue Code="97" Value="ObjectIds.Count" />
-            <Foreach Property ="ObjectIds">
-                <WriteSpecificValue Code="330" Value="UIntHandle(item)" MaxVersion="R2007" />
-                <WriteSpecificValue Code="331" Value="UIntHandle(item)" MinVersion="R2010" />
+            <WriteSpecificValue Code="97" Value="Objects.Count" />
+            <Foreach Property ="ObjectsPointers.Pointers">
+                <WriteSpecificValue Code="330" Value="UIntHandle(item.Handle)" MaxVersion="R2007" />
+                <WriteSpecificValue Code="331" Value="UIntHandle(item.Handle)" MinVersion="R2010" />
             </Foreach>
             <WriteSpecificValue Code="93" Value="FieldDataKeys.Count" />
             <WriteProperty Property="FieldDataKeys" />
@@ -264,7 +264,7 @@
         <Property Name="Description" Code="300" Type="string" DefaultValue="null" />
         <Property Name="IsNamed" Code="70" Type="bool" DefaultValue="true" ReadConverter="NotBoolShort" WriteConverter="NotBoolShort" />
         <Property Name="IsSelectable" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
-        <Property Name="EntityHandles" Code="340" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Pointer Name="Entities" Code="340" Type="DxfEntity" AllowMultiples="true" />
     </Object>
     <!--
 
@@ -272,7 +272,7 @@
 
     -->
     <Object Name="DxfIdBuffer" ObjectType="IdBuffer" SubclassMarker="AcDbIdBuffer" TypeString="IDBUFFER" HasXData="false" MinVersion="R14">
-        <Property Name="EntityHandles" Code="330" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Pointer Name="Entities" Code="330" Type="DxfEntity" AllowMultiples="true" />
     </Object>
     <!--
 
@@ -318,14 +318,14 @@
     <Object Name="DxfLayerIndex" ObjectType="LayerIndex" SubclassMarker="AcDbLayerIndex" TypeString="LAYER_INDEX" MaxVersion="R14">
         <Property Name="TimeStamp" Code="40" Type="DateTime" DefaultValue="DateTime.Now" ReadConverter="DateDouble" WriteConverter="DateDouble" />
         <Property Name="LayerNames" Code="8" Type="string" DefaultValue="null" AllowMultiples="true" />
-        <Property Name="IdBufferHandles" Code="360" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Pointer Name="IdBuffers" Code="360" Type="IDxfItem" AllowMultiples="true" />
         <Property Name="IdBufferCounts" Code="90" Type="int" DefaultValue="null" AllowMultiples="true" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbIndex&quot;" />
             <WriteProperty Property="TimeStamp" />
             <WriteSpecificValue Code="100" Value="&quot;AcDbLayerIndex&quot;" />
             <WriteProperty Property="LayerNames" />
-            <WriteProperty Property="IdBufferHandles" />
+            <WriteProperty Property="IdBuffers" />
             <WriteProperty Property="IdBufferCounts" />
         </WriteOrder>
     </Object>
@@ -868,7 +868,7 @@
     <Object Name="DxfSectionManager" ObjectType="SectionManager" SubclassMarker="AcDbSectionManager" TypeString="SECTIONMANAGER" MaxVersion="R2007">
         <Property Name="RequiresFullUpdate" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <Property Name="_sectionCount" Code="90" Type="int" DefaultValue="0" Accessibility="private" />
-        <Property Name="SectionEntities" Code="330" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Pointer Name="SectionEntities" Code="330" Type="DxfEntity" AllowMultiples="true" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbSectionManager&quot;" />
             <WriteProperty Property="RequiresFullUpdate" />
@@ -890,8 +890,8 @@
 
     -->
     <Object Name="DxfSortentsTable" ObjectType="SortentsTable" SubclassMarker="AcDbSortentsTable" TypeString="SORTENTSTABLE" GenerateReaderFunction="false" MaxVersion="R14">
-        <Property Name="EntityHandles" Code="331" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
-        <Property Name="SortHandles" Code="5" Type="uint" DefaultValue="null" AllowMultiples="true" ReadConverter="UIntHandle" WriteConverter="UIntHandle" />
+        <Pointer Name="Entities" Code="331" Type="DxfEntity" AllowMultiples="true" />
+        <Pointer Name="SortItems" Code="5" Type="IDxfItem" AllowMultiples="true" />
     </Object>
     <!--
 

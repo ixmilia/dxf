@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Objects;
 using Xunit;
 
@@ -1138,44 +1139,77 @@ SectionTypeSettingsEnd
         [Fact]
         public void ReadSortentsTableTest()
         {
-            var sortents = (DxfSortentsTable)GenObject("SORTENTSTABLE", @"
-100
-AcDbSortentsTable
-331
-2000
-331
-2001
-331
-2002
+            var file = Parse(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+POINT
   5
-3000
+42
+ 10
+1.0
+ 20
+2.0
+ 30
+3.0
+  0
+POINT
   5
-3001
+43
+ 10
+4.0
+ 20
+5.0
+ 30
+6.0
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+SORTENTSTABLE
+331
+42
   5
-3002
+43
+  0
+ENDSEC
+  0
+EOF
 ");
-            Assert.Equal(3, sortents.EntityHandles.Count);
-            Assert.Equal(0x2000u, sortents.EntityHandles[0]);
-            Assert.Equal(0x2001u, sortents.EntityHandles[1]);
-            Assert.Equal(0x2002u, sortents.EntityHandles[2]);
-            Assert.Equal(0x3000u, sortents.SortHandles[0]);
-            Assert.Equal(0x3001u, sortents.SortHandles[1]);
-            Assert.Equal(0x3002u, sortents.SortHandles[2]);
+            var sortents = (DxfSortentsTable)file.Objects.Single();
+            Assert.Equal(new DxfPoint(1, 2, 3), ((DxfModelPoint)sortents.Entities.Single()).Location);
+            Assert.Equal(new DxfPoint(4, 5, 6), ((DxfModelPoint)sortents.SortItems.Single()).Location);
         }
 
         [Fact]
         public void WriteSortentsTableTest()
         {
-            var sortents = new DxfSortentsTable();
-            sortents.EntityHandles.Add(0x2000u);
-            sortents.EntityHandles.Add(0x2001u);
-            sortents.EntityHandles.Add(0x2002u);
-            sortents.SortHandles.Add(0x3000u);
-            sortents.SortHandles.Add(0x3001u);
-            sortents.SortHandles.Add(0x3002u);
             var file = new DxfFile();
+            file.Clear();
             file.Header.Version = DxfAcadVersion.R14;
+            file.Entities.Add(new DxfModelPoint(new DxfPoint(1, 2, 3)));
+            file.Entities.Add(new DxfModelPoint(new DxfPoint(4, 5, 6)));
+            var sortents = new DxfSortentsTable();
+            sortents.Entities.Add(file.Entities.First());
+            sortents.SortItems.Add(file.Entities.Skip(1).First());
             file.Objects.Add(sortents);
+            VerifyFileContains(file, @"
+  0
+POINT
+  5
+A
+");
+            VerifyFileContains(file, @"
+  0
+POINT
+  5
+B
+");
             VerifyFileContains(file, @"
   0
 SORTENTSTABLE
@@ -1184,17 +1218,9 @@ SORTENTSTABLE
 100
 AcDbSortentsTable
 331
-2000
-331
-2001
-331
-2002
+A
   5
-3000
-  5
-3001
-  5
-3002
+B
 ");
         }
 

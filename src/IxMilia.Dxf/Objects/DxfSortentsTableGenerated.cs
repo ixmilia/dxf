@@ -15,12 +15,28 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfSortentsTable class
     /// </summary>
-    public partial class DxfSortentsTable : DxfObject
+    public partial class DxfSortentsTable : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SortentsTable; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
-        public IList<uint> EntityHandles { get; private set; }
-        public IList<uint> SortHandles { get; private set; }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            foreach (var pointer in EntitiesPointers.Pointers)
+            {
+                yield return pointer;
+            }
+            foreach (var pointer in SortItemsPointers.Pointers)
+            {
+                yield return pointer;
+            }
+        }
+
+        internal DxfPointerList<DxfEntity> EntitiesPointers { get; } = new DxfPointerList<DxfEntity>();
+        internal DxfPointerList<IDxfItem> SortItemsPointers { get; } = new DxfPointerList<IDxfItem>();
+
+        public IList<DxfEntity> Entities { get { return EntitiesPointers; } }
+        public IList<IDxfItem> SortItems { get { return SortItemsPointers; } }
 
         public DxfSortentsTable()
             : base()
@@ -30,16 +46,14 @@ namespace IxMilia.Dxf.Objects
         protected override void Initialize()
         {
             base.Initialize();
-            this.EntityHandles = new List<uint>();
-            this.SortHandles = new List<uint>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbSortentsTable"));
-            pairs.AddRange(this.EntityHandles.Select(p => new DxfCodePair(331, UIntHandle(p))));
-            pairs.AddRange(this.SortHandles.Select(p => new DxfCodePair(5, UIntHandle(p))));
+            pairs.AddRange(this.EntitiesPointers.Pointers.Select(p => new DxfCodePair(331, DxfCommonConverters.UIntHandle(p.Handle))));
+            pairs.AddRange(this.SortItemsPointers.Pointers.Select(p => new DxfCodePair(5, DxfCommonConverters.UIntHandle(p.Handle))));
         }
     }
 

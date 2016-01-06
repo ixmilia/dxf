@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -18,7 +19,7 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SpatialFilter; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
-        public List<DxfPoint> ClipBoundaryDefinitionPoints { get; private set; }
+        public IList<DxfPoint> ClipBoundaryDefinitionPoints { get; private set; }
         public DxfVector ClipBoundaryNormal { get; set; }
         public DxfPoint ClipBoundaryOrigin { get; set; }
         public bool IsClipBoundaryEnabled { get; set; }

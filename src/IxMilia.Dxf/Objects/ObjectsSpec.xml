@@ -7,12 +7,10 @@
 
     -->
     <Object Name="DxfObject" ObjectType="" SubclassMarker="" TypeString="">
-        <Property Name="Handle" Code="5" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" WriteCondition="outputHandles" DisableWritingDefault="true" />
-        <Property Name="OwnerHandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2000" />
         <WriteOrder>
-            <WriteProperty Property="Handle" />
+            <WriteSpecificValue Code="5" Value="((IDxfItemInternal)this).Handle" WriteConverter="UIntHandle" />
             <WriteExtensionData />
-            <WriteProperty Property="OwnerHandle" />
+            <WriteSpecificValue Code="330" Value="((IDxfItemInternal)this).OwnerHandle" DontWriteIfValueIs="0" WriteConverter="UIntHandle" />
         </WriteOrder>
     </Object>
     <!--
@@ -51,28 +49,15 @@
     ACDBDICTIONARYWDFLT
 
     -->
-    <Object Name="DxfAcdbDictionaryWithDefault" ObjectType="DictionaryWithDefault" SubclassMarker="AcDbDictionaryWithDefault" TypeString="ACDBDICTIONARYWDFLT" MinVersion="R2000">
+    <Object Name="DxfDictionaryWithDefault" ObjectType="DictionaryWithDefault" SubclassMarker="AcDbDictionaryWithDefault" TypeString="ACDBDICTIONARYWDFLT" GenerateReaderFunction="false" GenerateWriterFunction="false" MinVersion="R2000">
         <Property Name="DuplicateRecordHandling" Code="281" Type="DxfDictionaryDuplicateRecordHandling" DefaultValue="DxfDictionaryDuplicateRecordHandling.NotApplicable" ReadConverter="(DxfDictionaryDuplicateRecordHandling)" WriteConverter="(short)" />
-        <Property Name="_entryNames" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
-        <Property Name="_entryHandles" Code="350" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" Accessibility="private" />
-        <Property Name="DefaultObjectHandle" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
-        <WriteOrder>
-            <WriteSpecificValue Code="100" Value="&quot;AcDbDictionary&quot;" />
-            <WriteProperty Property="DuplicateRecordHandling" />
-            <Foreach Property="_entries">
-                <WriteSpecificValue Code="3" Value="item.Key" />
-                <WriteSpecificValue Code="350" Value="UIntHandle(item.Value)" />
-            </Foreach>
-            <WriteSpecificValue Code="100" Value="&quot;AcDbDictionaryWithDefault&quot;" />
-            <WriteProperty Property="DefaultObjectHandle" />
-        </WriteOrder>
     </Object>
     <!--
 
     ACDBPLACEHOLDER
 
     -->
-    <Object Name="DxfAcdbPlaceHolder" ObjectType="AcdbPlaceHolder" SubclassMarker="[none]" TypeString="ACDBPLACEHOLDER" MinVersion="R2000">
+    <Object Name="DxfPlaceHolder" ObjectType="AcdbPlaceHolder" SubclassMarker="[none]" TypeString="ACDBPLACEHOLDER" MinVersion="R2000">
         <!-- this object has no properties and writes nothing, including the 100-code subclass marker -->
         <WriteOrder />
     </Object>

@@ -7,37 +7,49 @@ using System.Linq;
 
 namespace IxMilia.Dxf.Objects
 {
-    public partial class DxfDictionary :
+    public partial class DxfDictionaryWithDefault :
         IDictionary<string, IDxfItem>,
         IDxfItemInternal
     {
         private IDictionary<string, DxfPointer> _items = new Dictionary<string, DxfPointer>();
         private string _lastEntryName;
+        internal readonly DxfPointer DefaultObjectPointer = new DxfPointer();
+
+        public DxfObject DefaultObject
+        {
+            get { return DefaultObjectPointer.Item as DxfObject; }
+            set { DefaultObjectPointer.Item = value; }
+        }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbDictionary"));
-            if (version >= DxfAcadVersion.R2000 && this.IsHardOwner != false)
-            {
-                pairs.Add(new DxfCodePair(280, BoolShort(this.IsHardOwner)));
-            }
 
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(281, (short)(this.DuplicateRecordHandling)));
             }
 
-            var code = IsHardOwner ? 360 : 350;
+            if (DefaultObject != null && DefaultObjectPointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(340, UIntHandle(DefaultObjectPointer.Handle)));
+            }
+
             foreach (var item in _items.OrderBy(kvp => kvp.Key))
             {
                 pairs.Add(new DxfCodePair(3, item.Key));
-                pairs.Add(new DxfCodePair(code, UIntHandle(item.Value.Handle)));
+                pairs.Add(new DxfCodePair(350, UIntHandle(item.Value.Handle)));
             }
         }
 
         protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
+            if (DefaultObject != null)
+            {
+                pairs.AddRange(DefaultObject.GetValuePairs(version, outputHandles));
+            }
+
             foreach (var child in GetChildren())
             {
                 pairs.AddRange(((DxfObject)child).GetValuePairs(version, outputHandles));
@@ -51,11 +63,11 @@ namespace IxMilia.Dxf.Objects
                 case 3:
                     _lastEntryName = pair.StringValue;
                     break;
-                case 280:
-                    this.IsHardOwner = BoolShort(pair.ShortValue);
-                    break;
                 case 281:
                     this.DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)(pair.ShortValue);
+                    break;
+                case 340:
+                    this.DefaultObjectPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 350:
                 case 360:
@@ -78,14 +90,18 @@ namespace IxMilia.Dxf.Objects
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {
-            return _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value);
+            yield return DefaultObjectPointer;
+            foreach (var pointer in _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value))
+            {
+                yield return pointer;
+            }
         }
 
         #region IDictionary implementation
 
         public IDxfItem this[string key]
         {
-            get { return _items[key].Item; }
+            get { return _items.ContainsKey(key) ? _items[key].Item : DefaultObject; }
             set { _items[key] = new DxfPointer(value); }
         }
 
@@ -136,13 +152,13 @@ namespace IxMilia.Dxf.Objects
             if (_items.ContainsKey(key))
             {
                 value = _items[key].Item;
-                return true;
             }
             else
             {
-                value = default(IDxfItem);
-                return false;
+                value = DefaultObject;
             }
+
+            return true;
         }
 
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)_items).GetEnumerator();

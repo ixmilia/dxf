@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -24,9 +25,9 @@ namespace IxMilia.Dxf.Objects
         public double StartAngle { get; set; }
         public double EndAngle { get; set; }
         private int _elementCount { get; set; }
-        private List<double> _elementOffsets { get; set; }
-        private List<DxfColor> _elementColors { get; set; }
-        private List<string> _elementLinetypes { get; set; }
+        private IList<double> _elementOffsets { get; set; }
+        private IList<DxfColor> _elementColors { get; set; }
+        private IList<string> _elementLinetypes { get; set; }
 
         // _flags flags
 

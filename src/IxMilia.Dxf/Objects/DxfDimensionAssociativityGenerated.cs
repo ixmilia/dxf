@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -30,31 +31,19 @@ namespace IxMilia.Dxf.Objects
         internal DxfPointer MainObjectPointer { get; } = new DxfPointer();
         internal DxfPointer IntersectionObjectPointer { get; } = new DxfPointer();
 
-        public DxfDimensionBase Dimension
-        {
-            get { return DimensionPointer.Item as DxfDimensionBase; }
-            set { DimensionPointer.Item = value as IDxfItem; }
-        }
+        public DxfDimensionBase Dimension { get { return DimensionPointer.Item as DxfDimensionBase; } set { DimensionPointer.Item = value; } }
         public int AssociativityFlags { get; set; }
         public bool IsTransSpace { get; set; }
         public DxfRotatedDimensionType RotatedDimensionType { get; set; }
         public string ClassName { get; set; }
         public DxfObjectOsnapType ObjectOsnapType { get; set; }
-        public IDxfItem MainObject
-        {
-            get { return MainObjectPointer.Item as IDxfItem; }
-            set { MainObjectPointer.Item = value as IDxfItem; }
-        }
+        public IDxfItem MainObject { get { return MainObjectPointer.Item as IDxfItem; } set { MainObjectPointer.Item = value; } }
         public DxfSubentityType MainObjectSubentityType { get; set; }
         public int MainObjectGsMarkerIndex { get; set; }
         public string MainObjectXrefHandle { get; set; }
         public double NearOsnapGeometryParameter { get; set; }
         public DxfPoint OsnapPoint { get; set; }
-        public IDxfItem IntersectionObject
-        {
-            get { return IntersectionObjectPointer.Item as IDxfItem; }
-            set { IntersectionObjectPointer.Item = value as IDxfItem; }
-        }
+        public IDxfItem IntersectionObject { get { return IntersectionObjectPointer.Item as IDxfItem; } set { IntersectionObjectPointer.Item = value; } }
         public DxfSubentityType IntersectionSubentityType { get; set; }
         public int IntersectionObjectGsMarkerIndex { get; set; }
         public string IntersectionObjectXrefHandle { get; set; }

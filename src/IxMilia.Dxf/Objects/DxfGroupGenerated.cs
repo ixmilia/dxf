@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -20,7 +21,7 @@ namespace IxMilia.Dxf.Objects
         public string Description { get; set; }
         public bool IsNamed { get; set; }
         public bool IsSelectable { get; set; }
-        public List<uint> EntityHandles { get; private set; }
+        public IList<uint> EntityHandles { get; private set; }
 
         public DxfGroup()
             : base()

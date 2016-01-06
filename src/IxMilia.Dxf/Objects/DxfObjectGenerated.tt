@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -56,8 +57,9 @@ var baseObject = xml.Elements(XName.Get("Object", xmlns)).Where(x => Name(x) == 
     /// </summary>
     public partial class DxfObject : IDxfItemInternal
     {
-
 #region IDxfItem and IDxfItemInternal
+        uint IDxfItemInternal.Handle { get; set; }
+        uint IDxfItemInternal.OwnerHandle { get; set; }
         public IDxfItem Owner { get; private set;}
 
         void IDxfItemInternal.SetOwner(IDxfItem owner)
@@ -165,6 +167,12 @@ foreach (var property in GetProperties(baseObject))
         {
             switch (pair.Code)
             {
+                case 5:
+                    ((IDxfItemInternal)this).Handle = UIntHandle(pair.StringValue);
+                    break;
+                case 330:
+                    ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);
+                    break;
 <#
         foreach (var propertyGroup in GetProperties(baseObject).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
         {
@@ -309,9 +317,21 @@ foreach (var obj in objects)
 <#
         foreach (var pointer in pointers)
         {
+            if (AllowMultiples(pointer))
+            {
+#>
+            foreach (var pointer in <#= Name(pointer) #>Pointers.Pointers)
+            {
+                yield return pointer;
+            }
+<#
+            }
+            else
+            {
 #>
             yield return <#= Name(pointer) #>Pointer;
 <#
+            }
         }
 #>
         }
@@ -320,10 +340,20 @@ foreach (var obj in objects)
 
         foreach (var pointer in pointers)
         {
+            var defaultValue = "new DxfPointer()";
+            var typeString = "DxfPointer";
+            var suffix = "Pointer";
+            if (AllowMultiples(pointer))
+            {
+                var type = Type(pointer);
+                defaultValue = string.Format("new DxfPointerList<{0}>()", type);
+                typeString = string.Format("DxfPointerList<{0}>", type);
+                suffix += "s";
+            }
 #>
-        internal DxfPointer <#= Name(pointer) #>Pointer { get; } = new DxfPointer();
+        internal <#= typeString #> <#= Name(pointer) #><#= suffix #> { get; } = <#= defaultValue #>;
 <#
-        }
+        } // foreach pointer
 #>
 
 <#
@@ -343,27 +373,27 @@ foreach (var obj in objects)
 
         seenProperties.Add(propertyName);
         var propertyType = Type(property);
+        var getset = string.Format("{{ get; {0}set; }}", SetterAccessibility(property));
 
         // special-case pointers
         if (IsPointer(property))
         {
-            var pointerName = propertyName + "Pointer";
-#>
-        public <#= Type(property) #> <#= propertyName #>
-        {
-            get { return <#= pointerName #>.Item as <#= Type(property) #>; }
-            set { <#= pointerName #>.Item = value as IDxfItem; }
-        }
-<#
-            continue;
+            if (AllowMultiples(property))
+            {
+                getset = string.Format("{{ get {{ return {0}Pointers; }} }}", Name(property));
+            }
+            else
+            {
+                getset = string.Format("{{ get {{ return {0}Pointer.Item as {1}; }} set {{ {0}Pointer.Item = value; }} }}", Name(property), propertyType);
+            }
         }
 
         if (AllowMultiples(property))
         {
-            propertyType = string.Format("List<{0}>", propertyType);
+            propertyType = string.Format("IList<{0}>", propertyType);
         }
 #>
-        <#= Accessibility(property) #> <#= propertyType #> <#= propertyName #> { get; <#= SetterAccessibility(property) #>set; }
+        <#= Accessibility(property) #> <#= propertyType #> <#= propertyName #> <#= getset #>
 <#
     } // foreach property
 

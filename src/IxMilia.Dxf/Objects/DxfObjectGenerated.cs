@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -57,8 +58,9 @@ namespace IxMilia.Dxf.Objects
     /// </summary>
     public partial class DxfObject : IDxfItemInternal
     {
-
 #region IDxfItem and IDxfItemInternal
+        uint IDxfItemInternal.Handle { get; set; }
+        uint IDxfItemInternal.OwnerHandle { get; set; }
         public IDxfItem Owner { get; private set;}
 
         void IDxfItemInternal.SetOwner(IDxfItem owner)
@@ -72,8 +74,6 @@ namespace IxMilia.Dxf.Objects
         }
 #endregion
 
-        public uint Handle { get; set; }
-        public uint OwnerHandle { get; set; }
 
         public string ObjectTypeString
         {
@@ -164,30 +164,21 @@ namespace IxMilia.Dxf.Objects
         protected DxfObject(DxfObject other)
             : this()
         {
-            this.Handle = other.Handle;
-            this.OwnerHandle = other.OwnerHandle;
         }
 
         protected virtual void Initialize()
         {
-            this.Handle = 0u;
-            this.OwnerHandle = 0u;
         }
 
         protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair(0, ObjectTypeString));
-            if (outputHandles && this.Handle != 0u)
-            {
-                pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
-            }
-
+            pairs.Add(new DxfCodePair(5, UIntHandle(((IDxfItemInternal)this).Handle)));
             AddExtensionValuePairs(pairs, version, outputHandles);
-            if (version >= DxfAcadVersion.R2000 && this.OwnerHandle != 0u)
+            if (((IDxfItemInternal)this).OwnerHandle != 0)
             {
-                pairs.Add(new DxfCodePair(330, UIntHandle(this.OwnerHandle)));
+                pairs.Add(new DxfCodePair(330, UIntHandle(((IDxfItemInternal)this).OwnerHandle)));
             }
-
         }
 
         internal virtual bool TrySetPair(DxfCodePair pair)
@@ -195,10 +186,10 @@ namespace IxMilia.Dxf.Objects
             switch (pair.Code)
             {
                 case 5:
-                    this.Handle = UIntHandle(pair.StringValue);
+                    ((IDxfItemInternal)this).Handle = UIntHandle(pair.StringValue);
                     break;
                 case 330:
-                    this.OwnerHandle = UIntHandle(pair.StringValue);
+                    ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return false;
@@ -218,10 +209,10 @@ namespace IxMilia.Dxf.Objects
                     obj = new DxfAcadProxyObject();
                     break;
                 case "ACDBDICTIONARYWDFLT":
-                    obj = new DxfAcdbDictionaryWithDefault();
+                    obj = new DxfDictionaryWithDefault();
                     break;
                 case "ACDBPLACEHOLDER":
-                    obj = new DxfAcdbPlaceHolder();
+                    obj = new DxfPlaceHolder();
                     break;
                 case "DATATABLE":
                     obj = new DxfDataTable();

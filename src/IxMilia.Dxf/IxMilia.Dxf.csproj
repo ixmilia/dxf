@@ -228,13 +228,7 @@
     <Compile Include="Objects\DxfAcadProxyObjectGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Objects\DxfAcdbDictionaryWithDefault.cs" />
-    <Compile Include="Objects\DxfAcdbDictionaryWithDefaultGenerated.cs">
-      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Objects\DxfAcdbPlaceHolderGenerated.cs">
-      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Objects\DxfDictionaryWithDefault.cs" />
     <Compile Include="Objects\DxfDataTable.cs" />
     <Compile Include="Objects\DxfDataTableGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
@@ -244,6 +238,9 @@
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfDictionaryVariableGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfDictionaryWithDefaultGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfDimensionAssociativityGenerated.cs">
@@ -303,6 +300,9 @@
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfObjectPointerGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfPlaceHolderGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfPlotSettings.cs" />

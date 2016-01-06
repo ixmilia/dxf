@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -26,12 +27,12 @@ namespace IxMilia.Dxf.Objects
         public bool UseSubset { get; set; }
         public string SheetSubsetName { get; set; }
         public bool SelectDatesFromCalendar { get; set; }
-        public List<DateTime> Dates { get; private set; }
+        public IList<DateTime> Dates { get; private set; }
         public bool SelectRangeOfDates { get; set; }
         public int StartTime_SecondsPastMidnight { get; set; }
         public int EndTime_SecondsPastMidnight { get; set; }
         public int IntervalInSeconds { get; set; }
-        public List<int> Hours { get; private set; }
+        public IList<int> Hours { get; private set; }
         public uint PageSetupWizardPointer { get; set; }
         public uint ViewPointer { get; set; }
         public uint VisualStyleID { get; set; }

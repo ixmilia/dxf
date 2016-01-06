@@ -5,10 +5,10 @@ namespace IxMilia.Dxf.Objects
 {
     public partial class DxfImageDefinitionReactor
     {
-        public uint AssociatedImage
+        public IDxfItem AssociatedImage
         {
-            get { return OwnerHandle; }
-            set { OwnerHandle = value; }
+            get { return Owner; }
+            set { ((IDxfItemInternal)this).SetOwner(value); }
         }
     }
 }

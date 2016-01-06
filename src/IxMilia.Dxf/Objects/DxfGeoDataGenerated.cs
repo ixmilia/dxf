@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -40,14 +41,14 @@ namespace IxMilia.Dxf.Objects
         public string ObservationToTag { get; set; }
         public string ObservationCoverageTag { get; set; }
         private int _geoMeshPointCount { get; set; }
-        private List<double> _sourceMeshXPoints { get; set; }
-        private List<double> _sourceMeshYPoints { get; set; }
-        private List<double> _destinationMeshXPoints { get; set; }
-        private List<double> _destinationMeshYPoints { get; set; }
+        private IList<double> _sourceMeshXPoints { get; set; }
+        private IList<double> _sourceMeshYPoints { get; set; }
+        private IList<double> _destinationMeshXPoints { get; set; }
+        private IList<double> _destinationMeshYPoints { get; set; }
         private int _facesCount { get; set; }
-        private List<int> _facePointIndexX { get; set; }
-        private List<int> _facePointIndexY { get; set; }
-        private List<int> _facePointIndexZ { get; set; }
+        private IList<int> _facePointIndexX { get; set; }
+        private IList<int> _facePointIndexY { get; set; }
+        private IList<int> _facePointIndexZ { get; set; }
 
         public DxfGeoData()
             : base()

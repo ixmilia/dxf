@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -24,16 +25,16 @@ namespace IxMilia.Dxf.Objects
         private string _formatStringCode4 { get; set; }
         public string EvaluationErrorMessage { get; set; }
         private int _childFieldCount { get; set; }
-        public List<uint> ChildFieldHandles { get; private set; }
+        public IList<uint> ChildFieldHandles { get; private set; }
         public int EvaluationOption { get; set; }
         public int FillingOption { get; set; }
         public int FieldState { get; set; }
         public int EvaluationStatus { get; set; }
         public int EvaluationErrorCode { get; set; }
         private int _objectIdCount { get; set; }
-        public List<uint> ObjectIds { get; private set; }
+        public IList<uint> ObjectIds { get; private set; }
         private int _dataSetCount { get; set; }
-        public List<string> FieldDataKeys { get; private set; }
+        public IList<string> FieldDataKeys { get; private set; }
         public string EvaluatedCacheKey { get; protected set; }
         private int _valueTypeCode { get; set; }
         private int _longValue { get; set; }
@@ -44,7 +45,7 @@ namespace IxMilia.Dxf.Objects
         private string _formatStringCode301 { get; set; }
         private string _formatStringOverflow { get; set; }
         private int _formatStringLength { get; set; }
-        private List<int> _childFieldCount_valueTypeCode { get; set; }
+        private IList<int> _childFieldCount_valueTypeCode { get; set; }
 
         public DxfField()
             : base()

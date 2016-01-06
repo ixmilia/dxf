@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -26,7 +27,7 @@ namespace IxMilia.Dxf.Objects
         public double VerticalCellMargin { get; set; }
         public bool IsTitleSuppressed { get; set; }
         public bool IsColumnHeadingSuppressed { get; set; }
-        public List<DxfTableCellStyle> CellStyles { get; private set; }
+        public IList<DxfTableCellStyle> CellStyles { get; private set; }
 
         public DxfTableStyle()
             : base()

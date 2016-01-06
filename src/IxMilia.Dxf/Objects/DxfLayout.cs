@@ -17,10 +17,10 @@ namespace IxMilia.Dxf.Objects
 
     public partial class DxfLayout
     {
-        public uint PaperSpaceHandle
+        public IDxfItem PaperSpaceObject
         {
-            get { return OwnerHandle; }
-            set { OwnerHandle = value; }
+            get { return Owner; }
+            set { ((IDxfItemInternal)this).SetOwner(value); }
         }
 
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -20,7 +21,7 @@ namespace IxMilia.Dxf.Objects
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
         public bool RequiresFullUpdate { get; set; }
         private int _sectionCount { get; set; }
-        public List<uint> SectionEntities { get; private set; }
+        public IList<uint> SectionEntities { get; private set; }
 
         public DxfSectionManager()
             : base()

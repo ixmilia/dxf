@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -18,8 +19,8 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SortentsTable; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
-        public List<uint> EntityHandles { get; private set; }
-        public List<uint> SortHandles { get; private set; }
+        public IList<uint> EntityHandles { get; private set; }
+        public IList<uint> SortHandles { get; private set; }
 
         public DxfSortentsTable()
             : base()

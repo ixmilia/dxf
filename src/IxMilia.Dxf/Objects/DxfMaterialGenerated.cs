@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -32,7 +33,7 @@ namespace IxMilia.Dxf.Objects
         public DxfMapProjectionMethod DiffuseMapProjectionMethod { get; set; }
         public DxfMapTilingMethod DiffuseMapTilingMethod { get; set; }
         public DxfMapAutoTransformMethod DiffuseMapAutoTransformMethod { get; set; }
-        private List<double> _diffuseMapTransformMatrixValues { get; set; }
+        private IList<double> _diffuseMapTransformMatrixValues { get; set; }
         public double SpecularGlossFactor { get; set; }
         public bool OverrideSpecularColor { get; set; }
         public double SpecularColorFactor { get; set; }
@@ -43,14 +44,14 @@ namespace IxMilia.Dxf.Objects
         public DxfMapProjectionMethod SpecularMapProjectionMethod { get; set; }
         public DxfMapTilingMethod SpecularMapTilingMethod { get; set; }
         public DxfMapAutoTransformMethod SpecularMapAutoTransformMethod { get; set; }
-        private List<double> _specularMapTransformMatrixValues { get; set; }
+        private IList<double> _specularMapTransformMatrixValues { get; set; }
         public double ReflectionMapBlendFactor { get; set; }
         public bool UseImageFileForReflectionMap { get; set; }
         public string ReflectionMapFileName { get; set; }
         public DxfMapProjectionMethod ReflectionMapProjectionMethod { get; set; }
         public DxfMapTilingMethod ReflectionMapTilingMethod { get; set; }
         public DxfMapAutoTransformMethod ReflectionMapAutoTransformMethod { get; set; }
-        private List<double> _reflectionMapTransformMatrixValues { get; set; }
+        private IList<double> _reflectionMapTransformMatrixValues { get; set; }
         public double OpacityFactor { get; set; }
         public double OpacityMapBlendFactor { get; set; }
         public bool UseImageFileForOpacityMap { get; set; }
@@ -58,14 +59,14 @@ namespace IxMilia.Dxf.Objects
         public DxfMapProjectionMethod OpacityMapProjectionMethod { get; set; }
         public DxfMapTilingMethod OpacityMapTilingMethod { get; set; }
         public DxfMapAutoTransformMethod OpacityMapAutoTransformMethod { get; set; }
-        private List<double> _opacityMapTransformMatrixValues { get; set; }
+        private IList<double> _opacityMapTransformMatrixValues { get; set; }
         public double BumpMapBlendFactor { get; set; }
         public bool UseImageFileForBumpMap { get; set; }
         public string BumpMapFileName { get; set; }
         public DxfMapProjectionMethod BumpMapProjectionMethod { get; set; }
         public DxfMapTilingMethod BumpMapTilingMethod { get; set; }
         public DxfMapAutoTransformMethod BumpMapAutoTransformMethod { get; set; }
-        private List<double> _bumpMapTransformMatrixValues { get; set; }
+        private IList<double> _bumpMapTransformMatrixValues { get; set; }
         public double RefractionIndex { get; set; }
         public double RefractionMapBlendFactor { get; set; }
         public bool UseImageFileForRefractionMap { get; set; }
@@ -73,7 +74,7 @@ namespace IxMilia.Dxf.Objects
         public DxfMapProjectionMethod RefractionMapProjectionMethod { get; set; }
         public DxfMapTilingMethod RefractionMapTilingMethod { get; set; }
         public DxfMapAutoTransformMethod RefractionMapAutoTransformMethod { get; set; }
-        private List<double> _refractionMapTransformMatrixValues { get; set; }
+        private IList<double> _refractionMapTransformMatrixValues { get; set; }
         public double ColorBleedScale { get; set; }
         public double IndirectDumpScale { get; set; }
         public double ReflectanceScale { get; set; }
@@ -89,7 +90,7 @@ namespace IxMilia.Dxf.Objects
         public DxfMapProjectionMethod NormalMapProjectionMethod { get; set; }
         public DxfMapTilingMethod NormalMapTilingMethod { get; set; }
         public DxfMapAutoTransformMethod NormalMapAutoTransformMethod { get; set; }
-        private List<double> _normalMapTransformMatrixValues { get; set; }
+        private IList<double> _normalMapTransformMatrixValues { get; set; }
         public bool IsAnonymous { get; set; }
         public short GlobalIlluminationMode { get; set; }
         public short FinalGatherMode { get; set; }

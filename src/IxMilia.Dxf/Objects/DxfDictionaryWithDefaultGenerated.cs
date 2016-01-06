@@ -13,15 +13,15 @@ namespace IxMilia.Dxf.Objects
 {
 
     /// <summary>
-    /// DxfSectionSettings class
+    /// DxfDictionaryWithDefault class
     /// </summary>
-    public partial class DxfSectionSettings : DxfObject
+    public partial class DxfDictionaryWithDefault : DxfObject
     {
-        public override DxfObjectType ObjectType { get { return DxfObjectType.SectionSettings; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
-        public int SectionType { get; set; }
+        public override DxfObjectType ObjectType { get { return DxfObjectType.DictionaryWithDefault; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
+        public DxfDictionaryDuplicateRecordHandling DuplicateRecordHandling { get; set; }
 
-        public DxfSectionSettings()
+        public DxfDictionaryWithDefault()
             : base()
         {
         }
@@ -29,7 +29,7 @@ namespace IxMilia.Dxf.Objects
         protected override void Initialize()
         {
             base.Initialize();
-            this.SectionType = 0;
+            this.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.NotApplicable;
         }
 
     }

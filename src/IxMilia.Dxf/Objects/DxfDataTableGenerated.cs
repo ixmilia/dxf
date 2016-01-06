@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -22,7 +23,7 @@ namespace IxMilia.Dxf.Objects
         public int ColumnCount { get; protected set; }
         public int RowCount { get; protected set; }
         public string Name { get; set; }
-        public List<string> ColumnNames { get; private set; }
+        public IList<string> ColumnNames { get; private set; }
 
         public DxfDataTable()
             : base()

@@ -40,14 +40,12 @@ namespace IxMilia.Dxf.Test
         {
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
-            file.Objects.Add(new DxfAcadProxyObject() { OwnerHandle = 0x42u });
+            file.Objects.Add(new DxfAcadProxyObject());
             VerifyFileContains(file, @"
   0
 ACAD_PROXY_OBJECT
   5
 #
-330
-42
 100
 AcDbProxyObject
  90
@@ -108,7 +106,6 @@ string 2
         {
             var table = new DxfDataTable();
             table.Name = "table-name";
-            table.OwnerHandle = 0x42u;
             table.SetSize(2, 2);
             table.ColumnNames.Add("column-of-points");
             table.ColumnNames.Add("column-of-strings");
@@ -120,8 +117,6 @@ string 2
             file.Header.Version = DxfAcadVersion.R2007;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
-330
-42
 100
 AcDbDataTable
  70
@@ -234,6 +229,103 @@ value-2
         }
 
         [Fact]
+        public void ReadDictionaryTest3()
+        {
+            // dictionary with default with simple DICTIONARYVAR values
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARYVAR
+  5
+1
+280
+0
+1
+default-value
+  0
+ACDBDICTIONARYWDFLT
+  5
+2
+340
+  1
+  3
+key-1
+350
+111
+  3
+key-2
+360
+222
+  0
+DICTIONARYVAR
+  5
+111
+280
+     0
+1
+value-1
+  0
+DICTIONARYVAR
+  5
+222
+280
+     0
+1
+value-2
+");
+            var dict = file.Objects.OfType<DxfDictionaryWithDefault>().Single();
+            Assert.Equal(dict, dict["key-1"].Owner);
+            Assert.Equal(dict, dict["key-2"].Owner);
+            Assert.Equal("value-1", ((DxfDictionaryVariable)dict["key-1"]).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict["key-2"]).Value);
+            Assert.Equal("default-value", ((DxfDictionaryVariable)dict["key-that-isn't-present"]).Value);
+        }
+
+        [Fact]
+        public void ReadDictionaryTest4()
+        {
+            // dictionary with default with sub-dictionary with DICTIONARYVAR value
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARYVAR
+  5
+1
+280
+0
+1
+default-value
+  0
+ACDBDICTIONARYWDFLT
+340
+  1
+  3
+key-1
+350
+111
+  0
+DICTIONARY
+  5
+111
+  3
+key-2
+360
+1000
+  0
+DICTIONARYVAR
+  5
+1000
+280
+     0
+1
+value-2
+");
+            var dict1 = file.Objects.OfType<DxfDictionaryWithDefault>().Single();
+            var dict2 = (DxfDictionary)dict1["key-1"];
+            Assert.Equal(dict1, dict2.Owner);
+            Assert.Equal(dict2, dict2["key-2"].Owner);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]).Value);
+        }
+
+        [Fact]
         public void WriteDictionaryTest1()
         {
             // dictionary with simple DICTIONARYVAR values
@@ -335,6 +427,55 @@ value-2
         }
 
         [Fact]
+        public void WriteDictionaryTest3()
+        {
+            // dictionary with default with DICTIONARYVAR value
+            var dict = new DxfDictionaryWithDefault();
+            dict.DefaultObject = new DxfDictionaryVariable() { Value = "default-value" };
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+            EnsureFileContainsObject(dict, @"
+  0
+ACDBDICTIONARYWDFLT
+  5
+A
+100
+AcDbDictionary
+281
+0
+340
+B
+  3
+key-1
+350
+C
+  0
+DICTIONARYVAR
+  5
+B
+330
+A
+100
+DictionaryVariables
+280
+0
+  1
+default-value
+  0
+DICTIONARYVAR
+  5
+C
+330
+A
+100
+DictionaryVariables
+280
+0
+  1
+value-1
+", DxfAcadVersion.R2000);
+        }
+
+        [Fact]
         public void DictionaryRoundTripTest1()
         {
             // dictionary with DICTIONARYVAR values
@@ -373,6 +514,26 @@ value-2
             var roundTrippedDict1 = parsedFile.Objects.OfType<DxfDictionary>().First();
             var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"];
             Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]).Value);
+        }
+
+        [Fact]
+        public void DictionaryRoundTripTest3()
+        {
+            // dictionary with default with DICTIONARYVAR values
+            var dict = new DxfDictionaryWithDefault();
+            dict.DefaultObject = new DxfDictionaryVariable() { Value = "default-value" };
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Objects.Add(dict);
+            var text = ToString(file);
+
+            var parsedFile = Parse(text);
+            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionaryWithDefault>().Single();
+            Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
+            Assert.Equal("default-value", ((DxfDictionaryVariable)roundTrippedDict.DefaultObject).Value);
         }
 
         [Fact]
@@ -978,8 +1139,6 @@ SectionTypeSettingsEnd
         public void ReadSortentsTableTest()
         {
             var sortents = (DxfSortentsTable)GenObject("SORTENTSTABLE", @"
-  5
-A
 100
 AcDbSortentsTable
 331
@@ -995,7 +1154,6 @@ AcDbSortentsTable
   5
 3002
 ");
-            Assert.Equal(0xAu, sortents.Handle);
             Assert.Equal(3, sortents.EntityHandles.Count);
             Assert.Equal(0x2000u, sortents.EntityHandles[0]);
             Assert.Equal(0x2001u, sortents.EntityHandles[1]);

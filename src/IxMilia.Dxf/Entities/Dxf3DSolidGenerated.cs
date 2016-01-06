@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -26,8 +27,8 @@ namespace IxMilia.Dxf.Entities
         internal DxfPointer HistoryObjectPointer { get; } = new DxfPointer();
 
         public short FormatVersionNumber { get; set; }
-        public List<string> CustomData { get; private set; }
-        public List<string> CustomData2 { get; private set; }
+        public IList<string> CustomData { get; private set; }
+        public IList<string> CustomData2 { get; private set; }
         public IDxfItem HistoryObject { get { return HistoryObjectPointer.Item as IDxfItem; } set { HistoryObjectPointer.Item = value; } }
 
         public Dxf3DSolid()

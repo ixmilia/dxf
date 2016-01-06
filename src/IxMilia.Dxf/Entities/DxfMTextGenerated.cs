@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -22,7 +23,7 @@ namespace IxMilia.Dxf.Entities
         public double ReferenceRectangleWidth { get; set; }
         public DxfAttachmentPoint AttachmentPoint { get; set; }
         public DxfDrawingDirection DrawingDirection { get; set; }
-        public List<string> ExtendedText { get; private set; }
+        public IList<string> ExtendedText { get; private set; }
         public string Text { get; set; }
         public string TextStyleName { get; set; }
         public DxfVector ExtrusionDirection { get; set; }
@@ -44,7 +45,7 @@ namespace IxMilia.Dxf.Entities
         public bool IsColumnAutoHeight { get; set; }
         public double ColumnWidth { get; set; }
         public double ColumnGutter { get; set; }
-        public List<double> ColumnHeights { get; private set; }
+        public IList<double> ColumnHeights { get; private set; }
         public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }
 
         public DxfMText()

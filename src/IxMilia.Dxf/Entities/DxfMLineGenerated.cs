@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -34,19 +35,19 @@ namespace IxMilia.Dxf.Entities
         public int StyleElementCount { get; set; }
         public DxfPoint StartPoint { get; set; }
         public DxfVector Normal { get; set; }
-        private List<double> _vertexX { get; set; }
-        private List<double> _vertexY { get; set; }
-        private List<double> _vertexZ { get; set; }
-        private List<double> _segmentDirectionX { get; set; }
-        private List<double> _segmentDirectionY { get; set; }
-        private List<double> _segmentDirectionZ { get; set; }
-        private List<double> _miterDirectionX { get; set; }
-        private List<double> _miterDirectionY { get; set; }
-        private List<double> _miterDirectionZ { get; set; }
+        private IList<double> _vertexX { get; set; }
+        private IList<double> _vertexY { get; set; }
+        private IList<double> _vertexZ { get; set; }
+        private IList<double> _segmentDirectionX { get; set; }
+        private IList<double> _segmentDirectionY { get; set; }
+        private IList<double> _segmentDirectionZ { get; set; }
+        private IList<double> _miterDirectionX { get; set; }
+        private IList<double> _miterDirectionY { get; set; }
+        private IList<double> _miterDirectionZ { get; set; }
         private int _parameterCount { get; set; }
-        public List<double> Parameters { get; private set; }
+        public IList<double> Parameters { get; private set; }
         private int _areaFillParameterCount { get; set; }
-        public List<double> AreaFillParameters { get; private set; }
+        public IList<double> AreaFillParameters { get; private set; }
 
         // Flags flags
 

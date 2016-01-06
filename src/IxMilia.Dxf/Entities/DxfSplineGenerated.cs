@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -28,14 +29,14 @@ namespace IxMilia.Dxf.Entities
         public double FitTolerance { get; set; }
         public DxfPoint StartTangent { get; set; }
         public DxfPoint EndTangent { get; set; }
-        public List<double> KnotValues { get; private set; }
+        public IList<double> KnotValues { get; private set; }
         public double Weight { get; set; }
-        private List<double> _controlPointX { get; set; }
-        private List<double> _controlPointY { get; set; }
-        private List<double> _controlPointZ { get; set; }
-        private List<double> _fitPointX { get; set; }
-        private List<double> _fitPointY { get; set; }
-        private List<double> _fitPointZ { get; set; }
+        private IList<double> _controlPointX { get; set; }
+        private IList<double> _controlPointY { get; set; }
+        private IList<double> _controlPointZ { get; set; }
+        private IList<double> _fitPointX { get; set; }
+        private IList<double> _fitPointY { get; set; }
+        private IList<double> _fitPointZ { get; set; }
 
         // Flags flags
 

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -35,13 +36,13 @@ namespace IxMilia.Dxf.Entities
         public DxfColor IndicatorColor { get; set; }
         public string IndicatorColorName { get; set; }
         private int _vertexCount { get; set; }
-        private List<double> _vertexX { get; set; }
-        private List<double> _vertexY { get; set; }
-        private List<double> _vertexZ { get; set; }
+        private IList<double> _vertexX { get; set; }
+        private IList<double> _vertexY { get; set; }
+        private IList<double> _vertexZ { get; set; }
         private int _backLineVertexCount { get; set; }
-        private List<double> _backLineVertexX { get; set; }
-        private List<double> _backLineVertexY { get; set; }
-        private List<double> _backLineVertexZ { get; set; }
+        private IList<double> _backLineVertexX { get; set; }
+        private IList<double> _backLineVertexY { get; set; }
+        private IList<double> _backLineVertexZ { get; set; }
         public IDxfItem GeometrySettings { get { return GeometrySettingsPointer.Item as IDxfItem; } set { GeometrySettingsPointer.Item = value; } }
 
         public DxfEntitySection()

@@ -5,25 +5,12 @@ using System.Diagnostics;
 
 namespace IxMilia.Dxf.Entities
 {
-    public partial class DxfAttribute : IDxfItemInternal
+    public partial class DxfAttribute
     {
         private const string AcDbXrecordText = "AcDbXrecord";
         private string _lastSubclassMarker;
         private bool _isVersionSet;
         private int _xrecCode70Count = 0;
-
-        private DxfPointer _mtextPointer = new DxfPointer(new DxfMText());
-
-        public DxfMText MText
-        {
-            get { return _mtextPointer.Item as DxfMText; }
-            internal set { _mtextPointer.Item = value; }
-        }
-
-        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
-        {
-            yield return _mtextPointer;
-        }
 
         internal override bool TrySetPair(DxfCodePair pair)
         {
@@ -136,7 +123,7 @@ namespace IxMilia.Dxf.Entities
                     else IsLockedInBlock = BoolShort(pair.ShortValue);
                     break;
                 case 340:
-                    this.SecondaryAttributeHandles.Add(UIntHandle(pair.StringValue));
+                    SecondaryAttributesPointers.Pointers.Add(new DxfPointer(UIntHandle(pair.StringValue)));
                     break;
                 default:
                     return base.TrySetPair(pair);

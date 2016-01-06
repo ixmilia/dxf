@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -20,7 +21,7 @@ namespace IxMilia.Dxf.Entities
         public int Flags { get; set; }
         public double ConstantWidth { get; set; }
         public double Thickness { get; set; }
-        public List<DxfLwPolylineVertex> Vertices { get; private set; }
+        public IList<DxfLwPolylineVertex> Vertices { get; private set; }
         public DxfVector ExtrusionDirection { get; set; }
 
         // Flags flags

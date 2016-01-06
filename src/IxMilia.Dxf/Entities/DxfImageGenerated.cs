@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -31,8 +32,8 @@ namespace IxMilia.Dxf.Entities
         public string ImageDefReactorReference { get; set; }
         public DxfImageClippingBoundaryType ClippingType { get; set; }
         public int ClippingVertexCount { get; set; }
-        private List<double> _clippingVerticesX { get; set; }
-        private List<double> _clippingVerticesY { get; set; }
+        private IList<double> _clippingVerticesX { get; set; }
+        private IList<double> _clippingVerticesY { get; set; }
         public bool IsInsideClipping { get; set; }
 
         // DisplayOptionsFlags flags

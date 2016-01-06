@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -19,7 +20,7 @@ namespace IxMilia.Dxf.Entities
 
         public int VersionNumber { get; set; }
         public int BinaryDataLength { get; set; }
-        public List<string> BinaryDataStrings { get; private set; }
+        public IList<string> BinaryDataStrings { get; private set; }
 
         public DxfOleFrame()
             : base()

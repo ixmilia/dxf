@@ -78,6 +78,7 @@
             <xs:attribute name="Name" type="xs:string" use="required" />
             <xs:attribute name="Code" type="xs:int" use="required" />
             <xs:attribute name="Type" type="xs:string" use="required" />
+            <xs:attribute name="AllowMultiples" type="xs:boolean" use="optional" />
             <xs:attribute name="MinVersion" type="VersionType" use="optional" />
             <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
         </xs:complexType>

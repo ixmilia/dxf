@@ -1289,7 +1289,7 @@ AcDbPolyline
         public void WriteAttributeTest()
         {
             var att = new DxfAttribute();
-            att.MText.Text = "mtext-value";
+            att.MText = new DxfMText() { Text = "mtext-value" };
             EnsureFileContainsEntity(att, @"
   0
 ATTRIB

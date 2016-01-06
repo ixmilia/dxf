@@ -382,11 +382,6 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
         indentPrefix = "    ";
     }
 
-    if (IsPointer(property))
-    {
-        name += "Pointer.Handle";
-    }
-
     if (codes != null)
     {
         var suffix = 'X';
@@ -404,10 +399,19 @@ IEnumerable<string> GetPropertyWriteLines(XElement property)
             var value = string.IsNullOrEmpty(writeConverter)
                 ? "p"
                 : string.Format("{0}(p)", writeConverter);
+            if (IsPointer(property))
+            {
+                name += "Pointers.Pointers";
+                value = "p.Handle";
+            }
             lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, {3})));", indentPrefix, name, code, value));
         }
         else
         {
+            if (IsPointer(property))
+            {
+                name += "Pointer.Handle";
+            }
             lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}(this.{3})));", indentPrefix, code, WriteConverter(property), name));
         }
     }

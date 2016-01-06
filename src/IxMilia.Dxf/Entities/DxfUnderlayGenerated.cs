@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -35,8 +36,8 @@ namespace IxMilia.Dxf.Entities
         public int Flags { get; set; }
         public short Contrast { get; set; }
         public short Fade { get; set; }
-        private List<double> _pointX { get; set; }
-        private List<double> _pointY { get; set; }
+        private IList<double> _pointX { get; set; }
+        private IList<double> _pointY { get; set; }
 
         // Flags flags
 

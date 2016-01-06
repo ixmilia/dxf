@@ -23,6 +23,7 @@ var entities = xml.Elements(XName.Get("Entity", xmlns)).Where(x => x.Attribute("
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -402,9 +403,21 @@ foreach (var entity in entities)
 <#
         foreach (var pointer in pointers)
         {
+            if (AllowMultiples(pointer))
+            {
+#>
+            foreach (var pointer in <#= Name(pointer) #>Pointers.Pointers)
+            {
+                yield return pointer;
+            }
+<#
+            }
+            else
+            {
 #>
             yield return <#= Name(pointer) #>Pointer;
 <#
+            }
         }
 #>
         }
@@ -413,10 +426,20 @@ foreach (var entity in entities)
 
         foreach (var pointer in pointers)
         {
+            var defaultValue = "new DxfPointer()";
+            var typeString = "DxfPointer";
+            var suffix = "Pointer";
+            if (AllowMultiples(pointer))
+            {
+                var type = Type(pointer);
+                defaultValue = string.Format("new DxfPointerList<{0}>()", type);
+                typeString = string.Format("DxfPointerList<{0}>", type);
+                suffix += "s";
+            }
 #>
-        internal DxfPointer <#= Name(pointer) #>Pointer { get; } = new DxfPointer();
+        internal <#= typeString #> <#= Name(pointer) #><#= suffix #> { get; } = <#= defaultValue #>;
 <#
-        }
+        } // foreach pointer
 #>
 
 <#
@@ -431,12 +454,19 @@ foreach (var entity in entities)
         var getset = string.Format("{{ get; {0}set; }}", SetterAccessibility(property));
         if (IsPointer(property))
         {
-            getset = string.Format("{{ get {{ return {0}Pointer.Item as {1}; }} set {{ {0}Pointer.Item = value; }} }}", Name(property), propertyType);
+            if (AllowMultiples(property))
+            {
+                getset = string.Format("{{ get {{ return {0}Pointers; }} }}", Name(property));
+            }
+            else
+            {
+                getset = string.Format("{{ get {{ return {0}Pointer.Item as {1}; }} set {{ {0}Pointer.Item = value; }} }}", Name(property), propertyType);
+            }
         }
 
         if (AllowMultiples(property))
         {
-            propertyType = string.Format("List<{0}>", propertyType);
+            propertyType = string.Format("IList<{0}>", propertyType);
         }
 #>
         <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> <#= getset #>

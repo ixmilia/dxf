@@ -188,10 +188,11 @@
         <Property Name="MTextFlag" Code="70" Type="DxfMTextFlag" DefaultValue="DxfMTextFlag.MultilineAttribute" ReadConverter="(DxfMTextFlag)" WriteConverter="(short)" MinVersion="R2007" />
         <Property Name="IsReallyLocked" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
         <Property Name="_secondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
-        <Property Name="SecondaryAttributeHandles" Code="340" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" MinVersion="R2007" />
+        <Pointer Name="SecondaryAttributes" Code="340" Type="IDxfItem" AllowMultiples="true" MinVersion="R2007" />
         <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
         <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
         <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
+        <Pointer Name="MText" Code="-1" Type="DxfMText" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" MinVersion="R13" />
             <WriteProperty Property="Thickness" />
@@ -219,8 +220,8 @@
             <WriteProperty Property="KeepDuplicateRecords" />
             <WriteProperty Property="MTextFlag" />
             <WriteProperty Property="IsReallyLocked" />
-            <WriteSpecificValue Code="70" Value="(short?)SecondaryAttributeHandles?.Count ?? default(short)" MinVersion="R2007" />
-            <WriteProperty Property="SecondaryAttributeHandles" />
+            <WriteSpecificValue Code="70" Value="(short)SecondaryAttributes.Count" MinVersion="R2007" />
+            <WriteProperty Property="SecondaryAttributes" />
             <WriteProperty Property="AlignmentPoint" />
             <WriteProperty Property="AnnotationScale" />
             <WriteProperty Property="XRecordTag" />
@@ -262,10 +263,11 @@
         <Property Name="MTextFlag" Code="70" Type="DxfMTextFlag" DefaultValue="DxfMTextFlag.MultilineAttribute" ReadConverter="(DxfMTextFlag)" WriteConverter="(short)" MinVersion="R2007" />
         <Property Name="IsReallyLocked" Code="70" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2007" />
         <Property Name="_secondaryAttributeCount" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" Accessibility="private" MinVersion="R2007" />
-        <Property Name="SecondaryAttributeHandles" Code="340" Type="uint" DefaultValue="null" ReadConverter="UIntHandle" WriteConverter="UIntHandle" AllowMultiples="true" MinVersion="R2007" />
+        <Pointer Name="SecondaryAttributes" Code="340" Type="IDxfItem" AllowMultiples="true" MinVersion="R2007" />
         <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
         <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
         <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
+        <Pointer Name="MText" Code="-1" Type="DxfMText" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" MinVersion="R13" />
             <WriteProperty Property="Thickness" />
@@ -291,8 +293,8 @@
             <WriteProperty Property="KeepDuplicateRecords" />
             <WriteProperty Property="MTextFlag" />
             <WriteProperty Property="IsReallyLocked" />
-            <WriteSpecificValue Code="70" Value="(short?)SecondaryAttributeHandles?.Count ?? default(short)" MinVersion="R2007" />
-            <WriteProperty Property="SecondaryAttributeHandles" />
+            <WriteSpecificValue Code="70" Value="(short)SecondaryAttributes.Count" MinVersion="R2007" />
+            <WriteProperty Property="SecondaryAttributes" />
             <WriteProperty Property="AlignmentPoint" />
             <WriteProperty Property="AnnotationScale" />
             <WriteProperty Property="XRecordTag" />

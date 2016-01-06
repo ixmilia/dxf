@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -12,9 +13,22 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// DxfAttributeDefinition class
     /// </summary>
-    public partial class DxfAttributeDefinition : DxfEntity
+    public partial class DxfAttributeDefinition : DxfEntity, IDxfItemInternal
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.AttributeDefinition; } }
+
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            foreach (var pointer in SecondaryAttributesPointers.Pointers)
+            {
+                yield return pointer;
+            }
+            yield return MTextPointer;
+        }
+
+        internal DxfPointerList<IDxfItem> SecondaryAttributesPointers { get; } = new DxfPointerList<IDxfItem>();
+        internal DxfPointer MTextPointer { get; } = new DxfPointer();
 
         public double Thickness { get; set; }
         public DxfPoint Location { get; set; }
@@ -39,10 +53,11 @@ namespace IxMilia.Dxf.Entities
         public DxfMTextFlag MTextFlag { get; set; }
         public bool IsReallyLocked { get; set; }
         private int _secondaryAttributeCount { get; set; }
-        public List<uint> SecondaryAttributeHandles { get; private set; }
+        public IList<IDxfItem> SecondaryAttributes { get { return SecondaryAttributesPointers; } }
         public DxfPoint AlignmentPoint { get; set; }
         public double AnnotationScale { get; set; }
         public string XRecordTag { get; set; }
+        public DxfMText MText { get { return MTextPointer.Item as DxfMText; } set { MTextPointer.Item = value; } }
 
         // TextGenerationFlags flags
 
@@ -145,7 +160,6 @@ namespace IxMilia.Dxf.Entities
             this.MTextFlag = DxfMTextFlag.MultilineAttribute;
             this.IsReallyLocked = false;
             this._secondaryAttributeCount = 0;
-            this.SecondaryAttributeHandles = new List<uint>();
             this.AlignmentPoint = DxfPoint.Origin;
             this.AnnotationScale = 1.0;
             this.XRecordTag = null;
@@ -260,11 +274,11 @@ namespace IxMilia.Dxf.Entities
 
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.Add(new DxfCodePair(70, (short?)SecondaryAttributeHandles?.Count ?? default(short)));
+                pairs.Add(new DxfCodePair(70, (short)SecondaryAttributes.Count));
             }
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.AddRange(this.SecondaryAttributeHandles.Select(p => new DxfCodePair(340, UIntHandle(p))));
+                pairs.AddRange(this.SecondaryAttributesPointers.Pointers.Select(p => new DxfCodePair(340, p.Handle)));
             }
 
             if (version >= DxfAcadVersion.R2007)

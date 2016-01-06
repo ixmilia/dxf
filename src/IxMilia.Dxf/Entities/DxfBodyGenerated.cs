@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -18,8 +19,8 @@ namespace IxMilia.Dxf.Entities
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R13; } }
 
         public short FormatVersionNumber { get; set; }
-        public List<string> CustomData { get; private set; }
-        public List<string> CustomData2 { get; private set; }
+        public IList<string> CustomData { get; private set; }
+        public IList<string> CustomData2 { get; private set; }
 
         public DxfBody()
             : base()

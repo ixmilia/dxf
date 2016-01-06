@@ -21,7 +21,6 @@ namespace IxMilia.Dxf.Objects
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2010; } }
         public DxfGeoDataVersion Version { get; set; }
         public DxfDesignCoordinateType CoordinateType { get; set; }
-        public uint HostBlockhandle { get; set; }
         public DxfPoint DesignPoint { get; set; }
         public DxfPoint ReferencePoint { get; set; }
         public DxfVector NorthVector { get; set; }
@@ -60,7 +59,6 @@ namespace IxMilia.Dxf.Objects
             base.Initialize();
             this.Version = DxfGeoDataVersion.R2009;
             this.CoordinateType = DxfDesignCoordinateType.Unknown;
-            this.HostBlockhandle = 0u;
             this.DesignPoint = DxfPoint.Origin;
             this.ReferencePoint = DxfPoint.Origin;
             this.NorthVector = DxfVector.ZAxis;
@@ -95,11 +93,6 @@ namespace IxMilia.Dxf.Objects
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(90, (int)(this.Version)));
             pairs.Add(new DxfCodePair(70, (short)(this.CoordinateType)));
-            if (this.HostBlockhandle != 0u)
-            {
-                pairs.Add(new DxfCodePair(330, UIntHandle(this.HostBlockhandle)));
-            }
-
             pairs.Add(new DxfCodePair(10, DesignPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, DesignPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, DesignPoint?.Z ?? default(double)));
@@ -255,9 +248,6 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case 307:
                     this.ObservationCoverageTag = (pair.StringValue);
-                    break;
-                case 330:
-                    this.HostBlockhandle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

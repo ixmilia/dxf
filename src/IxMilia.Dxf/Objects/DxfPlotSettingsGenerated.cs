@@ -15,10 +15,18 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfPlotSettings class
     /// </summary>
-    public partial class DxfPlotSettings : DxfObject
+    public partial class DxfPlotSettings : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.PlotSettings; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return ShadePlotObjectPointer;
+        }
+
+        internal DxfPointer ShadePlotObjectPointer { get; } = new DxfPointer();
+
         public string PageSetupName { get; set; }
         public string PrinterName { get; set; }
         public string PaperSize { get; set; }
@@ -49,7 +57,7 @@ namespace IxMilia.Dxf.Objects
         public double StandardScaleValue { get; set; }
         public double PaperImageOriginX { get; set; }
         public double PaperImageOriginY { get; set; }
-        public uint ShadePlotHandle { get; set; }
+        public IDxfItem ShadePlotObject { get { return ShadePlotObjectPointer.Item as IDxfItem; } set { ShadePlotObjectPointer.Item = value; } }
 
         // PlotLayoutFlags flags
 
@@ -245,7 +253,6 @@ namespace IxMilia.Dxf.Objects
             this.StandardScaleValue = 1.0;
             this.PaperImageOriginX = 0.0;
             this.PaperImageOriginY = 0.0;
-            this.ShadePlotHandle = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -294,11 +301,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(147, (this.StandardScaleValue)));
             pairs.Add(new DxfCodePair(148, (this.PaperImageOriginX)));
             pairs.Add(new DxfCodePair(149, (this.PaperImageOriginY)));
-            if (version >= DxfAcadVersion.R2007 && this.ShadePlotHandle != 0u)
-            {
-                pairs.Add(new DxfCodePair(333, UIntHandle(this.ShadePlotHandle)));
-            }
-
+            pairs.Add(new DxfCodePair(333, DxfCommonConverters.UIntHandle(this.ShadePlotObjectPointer.Handle)));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -396,7 +399,7 @@ namespace IxMilia.Dxf.Objects
                     this.PaperImageOriginY = (pair.DoubleValue);
                     break;
                 case 333:
-                    this.ShadePlotHandle = UIntHandle(pair.StringValue);
+                    this.ShadePlotObjectPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

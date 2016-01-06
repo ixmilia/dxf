@@ -192,7 +192,6 @@
     <Object Name="DxfGeoData" ObjectType="GeoData" SubclassMarker="[none]" TypeString="GEODATA" MinVersion="R2010">
         <Property Name="Version" Code="90" Type="DxfGeoDataVersion" DefaultValue="DxfGeoDataVersion.R2009" ReadConverter="(DxfGeoDataVersion)" WriteConverter="(int)" />
         <Property Name="CoordinateType" Code="70" Type="DxfDesignCoordinateType" DefaultValue="DxfDesignCoordinateType.Unknown" ReadConverter="(DxfDesignCoordinateType)" WriteConverter="(short)" />
-        <Property Name="HostBlockhandle" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
         <Property Name="DesignPoint" Code="-10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="ReferencePoint" Code="-11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="NorthVector" Code="-12" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="12,22" />
@@ -223,7 +222,6 @@
         <WriteOrder>
             <WriteProperty Property="Version" />
             <WriteProperty Property="CoordinateType" />
-            <WriteProperty Property="HostBlockhandle" />
             <WriteProperty Property="DesignPoint" />
             <WriteProperty Property="ReferencePoint" />
             <WriteProperty Property="NorthVector" />
@@ -353,9 +351,9 @@
         <Property Name="UcsXAxis" Code="16" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="16,26,36" />
         <Property Name="UcsYAxis" Code="17" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="17,27,37" />
         <Property Name="UcsOrthographicType" Code="76" Type="DxfUcsOrthographicType" DefaultValue="DxfUcsOrthographicType.NotOrthographic" ReadConverter="(DxfUcsOrthographicType)" WriteConverter="(short)" />
-        <Property Name="ViewportHandle" Code="331" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
-        <Property Name="TableRecordHandle" Code="345" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
-        <Property Name="TableRecordBaseHandle" Code="346" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
+        <Pointer Name="Viewport" Code="330" Type="IDxfItem" />
+        <Pointer Name="TableRecord" Code="345" Type="IDxfItem" />
+        <Pointer Name="TableRecordBase" Code="346" Type="IDxfItem" />
     </Object>
     <!--
 
@@ -704,7 +702,7 @@
         <Property Name="StandardScaleValue" Code="147" Type="double" DefaultValue="1.0" />
         <Property Name="PaperImageOriginX" Code="148" Type="double" DefaultValue="0.0" />
         <Property Name="PaperImageOriginY" Code="149" Type="double" DefaultValue="0.0" />
-        <Property Name="ShadePlotHandle" Code="333" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
+        <Pointer Name="ShadePlotObject" Code="333" Type="IDxfItem" />
     </Object>
     <!--
 
@@ -968,9 +966,9 @@
         <Property Name="EndTime_SecondsPastMidnight" Code="94" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
         <Property Name="IntervalInSeconds" Code="95" Type="int" DefaultValue="0" WriteCondition="SelectRangeOfDates" />
         <Property Name="Hours" Code="290" Type="int" DefaultValue="null" AllowMultiples="true" WriteConverter="(short)" />
-        <Property Name="PageSetupWizardPointer" Code="340" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
-        <Property Name="ViewPointer" Code="341" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
-        <Property Name="VisualStyleID" Code="342" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
+        <Pointer Name="PageSetupWizard" Code="340" Type="IDxfItem" />
+        <Pointer Name="View" Code="341" Type="IDxfItem" />
+        <Pointer Name="VisualStyle" Code="342" Type="IDxfItem" />
         <Property Name="ShadePlotType" Code="74" Type="short" DefaultValue="0" />
         <Property Name="ViewportsPerPage" Code="75" Type="int" DefaultValue="0" WriteConverter="(short)" />
         <Property Name="ViewportDistributionRowCount" Code="76" Type="int" DefaultValue="0" WriteConverter="(short)" />
@@ -978,7 +976,7 @@
         <Property Name="Spacing" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="LockViewports" Code="293" Type="bool" DefaultValue="false" />
         <Property Name="LabelViewports" Code="294" Type="bool" DefaultValue="false" />
-        <Property Name="TextStyleID" Code="343" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" />
+        <Pointer Name="TextStyle" Code="343" Type="IDxfItem" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbSunStudy&quot;" />
             <WriteProperty Property="Version" />
@@ -1000,9 +998,9 @@
             <WriteProperty Property="IntervalInSeconds" />
             <WriteSpecificValue Code="73" Value="(short)Hours.Count" />
             <WriteProperty Property="Hours" />
-            <WriteProperty Property="PageSetupWizardPointer" />
-            <WriteProperty Property="ViewPointer" />
-            <WriteProperty Property="VisualStyleID" />
+            <WriteProperty Property="PageSetupWizard" />
+            <WriteProperty Property="View" />
+            <WriteProperty Property="VisualStyle" />
             <WriteProperty Property="ShadePlotType" />
             <WriteProperty Property="ViewportsPerPage" />
             <WriteProperty Property="ViewportDistributionRowCount" />
@@ -1010,7 +1008,7 @@
             <WriteProperty Property="Spacing" />
             <WriteProperty Property="LockViewports" />
             <WriteProperty Property="LabelViewports" />
-            <WriteProperty Property="TextStyleID" />
+            <WriteProperty Property="TextStyle" />
         </WriteOrder>
     </Object>
     <!--

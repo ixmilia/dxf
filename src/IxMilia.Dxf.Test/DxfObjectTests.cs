@@ -1245,10 +1245,6 @@ AcDbSortentsTable
             sun.Hours.Add(42);
             sun.Hours.Add(43);
             sun.Hours.Add(44);
-            sun.PageSetupWizardPointer = 0x42u;
-            sun.ViewPointer = 0x43u;
-            sun.VisualStyleID = 0x44u;
-            sun.TextStyleID = 0x45u;
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(sun);
@@ -1288,11 +1284,11 @@ AcDbSunStudy
 290
 44
 340
-42
+0
 341
-43
+0
 342
-44
+0
  74
 0
  75
@@ -1308,7 +1304,7 @@ AcDbSunStudy
 294
 0
 343
-45
+0
 ");
 
             // verify writing as binary doesn't crash

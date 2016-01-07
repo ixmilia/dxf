@@ -636,63 +636,69 @@ layout-name
         [Fact]
         public void ReadLightListTest()
         {
-            var lightList = (DxfLightList)GenObject("LIGHTLIST", @"
- 90
+            var file = Parse(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+LIGHT
+  5
 42
+  1
+light-name
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+LIGHTLIST
  90
-3
+43
+ 90
+1
   5
-111
+42
   1
-uno
-  5
-222
-  1
-dos
-  5
-333
-  1
-tres
+can-be-anything
+  0
+ENDSEC
+  0
+EOF
 ");
-            Assert.Equal(42, lightList.Version);
-            Assert.Equal(3, lightList.Lights.Count);
-
-            Assert.Equal(0x111u, lightList.Lights[0].Handle);
-            Assert.Equal("uno", lightList.Lights[0].Name);
-            Assert.Equal(0x222u, lightList.Lights[1].Handle);
-            Assert.Equal("dos", lightList.Lights[1].Name);
-            Assert.Equal(0x333u, lightList.Lights[2].Handle);
-            Assert.Equal("tres", lightList.Lights[2].Name);
+            var lightList = (DxfLightList)file.Objects.Single();
+            Assert.Equal(43, lightList.Version);
+            Assert.Equal("light-name", lightList.Lights.Single().Name);
         }
 
         [Fact]
         public void WriteLightListTest()
         {
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Entities.Add(new DxfLight() { Name = "light-name" });
             var lightList = new DxfLightList();
             lightList.Version = 42;
-            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x111, Name = "uno" });
-            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x222, Name = "dos" });
-            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x333, Name = "tres" });
-            var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
+            lightList.Lights.Add((DxfLight)file.Entities.Single());
             file.Objects.Add(lightList);
             VerifyFileContains(file, @"
+  0
+LIGHTLIST
+  5
+B
+100
+AcDbLightList
  90
 42
  90
-3
+1
   5
-111
+A
   1
-uno
-  5
-222
-  1
-dos
-  5
-333
-  1
-tres
+light-name
 ");
         }
 

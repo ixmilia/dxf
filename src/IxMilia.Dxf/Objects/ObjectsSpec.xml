@@ -360,17 +360,9 @@
     LIGHTLIST
 
     -->
-    <Object Name="DxfLightList" ObjectType="LightList" SubclassMarker="AcDbLightList" TypeString="LIGHTLIST" GenerateReaderFunction="false" MaxVersion="R2007">
+    <Object Name="DxfLightList" ObjectType="LightList" SubclassMarker="AcDbLightList" TypeString="LIGHTLIST" GenerateReaderFunction="false" GenerateWriterFunction="false" MaxVersion="R2007">
         <Property Name="Version" Code="90" Type="int" DefaultValue="0" />
-        <WriteOrder>
-            <WriteSpecificValue Code="100" Value="&quot;AcDbLightList&quot;" />
-            <WriteProperty Property="Version" />
-            <WriteSpecificValue Code="90" Value="Lights.Count" />
-            <Foreach Property="Lights">
-                <WriteSpecificValue Code="5" Value="UIntHandle(item.Handle)" />
-                <WriteSpecificValue Code="1" Value="item.Name" />
-            </Foreach>
-        </WriteOrder>
+        <Pointer Name="Lights" Code="5" Type="DxfLight" AllowMultiples="true" />
     </Object>
     <!--
 

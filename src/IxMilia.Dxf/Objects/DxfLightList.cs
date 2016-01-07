@@ -1,20 +1,12 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
-using System.Linq;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
     public partial class DxfLightList
     {
-        public class DxfLightListItem
-        {
-            public uint Handle { get; set; }
-            public string Name { get; set; }
-        }
-
-        public List<DxfLightListItem> Lights { get; } = new List<DxfLightListItem>();
-
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             bool readVersionNumber = false;
@@ -34,12 +26,11 @@ namespace IxMilia.Dxf.Objects
                 switch (pair.Code)
                 {
                     case 5:
-                        // start a new light item
-                        Lights.Add(new DxfLightListItem());
-                        Lights.Last().Handle = UIntHandle(pair.StringValue);
+                        // pointer to a new light
+                        LightsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
                         break;
                     case 1:
-                        Lights.Last().Name = pair.StringValue;
+                        // don't worry about the name; it'll be read from the light entity directly
                         break;
                     case 90:
                         if (readVersionNumber)
@@ -64,6 +55,20 @@ namespace IxMilia.Dxf.Objects
             }
 
             return PostParse();
+        }
+
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+            base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbLightList"));
+            pairs.Add(new DxfCodePair(90, (this.Version)));
+            pairs.Add(new DxfCodePair(90, Lights.Count));
+            foreach (var item in LightsPointers.Pointers)
+            {
+                pairs.Add(new DxfCodePair(5, UIntHandle(item.Handle)));
+                pairs.Add(new DxfCodePair(1, ((DxfLight)item.Item).Name));
+            }
+
         }
     }
 }

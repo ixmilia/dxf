@@ -14,7 +14,7 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Thumbnail; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(90, RawData.Length));

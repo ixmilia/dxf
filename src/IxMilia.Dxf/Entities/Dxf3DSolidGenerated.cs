@@ -24,6 +24,11 @@ namespace IxMilia.Dxf.Entities
             yield return HistoryObjectPointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
         internal DxfPointer HistoryObjectPointer { get; } = new DxfPointer();
 
         public short FormatVersionNumber { get; set; }

@@ -60,12 +60,17 @@ namespace IxMilia.Dxf.Sections
             }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             foreach (var table in GetTables(version))
             {
-                foreach (var pair in table.GetValuePairs(version, outputHandles))
-                    yield return pair;
+                if (writtenItems.Add(table))
+                {
+                    foreach (var pair in table.GetValuePairs(version, outputHandles, writtenItems))
+                    {
+                        yield return pair;
+                    }
+                }
             }
         }
 

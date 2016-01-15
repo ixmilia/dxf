@@ -28,6 +28,10 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointerList<DxfLight> LightsPointers { get; } = new DxfPointerList<DxfLight>();
 
         public int Version { get; set; }

@@ -28,6 +28,10 @@ namespace IxMilia.Dxf.Blocks
         {
             yield return _endBlockPointer;
         }
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
 
         private DxfPointer _endBlockPointer { get; } = new DxfPointer();
 

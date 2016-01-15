@@ -85,6 +85,10 @@ if (pointers.Any())
 #>
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
 <#
 
     foreach (var pointer in pointers)
@@ -420,6 +424,11 @@ foreach (var entity in entities)
             }
         }
 #>
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
         }
 
 <#

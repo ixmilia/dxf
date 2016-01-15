@@ -24,6 +24,11 @@ namespace IxMilia.Dxf.Entities
             yield return StylePointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
         internal DxfPointer StylePointer { get; } = new DxfPointer();
 
         public string StyleName { get; set; }

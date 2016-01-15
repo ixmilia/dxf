@@ -24,6 +24,11 @@ namespace IxMilia.Dxf.Entities
             yield return GeometrySettingsPointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
         internal DxfPointer GeometrySettingsPointer { get; } = new DxfPointer();
 
         public int State { get; set; }

@@ -27,6 +27,11 @@ namespace IxMilia.Dxf.Entities
             yield return MTextPointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
         internal DxfPointerList<IDxfItem> SecondaryAttributesPointers { get; } = new DxfPointerList<IDxfItem>();
         internal DxfPointer MTextPointer { get; } = new DxfPointer();
 

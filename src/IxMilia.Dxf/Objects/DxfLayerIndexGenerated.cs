@@ -28,6 +28,10 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointerList<IDxfItem> IdBuffersPointers { get; } = new DxfPointerList<IDxfItem>();
 
         public DateTime TimeStamp { get; set; }

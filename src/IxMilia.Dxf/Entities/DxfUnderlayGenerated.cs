@@ -24,6 +24,11 @@ namespace IxMilia.Dxf.Entities
             yield return ObjectPointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
         internal DxfPointer ObjectPointer { get; } = new DxfPointer();
 
         public IDxfItem Object { get { return ObjectPointer.Item as IDxfItem; } set { ObjectPointer.Item = value; } }

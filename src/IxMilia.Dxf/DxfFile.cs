@@ -279,14 +279,15 @@ namespace IxMilia.Dxf
             var writer = new DxfWriter(stream, asText);
             writer.Open();
 
-            var nextHandle = DxfPointer.AssignPointers(this);
+            var nextHandle = DxfPointer.AssignHandles(this);
             Header.NextAvailableHandle = nextHandle;
 
             // write sections
+            var writtenItems = new HashSet<IDxfItem>();
             var outputHandles = Header.Version >= DxfAcadVersion.R13 || Header.HandlesEnabled; // handles are always enabled on R13+
             foreach (var section in Sections)
             {
-                foreach (var pair in section.GetValuePairs(Header.Version, outputHandles))
+                foreach (var pair in section.GetValuePairs(Header.Version, outputHandles, writtenItems))
                     writer.WriteCodeValuePair(pair);
             }
 
@@ -296,18 +297,9 @@ namespace IxMilia.Dxf
         internal IEnumerable<IDxfItemInternal> GetFileItems()
         {
             return this.TablesSection.GetTables(Header.Version).Cast<IDxfItemInternal>()
-                .Concat(this.ApplicationIds.Cast<IDxfItemInternal>())
-                .Concat(this.BlockRecords.Cast<IDxfItemInternal>())
                 .Concat(this.Blocks.Cast<IDxfItemInternal>())
-                .Concat(this.DimensionStyles.Cast<IDxfItemInternal>())
                 .Concat(this.Entities.Cast<IDxfItemInternal>())
-                .Concat(this.Layers.Cast<IDxfItemInternal>())
-                .Concat(this.Linetypes.Cast<IDxfItemInternal>())
                 .Concat(this.Objects.Cast<IDxfItemInternal>())
-                .Concat(this.Styles.Cast<IDxfItemInternal>())
-                .Concat(this.UserCoordinateSystems.Cast<IDxfItemInternal>())
-                .Concat(this.ViewPorts.Cast<IDxfItemInternal>())
-                .Concat(this.Views.Cast<IDxfItemInternal>())
                 .Where(item => item != null);
         }
 

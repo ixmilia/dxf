@@ -25,6 +25,10 @@ namespace IxMilia.Dxf.Objects
             yield return ShadePlotObjectPointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointer ShadePlotObjectPointer { get; } = new DxfPointer();
 
         public string PageSetupName { get; set; }

@@ -18,6 +18,11 @@ namespace IxMilia.Dxf
             yield break;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            yield break;
+        }
+
         public int StandardFlags;
         public string Name { get; set; }
         protected abstract DxfTableType TableType { get; }

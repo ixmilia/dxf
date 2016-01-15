@@ -32,6 +32,10 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointerList<DxfEntity> EntitiesPointers { get; } = new DxfPointerList<DxfEntity>();
         internal DxfPointerList<IDxfItem> SortItemsPointers { get; } = new DxfPointerList<IDxfItem>();
 

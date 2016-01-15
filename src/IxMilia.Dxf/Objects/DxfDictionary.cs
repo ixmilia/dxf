@@ -36,11 +36,14 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
-        protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             foreach (var child in GetChildren())
             {
-                pairs.AddRange(((DxfObject)child).GetValuePairs(version, outputHandles));
+                if (writtenItems.Add(child))
+                {
+                    pairs.AddRange(((DxfObject)child).GetValuePairs(version, outputHandles, writtenItems));
+                }
             }
         }
 

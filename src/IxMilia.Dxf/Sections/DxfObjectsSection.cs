@@ -1,7 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
-using System.Linq;
 using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf.Sections
@@ -17,9 +16,18 @@ namespace IxMilia.Dxf.Sections
 
         public override DxfSectionType Type { get { return DxfSectionType.Objects; } }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-            return Objects.SelectMany(o => o.GetValuePairs(version, outputHandles));
+            foreach (var obj in Objects)
+            {
+                if (writtenItems.Add(obj))
+                {
+                    foreach (var pair in obj.GetValuePairs(version, outputHandles, writtenItems))
+                    {
+                        yield return pair;
+                    }
+                }
+            }
         }
 
         protected internal override void Clear()

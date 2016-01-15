@@ -20,9 +20,18 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Entities; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-            return this.Entities.SelectMany(e => e.GetValuePairs(version, outputHandles));
+            foreach (var entity in Entities)
+            {
+                if (writtenItems.Add(entity))
+                {
+                    foreach (var pair in entity.GetValuePairs(version, outputHandles))
+                    {
+                        yield return pair;
+                    }
+                }
+            }
         }
 
         protected internal override void Clear()

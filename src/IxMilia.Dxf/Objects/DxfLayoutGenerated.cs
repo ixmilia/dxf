@@ -27,6 +27,10 @@ namespace IxMilia.Dxf.Objects
             yield return TableRecordBasePointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointer ViewportPointer { get; } = new DxfPointer();
         internal DxfPointer TableRecordPointer { get; } = new DxfPointer();
         internal DxfPointer TableRecordBasePointer { get; } = new DxfPointer();

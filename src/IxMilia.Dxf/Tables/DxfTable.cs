@@ -45,6 +45,11 @@ namespace IxMilia.Dxf.Tables
             yield break;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return GetSymbolItems().Cast<IDxfItemInternal>();
+        }
+
         internal abstract DxfTableType TableType { get; }
         public uint Handle { get; set; }
         public uint OwnerHandle { get; set; }
@@ -58,7 +63,7 @@ namespace IxMilia.Dxf.Tables
         protected virtual void Initialize() { }
         protected abstract IEnumerable<DxfSymbolTableFlags> GetSymbolItems();
 
-        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
+        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             BeforeWrite();
 
@@ -92,8 +97,11 @@ namespace IxMilia.Dxf.Tables
 
             foreach (var item in symbolItems)
             {
-                item.AddCommonValuePairs(pairs, version, outputHandles);
-                item.AddValuePairs(pairs, version, outputHandles);
+                if (writtenItems.Add(item))
+                {
+                    item.AddCommonValuePairs(pairs, version, outputHandles);
+                    item.AddValuePairs(pairs, version, outputHandles);
+                }
             }
 
             pairs.Add(new DxfCodePair(0, DxfSection.EndTableText));

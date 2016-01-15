@@ -27,6 +27,10 @@ namespace IxMilia.Dxf.Objects
             yield return IntersectionObjectPointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointer DimensionPointer { get; } = new DxfPointer();
         internal DxfPointer MainObjectPointer { get; } = new DxfPointer();
         internal DxfPointer IntersectionObjectPointer { get; } = new DxfPointer();

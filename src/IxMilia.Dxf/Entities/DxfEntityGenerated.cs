@@ -77,6 +77,10 @@ namespace IxMilia.Dxf.Entities
             yield return PlotStylePointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointer PlotStylePointer { get; } = new DxfPointer();
 
         public bool IsInPaperSpace { get; set; }

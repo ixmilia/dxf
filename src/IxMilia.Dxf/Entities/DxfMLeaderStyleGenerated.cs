@@ -27,6 +27,11 @@ namespace IxMilia.Dxf.Entities
             yield return BlockContentPointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
         internal DxfPointer LineLeaderTypePointer { get; } = new DxfPointer();
         internal DxfPointer ArrowheadPointer { get; } = new DxfPointer();
         internal DxfPointer MTextStylePointer { get; } = new DxfPointer();

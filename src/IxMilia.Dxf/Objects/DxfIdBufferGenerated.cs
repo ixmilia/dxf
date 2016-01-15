@@ -28,6 +28,10 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointerList<DxfEntity> EntitiesPointers { get; } = new DxfPointerList<DxfEntity>();
 
         public IList<DxfEntity> Entities { get { return EntitiesPointers; } }

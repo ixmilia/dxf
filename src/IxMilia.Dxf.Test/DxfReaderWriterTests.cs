@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Objects;
 using IxMilia.Dxf.Sections;
 using Xunit;
 
@@ -1410,6 +1411,61 @@ name
  62
 -5
 ");
+        }
+
+        [Fact]
+        public void SelfReferencingRoundTripTest()
+        {
+            // ensure we don't enter an infinite loop with an item that owns itself
+
+            // reading
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  5
+FFFF
+330
+FFFF
+  3
+key
+360
+FFFF
+");
+            var dict = (DxfDictionary)file.Objects.Single();
+            Assert.Equal(dict, dict.Owner);
+            Assert.Equal(dict, dict["key"]);
+
+            // writing
+            file.Header.Version = DxfAcadVersion.R14;
+            var text = ToString(file);
+
+            // reading again
+            file = Parse(text);
+            dict = (DxfDictionary)file.Objects.Single();
+            Assert.Equal(dict, dict.Owner);
+            Assert.Equal(dict, dict["key"]);
+
+            // ensure the pointer changed.  FFFF is unlikely to occur in writing
+            Assert.NotEqual(0xFFFFu, ((IDxfItemInternal)dict).Handle);
+        }
+
+        [Fact]
+        public void WriteSelfReferencingObjectRoundTripTest()
+        {
+            var dict = new DxfDictionary();
+            dict["key"] = dict;
+
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Objects.Add(dict);
+
+            var text = ToString(file);
+            file = Parse(text);
+            dict = (DxfDictionary)file.Objects.Single();
+
+            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict).OwnerHandle);
+            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict["key"]).OwnerHandle);
         }
 
         [Fact]

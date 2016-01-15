@@ -22,9 +22,18 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Blocks; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-            return this.Blocks.Where(block => block != null).SelectMany(e => e.GetValuePairs(version, outputHandles));
+            foreach (var block in Blocks.Where(b => b != null))
+            {
+                if (writtenItems.Add(block))
+                {
+                    foreach (var pair in block.GetValuePairs(version, outputHandles))
+                    {
+                        yield return pair;
+                    }
+                }
+            }
         }
 
         protected internal override void Clear()

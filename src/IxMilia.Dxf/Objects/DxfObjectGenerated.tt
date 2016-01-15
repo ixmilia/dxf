@@ -71,6 +71,11 @@ var baseObject = xml.Elements(XName.Get("Object", xmlns)).Where(x => Name(x) == 
         {
             yield break;
         }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
 #endregion
 
 <#
@@ -336,6 +341,10 @@ foreach (var obj in objects)
 #>
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
 <#
 
         foreach (var pointer in pointers)

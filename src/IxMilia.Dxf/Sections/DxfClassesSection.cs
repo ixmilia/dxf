@@ -19,9 +19,9 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Classes; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-           return this.Classes.SelectMany(e => e.GetValuePairs(version, outputHandles));
+            return this.Classes.SelectMany(e => e.GetValuePairs(version, outputHandles));
         }
 
         protected internal override void Clear()

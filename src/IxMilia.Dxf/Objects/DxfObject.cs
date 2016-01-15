@@ -100,7 +100,7 @@ namespace IxMilia.Dxf.Objects
             Initialize();
         }
 
-        protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
         }
 
@@ -109,13 +109,13 @@ namespace IxMilia.Dxf.Objects
             return this;
         }
 
-        public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
+        public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             var pairs = new List<DxfCodePair>();
             if (version >= MinVersion && version <= MaxVersion)
             {
                 AddValuePairs(pairs, version, outputHandles);
-                AddTrailingCodePairs(pairs, version, outputHandles);
+                AddTrailingCodePairs(pairs, version, outputHandles, writtenItems);
             }
 
             return pairs;

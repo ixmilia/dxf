@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace IxMilia.Dxf.Blocks
 {
@@ -22,6 +23,10 @@ namespace IxMilia.Dxf.Blocks
             IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
             {
                 yield break;
+            }
+            IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+            {
+                return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
             }
             #endregion
 

@@ -32,6 +32,10 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointerList<DxfField> ChildFieldsPointers { get; } = new DxfPointerList<DxfField>();
         internal DxfPointerList<DxfObject> ObjectsPointers { get; } = new DxfPointerList<DxfObject>();
 

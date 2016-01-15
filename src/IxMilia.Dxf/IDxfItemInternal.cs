@@ -10,5 +10,6 @@ namespace IxMilia.Dxf
         uint OwnerHandle { get; set; }
         void SetOwner(IDxfItem owner);
         IEnumerable<DxfPointer> GetPointers();
+        IEnumerable<IDxfItemInternal> GetChildItems();
     }
 }

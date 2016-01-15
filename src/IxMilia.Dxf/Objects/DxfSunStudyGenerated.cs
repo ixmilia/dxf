@@ -28,6 +28,10 @@ namespace IxMilia.Dxf.Objects
             yield return TextStylePointer;
         }
 
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
         internal DxfPointer PageSetupWizardPointer { get; } = new DxfPointer();
         internal DxfPointer ViewPointer { get; } = new DxfPointer();
         internal DxfPointer VisualStylePointer { get; } = new DxfPointer();

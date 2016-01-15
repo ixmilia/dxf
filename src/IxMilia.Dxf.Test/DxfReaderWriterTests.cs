@@ -1469,6 +1469,42 @@ FFFF
         }
 
         [Fact]
+        public void EnsureEntityHasNoDefaultOwner()
+        {
+            var file = Section("ENTITIES", @"
+  0
+POINT
+ 10
+0
+ 20
+0
+ 30
+0
+");
+            Assert.Null(file.Entities.Single().Owner);
+        }
+
+        [Fact]
+        public void EnsureTableItemsHaveOwnersTest()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+LAYER
+  0
+LAYER
+  2
+layer-name
+  0
+ENDTAB
+");
+            var layer = file.Layers.Single();
+            Assert.Equal("layer-name", layer.Name);
+            Assert.Equal(file.TablesSection.LayerTable, layer.Owner);
+        }
+
+        [Fact]
         public void WriteAllDefaultEntitiesTest()
         {
             var file = new DxfFile();

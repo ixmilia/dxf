@@ -59,7 +59,8 @@ EOF
             var inputDir = PrepareTempDirectory("TeighaCompatInputDir");
 
             // save the minimum file with all versions
-            var file = Parse(MinimumFileText);
+            var file = new DxfFile();
+            file.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(10, 10, 0)));
             var allIxMiliaVersions = new[]
             {
                 DxfAcadVersion.R9,

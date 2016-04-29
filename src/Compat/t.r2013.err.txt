@@ -1,3 +1,0 @@
-OdError thrown during readFile of drawing "C:/Users/brettfo/AppData/Local/Temp/TeighaCompatInputDir/file.R2013.dxf" :
-  Invalid index
-

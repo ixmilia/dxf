@@ -321,11 +321,11 @@ $SKPOLY
   9
 $TDCREATE
  40
-2457508.62343773
+2457508.67341107
   9
 $TDUPDATE
  40
-2457508.62343774
+2457508.67341107
   9
 $TDINDWG
  40
@@ -389,7 +389,7 @@ $HANDLING
   9
 $HANDSEED
   5
-8
+C
   9
 $SURFTAB1
  70
@@ -583,6 +583,82 @@ VPORT
   5
 1
  70
+     1
+  0
+VPORT
+  5
+0
+100
+AcDbSymbolTableRecord
+  2
+*ACTIVE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 11
+1.0
+ 21
+1.0
+ 12
+0.0
+ 22
+0.0
+ 13
+0.0
+ 23
+0.0
+ 14
+1.0
+ 24
+1.0
+ 15
+0.0
+ 25
+0.0
+ 16
+0.0
+ 26
+0.0
+ 36
+1.0
+ 17
+0.0
+ 27
+0.0
+ 37
+0.0
+ 40
+0.0
+ 41
+1.0
+ 42
+50.0
+ 43
+0.0
+ 44
+0.0
+ 50
+0.0
+ 51
+0.0
+ 71
+     0
+ 72
+  1000
+ 73
+     1
+ 74
+     3
+ 75
+     0
+ 76
+     0
+ 77
+     0
+ 78
      0
   0
 ENDTAB
@@ -593,7 +669,25 @@ LTYPE
   5
 2
  70
+     1
+  0
+LTYPE
+  5
+0
+100
+AcDbSymbolTableRecord
+  2
+CONTINUOUS
+ 70
      0
+  3
+Solid line
+ 72
+    65
+ 73
+     0
+ 40
+0.0
   0
 ENDTAB
   0
@@ -603,7 +697,21 @@ LAYER
   5
 3
  70
+     1
+  0
+LAYER
+  5
+0
+100
+AcDbSymbolTableRecord
+  2
+0
+ 70
      0
+ 62
+     7
+  6
+CONTINUOUS
   0
 ENDTAB
   0
@@ -613,7 +721,55 @@ STYLE
   5
 4
  70
+     2
+  0
+STYLE
+  5
+0
+100
+AcDbSymbolTableRecord
+  2
+ANNOTATIVE
+ 70
      0
+ 40
+0.0
+ 41
+1.0
+ 50
+0.0
+ 71
+     0
+ 42
+0.2
+  3
+txt
+  4
+
+  0
+STYLE
+  5
+0
+100
+AcDbSymbolTableRecord
+  2
+STANDARD
+ 70
+     0
+ 40
+0.0
+ 41
+1.0
+ 50
+0.0
+ 71
+     0
+ 42
+0.2
+  3
+txt
+  4
+
   0
 ENDTAB
   0
@@ -643,6 +799,54 @@ SECTION
   2
 BLOCKS
   0
+BLOCK
+  5
+7
+  8
+0
+  2
+$MODEL_SPACE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  1
+
+  0
+ENDBLK
+  5
+8
+  8
+0
+  0
+BLOCK
+  5
+9
+  8
+0
+  2
+$PAPER_SPACE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  1
+
+  0
+ENDBLK
+  5
+A
+  8
+0
+  0
 ENDSEC
   0
 SECTION
@@ -651,7 +855,7 @@ ENTITIES
   0
 LINE
   5
-7
+B
 100
 AcDbEntity
   8

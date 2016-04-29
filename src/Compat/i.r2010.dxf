@@ -489,19 +489,19 @@ $SKPOLY
   9
 $TDCREATE
  40
-2457508.62343773
+2457508.67341107
   9
 $TDUCREATE
  40
-2457508.91510441
+2457508.96507774
   9
 $TDUPDATE
  40
-2457508.62343774
+2457508.67341107
   9
 $TDUUPDATE
  40
-2457508.91510441
+2457508.96507774
   9
 $TDINDWG
  40
@@ -549,7 +549,7 @@ $SPLINESEGS
   9
 $HANDSEED
   5
-B
+F
   9
 $SURFTAB1
  70
@@ -929,11 +929,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{0BC7B852-0D32-4C08-BF12-33C0DC9BC5DC}
+{8C662FE6-C365-48BB-8A82-DE1362138269}
   9
 $VERSIONGUID
   2
-{0936AA74-95F2-4C6E-A198-59EE5BBB764E}
+{3292D433-7624-4AA7-91BF-167325CC8F5F}
   9
 $EXTNAMES
 290
@@ -1123,7 +1123,91 @@ VPORT
 100
 AcDbSymbolTable
  70
+     1
+  0
+VPORT
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbViewportTableRecord
+  2
+*ACTIVE
+ 70
      0
+ 10
+0.0
+ 20
+0.0
+ 11
+1.0
+ 21
+1.0
+ 12
+0.0
+ 22
+0.0
+ 13
+0.0
+ 23
+0.0
+ 14
+1.0
+ 24
+1.0
+ 15
+0.0
+ 25
+0.0
+ 16
+0.0
+ 26
+0.0
+ 36
+1.0
+ 17
+0.0
+ 27
+0.0
+ 37
+0.0
+ 42
+50.0
+ 43
+0.0
+ 44
+0.0
+ 45
+0.0
+ 50
+0.0
+ 51
+0.0
+ 71
+     0
+ 72
+  1000
+ 74
+     3
+  1
+
+281
+     0
+170
+     0
+ 61
+     0
+292
+     1
+282
+     0
+141
+0.0
+142
+0.0
   0
 ENDTAB
   0
@@ -1135,7 +1219,29 @@ LTYPE
 100
 AcDbSymbolTable
  70
+     1
+  0
+LTYPE
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbLinetypeTableRecord
+  2
+CONTINUOUS
+ 70
      0
+  3
+Solid line
+ 72
+    65
+ 73
+     0
+ 40
+0.0
   0
 ENDTAB
   0
@@ -1147,7 +1253,29 @@ LAYER
 100
 AcDbSymbolTable
  70
+     1
+  0
+LAYER
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
+  2
+0
+ 70
      0
+ 62
+     7
+  6
+CONTINUOUS
+290
+     1
+370
+    -2
   0
 ENDTAB
   0
@@ -1159,7 +1287,63 @@ STYLE
 100
 AcDbSymbolTable
  70
+     2
+  0
+STYLE
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbTextStyleTableRecord
+  2
+ANNOTATIVE
+ 70
      0
+ 40
+0.0
+ 41
+1.0
+ 50
+0.0
+ 71
+     0
+ 42
+0.2
+  3
+txt
+  4
+
+  0
+STYLE
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbTextStyleTableRecord
+  2
+STANDARD
+ 70
+     0
+ 40
+0.0
+ 41
+1.0
+ 50
+0.0
+ 71
+     0
+ 42
+0.2
+  3
+txt
+  4
+
   0
 ENDTAB
   0
@@ -1195,6 +1379,62 @@ APPID
 100
 AcDbSymbolTable
  70
+     4
+  0
+APPID
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD
+ 70
+     0
+  0
+APPID
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_MLEADERVER
+ 70
+     0
+  0
+APPID
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACAD_NAV_VCDISPLAY
+ 70
+     0
+  0
+APPID
+  5
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbRegAppTableRecord
+  2
+ACADANNOTATIVE
+ 70
      0
   0
 ENDTAB
@@ -1207,7 +1447,299 @@ DIMSTYLE
 100
 AcDbSymbolTable
  70
+     2
+  0
+DIMSTYLE
+105
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbDimStyleTableRecord
+  2
+ANNOTATIVE
+ 70
      0
+  3
+
+  4
+
+ 40
+1.0
+ 41
+0.18
+ 42
+0.0625
+ 43
+0.38
+ 44
+0.18
+ 45
+0.0
+ 46
+0.0
+ 47
+0.0
+ 48
+0.0
+ 71
+     0
+ 72
+     0
+ 73
+     1
+ 74
+     1
+ 75
+     0
+ 76
+     0
+ 77
+     0
+ 78
+     0
+ 79
+     0
+140
+0.18
+141
+0.09
+142
+0.0
+143
+25.4
+144
+1.0
+145
+0.0
+146
+1.0
+147
+0.09
+148
+0.0
+170
+     0
+171
+     2
+172
+     0
+173
+     0
+174
+     0
+175
+     0
+176
+     0
+177
+     0
+178
+     0
+179
+    12
+270
+     1
+271
+     0
+272
+     0
+273
+     1
+274
+     0
+275
+     0
+276
+    12
+277
+     1
+278
+    46
+279
+     0
+280
+     0
+281
+     0
+282
+     0
+283
+     0
+284
+     0
+285
+     0
+286
+     0
+287
+     0
+288
+     1
+289
+     0
+340
+
+341
+
+342
+
+343
+
+344
+
+371
+    -2
+372
+    -2
+  0
+DIMSTYLE
+105
+0
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbDimStyleTableRecord
+  2
+STANDARD
+ 70
+     0
+  3
+
+  4
+
+ 40
+1.0
+ 41
+0.18
+ 42
+0.0625
+ 43
+0.38
+ 44
+0.18
+ 45
+0.0
+ 46
+0.0
+ 47
+0.0
+ 48
+0.0
+ 71
+     0
+ 72
+     0
+ 73
+     1
+ 74
+     1
+ 75
+     0
+ 76
+     0
+ 77
+     0
+ 78
+     0
+ 79
+     0
+140
+0.18
+141
+0.09
+142
+0.0
+143
+25.4
+144
+1.0
+145
+0.0
+146
+1.0
+147
+0.09
+148
+0.0
+170
+     0
+171
+     2
+172
+     0
+173
+     0
+174
+     0
+175
+     0
+176
+     0
+177
+     0
+178
+     0
+179
+    12
+270
+     1
+271
+     0
+272
+     0
+273
+     1
+274
+     0
+275
+     0
+276
+    12
+277
+     1
+278
+    46
+279
+     0
+280
+     0
+281
+     0
+282
+     0
+283
+     0
+284
+     0
+285
+     0
+286
+     0
+287
+     0
+288
+     1
+289
+     0
+340
+
+341
+
+342
+
+343
+
+344
+
+371
+    -2
+372
+    -2
   0
 ENDTAB
   0
@@ -1229,6 +1761,78 @@ SECTION
   2
 BLOCKS
   0
+BLOCK
+  5
+A
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockBegin
+  2
+$MODEL_SPACE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+$MODEL_SPACE
+  1
+
+  0
+ENDBLK
+  5
+B
+330
+0
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockEnd
+  0
+BLOCK
+  5
+C
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockBegin
+  2
+$PAPER_SPACE
+ 70
+     0
+ 10
+0.0
+ 20
+0.0
+ 30
+0.0
+  3
+$PAPER_SPACE
+  1
+
+  0
+ENDBLK
+  5
+D
+330
+0
+100
+AcDbEntity
+  8
+0
+100
+AcDbBlockEnd
+  0
 ENDSEC
   0
 SECTION
@@ -1237,7 +1841,7 @@ ENTITIES
   0
 LINE
   5
-A
+E
 100
 AcDbEntity
   8

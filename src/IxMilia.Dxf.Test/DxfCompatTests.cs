@@ -13,7 +13,7 @@ namespace IxMilia.Dxf.Test
     public class DxfCompatTests : AbstractDxfTests
     {
         private const string TeighaConverterPath = @"C:\Program Files (x86)\ODA\Teigha File Converter 4.01.1\TeighaFileConverter.exe";
-        private static readonly string[] TeighaVersions = new[] { "ACAD9", "ACAD10", "ACAD12", "ACAD13", "ACAD14", "ACAD2000", "ACAD2004", "ACAD2007", "ACAD2010" };
+        private static readonly string[] TeighaVersions = new[] { "ACAD9", "ACAD10", "ACAD12", "ACAD13", "ACAD14", "ACAD2000", "ACAD2004", "ACAD2007", "ACAD2010", "ACAD2013" };
         private static readonly string MinimumFileText = @"
   0
 SECTION
@@ -62,6 +62,7 @@ EOF
             var file = Parse(MinimumFileText);
             var allIxMiliaVersions = new[]
             {
+                DxfAcadVersion.R9,
                 DxfAcadVersion.R10,
                 DxfAcadVersion.R11,
                 DxfAcadVersion.R12,

@@ -6,6 +6,7 @@ namespace IxMilia.Dxf
 {
     public enum DxfAcadVersion
     {
+        R9,
         R10,
         R11,
         R12,
@@ -16,12 +17,13 @@ namespace IxMilia.Dxf
         R2007,
         R2010,
         R2013,
-        Min = R10,
+        Min = R9,
         Max = R2013
     }
 
     public static class DxfAcadVersionStrings
     {
+        private const string R9 = "AC1004";
         private const string R10 = "AC1006";
         private const string R11 = "AC1009";
         private const string R12 = "AC1009";
@@ -38,6 +40,8 @@ namespace IxMilia.Dxf
         {
             switch (version)
             {
+                case DxfAcadVersion.R9:
+                    return R9;
                 case DxfAcadVersion.R10:
                     return R10;
                 case DxfAcadVersion.R11:
@@ -67,6 +71,8 @@ namespace IxMilia.Dxf
         {
             switch (str)
             {
+                case R9:
+                    return DxfAcadVersion.R9;
                 case R10:
                     return DxfAcadVersion.R10;
                 case R11:
@@ -88,7 +94,7 @@ namespace IxMilia.Dxf
                 case R2013:
                     return DxfAcadVersion.R2013;
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException($"The version string '{str}' was not expected");
             }
         }
     }

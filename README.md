@@ -46,7 +46,7 @@ DxfFile dxfFile = new DxfFile();
 dxfFile.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(50, 50, 0)));
 // ...
 
-using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
+using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Create))
 {
     dxfFile.Save(fs);
 }

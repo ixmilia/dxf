@@ -32,6 +32,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractDxfTests.cs" />
+    <Compile Include="ConditionalFileExistsFactAttribute.cs" />
+    <Compile Include="DxfCompatTests.cs" />
     <Compile Include="DxfEntityTests.cs" />
     <Compile Include="DxfHeaderTests.cs" />
     <Compile Include="DxfObjectTests.cs" />

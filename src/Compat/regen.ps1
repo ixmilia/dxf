@@ -1,6 +1,7 @@
 # Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-Add-Type -Path "..\Binaries\Debug\IxMilia.Dxf.dll"
+$dllPath = [System.IO.Path]::GetFullPath((Join-Path (pwd) "..\Binaries\Debug\IxMilia.Dxf.dll"))
+Add-Type -Path $dllPath
 $file = New-Object -TypeName IxMilia.Dxf.DxfFile
 $line = New-Object -TypeName IxMilia.Dxf.Entities.DxfLine
 $line.P1 = New-Object -TypeName IxMilia.Dxf.DxfPoint(0, 0, 0)
@@ -25,7 +26,8 @@ foreach ($version in $versions) {
     if ($strversion -eq "min") {
         $strversion = "r9"
     }
-    $fs = New-Object -TypeName System.IO.FileStream("i.$strversion.dxf", [System.IO.FileMode]::Create)
+    $filename = Join-Path (pwd) "i.$strversion.dxf"
+    $fs = New-Object -TypeName System.IO.FileStream($filename, [System.IO.FileMode]::Create)
     $file.Save($fs)
     $fs.Dispose()
 }

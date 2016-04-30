@@ -60,6 +60,11 @@ namespace IxMilia.Dxf.Sections
             }
         }
 
+        internal IEnumerable<DxfTable> GetAllTables()
+        {
+            return GetTables(DxfAcadVersion.Max);
+        }
+
         protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             foreach (var table in GetTables(version))

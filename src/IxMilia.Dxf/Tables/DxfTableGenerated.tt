@@ -48,7 +48,7 @@ foreach (var table in tables)
         public Dxf<#= Type(table) #>Table()
         {
             Items = new List<<#= tableItem #>>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)

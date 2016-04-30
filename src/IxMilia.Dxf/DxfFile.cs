@@ -310,5 +310,13 @@ namespace IxMilia.Dxf
                 section.Clear();
             }
         }
+
+        public void Normalize()
+        {
+            foreach (var table in TablesSection.GetAllTables())
+            {
+                table.Normalize();
+            }
+        }
     }
 }

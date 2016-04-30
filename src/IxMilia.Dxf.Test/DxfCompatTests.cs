@@ -52,14 +52,75 @@ EOF
         }
 
         [TeighaConverterExistsFact]
-        public void TeighaReadIxMiliaCompatTest()
+        public void IxMiliaReadTeighaTest()
+        {
+            // use Teigha to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
+            var exceptions = new List<Exception>();
+            foreach (var teighaVersion in TeighaVersions)
+            {
+                var inputDir = PrepareTempDirectory("TeighaCompatInputDir");
+                var outputDir = PrepareTempDirectory("TeighaCompatOutputDir");
+                var barePath = Path.Combine(inputDir, "bare.dxf");
+                File.WriteAllText(barePath, MinimumFileText);
+                var psi = new ProcessStartInfo();
+                psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
+                psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
+                //                                                                            recurse audit
+                var proc = Process.Start(psi);
+                proc.WaitForExit();
+                Assert.Equal(0, proc.ExitCode);
+                Assert.Equal(0, Directory.EnumerateFiles(outputDir, "*.err").Count());
+
+                var convertedFilePath = Directory.EnumerateFiles(outputDir, "*.dxf").Single();
+                using (var fs = new FileStream(convertedFilePath, FileMode.Open))
+                {
+                    try
+                    {
+                        var file = DxfFile.Load(fs);
+                        Assert.IsType<DxfLine>(file.Entities.Single());
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                }
+            }
+
+            if (exceptions.Count > 0)
+            {
+                throw new AggregateException("Error reading Teigha-produced files", exceptions);
+            }
+        }
+
+        [TeighaConverterExistsFact]
+        public void TeighaReadIxMiliaNewFileCompatTest()
+        {
+            TestTeighaReadIxMiliaGeneratedFile(() =>
+            {
+                var file = new DxfFile();
+                file.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(10, 10, 0)));
+                return file;
+            });
+        }
+
+        [TeighaConverterExistsFact]
+        public void TeighaReadIxMiliaNormalizedFileCompatTest()
+        {
+            TestTeighaReadIxMiliaGeneratedFile(() =>
+            {
+                var file = Parse(MinimumFileText);
+                file.Normalize();
+                return file;
+            });
+        }
+
+        private void TestTeighaReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)
         {
             // save a DXF file in all the formats that IxMilia.Dxf supports and try to get Teigha to read all of them
             var inputDir = PrepareTempDirectory("TeighaCompatInputDir");
 
             // save the minimum file with all versions
-            var file = new DxfFile();
-            file.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(10, 10, 0)));
+            var file = fileGenerator();
             var allIxMiliaVersions = new[]
             {
                 DxfAcadVersion.R9,
@@ -105,47 +166,6 @@ EOF
             if (errors.Count > 0)
             {
                 throw new Exception($"Errors reading IxMilia files:\r\n{string.Join("\r\n", errors)}");
-            }
-        }
-
-        [TeighaConverterExistsFact]
-        public void IxMiliaReadTeighaTest()
-        {
-            // use Teigha to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
-            var exceptions = new List<Exception>();
-            foreach (var teighaVersion in TeighaVersions)
-            {
-                var inputDir = PrepareTempDirectory("TeighaCompatInputDir");
-                var outputDir = PrepareTempDirectory("TeighaCompatOutputDir");
-                var barePath = Path.Combine(inputDir, "bare.dxf");
-                File.WriteAllText(barePath, MinimumFileText);
-                var psi = new ProcessStartInfo();
-                psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
-                psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
-                //                                                                            recurse audit
-                var proc = Process.Start(psi);
-                proc.WaitForExit();
-                Assert.Equal(0, proc.ExitCode);
-                Assert.Equal(0, Directory.EnumerateFiles(outputDir, "*.err").Count());
-
-                var convertedFilePath = Directory.EnumerateFiles(outputDir, "*.dxf").Single();
-                using (var fs = new FileStream(convertedFilePath, FileMode.Open))
-                {
-                    try
-                    {
-                        var file = DxfFile.Load(fs);
-                        Assert.IsType<DxfLine>(file.Entities.Single());
-                    }
-                    catch (Exception ex)
-                    {
-                        exceptions.Add(ex);
-                    }
-                }
-            }
-
-            if (exceptions.Count > 0)
-            {
-                throw new AggregateException("Error reading Teigha-produced files", exceptions);
             }
         }
     }

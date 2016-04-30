@@ -23,7 +23,7 @@ namespace IxMilia.Dxf.Tables
         public DxfAppIdTable()
         {
             Items = new List<DxfAppId>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -63,7 +63,7 @@ namespace IxMilia.Dxf.Tables
         public DxfBlockRecordTable()
         {
             Items = new List<DxfBlockRecord>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -103,7 +103,7 @@ namespace IxMilia.Dxf.Tables
         public DxfDimStyleTable()
         {
             Items = new List<DxfDimStyle>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -143,7 +143,7 @@ namespace IxMilia.Dxf.Tables
         public DxfLayerTable()
         {
             Items = new List<DxfLayer>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -183,7 +183,7 @@ namespace IxMilia.Dxf.Tables
         public DxfLTypeTable()
         {
             Items = new List<DxfLineType>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -223,7 +223,7 @@ namespace IxMilia.Dxf.Tables
         public DxfStyleTable()
         {
             Items = new List<DxfStyle>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -263,7 +263,7 @@ namespace IxMilia.Dxf.Tables
         public DxfUcsTable()
         {
             Items = new List<DxfUcs>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -303,7 +303,7 @@ namespace IxMilia.Dxf.Tables
         public DxfViewTable()
         {
             Items = new List<DxfView>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
@@ -343,7 +343,7 @@ namespace IxMilia.Dxf.Tables
         public DxfViewPortTable()
         {
             Items = new List<DxfViewPort>();
-            Initialize();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)

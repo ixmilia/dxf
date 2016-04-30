@@ -60,7 +60,7 @@ namespace IxMilia.Dxf.Tables
             ExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
-        protected virtual void Initialize() { }
+        internal virtual void Normalize() { }
         protected abstract IEnumerable<DxfSymbolTableFlags> GetSymbolItems();
 
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
@@ -300,12 +300,15 @@ namespace IxMilia.Dxf.Tables
 
     public partial class DxfAppIdTable
     {
-        protected override void Initialize()
+        internal override void Normalize()
         {
-            Items.Add(new DxfAppId() { Name = "ACAD" });
-            Items.Add(new DxfAppId() { Name = "ACADANNOTATIVE" });
-            Items.Add(new DxfAppId() { Name = "ACAD_NAV_VCDISPLAY" });
-            Items.Add(new DxfAppId() { Name = "ACAD_MLEADERVER" });
+            foreach (var name in new[] { "ACAD", "ACADANNOTATIVE", "ACAD_NAV_VCDISPLAY", "ACAD_MLEADERVER" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfAppId() { Name = name });
+                }
+            }
         }
     }
 
@@ -330,43 +333,62 @@ namespace IxMilia.Dxf.Tables
 
     public partial class DxfDimStyleTable
     {
-        protected override void Initialize()
+        internal override void Normalize()
         {
-            Items.Add(new DxfDimStyle() { Name = "STANDARD" });
-            Items.Add(new DxfDimStyle() { Name = "ANNOTATIVE" });
+            foreach (var name in new[] { "STANDARD", "ANNOTATIVE" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfDimStyle() { Name = name });
+                }
+            }
         }
     }
 
     public partial class DxfLayerTable
     {
-        protected override void Initialize()
+        internal override void Normalize()
         {
-            Items.Add(new DxfLayer("0"));
+            if (!Items.Any(a => a.Name == "0"))
+            {
+                Items.Add(new DxfLayer("0"));
+            }
         }
     }
 
     public partial class DxfLTypeTable
     {
-        protected override void Initialize()
+        internal override void Normalize()
         {
-            Items.Add(new DxfLineType() { Name = "CONTINUOUS", Description = "Solid line" });
+            if (!Items.Any(a => a.Name == "CONTINUOUS"))
+            {
+                Items.Add(new DxfLineType() { Name = "CONTINUOUS", Description = "Solid line" });
+            }
         }
     }
 
     public partial class DxfStyleTable
     {
-        protected override void Initialize()
+        internal override void Normalize()
         {
-            Items.Add(new DxfStyle() { Name = "STANDARD" });
-            Items.Add(new DxfStyle() { Name = "ANNOTATIVE" });
+            foreach (var name in new[] { "STANDARD", "ANNOTATIVE" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfStyle() { Name = name });
+                }
+            }
         }
     }
 
     public partial class DxfViewPortTable
     {
-        protected override void Initialize()
+        internal override void Normalize()
         {
-            Items.Add(new DxfViewPort() { Name = DxfViewPort.ActiveViewPortName });
+            if (!Items.Any(a => a.Name == DxfViewPort.ActiveViewPortName))
+            {
+                Items.Add(new DxfViewPort() { Name = DxfViewPort.ActiveViewPortName });
+            }
         }
     }
 }

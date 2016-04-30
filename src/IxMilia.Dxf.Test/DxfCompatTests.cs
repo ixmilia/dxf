@@ -12,7 +12,6 @@ namespace IxMilia.Dxf.Test
 {
     public class DxfCompatTests : AbstractDxfTests
     {
-        private const string TeighaConverterPath = @"C:\Program Files (x86)\ODA\Teigha File Converter 4.01.1\TeighaFileConverter.exe";
         private static readonly string[] TeighaVersions = new[] { "ACAD9", "ACAD10", "ACAD12", "ACAD13", "ACAD14", "ACAD2000", "ACAD2004", "ACAD2007", "ACAD2010", "ACAD2013" };
         private static readonly string MinimumFileText = @"
   0
@@ -52,7 +51,7 @@ EOF
             return fullPath;
         }
 
-        [ConditionalFileExistsFact(TeighaConverterPath)]
+        [TeighaConverterExistsFact]
         public void TeighaReadIxMiliaCompatTest()
         {
             // save a DXF file in all the formats that IxMilia.Dxf supports and try to get Teigha to read all of them
@@ -90,7 +89,7 @@ EOF
             var teighaVersion = "ACAD2010";
             var outputDir = PrepareTempDirectory("TeighaCompatOutputDir");
             var psi = new ProcessStartInfo();
-            psi.FileName = TeighaConverterPath;
+            psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
             psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
             //                                                                            recurse audit
             var proc = Process.Start(psi);
@@ -109,7 +108,7 @@ EOF
             }
         }
 
-        [ConditionalFileExistsFact(TeighaConverterPath)]
+        [TeighaConverterExistsFact]
         public void IxMiliaReadTeighaTest()
         {
             // use Teigha to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
@@ -121,7 +120,7 @@ EOF
                 var barePath = Path.Combine(inputDir, "bare.dxf");
                 File.WriteAllText(barePath, MinimumFileText);
                 var psi = new ProcessStartInfo();
-                psi.FileName = TeighaConverterPath;
+                psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
                 psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
                 //                                                                            recurse audit
                 var proc = Process.Start(psi);

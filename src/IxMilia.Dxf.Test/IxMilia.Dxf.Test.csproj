@@ -32,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractDxfTests.cs" />
+    <Compile Include="AutoCadExistsFactAttribute.cs" />
     <Compile Include="TeighaConverterExistsFactAttribute.cs" />
     <Compile Include="DxfCompatTests.cs" />
     <Compile Include="DxfEntityTests.cs" />

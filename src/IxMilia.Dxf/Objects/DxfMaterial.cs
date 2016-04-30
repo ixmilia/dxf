@@ -88,7 +88,7 @@ namespace IxMilia.Dxf.Objects
                                 _code_3_index++;
                                 break;
                             default:
-                                Debug.Assert(false, "Unexpected extra values for code 3");
+                                //Debug.Assert(false, $"Unexpected extra value for code 3: {pair.StringValue}");
                                 break;
                         }
                         break;

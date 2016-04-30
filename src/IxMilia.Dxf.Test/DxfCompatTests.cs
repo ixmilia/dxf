@@ -20,6 +20,8 @@ SECTION
 ENTITIES
   0
 LINE
+  8
+0
  10
 0.0
  20
@@ -112,6 +114,60 @@ EOF
                 file.Normalize();
                 return file;
             });
+        }
+
+        [AutoCadExistsFact]
+        public void IxMiliaReadAutoCadTest()
+        {
+            // use AutoCad to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
+            var exceptions = new List<Exception>();
+
+            var tempDir = PrepareTempDirectory("AutoCadTempDir");
+            var barePath = Path.Combine(tempDir, "bare.dxf");
+            File.WriteAllText(barePath, MinimumFileText);
+
+            var scriptLines = new List<string>();
+            scriptLines.Add("FILEDIA 0");
+            scriptLines.Add($"DXFIN \"{barePath}\"");
+            foreach (var version in new[] { "R12", "2000", "2004", "2007", "2010", "2013" })
+            {
+                var fullPath = Path.Combine(tempDir, $"result-{version}.dxf");
+                scriptLines.Add($"DXFOUT \"{fullPath}\" V {version} 16");
+            }
+
+            scriptLines.Add("FILEDIA 1");
+            scriptLines.Add("QUIT Y");
+            scriptLines.Add("");
+            var scriptPath = Path.Combine(tempDir, "script.scr");
+            File.WriteAllLines(scriptPath, scriptLines);
+
+            var psi = new ProcessStartInfo();
+            psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
+            psi.Arguments = $@"/b ""{scriptPath}""";
+            var proc = Process.Start(psi);
+            proc.WaitForExit();
+            Assert.Equal(0, proc.ExitCode);
+
+            foreach (var resultPath in Directory.EnumerateFiles(tempDir, "result-*.dxf"))
+            {
+                using (var fs = new FileStream(resultPath, FileMode.Open))
+                {
+                    try
+                    {
+                        var file = DxfFile.Load(fs);
+                        Assert.IsType<DxfLine>(file.Entities.Single());
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                }
+            }
+
+            if (exceptions.Count > 0)
+            {
+                throw new AggregateException("Error reading AutoCad-produced files", exceptions);
+            }
         }
 
         private void TestTeighaReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)

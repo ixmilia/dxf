@@ -1190,7 +1190,7 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(62, GetWritableColorValue(Color)));
-            pairs.Add(new DxfCodePair(6, (LinetypeName)));
+            pairs.Add(new DxfCodePair(6, GetWritableLinetypeName(LinetypeName)));
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(290, (IsLayerPlotted)));

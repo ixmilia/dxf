@@ -13,8 +13,18 @@ namespace IxMilia.Dxf.Sections
         public DxfBlocksSection()
         {
             Blocks = new List<DxfBlock>();
-            Blocks.Add(new DxfBlock() { Name = "*MODEL_SPACE", Layer = "0" });
-            Blocks.Add(new DxfBlock() { Name = "*PAPER_SPACE", Layer = "0" });
+            Normalize();
+        }
+
+        internal void Normalize()
+        {
+            foreach (var name in new[] { "*MODEL_SPACE", "*PAPER_SPACE" })
+            {
+                if (!Blocks.Any(b => b.Name == name))
+                {
+                    Blocks.Add(new DxfBlock() { Name = name, Layer = "0" });
+                }
+            }
         }
 
         public override DxfSectionType Type

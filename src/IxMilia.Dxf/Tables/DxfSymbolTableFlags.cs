@@ -158,9 +158,20 @@ namespace IxMilia.Dxf
         private short GetWritableColorValue(DxfColor color)
         {
             var value = Math.Abs(color?.RawValue ?? 0);
+            if (value == 256)
+            {
+                // BYLAYER isn't a valid layer color
+                value = 7;
+            }
+
             return IsLayerOn
                 ? value
                 : (short)-value;
+        }
+
+        private string GetWritableLinetypeName(string linetypeName)
+        {
+            return string.IsNullOrWhiteSpace(linetypeName) ? "CONTINUOUS" : linetypeName;
         }
     }
 }

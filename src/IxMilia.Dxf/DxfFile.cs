@@ -321,6 +321,7 @@ namespace IxMilia.Dxf
                 table.Normalize();
             }
 
+            BlocksSection.Normalize();
             ObjectsSection.Normalize();
         }
     }

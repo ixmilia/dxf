@@ -308,7 +308,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.AddRange(this.PreviewImageData.Select(p => new DxfCodePair(310, p)));
             }
 
-            if (version >= DxfAcadVersion.R2004)
+            if (version >= DxfAcadVersion.R2004 && this.Color24Bit != 0)
             {
                 pairs.Add(new DxfCodePair(420, (this.Color24Bit)));
             }

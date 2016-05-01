@@ -18,7 +18,7 @@
         <Property Name="IsVisible" Code="60" Type="bool" DefaultValue="true" ReadConverter="!BoolShort" WriteConverter="NotBoolShort" DisableWritingDefault="true" MinVersion="R13" />
         <Property Name="ImageByteCount" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2000" />
         <Property Name="PreviewImageData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R2000" />
-        <Property Name="Color24Bit" Code="420" Type="int" DefaultValue="0" MinVersion="R2004" />
+        <Property Name="Color24Bit" Code="420" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2004" />
         <Property Name="ColorName" Code="430" Type="string" DefaultValue="null" MinVersion="R2004" />
         <Property Name="Transparency" Code="440" Type="int" DefaultValue="0" MinVersion="R2004" />
         <Pointer Name="PlotStyle" Code="390" Type="IDxfItem" MinVersion="R2007" />

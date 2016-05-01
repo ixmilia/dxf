@@ -244,8 +244,8 @@ ENDTAB
             Assert.Equal(0.0, viewPorts[0].SnapBasePoint.Y);
             Assert.Equal(1.0, viewPorts[0].SnapSpacing.X);
             Assert.Equal(1.0, viewPorts[0].SnapSpacing.Y);
-            Assert.Equal(0.0, viewPorts[0].GridSpacing.X);
-            Assert.Equal(0.0, viewPorts[0].GridSpacing.Y);
+            Assert.Equal(1.0, viewPorts[0].GridSpacing.X);
+            Assert.Equal(1.0, viewPorts[0].GridSpacing.Y);
             Assert.Equal(0.0, viewPorts[0].ViewDirection.X);
             Assert.Equal(0.0, viewPorts[0].ViewDirection.Y);
             Assert.Equal(1.0, viewPorts[0].ViewDirection.Z);
@@ -377,9 +377,9 @@ AcDbSymbolTableRecord
  24
 1.0
  15
-0.0
+1.0
  25
-0.0
+1.0
  16
 0.0
  26

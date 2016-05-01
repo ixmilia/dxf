@@ -278,6 +278,18 @@ namespace IxMilia.Dxf
         private const string SHADOWPLANELOCATION = "$SHADOWPLANELOCATION";
         private const string AXISMODE = "$AXISMODE";
         private const string AXISUNIT = "$AXISUNIT";
+        private const string FASTZOOM = "$FASTZOOM";
+        private const string GRIDMODE = "$GRIDMODE";
+        private const string GRIDUNIT = "$GRIDUNIT";
+        private const string SNAPANG = "$SNAPANG";
+        private const string SNAPBASE = "$SNAPBASE";
+        private const string SNAPISOPAIR = "$SNAPISOPAIR";
+        private const string SNAPMODE = "$SNAPMODE";
+        private const string SNAPSTYLE = "$SNAPSTYLE";
+        private const string SNAPUNIT = "$SNAPUNIT";
+        private const string VIEWCTR = "$VIEWCTR";
+        private const string VIEWDIR = "$VIEWDIR";
+        private const string VIEWSIZE = "$VIEWSIZE";
 
         /// <summary>
         /// The $ACADVER header variable.
@@ -1594,6 +1606,66 @@ namespace IxMilia.Dxf
         /// </summary>
         public DxfVector AxisTickSpacing { get; set; }
 
+        /// <summary>
+        /// The $FASTZOOM header variable.
+        /// </summary>
+        public bool FastZoom { get; set; }
+
+        /// <summary>
+        /// The $GRIDMODE header variable.
+        /// </summary>
+        public bool GridOn { get; set; }
+
+        /// <summary>
+        /// The $GRIDUNIT header variable.
+        /// </summary>
+        public DxfVector GridSpacing { get; set; }
+
+        /// <summary>
+        /// The $SNAPANG header variable.
+        /// </summary>
+        public double SnapRotationAngle { get; set; }
+
+        /// <summary>
+        /// The $SNAPBASE header variable.
+        /// </summary>
+        public DxfPoint SnapBasePoint { get; set; }
+
+        /// <summary>
+        /// The $SNAPISOPAIR header variable.
+        /// </summary>
+        public DxfSnapIsometricPlane SnapIsometricPlane { get; set; }
+
+        /// <summary>
+        /// The $SNAPMODE header variable.
+        /// </summary>
+        public bool SnapOn { get; set; }
+
+        /// <summary>
+        /// The $SNAPSTYLE header variable.
+        /// </summary>
+        public DxfSnapStyle SnapStyle { get; set; }
+
+        /// <summary>
+        /// The $SNAPUNIT header variable.
+        /// </summary>
+        public DxfVector SnapSpacing { get; set; }
+
+        /// <summary>
+        /// The $VIEWCTR header variable.
+        /// </summary>
+        public DxfPoint ViewCenter { get; set; }
+
+        /// <summary>
+        /// The $VIEWDIR header variable.
+        /// </summary>
+        public DxfVector ViewDirection { get; set; }
+
+        /// <summary>
+        /// The $VIEWSIZE header variable.
+        /// </summary>
+        public double ViewHeight { get; set; }
+
         // set defaults
         public void SetDefaults()
         {
@@ -1860,6 +1932,18 @@ namespace IxMilia.Dxf
             this.ShadowPlaneZOffset = 0.0; // SHADOWPLANELOCATION
             this.AxisOn = false; // AXISMODE
             this.AxisTickSpacing = DxfVector.Zero; // AXISUNIT
+            this.FastZoom = true; // FASTZOOM
+            this.GridOn = false; // GRIDMODE
+            this.GridSpacing = new DxfVector(1.0, 1.0, 0.0); // GRIDUNIT
+            this.SnapRotationAngle = 0.0; // SNAPANG
+            this.SnapBasePoint = DxfPoint.Origin; // SNAPBASE
+            this.SnapIsometricPlane = DxfSnapIsometricPlane.Left; // SNAPISOPAIR
+            this.SnapOn = false; // SNAPMODE
+            this.SnapStyle = DxfSnapStyle.Standard; // SNAPSTYLE
+            this.SnapSpacing = new DxfVector(1.0, 1.0, 0.0); // SNAPUNIT
+            this.ViewCenter = DxfPoint.Origin; // VIEWCTR
+            this.ViewDirection = DxfVector.ZAxis; // VIEWDIR
+            this.ViewHeight = 1.0; // VIEWSIZE
         }
 
         // build list of code value pairs
@@ -3504,6 +3588,96 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(20, header.AxisTickSpacing?.Y ?? default(double)));
             }
 
+            // FASTZOOM
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, FASTZOOM));
+                list.Add(new DxfCodePair(70, BoolShort(header.FastZoom)));
+            }
+
+            // GRIDMODE
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, GRIDMODE));
+                list.Add(new DxfCodePair(70, BoolShort(header.GridOn)));
+            }
+
+            // GRIDUNIT
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, GRIDUNIT));
+                list.Add(new DxfCodePair(10, header.GridSpacing?.X ?? default(double)));
+                list.Add(new DxfCodePair(20, header.GridSpacing?.Y ?? default(double)));
+            }
+
+            // SNAPANG
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, SNAPANG));
+                list.Add(new DxfCodePair(50, (header.SnapRotationAngle)));
+            }
+
+            // SNAPBASE
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, SNAPBASE));
+                list.Add(new DxfCodePair(10, header.SnapBasePoint?.X ?? default(double)));
+                list.Add(new DxfCodePair(20, header.SnapBasePoint?.Y ?? default(double)));
+            }
+
+            // SNAPISOPAIR
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, SNAPISOPAIR));
+                list.Add(new DxfCodePair(70, (short)(header.SnapIsometricPlane)));
+            }
+
+            // SNAPMODE
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, SNAPMODE));
+                list.Add(new DxfCodePair(70, BoolShort(header.SnapOn)));
+            }
+
+            // SNAPSTYLE
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, SNAPSTYLE));
+                list.Add(new DxfCodePair(70, (short)(header.SnapStyle)));
+            }
+
+            // SNAPUNIT
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, SNAPUNIT));
+                list.Add(new DxfCodePair(10, header.SnapSpacing?.X ?? default(double)));
+                list.Add(new DxfCodePair(20, header.SnapSpacing?.Y ?? default(double)));
+            }
+
+            // VIEWCTR
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, VIEWCTR));
+                list.Add(new DxfCodePair(10, header.ViewCenter?.X ?? default(double)));
+                list.Add(new DxfCodePair(20, header.ViewCenter?.Y ?? default(double)));
+            }
+
+            // VIEWDIR
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, VIEWDIR));
+                list.Add(new DxfCodePair(10, header.ViewDirection?.X ?? default(double)));
+                list.Add(new DxfCodePair(20, header.ViewDirection?.Y ?? default(double)));
+                list.Add(new DxfCodePair(30, header.ViewDirection?.Z ?? default(double)));
+            }
+
+            // VIEWSIZE
+            if (version <= DxfAcadVersion.R10)
+            {
+                list.Add(new DxfCodePair(9, VIEWSIZE));
+                list.Add(new DxfCodePair(40, (header.ViewHeight)));
+            }
+
         }
 
         // setter method
@@ -4596,6 +4770,49 @@ namespace IxMilia.Dxf
                 case AXISUNIT:
                     SetPoint(pair, header.AxisTickSpacing);
                     break;
+                case FASTZOOM:
+                    EnsureCode(pair, 70);
+                    header.FastZoom = BoolShort(pair.ShortValue);
+                    break;
+                case GRIDMODE:
+                    EnsureCode(pair, 70);
+                    header.GridOn = BoolShort(pair.ShortValue);
+                    break;
+                case GRIDUNIT:
+                    SetPoint(pair, header.GridSpacing);
+                    break;
+                case SNAPANG:
+                    EnsureCode(pair, 50);
+                    header.SnapRotationAngle = (pair.DoubleValue);
+                    break;
+                case SNAPBASE:
+                    SetPoint(pair, header.SnapBasePoint);
+                    break;
+                case SNAPISOPAIR:
+                    EnsureCode(pair, 70);
+                    header.SnapIsometricPlane = (DxfSnapIsometricPlane)(pair.ShortValue);
+                    break;
+                case SNAPMODE:
+                    EnsureCode(pair, 70);
+                    header.SnapOn = BoolShort(pair.ShortValue);
+                    break;
+                case SNAPSTYLE:
+                    EnsureCode(pair, 70);
+                    header.SnapStyle = (DxfSnapStyle)(pair.ShortValue);
+                    break;
+                case SNAPUNIT:
+                    SetPoint(pair, header.SnapSpacing);
+                    break;
+                case VIEWCTR:
+                    SetPoint(pair, header.ViewCenter);
+                    break;
+                case VIEWDIR:
+                    SetPoint(pair, header.ViewDirection);
+                    break;
+                case VIEWSIZE:
+                    EnsureCode(pair, 40);
+                    header.ViewHeight = (pair.DoubleValue);
+                    break;
                 default:
                     // unsupported variable
                     break;
@@ -5406,6 +5623,30 @@ namespace IxMilia.Dxf
                     return this.AxisOn;
                 case AXISUNIT:
                     return this.AxisTickSpacing;
+                case FASTZOOM:
+                    return this.FastZoom;
+                case GRIDMODE:
+                    return this.GridOn;
+                case GRIDUNIT:
+                    return this.GridSpacing;
+                case SNAPANG:
+                    return this.SnapRotationAngle;
+                case SNAPBASE:
+                    return this.SnapBasePoint;
+                case SNAPISOPAIR:
+                    return this.SnapIsometricPlane;
+                case SNAPMODE:
+                    return this.SnapOn;
+                case SNAPSTYLE:
+                    return this.SnapStyle;
+                case SNAPUNIT:
+                    return this.SnapSpacing;
+                case VIEWCTR:
+                    return this.ViewCenter;
+                case VIEWDIR:
+                    return this.ViewDirection;
+                case VIEWSIZE:
+                    return this.ViewHeight;
                 default:
                     throw new ArgumentException("Unrecognized variable", "variableName");
             }
@@ -6212,6 +6453,42 @@ namespace IxMilia.Dxf
                     break;
                 case AXISUNIT:
                     this.AxisTickSpacing = (DxfVector)value;
+                    break;
+                case FASTZOOM:
+                    this.FastZoom = (bool)value;
+                    break;
+                case GRIDMODE:
+                    this.GridOn = (bool)value;
+                    break;
+                case GRIDUNIT:
+                    this.GridSpacing = (DxfVector)value;
+                    break;
+                case SNAPANG:
+                    this.SnapRotationAngle = (double)value;
+                    break;
+                case SNAPBASE:
+                    this.SnapBasePoint = (DxfPoint)value;
+                    break;
+                case SNAPISOPAIR:
+                    this.SnapIsometricPlane = (DxfSnapIsometricPlane)value;
+                    break;
+                case SNAPMODE:
+                    this.SnapOn = (bool)value;
+                    break;
+                case SNAPSTYLE:
+                    this.SnapStyle = (DxfSnapStyle)value;
+                    break;
+                case SNAPUNIT:
+                    this.SnapSpacing = (DxfVector)value;
+                    break;
+                case VIEWCTR:
+                    this.ViewCenter = (DxfPoint)value;
+                    break;
+                case VIEWDIR:
+                    this.ViewDirection = (DxfVector)value;
+                    break;
+                case VIEWSIZE:
+                    this.ViewHeight = (double)value;
                     break;
                 default:
                     throw new ArgumentException("Unrecognized variable", "variableName");

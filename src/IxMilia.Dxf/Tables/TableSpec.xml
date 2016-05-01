@@ -175,7 +175,7 @@
             <Property Name="ViewCenter" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22" />
             <Property Name="SnapBasePoint" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23" />
             <Property Name="SnapSpacing" Code="-2" Type="DxfVector" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" CodeOverrides="14,24" />
-            <Property Name="GridSpacing" Code="-2" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="15,25" />
+            <Property Name="GridSpacing" Code="-2" Type="DxfVector" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" CodeOverrides="15,25" />
             <Property Name="ViewDirection" Code="-3" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="16,26,36" />
             <Property Name="TargetViewPoint" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="17,27,37" />
             <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" MaxVersion="R2004" />
@@ -192,8 +192,8 @@
             <Property Name="UCSIcon" Code="74" Type="short" DefaultValue="3" />
             <Property Name="SnapOn" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
             <Property Name="GridOn" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
-            <Property Name="SnapStyle" Code="77" Type="short" DefaultValue="0" MaxVersion="R2004" />
-            <Property Name="SnapIsoPair" Code="78" Type="short" DefaultValue="0" MaxVersion="R2004" />
+            <Property Name="SnapStyle" Code="77" Type="DxfSnapStyle" DefaultValue="DxfSnapStyle.Standard" ReadConverter="(DxfSnapStyle)" WriteConverter="(short)" MaxVersion="R2004" />
+            <Property Name="SnapIsometricPlane" Code="78" Type="DxfSnapIsometricPlane" DefaultValue="DxfSnapIsometricPlane.Left" ReadConverter="(DxfSnapIsometricPlane)" WriteConverter="(short)" MaxVersion="R2004" />
             <Property Name="PlotStyleSheet" Code="1" Type="string" DefaultValue="null" MinVersion="R2007" />
             <Property Name="RenderMode" Code="281" Type="DxfViewRenderMode" DefaultValue="DxfViewRenderMode.Classic2D" ReadConverter="(DxfViewRenderMode)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="HasOwnUCS" Code="65" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R2000" MaxVersion="R2004" />

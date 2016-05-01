@@ -318,4 +318,18 @@
     <!-- Misc. R10 variables -->
     <Variable Name="AXISMODE" Code="70" Type="bool" Property="AxisOn" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R10" />
     <Variable Name="AXISUNIT" Code="-2" Type="DxfVector" Property="AxisTickSpacing" DefaultValue="DxfVector.Zero" MaxVersion="R10" />
+
+    <!-- The following variables are in the header in R10 and lower but in the VPORT table in R11 and later -->
+    <Variable Name="FASTZOOM" Code="70" Type="bool" Property="FastZoom" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R10" />
+    <Variable Name="GRIDMODE" Code="70" Type="bool" Property="GridOn" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R10" />
+    <Variable Name="GRIDUNIT" Code="-2" Type="DxfVector" Property="GridSpacing" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" MaxVersion="R10" />
+    <Variable Name="SNAPANG" Code="50" Type="double" Property="SnapRotationAngle" DefaultValue="0.0" MaxVersion="R10" />
+    <Variable Name="SNAPBASE" Code="-2" Type="DxfPoint" Property="SnapBasePoint" DefaultValue="DxfPoint.Origin" MaxVersion="R10" />
+    <Variable Name="SNAPISOPAIR" Code="70" Type="DxfSnapIsometricPlane" Property="SnapIsometricPlane" DefaultValue="DxfSnapIsometricPlane.Left" ReadConverter="(DxfSnapIsometricPlane)" WriteConverter="(short)" MaxVersion="R10" />
+    <Variable Name="SNAPMODE" Code="70" Type="bool" Property="SnapOn" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R10" />
+    <Variable Name="SNAPSTYLE" Code="70" Type="DxfSnapStyle" Property="SnapStyle" DefaultValue="DxfSnapStyle.Standard" ReadConverter="(DxfSnapStyle)" WriteConverter="(short)" MaxVersion="R10" />
+    <Variable Name="SNAPUNIT" Code="-2" Type="DxfVector" Property="SnapSpacing" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" MaxVersion="R10" />
+    <Variable Name="VIEWCTR" Code="-2" Type="DxfPoint" Property="ViewCenter" DefaultValue="DxfPoint.Origin" MaxVersion="R10" />
+    <Variable Name="VIEWDIR" Code="-3" Type="DxfVector" Property="ViewDirection" DefaultValue="DxfVector.ZAxis" MaxVersion="R10" />
+    <Variable Name="VIEWSIZE" Code="40" Type="double" Property="ViewHeight" DefaultValue="1.0" MaxVersion="R10" />
 </Spec>

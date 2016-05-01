@@ -369,6 +369,19 @@ namespace IxMilia.Dxf
         DiagonalStacking = 1,
         NotStacked = 2
     }
+
+    public enum DxfSnapIsometricPlane
+    {
+        Left = 0,
+        Top = 1,
+        Right = 2
+    }
+
+    public enum DxfSnapStyle
+    {
+        Standard = 0,
+        Isometric = 1
+    }
 }
 
 namespace IxMilia.Dxf.Sections

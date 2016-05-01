@@ -2080,8 +2080,8 @@ namespace IxMilia.Dxf
         public short UCSIcon { get; set; }
         public bool SnapOn { get; set; }
         public bool GridOn { get; set; }
-        public short SnapStyle { get; set; }
-        public short SnapIsoPair { get; set; }
+        public DxfSnapStyle SnapStyle { get; set; }
+        public DxfSnapIsometricPlane SnapIsometricPlane { get; set; }
         public string PlotStyleSheet { get; set; }
         public DxfViewRenderMode RenderMode { get; set; }
         public bool HasOwnUCS { get; set; }
@@ -2115,7 +2115,7 @@ namespace IxMilia.Dxf
             ViewCenter = DxfPoint.Origin;
             SnapBasePoint = DxfPoint.Origin;
             SnapSpacing = new DxfVector(1.0, 1.0, 0.0);
-            GridSpacing = DxfVector.Zero;
+            GridSpacing = new DxfVector(1.0, 1.0, 0.0);
             ViewDirection = DxfVector.ZAxis;
             TargetViewPoint = DxfPoint.Origin;
             ViewHeight = 1.0;
@@ -2132,8 +2132,8 @@ namespace IxMilia.Dxf
             UCSIcon = 3;
             SnapOn = false;
             GridOn = false;
-            SnapStyle = 0;
-            SnapIsoPair = 0;
+            SnapStyle = DxfSnapStyle.Standard;
+            SnapIsometricPlane = DxfSnapIsometricPlane.Left;
             PlotStyleSheet = null;
             RenderMode = DxfViewRenderMode.Classic2D;
             HasOwnUCS = false;
@@ -2225,12 +2225,12 @@ namespace IxMilia.Dxf
 
             if (version <= DxfAcadVersion.R2004)
             {
-                pairs.Add(new DxfCodePair(77, (SnapStyle)));
+                pairs.Add(new DxfCodePair(77, (short)(SnapStyle)));
             }
 
             if (version <= DxfAcadVersion.R2004)
             {
-                pairs.Add(new DxfCodePair(78, (SnapIsoPair)));
+                pairs.Add(new DxfCodePair(78, (short)(SnapIsometricPlane)));
             }
 
             if (version >= DxfAcadVersion.R2007)
@@ -2497,10 +2497,10 @@ namespace IxMilia.Dxf
                         item.GridOn = BoolShort(pair.ShortValue);
                         break;
                     case 77:
-                        item.SnapStyle = (pair.ShortValue);
+                        item.SnapStyle = (DxfSnapStyle)(pair.ShortValue);
                         break;
                     case 78:
-                        item.SnapIsoPair = (pair.ShortValue);
+                        item.SnapIsometricPlane = (DxfSnapIsometricPlane)(pair.ShortValue);
                         break;
                     case 1:
                         item.PlotStyleSheet = (pair.StringValue);

@@ -54,6 +54,8 @@ namespace IxMilia.Dxf
 
         public List<DxfStyle> Styles { get { return TablesSection.StyleTable.Items; } }
 
+        public DxfDictionary NamedObjectDictionary { get { return Objects.FirstOrDefault() as DxfDictionary; } }
+
         /// <summary>
         /// Gets the thumbnail bitmap.
         /// </summary>
@@ -129,6 +131,7 @@ namespace IxMilia.Dxf
             this.EntitiesSection = new DxfEntitiesSection();
             this.ObjectsSection = new DxfObjectsSection();
             this.ThumbnailImageSection = null; // not always present
+            this.Normalize();
         }
 
         public static DxfFile Load(Stream stream)
@@ -317,6 +320,8 @@ namespace IxMilia.Dxf
             {
                 table.Normalize();
             }
+
+            ObjectsSection.Normalize();
         }
     }
 }

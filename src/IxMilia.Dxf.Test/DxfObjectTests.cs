@@ -337,7 +337,7 @@ value-2
   0
 DICTIONARY
   5
-A
+C
 100
 AcDbDictionary
 281
@@ -345,17 +345,17 @@ AcDbDictionary
   3
 key-1
 350
-B
+D
   3
 key-2
 350
-C
+E
   0
 DICTIONARYVAR
   5
-B
+D
 330
-A
+C
 100
 DictionaryVariables
 280
@@ -365,9 +365,9 @@ value-1
   0
 DICTIONARYVAR
   5
-C
+E
 330
-A
+C
 100
 DictionaryVariables
 280
@@ -389,7 +389,7 @@ value-2
   0
 DICTIONARY
   5
-A
+C
 100
 AcDbDictionary
 281
@@ -397,13 +397,13 @@ AcDbDictionary
   3
 key-1
 350
-B
+D
   0
 DICTIONARY
   5
-B
+D
 330
-A
+C
 100
 AcDbDictionary
 281
@@ -411,13 +411,13 @@ AcDbDictionary
   3
 key-2
 350
-C
+E
   0
 DICTIONARYVAR
   5
-C
+E
 330
-B
+D
 100
 DictionaryVariables
 280
@@ -438,23 +438,23 @@ value-2
   0
 ACDBDICTIONARYWDFLT
   5
-A
+C
 100
 AcDbDictionary
 281
 0
 340
-B
+D
   3
 key-1
 350
-C
+E
   0
 DICTIONARYVAR
   5
-B
+D
 330
-A
+C
 100
 DictionaryVariables
 280
@@ -464,9 +464,9 @@ default-value
   0
 DICTIONARYVAR
   5
-C
+E
 330
-A
+C
 100
 DictionaryVariables
 280
@@ -491,7 +491,7 @@ value-1
             var text = ToString(file);
 
             var parsedFile = Parse(text);
-            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionary>().Single();
+            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionary>().Single(d => d.Keys.Count == 2);
             Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
             Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict["key-2"]).Value);
         }
@@ -512,7 +512,7 @@ value-1
             var text = ToString(file);
 
             var parsedFile = Parse(text);
-            var roundTrippedDict1 = parsedFile.Objects.OfType<DxfDictionary>().First();
+            var roundTrippedDict1 = parsedFile.Objects.OfType<DxfDictionary>().First(d => d.ContainsKey("key-1"));
             var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"];
             Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]).Value);
         }
@@ -688,7 +688,7 @@ EOF
   0
 LIGHTLIST
   5
-B
+D
 100
 AcDbLightList
  90

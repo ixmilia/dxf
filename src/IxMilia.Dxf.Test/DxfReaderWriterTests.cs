@@ -1485,7 +1485,7 @@ FFFF
 
             var text = ToString(file);
             file = Parse(text);
-            dict = (DxfDictionary)file.Objects.Single();
+            dict = file.Objects.OfType<DxfDictionary>().Single(d => d.ContainsKey("key"));
 
             Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict).OwnerHandle);
             Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict["key"]).OwnerHandle);

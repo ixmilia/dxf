@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Linq;
 using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf.Sections
@@ -33,6 +34,22 @@ namespace IxMilia.Dxf.Sections
         protected internal override void Clear()
         {
             Objects.Clear();
+        }
+
+        internal void Normalize()
+        {
+            if (Objects.FirstOrDefault()?.ObjectType != DxfObjectType.Dictionary)
+            {
+                // first object must be a dictionary
+                Objects.Insert(0, new DxfDictionary());
+            }
+
+            // now ensure that dictionary contains the expected values
+            var dict = (DxfDictionary)Objects.First();
+            if (!dict.ContainsKey("ACAD_GROUP") || !(dict["ACAD_GROUP"] is DxfDictionary))
+            {
+                dict["ACAD_GROUP"] = new DxfDictionary();
+            }
         }
 
         internal static DxfObjectsSection ObjectsSectionFromBuffer(DxfCodePairBufferReader buffer)

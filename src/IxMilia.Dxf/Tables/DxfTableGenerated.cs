@@ -93,6 +93,7 @@ namespace IxMilia.Dxf.Tables
     public partial class DxfDimStyleTable : DxfTable
     {
         internal override DxfTableType TableType { get { return DxfTableType.DimStyle; } }
+        internal override string TableClassName { get { return "AcDbDimStyleTable"; } }
         public List<DxfDimStyle> Items { get; private set; }
 
         protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()
@@ -1200,7 +1201,7 @@ namespace IxMilia.Dxf
                 pairs.Add(new DxfCodePair(370, DxfLineWeight.GetRawValue(LineWeight)));
             }
 
-            if (PlotStylePointer != 0u && version >= DxfAcadVersion.R2000)
+            if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(390, UIntHandle(PlotStylePointer)));
             }

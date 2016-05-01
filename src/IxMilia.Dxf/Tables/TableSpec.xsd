@@ -62,6 +62,7 @@
             </xs:sequence>
             <xs:attribute name="Type" type="xs:string" use="required" />
             <xs:attribute name="TypeStringVariable" type="xs:string" use="required" />
+            <xs:attribute name="TableClassName" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
 

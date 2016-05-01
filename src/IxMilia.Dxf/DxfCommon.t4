@@ -450,6 +450,11 @@ string ClassName(XElement xml)
     return AttributeOrDefault(xml, "ClassName");
 }
 
+string TableClassName(XElement table)
+{
+    return AttributeOrDefault(table, "TableClassName");
+}
+
 int[] CodeOverrides(XElement xml)
 {
     var text = AttributeOrDefault(xml, "CodeOverrides");

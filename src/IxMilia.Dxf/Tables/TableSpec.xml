@@ -17,7 +17,7 @@
             <Property Name="_bitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
         </TableItem>
     </Table>
-    <Table Type="DimStyle" TypeStringVariable="DimStyleText">
+    <Table Type="DimStyle" TypeStringVariable="DimStyleText" TableClassName="AcDbDimStyleTable">
         <TableItem Name="DxfDimStyle" ClassName="AcDbDimStyleTableRecord">
             <Property Name="DimensioningSuffix" Code="3" Type="string" DefaultValue="null" />
             <Property Name="AlternateDimensioningSuffix" Code="4" Type="string" DefaultValue="null" />
@@ -96,7 +96,7 @@
             <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="CONTINUOUS" />
             <Property Name="IsLayerPlotted" Code="290" Type="bool" DefaultValue="true" MinVersion="R2000" />
             <Property Name="LineWeight" Code="370" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue" WriteConverter="DxfLineWeight.GetRawValue" MinVersion="R2000" />
-            <Property Name="PlotStylePointer" Code="390" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2000" />
+            <Property Name="PlotStylePointer" Code="390" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" />
             <Property Name="MaterialHandle" Code="347" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DisableWritingDefault="true" MinVersion="R2007" />
         </TableItem>
     </Table>

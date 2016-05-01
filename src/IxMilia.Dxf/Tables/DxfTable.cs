@@ -51,6 +51,7 @@ namespace IxMilia.Dxf.Tables
         }
 
         internal abstract DxfTableType TableType { get; }
+        internal virtual string TableClassName { get { return null; } }
         public uint Handle { get; set; }
         public uint OwnerHandle { get; set; }
         public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
@@ -94,6 +95,10 @@ namespace IxMilia.Dxf.Tables
 
             var symbolItems = GetSymbolItems().Where(item => item != null).OrderBy(i => i.Name).ToList();
             pairs.Add(new DxfCodePair(70, (short)symbolItems.Count));
+            if (version >= DxfAcadVersion.R2000 && TableClassName != null)
+            {
+                pairs.Add(new DxfCodePair(100, TableClassName));
+            }
 
             foreach (var item in symbolItems)
             {

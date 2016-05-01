@@ -183,7 +183,7 @@
             <Property Name="LensLength" Code="42" Type="double" DefaultValue="50.0" />
             <Property Name="FrontClippingPlane" Code="43" Type="double" DefaultValue="0.0" />
             <Property Name="BackClippingPlane" Code="44" Type="double" DefaultValue="0.0" />
-            <Property Name="ViewHeight" Code="45" Type="double" DefaultValue="0.0" MinVersion="R2007" />
+            <Property Name="ViewHeight" Code="45" Type="double" DefaultValue="1.0" MinVersion="R2007" />
             <Property Name="SnapRotationAngle" Code="50" Type="double" DefaultValue="0.0" />
             <Property Name="ViewTwistAngle" Code="51" Type="double" DefaultValue="0.0" />
             <Property Name="ViewMode" Code="71" Type="DxfViewMode" DefaultValue="0" ReadConverter="(DxfViewMode)" WriteConverter="(short)" />

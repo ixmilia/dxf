@@ -329,6 +329,17 @@ namespace IxMilia.Dxf.Tables
                 blockRecord.AfterRead();
             }
         }
+
+        internal override void Normalize()
+        {
+            foreach (var name in new[] { "*MODEL_SPACE", "*PAPER_SPACE" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfBlockRecord() { Name = name });
+                }
+            }
+        }
     }
 
     public partial class DxfDimStyleTable
@@ -360,9 +371,12 @@ namespace IxMilia.Dxf.Tables
     {
         internal override void Normalize()
         {
-            if (!Items.Any(a => a.Name == "CONTINUOUS"))
+            foreach (var name in new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" })
             {
-                Items.Add(new DxfLineType() { Name = "CONTINUOUS", Description = "Solid line" });
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfLineType() { Name = name });
+                }
             }
         }
     }

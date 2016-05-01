@@ -501,7 +501,6 @@ ENDTAB
             var blockRecord = new DxfBlockRecord()
             {
                 Name = "<name>",
-                OwnerHandle = 0x42u,
                 LayoutHandle = 0x43u,
                 XData = new DxfXData("ACAD",
                     new DxfXDataItem[]
@@ -532,13 +531,37 @@ BLOCK_RECORD
 100
 AcDbSymbolTable
  70
-1
+3
   0
 BLOCK_RECORD
   5
 #
 330
-42
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+*MODEL_SPACE
+  0
+BLOCK_RECORD
+  5
+#
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+*PAPER_SPACE
+  0
+BLOCK_RECORD
+  5
+19
+330
+0
 100
 AcDbSymbolTableRecord
 100

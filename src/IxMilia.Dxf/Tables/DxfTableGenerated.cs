@@ -2123,7 +2123,7 @@ namespace IxMilia.Dxf
             LensLength = 50.0;
             FrontClippingPlane = 0.0;
             BackClippingPlane = 0.0;
-            ViewHeight = 0.0;
+            ViewHeight = 1.0;
             SnapRotationAngle = 0.0;
             ViewTwistAngle = 0.0;
             ViewMode = 0;

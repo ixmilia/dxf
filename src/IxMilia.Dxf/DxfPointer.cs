@@ -114,6 +114,10 @@ namespace IxMilia.Dxf
             foreach (var item in file.GetFileItems().Where(i => i != null))
             {
                 nextPointer = AssignHandles(item, nextPointer, visitedItems);
+                foreach (var child in item.GetChildItems().Where(c => c != null))
+                {
+                    nextPointer = AssignHandles(child, nextPointer, visitedItems);
+                }
             }
 
             return nextPointer;
@@ -137,7 +141,7 @@ namespace IxMilia.Dxf
                 childItem.OwnerHandle = item.Handle;
             }
 
-            return nextHandle++;
+            return nextHandle;
         }
 
         private static void ClearPointers(IDxfItemInternal item, HashSet<IDxfItemInternal> visitedItems)

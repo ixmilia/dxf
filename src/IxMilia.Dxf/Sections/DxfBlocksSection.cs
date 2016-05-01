@@ -13,8 +13,8 @@ namespace IxMilia.Dxf.Sections
         public DxfBlocksSection()
         {
             Blocks = new List<DxfBlock>();
-            Blocks.Add(new DxfBlock() { Name = "$MODEL_SPACE", Layer = "0" });
-            Blocks.Add(new DxfBlock() { Name = "$PAPER_SPACE", Layer = "0" });
+            Blocks.Add(new DxfBlock() { Name = "*MODEL_SPACE", Layer = "0" });
+            Blocks.Add(new DxfBlock() { Name = "*PAPER_SPACE", Layer = "0" });
         }
 
         public override DxfSectionType Type

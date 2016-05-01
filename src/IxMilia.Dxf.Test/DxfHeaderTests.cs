@@ -252,7 +252,7 @@ ENDTAB
             Assert.Equal(0.0, viewPorts[0].TargetViewPoint.X);
             Assert.Equal(0.0, viewPorts[0].TargetViewPoint.Y);
             Assert.Equal(0.0, viewPorts[0].TargetViewPoint.Z);
-            Assert.Equal(0.0, viewPorts[0].ViewHeight);
+            Assert.Equal(1.0, viewPorts[0].ViewHeight);
             Assert.Equal(1.0, viewPorts[0].ViewPortAspectRatio);
             Assert.Equal(50.0, viewPorts[0].LensLength);
             Assert.Equal(0.0, viewPorts[0].FrontClippingPlane);
@@ -349,7 +349,7 @@ default
   0
 VPORT
   5
-#
+3
 100
 AcDbSymbolTableRecord
   2
@@ -393,7 +393,7 @@ AcDbSymbolTableRecord
  37
 0.0
  40
-0.0
+1.0
  41
 1.0
  42

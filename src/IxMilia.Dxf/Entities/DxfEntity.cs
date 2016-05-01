@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 
 namespace IxMilia.Dxf.Entities
@@ -274,6 +275,11 @@ namespace IxMilia.Dxf.Entities
         protected static string UIntHandle(uint u)
         {
             return DxfCommonConverters.UIntHandle(u);
+        }
+
+        protected static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        {
+            return value => string.IsNullOrWhiteSpace(value) ? defaultValue : value;
         }
 
         private static void SwallowEntity(DxfCodePairBufferReader buffer)

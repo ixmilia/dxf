@@ -262,7 +262,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(67, BoolShort(this.IsInPaperSpace)));
             }
 
-            pairs.Add(new DxfCodePair(8, (this.Layer)));
+            pairs.Add(new DxfCodePair(8, DefaultIfNullOrEmpty("0")(this.Layer)));
             if (this.LinetypeName != "BYLAYER")
             {
                 pairs.Add(new DxfCodePair(6, (this.LinetypeName)));

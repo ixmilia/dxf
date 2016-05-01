@@ -134,6 +134,22 @@ AcDbLine
 ", DxfAcadVersion.R14);
         }
 
+        [Fact]
+        public void WriteEntityWithNullLayerTest()
+        {
+            var line = new DxfLine() { Layer = "" };
+            EnsureFileContainsEntity(line, @"
+  0
+LINE
+  5
+#
+100
+AcDbEntity
+  8
+0
+");
+        }
+
         #region Read default value tests
 
         [Fact]

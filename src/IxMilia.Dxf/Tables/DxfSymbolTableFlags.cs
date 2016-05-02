@@ -124,6 +124,11 @@ namespace IxMilia.Dxf
         {
             return DxfCommonConverters.UIntHandle(u);
         }
+
+        protected static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        {
+            return value => value <= 0.0 ? defaultValue : value;
+        }
     }
 
     public partial class DxfBlockRecord
@@ -157,10 +162,10 @@ namespace IxMilia.Dxf
 
         private short GetWritableColorValue(DxfColor color)
         {
-            var value = Math.Abs(color?.RawValue ?? 0);
-            if (value == 256)
+            var value = Math.Abs(color?.RawValue ?? 7);
+            if (value == 0 || value == 256)
             {
-                // BYLAYER isn't a valid layer color
+                // BYLAYER and BYBLOCK aren't valid colors
                 value = 7;
             }
 

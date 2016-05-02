@@ -142,12 +142,12 @@
     </Table>
     <Table Type="View" TypeStringVariable="ViewText">
         <TableItem Name="DxfView" ClassName="AcDbViewTableRecord">
-            <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" />
+            <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" WriteConverter="EnsurePositiveOrDefault(1.0)" />
             <Property Name="ViewCenterPoint" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20" />
-            <Property Name="ViewWidth" Code="41" Type="double" DefaultValue="1.0" />
+            <Property Name="ViewWidth" Code="41" Type="double" DefaultValue="1.0" WriteConverter="EnsurePositiveOrDefault(1.0)" />
             <Property Name="ViewDirection" Code="-3" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="11,21,31" />
             <Property Name="TargetPoint" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
-            <Property Name="LensLength" Code="42" Type="double" DefaultValue="1.0" />
+            <Property Name="LensLength" Code="42" Type="double" DefaultValue="1.0" WriteConverter="EnsurePositiveOrDefault(1.0)" />
             <Property Name="FrontClippingPlane" Code="43" Type="double" DefaultValue="0.0" />
             <Property Name="BackClippingPlane" Code="44" Type="double" DefaultValue="1.0" />
             <Property Name="TwistAngle" Code="50" Type="double" DefaultValue="0.0" />
@@ -178,12 +178,12 @@
             <Property Name="GridSpacing" Code="-2" Type="DxfVector" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" CodeOverrides="15,25" />
             <Property Name="ViewDirection" Code="-3" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="16,26,36" />
             <Property Name="TargetViewPoint" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="17,27,37" />
-            <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" MaxVersion="R2004" />
-            <Property Name="ViewPortAspectRatio" Code="41" Type="double" DefaultValue="1.0" MaxVersion="R2004" />
-            <Property Name="LensLength" Code="42" Type="double" DefaultValue="50.0" />
+            <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" WriteConverter="EnsurePositiveOrDefault(1.0)" MaxVersion="R2004" />
+            <Property Name="ViewPortAspectRatio" Code="41" Type="double" DefaultValue="1.0" WriteConverter="EnsurePositiveOrDefault(1.0)" MaxVersion="R2004" />
+            <Property Name="LensLength" Code="42" Type="double" DefaultValue="50.0" WriteConverter="EnsurePositiveOrDefault(50.0)" />
             <Property Name="FrontClippingPlane" Code="43" Type="double" DefaultValue="0.0" />
             <Property Name="BackClippingPlane" Code="44" Type="double" DefaultValue="0.0" />
-            <Property Name="ViewHeight" Code="45" Type="double" DefaultValue="1.0" MinVersion="R2007" />
+            <Property Name="ViewHeight" Code="45" Type="double" DefaultValue="1.0" WriteConverter="EnsurePositiveOrDefault(1.0)" MinVersion="R2007" />
             <Property Name="SnapRotationAngle" Code="50" Type="double" DefaultValue="0.0" />
             <Property Name="ViewTwistAngle" Code="51" Type="double" DefaultValue="0.0" />
             <Property Name="ViewMode" Code="71" Type="DxfViewMode" DefaultValue="0" ReadConverter="(DxfViewMode)" WriteConverter="(short)" />

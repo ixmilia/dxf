@@ -1793,17 +1793,17 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
-            pairs.Add(new DxfCodePair(40, (ViewHeight)));
+            pairs.Add(new DxfCodePair(40, EnsurePositiveOrDefault(1.0)(ViewHeight)));
             pairs.Add(new DxfCodePair(10, ViewCenterPoint?.X ?? 0.0));
             pairs.Add(new DxfCodePair(20, ViewCenterPoint?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(41, (ViewWidth)));
+            pairs.Add(new DxfCodePair(41, EnsurePositiveOrDefault(1.0)(ViewWidth)));
             pairs.Add(new DxfCodePair(11, ViewDirection?.X ?? 0.0));
             pairs.Add(new DxfCodePair(21, ViewDirection?.Y ?? 0.0));
             pairs.Add(new DxfCodePair(31, ViewDirection?.Z ?? 0.0));
             pairs.Add(new DxfCodePair(12, TargetPoint?.X ?? 0.0));
             pairs.Add(new DxfCodePair(22, TargetPoint?.Y ?? 0.0));
             pairs.Add(new DxfCodePair(32, TargetPoint?.Z ?? 0.0));
-            pairs.Add(new DxfCodePair(42, (LensLength)));
+            pairs.Add(new DxfCodePair(42, EnsurePositiveOrDefault(1.0)(LensLength)));
             pairs.Add(new DxfCodePair(43, (FrontClippingPlane)));
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
             pairs.Add(new DxfCodePair(50, (TwistAngle)));
@@ -2188,20 +2188,20 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(37, TargetViewPoint?.Z ?? 0.0));
             if (version <= DxfAcadVersion.R2004)
             {
-                pairs.Add(new DxfCodePair(40, (ViewHeight)));
+                pairs.Add(new DxfCodePair(40, EnsurePositiveOrDefault(1.0)(ViewHeight)));
             }
 
             if (version <= DxfAcadVersion.R2004)
             {
-                pairs.Add(new DxfCodePair(41, (ViewPortAspectRatio)));
+                pairs.Add(new DxfCodePair(41, EnsurePositiveOrDefault(1.0)(ViewPortAspectRatio)));
             }
 
-            pairs.Add(new DxfCodePair(42, (LensLength)));
+            pairs.Add(new DxfCodePair(42, EnsurePositiveOrDefault(50.0)(LensLength)));
             pairs.Add(new DxfCodePair(43, (FrontClippingPlane)));
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.Add(new DxfCodePair(45, (ViewHeight)));
+                pairs.Add(new DxfCodePair(45, EnsurePositiveOrDefault(1.0)(ViewHeight)));
             }
 
             pairs.Add(new DxfCodePair(50, (SnapRotationAngle)));

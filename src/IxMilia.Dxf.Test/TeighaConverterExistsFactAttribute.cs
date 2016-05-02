@@ -32,12 +32,15 @@ namespace IxMilia.Dxf.Test
                 _pathResolved = true;
                 var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
                 var oda = Path.Combine(programFiles, "ODA");
-                foreach (var candidateDir in Directory.EnumerateDirectories(oda, "Teigha*"))
+                if (Directory.Exists(oda))
                 {
-                    var candidatePath = Path.Combine(candidateDir, _converterExe);
-                    if (File.Exists(candidatePath))
+                    foreach (var candidateDir in Directory.EnumerateDirectories(oda, "Teigha*"))
                     {
-                        _converterPath = candidatePath;
+                        var candidatePath = Path.Combine(candidateDir, _converterExe);
+                        if (File.Exists(candidatePath))
+                        {
+                            _converterPath = candidatePath;
+                        }
                     }
                 }
             }

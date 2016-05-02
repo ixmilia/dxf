@@ -38,12 +38,15 @@ namespace IxMilia.Dxf.Test
                 }
 
                 var autodesk = Path.Combine(programFiles, "Autodesk");
-                foreach (var candidateDir in Directory.EnumerateDirectories(autodesk, "AutoCAD*"))
+                if (Directory.Exists(autodesk))
                 {
-                    var candidatePath = Path.Combine(candidateDir, _converterExe);
-                    if (File.Exists(candidatePath))
+                    foreach (var candidateDir in Directory.EnumerateDirectories(autodesk, "AutoCAD*"))
                     {
-                        _converterPath = candidatePath;
+                        var candidatePath = Path.Combine(candidateDir, _converterExe);
+                        if (File.Exists(candidatePath))
+                        {
+                            _converterPath = candidatePath;
+                        }
                     }
                 }
             }

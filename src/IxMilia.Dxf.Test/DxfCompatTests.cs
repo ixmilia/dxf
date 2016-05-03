@@ -40,17 +40,31 @@ ENDSEC
 EOF
 ".Trim();
 
-        private string PrepareTempDirectory(string dirName)
+        private class ManageTemporaryDirectory : IDisposable
         {
-            var tempDir = Path.GetTempPath();
-            var fullPath = Path.Combine(tempDir, dirName);
-            if (Directory.Exists(fullPath))
+            public string DirectoryPath { get; }
+
+            public ManageTemporaryDirectory()
             {
-                Directory.Delete(fullPath, true);
+                DirectoryPath = Path.Combine(
+                    Path.GetTempPath(),
+                    Guid.NewGuid().ToString()
+                    );
+                if (Directory.Exists(DirectoryPath))
+                {
+                    Directory.Delete(DirectoryPath, true);
+                }
+
+                Directory.CreateDirectory(DirectoryPath);
             }
 
-            Directory.CreateDirectory(fullPath);
-            return fullPath;
+            public void Dispose()
+            {
+                if (Directory.Exists(DirectoryPath))
+                {
+                    Directory.Delete(DirectoryPath, true);
+                }
+            }
         }
 
         [TeighaConverterExistsFact]
@@ -60,30 +74,34 @@ EOF
             var exceptions = new List<Exception>();
             foreach (var teighaVersion in TeighaVersions)
             {
-                var inputDir = PrepareTempDirectory("TeighaCompatInputDir");
-                var outputDir = PrepareTempDirectory("TeighaCompatOutputDir");
-                var barePath = Path.Combine(inputDir, "bare.dxf");
-                File.WriteAllText(barePath, MinimumFileText);
-                var psi = new ProcessStartInfo();
-                psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
-                psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
-                //                                                                            recurse audit
-                var proc = Process.Start(psi);
-                proc.WaitForExit();
-                Assert.Equal(0, proc.ExitCode);
-                Assert.Equal(0, Directory.EnumerateFiles(outputDir, "*.err").Count());
-
-                var convertedFilePath = Directory.EnumerateFiles(outputDir, "*.dxf").Single();
-                using (var fs = new FileStream(convertedFilePath, FileMode.Open))
+                using (var input = new ManageTemporaryDirectory())
+                using (var output = new ManageTemporaryDirectory())
                 {
-                    try
+                    var inputDir = input.DirectoryPath;
+                    var outputDir = output.DirectoryPath;
+                    var barePath = Path.Combine(inputDir, "bare.dxf");
+                    File.WriteAllText(barePath, MinimumFileText);
+                    var psi = new ProcessStartInfo();
+                    psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
+                    psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
+                    //                                                                            recurse audit
+                    var proc = Process.Start(psi);
+                    proc.WaitForExit();
+                    Assert.Equal(0, proc.ExitCode);
+                    Assert.Equal(0, Directory.EnumerateFiles(outputDir, "*.err").Count());
+
+                    var convertedFilePath = Directory.EnumerateFiles(outputDir, "*.dxf").Single();
+                    using (var fs = new FileStream(convertedFilePath, FileMode.Open))
                     {
-                        var file = DxfFile.Load(fs);
-                        Assert.IsType<DxfLine>(file.Entities.Single());
-                    }
-                    catch (Exception ex)
-                    {
-                        exceptions.Add(ex);
+                        try
+                        {
+                            var file = DxfFile.Load(fs);
+                            Assert.IsType<DxfLine>(file.Entities.Single());
+                        }
+                        catch (Exception ex)
+                        {
+                            exceptions.Add(ex);
+                        }
                     }
                 }
             }
@@ -122,44 +140,47 @@ EOF
             // use AutoCad to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
             var exceptions = new List<Exception>();
 
-            var tempDir = PrepareTempDirectory("AutoCadTempDir");
-            var barePath = Path.Combine(tempDir, "bare.dxf");
-            File.WriteAllText(barePath, MinimumFileText);
-
-            var scriptLines = new List<string>();
-            scriptLines.Add("FILEDIA 0");
-            scriptLines.Add($"DXFIN \"{barePath}\"");
-            foreach (var version in new[] { "R12", "2000", "2004", "2007", "2010", "2013" })
+            using (var directory = new ManageTemporaryDirectory())
             {
-                var fullPath = Path.Combine(tempDir, $"result-{version}.dxf");
-                scriptLines.Add($"DXFOUT \"{fullPath}\" V {version} 16");
-            }
+                var tempDir = directory.DirectoryPath;
+                var barePath = Path.Combine(tempDir, "bare.dxf");
+                File.WriteAllText(barePath, MinimumFileText);
 
-            scriptLines.Add("FILEDIA 1");
-            scriptLines.Add("QUIT Y");
-            scriptLines.Add("");
-            var scriptPath = Path.Combine(tempDir, "script.scr");
-            File.WriteAllLines(scriptPath, scriptLines);
-
-            var psi = new ProcessStartInfo();
-            psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
-            psi.Arguments = $@"/b ""{scriptPath}""";
-            var proc = Process.Start(psi);
-            proc.WaitForExit();
-            Assert.Equal(0, proc.ExitCode);
-
-            foreach (var resultPath in Directory.EnumerateFiles(tempDir, "result-*.dxf"))
-            {
-                using (var fs = new FileStream(resultPath, FileMode.Open))
+                var scriptLines = new List<string>();
+                scriptLines.Add("FILEDIA 0");
+                scriptLines.Add($"DXFIN \"{barePath}\"");
+                foreach (var version in new[] { "R12", "2000", "2004", "2007", "2010", "2013" })
                 {
-                    try
+                    var fullPath = Path.Combine(tempDir, $"result-{version}.dxf");
+                    scriptLines.Add($"DXFOUT \"{fullPath}\" V {version} 16");
+                }
+
+                scriptLines.Add("FILEDIA 1");
+                scriptLines.Add("QUIT Y");
+                scriptLines.Add("");
+                var scriptPath = Path.Combine(tempDir, "script.scr");
+                File.WriteAllLines(scriptPath, scriptLines);
+
+                var psi = new ProcessStartInfo();
+                psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
+                psi.Arguments = $@"/b ""{scriptPath}""";
+                var proc = Process.Start(psi);
+                proc.WaitForExit();
+                Assert.Equal(0, proc.ExitCode);
+
+                foreach (var resultPath in Directory.EnumerateFiles(tempDir, "result-*.dxf"))
+                {
+                    using (var fs = new FileStream(resultPath, FileMode.Open))
                     {
-                        var file = DxfFile.Load(fs);
-                        Assert.IsType<DxfLine>(file.Entities.Single());
-                    }
-                    catch (Exception ex)
-                    {
-                        exceptions.Add(ex);
+                        try
+                        {
+                            var file = DxfFile.Load(fs);
+                            Assert.IsType<DxfLine>(file.Entities.Single());
+                        }
+                        catch (Exception ex)
+                        {
+                            exceptions.Add(ex);
+                        }
                     }
                 }
             }
@@ -174,8 +195,10 @@ EOF
         public void AutoCadReadIxMiliaFileCompatTest()
         {
             // save a DXF file in all the formats that IxMilia.Dxf and AutoCAD support and try to get AutoCAD to read all of them
-            var tempDir = PrepareTempDirectory("AutoCADCompatDir");
-            var versions = new List<Tuple<DxfAcadVersion, string>>()
+            using (var directory = new ManageTemporaryDirectory())
+            {
+                var tempDir = directory.DirectoryPath;
+                var versions = new List<Tuple<DxfAcadVersion, string>>()
             {
                 Tuple.Create(DxfAcadVersion.R12, "R12"),
                 Tuple.Create(DxfAcadVersion.R2000, "2000"),
@@ -185,69 +208,72 @@ EOF
                 Tuple.Create(DxfAcadVersion.R2013, "2013"),
             };
 
-            // save the minimal file with all versions
-            var file = new DxfFile();
-            var text = new DxfText(DxfPoint.Origin, 2.0, "");
-            file.Entities.Add(text);
-            foreach (var pair in versions)
-            {
-                var fileName = $"file.{pair.Item1}.dxf";
-                file.Header.Version = pair.Item1;
-                text.Value = pair.Item1.ToString();
-                var outputPath = Path.Combine(tempDir, fileName);
-                using (var fs = new FileStream(outputPath, FileMode.Create))
+                // save the minimal file with all versions
+                var file = new DxfFile();
+                var text = new DxfText(DxfPoint.Origin, 2.0, "");
+                file.Entities.Add(text);
+                foreach (var pair in versions)
                 {
-                    file.Save(fs);
-                }
-            }
-
-            // open each file in AutoCAD and try to write it back out
-            var lines = new List<string>();
-            lines.Add("FILEDIA 0");
-            foreach (var pair in versions)
-            {
-                lines.Add("ERASE ALL ");
-                lines.Add($"DXFIN \"{Path.Combine(tempDir, $"file.{pair.Item1}.dxf")}\"");
-                lines.Add($"DXFOUT \"{Path.Combine(tempDir, $"result.{pair.Item1}.dxf")}\" V {pair.Item2} 16");
-            }
-
-            lines.Add("FILEDIA 1");
-            lines.Add("QUIT Y");
-
-            // create and execute the script
-            var scriptPath = Path.Combine(tempDir, "script.scr");
-            File.WriteAllLines(scriptPath, lines);
-
-            var psi = new ProcessStartInfo();
-            psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
-            psi.Arguments = $@"/b ""{scriptPath}""";
-            var proc = Process.Start(psi);
-            proc.WaitForExit();
-            Assert.Equal(0, proc.ExitCode);
-
-            // check each resultant file for the correct version and text
-            foreach (var pair in versions)
-            {
-                DxfFile dxf;
-                using (var fs = new FileStream(Path.Combine(tempDir, $"result.{pair.Item1}.dxf"), FileMode.Open))
-                {
-                    dxf = DxfFile.Load(fs);
+                    var fileName = $"file.{pair.Item1}.dxf";
+                    file.Header.Version = pair.Item1;
+                    text.Value = pair.Item1.ToString();
+                    var outputPath = Path.Combine(tempDir, fileName);
+                    using (var fs = new FileStream(outputPath, FileMode.Create))
+                    {
+                        file.Save(fs);
+                    }
                 }
 
-                Assert.Equal(pair.Item1, dxf.Header.Version);
-                Assert.Equal(pair.Item1.ToString(), ((DxfText)dxf.Entities.Single()).Value);
+                // open each file in AutoCAD and try to write it back out
+                var lines = new List<string>();
+                lines.Add("FILEDIA 0");
+                foreach (var pair in versions)
+                {
+                    lines.Add("ERASE ALL ");
+                    lines.Add($"DXFIN \"{Path.Combine(tempDir, $"file.{pair.Item1}.dxf")}\"");
+                    lines.Add($"DXFOUT \"{Path.Combine(tempDir, $"result.{pair.Item1}.dxf")}\" V {pair.Item2} 16");
+                }
+
+                lines.Add("FILEDIA 1");
+                lines.Add("QUIT Y");
+
+                // create and execute the script
+                var scriptPath = Path.Combine(tempDir, "script.scr");
+                File.WriteAllLines(scriptPath, lines);
+
+                var psi = new ProcessStartInfo();
+                psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
+                psi.Arguments = $@"/b ""{scriptPath}""";
+                var proc = Process.Start(psi);
+                proc.WaitForExit();
+                Assert.Equal(0, proc.ExitCode);
+
+                // check each resultant file for the correct version and text
+                foreach (var pair in versions)
+                {
+                    DxfFile dxf;
+                    using (var fs = new FileStream(Path.Combine(tempDir, $"result.{pair.Item1}.dxf"), FileMode.Open))
+                    {
+                        dxf = DxfFile.Load(fs);
+                    }
+
+                    Assert.Equal(pair.Item1, dxf.Header.Version);
+                    Assert.Equal(pair.Item1.ToString(), ((DxfText)dxf.Entities.Single()).Value);
+                }
             }
         }
 
         private void TestTeighaReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)
         {
             // save a DXF file in all the formats that IxMilia.Dxf supports and try to get Teigha to read all of them
-            var inputDir = PrepareTempDirectory("TeighaCompatInputDir");
-
-            // save the minimum file with all versions
-            var file = fileGenerator();
-            var allIxMiliaVersions = new[]
+            using (var input = new ManageTemporaryDirectory())
             {
+                var inputDir = input.DirectoryPath;
+
+                // save the minimum file with all versions
+                var file = fileGenerator();
+                var allIxMiliaVersions = new[]
+                {
                 DxfAcadVersion.R9,
                 DxfAcadVersion.R10,
                 DxfAcadVersion.R11,
@@ -260,37 +286,41 @@ EOF
                 DxfAcadVersion.R2010,
                 DxfAcadVersion.R2013
             };
-            foreach (var version in allIxMiliaVersions)
-            {
-                file.Header.Version = version;
-                var outputPath = Path.Combine(inputDir, $"file.{version}.dxf");
-                using (var fs = new FileStream(outputPath, FileMode.Create))
+                foreach (var version in allIxMiliaVersions)
                 {
-                    file.Save(fs);
+                    file.Header.Version = version;
+                    var outputPath = Path.Combine(inputDir, $"file.{version}.dxf");
+                    using (var fs = new FileStream(outputPath, FileMode.Create))
+                    {
+                        file.Save(fs);
+                    }
                 }
-            }
 
-            // invoke the Teigha converter
-            var errors = new List<string>();
-            var teighaVersion = "ACAD2010";
-            var outputDir = PrepareTempDirectory("TeighaCompatOutputDir");
-            var psi = new ProcessStartInfo();
-            psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
-            psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
-            //                                                                            recurse audit
-            var proc = Process.Start(psi);
-            proc.WaitForExit();
-            Assert.Equal(0, proc.ExitCode);
+                // invoke the Teigha converter
+                var errors = new List<string>();
+                var teighaVersion = "ACAD2010";
+                using (var output = new ManageTemporaryDirectory())
+                {
+                    var outputDir = output.DirectoryPath;
+                    var psi = new ProcessStartInfo();
+                    psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
+                    psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
+                    //                                                                            recurse audit
+                    var proc = Process.Start(psi);
+                    proc.WaitForExit();
+                    Assert.Equal(0, proc.ExitCode);
 
-            // check for any error files
-            foreach (var errorFile in Directory.EnumerateFiles(outputDir, "*.err"))
-            {
-                errors.Add(File.ReadAllText(errorFile));
-            }
+                    // check for any error files
+                    foreach (var errorFile in Directory.EnumerateFiles(outputDir, "*.err"))
+                    {
+                        errors.Add(File.ReadAllText(errorFile));
+                    }
+                }
 
-            if (errors.Count > 0)
-            {
-                throw new Exception($"Errors reading IxMilia files:\r\n{string.Join("\r\n", errors)}");
+                if (errors.Count > 0)
+                {
+                    throw new Exception($"Errors reading IxMilia files:\r\n{string.Join("\r\n", errors)}");
+                }
             }
         }
     }

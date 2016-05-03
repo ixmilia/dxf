@@ -1147,7 +1147,7 @@
             <Flag Name="IsTextUpsideDown" Mask="4" />
         </Property>
         <Property Name="HorizontalTextJustification" Code="72" Type="DxfHorizontalTextJustification" DefaultValue="DxfHorizontalTextJustification.Left" ReadConverter="(DxfHorizontalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
-        <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
+        <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" DisableWritingDefault="true" CodeOverrides="11,21,31" />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Property Name="VerticalTextJustification" Code="73" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification)" WriteConverter="(short)" DisableWritingDefault="true" />
         <Constructor>
@@ -1155,6 +1155,23 @@
             <ConstructorParameter Property="TextHeight" Type="double" />
             <ConstructorParameter Property="Value" Type="string" />
         </Constructor>
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" />
+            <WriteProperty Property="Thickness" />
+            <WriteProperty Property="Location" />
+            <WriteProperty Property="TextHeight" />
+            <WriteProperty Property="Value" />
+            <WriteProperty Property="Rotation" />
+            <WriteProperty Property="RelativeXScaleFactor" />
+            <WriteProperty Property="ObliqueAngle" />
+            <WriteProperty Property="TextStyleName" />
+            <WriteProperty Property="TextGenerationFlags" />
+            <WriteProperty Property="HorizontalTextJustification" />
+            <WriteProperty Property="SecondAlignmentPoint" />
+            <WriteProperty Property="Normal" />
+            <WriteProperty Property="VerticalTextJustification" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" />
+        </WriteOrder>
     </Entity>
     <!--
 

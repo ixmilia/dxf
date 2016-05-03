@@ -133,9 +133,13 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(72, (short)(this.HorizontalTextJustification)));
             }
 
-            pairs.Add(new DxfCodePair(11, SecondAlignmentPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, SecondAlignmentPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, SecondAlignmentPoint?.Z ?? default(double)));
+            if (this.SecondAlignmentPoint != DxfPoint.Origin)
+            {
+                pairs.Add(new DxfCodePair(11, SecondAlignmentPoint?.X ?? default(double)));
+                pairs.Add(new DxfCodePair(21, SecondAlignmentPoint?.Y ?? default(double)));
+                pairs.Add(new DxfCodePair(31, SecondAlignmentPoint?.Z ?? default(double)));
+            }
+
             if (this.Normal != DxfVector.ZAxis)
             {
                 pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
@@ -148,6 +152,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(73, (short)(this.VerticalTextJustification)));
             }
 
+            pairs.Add(new DxfCodePair(100, "AcDbText"));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

@@ -170,6 +170,75 @@ EOF
             }
         }
 
+        [AutoCadExistsFact]
+        public void AutoCadReadIxMiliaFileCompatTest()
+        {
+            // save a DXF file in all the formats that IxMilia.Dxf and AutoCAD support and try to get AutoCAD to read all of them
+            var tempDir = PrepareTempDirectory("AutoCADCompatDir");
+            var versions = new List<Tuple<DxfAcadVersion, string>>()
+            {
+                Tuple.Create(DxfAcadVersion.R12, "R12"),
+                Tuple.Create(DxfAcadVersion.R2000, "2000"),
+                Tuple.Create(DxfAcadVersion.R2004, "2004"),
+                Tuple.Create(DxfAcadVersion.R2007, "2007"),
+                Tuple.Create(DxfAcadVersion.R2010, "2010"),
+                Tuple.Create(DxfAcadVersion.R2013, "2013"),
+            };
+
+            // save the minimal file with all versions
+            var file = new DxfFile();
+            var text = new DxfText(DxfPoint.Origin, 2.0, "");
+            file.Entities.Add(text);
+            foreach (var pair in versions)
+            {
+                var fileName = $"file.{pair.Item1}.dxf";
+                file.Header.Version = pair.Item1;
+                text.Value = pair.Item1.ToString();
+                var outputPath = Path.Combine(tempDir, fileName);
+                using (var fs = new FileStream(outputPath, FileMode.Create))
+                {
+                    file.Save(fs);
+                }
+            }
+
+            // open each file in AutoCAD and try to write it back out
+            var lines = new List<string>();
+            lines.Add("FILEDIA 0");
+            foreach (var pair in versions)
+            {
+                lines.Add("ERASE ALL ");
+                lines.Add($"DXFIN \"{Path.Combine(tempDir, $"file.{pair.Item1}.dxf")}\"");
+                lines.Add($"DXFOUT \"{Path.Combine(tempDir, $"result.{pair.Item1}.dxf")}\" V {pair.Item2} 16");
+            }
+
+            lines.Add("FILEDIA 1");
+            lines.Add("QUIT Y");
+
+            // create and execute the script
+            var scriptPath = Path.Combine(tempDir, "script.scr");
+            File.WriteAllLines(scriptPath, lines);
+
+            var psi = new ProcessStartInfo();
+            psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
+            psi.Arguments = $@"/b ""{scriptPath}""";
+            var proc = Process.Start(psi);
+            proc.WaitForExit();
+            Assert.Equal(0, proc.ExitCode);
+
+            // check each resultant file for the correct version and text
+            foreach (var pair in versions)
+            {
+                DxfFile dxf;
+                using (var fs = new FileStream(Path.Combine(tempDir, $"result.{pair.Item1}.dxf"), FileMode.Open))
+                {
+                    dxf = DxfFile.Load(fs);
+                }
+
+                Assert.Equal(pair.Item1, dxf.Header.Version);
+                Assert.Equal(pair.Item1.ToString(), ((DxfText)dxf.Entities.Single()).Value);
+            }
+        }
+
         private void TestTeighaReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)
         {
             // save a DXF file in all the formats that IxMilia.Dxf supports and try to get Teigha to read all of them

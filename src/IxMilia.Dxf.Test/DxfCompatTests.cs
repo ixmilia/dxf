@@ -129,7 +129,6 @@ EOF
             TestTeighaReadIxMiliaGeneratedFile(() =>
             {
                 var file = Parse(MinimumFileText);
-                file.Normalize();
                 return file;
             });
         }

@@ -1464,7 +1464,7 @@ FFFF
 
             // reading again
             file = Parse(text);
-            dict = (DxfDictionary)file.Objects.Single();
+            dict = (DxfDictionary)file.Objects.First();
             Assert.Equal(dict, dict.Owner);
             Assert.Equal(dict, dict["key"]);
 

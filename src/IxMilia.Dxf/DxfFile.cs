@@ -279,6 +279,8 @@ namespace IxMilia.Dxf
 
         private void WriteStream(Stream stream, bool asText)
         {
+            Normalize();
+
             var writer = new DxfWriter(stream, asText);
             writer.Open();
 

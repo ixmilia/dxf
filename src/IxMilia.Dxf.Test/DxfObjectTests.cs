@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Test
   0
 {typeString}
 {contents.Trim()}
-").Objects.Single();
+").Objects.Last();
         }
 
         private static void EnsureFileContainsObject(DxfObject obj, string text, DxfAcadVersion version = DxfAcadVersion.R12)
@@ -337,7 +337,7 @@ value-2
   0
 DICTIONARY
   5
-C
+#
 100
 AcDbDictionary
 281
@@ -345,17 +345,17 @@ AcDbDictionary
   3
 key-1
 350
-D
+#
   3
 key-2
 350
-E
+#
   0
 DICTIONARYVAR
   5
-D
+#
 330
-C
+#
 100
 DictionaryVariables
 280
@@ -365,9 +365,9 @@ value-1
   0
 DICTIONARYVAR
   5
-E
+#
 330
-C
+#
 100
 DictionaryVariables
 280
@@ -389,7 +389,7 @@ value-2
   0
 DICTIONARY
   5
-C
+#
 100
 AcDbDictionary
 281
@@ -397,13 +397,13 @@ AcDbDictionary
   3
 key-1
 350
-D
+#
   0
 DICTIONARY
   5
-D
+#
 330
-C
+#
 100
 AcDbDictionary
 281
@@ -411,13 +411,13 @@ AcDbDictionary
   3
 key-2
 350
-E
+#
   0
 DICTIONARYVAR
   5
-E
+#
 330
-D
+#
 100
 DictionaryVariables
 280
@@ -438,23 +438,23 @@ value-2
   0
 ACDBDICTIONARYWDFLT
   5
-C
+#
 100
 AcDbDictionary
 281
 0
 340
-D
+#
   3
 key-1
 350
-E
+#
   0
 DICTIONARYVAR
   5
-D
+#
 330
-C
+#
 100
 DictionaryVariables
 280
@@ -464,9 +464,9 @@ default-value
   0
 DICTIONARYVAR
   5
-E
+#
 330
-C
+#
 100
 DictionaryVariables
 280
@@ -570,9 +570,9 @@ ENDSEC
   0
 EOF
 ");
-            var dimassoc = (Objects.DxfDimensionAssociativity)file.Objects.Single();
+            var dimassoc = (Objects.DxfDimensionAssociativity)file.Objects.Last();
             Assert.Equal("class-name", dimassoc.ClassName);
-            var dim = (Entities.DxfAlignedDimension)dimassoc.Dimension;
+            var dim = (DxfAlignedDimension)dimassoc.Dimension;
             Assert.Equal(dimassoc, dim.Owner);
             Assert.Equal("dimension-text", dim.Text);
         }
@@ -668,7 +668,7 @@ ENDSEC
   0
 EOF
 ");
-            var lightList = (DxfLightList)file.Objects.Single();
+            var lightList = (DxfLightList)file.Objects.Last();
             Assert.Equal(43, lightList.Version);
             Assert.Equal("light-name", lightList.Lights.Single().Name);
         }
@@ -688,7 +688,7 @@ EOF
   0
 LIGHTLIST
   5
-D
+#
 100
 AcDbLightList
  90
@@ -696,7 +696,7 @@ AcDbLightList
  90
 1
   5
-A
+#
   1
 light-name
 ");
@@ -1187,7 +1187,7 @@ ENDSEC
   0
 EOF
 ");
-            var sortents = (DxfSortentsTable)file.Objects.Single();
+            var sortents = (DxfSortentsTable)file.Objects.Last();
             Assert.Equal(new DxfPoint(1, 2, 3), ((DxfModelPoint)sortents.Entities.Single()).Location);
             Assert.Equal(new DxfPoint(4, 5, 6), ((DxfModelPoint)sortents.SortItems.Single()).Location);
         }
@@ -1208,13 +1208,13 @@ EOF
   0
 POINT
   5
-A
+#
 ");
             VerifyFileContains(file, @"
   0
 POINT
   5
-B
+#
 ");
             VerifyFileContains(file, @"
   0
@@ -1224,9 +1224,9 @@ SORTENTSTABLE
 100
 AcDbSortentsTable
 331
-A
+#
   5
-B
+#
 ");
         }
 

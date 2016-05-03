@@ -537,7 +537,7 @@ BLOCK_RECORD
   5
 #
 330
-0
+#
 100
 AcDbSymbolTableRecord
 100
@@ -549,7 +549,7 @@ BLOCK_RECORD
   5
 #
 330
-0
+#
 100
 AcDbSymbolTableRecord
 100
@@ -561,7 +561,7 @@ BLOCK_RECORD
   5
 19
 330
-0
+#
 100
 AcDbSymbolTableRecord
 100
@@ -1398,14 +1398,19 @@ name
         public void WriteNormalLayerColorTest()
         {
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
             file.Layers.Add(new DxfLayer("name", DxfColor.FromIndex(5)) { IsLayerOn = true });
             VerifyFileContains(file, @"
   0
 LAYER
   5
 #
+330
+#
 100
 AcDbSymbolTableRecord
+100
+AcDbLayerTableRecord
   2
 name
  70

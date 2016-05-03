@@ -113,17 +113,17 @@ namespace IxMilia.Dxf
             uint nextPointer = 1u;
             foreach (var item in file.GetFileItems().Where(i => i != null))
             {
-                nextPointer = AssignHandles(item, nextPointer, visitedItems);
+                nextPointer = AssignHandles(item, nextPointer, 0u, visitedItems);
                 foreach (var child in item.GetChildItems().Where(c => c != null))
                 {
-                    nextPointer = AssignHandles(child, nextPointer, visitedItems);
+                    nextPointer = AssignHandles(child, nextPointer, item.Handle, visitedItems);
                 }
             }
 
             return nextPointer;
         }
 
-        private static uint AssignHandles(IDxfItemInternal item, uint nextHandle, HashSet<IDxfItemInternal> visitedItems)
+        private static uint AssignHandles(IDxfItemInternal item, uint nextHandle, uint ownerHandle, HashSet<IDxfItemInternal> visitedItems)
         {
             if (item == null || !visitedItems.Add(item))
             {
@@ -132,11 +132,15 @@ namespace IxMilia.Dxf
 
             Debug.Assert(item.Handle == 0u);
             item.Handle = nextHandle++;
+            if (item.OwnerHandle == 0u && ownerHandle != 0u)
+            {
+                item.OwnerHandle = ownerHandle;
+            }
 
             foreach (var child in item.GetPointers().Where(c => c.Item != null))
             {
                 var childItem = (IDxfItemInternal)child.Item;
-                nextHandle = AssignHandles(childItem, nextHandle, visitedItems);
+                nextHandle = AssignHandles(childItem, nextHandle, item.Handle, visitedItems);
                 child.Handle = childItem.Handle;
                 childItem.OwnerHandle = item.Handle;
             }

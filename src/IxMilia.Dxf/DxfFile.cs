@@ -26,6 +26,8 @@ namespace IxMilia.Dxf
         internal DxfObjectsSection ObjectsSection { get; private set; }
         internal DxfThumbnailImageSection ThumbnailImageSection { get; private set; }
 
+        private DateTime _lastOpenOrSave;
+
         public List<DxfEntity> Entities { get { return EntitiesSection.Entities; } }
 
         public List<DxfClass> Classes { get { return ClassSection.Classes; } }
@@ -124,6 +126,7 @@ namespace IxMilia.Dxf
 
         public DxfFile()
         {
+            _lastOpenOrSave = DateTime.UtcNow;
             this.HeaderSection = new DxfHeaderSection();
             this.ClassSection = new DxfClassesSection();
             this.TablesSection = new DxfTablesSection();
@@ -277,8 +280,26 @@ namespace IxMilia.Dxf
             new DxbWriter(stream).Save(this);
         }
 
+        private void UpdateTimes()
+        {
+            var currentTime = DateTime.Now;
+            var currentTimeUtc = DateTime.UtcNow;
+            var timeInDrawing = currentTimeUtc - _lastOpenOrSave;
+
+            Header.TimeInDrawing += timeInDrawing;
+            Header.UpdateDate = currentTime;
+            Header.UpdateDateUniversal = currentTimeUtc;
+            if (Header.UserTimerOn)
+            {
+                Header.UserElapsedTimer += timeInDrawing;
+            }
+
+            _lastOpenOrSave = currentTimeUtc;
+        }
+
         private void WriteStream(Stream stream, bool asText)
         {
+            UpdateTimes();
             Normalize();
 
             var writer = new DxfWriter(stream, asText);

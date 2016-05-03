@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -1809,6 +1810,24 @@ $SHADOWPLANELOCATION";
                 .Select(s => s.Trim())
                 .ToArray();
             AssertArrayEqual(expectedOrder, actualOrder);
+        }
+
+        #endregion
+
+        #region Other tests
+
+        [Fact]
+        public void TimersTest()
+        {
+            var file = new DxfFile();
+            Thread.Sleep(TimeSpan.FromMilliseconds(20));
+            using (var ms = new MemoryStream())
+            {
+                // we don't really care what's written but this will force the timers to be updated
+                file.Save(ms);
+            }
+
+            Assert.True(file.Header.TimeInDrawing >= TimeSpan.FromMilliseconds(20));
         }
 
         #endregion

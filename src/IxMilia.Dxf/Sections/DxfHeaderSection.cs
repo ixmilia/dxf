@@ -403,7 +403,7 @@ namespace IxMilia.Dxf.Sections
         protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             var values = new List<DxfCodePair>();
-            DxfHeader.AddValueToList(values, this.Header, version);
+            Header.AddValueToList(values);
             return values;
         }
 
@@ -434,7 +434,7 @@ namespace IxMilia.Dxf.Sections
                 }
                 else
                 {
-                    DxfHeader.SetHeaderVariable(keyName, pair, section.Header);
+                    section.Header.SetHeaderVariable(keyName, pair);
                 }
             }
 

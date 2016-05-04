@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information. -->
 <Spec xmlns="http://IxMilia.com/Dxf/HeaderVariablesSpec">
-    <Variable Name="ACADVER" Code="1" Type="DxfAcadVersion" Property="Version" DefaultValue="DxfAcadVersion.R12" ReadConverter="DxfAcadVersionStrings.StringToVersion" WriteConverter="DxfAcadVersionStrings.VersionToString" />
+    <Variable Name="ACADVER" Code="1" Type="DxfAcadVersion" Property="Version" DefaultValue="DxfAcadVersion.R12" ReadConverter="VersionConverter" WriteConverter="VersionConverter" />
     <Variable Name="ACADMAINTVER" Code="70" Type="short" Property="MaintenenceVersion" DefaultValue="0" MinVersion="R14" />
     <Variable Name="DWGCODEPAGE" Code="3" Type="string" Property="DrawingCodePage" DefaultValue="ANSI_1252" MinVersion="R13" />
     <Variable Name="LASTSAVEDBY" Code="1" Type="string" Property="LastSavedBy" DefaultValue="null" MinVersion="R2004" />

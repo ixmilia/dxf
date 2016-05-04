@@ -24,6 +24,39 @@ namespace IxMilia.Dxf
             set { SetValue(variableName, value); }
         }
 
+        public bool IsRestrictedVersion { get; set; } = false;
+
+        private void SetManualDefaults()
+        {
+            IsRestrictedVersion = false;
+        }
+
+        private DxfAcadVersion VersionConverter(string str)
+        {
+            if (str.EndsWith("S"))
+            {
+                IsRestrictedVersion = true;
+                str = str.Substring(0, str.Length - 1);
+            }
+            else
+            {
+                IsRestrictedVersion = false;
+            }
+
+            return DxfAcadVersionStrings.StringToVersion(str);
+        }
+
+        private string VersionConverter(DxfAcadVersion version)
+        {
+            var str = DxfAcadVersionStrings.VersionToString(version);
+            if (IsRestrictedVersion)
+            {
+                str += "S";
+            }
+
+            return str;
+        }
+
         private static string StringShort(short s)
         {
             return DxfCommonConverters.StringShort(s);

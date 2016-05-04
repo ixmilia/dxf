@@ -290,6 +290,19 @@ ENDTAB
             Assert.Equal(27.0, viewPorts[1].ViewTwistAngle);
         }
 
+        [Fact]
+        public void ReadAlternateVersionTest()
+        {
+            var file = Section("HEADER", @"
+  9
+$ACADVER
+  1
+15.0S
+");
+            Assert.Equal(DxfAcadVersion.R2000, file.Header.Version);
+            Assert.True(file.Header.IsRestrictedVersion);
+        }
+
         #endregion
 
         #region Write tests
@@ -446,6 +459,20 @@ AcDbSymbolTableRecord
                     var file2 = DxfFile.Load(ms);
                 }
             }
+        }
+
+        [Fact]
+        public void WriteAlternateVersionTest()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Header.IsRestrictedVersion = true;
+            VerifyFileContains(file, @"
+  9
+$ACADVER
+  1
+AC1015S
+");
         }
 
         [Fact]

@@ -279,7 +279,7 @@ namespace IxMilia.Dxf.Entities
 
         protected static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
         {
-            return value => string.IsNullOrWhiteSpace(value) ? defaultValue : value;
+            return DxfCommonConverters.DefaultIfNullOrEmpty(defaultValue);
         }
 
         private static void SwallowEntity(DxfCodePairBufferReader buffer)

@@ -1589,15 +1589,15 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
-            pairs.Add(new DxfCodePair(10, Origin?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(20, Origin?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(30, Origin?.Z ?? 0.0));
-            pairs.Add(new DxfCodePair(11, XAxis?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(21, XAxis?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(31, XAxis?.Z ?? 0.0));
-            pairs.Add(new DxfCodePair(12, YAxis?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(22, YAxis?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(32, YAxis?.Z ?? 0.0));
+            pairs.Add(new DxfCodePair(10, (Origin?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(20, (Origin?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(30, (Origin?.Z ?? 0.0)));
+            pairs.Add(new DxfCodePair(11, (XAxis?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(21, (XAxis?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(31, (XAxis?.Z ?? 0.0)));
+            pairs.Add(new DxfCodePair(12, (YAxis?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(22, (YAxis?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(32, (YAxis?.Z ?? 0.0)));
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(79, (short)(OrthographicViewType)));
@@ -1620,17 +1620,17 @@ namespace IxMilia.Dxf
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(13, OrthographicOrigin?.X ?? 0.0));
+                pairs.Add(new DxfCodePair(13, (OrthographicOrigin?.X ?? 0.0)));
             }
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(23, OrthographicOrigin?.Y ?? 0.0));
+                pairs.Add(new DxfCodePair(23, (OrthographicOrigin?.Y ?? 0.0)));
             }
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(33, OrthographicOrigin?.Z ?? 0.0));
+                pairs.Add(new DxfCodePair(33, (OrthographicOrigin?.Z ?? 0.0)));
             }
 
             if (XData != null)
@@ -1794,15 +1794,15 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(40, EnsurePositiveOrDefault(1.0)(ViewHeight)));
-            pairs.Add(new DxfCodePair(10, ViewCenterPoint?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(20, ViewCenterPoint?.Y ?? 0.0));
+            pairs.Add(new DxfCodePair(10, (ViewCenterPoint?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(20, (ViewCenterPoint?.Y ?? 0.0)));
             pairs.Add(new DxfCodePair(41, EnsurePositiveOrDefault(1.0)(ViewWidth)));
-            pairs.Add(new DxfCodePair(11, ViewDirection?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(21, ViewDirection?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(31, ViewDirection?.Z ?? 0.0));
-            pairs.Add(new DxfCodePair(12, TargetPoint?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(22, TargetPoint?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(32, TargetPoint?.Z ?? 0.0));
+            pairs.Add(new DxfCodePair(11, (ViewDirection?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(21, (ViewDirection?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(31, (ViewDirection?.Z ?? 0.0)));
+            pairs.Add(new DxfCodePair(12, (TargetPoint?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(22, (TargetPoint?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(32, (TargetPoint?.Z ?? 0.0)));
             pairs.Add(new DxfCodePair(42, EnsurePositiveOrDefault(1.0)(LensLength)));
             pairs.Add(new DxfCodePair(43, (FrontClippingPlane)));
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
@@ -1845,47 +1845,47 @@ namespace IxMilia.Dxf
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(110, UCSOrigin?.X ?? 0.0));
+                pairs.Add(new DxfCodePair(110, (UCSOrigin?.X ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(120, UCSOrigin?.Y ?? 0.0));
+                pairs.Add(new DxfCodePair(120, (UCSOrigin?.Y ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(130, UCSOrigin?.Z ?? 0.0));
+                pairs.Add(new DxfCodePair(130, (UCSOrigin?.Z ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(111, UCSXAxis?.X ?? 0.0));
+                pairs.Add(new DxfCodePair(111, (UCSXAxis?.X ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(121, UCSXAxis?.Y ?? 0.0));
+                pairs.Add(new DxfCodePair(121, (UCSXAxis?.Y ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(131, UCSXAxis?.Z ?? 0.0));
+                pairs.Add(new DxfCodePair(131, (UCSXAxis?.Z ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(112, UCSYAxis?.X ?? 0.0));
+                pairs.Add(new DxfCodePair(112, (UCSYAxis?.X ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(122, UCSYAxis?.Y ?? 0.0));
+                pairs.Add(new DxfCodePair(122, (UCSYAxis?.Y ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(132, UCSYAxis?.Z ?? 0.0));
+                pairs.Add(new DxfCodePair(132, (UCSYAxis?.Z ?? 0.0)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
@@ -2076,7 +2076,7 @@ namespace IxMilia.Dxf
         public double SnapRotationAngle { get; set; }
         public double ViewTwistAngle { get; set; }
         public DxfViewMode ViewMode { get; set; }
-        public int CircleZoomPercent { get; set; }
+        public int CircleSides { get; set; }
         public bool FastZoom { get; set; }
         public short UCSIcon { get; set; }
         public bool SnapOn { get; set; }
@@ -2128,7 +2128,7 @@ namespace IxMilia.Dxf
             SnapRotationAngle = 0.0;
             ViewTwistAngle = 0.0;
             ViewMode = 0;
-            CircleZoomPercent = 1000;
+            CircleSides = 1000;
             FastZoom = true;
             UCSIcon = 3;
             SnapOn = false;
@@ -2168,24 +2168,24 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
-            pairs.Add(new DxfCodePair(10, LowerLeft?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(20, LowerLeft?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(11, UpperRight?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(21, UpperRight?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(12, ViewCenter?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(22, ViewCenter?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(13, SnapBasePoint?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(23, SnapBasePoint?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(14, SnapSpacing?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(24, SnapSpacing?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(15, GridSpacing?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(25, GridSpacing?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(16, ViewDirection?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(26, ViewDirection?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(36, ViewDirection?.Z ?? 0.0));
-            pairs.Add(new DxfCodePair(17, TargetViewPoint?.X ?? 0.0));
-            pairs.Add(new DxfCodePair(27, TargetViewPoint?.Y ?? 0.0));
-            pairs.Add(new DxfCodePair(37, TargetViewPoint?.Z ?? 0.0));
+            pairs.Add(new DxfCodePair(10, (LowerLeft?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(20, (LowerLeft?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(11, (UpperRight?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(21, (UpperRight?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(12, (ViewCenter?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(22, (ViewCenter?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(13, (SnapBasePoint?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(23, (SnapBasePoint?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(14, EnsurePositiveOrDefault(1.0)(SnapSpacing?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(24, EnsurePositiveOrDefault(1.0)(SnapSpacing?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(15, EnsurePositiveOrDefault(1.0)(GridSpacing?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(25, EnsurePositiveOrDefault(1.0)(GridSpacing?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(16, (ViewDirection?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(26, (ViewDirection?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(36, (ViewDirection?.Z ?? 0.0)));
+            pairs.Add(new DxfCodePair(17, (TargetViewPoint?.X ?? 0.0)));
+            pairs.Add(new DxfCodePair(27, (TargetViewPoint?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(37, (TargetViewPoint?.Z ?? 0.0)));
             if (version <= DxfAcadVersion.R2004)
             {
                 pairs.Add(new DxfCodePair(40, EnsurePositiveOrDefault(1.0)(ViewHeight)));
@@ -2207,13 +2207,13 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(50, (SnapRotationAngle)));
             pairs.Add(new DxfCodePair(51, (ViewTwistAngle)));
             pairs.Add(new DxfCodePair(71, (short)(ViewMode)));
-            pairs.Add(new DxfCodePair(72, (short)(CircleZoomPercent)));
+            pairs.Add(new DxfCodePair(72, (short)EnsurePositiveOrDefault(1000)(CircleSides)));
             if (version <= DxfAcadVersion.R2004)
             {
                 pairs.Add(new DxfCodePair(73, BoolShort(FastZoom)));
             }
 
-            pairs.Add(new DxfCodePair(74, (UCSIcon)));
+            pairs.Add(new DxfCodePair(74, (short)EnsurePositiveOrDefault(3)(UCSIcon)));
             if (version <= DxfAcadVersion.R2004)
             {
                 pairs.Add(new DxfCodePair(75, BoolShort(SnapOn)));
@@ -2251,47 +2251,47 @@ namespace IxMilia.Dxf
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(110, UCSOrigin?.X ?? 0.0));
+                pairs.Add(new DxfCodePair(110, (UCSOrigin?.X ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(120, UCSOrigin?.Y ?? 0.0));
+                pairs.Add(new DxfCodePair(120, (UCSOrigin?.Y ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(130, UCSOrigin?.Z ?? 0.0));
+                pairs.Add(new DxfCodePair(130, (UCSOrigin?.Z ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(111, UCSXAxis?.X ?? 0.0));
+                pairs.Add(new DxfCodePair(111, (UCSXAxis?.X ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(121, UCSXAxis?.Y ?? 0.0));
+                pairs.Add(new DxfCodePair(121, (UCSXAxis?.Y ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(131, UCSXAxis?.Z ?? 0.0));
+                pairs.Add(new DxfCodePair(131, (UCSXAxis?.Z ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(112, UCSYAxis?.X ?? 0.0));
+                pairs.Add(new DxfCodePair(112, (UCSYAxis?.X ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(122, UCSYAxis?.Y ?? 0.0));
+                pairs.Add(new DxfCodePair(122, (UCSYAxis?.Y ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(132, UCSYAxis?.Z ?? 0.0));
+                pairs.Add(new DxfCodePair(132, (UCSYAxis?.Z ?? 0.0)));
             }
 
             if (HasOwnUCS && version >= DxfAcadVersion.R2000)
@@ -2483,7 +2483,7 @@ namespace IxMilia.Dxf
                         item.ViewMode = (DxfViewMode)(pair.ShortValue);
                         break;
                     case 72:
-                        item.CircleZoomPercent = (int)(pair.ShortValue);
+                        item.CircleSides = (int)(pair.ShortValue);
                         break;
                     case 73:
                         item.FastZoom = BoolShort(pair.ShortValue);

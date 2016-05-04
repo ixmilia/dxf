@@ -2053,23 +2053,23 @@ namespace IxMilia.Dxf
 
             // TEXTSIZE
             list.Add(new DxfCodePair(9, TEXTSIZE));
-            list.Add(new DxfCodePair(40, (header.DefaultTextHeight)));
+            list.Add(new DxfCodePair(40, EnsurePositiveOrDefault(0.2)(header.DefaultTextHeight)));
 
             // TRACEWID
             list.Add(new DxfCodePair(9, TRACEWID));
-            list.Add(new DxfCodePair(40, (header.TraceWidth)));
+            list.Add(new DxfCodePair(40, EnsurePositiveOrDefault(0.05)(header.TraceWidth)));
 
             // TEXTSTYLE
             list.Add(new DxfCodePair(9, TEXTSTYLE));
-            list.Add(new DxfCodePair(7, (header.TextStyle)));
+            list.Add(new DxfCodePair(7, DefaultIfNullOrEmpty("STANDARD")(header.TextStyle)));
 
             // CLAYER
             list.Add(new DxfCodePair(9, CLAYER));
-            list.Add(new DxfCodePair(8, (header.CurrentLayer)));
+            list.Add(new DxfCodePair(8, DefaultIfNullOrEmpty("0")(header.CurrentLayer)));
 
             // CELTYPE
             list.Add(new DxfCodePair(9, CELTYPE));
-            list.Add(new DxfCodePair(6, (header.CurrentEntityLinetype)));
+            list.Add(new DxfCodePair(6, DefaultIfNullOrEmpty("BYLAYER")(header.CurrentEntityLinetype)));
 
             // CECOLOR
             list.Add(new DxfCodePair(9, CECOLOR));
@@ -2248,7 +2248,7 @@ namespace IxMilia.Dxf
 
             // DIMSTYLE
             list.Add(new DxfCodePair(9, DIMSTYLE));
-            list.Add(new DxfCodePair(2, (header.DimensionStyleName)));
+            list.Add(new DxfCodePair(2, DefaultIfNullOrEmpty("STANDARD")(header.DimensionStyleName)));
 
             // DIMCLRD
             if (version >= DxfAcadVersion.R11)
@@ -2570,7 +2570,7 @@ namespace IxMilia.Dxf
 
             // MENU
             list.Add(new DxfCodePair(9, MENU));
-            list.Add(new DxfCodePair(1, (header.FileName)));
+            list.Add(new DxfCodePair(1, DefaultIfNullOrEmpty(".")(header.FileName)));
 
             // ELEVATION
             list.Add(new DxfCodePair(9, ELEVATION));

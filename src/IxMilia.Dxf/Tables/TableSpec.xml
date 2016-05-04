@@ -174,8 +174,8 @@
             <Property Name="UpperRight" Code="-2" Type="DxfPoint" DefaultValue="new DxfPoint(1.0, 1.0, 0.0)" CodeOverrides="11,21" />
             <Property Name="ViewCenter" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22" />
             <Property Name="SnapBasePoint" Code="-2" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23" />
-            <Property Name="SnapSpacing" Code="-2" Type="DxfVector" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" CodeOverrides="14,24" />
-            <Property Name="GridSpacing" Code="-2" Type="DxfVector" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" CodeOverrides="15,25" />
+            <Property Name="SnapSpacing" Code="-2" Type="DxfVector" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" WriteConverter="EnsurePositiveOrDefault(1.0)" CodeOverrides="14,24" />
+            <Property Name="GridSpacing" Code="-2" Type="DxfVector" DefaultValue="new DxfVector(1.0, 1.0, 0.0)" WriteConverter="EnsurePositiveOrDefault(1.0)" CodeOverrides="15,25" />
             <Property Name="ViewDirection" Code="-3" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="16,26,36" />
             <Property Name="TargetViewPoint" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="17,27,37" />
             <Property Name="ViewHeight" Code="40" Type="double" DefaultValue="1.0" WriteConverter="EnsurePositiveOrDefault(1.0)" MaxVersion="R2004" />
@@ -187,9 +187,9 @@
             <Property Name="SnapRotationAngle" Code="50" Type="double" DefaultValue="0.0" />
             <Property Name="ViewTwistAngle" Code="51" Type="double" DefaultValue="0.0" />
             <Property Name="ViewMode" Code="71" Type="DxfViewMode" DefaultValue="0" ReadConverter="(DxfViewMode)" WriteConverter="(short)" />
-            <Property Name="CircleZoomPercent" Code="72" Type="int" DefaultValue="1000" ReadConverter="(int)" WriteConverter="(short)" />
+            <Property Name="CircleSides" Code="72" Type="int" DefaultValue="1000" ReadConverter="(int)" WriteConverter="(short)EnsurePositiveOrDefault(1000)" />
             <Property Name="FastZoom" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
-            <Property Name="UCSIcon" Code="74" Type="short" DefaultValue="3" />
+            <Property Name="UCSIcon" Code="74" Type="short" DefaultValue="3" WriteConverter="(short)EnsurePositiveOrDefault(3)" />
             <Property Name="SnapOn" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
             <Property Name="GridOn" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R2004" />
             <Property Name="SnapStyle" Code="77" Type="DxfSnapStyle" DefaultValue="DxfSnapStyle.Standard" ReadConverter="(DxfSnapStyle)" WriteConverter="(short)" MaxVersion="R2004" />

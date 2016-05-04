@@ -232,7 +232,7 @@ foreach (var table in tables)
 <#
                     } // if
 #>
-            <#= indent #>pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= Name(property) #>?.<#= prop #> ?? 0.0));
+            <#= indent #>pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= WriteConverter(property) #>(<#= Name(property) #>?.<#= prop #> ?? 0.0)));
 <#
                     if (hasPredicate)
                     {

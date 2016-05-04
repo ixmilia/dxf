@@ -107,12 +107,12 @@ namespace IxMilia.Dxf
 
         protected static bool BoolShort(short s)
         {
-            return s != 0;
+            return DxfCommonConverters.BoolShort(s);
         }
 
         protected static short BoolShort(bool b)
         {
-            return (short)(b ? 1 : 0);
+            return DxfCommonConverters.BoolShort(b);
         }
 
         protected static uint UIntHandle(string s)
@@ -127,7 +127,12 @@ namespace IxMilia.Dxf
 
         protected static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
         {
-            return value => value <= 0.0 ? defaultValue : value;
+            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
+        }
+
+        protected static Func<int, int> EnsurePositiveOrDefault(int defaultValue)
+        {
+            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
         }
     }
 

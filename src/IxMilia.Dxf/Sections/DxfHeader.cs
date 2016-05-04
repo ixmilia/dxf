@@ -84,6 +84,16 @@ namespace IxMilia.Dxf
             return t.TotalDays;
         }
 
+        private static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        {
+            return DxfCommonConverters.DefaultIfNullOrEmpty(defaultValue);
+        }
+
+        private static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        {
+            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
+        }
+
         private static void EnsureCode(DxfCodePair pair, int code)
         {
             if (pair.Code != code)

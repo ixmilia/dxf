@@ -149,5 +149,20 @@ namespace IxMilia.Dxf
                     return 0;
             }
         }
+
+        public static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        {
+            return value => value <= 0.0 ? defaultValue : value;
+        }
+
+        public static Func<int, int> EnsurePositiveOrDefault(int defaultValue)
+        {
+            return value => value <= 0 ? defaultValue : value;
+        }
+
+        public static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        {
+            return value => string.IsNullOrWhiteSpace(value) ? defaultValue : value;
+        }
     }
 }

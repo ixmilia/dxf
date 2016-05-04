@@ -34,11 +34,11 @@
         <Flag Name="ParallelSnap" Mask="8192" />
     </Variable>
     <Variable Name="ATTMODE" Code="70" Type="DxfAttributeVisibility" Property="AttributeVisibility" DefaultValue="DxfAttributeVisibility.Normal" ReadConverter="(DxfAttributeVisibility)" WriteConverter="(short)" />
-    <Variable Name="TEXTSIZE" Code="40" Type="double" Property="DefaultTextHeight" DefaultValue="0.2" />
-    <Variable Name="TRACEWID" Code="40" Type="double" Property="TraceWidth" DefaultValue="0.05" />
-    <Variable Name="TEXTSTYLE" Code="7" Type="string" Property="TextStyle" DefaultValue="STANDARD" />
-    <Variable Name="CLAYER" Code="8" Type="string" Property="CurrentLayer" DefaultValue="0" />
-    <Variable Name="CELTYPE" Code="6" Type="string" Property="CurrentEntityLinetype" DefaultValue="BYLAYER" />
+    <Variable Name="TEXTSIZE" Code="40" Type="double" Property="DefaultTextHeight" DefaultValue="0.2" WriteConverter="EnsurePositiveOrDefault(0.2)" />
+    <Variable Name="TRACEWID" Code="40" Type="double" Property="TraceWidth" DefaultValue="0.05" WriteConverter="EnsurePositiveOrDefault(0.05)" />
+    <Variable Name="TEXTSTYLE" Code="7" Type="string" Property="TextStyle" DefaultValue="STANDARD" WriteConverter="DefaultIfNullOrEmpty(&quot;STANDARD&quot;)" />
+    <Variable Name="CLAYER" Code="8" Type="string" Property="CurrentLayer" DefaultValue="0" WriteConverter="DefaultIfNullOrEmpty(&quot;0&quot;)" />
+    <Variable Name="CELTYPE" Code="6" Type="string" Property="CurrentEntityLinetype" DefaultValue="BYLAYER" WriteConverter="DefaultIfNullOrEmpty(&quot;BYLAYER&quot;)" />
     <Variable Name="CECOLOR" Code="62" Type="DxfColor" Property="CurrentEntityColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
     <Variable Name="CELTSCALE" Code="40" Type="double" Property="CurrentEntityLinetypeScale" DefaultValue="1.0" MinVersion="R13" />
     <Variable Name="DELOBJ" Code="70" Type="bool" Property="RetainDeletedObjects" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" MaxVersion="R14" />
@@ -82,7 +82,7 @@
     <Variable Name="DIMSAH" Code="70" Type="bool" Property="UseSeparateArrowBlocksForDimensions" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />
     <Variable Name="DIMBLK1" Code="1" Type="string" Property="FirstArrowBlockName" DefaultValue="null" />
     <Variable Name="DIMBLK2" Code="1" Type="string" Property="SecondArrowBlockName" DefaultValue="null" />
-    <Variable Name="DIMSTYLE" Code="2" Type="string" Property="DimensionStyleName" DefaultValue="STANDARD" />
+    <Variable Name="DIMSTYLE" Code="2" Type="string" Property="DimensionStyleName" DefaultValue="STANDARD" WriteConverter="DefaultIfNullOrEmpty(&quot;STANDARD&quot;)" />
     <Variable Name="DIMCLRD" Code="70" Type="DxfColor" Property="DimensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R11" />
     <Variable Name="DIMCLRE" Code="70" Type="DxfColor" Property="DimensionExtensionLineColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R11" />
     <Variable Name="DIMCLRT" Code="70" Type="DxfColor" Property="DimensionTextColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" MinVersion="R11" />
@@ -131,7 +131,7 @@
     <Variable Name="FILLETRAD" Code="40" Type="double" Property="FilletRadius" DefaultValue="0.0" />
     <Variable Name="AUNITS" Code="70" Type="DxfAngleFormat" Property="AngleUnitFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" />
     <Variable Name="AUPREC" Code="70" Type="short" Property="AngleUnitPrecision" DefaultValue="0" />
-    <Variable Name="MENU" Code="1" Type="string" Property="FileName" DefaultValue="." />
+    <Variable Name="MENU" Code="1" Type="string" Property="FileName" DefaultValue="." WriteConverter="DefaultIfNullOrEmpty(&quot;.&quot;)" />
     <Variable Name="ELEVATION" Code="40" Type="double" Property="Elevation" DefaultValue="0.0" />
     <Variable Name="PELEVATION" Code="40" Type="double" Property="PaperspaceElevation" DefaultValue="0.0" MinVersion="R11" />
     <Variable Name="THICKNESS" Code="40" Type="double" Property="Thickness" DefaultValue="0.0" />

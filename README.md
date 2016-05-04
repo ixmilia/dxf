@@ -52,6 +52,26 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Create))
 }
 ```
 
+### Compatibility
+
+This library should be able to open any valid DXF file, including files produced by AutoCAD or anything using the
+Teigha libraries from the [Open Design Alliance](https://opendesign.com), including Microsoft Visio (which uses older
+Open Design libraries.)
+
+The Teigha libraries should be able to open anything produced by this library.
+
+AutoCAD is rather fussy with what it will accept as valid DXF, even though the official spec is rather loose.  If you
+use this library to write a file that AutoCAD can't open, file an issue with the drawing (or a sample) that was
+produced by this library that AutoCAD won't open and I will take a look as soon as I am able.  I've found that AutoCAD
+compatibility can be greatly improved by doing the following:
+
+``` C#
+// assuming `dxfFile` is a valid `DxfFile` object
+dxfFile.Header.SetDefaults();
+dxfFile.ViewPorts.Clear();
+dxfFile.Save(...);
+```
+
 ### Status
 
 Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for the following entities:
@@ -64,7 +84,10 @@ Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for t
 
 ### DXF Reference
 
-Since I don't want to fall afoul of Autodesk's lawyers, this repo can't include the actual DXF documentation.  It can, however contain links to the official documents that I've been able to scrape together.  For most scenarios the 2014 documentation should suffice, but all other versions are included here for backwards compatibility and reference between versions.
+Since I don't want to fall afoul of Autodesk's lawyers, this repo can't include the actual DXF documentation.  It can,
+however contain links to the official documents that I've been able to scrape together.  For most scenarios the 2014
+documentation should suffice, but all other versions are included here for backwards compatibility and reference
+between versions.
 
 [R10 (non-Autodesk source)](http://www.martinreddy.net/gfx/3d/DXF10.spec)
 

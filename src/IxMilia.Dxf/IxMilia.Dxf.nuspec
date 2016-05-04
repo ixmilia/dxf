@@ -9,7 +9,7 @@
     <owners>$author$</owners>
     <projectUrl>https://github.com/IxMilia/Dxf</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A portable .NET library for reading and writing DXF and DXB files.  AutoCAD versions R10 through R2014 are supported.</description>
+    <description>A portable .NET library for reading and writing DXF and DXB files.  AutoCAD versions 1.0 through R2016 are supported.</description>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <copyright>Copyright 2015</copyright>
     <tags>AutoCAD CAD DXB DXF</tags>

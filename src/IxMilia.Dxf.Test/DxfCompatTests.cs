@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Objects;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -143,6 +144,40 @@ EOF
                         // add the entity with its default initialized values
                         var entity = (DxfEntity)ctor.Invoke(new object[0]);
                         file.Entities.Add(entity);
+                    }
+                }
+            }
+
+            using (var input = new ManageTemporaryDirectory())
+            using (var output = new ManageTemporaryDirectory())
+            {
+                var inputFile = Path.Combine(input.DirectoryPath, "file.dxf");
+                using (var fs = new FileStream(inputFile, FileMode.Create))
+                {
+                    file.Save(fs);
+                }
+
+                AssertTeighaConvert(input.DirectoryPath, output.DirectoryPath, DxfAcadVersion.R2013);
+            }
+        }
+
+        [TeighaConverterExistsFact]
+        public void TeighaReadAllObjectsTest()
+        {
+            // create a file with all objects and ensure Teigha can read it
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2013;
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                if (DxfReaderWriterTests.IsObjectOrDerived(type))
+                {
+                    var ctor = type.GetConstructor(Type.EmptyTypes);
+                    if (ctor != null)
+                    {
+                        // add the object with its default initialized values
+                        var obj = (DxfObject)ctor.Invoke(new object[0]);
+                        file.Objects.Add(obj);
                     }
                 }
             }

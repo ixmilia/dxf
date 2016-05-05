@@ -1594,5 +1594,20 @@ ENDTAB
 
             return false;
         }
+
+        internal static bool IsObjectOrDerived(Type type)
+        {
+            if (type == typeof(DxfObject))
+            {
+                return true;
+            }
+
+            if (type.BaseType != null)
+            {
+                return IsObjectOrDerived(type.BaseType);
+            }
+
+            return false;
+        }
     }
 }

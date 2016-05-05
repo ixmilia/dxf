@@ -12,7 +12,6 @@ namespace IxMilia.Dxf.Test
 {
     public class DxfCompatTests : AbstractDxfTests
     {
-        private static readonly string[] TeighaVersions = new[] { "ACAD9", "ACAD10", "ACAD12", "ACAD13", "ACAD14", "ACAD2000", "ACAD2004", "ACAD2007", "ACAD2010", "ACAD2013" };
         private static readonly string MinimumFileText = @"
   0
 SECTION
@@ -72,7 +71,8 @@ EOF
         {
             // use Teigha to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
             var exceptions = new List<Exception>();
-            foreach (var teighaVersion in TeighaVersions)
+            var versions = new[] { DxfAcadVersion.R9, DxfAcadVersion.R10, DxfAcadVersion.R12, DxfAcadVersion.R13, DxfAcadVersion.R14, DxfAcadVersion.R2000, DxfAcadVersion.R2004, DxfAcadVersion.R2007, DxfAcadVersion.R2010, DxfAcadVersion.R2013 };
+            foreach (var desiredVersion in versions)
             {
                 using (var input = new ManageTemporaryDirectory())
                 using (var output = new ManageTemporaryDirectory())
@@ -81,14 +81,7 @@ EOF
                     var outputDir = output.DirectoryPath;
                     var barePath = Path.Combine(inputDir, "bare.dxf");
                     File.WriteAllText(barePath, MinimumFileText);
-                    var psi = new ProcessStartInfo();
-                    psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
-                    psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
-                    //                                                                            recurse audit
-                    var proc = Process.Start(psi);
-                    proc.WaitForExit();
-                    Assert.Equal(0, proc.ExitCode);
-                    Assert.Equal(0, Directory.EnumerateFiles(outputDir, "*.err").Count());
+                    AssertTeighaConvert(inputDir, outputDir, desiredVersion);
 
                     var convertedFilePath = Directory.EnumerateFiles(outputDir, "*.dxf").Single();
                     using (var fs = new FileStream(convertedFilePath, FileMode.Open))
@@ -133,6 +126,40 @@ EOF
             });
         }
 
+        [TeighaConverterExistsFact]
+        public void TeighaReadAllEntitiesTest()
+        {
+            // create a file with all entities and ensure Teigha can read it
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2013;
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                if (DxfReaderWriterTests.IsEntityOrDerived(type))
+                {
+                    var ctor = type.GetConstructor(Type.EmptyTypes);
+                    if (ctor != null)
+                    {
+                        // add the entity with its default initialized values
+                        var entity = (DxfEntity)ctor.Invoke(new object[0]);
+                        file.Entities.Add(entity);
+                    }
+                }
+            }
+
+            using (var input = new ManageTemporaryDirectory())
+            using (var output = new ManageTemporaryDirectory())
+            {
+                var inputFile = Path.Combine(input.DirectoryPath, "file.dxf");
+                using (var fs = new FileStream(inputFile, FileMode.Create))
+                {
+                    file.Save(fs);
+                }
+
+                AssertTeighaConvert(input.DirectoryPath, output.DirectoryPath, DxfAcadVersion.R2013);
+            }
+        }
+
         [AutoCadExistsFact]
         public void IxMiliaReadAutoCadTest()
         {
@@ -160,12 +187,7 @@ EOF
                 var scriptPath = Path.Combine(tempDir, "script.scr");
                 File.WriteAllLines(scriptPath, scriptLines);
 
-                var psi = new ProcessStartInfo();
-                psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
-                psi.Arguments = $@"/b ""{scriptPath}""";
-                var proc = Process.Start(psi);
-                proc.WaitForExit();
-                Assert.Equal(0, proc.ExitCode);
+                ExecuteAutoCadScript(scriptPath);
 
                 foreach (var resultPath in Directory.EnumerateFiles(tempDir, "result-*.dxf"))
                 {
@@ -197,15 +219,15 @@ EOF
             using (var directory = new ManageTemporaryDirectory())
             {
                 var tempDir = directory.DirectoryPath;
-                var versions = new List<Tuple<DxfAcadVersion, string>>()
-            {
-                Tuple.Create(DxfAcadVersion.R12, "R12"),
-                Tuple.Create(DxfAcadVersion.R2000, "2000"),
-                Tuple.Create(DxfAcadVersion.R2004, "2004"),
-                Tuple.Create(DxfAcadVersion.R2007, "2007"),
-                Tuple.Create(DxfAcadVersion.R2010, "2010"),
-                Tuple.Create(DxfAcadVersion.R2013, "2013"),
-            };
+                var versions = new[]
+                {
+                    Tuple.Create(DxfAcadVersion.R12, "R12"),
+                    Tuple.Create(DxfAcadVersion.R2000, "2000"),
+                    Tuple.Create(DxfAcadVersion.R2004, "2004"),
+                    Tuple.Create(DxfAcadVersion.R2007, "2007"),
+                    Tuple.Create(DxfAcadVersion.R2010, "2010"),
+                    Tuple.Create(DxfAcadVersion.R2013, "2013")
+                };
 
                 // save the minimal file with all versions
                 var file = new DxfFile();
@@ -240,12 +262,7 @@ EOF
                 var scriptPath = Path.Combine(tempDir, "script.scr");
                 File.WriteAllLines(scriptPath, lines);
 
-                var psi = new ProcessStartInfo();
-                psi.FileName = AutoCadExistsFactAttribute.GetPathToAutoCad();
-                psi.Arguments = $@"/b ""{scriptPath}""";
-                var proc = Process.Start(psi);
-                proc.WaitForExit();
-                Assert.Equal(0, proc.ExitCode);
+                ExecuteAutoCadScript(scriptPath);
 
                 // check each resultant file for the correct version and text
                 foreach (var pair in versions)
@@ -296,31 +313,81 @@ EOF
                 }
 
                 // invoke the Teigha converter
-                var errors = new List<string>();
-                var teighaVersion = "ACAD2010";
                 using (var output = new ManageTemporaryDirectory())
                 {
                     var outputDir = output.DirectoryPath;
-                    var psi = new ProcessStartInfo();
-                    psi.FileName = TeighaConverterExistsFactAttribute.GetPathToFileConverter();
-                    psi.Arguments = $@"""{inputDir}"" ""{outputDir}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
-                    //                                                                            recurse audit
-                    var proc = Process.Start(psi);
-                    proc.WaitForExit();
-                    Assert.Equal(0, proc.ExitCode);
-
-                    // check for any error files
-                    foreach (var errorFile in Directory.EnumerateFiles(outputDir, "*.err"))
-                    {
-                        errors.Add(File.ReadAllText(errorFile));
-                    }
-                }
-
-                if (errors.Count > 0)
-                {
-                    throw new Exception($"Errors reading IxMilia files:\r\n{string.Join("\r\n", errors)}");
+                    AssertTeighaConvert(inputDir, outputDir, DxfAcadVersion.R2010);
                 }
             }
+        }
+
+        private void WaitForProcess(string fileName, string arguments)
+        {
+            var psi = new ProcessStartInfo();
+            psi.FileName = fileName;
+            psi.Arguments = arguments;
+            var proc = Process.Start(psi);
+            proc.WaitForExit();
+            Assert.Equal(0, proc.ExitCode);
+        }
+
+        private void ExecuteAutoCadScript(string pathToScript)
+        {
+            WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad(), $"/b \"{pathToScript}\"");
+        }
+
+        private void AssertTeighaConvert(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
+        {
+            WaitForProcess(TeighaConverterExistsFactAttribute.GetPathToFileConverter(), GenerateTeighaArguments(inputDirectory, outputDirectory, desiredVersion));
+            var errors = Directory.EnumerateFiles(outputDirectory, "*.err").Select(path => path + ":\r\n" + File.ReadAllText(path)).ToList();
+            // TODO: gather the files that couldn't be converted
+            if (errors.Count > 0)
+            {
+                throw new Exception("Teigha error converting files: " + string.Join("", errors));
+            }
+        }
+
+        private string GenerateTeighaArguments(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
+        {
+            string teighaVersion;
+            switch (desiredVersion)
+            {
+                case DxfAcadVersion.R9:
+                    teighaVersion = "ACAD9";
+                    break;
+                case DxfAcadVersion.R10:
+                    teighaVersion = "ACAD10";
+                    break;
+                case DxfAcadVersion.R12:
+                    teighaVersion = "ACAD12";
+                    break;
+                case DxfAcadVersion.R13:
+                    teighaVersion = "ACAD13";
+                    break;
+                case DxfAcadVersion.R14:
+                    teighaVersion = "ACAD14";
+                    break;
+                case DxfAcadVersion.R2000:
+                    teighaVersion = "ACAD2000";
+                    break;
+                case DxfAcadVersion.R2004:
+                    teighaVersion = "ACAD2004";
+                    break;
+                case DxfAcadVersion.R2007:
+                    teighaVersion = "ACAD2007";
+                    break;
+                case DxfAcadVersion.R2010:
+                    teighaVersion = "ACAD2010";
+                    break;
+                case DxfAcadVersion.R2013:
+                    teighaVersion = "ACAD2013";
+                    break;
+                default:
+                    throw new InvalidOperationException("Unsupported Teigha version " + desiredVersion);
+            }
+
+            //                                                                              recurse audit
+            return $@"""{inputDirectory}"" ""{outputDirectory}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
         }
     }
 }

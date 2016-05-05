@@ -1580,7 +1580,7 @@ ENDTAB
             }
         }
 
-        private static bool IsEntityOrDerived(Type type)
+        internal static bool IsEntityOrDerived(Type type)
         {
             if (type == typeof(DxfEntity))
             {

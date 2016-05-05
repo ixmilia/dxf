@@ -4,20 +4,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
-namespace IxMilia.Dxf.Entities
+namespace IxMilia.Dxf.Objects
 {
 
     /// <summary>
     /// DxfMLeaderStyle class
     /// </summary>
-    public partial class DxfMLeaderStyle : DxfEntity, IDxfItemInternal
+    public partial class DxfMLeaderStyle : DxfObject, IDxfItemInternal
     {
-        public override DxfEntityType EntityType { get { return DxfEntityType.MLeaderStyle; } }
+        public override DxfObjectType ObjectType { get { return DxfObjectType.MLeaderStyle; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
-
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {
@@ -31,7 +32,6 @@ namespace IxMilia.Dxf.Entities
         {
             return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
         }
-
         internal DxfPointer LineLeaderTypePointer { get; } = new DxfPointer();
         internal DxfPointer ArrowheadPointer { get; } = new DxfPointer();
         internal DxfPointer MTextStylePointer { get; } = new DxfPointer();
@@ -135,6 +135,7 @@ namespace IxMilia.Dxf.Entities
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbMLeaderStyle"));
             pairs.Add(new DxfCodePair(170, (this.ContentType)));
             pairs.Add(new DxfCodePair(171, (this.DrawMLeaderOrderType)));
             pairs.Add(new DxfCodePair(172, (this.DrawLeaderOrderType)));

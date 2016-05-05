@@ -133,9 +133,6 @@
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfLwPolylineVertex.cs" />
-    <Compile Include="Entities\DxfMLeaderStyleGenerated.cs">
-      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
-    </Compile>
     <Compile Include="Entities\DxfMLine.cs" />
     <Compile Include="Entities\DxfMLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
@@ -193,9 +190,6 @@
     </Compile>
     <Compile Include="Entities\DxfSpline.cs" />
     <Compile Include="Entities\DxfSplineGenerated.cs">
-      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\DxfSunGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfTextGenerated.cs">
@@ -287,6 +281,9 @@
     </Compile>
     <Compile Include="Objects\DxfMentalRayRenderSettings.cs" />
     <Compile Include="Objects\DxfMentalRayRenderSettingsGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfMLeaderStyleGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfMLineStyle.cs" />

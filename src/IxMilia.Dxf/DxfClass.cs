@@ -116,7 +116,7 @@ namespace IxMilia.Dxf
         {
             var cls = new DxfClass();
 
-            // version R13 has varing values for the leading 0 code pair
+            // version R13 has varying values for the leading 0 code pair
             var pair = buffer.Peek();
             Debug.Assert(pair.Code == 0);
             if (version <= DxfAcadVersion.R13)

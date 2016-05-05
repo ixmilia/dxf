@@ -593,6 +593,57 @@
     </Object>
     <!--
 
+    MLEADERSTYLE
+
+    -->
+    <Object Name="DxfMLeaderStyle" ObjectType="MLeaderStyle" SubclassMarker="AcDbMLeaderStyle" TypeString="MLEADERSTYLE" MinVersion="R2007">
+        <Property Name="ContentType" Code="170" Type="short" DefaultValue="0" />
+        <Property Name="DrawMLeaderOrderType" Code="171" Type="short" DefaultValue="0" />
+        <Property Name="DrawLeaderOrderType" Code="172" Type="short" DefaultValue="0" />
+        <Property Name="MaxLeaderSegmentCount" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="FirstSegmentAngleConstraint" Code="40" Type="double" DefaultValue="0.0" />
+        <Property Name="SecondSegmentAngleConstraint" Code="41" Type="double" DefaultValue="0.0" />
+        <Property Name="LeaderLineType" Code="173" Type="short" DefaultValue="0" />
+        <Property Name="LeaderLineColor" Code="91" Type="int" DefaultValue="0" />
+        <Pointer Name="LineLeaderType" Code="340" Type="IDxfItem" />
+        <Property Name="LeaderLineWeight" Code="92" Type="int" DefaultValue="0" />
+        <Property Name="EnableLanding" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="LandingGap" Code="42" Type="double" DefaultValue="0.0" />
+        <Property Name="EnableDogleg" Code="291" Type="bool" DefaultValue="true" />
+        <Property Name="DoglegLength" Code="43" Type="double" DefaultValue="0.0" />
+        <Property Name="MLeaderStyleDescription" Code="3" Type="string" DefaultValue="null" />
+        <Pointer Name="Arrowhead" Code="341" Type="IDxfItem" />
+        <Property Name="ArrowheadSize" Code="44" Type="double" DefaultValue="0.0" />
+        <Property Name="DefaultMTextContents" Code="300" Type="string" DefaultValue="null" />
+        <Pointer Name="MTextStyle" Code="342" Type="IDxfItem" />
+        <Property Name="TextLeftAttachmentType" Code="174" Type="short" DefaultValue="0" />
+        <Property Name="TextAngleType" Code="175" Type="short" DefaultValue="0" />
+        <Property Name="TextAlignmentType" Code="176" Type="short" DefaultValue="0" />
+        <Property Name="TextRightAttachmentType" Code="178" Type="short" DefaultValue="0" />
+        <Property Name="TextColor" Code="93" Type="int" DefaultValue="0" />
+        <Property Name="TextHeight" Code="45" Type="double" DefaultValue="0.0" />
+        <Property Name="EnableFrameText" Code="292" Type="bool" DefaultValue="true" />
+        <Property Name="AlwaysAlignTextLeft" Code="297" Type="bool" DefaultValue="true" />
+        <Property Name="AlignGap" Code="46" Type="double" DefaultValue="0.0" />
+        <Pointer Name="BlockContent" Code="343" Type="IDxfItem" />
+        <Property Name="BlockContentColor" Code="94" Type="int" DefaultValue="0" />
+        <Property Name="BlockContentXScale" Code="47" Type="double" DefaultValue="1.0" />
+        <Property Name="BlockContentYScale" Code="49" Type="double" DefaultValue="1.0" />
+        <Property Name="BlockContentZScale" Code="140" Type="double" DefaultValue="1.0" />
+        <Property Name="EnableBlockContentScale" Code="293" Type="bool" DefaultValue="true" />
+        <Property Name="BlockContentRotation" Code="141" Type="double" DefaultValue="0.0" />
+        <Property Name="EnableBlockContentRotation" Code="294" Type="bool" DefaultValue="true" />
+        <Property Name="BlockContentConnectionType" Code="177" Type="short" DefaultValue="0" />
+        <Property Name="Scale" Code="142" Type="double" DefaultValue="1.0" />
+        <Property Name="OverwritePropertyValue" Code="295" Type="bool" DefaultValue="false" />
+        <Property Name="IsAnnotative" Code="296" Type="bool" DefaultValue="true" />
+        <Property Name="BreakGapSize" Code="143" Type="double" DefaultValue="0.0" />
+        <Property Name="TextAttachmentDirection" Code="271" Type="DxfTextAttachmentDirection" DefaultValue="DxfTextAttachmentDirection.Horizontal" ReadConverter="(DxfTextAttachmentDirection)" WriteConverter="(short)" />
+        <Property Name="BottomTextAttachmentDirection" Code="272" Type="DxfBottomTextAttachmentDirection" DefaultValue="DxfBottomTextAttachmentDirection.Center" ReadConverter="(DxfBottomTextAttachmentDirection)" WriteConverter="(short)" />
+        <Property Name="TopTextAttachmentDirection" Code="273" Type="DxfTopTextAttachmentDirection" DefaultValue="DxfTopTextAttachmentDirection.Center" ReadConverter="(DxfTopTextAttachmentDirection)" WriteConverter="(short)" />
+    </Object>
+    <!--
+
     MLINESTYLE
 
     -->

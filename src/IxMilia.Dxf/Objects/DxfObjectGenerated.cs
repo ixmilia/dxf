@@ -33,6 +33,7 @@ namespace IxMilia.Dxf.Objects
         LightList,
         Material,
         MentalRayRenderSettings,
+        MLeaderStyle,
         MLineStyle,
         ObjectPointer,
         PlotSettings,
@@ -122,6 +123,8 @@ namespace IxMilia.Dxf.Objects
                         return "LIGHTLIST";
                     case DxfObjectType.Material:
                         return "MATERIAL";
+                    case DxfObjectType.MLeaderStyle:
+                        return "MLEADERSTYLE";
                     case DxfObjectType.MLineStyle:
                         return "MLINESTYLE";
                     case DxfObjectType.ObjectPointer:
@@ -263,6 +266,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "MATERIAL":
                     obj = new DxfMaterial();
+                    break;
+                case "MLEADERSTYLE":
+                    obj = new DxfMLeaderStyle();
                     break;
                 case "MLINESTYLE":
                     obj = new DxfMLineStyle();

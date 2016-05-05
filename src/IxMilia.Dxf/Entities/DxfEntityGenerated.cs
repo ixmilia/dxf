@@ -30,7 +30,6 @@ namespace IxMilia.Dxf.Entities
         Light,
         Line,
         LwPolyline,
-        MLeaderStyle,
         MLine,
         ModelerGeometry,
         MText,
@@ -48,7 +47,6 @@ namespace IxMilia.Dxf.Entities
         Shape,
         Solid,
         Spline,
-        Sun,
         Text,
         Tolerance,
         Trace,
@@ -144,8 +142,6 @@ namespace IxMilia.Dxf.Entities
                         return "LWPOLYLINE";
                     case DxfEntityType.MLine:
                         return "MLINE";
-                    case DxfEntityType.MLeaderStyle:
-                        return "MLEADERSTYLE";
                     case DxfEntityType.MText:
                         return "MTEXT";
                     case DxfEntityType.OleFrame:
@@ -172,8 +168,6 @@ namespace IxMilia.Dxf.Entities
                         return "SOLID";
                     case DxfEntityType.Spline:
                         return "SPLINE";
-                    case DxfEntityType.Sun:
-                        return "SUN";
                     case DxfEntityType.Text:
                         return "TEXT";
                     case DxfEntityType.Tolerance:
@@ -465,9 +459,6 @@ namespace IxMilia.Dxf.Entities
                 case "MLINE":
                     entity = new DxfMLine();
                     break;
-                case "MLEADERSTYLE":
-                    entity = new DxfMLeaderStyle();
-                    break;
                 case "MTEXT":
                     entity = new DxfMText();
                     break;
@@ -506,9 +497,6 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case "SPLINE":
                     entity = new DxfSpline();
-                    break;
-                case "SUN":
-                    entity = new DxfSun();
                     break;
                 case "TEXT":
                     entity = new DxfText();

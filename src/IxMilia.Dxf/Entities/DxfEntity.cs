@@ -236,17 +236,21 @@ namespace IxMilia.Dxf.Entities
                     break;
                 }
 
-                while (this.TrySetExtensionData(pair, buffer))
+                if (TrySetPair(pair))
                 {
-                    pair = buffer.Peek();
+                    // pair was successfully applied; consume it
+                    buffer.Advance();
                 }
-
-                if (!TrySetPair(pair))
+                else if (this.TrySetExtensionData(pair, buffer))
                 {
+                    // do nothing as TrySetExtensionData consumes as necessary
+                }
+                else
+                {
+                    // track it for later use and consume it
                     ExcessCodePairs.Add(pair);
+                    buffer.Advance();
                 }
-
-                buffer.Advance();
             }
 
             return PostParse();

@@ -169,9 +169,8 @@
     <Variable Name="SURFV" Code="70" Type="short" Property="PEditSmoothNDensith" DefaultValue="6" />
     <Variable Name="UCSBASE" Code="2" Type="string" Property="UCSDefinitionName" DefaultValue="null" MinVersion="R2000" />
 
-    <!-- code 1 in R10, 2 in R11+ -->
-    <Variable Name="UCSNAME" Code="1" Type="string" Property="UCSName" DefaultValue="null" MaxVersion="R10" />
-    <Variable Name="UCSNAME" Code="2" Type="string" Property="UCSName" DefaultValue="null" MinVersion="R11" />
+    <!-- spec says code 1 in R10, but AutoCAD only opens if it's a code 2, regardless of version -->
+    <Variable Name="UCSNAME" Code="2" Type="string" Property="UCSName" DefaultValue="null" />
 
     <Variable Name="UCSORG" Code="-3" Type="DxfPoint" Property="UCSOrigin" DefaultValue="DxfPoint.Origin" />
     <Variable Name="UCSXDIR" Code="-3" Type="DxfVector" Property="UCSXAxis" DefaultValue="DxfVector.XAxis" />

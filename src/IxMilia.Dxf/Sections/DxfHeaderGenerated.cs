@@ -2754,18 +2754,8 @@ namespace IxMilia.Dxf
             }
 
             // UCSNAME
-            if (Version <= DxfAcadVersion.R10)
-            {
-                list.Add(new DxfCodePair(9, UCSNAME));
-                list.Add(new DxfCodePair(1, (this.UCSName)));
-            }
-
-            // UCSNAME
-            if (Version >= DxfAcadVersion.R11)
-            {
-                list.Add(new DxfCodePair(9, UCSNAME));
-                list.Add(new DxfCodePair(2, (this.UCSName)));
-            }
+            list.Add(new DxfCodePair(9, UCSNAME));
+            list.Add(new DxfCodePair(2, (this.UCSName)));
 
             // UCSORG
             list.Add(new DxfCodePair(9, UCSORG));
@@ -4282,18 +4272,8 @@ namespace IxMilia.Dxf
                     this.UCSDefinitionName = (pair.StringValue);
                     break;
                 case UCSNAME:
-                    switch (pair.Code)
-                    {
-                        case 1:
-                            this.UCSName = (pair.StringValue);
-                            break;
-                        case 2:
-                            this.UCSName = (pair.StringValue);
-                            break;
-                        default:
-                            Debug.Assert(false, string.Format("Expected code [1, 2], got {0}", pair.Code));
-                            break;
-                    }
+                    EnsureCode(pair, 2);
+                    this.UCSName = (pair.StringValue);
                     break;
                 case UCSORG:
                     SetPoint(pair, this.UCSOrigin);

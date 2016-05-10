@@ -256,23 +256,28 @@ EOF
                 var tempDir = directory.DirectoryPath;
                 var versions = new[]
                 {
-                    Tuple.Create(DxfAcadVersion.R12, "R12"),
-                    Tuple.Create(DxfAcadVersion.R2000, "2000"),
-                    Tuple.Create(DxfAcadVersion.R2004, "2004"),
-                    Tuple.Create(DxfAcadVersion.R2007, "2007"),
-                    Tuple.Create(DxfAcadVersion.R2010, "2010"),
-                    Tuple.Create(DxfAcadVersion.R2013, "2013")
+                    DxfAcadVersion.R9,
+                    DxfAcadVersion.R10,
+                    DxfAcadVersion.R11,
+                    DxfAcadVersion.R12,
+                    //DxfAcadVersion.R13,
+                    DxfAcadVersion.R14,
+                    DxfAcadVersion.R2000,
+                    DxfAcadVersion.R2004,
+                    DxfAcadVersion.R2007,
+                    DxfAcadVersion.R2010,
+                    DxfAcadVersion.R2013
                 };
 
                 // save the minimal file with all versions
                 var file = new DxfFile();
                 var text = new DxfText(DxfPoint.Origin, 2.0, "");
                 file.Entities.Add(text);
-                foreach (var pair in versions)
+                foreach (var version in versions)
                 {
-                    var fileName = $"file.{pair.Item1}.dxf";
-                    file.Header.Version = pair.Item1;
-                    text.Value = pair.Item1.ToString();
+                    var fileName = $"file.{version}.dxf";
+                    file.Header.Version = version;
+                    text.Value = version.ToString();
                     var outputPath = Path.Combine(tempDir, fileName);
                     using (var fs = new FileStream(outputPath, FileMode.Create))
                     {
@@ -283,11 +288,11 @@ EOF
                 // open each file in AutoCAD and try to write it back out
                 var lines = new List<string>();
                 lines.Add("FILEDIA 0");
-                foreach (var pair in versions)
+                foreach (var version in versions)
                 {
                     lines.Add("ERASE ALL ");
-                    lines.Add($"DXFIN \"{Path.Combine(tempDir, $"file.{pair.Item1}.dxf")}\"");
-                    lines.Add($"DXFOUT \"{Path.Combine(tempDir, $"result.{pair.Item1}.dxf")}\" V {pair.Item2} 16");
+                    lines.Add($"DXFIN \"{Path.Combine(tempDir, $"file.{version}.dxf")}\"");
+                    lines.Add($"DXFOUT \"{Path.Combine(tempDir, $"result.{version}.dxf")}\" V R12 16");
                 }
 
                 lines.Add("FILEDIA 1");
@@ -300,16 +305,15 @@ EOF
                 ExecuteAutoCadScript(scriptPath);
 
                 // check each resultant file for the correct version and text
-                foreach (var pair in versions)
+                foreach (var version in versions)
                 {
                     DxfFile dxf;
-                    using (var fs = new FileStream(Path.Combine(tempDir, $"result.{pair.Item1}.dxf"), FileMode.Open))
+                    using (var fs = new FileStream(Path.Combine(tempDir, $"result.{version}.dxf"), FileMode.Open))
                     {
                         dxf = DxfFile.Load(fs);
                     }
 
-                    Assert.Equal(pair.Item1, dxf.Header.Version);
-                    Assert.Equal(pair.Item1.ToString(), ((DxfText)dxf.Entities.Single()).Value);
+                    Assert.Equal(version.ToString(), ((DxfText)dxf.Entities.Single()).Value);
                 }
             }
         }

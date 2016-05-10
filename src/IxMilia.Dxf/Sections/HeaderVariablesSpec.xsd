@@ -9,6 +9,16 @@
 
     <xs:simpleType name="VersionType">
         <xs:restriction base="xs:string">
+            <xs:enumeration value="Version_1_0" />
+            <xs:enumeration value="Version_1_2" />
+            <xs:enumeration value="Version_1_40" />
+            <xs:enumeration value="Version_2_05" />
+            <xs:enumeration value="Version_2_10" />
+            <xs:enumeration value="Version_2_21" />
+            <xs:enumeration value="Version_2_22" />
+            <xs:enumeration value="Version_2_5" />
+            <xs:enumeration value="Version_2_6" />
+            <xs:enumeration value="R9" />
             <xs:enumeration value="R10" />
             <xs:enumeration value="R11" />
             <xs:enumeration value="R12" />

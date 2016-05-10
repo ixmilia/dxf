@@ -36,6 +36,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
+            this.DimensionType = DxfDimensionType.RotatedHorizontalOrVertical;
             this.InsertionPoint = DxfPoint.Origin;
             this.DefinitionPoint2 = DxfPoint.Origin;
             this.DefinitionPoint3 = DxfPoint.Origin;

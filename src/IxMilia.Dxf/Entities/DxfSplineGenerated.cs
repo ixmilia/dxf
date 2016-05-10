@@ -105,7 +105,7 @@ namespace IxMilia.Dxf.Entities
             base.Initialize();
             this.Normal = DxfVector.ZAxis;
             this.Flags = 0;
-            this.DegreeOfCurve = 0;
+            this.DegreeOfCurve = 1;
             this._numberOfKnotsIgnored = 0;
             this._numberOfControlPointsIgnored = 0;
             this._numberOfFitPointsIgnored = 0;
@@ -132,6 +132,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
+            pairs.Add(new DxfCodePair(71, (short)(this.DegreeOfCurve)));
             pairs.Add(new DxfCodePair(72, (short?)KnotValues?.Count ?? default(short)));
             pairs.Add(new DxfCodePair(73, (short?)ControlPoints?.Count ?? default(short)));
             pairs.Add(new DxfCodePair(74, (short?)FitPoints?.Count ?? default(short)));

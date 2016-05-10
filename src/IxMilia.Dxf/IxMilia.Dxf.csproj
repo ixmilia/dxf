@@ -56,9 +56,6 @@
     <Compile Include="Entities\DxfAlignedDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfAngularDimensionGenerated.cs">
-      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
-    </Compile>
     <Compile Include="Entities\DxfAngularThreePointDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
@@ -88,6 +85,7 @@
     <Compile Include="Entities\DxfDiameterDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DxfDimensionBase.cs" />
     <Compile Include="Entities\DxfDimensionBaseGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>

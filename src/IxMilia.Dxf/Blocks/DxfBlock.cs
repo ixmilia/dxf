@@ -184,8 +184,12 @@ namespace IxMilia.Dxf.Blocks
                 }
                 else if (IsBlockStart(pair))
                 {
-                    if (readingBlockStart || !readingBlockEnd)
-                        throw new DxfReadException("Unexpected block start", pair);
+                    if (readingBlockStart)
+                    {
+                        // if another block is found, stop reading this one because some blocks don't specify (0, ENDBLK)
+                        break;
+                    }
+
                     break;
                 }
                 else if (IsBlockEnd(pair))

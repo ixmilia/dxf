@@ -61,10 +61,10 @@ namespace IxMilia.Dxf.Entities
         {
             base.Initialize();
             this.Version = DxfVersion.R2010;
-            this.BlockName = null;
+            this.BlockName = "*MODEL_SPACE";
             this.DefinitionPoint1 = DxfPoint.Origin;
             this.TextMidPoint = DxfPoint.Origin;
-            this.DimensionType = DxfDimensionType.RotatedHorizontalOrVertical;
+            this.DimensionType = DxfDimensionType.Aligned;
             this.AttachmentPoint = DxfAttachmentPoint.TopLeft;
             this.TextLineSpacingStyle = DxfTextLineSpacingStyle.AtLeast;
             this.TextLineSpacingFactor = 1.0;
@@ -73,7 +73,7 @@ namespace IxMilia.Dxf.Entities
             this.TextRotationAngle = 0.0;
             this.HorizontalDirectionAngle = 0.0;
             this.Normal = DxfVector.ZAxis;
-            this.DimensionStyleName = null;
+            this.DimensionStyleName = "STANDARD";
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -92,7 +92,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(11, TextMidPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(21, TextMidPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(31, TextMidPoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(70, (short)(this.DimensionType)));
+            pairs.Add(new DxfCodePair(70, HandleDimensionType(this.DimensionType)));
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(71, (short)(this.AttachmentPoint)));
@@ -183,7 +183,7 @@ namespace IxMilia.Dxf.Entities
                     this.TextRotationAngle = (pair.DoubleValue);
                     break;
                 case 70:
-                    this.DimensionType = (DxfDimensionType)(pair.ShortValue);
+                    this.DimensionType = HandleDimensionType(pair.ShortValue);
                     break;
                 case 71:
                     this.AttachmentPoint = (DxfAttachmentPoint)(pair.ShortValue);

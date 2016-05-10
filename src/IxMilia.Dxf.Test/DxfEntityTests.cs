@@ -1112,7 +1112,7 @@ bar
 100
 AcDbDimension
   2
-
+*MODEL_SPACE
  10
 330.25
  20
@@ -1126,19 +1126,13 @@ AcDbDimension
  31
 0.0
  70
-0
+1
   1
 text
   3
-
+STANDARD
 100
 AcDbAlignedDimension
- 12
-0.0
- 22
-0.0
- 32
-0.0
  13
 330.25
  23

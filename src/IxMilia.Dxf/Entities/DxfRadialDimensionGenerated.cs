@@ -33,6 +33,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
+            this.DimensionType = DxfDimensionType.Radius;
             this.DefinitionPoint2 = DxfPoint.Origin;
             this.LeaderLength = 0.0;
         }

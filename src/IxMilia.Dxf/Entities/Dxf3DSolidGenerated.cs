@@ -60,7 +60,11 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(100, "AcDb3dSolid"));
             }
-            pairs.Add(new DxfCodePair(350, DxfCommonConverters.UIntHandle(this.HistoryObjectPointer.Handle)));
+            if (version >= DxfAcadVersion.R2007)
+            {
+                pairs.Add(new DxfCodePair(350, DxfCommonConverters.UIntHandle(this.HistoryObjectPointer.Handle)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

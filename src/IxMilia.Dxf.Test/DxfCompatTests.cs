@@ -318,6 +318,92 @@ EOF
             }
         }
 
+        [AutoCadExistsFact]
+        public void AutoCadReadAllEntitiesTest()
+        {
+            // TODO: make these work with AutoCAD
+            var unsupportedTypes = new[]
+            {
+                // unsupported because I need to write more information with them
+                typeof(DxfInsert), // need a block to insert
+                typeof(DxfLeader), // needs vertices
+                typeof(DxfMLine), // need to set MLINESTYLE and MLINESTYLE dictionary
+                typeof(DxfDgnUnderlay), // AcDbUnderlayDefinition object ID must be set
+                typeof(DxfDwfUnderlay), // AcDbUnderlayDefinition object ID must be set
+                typeof(DxfPdfUnderlay), // AcDbUnderlayDefinition object ID must be set
+                typeof(DxfSpline), // need to supply control/fit points
+                typeof(DxfVertex), // can't write a lone vertex?
+
+                // unsupported for other reasons TBD
+                typeof(Dxf3DSolid),
+                typeof(DxfAttribute),
+                typeof(DxfAttributeDefinition),
+                typeof(DxfBody),
+                typeof(DxfHelix), // acad expects AcDbSpline?
+                typeof(DxfLight),
+                typeof(DxfMText),
+                typeof(DxfRegion),
+                typeof(DxfProxyEntity),
+                typeof(DxfShape),
+                typeof(DxfTolerance),
+            };
+
+            // create a file with all entities and ensure AutoCAD can read it
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2010;
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                if (DxfReaderWriterTests.IsEntityOrDerived(type) && type.BaseType != typeof(DxfDimensionBase) && !unsupportedTypes.Contains(type))
+                {
+                    var ctor = type.GetConstructor(Type.EmptyTypes);
+                    if (ctor != null)
+                    {
+                        // add the entity with its default initialized values
+                        var entity = (DxfEntity)ctor.Invoke(new object[0]);
+                        file.Entities.Add(entity);
+
+                        if (entity is DxfText)
+                        {
+                            // set an explicit value to ensure that it could be round-tripped
+                            ((DxfText)entity).Value = "sample text";
+                        }
+                    }
+                }
+            }
+
+            using (var directory = new ManageTemporaryDirectory())
+            {
+                var sampleFilePath = Path.Combine(directory.DirectoryPath, "file.dxf");
+                using (var fs = new FileStream(sampleFilePath, FileMode.Create))
+                {
+                    file.Save(fs);
+                }
+
+                var scriptFilePath = Path.Combine(directory.DirectoryPath, "script.scr");
+                var outputFilePath = Path.Combine(directory.DirectoryPath, "result.dxf");
+                File.WriteAllLines(scriptFilePath, new[]
+                {
+                    "FILEDIA 0",
+                    $"DXFIN \"{sampleFilePath}\"",
+                    $"DXFOUT \"{outputFilePath}\" 16",
+                    "FILEDIA 1",
+                    "QUIT Y"
+                });
+                ExecuteAutoCadScript(scriptFilePath);
+
+                // read file back in and confirm DxfText value
+                DxfFile resultFile;
+                using (var fs = new FileStream(outputFilePath, FileMode.Open))
+                {
+                    resultFile = DxfFile.Load(fs);
+                }
+
+                var text = resultFile.Entities.OfType<DxfText>().Single();
+                Assert.Equal("sample text", text.Value);
+            }
+        }
+
         private void TestTeighaReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)
         {
             // save a DXF file in all the formats that IxMilia.Dxf supports and try to get Teigha to read all of them
@@ -373,6 +459,7 @@ EOF
         private void ExecuteAutoCadScript(string pathToScript)
         {
             WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad(), $"/b \"{pathToScript}\"");
+            // TODO: kill all instances of senddmp.exe and fail if present
         }
 
         private void AssertTeighaConvert(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)

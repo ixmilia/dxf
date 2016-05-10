@@ -550,20 +550,17 @@ namespace IxMilia.Dxf.Entities
             DxfDimensionBase newDimension = null;
             switch (DimensionType)
             {
-                case DxfDimensionType.RotatedHorizontalOrVertical:
-                    newDimension = new DxfRotatedDimension(this);
-                    break;
                 case DxfDimensionType.Aligned:
                     newDimension = new DxfAlignedDimension(this);
                     break;
-                case DxfDimensionType.Angular:
-                    newDimension = new DxfAngularDimension(this);
-                    break;
-                case DxfDimensionType.Diameter:
-                    newDimension = new DxfDiameterDimension(this);
+                case DxfDimensionType.RotatedHorizontalOrVertical:
+                    newDimension = new DxfRotatedDimension(this);
                     break;
                 case DxfDimensionType.Radius:
                     newDimension = new DxfRadialDimension(this);
+                    break;
+                case DxfDimensionType.Diameter:
+                    newDimension = new DxfDiameterDimension(this);
                     break;
                 case DxfDimensionType.AngularThreePoint:
                     newDimension = new DxfAngularThreePointDimension(this);

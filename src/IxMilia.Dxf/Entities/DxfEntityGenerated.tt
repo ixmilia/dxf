@@ -624,6 +624,13 @@ foreach (var entity in entities)
         {
             base.Initialize();
 <#
+        if (BaseClass(entity, "") == "DxfDimensionBase")
+        {
+#>
+            this.DimensionType = DxfDimensionType.<#= Tag(entity) #>;
+<#
+        }
+
         foreach (var property in GetProperties(entity))
         {
             var defaultValue = AllowMultiples(property)

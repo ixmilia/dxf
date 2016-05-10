@@ -35,6 +35,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
+            this.DimensionType = DxfDimensionType.AngularThreePoint;
             this.DefinitionPoint2 = DxfPoint.Origin;
             this.DefinitionPoint3 = DxfPoint.Origin;
             this.DefinitionPoint4 = DxfPoint.Origin;
@@ -44,7 +45,7 @@ namespace IxMilia.Dxf.Entities
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbRadialDimension"));
+            pairs.Add(new DxfCodePair(100, "AcDb3PointAngularDimension"));
             pairs.Add(new DxfCodePair(13, DefinitionPoint2?.X ?? default(double)));
             pairs.Add(new DxfCodePair(23, DefinitionPoint2?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(33, DefinitionPoint2?.Z ?? default(double)));

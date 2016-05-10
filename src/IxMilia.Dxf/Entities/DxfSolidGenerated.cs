@@ -43,7 +43,7 @@ namespace IxMilia.Dxf.Entities
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbShape"));
+            pairs.Add(new DxfCodePair(100, "AcDbTrace"));
             pairs.Add(new DxfCodePair(10, FirstCorner?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, FirstCorner?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, FirstCorner?.Z ?? default(double)));

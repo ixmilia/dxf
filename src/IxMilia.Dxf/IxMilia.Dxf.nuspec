@@ -14,4 +14,8 @@
     <copyright>Copyright 2015</copyright>
     <tags>AutoCAD CAD DXB DXF</tags>
   </metadata>
+  <files>
+    <file src="..\Binaries\$configuration$\$id$.dll" target="lib\netstandard1.2" />
+    <file src="..\Binaries\$configuration$\$id$.pdb" target="lib\netstandard1.2" />
+  </files>
 </package>

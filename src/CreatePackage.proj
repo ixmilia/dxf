@@ -12,11 +12,11 @@
     <GitHubUrl>https://github.com/IxMilia/Dxf</GitHubUrl>
   </PropertyGroup>
 
-  <Target Name="BuildAndTest">
+  <Target Name="BuildSource">
     <MSBuild BuildInParallel="true"
              Projects="$(MSBuildThisFileDirectory)..\BuildAndTest.proj"
              Properties="TreatWarningsAsErrors=true;Configuration=$(Configuration)"
-             Targets="BuildAndTest" />
+             Targets="Build" />
   </Target>
 
   <Target Name="GitLink">
@@ -35,7 +35,7 @@
     <Message Text="Package created in '$(PackageOutputDir)'.  Consume the *.symbols.nupkg file." />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="BuildAndTest;GitLink;CreatePackage">
+  <Target Name="Build" DependsOnTargets="BuildSource;GitLink;CreatePackage">
   </Target>
 
 </Project>

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,7 +19,6 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.MentalRayRenderSettings; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
-
         public int ClassVersion_1 { get; set; }
         public string PresetName { get; set; }
         public bool RenderMaterials { get; set; }

@@ -5,7 +5,7 @@ A portable .NET library for reading and writing DXF and DXB files.  Clone and
 build locally or directly consume the
 [NuGet package](http://www.nuget.org/packages/IxMilia.Dxf/).
 
-### Usage
+## Usage
 
 Open a DXF file:
 
@@ -46,13 +46,69 @@ DxfFile dxfFile = new DxfFile();
 dxfFile.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(50, 50, 0)));
 // ...
 
-using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
+using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Create))
 {
     dxfFile.Save(fs);
 }
 ```
 
-### Status
+## Compatibility
+
+### Reading Files
+
+This library should be able to open any valid DXF file, including files produced by AutoCAD or anything using the
+Teigha libraries from the [Open Design Alliance](https://opendesign.com), including Microsoft Visio which uses older
+Open Design libraries.
+
+### Open Design Alliance (Teigha)
+
+The Teigha libraries should be able to open anything produced by this library.
+
+### AutoCAD
+
+AutoCAD is rather fussy with what it will accept as valid DXF, even though the official spec is rather loose.  If you
+use this library to write a file that AutoCAD can't open, file an issue with the drawing (or a sample) that was
+produced by this library.  I've found that AutoCAD compatibility can be greatly improved by doing the following:
+
+``` C#
+// assuming `dxfFile` is a valid `DxfFile` object
+dxfFile.Header.SetDefaults();
+dxfFile.ViewPorts.Clear();
+dxfFile.Save(...);
+```
+
+There are also some entity types that AutoCAD might not open when written by this library, specifically:
+
+- 3DSOLID (`Dxf3DSolid`)
+- ACAD_PROXY_ENTITY (`DxfProxyEntity`)
+- ATTRIB (`DxfAttribute`)
+- ATTDEF (`DxfAttributeDefinition`)
+- BODY (`DxfBody`)
+- DIMENSION (`DxfAlignedDimension`, `DxfAngularThreePointDimension`, `DxfDiameterDimension`, `DxfOrdinateDimension`,
+  `DxfRadialDimension`, `DxfRotatedDimension`)
+- HELIX (`DxfHelix`)
+- LIGHT (`DxfLight`)
+- MTEXT (`DxfMText`)
+- REGION (`DxfRegion`)
+- SHAPE (`DxfShape`)
+- TOLERANCE (`DxfTolerance`)
+
+And the following entities might not open in AutoCAD if written with missing information, e.g., a LEADER (`DxfLeader`)
+requires at least 2 vertices.
+
+- INSERT (`DxfInsert`)
+- LEADER (`DxfLeader`)
+- MLINE (`DxfMLine`)
+- DGNUNDERLAY (`DxfDgnUnderlay`)
+- DWFUNDERLAY (`DxfDwfUnderlay`)
+- PDFUNDERLAY (`DxfPdfUnderlay`)
+- SPLINE (`DxfSpline`)
+- VERTEX (`DxfVertex`)
+
+Also note that AutoCAD doesn't seem to like R13 files written by IxMilia.  For the greatest chance of compatibility,
+save the file as either R12 or the newest version possible (e.g., R2013 or R2010.)
+
+## Status
 
 Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for the following entities:
 - HATCH
@@ -62,9 +118,12 @@ Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for t
 - TABLE
 - VIEWPORT
 
-### DXF Reference
+## DXF Reference
 
-Since I don't want to fall afoul of Autodesk's lawyers, this repo can't include the actual DXF documentation.  It can, however contain links to the official documents that I've been able to scrape together.  For most scenarios the 2014 documentation should suffice, but all other versions are included here for backwards compatibility and reference between versions.
+Since I don't want to fall afoul of Autodesk's lawyers, this repo can't include the actual DXF documentation.  It can,
+however contain links to the official documents that I've been able to scrape together.  For most scenarios the 2014
+documentation should suffice, but all other versions are included here for backwards compatibility and reference
+between versions.
 
 [R10 (non-Autodesk source)](http://www.martinreddy.net/gfx/3d/DXF10.spec)
 

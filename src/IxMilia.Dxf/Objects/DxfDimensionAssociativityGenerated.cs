@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -13,24 +15,39 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfDimensionAssociativity class
     /// </summary>
-    public partial class DxfDimensionAssociativity : DxfObject
+    public partial class DxfDimensionAssociativity : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.DimensionAssociativity; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2004; } }
 
-        public uint DimensionHandle { get; set; }
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return DimensionPointer;
+            yield return MainObjectPointer;
+            yield return IntersectionObjectPointer;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+        internal DxfPointer DimensionPointer { get; } = new DxfPointer();
+        internal DxfPointer MainObjectPointer { get; } = new DxfPointer();
+        internal DxfPointer IntersectionObjectPointer { get; } = new DxfPointer();
+
+        public DxfDimensionBase Dimension { get { return DimensionPointer.Item as DxfDimensionBase; } set { DimensionPointer.Item = value; } }
         public int AssociativityFlags { get; set; }
         public bool IsTransSpace { get; set; }
         public DxfRotatedDimensionType RotatedDimensionType { get; set; }
         public string ClassName { get; set; }
         public DxfObjectOsnapType ObjectOsnapType { get; set; }
-        public uint MainObjectHandle { get; set; }
+        public IDxfItem MainObject { get { return MainObjectPointer.Item as IDxfItem; } set { MainObjectPointer.Item = value; } }
         public DxfSubentityType MainObjectSubentityType { get; set; }
         public int MainObjectGsMarkerIndex { get; set; }
         public string MainObjectXrefHandle { get; set; }
         public double NearOsnapGeometryParameter { get; set; }
         public DxfPoint OsnapPoint { get; set; }
-        public uint IntersectionObjectHandle { get; set; }
+        public IDxfItem IntersectionObject { get { return IntersectionObjectPointer.Item as IDxfItem; } set { IntersectionObjectPointer.Item = value; } }
         public DxfSubentityType IntersectionSubentityType { get; set; }
         public int IntersectionObjectGsMarkerIndex { get; set; }
         public string IntersectionObjectXrefHandle { get; set; }
@@ -90,19 +107,16 @@ namespace IxMilia.Dxf.Objects
         protected override void Initialize()
         {
             base.Initialize();
-            this.DimensionHandle = 0u;
             this.AssociativityFlags = 0;
             this.IsTransSpace = true;
             this.RotatedDimensionType = DxfRotatedDimensionType.Parallel;
             this.ClassName = "AcDbOsnapPointRef";
             this.ObjectOsnapType = DxfObjectOsnapType.None;
-            this.MainObjectHandle = 0u;
             this.MainObjectSubentityType = DxfSubentityType.Edge;
             this.MainObjectGsMarkerIndex = 0;
             this.MainObjectXrefHandle = null;
             this.NearOsnapGeometryParameter = 0.0;
             this.OsnapPoint = DxfPoint.Origin;
-            this.IntersectionObjectHandle = 0u;
             this.IntersectionSubentityType = DxfSubentityType.Edge;
             this.IntersectionObjectGsMarkerIndex = 0;
             this.IntersectionObjectXrefHandle = null;
@@ -113,13 +127,13 @@ namespace IxMilia.Dxf.Objects
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbDimAssoc"));
-            pairs.Add(new DxfCodePair(330, UIntHandle(this.DimensionHandle)));
+            pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(this.DimensionPointer.Handle)));
             pairs.Add(new DxfCodePair(90, (this.AssociativityFlags)));
             pairs.Add(new DxfCodePair(70, BoolShort(this.IsTransSpace)));
             pairs.Add(new DxfCodePair(71, (short)(this.RotatedDimensionType)));
             pairs.Add(new DxfCodePair(1, (this.ClassName)));
             pairs.Add(new DxfCodePair(72, (short)(this.ObjectOsnapType)));
-            pairs.Add(new DxfCodePair(331, UIntHandle(this.MainObjectHandle)));
+            pairs.Add(new DxfCodePair(331, DxfCommonConverters.UIntHandle(this.MainObjectPointer.Handle)));
             pairs.Add(new DxfCodePair(73, (short)(this.MainObjectSubentityType)));
             pairs.Add(new DxfCodePair(91, (this.MainObjectGsMarkerIndex)));
             pairs.Add(new DxfCodePair(301, (this.MainObjectXrefHandle)));
@@ -127,7 +141,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(10, OsnapPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, OsnapPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, OsnapPoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(332, UIntHandle(this.IntersectionObjectHandle)));
+            pairs.Add(new DxfCodePair(332, DxfCommonConverters.UIntHandle(this.IntersectionObjectPointer.Handle)));
             pairs.Add(new DxfCodePair(74, (short)(this.IntersectionSubentityType)));
             pairs.Add(new DxfCodePair(92, (this.IntersectionObjectGsMarkerIndex)));
             pairs.Add(new DxfCodePair(302, (this.IntersectionObjectXrefHandle)));
@@ -187,13 +201,13 @@ namespace IxMilia.Dxf.Objects
                     this.IntersectionObjectXrefHandle = (pair.StringValue);
                     break;
                 case 330:
-                    this.DimensionHandle = UIntHandle(pair.StringValue);
+                    this.DimensionPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 331:
-                    this.MainObjectHandle = UIntHandle(pair.StringValue);
+                    this.MainObjectPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 332:
-                    this.IntersectionObjectHandle = UIntHandle(pair.StringValue);
+                    this.IntersectionObjectPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

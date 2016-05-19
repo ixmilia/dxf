@@ -7,7 +7,7 @@ using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Blocks
 {
-    public partial class DxfBlock : IDxfHasHandle, IDxfHasChildrenWithHandle
+    public partial class DxfBlock : IDxfItemInternal
     {
         internal const string BlockText = "BLOCK";
         internal const string EndBlockText = "ENDBLK";
@@ -17,17 +17,38 @@ namespace IxMilia.Dxf.Blocks
 
         private int Flags = 0;
 
-        public uint Handle { get; set; }
+        uint IDxfItemInternal.Handle { get; set; }
+        public IDxfItem Owner { get; private set; }
+        uint IDxfItemInternal.OwnerHandle { get; set; }
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return _endBlockPointer;
+        }
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
+        private DxfPointer _endBlockPointer { get; } = new DxfPointer();
+
+        public bool IsInPaperSpace { get; set; }
         public string Layer { get; set; }
         public string Name { get; set; }
         public DxfPoint BasePoint { get; set; }
         public string XrefName { get; set; }
         public List<DxfEntity> Entities { get; private set; }
-        public uint OwnerHandle { get; set; }
         public string Description { get; set; }
         public DxfXData XData { get; set; }
         public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
-        private DxfEndBlock EndBlock { get; set; }
+        private DxfEndBlock EndBlock
+        {
+            get { return _endBlockPointer.Item as DxfEndBlock; }
+            set { _endBlockPointer.Item = value; }
+        }
 
         public bool IsAnonymous
         {
@@ -83,9 +104,9 @@ namespace IxMilia.Dxf.Blocks
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(0, BlockText));
-            if (outputHandles)
+            if (outputHandles && ((IDxfItemInternal)this).Handle != 0u)
             {
-                list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
+                list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(((IDxfItemInternal)this).Handle)));
             }
 
             if (version >= DxfAcadVersion.R14)
@@ -98,8 +119,17 @@ namespace IxMilia.Dxf.Blocks
 
             if (version >= DxfAcadVersion.R13)
             {
-                list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+                if (((IDxfItemInternal)this).OwnerHandle != 0u)
+                {
+                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(((IDxfItemInternal)this).OwnerHandle)));
+                }
+
                 list.Add(new DxfCodePair(100, AcDbEntityText));
+            }
+
+            if (IsInPaperSpace)
+            {
+                list.Add(new DxfCodePair(67, DxfCommonConverters.BoolShort(IsInPaperSpace)));
             }
 
             list.Add(new DxfCodePair(8, Layer));
@@ -118,10 +148,7 @@ namespace IxMilia.Dxf.Blocks
                 list.Add(new DxfCodePair(3, Name));
             }
 
-            if (!string.IsNullOrEmpty(XrefName))
-            {
-                list.Add(new DxfCodePair(1, XrefName));
-            }
+            list.Add(new DxfCodePair(1, XrefName));
 
             if (!string.IsNullOrEmpty(Description))
             {
@@ -134,14 +161,6 @@ namespace IxMilia.Dxf.Blocks
             list.AddRange(EndBlock.GetValuePairs(version, outputHandles));
 
             return list;
-        }
-
-        IEnumerable<IDxfHasHandle> IDxfHasChildrenWithHandle.GetChildren()
-        {
-            if (EndBlock != null)
-            {
-                yield return EndBlock;
-            }
         }
 
         internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
@@ -165,8 +184,12 @@ namespace IxMilia.Dxf.Blocks
                 }
                 else if (IsBlockStart(pair))
                 {
-                    if (readingBlockStart || !readingBlockEnd)
-                        throw new DxfReadException("Unexpected block start", pair);
+                    if (readingBlockStart)
+                    {
+                        // if another block is found, stop reading this one because some blocks don't specify (0, ENDBLK)
+                        break;
+                    }
+
                     break;
                 }
                 else if (IsBlockEnd(pair))
@@ -204,7 +227,7 @@ namespace IxMilia.Dxf.Blocks
                                 block.Description = pair.StringValue;
                                 break;
                             case 5:
-                                block.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                                ((IDxfItemInternal)block).Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                                 break;
                             case 8:
                                 block.Layer = pair.StringValue;
@@ -218,11 +241,14 @@ namespace IxMilia.Dxf.Blocks
                             case 30:
                                 block.BasePoint.Z = pair.DoubleValue;
                                 break;
+                            case 67:
+                                block.IsInPaperSpace = DxfCommonConverters.BoolShort(pair.ShortValue);
+                                break;
                             case 70:
                                 block.Flags = pair.ShortValue;
                                 break;
                             case 330:
-                                block.OwnerHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                                ((IDxfItemInternal)block).OwnerHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
                                 break;
                             case DxfCodePairGroup.GroupCodeNumber:
                                 var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);

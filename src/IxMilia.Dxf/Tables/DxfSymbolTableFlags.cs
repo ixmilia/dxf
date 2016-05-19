@@ -6,8 +6,23 @@ using IxMilia.Dxf.Tables;
 
 namespace IxMilia.Dxf
 {
-    public abstract class DxfSymbolTableFlags : IDxfHasHandle
+    public abstract class DxfSymbolTableFlags : IDxfItemInternal
     {
+        public IDxfItem Owner { get; private set; }
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield break;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            yield break;
+        }
+
         public int StandardFlags;
         public string Name { get; set; }
         protected abstract DxfTableType TableType { get; }
@@ -92,12 +107,12 @@ namespace IxMilia.Dxf
 
         protected static bool BoolShort(short s)
         {
-            return s != 0;
+            return DxfCommonConverters.BoolShort(s);
         }
 
         protected static short BoolShort(bool b)
         {
-            return (short)(b ? 1 : 0);
+            return DxfCommonConverters.BoolShort(b);
         }
 
         protected static uint UIntHandle(string s)
@@ -108,6 +123,16 @@ namespace IxMilia.Dxf
         protected static string UIntHandle(uint u)
         {
             return DxfCommonConverters.UIntHandle(u);
+        }
+
+        protected static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        {
+            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
+        }
+
+        protected static Func<int, int> EnsurePositiveOrDefault(int defaultValue)
+        {
+            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
         }
     }
 
@@ -142,10 +167,21 @@ namespace IxMilia.Dxf
 
         private short GetWritableColorValue(DxfColor color)
         {
-            var value = Math.Abs(color?.RawValue ?? 0);
+            var value = Math.Abs(color?.RawValue ?? 7);
+            if (value == 0 || value == 256)
+            {
+                // BYLAYER and BYBLOCK aren't valid colors
+                value = 7;
+            }
+
             return IsLayerOn
                 ? value
                 : (short)-value;
+        }
+
+        private string GetWritableLinetypeName(string linetypeName)
+        {
+            return string.IsNullOrWhiteSpace(linetypeName) ? "CONTINUOUS" : linetypeName;
         }
     }
 }

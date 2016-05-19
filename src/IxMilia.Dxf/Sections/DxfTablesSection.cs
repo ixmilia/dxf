@@ -37,14 +37,16 @@ namespace IxMilia.Dxf.Sections
 
         internal IEnumerable<DxfTable> GetTables(DxfAcadVersion version)
         {
+            yield return ViewPortTable;
+            yield return LTypeTable;
+            yield return LayerTable;
+            yield return StyleTable;
+            yield return ViewTable;
+            yield return UcsTable;
+
             if (version >= DxfAcadVersion.R12)
             {
                 yield return AppIdTable;
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                yield return BlockRecordTable;
             }
 
             if (version >= DxfAcadVersion.R12)
@@ -52,26 +54,48 @@ namespace IxMilia.Dxf.Sections
                 yield return DimStyleTable;
             }
 
-            yield return LTypeTable;
-            yield return LayerTable;
-            yield return StyleTable;
-            yield return UcsTable;
-            yield return ViewTable;
-            yield return ViewPortTable;
+            if (version >= DxfAcadVersion.R13)
+            {
+                yield return BlockRecordTable;
+            }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        internal IEnumerable<DxfTable> GetAllTables()
+        {
+            return GetTables(DxfAcadVersion.Max);
+        }
+
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             foreach (var table in GetTables(version))
             {
-                foreach (var pair in table.GetValuePairs(version, outputHandles))
-                    yield return pair;
+                if (writtenItems.Add(table))
+                {
+                    foreach (var pair in table.GetValuePairs(version, outputHandles, writtenItems))
+                    {
+                        yield return pair;
+                    }
+                }
             }
+        }
+
+        protected internal override void Clear()
+        {
+            AppIdTable.Items.Clear();
+            BlockRecordTable.Items.Clear();
+            DimStyleTable.Items.Clear();
+            LayerTable.Items.Clear();
+            LTypeTable.Items.Clear();
+            StyleTable.Items.Clear();
+            UcsTable.Items.Clear();
+            ViewPortTable.Items.Clear();
+            ViewTable.Items.Clear();
         }
 
         internal static DxfTablesSection TablesSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             var section = new DxfTablesSection();
+            section.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

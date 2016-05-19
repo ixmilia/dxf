@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -74,11 +75,13 @@ namespace IxMilia.Dxf.Objects
         Inches = 5
     }
 
-    public abstract partial class DxfObject
+    public abstract partial class DxfObject : IDxfItem, IDxfHasXData, IDxfHasXDataHidden
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
-        protected DxfXData XDataProtected { get; set; }
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; } = new List<DxfCodePairGroup>();
+
+        DxfXData IDxfHasXDataHidden.XDataHidden { get; set; }
 
         public abstract DxfObjectType ObjectType { get; }
 
@@ -95,10 +98,9 @@ namespace IxMilia.Dxf.Objects
         protected DxfObject()
         {
             Initialize();
-            ExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
-        protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
         }
 
@@ -107,13 +109,13 @@ namespace IxMilia.Dxf.Objects
             return this;
         }
 
-        public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
+        public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             var pairs = new List<DxfCodePair>();
             if (version >= MinVersion && version <= MaxVersion)
             {
                 AddValuePairs(pairs, version, outputHandles);
-                AddTrailingCodePairs(pairs, version, outputHandles);
+                AddTrailingCodePairs(pairs, version, outputHandles, writtenItems);
             }
 
             return pairs;
@@ -127,24 +129,6 @@ namespace IxMilia.Dxf.Objects
             }
         }
 
-        internal virtual bool TrySetExtensionData(DxfCodePair pair, DxfCodePairBufferReader buffer)
-        {
-            if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
-            {
-                buffer.Advance();
-                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                return true;
-            }
-            else if (pair.Code == (int)DxfXDataType.ApplicationName)
-            {
-                XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
-                return true;
-            }
-
-            return false;
-        }
-
         internal virtual DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
@@ -155,7 +139,7 @@ namespace IxMilia.Dxf.Objects
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                while (this.TrySetExtensionData(pair, buffer))
                 {
                     pair = buffer.Peek();
                 }

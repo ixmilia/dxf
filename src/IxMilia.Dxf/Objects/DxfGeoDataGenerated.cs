@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,10 +19,8 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.GeoData; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2010; } }
-
         public DxfGeoDataVersion Version { get; set; }
         public DxfDesignCoordinateType CoordinateType { get; set; }
-        public uint HostBlockhandle { get; set; }
         public DxfPoint DesignPoint { get; set; }
         public DxfPoint ReferencePoint { get; set; }
         public DxfVector NorthVector { get; set; }
@@ -40,14 +40,14 @@ namespace IxMilia.Dxf.Objects
         public string ObservationToTag { get; set; }
         public string ObservationCoverageTag { get; set; }
         private int _geoMeshPointCount { get; set; }
-        private List<double> _sourceMeshXPoints { get; set; }
-        private List<double> _sourceMeshYPoints { get; set; }
-        private List<double> _destinationMeshXPoints { get; set; }
-        private List<double> _destinationMeshYPoints { get; set; }
+        private IList<double> _sourceMeshXPoints { get; set; }
+        private IList<double> _sourceMeshYPoints { get; set; }
+        private IList<double> _destinationMeshXPoints { get; set; }
+        private IList<double> _destinationMeshYPoints { get; set; }
         private int _facesCount { get; set; }
-        private List<int> _facePointIndexX { get; set; }
-        private List<int> _facePointIndexY { get; set; }
-        private List<int> _facePointIndexZ { get; set; }
+        private IList<int> _facePointIndexX { get; set; }
+        private IList<int> _facePointIndexY { get; set; }
+        private IList<int> _facePointIndexZ { get; set; }
 
         public DxfGeoData()
             : base()
@@ -59,7 +59,6 @@ namespace IxMilia.Dxf.Objects
             base.Initialize();
             this.Version = DxfGeoDataVersion.R2009;
             this.CoordinateType = DxfDesignCoordinateType.Unknown;
-            this.HostBlockhandle = 0u;
             this.DesignPoint = DxfPoint.Origin;
             this.ReferencePoint = DxfPoint.Origin;
             this.NorthVector = DxfVector.ZAxis;
@@ -94,7 +93,6 @@ namespace IxMilia.Dxf.Objects
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(90, (int)(this.Version)));
             pairs.Add(new DxfCodePair(70, (short)(this.CoordinateType)));
-            pairs.Add(new DxfCodePair(330, UIntHandle(this.HostBlockhandle)));
             pairs.Add(new DxfCodePair(10, DesignPoint?.X ?? default(double)));
             pairs.Add(new DxfCodePair(20, DesignPoint?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(30, DesignPoint?.Z ?? default(double)));
@@ -250,9 +248,6 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case 307:
                     this.ObservationCoverageTag = (pair.StringValue);
-                    break;
-                case 330:
-                    this.HostBlockhandle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

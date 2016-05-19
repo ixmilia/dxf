@@ -6,17 +6,18 @@ using System.Linq;
 
 namespace IxMilia.Dxf
 {
-    public interface DxfCodePairOrGroup
+    public interface IDxfCodePairOrGroup
     {
         bool IsCodePair { get; }
     }
 
-    public class DxfCodePairGroup : DxfCodePairOrGroup
+    public class DxfCodePairGroup : IDxfCodePairOrGroup
     {
         internal const int GroupCodeNumber = 102;
 
         public string GroupName { get; set; }
-        public List<DxfCodePairOrGroup> Items { get; private set; }
+
+        public List<IDxfCodePairOrGroup> Items { get; private set; }
 
         public bool IsCodePair { get { return false; } }
 
@@ -25,10 +26,10 @@ namespace IxMilia.Dxf
         {
         }
 
-        public DxfCodePairGroup(string groupName, IEnumerable<DxfCodePairOrGroup> items)
+        public DxfCodePairGroup(string groupName, IEnumerable<IDxfCodePairOrGroup> items)
         {
             GroupName = groupName;
-            Items = items == null ? new List<DxfCodePairOrGroup>() : items.ToList();
+            Items = items == null ? new List<IDxfCodePairOrGroup>() : items.ToList();
         }
 
         internal void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -56,7 +57,7 @@ namespace IxMilia.Dxf
 
         internal static DxfCodePairGroup FromBuffer(DxfCodePairBufferReader buffer, string groupName)
         {
-            var items = new List<DxfCodePairOrGroup>();
+            var items = new List<IDxfCodePairOrGroup>();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

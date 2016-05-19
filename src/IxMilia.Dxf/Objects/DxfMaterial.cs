@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Diagnostics;
+using System.Linq;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -61,7 +62,7 @@ namespace IxMilia.Dxf.Objects
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                while (this.TrySetExtensionData(pair, buffer))
                 {
                     pair = buffer.Peek();
                 }
@@ -87,7 +88,7 @@ namespace IxMilia.Dxf.Objects
                                 _code_3_index++;
                                 break;
                             default:
-                                Debug.Assert(false, "Unexpected extra values for code 3");
+                                //Debug.Assert(false, $"Unexpected extra value for code 3: {pair.StringValue}");
                                 break;
                         }
                         break;

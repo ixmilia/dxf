@@ -24,6 +24,39 @@ namespace IxMilia.Dxf
             set { SetValue(variableName, value); }
         }
 
+        public bool IsRestrictedVersion { get; set; } = false;
+
+        private void SetManualDefaults()
+        {
+            IsRestrictedVersion = false;
+        }
+
+        private DxfAcadVersion VersionConverter(string str)
+        {
+            if (str.EndsWith("S"))
+            {
+                IsRestrictedVersion = true;
+                str = str.Substring(0, str.Length - 1);
+            }
+            else
+            {
+                IsRestrictedVersion = false;
+            }
+
+            return DxfAcadVersionStrings.StringToVersion(str);
+        }
+
+        private string VersionConverter(DxfAcadVersion version)
+        {
+            var str = DxfAcadVersionStrings.VersionToString(version);
+            if (IsRestrictedVersion)
+            {
+                str += "S";
+            }
+
+            return str;
+        }
+
         private static string StringShort(short s)
         {
             return DxfCommonConverters.StringShort(s);
@@ -84,6 +117,16 @@ namespace IxMilia.Dxf
             return t.TotalDays;
         }
 
+        private static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        {
+            return DxfCommonConverters.DefaultIfNullOrEmpty(defaultValue);
+        }
+
+        private static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        {
+            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
+        }
+
         private static void EnsureCode(DxfCodePair pair, int code)
         {
             if (pair.Code != code)
@@ -108,6 +151,16 @@ namespace IxMilia.Dxf
                 default:
                     break;
             }
+        }
+
+        private static bool EnumBool<TEnum>(TEnum value) where TEnum : struct, IComparable
+        {
+            return ((TEnum)Enum.GetValues(typeof(TEnum)).GetValue(0)).CompareTo(value) != 0;
+        }
+
+        private static TEnum EnumBool<TEnum>(bool value) where TEnum : struct
+        {
+            return (TEnum)Enum.GetValues(typeof(TEnum)).GetValue(value ? 1 : 0);
         }
     }
 }

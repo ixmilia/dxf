@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -28,14 +29,14 @@ namespace IxMilia.Dxf.Entities
         public double FitTolerance { get; set; }
         public DxfPoint StartTangent { get; set; }
         public DxfPoint EndTangent { get; set; }
-        public List<double> KnotValues { get; private set; }
+        public IList<double> KnotValues { get; private set; }
         public double Weight { get; set; }
-        private List<double> _controlPointX { get; set; }
-        private List<double> _controlPointY { get; set; }
-        private List<double> _controlPointZ { get; set; }
-        private List<double> _fitPointX { get; set; }
-        private List<double> _fitPointY { get; set; }
-        private List<double> _fitPointZ { get; set; }
+        private IList<double> _controlPointX { get; set; }
+        private IList<double> _controlPointY { get; set; }
+        private IList<double> _controlPointZ { get; set; }
+        private IList<double> _fitPointX { get; set; }
+        private IList<double> _fitPointY { get; set; }
+        private IList<double> _fitPointZ { get; set; }
 
         // Flags flags
 
@@ -104,7 +105,7 @@ namespace IxMilia.Dxf.Entities
             base.Initialize();
             this.Normal = DxfVector.ZAxis;
             this.Flags = 0;
-            this.DegreeOfCurve = 0;
+            this.DegreeOfCurve = 1;
             this._numberOfKnotsIgnored = 0;
             this._numberOfControlPointsIgnored = 0;
             this._numberOfFitPointsIgnored = 0;
@@ -131,6 +132,7 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
+            pairs.Add(new DxfCodePair(71, (short)(this.DegreeOfCurve)));
             pairs.Add(new DxfCodePair(72, (short?)KnotValues?.Count ?? default(short)));
             pairs.Add(new DxfCodePair(73, (short?)ControlPoints?.Count ?? default(short)));
             pairs.Add(new DxfCodePair(74, (short?)FitPoints?.Count ?? default(short)));

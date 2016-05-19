@@ -17,6 +17,12 @@ namespace IxMilia.Dxf.Objects
         public List<DxfGeoMeshPoint> GeoMeshPoints { get; } = new List<DxfGeoMeshPoint>();
         public List<DxfPoint> FaceIndices { get; } = new List<DxfPoint>();
 
+        public IDxfItem HostBlock
+        {
+            get { return Owner; }
+            set { ((IDxfItemInternal)this).SetOwner(value); }
+        }
+
         protected override DxfObject PostParse()
         {
             // geo mesh points

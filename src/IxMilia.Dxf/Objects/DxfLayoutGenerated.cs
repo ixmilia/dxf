@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -13,10 +15,25 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfLayout class
     /// </summary>
-    public partial class DxfLayout : DxfPlotSettings
+    public partial class DxfLayout : DxfPlotSettings, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.Layout; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return ViewportPointer;
+            yield return TableRecordPointer;
+            yield return TableRecordBasePointer;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+        internal DxfPointer ViewportPointer { get; } = new DxfPointer();
+        internal DxfPointer TableRecordPointer { get; } = new DxfPointer();
+        internal DxfPointer TableRecordBasePointer { get; } = new DxfPointer();
 
         public string LayoutName { get; set; }
         public int LayoutFlags { get; set; }
@@ -31,9 +48,9 @@ namespace IxMilia.Dxf.Objects
         public DxfVector UcsXAxis { get; set; }
         public DxfVector UcsYAxis { get; set; }
         public DxfUcsOrthographicType UcsOrthographicType { get; set; }
-        public uint ViewportHandle { get; set; }
-        public uint TableRecordHandle { get; set; }
-        public uint TableRecordBaseHandle { get; set; }
+        public IDxfItem Viewport { get { return ViewportPointer.Item as IDxfItem; } set { ViewportPointer.Item = value; } }
+        public IDxfItem TableRecord { get { return TableRecordPointer.Item as IDxfItem; } set { TableRecordPointer.Item = value; } }
+        public IDxfItem TableRecordBase { get { return TableRecordBasePointer.Item as IDxfItem; } set { TableRecordBasePointer.Item = value; } }
 
         // LayoutFlags flags
 
@@ -80,9 +97,6 @@ namespace IxMilia.Dxf.Objects
             this.UcsXAxis = DxfVector.XAxis;
             this.UcsYAxis = DxfVector.YAxis;
             this.UcsOrthographicType = DxfUcsOrthographicType.NotOrthographic;
-            this.ViewportHandle = 0u;
-            this.TableRecordHandle = 0u;
-            this.TableRecordBaseHandle = 0u;
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -116,9 +130,9 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(27, UcsYAxis?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(37, UcsYAxis?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(76, (short)(this.UcsOrthographicType)));
-            pairs.Add(new DxfCodePair(331, UIntHandle(this.ViewportHandle)));
-            pairs.Add(new DxfCodePair(345, UIntHandle(this.TableRecordHandle)));
-            pairs.Add(new DxfCodePair(346, UIntHandle(this.TableRecordBaseHandle)));
+            pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(this.ViewportPointer.Handle)));
+            pairs.Add(new DxfCodePair(345, DxfCommonConverters.UIntHandle(this.TableRecordPointer.Handle)));
+            pairs.Add(new DxfCodePair(346, DxfCommonConverters.UIntHandle(this.TableRecordBasePointer.Handle)));
         }
     }
 

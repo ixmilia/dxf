@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                while (this.TrySetExtensionData(pair, buffer))
                 {
                     pair = buffer.Peek();
                 }
@@ -112,16 +112,16 @@ namespace IxMilia.Dxf.Objects
                         this.LabelViewports = (pair.BoolValue);
                         break;
                     case 340:
-                        this.PageSetupWizardPointer = UIntHandle(pair.StringValue);
+                        this.PageSetupWizardPointer.Handle = UIntHandle(pair.StringValue);
                         break;
                     case 341:
-                        this.ViewPointer = UIntHandle(pair.StringValue);
+                        this.ViewPointer.Handle = UIntHandle(pair.StringValue);
                         break;
                     case 342:
-                        this.VisualStyleID = UIntHandle(pair.StringValue);
+                        this.VisualStylePointer.Handle = UIntHandle(pair.StringValue);
                         break;
                     case 343:
-                        this.TextStyleID = UIntHandle(pair.StringValue);
+                        this.TextStylePointer.Handle = UIntHandle(pair.StringValue);
                         break;
                     default:
                         if (!base.TrySetPair(pair))

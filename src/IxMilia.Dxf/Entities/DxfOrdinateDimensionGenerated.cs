@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -33,6 +34,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
+            this.DimensionType = DxfDimensionType.Ordinate;
             this.DefinitionPoint2 = DxfPoint.Origin;
             this.DefinitionPoint3 = DxfPoint.Origin;
         }

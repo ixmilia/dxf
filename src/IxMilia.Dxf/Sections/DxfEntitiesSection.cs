@@ -20,14 +20,29 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Entities; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-            return this.Entities.SelectMany(e => e.GetValuePairs(version, outputHandles));
+            foreach (var entity in Entities)
+            {
+                if (writtenItems.Add(entity))
+                {
+                    foreach (var pair in entity.GetValuePairs(version, outputHandles))
+                    {
+                        yield return pair;
+                    }
+                }
+            }
+        }
+
+        protected internal override void Clear()
+        {
+            Entities.Clear();
         }
 
         internal static DxfEntitiesSection EntitiesSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             var entities = new List<DxfEntity>();
+            entities.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
@@ -69,10 +84,12 @@ namespace IxMilia.Dxf.Sections
                     case DxfEntityType.Attribute:
                         var att = (DxfAttribute)entity;
                         att.MText = GetMText(buffer);
+                        SetOwner(att.MText, att);
                         break;
                     case DxfEntityType.AttributeDefinition:
                         var attdef = (DxfAttributeDefinition)entity;
                         attdef.MText = GetMText(buffer);
+                        SetOwner(attdef.MText, attdef);
                         break;
                     case DxfEntityType.Insert:
                         var insert = (DxfInsert)entity;
@@ -86,16 +103,28 @@ namespace IxMilia.Dxf.Sections
                                 attribs.Add(nextAtt);
                             }
 
-                            insert.Attributes.AddRange(attribs);
+                            foreach (var attrib in attribs)
+                            {
+                                insert.Attributes.Add(attrib);
+                                SetOwner(attrib, insert);
+                            }
+
                             insert.Seqend = GetSeqend(buffer);
+                            SetOwner(insert.Seqend, insert);
                         }
 
                         break;
                     case DxfEntityType.Polyline:
                         var poly = (DxfPolyline)entity;
                         var verts = CollectWhileType(buffer, DxfEntityType.Vertex).Cast<DxfVertex>();
-                        poly.Vertices.AddRange(verts);
+                        foreach (var vert in verts)
+                        {
+                            poly.Vertices.Add(vert);
+                            SetOwner(vert, poly);
+                        }
+
                         poly.Seqend = GetSeqend(buffer);
+                        SetOwner(poly.Seqend, poly);
                         break;
                     default:
                         break;
@@ -167,6 +196,14 @@ namespace IxMilia.Dxf.Sections
             }
 
             return new DxfSeqend();
+        }
+
+        private static void SetOwner(IDxfItem item, IDxfItem owner)
+        {
+            if (item != null)
+            {
+                ((IDxfItemInternal)item).SetOwner(owner);
+            }
         }
     }
 }

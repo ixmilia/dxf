@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Objects;
 using IxMilia.Dxf.Sections;
 using Xunit;
 
@@ -276,7 +277,8 @@ THUMBNAILIMAGE");
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.RawThumbnail = new byte[] { 0x01, 0x23, 0x45 };
-            VerifyFileContains(file, @"  0
+            VerifyFileContains(file, @"
+  0
 SECTION
   2
 THUMBNAILIMAGE
@@ -499,6 +501,7 @@ ENDTAB
             var blockRecord = new DxfBlockRecord()
             {
                 Name = "<name>",
+                LayoutHandle = 0x43u,
                 XData = new DxfXData("ACAD",
                     new DxfXDataItem[]
                     {
@@ -524,19 +527,41 @@ TABLE
   2
 BLOCK_RECORD
   5
-2
-330
-0
+#
 100
 AcDbSymbolTable
  70
-0
+3
   0
 BLOCK_RECORD
   5
-A
+#
 330
-0
+#
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+*MODEL_SPACE
+  0
+BLOCK_RECORD
+  5
+#
+330
+#
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+*PAPER_SPACE
+  0
+BLOCK_RECORD
+  5
+19
+330
+#
 100
 AcDbSymbolTableRecord
 100
@@ -544,7 +569,7 @@ AcDbBlockTableRecord
   2
 <name>
 340
-0
+43
 310
 010203040506070809010203040506070809
 1001
@@ -692,7 +717,7 @@ EOF
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal(0x42u, block.Handle);
+            Assert.Equal(0x42u, ((IDxfItemInternal)block).Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal(11, block.BasePoint.X);
             Assert.Equal(22, block.BasePoint.Y);
@@ -767,7 +792,6 @@ EOF
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal(0x42u, block.Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal("<xref>", block.XrefName);
             Assert.Equal(11, block.BasePoint.X);
@@ -786,7 +810,6 @@ EOF
             file.Header.Version = DxfAcadVersion.R13;
             var block = new DxfBlock();
             block.Name = "<block name>";
-            block.Handle = 0x42u;
             block.Layer = "<layer>";
             block.XrefName = "<xref>";
             block.BasePoint = new DxfPoint(11, 22, 33);
@@ -794,15 +817,9 @@ EOF
             file.Blocks.Add(block);
             VerifyFileContains(file, @"
   0
-SECTION
-  2
-BLOCKS
-  0
 BLOCK
   5
-42
-330
-0
+#
 100
 AcDbEntity
   8
@@ -836,7 +853,7 @@ AcDbBlockBegin
   0
 ENDBLK
   5
-4C
+#
 100
 AcDbEntity
   8
@@ -919,7 +936,7 @@ EOF
 ");
             var styleTable = file.TablesSection.StyleTable;
             Assert.Equal(0x1Cu, styleTable.Handle);
-            Assert.Equal(3, styleTable.MaxEntries);
+            Assert.Equal(2, styleTable.Items.Count);
 
             var extendedDataGroup = styleTable.ExtensionDataGroups.Single();
             Assert.Equal("ACAD_XDICTIONARY", extendedDataGroup.GroupName);
@@ -948,22 +965,19 @@ EOF
         public void WriteTableWithoutExtendedDataTest()
         {
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Styles.Add(new DxfStyle());
             VerifyFileContains(file, @"
-  0
-SECTION
-  2
-TABLES
   0
 TABLE
   2
 STYLE
   5
-6
+#
 100
 AcDbSymbolTable
  70
-0
+3
 ");
         }
 
@@ -971,8 +985,9 @@ AcDbSymbolTable
         public void WriteTableWithExtendedDataTest()
         {
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.TablesSection.StyleTable.ExtensionDataGroups.Add(new DxfCodePairGroup("ACAD_XDICTIONARY",
-                new DxfCodePairOrGroup[]
+                new IDxfCodePairOrGroup[]
                 {
                     new DxfCodePair(360, "AAAA"),
                     new DxfCodePair(360, "BBBB")
@@ -980,15 +995,11 @@ AcDbSymbolTable
             file.Styles.Add(new DxfStyle());
             VerifyFileContains(file, @"
   0
-SECTION
-  2
-TABLES
-  0
 TABLE
   2
 STYLE
   5
-6
+#
 102
 {ACAD_XDICTIONARY
 360
@@ -999,8 +1010,6 @@ BBBB
 }
 100
 AcDbSymbolTable
- 70
-0
 ");
         }
 
@@ -1112,7 +1121,7 @@ $XCLIPFRAME
 ");
             Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
-            Assert.True(file.Header.IsXRefClippingBoundaryVisible);
+            Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
 
             // now test code 280 short
             file = Section("HEADER", @"
@@ -1135,7 +1144,7 @@ $XCLIPFRAME
 ");
             Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
-            Assert.True(file.Header.IsXRefClippingBoundaryVisible);
+            Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
 
             // verify that these variables aren't written twice
             file = new DxfFile();
@@ -1389,12 +1398,15 @@ name
         public void WriteNormalLayerColorTest()
         {
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
             file.Layers.Add(new DxfLayer("name", DxfColor.FromIndex(5)) { IsLayerOn = true });
             VerifyFileContains(file, @"
   0
 LAYER
   5
-A
+#
+330
+#
 100
 AcDbSymbolTableRecord
 100
@@ -1417,11 +1429,9 @@ name
   0
 LAYER
   5
-A
+#
 100
 AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
   2
 name
  70
@@ -1429,6 +1439,97 @@ name
  62
 -5
 ");
+        }
+
+        [Fact]
+        public void SelfReferencingRoundTripTest()
+        {
+            // ensure we don't enter an infinite loop with an item that owns itself
+
+            // reading
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  5
+FFFF
+330
+FFFF
+  3
+key
+360
+FFFF
+");
+            var dict = (DxfDictionary)file.Objects.Single();
+            Assert.Equal(dict, dict.Owner);
+            Assert.Equal(dict, dict["key"]);
+
+            // writing
+            file.Header.Version = DxfAcadVersion.R14;
+            var text = ToString(file);
+
+            // reading again
+            file = Parse(text);
+            dict = (DxfDictionary)file.Objects.First();
+            Assert.Equal(dict, dict.Owner);
+            Assert.Equal(dict, dict["key"]);
+
+            // ensure the pointer changed.  FFFF is unlikely to occur in writing
+            Assert.NotEqual(0xFFFFu, ((IDxfItemInternal)dict).Handle);
+        }
+
+        [Fact]
+        public void WriteSelfReferencingObjectRoundTripTest()
+        {
+            var dict = new DxfDictionary();
+            dict["key"] = dict;
+
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Objects.Add(dict);
+
+            var text = ToString(file);
+            file = Parse(text);
+            dict = file.Objects.OfType<DxfDictionary>().Single(d => d.ContainsKey("key"));
+
+            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict).OwnerHandle);
+            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict["key"]).OwnerHandle);
+        }
+
+        [Fact]
+        public void EnsureEntityHasNoDefaultOwner()
+        {
+            var file = Section("ENTITIES", @"
+  0
+POINT
+ 10
+0
+ 20
+0
+ 30
+0
+");
+            Assert.Null(file.Entities.Single().Owner);
+        }
+
+        [Fact]
+        public void EnsureTableItemsHaveOwnersTest()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+LAYER
+  0
+LAYER
+  2
+layer-name
+  0
+ENDTAB
+");
+            var layer = file.Layers.Single();
+            Assert.Equal("layer-name", layer.Name);
+            Assert.Equal(file.TablesSection.LayerTable, layer.Owner);
         }
 
         [Fact]
@@ -1479,7 +1580,7 @@ name
             }
         }
 
-        private static bool IsEntityOrDerived(Type type)
+        internal static bool IsEntityOrDerived(Type type)
         {
             if (type == typeof(DxfEntity))
             {
@@ -1489,6 +1590,21 @@ name
             if (type.BaseType != null)
             {
                 return IsEntityOrDerived(type.BaseType);
+            }
+
+            return false;
+        }
+
+        internal static bool IsObjectOrDerived(Type type)
+        {
+            if (type == typeof(DxfObject))
+            {
+                return true;
+            }
+
+            if (type.BaseType != null)
+            {
+                return IsObjectOrDerived(type.BaseType);
             }
 
             return false;

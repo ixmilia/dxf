@@ -1,0 +1,163 @@
+﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
+
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+
+namespace IxMilia.Dxf
+{
+    internal class DxfPointer
+    {
+        public uint Handle { get; set; }
+        public IDxfItem Item { get; set; }
+
+        public DxfPointer()
+            : this(0u, null)
+        {
+        }
+
+        public DxfPointer(uint handle)
+            : this(handle, null)
+        {
+        }
+
+        public DxfPointer(IDxfItem item)
+            : this(0u, item)
+        {
+        }
+
+        public DxfPointer(uint handle, IDxfItem item)
+        {
+            Handle = handle;
+            Item = item;
+        }
+
+        public static void BindPointers(DxfFile file)
+        {
+            // gather all items by handle
+            var handleMap = new Dictionary<uint, IDxfItemInternal>();
+            var visitedItems = new HashSet<IDxfItemInternal>();
+            foreach (var item in file.GetFileItems())
+            {
+                GatherPointers(item, handleMap, visitedItems);
+            }
+
+            visitedItems.Clear();
+            var visitedChildren = new HashSet<IDxfItemInternal>();
+
+            // bind all pointers
+            foreach (var item in file.GetFileItems())
+            {
+                BindPointers(item, handleMap, visitedItems, visitedChildren);
+            }
+        }
+
+        private static void GatherPointers(IDxfItemInternal item, Dictionary<uint, IDxfItemInternal> handleMap, HashSet<IDxfItemInternal> visitedItems)
+        {
+            if (item != null && visitedItems.Add(item))
+            {
+                if (item.Handle != 0u)
+                {
+                    handleMap[item.Handle] = item;
+                }
+
+                foreach (var child in item.GetChildItems())
+                {
+                    GatherPointers(child, handleMap, visitedItems);
+                }
+            }
+        }
+
+        private static void BindPointers(IDxfItemInternal item, Dictionary<uint, IDxfItemInternal> handleMap, HashSet<IDxfItemInternal> visitedItems, HashSet<IDxfItemInternal> visitedChildren)
+        {
+            if (visitedItems.Add(item))
+            {
+                // set initial owners
+                SetChildOwners(item, visitedChildren);
+
+                // set explicit owners
+                foreach (var child in item.GetPointers())
+                {
+                    if (handleMap.ContainsKey(child.Handle))
+                    {
+                        child.Item = handleMap[child.Handle];
+                        BindPointers((IDxfItemInternal)child.Item, handleMap, visitedItems, visitedChildren);
+                        ((IDxfItemInternal)child.Item).SetOwner(item);
+                    }
+                }
+            }
+        }
+
+        private static void SetChildOwners(IDxfItemInternal item, HashSet<IDxfItemInternal> visitedChildren)
+        {
+            foreach (var child in item.GetChildItems())
+            {
+                if (child != null && visitedChildren.Add(child))
+                {
+                    child.SetOwner(item);
+                    SetChildOwners(child, visitedChildren);
+                }
+            }
+        }
+
+        public static uint AssignHandles(DxfFile file)
+        {
+            var visitedItems = new HashSet<IDxfItemInternal>();
+            foreach (var item in file.GetFileItems())
+            {
+                ClearPointers(item, visitedItems);
+            }
+
+            visitedItems.Clear();
+
+            uint nextPointer = 1u;
+            foreach (var item in file.GetFileItems().Where(i => i != null))
+            {
+                nextPointer = AssignHandles(item, nextPointer, 0u, visitedItems);
+                foreach (var child in item.GetChildItems().Where(c => c != null))
+                {
+                    nextPointer = AssignHandles(child, nextPointer, item.Handle, visitedItems);
+                }
+            }
+
+            return nextPointer;
+        }
+
+        private static uint AssignHandles(IDxfItemInternal item, uint nextHandle, uint ownerHandle, HashSet<IDxfItemInternal> visitedItems)
+        {
+            if (item == null || !visitedItems.Add(item))
+            {
+                return nextHandle;
+            }
+
+            Debug.Assert(item.Handle == 0u);
+            item.Handle = nextHandle++;
+            if (item.OwnerHandle == 0u && ownerHandle != 0u)
+            {
+                item.OwnerHandle = ownerHandle;
+            }
+
+            foreach (var child in item.GetPointers().Where(c => c.Item != null))
+            {
+                var childItem = (IDxfItemInternal)child.Item;
+                nextHandle = AssignHandles(childItem, nextHandle, item.Handle, visitedItems);
+                child.Handle = childItem.Handle;
+                childItem.OwnerHandle = item.Handle;
+            }
+
+            return nextHandle;
+        }
+
+        private static void ClearPointers(IDxfItemInternal item, HashSet<IDxfItemInternal> visitedItems)
+        {
+            if (item != null && visitedItems.Add(item))
+            {
+                item.Handle = 0u;
+                foreach (var child in item.GetChildItems())
+                {
+                    ClearPointers(child, visitedItems);
+                }
+            }
+        }
+    }
+}

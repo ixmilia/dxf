@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,15 +19,14 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.AcadProxyObject; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
-
         public int ProxyObjectClassId { get; set; }
         public int ApplicationObjectClassId { get; set; }
         public int SizeInBits { get; set; }
-        public List<string> BinaryObjectData { get; private set; }
-        private List<string> _objectIdsA { get; set; }
-        private List<string> _objectIdsB { get; set; }
-        private List<string> _objectIdsC { get; set; }
-        private List<string> _objectIdsD { get; set; }
+        public IList<string> BinaryObjectData { get; private set; }
+        private IList<string> _objectIdsA { get; set; }
+        private IList<string> _objectIdsB { get; set; }
+        private IList<string> _objectIdsC { get; set; }
+        private IList<string> _objectIdsD { get; set; }
         private uint _objectDrawingFormat { get; set; }
         public bool IsOriginalObjectDxfFormat { get; set; }
 

@@ -27,7 +27,7 @@ namespace IxMilia.Dxf.Objects
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                while (this.TrySetExtensionData(pair, buffer))
                 {
                     pair = buffer.Peek();
                 }

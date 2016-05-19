@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {

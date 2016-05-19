@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -19,6 +20,7 @@ namespace IxMilia.Dxf.Objects
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             bool readDuplicateFlag = false;
+            bool readingData = false;
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
@@ -27,24 +29,45 @@ namespace IxMilia.Dxf.Objects
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                if (readingData)
                 {
-                    pair = buffer.Peek();
-                }
-
-                if (pair.Code == 280 && !readDuplicateFlag)
-                {
-                    DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)pair.ShortValue;
-                    readDuplicateFlag = true;
-                }
-                else if (pair.Code == 5 || pair.Code == 105)
-                {
-                    // these codes aren't allowed here
-                    ExcessCodePairs.Add(pair);
+                    DataPairs.Add(pair);
                 }
                 else
                 {
-                    DataPairs.Add(pair);
+                    if (base.TrySetPair(pair))
+                    {
+                        buffer.Advance();
+                        continue;
+                    }
+
+                    if (this.TrySetExtensionData(pair, buffer))
+                    {
+                        continue;
+                    }
+
+                    if (pair.Code == 100)
+                    {
+                        Debug.Assert(pair.StringValue == "AcDbXrecord");
+                        buffer.Advance();
+                        continue;
+                    }
+
+                    if (pair.Code == 280 && !readDuplicateFlag)
+                    {
+                        DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)pair.ShortValue;
+                        readDuplicateFlag = true;
+                        readingData = true;
+                    }
+                    else if (pair.Code == 5 || pair.Code == 105)
+                    {
+                        // these codes aren't allowed here
+                        ExcessCodePairs.Add(pair);
+                    }
+                    else
+                    {
+                        DataPairs.Add(pair);
+                    }
                 }
 
                 buffer.Advance();

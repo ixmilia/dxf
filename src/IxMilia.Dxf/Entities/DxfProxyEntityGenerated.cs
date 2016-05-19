@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -20,13 +21,13 @@ namespace IxMilia.Dxf.Entities
         public int ProxyEntityClassId { get; set; }
         public int ApplicationEntityClassId { get; set; }
         public int GraphicsDataSize { get; set; }
-        public List<string> GraphicsDataString { get; private set; }
+        public IList<string> GraphicsDataString { get; private set; }
         public int EntityDataSize { get; set; }
-        public List<string> EntityDataString { get; private set; }
-        public List<string> ObjectID1 { get; private set; }
-        public List<string> ObjectID2 { get; private set; }
-        public List<string> ObjectID3 { get; private set; }
-        public List<string> ObjectID4 { get; private set; }
+        public IList<string> EntityDataString { get; private set; }
+        public IList<string> ObjectID1 { get; private set; }
+        public IList<string> ObjectID2 { get; private set; }
+        public IList<string> ObjectID3 { get; private set; }
+        public IList<string> ObjectID4 { get; private set; }
         public int Terminator { get; set; }
         private uint _objectDrawingFormat { get; set; }
         public bool OriginalDataFormatIsDxf { get; set; }

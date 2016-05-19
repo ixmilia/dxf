@@ -95,7 +95,7 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(3, ApplicationName));
                 list.Add(new DxfCodePair(90, ProxyCapabilities.Value));
                 if (version >= DxfAcadVersion.R2004)
-                    list.Add(new DxfCodePair(91, null));
+                    list.Add(new DxfCodePair(91, InstanceCount));
             }
             else
             {
@@ -106,8 +106,8 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(90, ClassVersionNumber));
             }
 
-            list.Add(new DxfCodePair(280, (short)(WasClassLoadedWithFile ? 0 : 1)));
-            list.Add(new DxfCodePair(281, (short)(IsEntity ? 1 : 0)));
+            list.Add(new DxfCodePair(280, DxfCommonConverters.BoolShort(!WasClassLoadedWithFile)));
+            list.Add(new DxfCodePair(281, DxfCommonConverters.BoolShort(IsEntity)));
 
             return list;
         }
@@ -116,7 +116,7 @@ namespace IxMilia.Dxf
         {
             var cls = new DxfClass();
 
-            // version R13 has varing values for the leading 0 code pair
+            // version R13 has varying values for the leading 0 code pair
             var pair = buffer.Peek();
             Debug.Assert(pair.Code == 0);
             if (version <= DxfAcadVersion.R13)
@@ -167,10 +167,10 @@ namespace IxMilia.Dxf
                         cls.InstanceCount = pair.IntegerValue;
                         break;
                     case 280:
-                        cls.WasClassLoadedWithFile = pair.ShortValue == 0;
+                        cls.WasClassLoadedWithFile = !DxfCommonConverters.BoolShort(pair.ShortValue);
                         break;
                     case 281:
-                        cls.IsEntity = pair.ShortValue != 0;
+                        cls.IsEntity = DxfCommonConverters.BoolShort(pair.ShortValue);
                         break;
                 }
             }

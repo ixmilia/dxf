@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -16,7 +17,6 @@ namespace IxMilia.Dxf.Entities
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Dimension; } }
 
-        public DxfPoint InsertionPoint { get; set; }
         public DxfPoint DefinitionPoint2 { get; set; }
         public DxfPoint DefinitionPoint3 { get; set; }
 
@@ -33,7 +33,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
-            this.InsertionPoint = DxfPoint.Origin;
+            this.DimensionType = DxfDimensionType.Aligned;
             this.DefinitionPoint2 = DxfPoint.Origin;
             this.DefinitionPoint3 = DxfPoint.Origin;
         }
@@ -42,9 +42,6 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbAlignedDimension"));
-            pairs.Add(new DxfCodePair(12, InsertionPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(22, InsertionPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(32, InsertionPoint?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(13, DefinitionPoint2?.X ?? default(double)));
             pairs.Add(new DxfCodePair(23, DefinitionPoint2?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(33, DefinitionPoint2?.Z ?? default(double)));
@@ -57,15 +54,6 @@ namespace IxMilia.Dxf.Entities
         {
             switch (pair.Code)
             {
-                case 12:
-                    this.InsertionPoint.X = pair.DoubleValue;
-                    break;
-                case 22:
-                    this.InsertionPoint.Y = pair.DoubleValue;
-                    break;
-                case 32:
-                    this.InsertionPoint.Z = pair.DoubleValue;
-                    break;
                 case 13:
                     this.DefinitionPoint2.X = pair.DoubleValue;
                     break;

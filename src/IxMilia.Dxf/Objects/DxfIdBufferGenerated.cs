@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -13,12 +15,26 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfIdBuffer class
     /// </summary>
-    public partial class DxfIdBuffer : DxfObject
+    public partial class DxfIdBuffer : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.IdBuffer; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
-        public List<uint> EntityHandles { get; private set; }
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            foreach (var pointer in EntitiesPointers.Pointers)
+            {
+                yield return pointer;
+            }
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+        internal DxfPointerList<DxfEntity> EntitiesPointers { get; } = new DxfPointerList<DxfEntity>();
+
+        public IList<DxfEntity> Entities { get { return EntitiesPointers; } }
 
         public DxfIdBuffer()
             : base()
@@ -28,14 +44,13 @@ namespace IxMilia.Dxf.Objects
         protected override void Initialize()
         {
             base.Initialize();
-            this.EntityHandles = new List<uint>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbIdBuffer"));
-            pairs.AddRange(this.EntityHandles.Select(p => new DxfCodePair(330, UIntHandle(p))));
+            pairs.AddRange(this.EntitiesPointers.Pointers.Select(p => new DxfCodePair(330, DxfCommonConverters.UIntHandle(p.Handle))));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -43,7 +58,7 @@ namespace IxMilia.Dxf.Objects
             switch (pair.Code)
             {
                 case 330:
-                    this.EntityHandles.Add(UIntHandle(pair.StringValue));
+                    this.EntitiesPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
                     break;
                 default:
                     return base.TrySetPair(pair);

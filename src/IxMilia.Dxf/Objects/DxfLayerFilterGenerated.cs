@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,8 +19,7 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LayerFilter; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2004; } }
-
-        public List<string> LayerNames { get; private set; }
+        public IList<string> LayerNames { get; private set; }
 
         public DxfLayerFilter()
             : base()

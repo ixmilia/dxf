@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -26,16 +27,16 @@ namespace IxMilia.Dxf.Entities
         public double TextAnnotationHeight { get; set; }
         public double TextAnnotationWidth { get; set; }
         public int VertexCount { get; set; }
-        private List<double> _verticesX { get; set; }
-        private List<double> _verticesY { get; set; }
-        private List<double> _verticesZ { get; set; }
+        private IList<double> _verticesX { get; set; }
+        private IList<double> _verticesY { get; set; }
+        private IList<double> _verticesZ { get; set; }
         public DxfColor OverrideColor { get; set; }
         public string AssociatedAnnotationReference { get; set; }
         public DxfVector Normal { get; set; }
         public DxfVector Right { get; set; }
         public DxfVector BlockOffset { get; set; }
         public DxfVector AnnotationOffset { get; set; }
-        public DxfXData XData { get { return XDataProtected; } set { XDataProtected = value; } }
+        public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }
 
         public DxfLeader()
             : base()

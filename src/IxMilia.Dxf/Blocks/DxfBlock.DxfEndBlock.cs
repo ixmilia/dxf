@@ -2,20 +2,40 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace IxMilia.Dxf.Blocks
 {
     public partial class DxfBlock
     {
-        private class DxfEndBlock : IDxfHasHandle
+        private class DxfEndBlock : IDxfItemInternal
         {
-            public DxfBlock Parent { get; }
-            public uint Handle { get; set; }
+            #region IDxfItem and IDxfItemInternal
+            uint IDxfItemInternal.Handle { get; set; }
+            uint IDxfItemInternal.OwnerHandle { get; set; }
+            public IDxfItem Owner { get; private set; }
+
+            void IDxfItemInternal.SetOwner(IDxfItem owner)
+            {
+                Owner = owner;
+            }
+
+            IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+            {
+                yield break;
+            }
+            IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+            {
+                return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+            }
+            #endregion
+
+            public DxfBlock Parent => (DxfBlock)Owner;
             public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
 
             public DxfEndBlock(DxfBlock parent)
             {
-                Parent = parent;
+                Owner = parent;
                 ExtensionDataGroups = new List<DxfCodePairGroup>();
             }
 
@@ -26,10 +46,13 @@ namespace IxMilia.Dxf.Blocks
                 switch (pair.Code)
                 {
                     case 5:
-                        Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                        ((IDxfItemInternal)this).Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                         break;
                     case 8:
-                        Debug.Assert(version >= DxfAcadVersion.R13);
+                        // just a re-iteration of the layer
+                        break;
+                    case 67:
+                        // just a re-iteration of the paper space setting
                         break;
                     case 100:
                         Debug.Assert(pair.StringValue == AcDbEntityText || pair.StringValue == AcDbBlockEndText);
@@ -45,9 +68,9 @@ namespace IxMilia.Dxf.Blocks
             {
                 var list = new List<DxfCodePair>();
                 list.Add(new DxfCodePair(0, EndBlockText));
-                if (outputHandles)
+                if (outputHandles && ((IDxfItemInternal)this).Handle != 0u)
                 {
-                    list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
+                    list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(((IDxfItemInternal)this).Handle)));
                 }
 
                 if (Parent.XData != null)
@@ -65,13 +88,23 @@ namespace IxMilia.Dxf.Blocks
 
                 if (version >= DxfAcadVersion.R2000)
                 {
-                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(0)));
+                    list.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(((IDxfItemInternal)Parent).OwnerHandle)));
                 }
 
                 if (version >= DxfAcadVersion.R13)
                 {
                     list.Add(new DxfCodePair(100, AcDbEntityText));
-                    list.Add(new DxfCodePair(8, Parent.Layer));
+                }
+
+                if (Parent.IsInPaperSpace)
+                {
+                    list.Add(new DxfCodePair(67, DxfCommonConverters.BoolShort(Parent.IsInPaperSpace)));
+                }
+
+                list.Add(new DxfCodePair(8, Parent.Layer));
+
+                if (version >= DxfAcadVersion.R13)
+                {
                     list.Add(new DxfCodePair(100, AcDbBlockEndText));
                 }
                 return list;

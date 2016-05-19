@@ -48,9 +48,13 @@ namespace IxMilia.Dxf
         }
 
         public DxfLineWeight()
-            : this((short)DxfLineWeightType.Standard)
+            : this((short)DxfLineWeightType.ByLayer)
         {
         }
+
+        public static DxfLineWeight Standard => new DxfLineWeight((short)DxfLineWeightType.Standard);
+        public static DxfLineWeight ByLayer => new DxfLineWeight((short)DxfLineWeightType.ByLayer);
+        public static DxfLineWeight ByBlock => new DxfLineWeight((short)DxfLineWeightType.ByBlock);
 
         private DxfLineWeight(short value)
         {

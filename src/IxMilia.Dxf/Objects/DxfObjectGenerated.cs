@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -13,10 +15,11 @@ namespace IxMilia.Dxf.Objects
     public enum DxfObjectType
     {
         AcadProxyObject,
-        AcdbDictionary,
-        AcdbDictionaryWithDefault,
         AcdbPlaceHolder,
         DataTable,
+        Dictionary,
+        DictionaryVariable,
+        DictionaryWithDefault,
         DimensionAssociativity,
         Field,
         GeoData,
@@ -30,6 +33,7 @@ namespace IxMilia.Dxf.Objects
         LightList,
         Material,
         MentalRayRenderSettings,
+        MLeaderStyle,
         MLineStyle,
         ObjectPointer,
         PlotSettings,
@@ -53,10 +57,29 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfObject class
     /// </summary>
-    public partial class DxfObject : IDxfHasHandle
+    public partial class DxfObject : IDxfItemInternal
     {
-        public uint Handle { get; set; }
-        public uint OwnerHandle { get; set; }
+#region IDxfItem and IDxfItemInternal
+        uint IDxfItemInternal.Handle { get; set; }
+        uint IDxfItemInternal.OwnerHandle { get; set; }
+        public IDxfItem Owner { get; private set;}
+
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield break;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+#endregion
+
 
         public string ObjectTypeString
         {
@@ -66,14 +89,16 @@ namespace IxMilia.Dxf.Objects
                 {
                     case DxfObjectType.AcadProxyObject:
                         return "ACAD_PROXY_OBJECT";
-                    case DxfObjectType.AcdbDictionaryWithDefault:
+                    case DxfObjectType.DictionaryWithDefault:
                         return "ACDBDICTIONARYWDFLT";
                     case DxfObjectType.AcdbPlaceHolder:
                         return "ACDBPLACEHOLDER";
                     case DxfObjectType.DataTable:
                         return "DATATABLE";
-                    case DxfObjectType.AcdbDictionary:
+                    case DxfObjectType.Dictionary:
                         return "DICTIONARY";
+                    case DxfObjectType.DictionaryVariable:
+                        return "DICTIONARYVAR";
                     case DxfObjectType.DimensionAssociativity:
                         return "DIMASSOC";
                     case DxfObjectType.Field:
@@ -98,6 +123,8 @@ namespace IxMilia.Dxf.Objects
                         return "LIGHTLIST";
                     case DxfObjectType.Material:
                         return "MATERIAL";
+                    case DxfObjectType.MLeaderStyle:
+                        return "MLEADERSTYLE";
                     case DxfObjectType.MLineStyle:
                         return "MLINESTYLE";
                     case DxfObjectType.ObjectPointer:
@@ -145,30 +172,21 @@ namespace IxMilia.Dxf.Objects
         protected DxfObject(DxfObject other)
             : this()
         {
-            this.Handle = other.Handle;
-            this.OwnerHandle = other.OwnerHandle;
         }
 
         protected virtual void Initialize()
         {
-            this.Handle = 0u;
-            this.OwnerHandle = 0u;
         }
 
         protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair(0, ObjectTypeString));
-            if (outputHandles)
-            {
-                pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
-            }
-
+            pairs.Add(new DxfCodePair(5, UIntHandle(((IDxfItemInternal)this).Handle)));
             AddExtensionValuePairs(pairs, version, outputHandles);
-            if (version >= DxfAcadVersion.R2000)
+            if (((IDxfItemInternal)this).OwnerHandle != 0)
             {
-                pairs.Add(new DxfCodePair(330, UIntHandle(this.OwnerHandle)));
+                pairs.Add(new DxfCodePair(330, UIntHandle(((IDxfItemInternal)this).OwnerHandle)));
             }
-
         }
 
         internal virtual bool TrySetPair(DxfCodePair pair)
@@ -176,10 +194,10 @@ namespace IxMilia.Dxf.Objects
             switch (pair.Code)
             {
                 case 5:
-                    this.Handle = UIntHandle(pair.StringValue);
+                    ((IDxfItemInternal)this).Handle = UIntHandle(pair.StringValue);
                     break;
                 case 330:
-                    this.OwnerHandle = UIntHandle(pair.StringValue);
+                    ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return false;
@@ -199,16 +217,19 @@ namespace IxMilia.Dxf.Objects
                     obj = new DxfAcadProxyObject();
                     break;
                 case "ACDBDICTIONARYWDFLT":
-                    obj = new DxfAcdbDictionaryWithDefault();
+                    obj = new DxfDictionaryWithDefault();
                     break;
                 case "ACDBPLACEHOLDER":
-                    obj = new DxfAcdbPlaceHolder();
+                    obj = new DxfPlaceHolder();
                     break;
                 case "DATATABLE":
                     obj = new DxfDataTable();
                     break;
                 case "DICTIONARY":
                     obj = new DxfDictionary();
+                    break;
+                case "DICTIONARYVAR":
+                    obj = new DxfDictionaryVariable();
                     break;
                 case "DIMASSOC":
                     obj = new DxfDimensionAssociativity();
@@ -245,6 +266,9 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "MATERIAL":
                     obj = new DxfMaterial();
+                    break;
+                case "MLEADERSTYLE":
+                    obj = new DxfMLeaderStyle();
                     break;
                 case "MLINESTYLE":
                     obj = new DxfMLineStyle();

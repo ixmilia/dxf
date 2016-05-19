@@ -23,7 +23,7 @@ namespace IxMilia.Dxf.Tables
         TwoDistantLights = 1
     }
 
-    public abstract partial class DxfTable : IDxfHasHandle
+    public abstract partial class DxfTable : IDxfItemInternal
     {
         public const string AppIdText = "APPID";
         public const string BlockRecordText = "BLOCK_RECORD";
@@ -35,9 +35,24 @@ namespace IxMilia.Dxf.Tables
         public const string ViewText = "VIEW";
         public const string ViewPortText = "VPORT";
 
+        public IDxfItem Owner { get; private set; }
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield break;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return GetSymbolItems().Cast<IDxfItemInternal>();
+        }
+
         internal abstract DxfTableType TableType { get; }
+        internal virtual string TableClassName { get { return null; } }
         public uint Handle { get; set; }
-        public int MaxEntries { get; set; }
         public uint OwnerHandle { get; set; }
         public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
 
@@ -46,24 +61,21 @@ namespace IxMilia.Dxf.Tables
             ExtensionDataGroups = new List<DxfCodePairGroup>();
         }
 
+        internal virtual void Normalize() { }
         protected abstract IEnumerable<DxfSymbolTableFlags> GetSymbolItems();
 
-        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
+        internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             BeforeWrite();
 
             var pairs = new List<DxfCodePair>();
-            var symbolItems = GetSymbolItems().Where(item => item != null);
-            if (!symbolItems.Any())
-                return pairs;
 
             // common pairs
             pairs.Add(new DxfCodePair(0, DxfSection.TableText));
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
-            if (outputHandles)
+            if (outputHandles && Handle != 0u)
             {
-                int code = TableType == DxfTableType.DimStyle ? 105 : 5;
-                pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(Handle)));
+                pairs.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
             }
 
             if (version >= DxfAcadVersion.R13)
@@ -73,17 +85,28 @@ namespace IxMilia.Dxf.Tables
                     group.AddValuePairs(pairs, version, outputHandles);
                 }
 
-                if (version >= DxfAcadVersion.R2000)
+                if (version >= DxfAcadVersion.R2000 && OwnerHandle != 0u)
+                {
                     pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+                }
+
                 pairs.Add(new DxfCodePair(100, "AcDbSymbolTable"));
             }
 
-            pairs.Add(new DxfCodePair(70, (short)MaxEntries));
-
-            foreach (var item in symbolItems.OrderBy(i => i.Name))
+            var symbolItems = GetSymbolItems().Where(item => item != null).OrderBy(i => i.Name).ToList();
+            pairs.Add(new DxfCodePair(70, (short)symbolItems.Count));
+            if (version >= DxfAcadVersion.R2000 && TableClassName != null)
             {
-                item.AddCommonValuePairs(pairs, version, outputHandles);
-                item.AddValuePairs(pairs, version, outputHandles);
+                pairs.Add(new DxfCodePair(100, TableClassName));
+            }
+
+            foreach (var item in symbolItems)
+            {
+                if (writtenItems.Add(item))
+                {
+                    item.AddCommonValuePairs(pairs, version, outputHandles);
+                    item.AddValuePairs(pairs, version, outputHandles);
+                }
             }
 
             pairs.Add(new DxfCodePair(0, DxfSection.EndTableText));
@@ -245,7 +268,7 @@ namespace IxMilia.Dxf.Tables
                             result.Handle = DxfCommonConverters.UIntHandle(common.StringValue);
                             break;
                         case 70:
-                            result.MaxEntries = common.ShortValue;
+                            // entry count, read dynamically
                             break;
                         case 330:
                             result.OwnerHandle = DxfCommonConverters.UIntHandle(common.StringValue);
@@ -280,6 +303,20 @@ namespace IxMilia.Dxf.Tables
         }
     }
 
+    public partial class DxfAppIdTable
+    {
+        internal override void Normalize()
+        {
+            foreach (var name in new[] { "ACAD", "ACADANNOTATIVE", "ACAD_NAV_VCDISPLAY", "ACAD_MLEADERVER" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfAppId() { Name = name });
+                }
+            }
+        }
+    }
+
     public partial class DxfBlockRecordTable
     {
         protected override void BeforeWrite()
@@ -295,6 +332,81 @@ namespace IxMilia.Dxf.Tables
             foreach (var blockRecord in Items.Where(item => item != null))
             {
                 blockRecord.AfterRead();
+            }
+        }
+
+        internal override void Normalize()
+        {
+            foreach (var name in new[] { "*MODEL_SPACE", "*PAPER_SPACE" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfBlockRecord() { Name = name });
+                }
+            }
+        }
+    }
+
+    public partial class DxfDimStyleTable
+    {
+        internal override void Normalize()
+        {
+            foreach (var name in new[] { "STANDARD", "ANNOTATIVE" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfDimStyle() { Name = name });
+                }
+            }
+        }
+    }
+
+    public partial class DxfLayerTable
+    {
+        internal override void Normalize()
+        {
+            if (!Items.Any(a => a.Name == "0"))
+            {
+                Items.Add(new DxfLayer("0"));
+            }
+        }
+    }
+
+    public partial class DxfLTypeTable
+    {
+        internal override void Normalize()
+        {
+            foreach (var name in new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfLineType() { Name = name });
+                }
+            }
+        }
+    }
+
+    public partial class DxfStyleTable
+    {
+        internal override void Normalize()
+        {
+            foreach (var name in new[] { "STANDARD", "ANNOTATIVE" })
+            {
+                if (!Items.Any(a => a.Name == name))
+                {
+                    Items.Add(new DxfStyle() { Name = name });
+                }
+            }
+        }
+    }
+
+    public partial class DxfViewPortTable
+    {
+        internal override void Normalize()
+        {
+            if (!Items.Any(a => a.Name == DxfViewPort.ActiveViewPortName))
+            {
+                Items.Add(new DxfViewPort() { Name = DxfViewPort.ActiveViewPortName });
             }
         }
     }

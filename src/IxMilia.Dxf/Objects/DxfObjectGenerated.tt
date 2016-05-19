@@ -24,6 +24,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -53,8 +55,29 @@ var baseObject = xml.Elements(XName.Get("Object", xmlns)).Where(x => Name(x) == 
     /// <summary>
     /// DxfObject class
     /// </summary>
-    public partial class DxfObject : IDxfHasHandle
+    public partial class DxfObject : IDxfItemInternal
     {
+#region IDxfItem and IDxfItemInternal
+        uint IDxfItemInternal.Handle { get; set; }
+        uint IDxfItemInternal.OwnerHandle { get; set; }
+        public IDxfItem Owner { get; private set;}
+
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield break;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+#endregion
+
 <#
 foreach (var property in GetProperties(baseObject))
 {
@@ -149,6 +172,12 @@ foreach (var property in GetProperties(baseObject))
         {
             switch (pair.Code)
             {
+                case 5:
+                    ((IDxfItemInternal)this).Handle = UIntHandle(pair.StringValue);
+                    break;
+                case 330:
+                    ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);
+                    break;
 <#
         foreach (var propertyGroup in GetProperties(baseObject).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
         {
@@ -253,12 +282,13 @@ foreach (var obj in objects)
 {
     var className = Name(obj);
     var baseClass = BaseClass(obj, "DxfObject");
+    if (GetPointers(obj).Any()) baseClass += ", IDxfItemInternal";
     manager.StartNewFile(className + "Generated.cs");
 #>
     /// <summary>
     /// <#= className #> class
     /// </summary>
-    public partial class <#= className #> : <#= baseClass #>
+    <#= Accessibility(obj) #> partial class <#= className #> : <#= baseClass #>
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.<#= ObjectType(obj) #>; } }
 <#
@@ -279,22 +309,100 @@ foreach (var obj in objects)
 <#
     } // if
 
+    //
+    // Pointers
+    //
+    var pointers = GetPointers(obj);
+    if (pointers.Any())
+    {
+#>
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+<#
+        foreach (var pointer in pointers)
+        {
+            if (AllowMultiples(pointer))
+            {
+#>
+            foreach (var pointer in <#= Name(pointer) #>Pointers.Pointers)
+            {
+                yield return pointer;
+            }
+<#
+            }
+            else
+            {
+#>
+            yield return <#= Name(pointer) #>Pointer;
+<#
+            }
+        }
+#>
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+<#
+
+        foreach (var pointer in pointers)
+        {
+            var defaultValue = "new DxfPointer()";
+            var typeString = "DxfPointer";
+            var suffix = "Pointer";
+            if (AllowMultiples(pointer))
+            {
+                var type = Type(pointer);
+                defaultValue = string.Format("new DxfPointerList<{0}>()", type);
+                typeString = string.Format("DxfPointerList<{0}>", type);
+                suffix += "s";
+            }
+#>
+        internal <#= typeString #> <#= Name(pointer) #><#= suffix #> { get; } = <#= defaultValue #>;
+<#
+        } // foreach pointer
 #>
 
 <#
+    } // end if pointers.Any()
 
     //
     // Properties
     //
-    foreach (var property in GetProperties(obj))
+    var seenProperties = new HashSet<string>();
+    foreach (var property in GetPropertiesAndPointers(obj))
     {
+        var propertyName = Name(property);
+        if (seenProperties.Contains(propertyName))
+        {
+            continue;
+        }
+
+        seenProperties.Add(propertyName);
         var propertyType = Type(property);
+        var getset = string.Format("{{ get; {0}set; }}", SetterAccessibility(property));
+
+        // special-case pointers
+        if (IsPointer(property))
+        {
+            if (AllowMultiples(property))
+            {
+                getset = string.Format("{{ get {{ return {0}Pointers; }} }}", Name(property));
+            }
+            else
+            {
+                getset = string.Format("{{ get {{ return {0}Pointer.Item as {1}; }} set {{ {0}Pointer.Item = value; }} }}", Name(property), propertyType);
+            }
+        }
+
         if (AllowMultiples(property))
         {
-            propertyType = string.Format("List<{0}>", propertyType);
+            propertyType = string.Format("IList<{0}>", propertyType);
         }
 #>
-        <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> { get; <#= SetterAccessibility(property) #>set; }
+        <#= Accessibility(property) #> <#= propertyType #> <#= propertyName #> <#= getset #>
 <#
     } // foreach property
 
@@ -428,13 +536,21 @@ foreach (var obj in objects)
         {
             base.Initialize();
 <#
+        seenProperties = new HashSet<string>();
         foreach (var property in GetProperties(obj))
         {
+            var propertyName = Name(property);
+            if (seenProperties.Contains(propertyName))
+            {
+                continue;
+            }
+
+            seenProperties.Add(propertyName);
             var defaultValue = AllowMultiples(property)
                 ? string.Format("new List<{0}>()", Type(property))
                 : DefaultValue(property);
 #>
-            this.<#= Name(property) #> = <#= defaultValue #>;
+            this.<#= propertyName #> = <#= defaultValue #>;
 <#
         } // foreach property
 #>
@@ -479,7 +595,7 @@ foreach (var obj in objects)
 
     } // if (GenerateWriterFunction(obj))
 
-    if (GetProperties(obj).Any() && GenerateReaderFunction(obj))
+    if (GetPropertiesAndPointers(obj).Any() && GenerateReaderFunction(obj))
     {
         // handle codes with multiple values (but only positive codes (negative codes mean special handling))
         var multiCodeProperties = GetProperties(obj)
@@ -509,7 +625,7 @@ foreach (var obj in objects)
             switch (pair.Code)
             {
 <#
-        foreach (var propertyGroup in GetProperties(obj).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
+        foreach (var propertyGroup in GetPropertiesAndPointers(obj).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
         {
             var code = propertyGroup.Key;
             if (propertyGroup.Count() == 1)
@@ -533,15 +649,25 @@ foreach (var obj in objects)
                 {
                     var codeType = DxfCodePair.ExpectedType(code);
                     var codeTypeValue = TypeToString(codeType);
+                    if (IsPointer(property))
+                    {
+                        if (AllowMultiples(property)) name += "Pointers.Pointers";
+                        else name += "Pointer.Handle";
+                    }
                     var assignCode = AllowMultiples(property)
-                        ? string.Format("this.{0}.Add(", Name(property))
-                        : string.Format("this.{0} = ", Name(property));
+                        ? string.Format("this.{0}.Add(", name)
+                        : string.Format("this.{0} = ", name);
                     var assignSuffix = AllowMultiples(property)
                         ? ")"
                         : "";
+                    var value = string.Format("{0}(pair.{1})", ReadConverter(property), codeTypeValue);
+                    if (IsPointer(property) && AllowMultiples(property))
+                    {
+                        value = "new DxfPointer(" + value + ")";
+                    }
 #>
                 case <#= code #>:
-                    <#= assignCode #><#= ReadConverter(property) #>(pair.<#= codeTypeValue #>)<#= assignSuffix #>;
+                    <#= assignCode #><#= value #><#= assignSuffix #>;
                     break;
 <#
                 } // else

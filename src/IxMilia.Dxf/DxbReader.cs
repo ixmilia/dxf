@@ -139,6 +139,10 @@ namespace IxMilia.Dxf
             }
 
             var file = new DxfFile();
+            foreach (var section in file.Sections)
+            {
+                section.Clear();
+            }
 
             // collect the entities (e.g., polylines, etc.)
             entities = DxfEntitiesSection.GatherEntities(entities);

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -32,6 +33,7 @@ namespace IxMilia.Dxf.Entities
         protected override void Initialize()
         {
             base.Initialize();
+            this.DimensionType = DxfDimensionType.Diameter;
             this.DefinitionPoint2 = DxfPoint.Origin;
             this.LeaderLength = 0.0;
         }
@@ -39,7 +41,7 @@ namespace IxMilia.Dxf.Entities
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbRadialDiametricDimension"));
+            pairs.Add(new DxfCodePair(100, "AcDbDiametricDimension"));
             pairs.Add(new DxfCodePair(15, DefinitionPoint2?.X ?? default(double)));
             pairs.Add(new DxfCodePair(25, DefinitionPoint2?.Y ?? default(double)));
             pairs.Add(new DxfCodePair(35, DefinitionPoint2?.Z ?? default(double)));

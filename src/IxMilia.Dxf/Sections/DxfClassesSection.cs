@@ -19,14 +19,20 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Classes; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-           return this.Classes.SelectMany(e => e.GetValuePairs(version, outputHandles));
+            return this.Classes.SelectMany(e => e.GetValuePairs(version, outputHandles));
+        }
+
+        protected internal override void Clear()
+        {
+            Classes.Clear();
         }
 
         internal static DxfClassesSection ClassesSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
             var section = new DxfClassesSection();
+            section.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

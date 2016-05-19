@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 
 namespace IxMilia.Dxf.Entities
@@ -170,11 +171,13 @@ namespace IxMilia.Dxf.Entities
         ConstantMultilineAttributeDefinition = 4
     }
 
-    public abstract partial class DxfEntity
+    public abstract partial class DxfEntity : IDxfHasXData, IDxfHasXDataHidden
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
-        protected DxfXData XDataProtected { get; set; }
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+
+        public List<DxfCodePairGroup> ExtensionDataGroups { get; } = new List<DxfCodePairGroup>();
+
+        DxfXData IDxfHasXDataHidden.XDataHidden{ get; set; }
 
         public abstract DxfEntityType EntityType { get; }
 
@@ -223,24 +226,6 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        internal virtual bool TrySetExtensionData(DxfCodePair pair, DxfCodePairBufferReader buffer)
-        {
-            if (pair.Code == DxfCodePairGroup.GroupCodeNumber)
-            {
-                buffer.Advance();
-                var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                return true;
-            }
-            else if (pair.Code == (int)DxfXDataType.ApplicationName)
-            {
-                XDataProtected = DxfXData.FromBuffer(buffer, pair.StringValue);
-                return true;
-            }
-
-            return false;
-        }
-
         internal virtual DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
@@ -251,17 +236,21 @@ namespace IxMilia.Dxf.Entities
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                if (TrySetPair(pair))
                 {
-                    pair = buffer.Peek();
+                    // pair was successfully applied; consume it
+                    buffer.Advance();
                 }
-
-                if (!TrySetPair(pair))
+                else if (this.TrySetExtensionData(pair, buffer))
                 {
+                    // do nothing as TrySetExtensionData consumes as necessary
+                }
+                else
+                {
+                    // track it for later use and consume it
                     ExcessCodePairs.Add(pair);
+                    buffer.Advance();
                 }
-
-                buffer.Advance();
             }
 
             return PostParse();
@@ -290,6 +279,11 @@ namespace IxMilia.Dxf.Entities
         protected static string UIntHandle(uint u)
         {
             return DxfCommonConverters.UIntHandle(u);
+        }
+
+        protected static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        {
+            return DxfCommonConverters.DefaultIfNullOrEmpty(defaultValue);
         }
 
         private static void SwallowEntity(DxfCodePairBufferReader buffer)

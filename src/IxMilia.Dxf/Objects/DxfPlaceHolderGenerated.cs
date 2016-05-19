@@ -6,20 +6,21 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
 
     /// <summary>
-    /// DxfAcdbPlaceHolder class
+    /// DxfPlaceHolder class
     /// </summary>
-    public partial class DxfAcdbPlaceHolder : DxfObject
+    public partial class DxfPlaceHolder : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.AcdbPlaceHolder; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
 
-
-        public DxfAcdbPlaceHolder()
+        public DxfPlaceHolder()
             : base()
         {
         }

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -13,12 +15,27 @@ namespace IxMilia.Dxf.Objects
     /// <summary>
     /// DxfLightList class
     /// </summary>
-    public partial class DxfLightList : DxfObject
+    public partial class DxfLightList : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LightList; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
 
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            foreach (var pointer in LightsPointers.Pointers)
+            {
+                yield return pointer;
+            }
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+        internal DxfPointerList<DxfLight> LightsPointers { get; } = new DxfPointerList<DxfLight>();
+
         public int Version { get; set; }
+        public IList<DxfLight> Lights { get { return LightsPointers; } }
 
         public DxfLightList()
             : base()
@@ -31,19 +48,6 @@ namespace IxMilia.Dxf.Objects
             this.Version = 0;
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
-        {
-            base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbLightList"));
-            pairs.Add(new DxfCodePair(90, (this.Version)));
-            pairs.Add(new DxfCodePair(90, Lights.Count));
-            foreach (var item in Lights)
-            {
-                pairs.Add(new DxfCodePair(5, UIntHandle(item.Handle)));
-                pairs.Add(new DxfCodePair(1, item.Name));
-            }
-
-        }
     }
 
 }

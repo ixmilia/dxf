@@ -26,6 +26,8 @@ namespace IxMilia.Dxf
         internal DxfObjectsSection ObjectsSection { get; private set; }
         internal DxfThumbnailImageSection ThumbnailImageSection { get; private set; }
 
+        private DateTime _lastOpenOrSave;
+
         public List<DxfEntity> Entities { get { return EntitiesSection.Entities; } }
 
         public List<DxfClass> Classes { get { return ClassSection.Classes; } }
@@ -53,6 +55,8 @@ namespace IxMilia.Dxf
         public List<DxfLineType> Linetypes { get { return TablesSection.LTypeTable.Items; } }
 
         public List<DxfStyle> Styles { get { return TablesSection.StyleTable.Items; } }
+
+        public DxfDictionary NamedObjectDictionary { get { return Objects.FirstOrDefault() as DxfDictionary; } }
 
         /// <summary>
         /// Gets the thumbnail bitmap.
@@ -122,6 +126,7 @@ namespace IxMilia.Dxf
 
         public DxfFile()
         {
+            _lastOpenOrSave = DateTime.UtcNow;
             this.HeaderSection = new DxfHeaderSection();
             this.ClassSection = new DxfClassesSection();
             this.TablesSection = new DxfTablesSection();
@@ -129,6 +134,7 @@ namespace IxMilia.Dxf
             this.EntitiesSection = new DxfEntitiesSection();
             this.ObjectsSection = new DxfObjectsSection();
             this.ThumbnailImageSection = null; // not always present
+            this.Normalize();
         }
 
         public static DxfFile Load(Stream stream)
@@ -201,6 +207,7 @@ namespace IxMilia.Dxf
         private static DxfFile LoadFromReader(IDxfCodePairReader reader)
         {
             var file = new DxfFile();
+            file.Clear();
             var buffer = new DxfCodePairBufferReader(reader.GetCodePairs());
             var version = DxfAcadVersion.R14;
             while (buffer.ItemsRemain)
@@ -258,7 +265,7 @@ namespace IxMilia.Dxf
             }
 
             Debug.Assert(!buffer.ItemsRemain);
-            file.SetHandles();
+            DxfPointer.BindPointers(file);
 
             return file;
         }
@@ -273,91 +280,72 @@ namespace IxMilia.Dxf
             new DxbWriter(stream).Save(this);
         }
 
+        private void UpdateTimes()
+        {
+            var currentTime = DateTime.Now;
+            var currentTimeUtc = DateTime.UtcNow;
+            var timeInDrawing = currentTimeUtc - _lastOpenOrSave;
+
+            Header.TimeInDrawing += timeInDrawing;
+            Header.UpdateDate = currentTime;
+            Header.UpdateDateUniversal = currentTimeUtc;
+            if (Header.UserTimerOn)
+            {
+                Header.UserElapsedTimer += timeInDrawing;
+            }
+
+            _lastOpenOrSave = currentTimeUtc;
+        }
+
         private void WriteStream(Stream stream, bool asText)
         {
+            UpdateTimes();
+            Normalize();
+
             var writer = new DxfWriter(stream, asText);
             writer.Open();
 
-            var nextHandle = SetHandles();
+            var nextHandle = DxfPointer.AssignHandles(this);
             Header.NextAvailableHandle = nextHandle;
 
             // write sections
+            var writtenItems = new HashSet<IDxfItem>();
             var outputHandles = Header.Version >= DxfAcadVersion.R13 || Header.HandlesEnabled; // handles are always enabled on R13+
             foreach (var section in Sections)
             {
-                foreach (var pair in section.GetValuePairs(Header.Version, outputHandles))
+                foreach (var pair in section.GetValuePairs(Header.Version, outputHandles, writtenItems))
                     writer.WriteCodeValuePair(pair);
             }
 
             writer.Close();
         }
 
-        private IEnumerable<IDxfHasHandle> HandleItems
+        internal IEnumerable<IDxfItemInternal> GetFileItems()
         {
-            get
+            return this.TablesSection.GetTables(Header.Version).Cast<IDxfItemInternal>()
+                .Concat(this.Blocks.Cast<IDxfItemInternal>())
+                .Concat(this.Entities.Cast<IDxfItemInternal>())
+                .Concat(this.Objects.Cast<IDxfItemInternal>())
+                .Where(item => item != null);
+        }
+
+        public void Clear()
+        {
+            foreach (var section in Sections)
             {
-                return this.TablesSection.GetTables(Header.Version).Cast<IDxfHasHandle>()
-                    .Concat(this.ApplicationIds.Cast<IDxfHasHandle>())
-                    .Concat(this.BlockRecords.Cast<IDxfHasHandle>())
-                    .Concat(this.Blocks.Cast<IDxfHasHandle>())
-                    .Concat(this.DimensionStyles.Cast<IDxfHasHandle>())
-                    .Concat(this.Entities.Cast<IDxfHasHandle>())
-                    .Concat(this.Layers.Cast<IDxfHasHandle>())
-                    .Concat(this.Linetypes.Cast<IDxfHasHandle>())
-                    .Concat(this.Objects.Cast<IDxfHasHandle>())
-                    .Concat(this.Styles.Cast<IDxfHasHandle>())
-                    .Concat(this.UserCoordinateSystems.Cast<IDxfHasHandle>())
-                    .Concat(this.ViewPorts.Cast<IDxfHasHandle>())
-                    .Concat(this.Views.Cast<IDxfHasHandle>())
-                    .Where(item => item != null);
+                section.Clear();
             }
         }
 
-        private uint SetHandles()
+        public void Normalize()
         {
-            uint largestHandle = 0u;
-
-            foreach (var item in HandleItems)
+            foreach (var table in TablesSection.GetAllTables())
             {
-                largestHandle = Math.Max(largestHandle, item.Handle);
-                var parent = item as IDxfHasChildrenWithHandle;
-                if (parent != null)
-                {
-                    foreach (var child in parent.GetChildren())
-                    {
-                        largestHandle = Math.Max(largestHandle, child.Handle);
-                    }
-                }
+                table.Normalize();
             }
 
-            var nextHandle = largestHandle + 1;
-
-            foreach (var item in HandleItems)
-            {
-                if (item.Handle == 0u)
-                {
-                    item.Handle = nextHandle++;
-                }
-
-                var parent = item as IDxfHasChildrenWithHandle;
-                if (parent != null)
-                {
-                    foreach (var child in parent.GetChildren())
-                    {
-                        if (child as IDxfHasOwnerHandle != null)
-                        {
-                            ((IDxfHasOwnerHandle)child).OwnerHandle = item.Handle;
-                        }
-
-                        if (child.Handle == 0u)
-                        {
-                            child.Handle = nextHandle++;
-                        }
-                    }
-                }
-            }
-
-            return nextHandle;
+            BlocksSection.Normalize();
+            ObjectsSection.Normalize();
         }
     }
 }

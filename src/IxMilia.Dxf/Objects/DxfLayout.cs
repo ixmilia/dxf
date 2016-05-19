@@ -17,10 +17,10 @@ namespace IxMilia.Dxf.Objects
 
     public partial class DxfLayout
     {
-        public uint PaperSpaceHandle
+        public IDxfItem PaperSpaceObject
         {
-            get { return OwnerHandle; }
-            set { OwnerHandle = value; }
+            get { return Owner; }
+            set { ((IDxfItemInternal)this).SetOwner(value); }
         }
 
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
@@ -34,7 +34,7 @@ namespace IxMilia.Dxf.Objects
                     break;
                 }
 
-                if (TrySetExtensionData(pair, buffer))
+                while (this.TrySetExtensionData(pair, buffer))
                 {
                     pair = buffer.Peek();
                 }
@@ -153,16 +153,16 @@ namespace IxMilia.Dxf.Objects
                     this.Elevation = (pair.DoubleValue);
                     break;
                 case 331:
-                    this.ViewportHandle = UIntHandle(pair.StringValue);
+                    this.ViewportPointer.Handle = UIntHandle(pair.StringValue);
                     break;
                 case 333:
-                    this.ShadePlotHandle = UIntHandle(pair.StringValue);
+                    this.ShadePlotObjectPointer.Handle = UIntHandle(pair.StringValue);
                     break;
                 case 345:
-                    this.TableRecordHandle = UIntHandle(pair.StringValue);
+                    this.TableRecordPointer.Handle = UIntHandle(pair.StringValue);
                     break;
                 case 346:
-                    this.TableRecordBaseHandle = UIntHandle(pair.StringValue);
+                    this.TableRecordBasePointer.Handle = UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

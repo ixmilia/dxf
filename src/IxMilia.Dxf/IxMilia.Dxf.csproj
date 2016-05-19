@@ -20,6 +20,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
   <ItemGroup>
     <Compile Include="Blocks\DxfBlock.DxfEndBlock.cs" />
+    <Compile Include="Collections\DxfPointerList.cs" />
     <Compile Include="DxbItemType.cs" />
     <Compile Include="DxbReader.cs" />
     <Compile Include="DxbWriter.cs" />
@@ -37,6 +38,7 @@
     <Compile Include="DxfHelpers.cs" />
     <Compile Include="DxfLineWeight.cs" />
     <Compile Include="DxfPoint.cs" />
+    <Compile Include="DxfPointer.cs" />
     <Compile Include="DxfReader.cs" />
     <Compile Include="DxfReadException.cs" />
     <Compile Include="DxfShadowMode.cs" />
@@ -52,9 +54,6 @@
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfAlignedDimensionGenerated.cs">
-      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Entities\DxfAngularDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfAngularThreePointDimensionGenerated.cs">
@@ -86,6 +85,7 @@
     <Compile Include="Entities\DxfDiameterDimensionGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Entities\DxfDimensionBase.cs" />
     <Compile Include="Entities\DxfDimensionBaseGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
@@ -131,9 +131,6 @@
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Entities\DxfLwPolylineVertex.cs" />
-    <Compile Include="Entities\DxfMLeaderStyleGenerated.cs">
-      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
-    </Compile>
     <Compile Include="Entities\DxfMLine.cs" />
     <Compile Include="Entities\DxfMLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
@@ -193,9 +190,6 @@
     <Compile Include="Entities\DxfSplineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Entities\DxfSunGenerated.cs">
-      <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
-    </Compile>
     <Compile Include="Entities\DxfTextGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
@@ -218,27 +212,27 @@
     <Compile Include="Entities\DxfXLineGenerated.cs">
       <DependentUpon>DxfEntityGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="IDxfHasChildrenWithHandle.cs" />
-    <Compile Include="IDxfHasHandle.cs" />
     <Compile Include="IDxfCodePairReader.cs" />
-    <Compile Include="IDxfHasOwnerHandle.cs" />
+    <Compile Include="IDxfHasXData.cs" />
+    <Compile Include="IDxfItem.cs" />
+    <Compile Include="IDxfItemInternal.cs" />
     <Compile Include="Objects\DxfAcadProxyObject.cs" />
     <Compile Include="Objects\DxfAcadProxyObjectGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
-    <Compile Include="Objects\DxfAcdbDictionaryWithDefault.cs" />
-    <Compile Include="Objects\DxfAcdbDictionaryWithDefaultGenerated.cs">
-      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Objects\DxfAcdbPlaceHolderGenerated.cs">
-      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Objects\DxfDictionaryWithDefault.cs" />
     <Compile Include="Objects\DxfDataTable.cs" />
     <Compile Include="Objects\DxfDataTableGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfDictionary.cs" />
     <Compile Include="Objects\DxfDictionaryGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfDictionaryVariableGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfDictionaryWithDefaultGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfDimensionAssociativityGenerated.cs">
@@ -287,6 +281,9 @@
     <Compile Include="Objects\DxfMentalRayRenderSettingsGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Objects\DxfMLeaderStyleGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Objects\DxfMLineStyle.cs" />
     <Compile Include="Objects\DxfMLineStyleGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
@@ -298,6 +295,9 @@
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfObjectPointerGenerated.cs">
+      <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Objects\DxfPlaceHolderGenerated.cs">
       <DependentUpon>DxfObjectGenerated.tt</DependentUpon>
     </Compile>
     <Compile Include="Objects\DxfPlotSettings.cs" />

@@ -14,7 +14,7 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Thumbnail; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(90, RawData.Length));
@@ -74,6 +74,10 @@ namespace IxMilia.Dxf.Sections
 
         private const int BITMAPFILELENGTHOFFSET = 2;
 
+        protected internal override void Clear()
+        {
+        }
+
         internal static DxfThumbnailImageSection ThumbnailImageSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             if (buffer.ItemsRemain)
@@ -103,6 +107,7 @@ namespace IxMilia.Dxf.Sections
                 }
 
                 var section = new DxfThumbnailImageSection();
+                section.Clear();
                 section.RawData = DxfCommonConverters.HexBytes(string.Join(string.Empty, lines));
                 return section;
             }

@@ -39,7 +39,7 @@ namespace IxMilia.Dxf
         {
             seenKeys.Add(name);
 #>
-        private const string <#= name #> = "$<#= name #>";
+        private const string <#= Identifier(name) #> = "$<#= name #>";
 <#      }
     } // foreach
 
@@ -64,8 +64,9 @@ foreach (var property in variables) {
 #>
 
         // set defaults
-        private void SetDefaults()
+        public void SetDefaults()
         {
+            SetManualDefaults();
 <#
     seenProperties.Clear();
     foreach (var property in variables)
@@ -98,62 +99,64 @@ foreach (var property in variables) {
         }
 
         // build list of code value pairs
-        internal static void AddValueToList(List<DxfCodePair> list, DxfHeader header, DxfAcadVersion version)
+        internal void AddValueToList(List<DxfCodePair> list)
         {
 <# foreach (var property in variables.Where(p => !SuppressWriting(p))) {
     var converterAtt = property.Attribute("WriteConverter");
     var converter = converterAtt == null ? string.Empty : converterAtt.Value;
     var type = property.Attribute("Type").Value;
+    var dontWriteDefaultAtt = property.Attribute("DontWriteDefault");
     var minVersionAtt = property.Attribute("MinVersion");
     var maxVersionAtt = property.Attribute("MaxVersion");
-    var minVersion = minVersionAtt == null ? "Min" : minVersionAtt.Value;
-    var maxVersion = maxVersionAtt == null ? "Max" : maxVersionAtt.Value;
-    var usingIf = minVersionAtt != null || maxVersionAtt != null;
+    var dontWriteDefault = dontWriteDefaultAtt == null ? false : bool.Parse(dontWriteDefaultAtt.Value);
+    var usingIf = dontWriteDefault || minVersionAtt != null || maxVersionAtt != null;
 #>
             // <#= property.Attribute("Name").Value #>
 <#
     if (usingIf) {
-        var minIfText = "version >= DxfAcadVersion." + minVersion;
-        var maxIfText = "version <= DxfAcadVersion." + maxVersion;
-        string allIfText;
-        if (minVersion == maxVersion) {
-            allIfText = "version == DxfAcadVersion." + minVersion;
-        }
-        else if (minVersionAtt != null && maxVersionAtt != null) {
-            allIfText = minIfText + " && " + maxIfText;
-        }
-        else if (minVersionAtt != null) {
-            allIfText = minIfText;
+        var ifParts = new List<string>();
+        if (minVersionAtt != null && maxVersionAtt != null && minVersionAtt.Value == maxVersionAtt.Value)
+        {
+            ifParts.Add(string.Format("Version == DxfAcadVersion.{0}", minVersionAtt.Value));
         }
         else {
-            allIfText = maxIfText;
+            if (minVersionAtt != null) {
+                ifParts.Add(string.Format("Version >= DxfAcadVersion.{0}", minVersionAtt.Value));
+            }
+            if (maxVersionAtt != null) {
+                ifParts.Add(string.Format("Version <= DxfAcadVersion.{0}", maxVersionAtt.Value));
+            }
         }
+        if (dontWriteDefault) {
+            ifParts.Add(string.Format("this.{0} != {1}", property.Attribute("Property").Value, property.Attribute("DefaultValue").Value));
+        }
+        var allIfText = string.Join(" && ", ifParts);
 #>
             if (<#= allIfText #>)
             {
 <#
     } // if
 #>
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(9, <#= property.Attribute("Name").Value #>));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(9, <#= Identifier(property.Attribute("Name").Value) #>));
 <#
     if (type == "DxfPoint" || type == "DxfVector")
     {
         var prop = property.Attribute("Property").Value;
 #>
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(10, header.<#= prop #>?.X ?? default(double)));
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(20, header.<#= prop #>?.Y ?? default(double)));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(10, this.<#= prop #>?.X ?? default(double)));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(20, this.<#= prop #>?.Y ?? default(double)));
 <#
         if (Math.Abs(int.Parse(property.Attribute("Code").Value)) >= 3)
         {
 #>
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(30, header.<#= prop #>?.Z ?? default(double)));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(30, this.<#= prop #>?.Z ?? default(double)));
 <#
         }
     }
     else
     {
 #>
-<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(<#= property.Attribute("Code").Value #>, <#= converter #>(header.<#= property.Attribute("Property").Value #>)));
+<# if (usingIf) { #>    <# } // if #>            list.Add(new DxfCodePair(<#= property.Attribute("Code").Value #>, <#= converter #>(this.<#= property.Attribute("Property").Value #>)));
 <#
     } // if
     if (usingIf) {
@@ -169,7 +172,7 @@ foreach (var property in variables) {
         }
 
         // setter method
-        internal static void SetHeaderVariable(string keyName, DxfCodePair pair, DxfHeader header)
+        internal void SetHeaderVariable(string keyName, DxfCodePair pair)
         {
             switch (keyName)
             {
@@ -177,14 +180,14 @@ foreach (var property in variables) {
     foreach (var propertyGroup in variables.GroupBy(v => v.Attribute("Name").Value))
     {
 #>
-                case <#= propertyGroup.Key #>:
+                case <#= Identifier(propertyGroup.Key) #>:
 <#
         var type = propertyGroup.First().Attribute("Type").Value;
         var prop = propertyGroup.First().Attribute("Property").Value;
         if (type == "DxfPoint" || type == "DxfVector")
         {
 #>
-                    SetPoint(pair, header.<#= prop #>);
+                    SetPoint(pair, this.<#= prop #>);
                     break;
 <#
         }
@@ -205,7 +208,7 @@ foreach (var property in variables) {
                     var converter = converterAtt == null ? string.Empty : converterAtt.Value;
 #>
                         case <#= code #>:
-                            header.<#= prop #> = <#= converter #>(pair.<#= codeTypeValue #>);
+                            this.<#= prop #> = <#= converter #>(pair.<#= codeTypeValue #>);
                             break;
 <#
                 }
@@ -225,7 +228,7 @@ foreach (var property in variables) {
                 var converter = converterAtt == null ? string.Empty : converterAtt.Value;
 #>
                     EnsureCode(pair, <#= code #>);
-                    header.<#= prop #> = <#= converter #>(pair.<#= codeTypeValue #>);
+                    this.<#= prop #> = <#= converter #>(pair.<#= codeTypeValue #>);
 <#
             } // if
 #>
@@ -282,7 +285,7 @@ foreach (var property in variables) {
         {
             seenProperties.Add(propertyName);
 #>
-                case <#= propertyName #>:
+                case <#= Identifier(propertyName) #>:
                     return this.<#= property.Attribute("Property").Value #>;
 <#
         } // if
@@ -310,7 +313,7 @@ foreach (var property in variables) {
         {
             seenProperties.Add(propertyName);
 #>
-                case <#= propertyName #>:
+                case <#= Identifier(propertyName) #>:
                     this.<#= property.Attribute("Property").Value #> = (<#= property.Attribute("Type").Value #>)value;
                     break;
 <#

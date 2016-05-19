@@ -38,6 +38,15 @@ foreach (var table in tables)
     public partial class Dxf<#= Type(table) #>Table : DxfTable
     {
         internal override DxfTableType TableType { get { return DxfTableType.<#= Type(table) #>; } }
+<#
+    var tableClassName = TableClassName(table);
+    if (tableClassName != null)
+    {
+#>
+        internal override string TableClassName { get { return "<#= tableClassName #>"; } }
+<#
+    }
+#>
         public List<<#= tableItem #>> Items { get; private set; }
 
         protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()
@@ -48,11 +57,13 @@ foreach (var table in tables)
         public Dxf<#= Type(table) #>Table()
         {
             Items = new List<<#= tableItem #>>();
+            Normalize();
         }
 
         internal static DxfTable ReadFromBuffer(DxfCodePairBufferReader buffer)
         {
             var table = new Dxf<#= Type(table) #>Table();
+            table.Items.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
@@ -221,7 +232,7 @@ foreach (var table in tables)
 <#
                     } // if
 #>
-            <#= indent #>pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= Name(property) #>?.<#= prop #> ?? 0.0));
+            <#= indent #>pairs.Add(new DxfCodePair(<#= codeOverrides[i] #>, <#= WriteConverter(property) #>(<#= Name(property) #>?.<#= prop #> ?? 0.0)));
 <#
                     if (hasPredicate)
                     {

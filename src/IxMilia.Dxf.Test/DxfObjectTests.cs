@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Objects;
 using Xunit;
 
@@ -16,7 +17,16 @@ namespace IxMilia.Dxf.Test
   0
 {typeString}
 {contents.Trim()}
-").Objects.Single();
+").Objects.Last();
+        }
+
+        private static void EnsureFileContainsObject(DxfObject obj, string text, DxfAcadVersion version = DxfAcadVersion.R12)
+        {
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = version;
+            file.Objects.Add(obj);
+            VerifyFileContains(file, text);
         }
 
         [Fact]
@@ -36,9 +46,7 @@ namespace IxMilia.Dxf.Test
   0
 ACAD_PROXY_OBJECT
   5
-A
-330
-0
+#
 100
 AcDbProxyObject
  90
@@ -110,12 +118,6 @@ string 2
             file.Header.Version = DxfAcadVersion.R2007;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
-  0
-DATATABLE
-  5
-A
-330
-0
 100
 AcDbDataTable
  70
@@ -154,67 +156,425 @@ string 2
         }
 
         [Fact]
-        public void ReadDictionaryTest()
+        public void ReadDictionaryTest1()
         {
-            var dict = (DxfDictionary)GenObject("DICTIONARY", @"
-100
-AcDbDictionary
+            // dictionary with simple DICTIONARYVAR values
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  3
+key-1
+360
+111
+  3
+key-2
+360
+222
+  0
+DICTIONARYVAR
+  5
+111
 280
+     0
 1
-281
+value-1
+  0
+DICTIONARYVAR
+  5
+222
+280
+     0
 1
-  3
-name-1
-350
-1
-  3
-name-2
-350
-2
-  3
-name-3
-350
-3
+value-2
 ");
-            Assert.True(dict.IsHardOwner);
-            Assert.Equal(DxfDictionaryDuplicateRecordHandling.KeepExisting, dict.DuplicateRecordHandling);
-            Assert.Equal(3, dict.Count);
-            Assert.Equal(1u, dict["name-1"]);
-            Assert.Equal(2u, dict["name-2"]);
-            Assert.Equal(3u, dict["name-3"]);
+            var dict = file.Objects.OfType<DxfDictionary>().Single();
+            Assert.Equal(dict, dict["key-1"].Owner);
+            Assert.Equal(dict, dict["key-2"].Owner);
+            Assert.Equal("value-1", ((DxfDictionaryVariable)dict["key-1"]).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict["key-2"]).Value);
         }
 
         [Fact]
-        public void WriteDictionaryTest()
+        public void ReadDictionaryTest2()
         {
-            var dict = new DxfDictionary();
-            dict["name-1"] = 1u;
-            dict["name-2"] = 2u;
-            dict["name-3"] = 3u;
-            dict.IsHardOwner = true;
-            dict.DuplicateRecordHandling = DxfDictionaryDuplicateRecordHandling.KeepExisting;
-            var file = new DxfFile();
-            file.Objects.Add(dict);
-            VerifyFileContains(file, @"
+            // dictionary with sub-dictionary with DICTIONARYVAR value
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  3
+key-1
+360
+1000
   0
 DICTIONARY
   5
-A
+1000
+  3
+key-2
+360
+2000
+  0
+DICTIONARYVAR
+  5
+2000
+280
+     0
+1
+value-2
+");
+            var dict1 = file.Objects.OfType<DxfDictionary>().First();
+            var dict2 = (DxfDictionary)dict1["key-1"];
+            Assert.Equal(dict1, dict2.Owner);
+            Assert.Equal(dict2, dict2["key-2"].Owner);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]).Value);
+        }
+
+        [Fact]
+        public void ReadDictionaryTest3()
+        {
+            // dictionary with default with simple DICTIONARYVAR values
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARYVAR
+  5
+1
+280
+0
+1
+default-value
+  0
+ACDBDICTIONARYWDFLT
+  5
+2
+340
+  1
+  3
+key-1
+350
+111
+  3
+key-2
+360
+222
+  0
+DICTIONARYVAR
+  5
+111
+280
+     0
+1
+value-1
+  0
+DICTIONARYVAR
+  5
+222
+280
+     0
+1
+value-2
+");
+            var dict = file.Objects.OfType<DxfDictionaryWithDefault>().Single();
+            Assert.Equal(dict, dict["key-1"].Owner);
+            Assert.Equal(dict, dict["key-2"].Owner);
+            Assert.Equal("value-1", ((DxfDictionaryVariable)dict["key-1"]).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict["key-2"]).Value);
+            Assert.Equal("default-value", ((DxfDictionaryVariable)dict["key-that-isn't-present"]).Value);
+        }
+
+        [Fact]
+        public void ReadDictionaryTest4()
+        {
+            // dictionary with default with sub-dictionary with DICTIONARYVAR value
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARYVAR
+  5
+1
+280
+0
+1
+default-value
+  0
+ACDBDICTIONARYWDFLT
+340
+  1
+  3
+key-1
+350
+111
+  0
+DICTIONARY
+  5
+111
+  3
+key-2
+360
+1000
+  0
+DICTIONARYVAR
+  5
+1000
+280
+     0
+1
+value-2
+");
+            var dict1 = file.Objects.OfType<DxfDictionaryWithDefault>().Single();
+            var dict2 = (DxfDictionary)dict1["key-1"];
+            Assert.Equal(dict1, dict2.Owner);
+            Assert.Equal(dict2, dict2["key-2"].Owner);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]).Value);
+        }
+
+        [Fact]
+        public void WriteDictionaryTest1()
+        {
+            // dictionary with simple DICTIONARYVAR values
+            var dict = new DxfDictionary();
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+            dict["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
+            EnsureFileContainsObject(dict, @"
+  0
+DICTIONARY
+  5
+#
 100
 AcDbDictionary
+281
+     0
   3
-name-1
+key-1
 350
+#
+  3
+key-2
+350
+#
+  0
+DICTIONARYVAR
+  5
+#
+330
+#
+100
+DictionaryVariables
+280
+     0
 1
+value-1
+  0
+DICTIONARYVAR
+  5
+#
+330
+#
+100
+DictionaryVariables
+280
+     0
+1
+value-2
+", DxfAcadVersion.R2000);
+        }
+
+        [Fact]
+        public void WriteDictionaryTest2()
+        {
+            // dictionary with sub-dictionary with DICTIONARYVAR value
+            var dict1 = new DxfDictionary();
+            var dict2 = new DxfDictionary();
+            dict1["key-1"] = dict2;
+            dict2["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
+            EnsureFileContainsObject(dict1, @"
+  0
+DICTIONARY
+  5
+#
+100
+AcDbDictionary
+281
+     0
   3
-name-2
+key-1
 350
-2
+#
+  0
+DICTIONARY
+  5
+#
+330
+#
+100
+AcDbDictionary
+281
+     0
   3
-name-3
+key-2
 350
-3
+#
+  0
+DICTIONARYVAR
+  5
+#
+330
+#
+100
+DictionaryVariables
+280
+     0
+1
+value-2
+", DxfAcadVersion.R2000);
+        }
+
+        [Fact]
+        public void WriteDictionaryTest3()
+        {
+            // dictionary with default with DICTIONARYVAR value
+            var dict = new DxfDictionaryWithDefault();
+            dict.DefaultObject = new DxfDictionaryVariable() { Value = "default-value" };
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+            EnsureFileContainsObject(dict, @"
+  0
+ACDBDICTIONARYWDFLT
+  5
+#
+100
+AcDbDictionary
+281
+0
+340
+#
+  3
+key-1
+350
+#
+  0
+DICTIONARYVAR
+  5
+#
+330
+#
+100
+DictionaryVariables
+280
+0
+  1
+default-value
+  0
+DICTIONARYVAR
+  5
+#
+330
+#
+100
+DictionaryVariables
+280
+0
+  1
+value-1
+", DxfAcadVersion.R2000);
+        }
+
+        [Fact]
+        public void DictionaryRoundTripTest1()
+        {
+            // dictionary with DICTIONARYVAR values
+            var dict = new DxfDictionary();
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+            dict["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
+
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Objects.Add(dict);
+            var text = ToString(file);
+
+            var parsedFile = Parse(text);
+            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionary>().Single(d => d.Keys.Count == 2);
+            Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict["key-2"]).Value);
+        }
+
+        [Fact]
+        public void DictionaryRoundTripTest2()
+        {
+            // dictionary with sub-dictionary wit DICTIONARYVAR value
+            var dict1 = new DxfDictionary();
+            var dict2 = new DxfDictionary();
+            dict1["key-1"] = dict2;
+            dict2["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
+
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Objects.Add(dict1);
+            var text = ToString(file);
+
+            var parsedFile = Parse(text);
+            var roundTrippedDict1 = parsedFile.Objects.OfType<DxfDictionary>().First(d => d.ContainsKey("key-1"));
+            var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"];
+            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]).Value);
+        }
+
+        [Fact]
+        public void DictionaryRoundTripTest3()
+        {
+            // dictionary with default with DICTIONARYVAR values
+            var dict = new DxfDictionaryWithDefault();
+            dict.DefaultObject = new DxfDictionaryVariable() { Value = "default-value" };
+            dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
+
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Objects.Add(dict);
+            var text = ToString(file);
+
+            var parsedFile = Parse(text);
+            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionaryWithDefault>().Single();
+            Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
+            Assert.Equal("default-value", ((DxfDictionaryVariable)roundTrippedDict.DefaultObject).Value);
+        }
+
+        [Fact]
+        public void ReadDimensionAssociativityTest()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+DIMENSION
+  5
+1
+  1
+dimension-text
+ 70
+     1
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+DIMASSOC
+330
+1
+  1
+class-name
+  0
+ENDSEC
+  0
+EOF
 ");
+            var dimassoc = (Objects.DxfDimensionAssociativity)file.Objects.Last();
+            Assert.Equal("class-name", dimassoc.ClassName);
+            var dim = (DxfAlignedDimension)dimassoc.Dimension;
+            Assert.Equal(dimassoc, dim.Owner);
+            Assert.Equal("dimension-text", dim.Text);
         }
 
         [Fact]
@@ -239,6 +599,7 @@ layout-name
             layout.PageSetupName = "page-setup-name";
             layout.LayoutName = "layout-name";
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(layout);
             using (var ms = new MemoryStream())
             {
@@ -275,62 +636,69 @@ layout-name
         [Fact]
         public void ReadLightListTest()
         {
-            var lightList = (DxfLightList)GenObject("LIGHTLIST", @"
- 90
+            var file = Parse(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+LIGHT
+  5
 42
+  1
+light-name
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+LIGHTLIST
  90
-3
+43
+ 90
+1
   5
-111
+42
   1
-uno
-  5
-222
-  1
-dos
-  5
-333
-  1
-tres
+can-be-anything
+  0
+ENDSEC
+  0
+EOF
 ");
-            Assert.Equal(42, lightList.Version);
-            Assert.Equal(3, lightList.Lights.Count);
-
-            Assert.Equal(0x111u, lightList.Lights[0].Handle);
-            Assert.Equal("uno", lightList.Lights[0].Name);
-            Assert.Equal(0x222u, lightList.Lights[1].Handle);
-            Assert.Equal("dos", lightList.Lights[1].Name);
-            Assert.Equal(0x333u, lightList.Lights[2].Handle);
-            Assert.Equal("tres", lightList.Lights[2].Name);
+            var lightList = (DxfLightList)file.Objects.Last();
+            Assert.Equal(43, lightList.Version);
+            Assert.Equal("light-name", lightList.Lights.Single().Name);
         }
 
         [Fact]
         public void WriteLightListTest()
         {
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Entities.Add(new DxfLight() { Name = "light-name" });
             var lightList = new DxfLightList();
             lightList.Version = 42;
-            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x111, Name = "uno" });
-            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x222, Name = "dos" });
-            lightList.Lights.Add(new DxfLightList.DxfLightListItem() { Handle = 0x333, Name = "tres" });
-            var file = new DxfFile();
+            lightList.Lights.Add((DxfLight)file.Entities.Single());
             file.Objects.Add(lightList);
             VerifyFileContains(file, @"
+  0
+LIGHTLIST
+  5
+#
+100
+AcDbLightList
  90
 42
  90
-3
+1
   5
-111
+#
   1
-uno
-  5
-222
-  1
-dos
-  5
-333
-  1
-tres
+light-name
 ");
         }
 
@@ -501,6 +869,7 @@ quatro
             mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 3.0, Color = DxfColor.FromRawValue(3), Linetype = "tres" });
             mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 4.0, Color = DxfColor.FromRawValue(4), Linetype = "quatro" });
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(mlineStyle);
             VerifyFileContains(file, @"
 100
@@ -539,7 +908,7 @@ quatro
         {
             var settings = (DxfSectionSettings)GenObject("SECTIONSETTINGS", @"
   5
-A
+#
 100
 AcDbSectionSettings
  90
@@ -671,12 +1040,9 @@ SectionTypeSettingsEnd
             typeSettings.GeometrySettings.Add(new DxfSectionGeometrySettings() { SectionType = 1002 });
             settings.SectionTypeSettings.Add(typeSettings);
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(settings);
             VerifyFileContains(file, @"
-  0
-SECTIONSETTINGS
-  5
-A
 100
 AcDbSectionSettings
  90
@@ -779,65 +1145,88 @@ SectionTypeSettingsEnd
         [Fact]
         public void ReadSortentsTableTest()
         {
-            var sortents = (DxfSortentsTable)GenObject("SORTENTSTABLE", @"
+            var file = Parse(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+POINT
   5
-A
-100
-AcDbSortentsTable
+42
+ 10
+1.0
+ 20
+2.0
+ 30
+3.0
+  0
+POINT
+  5
+43
+ 10
+4.0
+ 20
+5.0
+ 30
+6.0
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+SORTENTSTABLE
 331
-2000
-331
-2001
-331
-2002
+42
   5
-3000
-  5
-3001
-  5
-3002
+43
+  0
+ENDSEC
+  0
+EOF
 ");
-            Assert.Equal(0xAu, sortents.Handle);
-            Assert.Equal(3, sortents.EntityHandles.Count);
-            Assert.Equal(0x2000u, sortents.EntityHandles[0]);
-            Assert.Equal(0x2001u, sortents.EntityHandles[1]);
-            Assert.Equal(0x2002u, sortents.EntityHandles[2]);
-            Assert.Equal(0x3000u, sortents.SortHandles[0]);
-            Assert.Equal(0x3001u, sortents.SortHandles[1]);
-            Assert.Equal(0x3002u, sortents.SortHandles[2]);
+            var sortents = (DxfSortentsTable)file.Objects.Last();
+            Assert.Equal(new DxfPoint(1, 2, 3), ((DxfModelPoint)sortents.Entities.Single()).Location);
+            Assert.Equal(new DxfPoint(4, 5, 6), ((DxfModelPoint)sortents.SortItems.Single()).Location);
         }
 
         [Fact]
         public void WriteSortentsTableTest()
         {
-            var sortents = new DxfSortentsTable();
-            sortents.EntityHandles.Add(0x2000u);
-            sortents.EntityHandles.Add(0x2001u);
-            sortents.EntityHandles.Add(0x2002u);
-            sortents.SortHandles.Add(0x3000u);
-            sortents.SortHandles.Add(0x3001u);
-            sortents.SortHandles.Add(0x3002u);
             var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Entities.Add(new DxfModelPoint(new DxfPoint(1, 2, 3)));
+            file.Entities.Add(new DxfModelPoint(new DxfPoint(4, 5, 6)));
+            var sortents = new DxfSortentsTable();
+            sortents.Entities.Add(file.Entities.First());
+            sortents.SortItems.Add(file.Entities.Skip(1).First());
             file.Objects.Add(sortents);
+            VerifyFileContains(file, @"
+  0
+POINT
+  5
+#
+");
+            VerifyFileContains(file, @"
+  0
+POINT
+  5
+#
+");
             VerifyFileContains(file, @"
   0
 SORTENTSTABLE
   5
-A
+#
 100
 AcDbSortentsTable
 331
-2000
-331
-2001
-331
-2002
+#
   5
-3000
-  5
-3001
-  5
-3002
+#
 ");
         }
 
@@ -889,12 +1278,13 @@ AcDbSortentsTable
             sun.Hours.Add(43);
             sun.Hours.Add(44);
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(sun);
             VerifyFileContains(file, @"
   0
 SUNSTUDY
   5
-A
+#
 100
 AcDbSunStudy
  90
@@ -961,7 +1351,7 @@ AcDbSunStudy
         {
             var table = (DxfTableStyle)GenObject("TABLESTYLE", @"
   5
-A
+#
 100
 AcDbTableStyle
 280
@@ -1097,12 +1487,9 @@ two
             table.CellStyles.Add(new DxfTableCellStyle() { Name = "one" });
             table.CellStyles.Add(new DxfTableCellStyle() { Name = "two" });
             var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
-  0
-TABLESTYLE
-  5
-A
 100
 AcDbTableStyle
   3
@@ -1224,6 +1611,71 @@ two
  69
 0
 ");
+        }
+
+        [Fact]
+        public void ReadXRecordWithMultipleXDataTest()
+        {
+            var xrecord = (DxfXRecordObject)GenObject("XRECORD", @"
+102
+{ACAD_REACTORS_1
+330
+111
+102
+}
+102
+{ACAD_REACTORS_2
+330
+222
+102
+}
+102
+{ACAD_REACTORS_3
+330
+333
+102
+}
+100
+AcDbXrecord
+280
+     1
+102
+VTR_0.000_0.000_1.000_1.000_VISUALSTYLE
+340
+195
+102
+VTR_0.000_0.000_1.000_1.000_GRIDDISPLAY
+ 70
+     3
+102
+VTR_0.000_0.000_1.000_1.000_GRIDMAJOR
+ 70
+     5
+102
+VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING
+280
+     1
+102
+VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTINGTYPE
+ 70
+     1
+102
+VTR_0.000_0.000_1.000_1.000_BRIGHTNESS
+141
+0.0
+102
+VTR_0.000_0.000_1.000_1.000_CONTRAST
+142
+0.0
+");
+            Assert.Equal(3, xrecord.ExtensionDataGroups.Count);
+            Assert.Equal("ACAD_REACTORS_1", xrecord.ExtensionDataGroups[0].GroupName);
+            Assert.Equal("ACAD_REACTORS_2", xrecord.ExtensionDataGroups[1].GroupName);
+            Assert.Equal("ACAD_REACTORS_3", xrecord.ExtensionDataGroups[2].GroupName);
+            Assert.Equal(DxfDictionaryDuplicateRecordHandling.KeepExisting, xrecord.DuplicateRecordHandling);
+            Assert.Equal(14, xrecord.DataPairs.Count);
+            Assert.Equal(102, xrecord.DataPairs[0].Code);
+            Assert.Equal("VTR_0.000_0.000_1.000_1.000_VISUALSTYLE", xrecord.DataPairs[0].StringValue);
         }
 
         [Fact]

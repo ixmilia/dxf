@@ -13,6 +13,18 @@ namespace IxMilia.Dxf.Sections
         public DxfBlocksSection()
         {
             Blocks = new List<DxfBlock>();
+            Normalize();
+        }
+
+        internal void Normalize()
+        {
+            foreach (var name in new[] { "*MODEL_SPACE", "*PAPER_SPACE" })
+            {
+                if (!Blocks.Any(b => b.Name == name))
+                {
+                    Blocks.Add(new DxfBlock() { Name = name, Layer = "0" });
+                }
+            }
         }
 
         public override DxfSectionType Type
@@ -20,14 +32,29 @@ namespace IxMilia.Dxf.Sections
             get { return DxfSectionType.Blocks; }
         }
 
-        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles)
+        protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-            return this.Blocks.Where(block => block != null).SelectMany(e => e.GetValuePairs(version, outputHandles));
+            foreach (var block in Blocks.Where(b => b != null))
+            {
+                if (writtenItems.Add(block))
+                {
+                    foreach (var pair in block.GetValuePairs(version, outputHandles))
+                    {
+                        yield return pair;
+                    }
+                }
+            }
+        }
+
+        protected internal override void Clear()
+        {
+            Blocks.Clear();
         }
 
         internal static DxfBlocksSection BlocksSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
         {
             var section = new DxfBlocksSection();
+            section.Clear();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -29,7 +30,6 @@ namespace IxMilia.Dxf.Entities
         Light,
         Line,
         LwPolyline,
-        MLeaderStyle,
         MLine,
         ModelerGeometry,
         MText,
@@ -47,7 +47,6 @@ namespace IxMilia.Dxf.Entities
         Shape,
         Solid,
         Spline,
-        Sun,
         Text,
         Tolerance,
         Trace,
@@ -60,10 +59,28 @@ namespace IxMilia.Dxf.Entities
     /// <summary>
     /// DxfEntity class
     /// </summary>
-    public partial class DxfEntity : IDxfHasHandle, IDxfHasOwnerHandle
+    public partial class DxfEntity : IDxfItemInternal
     {
-        public uint Handle { get; set; }
-        public uint OwnerHandle { get; set; }
+        uint IDxfItemInternal.Handle { get; set; }
+        uint IDxfItemInternal.OwnerHandle { get; set; }
+        public IDxfItem Owner { get; private set;}
+
+        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        {
+            Owner = owner;
+        }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return PlotStylePointer;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+        internal DxfPointer PlotStylePointer { get; } = new DxfPointer();
+
         public bool IsInPaperSpace { get; set; }
         public string Layer { get; set; }
         public string LinetypeName { get; set; }
@@ -78,7 +95,7 @@ namespace IxMilia.Dxf.Entities
         public int Color24Bit { get; set; }
         public string ColorName { get; set; }
         public int Transparency { get; set; }
-        public string PlotStyleHandle { get; set; }
+        public IDxfItem PlotStyle { get { return PlotStylePointer.Item as IDxfItem; } set { PlotStylePointer.Item = value; } }
         public DxfShadowMode ShadowMode { get; set; }
 
         public string EntityTypeString
@@ -125,8 +142,6 @@ namespace IxMilia.Dxf.Entities
                         return "LWPOLYLINE";
                     case DxfEntityType.MLine:
                         return "MLINE";
-                    case DxfEntityType.MLeaderStyle:
-                        return "MLEADERSTYLE";
                     case DxfEntityType.MText:
                         return "MTEXT";
                     case DxfEntityType.OleFrame:
@@ -153,8 +168,6 @@ namespace IxMilia.Dxf.Entities
                         return "SOLID";
                     case DxfEntityType.Spline:
                         return "SPLINE";
-                    case DxfEntityType.Sun:
-                        return "SUN";
                     case DxfEntityType.Text:
                         return "TEXT";
                     case DxfEntityType.Tolerance:
@@ -184,8 +197,9 @@ namespace IxMilia.Dxf.Entities
         protected DxfEntity(DxfEntity other)
             : this()
         {
-            this.Handle = other.Handle;
-            this.OwnerHandle = other.OwnerHandle;
+            ((IDxfItemInternal)this).Handle = ((IDxfItemInternal)other).Handle;
+            ((IDxfItemInternal)this).OwnerHandle = ((IDxfItemInternal)other).OwnerHandle;
+            ((IDxfItemInternal)this).SetOwner(((IDxfItemInternal)other).Owner);
             this.IsInPaperSpace = other.IsInPaperSpace;
             this.Layer = other.Layer;
             this.LinetypeName = other.LinetypeName;
@@ -200,14 +214,13 @@ namespace IxMilia.Dxf.Entities
             this.Color24Bit = other.Color24Bit;
             this.ColorName = other.ColorName;
             this.Transparency = other.Transparency;
-            this.PlotStyleHandle = other.PlotStyleHandle;
+            this.PlotStylePointer.Handle = other.PlotStylePointer.Handle;
+            this.PlotStylePointer.Item = other.PlotStylePointer.Item;
             this.ShadowMode = other.ShadowMode;
         }
 
         protected virtual void Initialize()
         {
-            this.Handle = 0u;
-            this.OwnerHandle = 0u;
             this.IsInPaperSpace = false;
             this.Layer = "0";
             this.LinetypeName = "BYLAYER";
@@ -222,7 +235,6 @@ namespace IxMilia.Dxf.Entities
             this.Color24Bit = 0;
             this.ColorName = null;
             this.Transparency = 0;
-            this.PlotStyleHandle = null;
             this.ShadowMode = DxfShadowMode.CastsAndReceivesShadows;
         }
 
@@ -231,22 +243,20 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(0, EntityTypeString));
             if (outputHandles)
             {
-                pairs.Add(new DxfCodePair(5, UIntHandle(this.Handle)));
+                pairs.Add(new DxfCodePair(5, UIntHandle(((IDxfItemInternal)this).Handle)));
             }
-
             AddExtensionValuePairs(pairs, version, outputHandles);
-            if (version >= DxfAcadVersion.R2000)
+            if (((IDxfItemInternal)this).OwnerHandle != 0 && outputHandles)
             {
-                pairs.Add(new DxfCodePair(330, UIntHandle(this.OwnerHandle)));
+                pairs.Add(new DxfCodePair(330, UIntHandle(((IDxfItemInternal)this).OwnerHandle)));
             }
-
             pairs.Add(new DxfCodePair(100, "AcDbEntity"));
             if (version >= DxfAcadVersion.R12 && this.IsInPaperSpace != false)
             {
                 pairs.Add(new DxfCodePair(67, BoolShort(this.IsInPaperSpace)));
             }
 
-            pairs.Add(new DxfCodePair(8, (this.Layer)));
+            pairs.Add(new DxfCodePair(8, DefaultIfNullOrEmpty("0")(this.Layer)));
             if (this.LinetypeName != "BYLAYER")
             {
                 pairs.Add(new DxfCodePair(6, (this.LinetypeName)));
@@ -292,7 +302,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.AddRange(this.PreviewImageData.Select(p => new DxfCodePair(310, p)));
             }
 
-            if (version >= DxfAcadVersion.R2004)
+            if (version >= DxfAcadVersion.R2004 && this.Color24Bit != 0)
             {
                 pairs.Add(new DxfCodePair(420, (this.Color24Bit)));
             }
@@ -309,7 +319,7 @@ namespace IxMilia.Dxf.Entities
 
             if (version >= DxfAcadVersion.R2007)
             {
-                pairs.Add(new DxfCodePair(390, (this.PlotStyleHandle)));
+                pairs.Add(new DxfCodePair(390, DxfCommonConverters.UIntHandle(this.PlotStylePointer.Handle)));
             }
 
             if (version >= DxfAcadVersion.R2007)
@@ -324,7 +334,10 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 5:
-                    this.Handle = UIntHandle(pair.StringValue);
+                    ((IDxfItemInternal)this).Handle = UIntHandle(pair.StringValue);
+                    break;
+                case 330:
+                    ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);
                     break;
                 case 6:
                     this.LinetypeName = (pair.StringValue);
@@ -356,9 +369,6 @@ namespace IxMilia.Dxf.Entities
                 case 310:
                     this.PreviewImageData.Add((pair.StringValue));
                     break;
-                case 330:
-                    this.OwnerHandle = UIntHandle(pair.StringValue);
-                    break;
                 case 347:
                     this.MaterialHandle = (pair.StringValue);
                     break;
@@ -366,7 +376,7 @@ namespace IxMilia.Dxf.Entities
                     this.LineweightEnumValue = (pair.ShortValue);
                     break;
                 case 390:
-                    this.PlotStyleHandle = (pair.StringValue);
+                    this.PlotStylePointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 420:
                     this.Color24Bit = (pair.IntegerValue);
@@ -449,9 +459,6 @@ namespace IxMilia.Dxf.Entities
                 case "MLINE":
                     entity = new DxfMLine();
                     break;
-                case "MLEADERSTYLE":
-                    entity = new DxfMLeaderStyle();
-                    break;
                 case "MTEXT":
                     entity = new DxfMText();
                     break;
@@ -490,9 +497,6 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case "SPLINE":
                     entity = new DxfSpline();
-                    break;
-                case "SUN":
-                    entity = new DxfSun();
                     break;
                 case "TEXT":
                     entity = new DxfText();
@@ -546,20 +550,17 @@ namespace IxMilia.Dxf.Entities
             DxfDimensionBase newDimension = null;
             switch (DimensionType)
             {
-                case DxfDimensionType.RotatedHorizontalOrVertical:
-                    newDimension = new DxfRotatedDimension(this);
-                    break;
                 case DxfDimensionType.Aligned:
                     newDimension = new DxfAlignedDimension(this);
                     break;
-                case DxfDimensionType.Angular:
-                    newDimension = new DxfAngularDimension(this);
-                    break;
-                case DxfDimensionType.Diameter:
-                    newDimension = new DxfDiameterDimension(this);
+                case DxfDimensionType.RotatedHorizontalOrVertical:
+                    newDimension = new DxfRotatedDimension(this);
                     break;
                 case DxfDimensionType.Radius:
                     newDimension = new DxfRadialDimension(this);
+                    break;
+                case DxfDimensionType.Diameter:
+                    newDimension = new DxfDiameterDimension(this);
                     break;
                 case DxfDimensionType.AngularThreePoint:
                     newDimension = new DxfAngularThreePointDimension(this);

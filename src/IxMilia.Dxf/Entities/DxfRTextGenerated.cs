@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -62,7 +63,7 @@ namespace IxMilia.Dxf.Entities
             this.ExtrusionDirection = DxfVector.ZAxis;
             this.RotationAngle = 0.0;
             this.TextHeight = 0.0;
-            this.TextStyle = null;
+            this.TextStyle = "STANDARD";
             this.TypeFlags = 0;
             this.Contents = null;
         }

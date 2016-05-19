@@ -73,6 +73,16 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="Pointer">
+        <xs:complexType>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="Code" type="xs:int" use="required" />
+            <xs:attribute name="Type" type="xs:string" use="required" />
+            <xs:attribute name="AllowMultiples" type="xs:boolean" use="optional" />
+            <xs:attribute name="Accessibility" type="AccessibilityType" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="ConstructorParameter">
         <xs:complexType>
             <xs:attribute name="Property" type="xs:string" use="required" />
@@ -101,6 +111,7 @@
             <xs:attribute name="Code" type="xs:string" use="required" />
             <xs:attribute name="Value" type="xs:string" use="required" />
             <xs:attribute name="DontWriteIfValueIs" type="xs:string" use="optional" />
+            <xs:attribute name="WriteConverter" type="xs:string" use="optional" />
             <xs:attribute name="MinVersion" type="VersionType" use="optional" />
             <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
         </xs:complexType>
@@ -140,6 +151,7 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element ref="Constructor" />
                     <xs:element ref="Property" />
+                    <xs:element ref="Pointer" />
                     <xs:element ref="WriteOrder" />
                 </xs:choice>
             </xs:sequence>
@@ -156,6 +168,7 @@
             <xs:attribute name="HasXData" type="xs:boolean" use="optional" />
             <xs:attribute name="GenerateReaderFunction" type="xs:boolean" use="optional" />
             <xs:attribute name="GenerateWriterFunction" type="xs:boolean" use="optional" />
+            <xs:attribute name="Accessibility" type="AccessibilityType" use="optional" />
         </xs:complexType>
     </xs:element>
 

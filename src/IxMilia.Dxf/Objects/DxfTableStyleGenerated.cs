@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,7 +19,6 @@ namespace IxMilia.Dxf.Objects
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.TableStyle; } }
         protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2004; } }
-
         public DxfVersion Version { get; set; }
         public string Description { get; set; }
         public DxfFlowDirection FlowDirection { get; set; }
@@ -26,7 +27,7 @@ namespace IxMilia.Dxf.Objects
         public double VerticalCellMargin { get; set; }
         public bool IsTitleSuppressed { get; set; }
         public bool IsColumnHeadingSuppressed { get; set; }
-        public List<DxfTableCellStyle> CellStyles { get; private set; }
+        public IList<DxfTableCellStyle> CellStyles { get; private set; }
 
         public DxfTableStyle()
             : base()

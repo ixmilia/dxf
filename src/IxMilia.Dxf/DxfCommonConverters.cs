@@ -33,12 +33,12 @@ namespace IxMilia.Dxf
 
         public static string GuidString(Guid g)
         {
-            return g.ToString();
+            return g.ToString("B").ToUpper();
         }
 
         public static Guid GuidString(string s)
         {
-            return new Guid(s);
+            return Guid.Parse(s);
         }
 
         public static uint UIntHandle(string s)
@@ -148,6 +148,21 @@ namespace IxMilia.Dxf
                 default:
                     return 0;
             }
+        }
+
+        public static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        {
+            return value => value <= 0.0 ? defaultValue : value;
+        }
+
+        public static Func<int, int> EnsurePositiveOrDefault(int defaultValue)
+        {
+            return value => value <= 0 ? defaultValue : value;
+        }
+
+        public static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        {
+            return value => string.IsNullOrWhiteSpace(value) ? defaultValue : value;
         }
     }
 }

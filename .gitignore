@@ -10,3 +10,4 @@ packages/
 *.user
 .vs/
 NuGet.exe
+project.lock.json

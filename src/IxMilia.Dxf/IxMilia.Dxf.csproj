@@ -12,9 +12,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IxMilia.Dxf</RootNamespace>
     <AssemblyName>IxMilia.Dxf</AssemblyName>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <DefineConstants>$(DefineConstants);DXF</DefineConstants>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
@@ -410,6 +413,7 @@
     <None Include="Objects\ObjectsSpec.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="project.json" />
     <None Include="Sections\HeaderVariablesSpec.xml">
       <SubType>Designer</SubType>
     </None>

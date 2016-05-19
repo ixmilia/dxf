@@ -10,7 +10,9 @@
     <SolutionDir>$(MSBuildThisFileDirectory)src</SolutionDir>
     <SolutionFile>$(SolutionDir)\IxMilia.Dxf.sln</SolutionFile>
     <TestAssembly>$(SolutionDir)\Binaries\$(Configuration)\IxMilia.Dxf.Test.dll</TestAssembly>
-    <NuGetExe>$(MSBuildThisFileDirectory)src\.nuget\NuGet.exe</NuGetExe>
+    <NuGetDir>$(MSBuildThisFileDirectory)src\.nuget</NuGetDir>
+    <NuGetExe>$(NuGetDir)\NuGet.exe</NuGetExe>
+    <NuGetConfig>$(NuGetDir)\nuget.config</NuGetConfig>
   </PropertyGroup>
 
   <UsingTask TaskName="DownloadFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -29,8 +31,8 @@
   </UsingTask>
 
   <Target Name="RestorePackages">
-    <DownloadFile Url="https://www.nuget.org/nuget.exe" Destination="$(NuGetExe)" Condition="!Exists('$(NuGetExe)')" />
-    <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(SolutionFile)&quot;" />
+    <DownloadFile Url="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" Destination="$(NuGetExe)" Condition="!Exists('$(NuGetExe)')" />
+    <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(SolutionFile)&quot; /ConfigFile &quot;$(NuGetConfig)&quot;" />
     <Exec Command="&quot;$(NuGetExe)&quot; install gitlink -SolutionDir &quot;$(SolutionDir)&quot; -Verbosity quiet -ExcludeVersion" Condition="!Exists('$(SolutionDir)\packages\gitlink\')" />
   </Target>
 

@@ -1614,7 +1614,7 @@ two
         }
 
         [Fact]
-        public void ReadXRecordWithMultipleXDataTest()
+        public void ReadXRecordWithMultipleXDataTest1()
         {
             var xrecord = (DxfXRecordObject)GenObject("XRECORD", @"
 102
@@ -1676,6 +1676,49 @@ VTR_0.000_0.000_1.000_1.000_CONTRAST
             Assert.Equal(14, xrecord.DataPairs.Count);
             Assert.Equal(102, xrecord.DataPairs[0].Code);
             Assert.Equal("VTR_0.000_0.000_1.000_1.000_VISUALSTYLE", xrecord.DataPairs[0].StringValue);
+        }
+
+        [Fact]
+        public void ReadXRecordWithMultipleXDataTest2()
+        {
+            // reads an XRECORD object that hasn't specified it's 280 code pair for duplicate record handling
+            var xrecord = (DxfXRecordObject)GenObject("XRECORD", @"
+100
+AcDbXrecord
+102
+VTR_0.000_0.000_1.000_1.000_VISUALSTYLE
+340
+195
+102
+VTR_0.000_0.000_1.000_1.000_GRIDDISPLAY
+ 70
+     3
+102
+VTR_0.000_0.000_1.000_1.000_GRIDMAJOR
+ 70
+     5
+102
+VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING
+280
+     1
+102
+VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTINGTYPE
+ 70
+     1
+102
+VTR_0.000_0.000_1.000_1.000_BRIGHTNESS
+141
+0.0
+102
+VTR_0.000_0.000_1.000_1.000_CONTRAST
+142
+0.0
+");
+            Assert.Equal(0, xrecord.ExtensionDataGroups.Count);
+            Assert.Equal(14, xrecord.DataPairs.Count);
+            Assert.Equal(102, xrecord.DataPairs[6].Code);
+            Assert.Equal("VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING", xrecord.DataPairs[6].StringValue);
+            Assert.Equal(1, xrecord.DataPairs[7].ShortValue);
         }
 
         [Fact]

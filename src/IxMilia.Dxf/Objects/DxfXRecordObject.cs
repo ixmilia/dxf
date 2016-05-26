@@ -19,7 +19,6 @@ namespace IxMilia.Dxf.Objects
 
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
-            bool readDuplicateFlag = false;
             bool readingData = false;
             while (buffer.ItemsRemain)
             {
@@ -35,6 +34,14 @@ namespace IxMilia.Dxf.Objects
                 }
                 else
                 {
+                    if (pair.Code == 280)
+                    {
+                        DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)pair.ShortValue;
+                        buffer.Advance();
+                        readingData = true;
+                        continue;
+                    }
+
                     if (base.TrySetPair(pair))
                     {
                         buffer.Advance();
@@ -52,13 +59,6 @@ namespace IxMilia.Dxf.Objects
                         buffer.Advance();
                         continue;
                     }
-
-                    if (pair.Code == 280 && !readDuplicateFlag)
-                    {
-                        DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)pair.ShortValue;
-                        readDuplicateFlag = true;
-                        readingData = true;
-                    }
                     else if (pair.Code == 5 || pair.Code == 105)
                     {
                         // these codes aren't allowed here
@@ -67,6 +67,7 @@ namespace IxMilia.Dxf.Objects
                     else
                     {
                         DataPairs.Add(pair);
+                        readingData = true;
                     }
                 }
 

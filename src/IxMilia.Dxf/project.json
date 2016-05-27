@@ -1,8 +1,37 @@
-{
-  "dependencies": {
-    "NETStandard.Library": "1.5.0-rc3-24117-00"
+﻿{
+  "version": "0.4.0.0",
+  "title": "IxMilia.Dxf",
+  "authors": [ "IxMilia" ],
+  "description": "A portable .NET library for reading and writing DXF and DXB files.  AutoCAD versions 1.0 through R2016 are supported.",
+  "copyright": "Copyright 2016",
+  "packOptions": {
+    "licenceUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "projectUrl": "https://github.com/IxMilia/Dxf",
+    "owners": [ "IxMilia" ],
+    "requireLicenseAcceptance": false,
+    "tags": [ "AutoCAD", "CAD", "DXB", "DXF" ]
+  },
+
+  "buildOptions": {
+    "define": [ "DXF" ]
   },
   "frameworks": {
-    "netstandard1.2": {}
+    "netstandard1.0": {
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc3-24117-00"
+      }
+    },
+    ".NETPortable,Version=v4.5,Profile=Profile111": {
+      "frameworkAssemblies": {
+        "System.Collections": "",
+        "System.Diagnostics.Debug": "",
+        "System.Globalization": "",
+        "System.IO": "",
+        "System.Linq": "",
+        "System.Runtime": "",
+        "System.Runtime.Extensions": "",
+        "System.Text.RegularExpressions": ""
+      }
+    }
   }
 }

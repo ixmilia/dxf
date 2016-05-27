@@ -7,9 +7,7 @@
 
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
-    <ProjectFile>$(MSBuildThisFileDirectory)IxMilia.Dxf\IxMilia.Dxf.csproj</ProjectFile>
-    <GitLinkExe>$(MSBuildThisFileDirectory)packages\gitlink\lib\net45\GitLink.exe</GitLinkExe>
-    <GitHubUrl>https://github.com/IxMilia/Dxf</GitHubUrl>
+    <ProjectDir>$(MSBuildThisFileDirectory)IxMilia.Dxf</ProjectDir>
   </PropertyGroup>
 
   <Target Name="BuildSource">
@@ -19,23 +17,14 @@
              Targets="Build" />
   </Target>
 
-  <Target Name="GitLink">
-    <Exec Command="git rev-parse --verify HEAD" ConsoleToMSBuild="true" Condition="'$(CommitHash)' == ''">
-      <Output TaskParameter="ConsoleOutput" PropertyName="CommitHash" />
-    </Exec>
-    <Message Text="Creating package for SHA $(CommitHash)" />
-    <Exec Command='"$(GitLinkExe)" "$(MSBuildThisFileDirectory).." -u $(GitHubUrl) -s $(CommitHash)' />
-  </Target>
-
   <Target Name="CreatePackage">
     <PropertyGroup>
       <PackageOutputDir>$(MSBuildThisFileDirectory)Binaries\$(Configuration)</PackageOutputDir>
     </PropertyGroup>
-    <Exec Command='"$(MSBuildThisFileDirectory).nuget\NuGet.exe" pack "$(ProjectFile)" -Prop Configuration=$(Configuration) -OutputDirectory "$(PackageOutputDir)" -Symbols' />
-    <Message Text="Package created in '$(PackageOutputDir)'.  Consume the *.symbols.nupkg file." />
+    <Exec Command="dotnet pack &quot;$(ProjectDir)&quot; --configuration $(Configuration) --output &quot;$(PackageOutputDir)&quot;" />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="BuildSource;GitLink;CreatePackage">
+  <Target Name="Build" DependsOnTargets="BuildSource;CreatePackage">
   </Target>
 
 </Project>

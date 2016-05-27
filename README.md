@@ -118,6 +118,13 @@ Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for t
 - TABLE
 - VIEWPORT
 
+## Building locally
+
+Requirements to build locally are:
+
+- [Visual Studio 2015](https://www.visualstudio.com)
+- [.NET Core SDK](https://www.microsoft.com/net/download#core)
+
 ## DXF Reference
 
 Since I don't want to fall afoul of Autodesk's lawyers, this repo can't include the actual DXF documentation.  It can,

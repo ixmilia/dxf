@@ -152,7 +152,9 @@ namespace IxMilia.Dxf
 
         public static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
         {
-            return value => value <= 0.0 ? defaultValue : value;
+            return value => double.IsNaN(value) || double.IsInfinity(value) || value <= 0.0
+                ? defaultValue
+                : value;
         }
 
         public static Func<int, int> EnsurePositiveOrDefault(int defaultValue)

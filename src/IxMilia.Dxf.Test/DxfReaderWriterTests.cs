@@ -1375,6 +1375,187 @@ AcDbSymbolTableRecord
         }
 
         [Fact]
+        public void WriteViewPortWithInvalidValuesTest()
+        {
+            var file = new DxfFile();
+            var viewPort = file.ViewPorts.First();
+            viewPort.Name = "<viewPort>";
+
+            // values must be positive; will be normalized to 1.0 on write
+            viewPort.ViewHeight = -1.0; // code 40
+            viewPort.ViewPortAspectRatio = 0.0; // code 41
+            viewPort.LensLength = double.PositiveInfinity; // code 42
+            viewPort.ViewHeight = double.NegativeInfinity; // code 45; not written < R2007
+            VerifyFileContains(file, @"
+  0
+VPORT
+  5
+#
+100
+AcDbSymbolTableRecord
+  2
+<viewPort>
+ 70
+0
+ 10
+0.0
+ 20
+0.0
+ 11
+1.0
+ 21
+1.0
+ 12
+0.0
+ 22
+0.0
+ 13
+0.0
+ 23
+0.0
+ 14
+1.0
+ 24
+1.0
+ 15
+1.0
+ 25
+1.0
+ 16
+0.0
+ 26
+0.0
+ 36
+1.0
+ 17
+0.0
+ 27
+0.0
+ 37
+0.0
+ 40
+1.0
+ 41
+1.0
+ 42
+50.0
+ 43
+0.0
+ 44
+0.0
+");
+            file.Header.Version = DxfAcadVersion.R2007;
+            VerifyFileContains(file, @"
+  0
+VPORT
+  5
+#
+330
+#
+100
+AcDbSymbolTableRecord
+100
+AcDbViewportTableRecord
+  2
+<viewPort>
+ 70
+0
+ 10
+0.0
+ 20
+0.0
+ 11
+1.0
+ 21
+1.0
+ 12
+0.0
+ 22
+0.0
+ 13
+0.0
+ 23
+0.0
+ 14
+1.0
+ 24
+1.0
+ 15
+1.0
+ 25
+1.0
+ 16
+0.0
+ 26
+0.0
+ 36
+1.0
+ 17
+0.0
+ 27
+0.0
+ 37
+0.0
+ 42
+50.0
+ 43
+0.0
+ 44
+0.0
+ 45
+1.0
+");
+        }
+
+        [Fact]
+        public void WriteViewWithInvalidValuesTest()
+        {
+            var file = new DxfFile();
+            var view = new DxfView();
+            view.Name = "<view>";
+            file.Views.Add(view);
+
+            // values must be positive; will be normalized to 1.0 on write
+            view.ViewHeight = -1.0; // code 40
+            view.ViewWidth = 0.0; // code 41
+            view.LensLength = double.NaN; // code 42
+            VerifyFileContains(file, @"
+  0
+VIEW
+  5
+#
+100
+AcDbSymbolTableRecord
+  2
+<view>
+ 70
+0
+ 40
+1.0
+ 10
+0.0
+ 20
+0.0
+ 41
+1.0
+ 11
+0.0
+ 21
+0.0
+ 31
+1.0
+ 12
+0.0
+ 22
+0.0
+ 32
+0.0
+ 42
+1.0
+");
+        }
+
+        [Fact]
         public void ReadZeroLayerColorTest()
         {
             var file = Section("TABLES", @"

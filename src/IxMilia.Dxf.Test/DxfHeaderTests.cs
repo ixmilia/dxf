@@ -2302,6 +2302,63 @@ $SHADOWPLANELOCATION";
             Assert.Equal(0, file.Header.ViewportViewScaleFactor);
         }
 
+        [Fact]
+        public void WriteHeaderWithInvalidValuesTest()
+        {
+            var file = new DxfFile();
+            file.Header.DefaultTextHeight = -1.0; // $TEXTSIZE, normalized to 0.2
+            file.Header.TraceWidth = 0.0; // $TRACEWID, normalized to 0.05
+            file.Header.TextStyle = string.Empty; // $TEXTSTYLE, normalized to STANDARD
+            file.Header.CurrentLayer = null; // $CLAYER, normalized to 0
+            file.Header.CurrentEntityLinetype = null; // $CELTYPE, normalized to BYLAYER
+            file.Header.DimensionStyleName = null; // $DIMSTYLE, normalized to STANDARD
+            file.Header.FileName = null; // $MENU, normalized to .
+
+            var content = ToString(file);
+            Assert.Contains(@"
+  9
+$TEXTSIZE
+ 40
+0.2
+".Trim(), content);
+            Assert.Contains(@"
+  9
+$TRACEWID
+ 40
+0.05
+".Trim(), content);
+            Assert.Contains(@"
+  9
+$TEXTSTYLE
+  7
+STANDARD
+".Trim(), content);
+            Assert.Contains(@"
+  9
+$CLAYER
+  8
+0
+".Trim(), content);
+            Assert.Contains(@"
+  9
+$CELTYPE
+  6
+BYLAYER
+".Trim(), content);
+            Assert.Contains(@"
+  9
+$DIMSTYLE
+  2
+STANDARD
+".Trim(), content);
+            Assert.Contains(@"
+  9
+$MENU
+  1
+.
+".Trim(), content);
+        }
+
         #endregion
 
     }

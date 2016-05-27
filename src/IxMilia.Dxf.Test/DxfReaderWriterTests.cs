@@ -1400,11 +1400,15 @@ AcDbSymbolTableRecord
             var viewPort = file.ViewPorts.First();
             viewPort.Name = "<viewPort>";
 
-            // values must be positive; will be normalized to 1.0 on write
-            viewPort.ViewHeight = -1.0; // code 40
-            viewPort.ViewPortAspectRatio = 0.0; // code 41
-            viewPort.LensLength = double.PositiveInfinity; // code 42
-            viewPort.ViewHeight = double.NegativeInfinity; // code 45; not written < R2007
+            // values must be positive; will be normalized on write
+            viewPort.SnapSpacing = new DxfVector(double.NaN, double.PositiveInfinity, 0.0); // codes 14, 24; normalized to 1.0, 1.0
+            viewPort.GridSpacing = null; // codes 15, 25; normalized to 1.0, 1.0
+            viewPort.ViewHeight = -1.0; // code 40; normalized to 1.0
+            viewPort.ViewPortAspectRatio = 0.0; // code 41; normalized to 1.0
+            viewPort.LensLength = double.PositiveInfinity; // code 42; normalized to 50.0
+            viewPort.ViewHeight = double.NegativeInfinity; // code 45; not written < R2007, normalized to 1.0
+            viewPort.CircleSides = 0; // code 72; normalized to 1000
+            viewPort.UCSIcon = -1; // code 74; normalized to 3
             VerifyFileContains(file, @"
   0
 VPORT
@@ -1462,6 +1466,18 @@ AcDbSymbolTableRecord
 0.0
  44
 0.0
+ 50
+0.0
+ 51
+0.0
+ 71
+0
+ 72
+1000
+ 73
+1
+ 74
+3
 ");
             file.Header.Version = DxfAcadVersion.R2007;
             VerifyFileContains(file, @"

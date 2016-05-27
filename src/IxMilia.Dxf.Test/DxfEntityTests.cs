@@ -150,6 +150,28 @@ AcDbEntity
 ");
         }
 
+        [Fact]
+        public void DimensionDefaultValuesTest()
+        {
+            var dim = new DxfAlignedDimension();
+            Assert.Equal("*MODEL_SPACE", dim.BlockName);
+            Assert.Equal("STANDARD", dim.DimensionStyleName);
+        }
+
+        [Fact]
+        public void RTextDefaultValuesTest()
+        {
+            var rtext = new DxfRText();
+            Assert.Equal("STANDARD", rtext.TextStyle);
+        }
+
+        [Fact]
+        public void SplineDefaultValuesTest()
+        {
+            var spline = new DxfSpline();
+            Assert.Equal(1, spline.DegreeOfCurve);
+        }
+
         #region Read default value tests
 
         [Fact]

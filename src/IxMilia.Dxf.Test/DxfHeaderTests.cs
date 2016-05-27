@@ -1817,6 +1817,22 @@ $SHADOWPLANELOCATION";
             TestHeaderOrder(expectedOrderText, DxfAcadVersion.R2013);
         }
 
+        [Fact]
+        public void DontWriteNullPointersTest()
+        {
+            var file = new DxfFile();
+
+            // ensure they default to 0
+            Assert.Equal(0u, file.Header.CurrentMaterialHandle);
+            Assert.Equal(0u, file.Header.InterferenceObjectVisualStylePointer);
+            Assert.Equal(0u, file.Header.InterferenceViewPortVisualStylePointer);
+
+            var output = ToString(file);
+            Assert.DoesNotContain("$CMATERIAL", output);
+            Assert.DoesNotContain("$INTERFEREOBJVS", output);
+            Assert.DoesNotContain("$INTERFEREVPVS", output);
+        }
+
         private static void TestHeaderOrder(string expectedOrderText, DxfAcadVersion version)
         {
             var file = new DxfFile();

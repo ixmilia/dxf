@@ -402,6 +402,7 @@
     <None Include="Entities\EntitiesSpec.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="IxMilia.Dxf.nuspec" />
     <None Include="MultipleOutputHelper.t4" />
     <None Include="Objects\DxfObjectGenerated.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

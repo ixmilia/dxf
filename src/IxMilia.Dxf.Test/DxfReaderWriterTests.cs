@@ -1533,6 +1533,40 @@ ENDTAB
         }
 
         [Fact]
+        public void EnsureParsedFileHasNoDefaultItems()
+        {
+            var file = Parse("0\r\nEOF");
+
+            // all of these must be empty
+            Assert.Equal(0, file.ApplicationIds.Count);
+            Assert.Equal(0, file.BlockRecords.Count);
+            Assert.Equal(0, file.Blocks.Count);
+            Assert.Equal(0, file.Classes.Count);
+            Assert.Equal(0, file.DimensionStyles.Count);
+            Assert.Equal(0, file.Entities.Count);
+            Assert.Equal(0, file.Layers.Count);
+            Assert.Equal(0, file.Linetypes.Count);
+            Assert.Null(file.RawThumbnail);
+
+            // there is always a default dictionary
+            Assert.Equal(1, file.NamedObjectDictionary.Count);
+            Assert.Equal(1, file.Objects.Count);
+            Assert.True(ReferenceEquals(file.NamedObjectDictionary, file.Objects.Single()));
+            Assert.Equal("ACAD_GROUP", file.NamedObjectDictionary.Single().Key);
+        }
+
+        [Fact]
+        public void DefaultTableItemsTest()
+        {
+            var file = new DxfFile();
+            Assert.Equal(new[] { "ACAD", "ACADANNOTATIVE", "ACAD_NAV_VCDISPLAY", "ACAD_MLEADERVER" }, file.ApplicationIds.Select(a => a.Name).ToArray());
+            Assert.Equal(new[] { "STANDARD", "ANNOTATIVE" }, file.DimensionStyles.Select(d => d.Name).ToArray());
+            Assert.Equal("0", file.Layers.Single().Name);
+            Assert.Equal(new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" }, file.Linetypes.Select(l => l.Name).ToArray());
+            Assert.Equal("*ACTIVE", file.ViewPorts.Single().Name);
+        }
+
+        [Fact]
         public void WriteAllDefaultEntitiesTest()
         {
             var file = new DxfFile();

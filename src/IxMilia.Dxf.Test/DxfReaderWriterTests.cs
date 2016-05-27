@@ -1335,6 +1335,46 @@ AcDbBlockEnd
         }
 
         [Fact]
+        public void WriteLayerWithInvalidValuesTest()
+        {
+            var file = new DxfFile();
+            var layer = file.Layers.Single();
+            layer.Color = DxfColor.ByLayer; // code 62, value 256 not valid; normalized to 7
+            layer.LinetypeName = null; // code 6, value null or empty not valid; normalized to CONTINUOUS
+            VerifyFileContains(file, @"
+  0
+LAYER
+  5
+#
+100
+AcDbSymbolTableRecord
+  2
+0
+ 70
+0
+ 62
+7
+  6
+CONTINUOUS
+");
+            layer.Color = DxfColor.ByBlock; // code 62, value 0 not valid; normalized to 7
+            VerifyFileContains(file, @"
+  0
+LAYER
+  5
+#
+100
+AcDbSymbolTableRecord
+  2
+0
+ 70
+0
+ 62
+7
+");
+        }
+
+        [Fact]
         public void ReadZeroLayerColorTest()
         {
             var file = Section("TABLES", @"
@@ -1570,6 +1610,9 @@ ENDTAB
         public void DefaultBlocksTest()
         {
             var file = new DxfFile();
+            Assert.Equal(new[] { "*MODEL_SPACE", "*PAPER_SPACE" }, file.Blocks.Select(b => b.Name).ToArray());
+            file.Blocks.Clear();
+            file.Normalize();
             Assert.Equal(new[] { "*MODEL_SPACE", "*PAPER_SPACE" }, file.Blocks.Select(b => b.Name).ToArray());
         }
 

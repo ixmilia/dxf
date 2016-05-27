@@ -1567,6 +1567,13 @@ ENDTAB
         }
 
         [Fact]
+        public void DefaultBlocksTest()
+        {
+            var file = new DxfFile();
+            Assert.Equal(new[] { "*MODEL_SPACE", "*PAPER_SPACE" }, file.Blocks.Select(b => b.Name).ToArray());
+        }
+
+        [Fact]
         public void WriteAllDefaultEntitiesTest()
         {
             var file = new DxfFile();

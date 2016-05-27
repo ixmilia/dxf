@@ -61,6 +61,43 @@ namespace IxMilia.Dxf
             Value = value;
         }
 
+        public static bool operator ==(DxfLineWeight a, DxfLineWeight b)
+        {
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if ((object)a == null || (object)b == null)
+            {
+                return false;
+            }
+
+            return a.Value == b.Value;
+        }
+
+        public static bool operator !=(DxfLineWeight a, DxfLineWeight b)
+        {
+            return !(a == b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is DxfLineWeight)
+            {
+                return this == (DxfLineWeight)obj;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
         internal static DxfLineWeight FromRawValue(short value)
         {
             return new DxfLineWeight(value);

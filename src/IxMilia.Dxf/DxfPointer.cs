@@ -117,6 +117,7 @@ namespace IxMilia.Dxf
                 foreach (var child in item.GetChildItems().Where(c => c != null))
                 {
                     nextPointer = AssignHandles(child, nextPointer, item.Handle, visitedItems);
+                    child.SetOwner(item);
                 }
             }
 

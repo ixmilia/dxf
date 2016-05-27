@@ -1335,6 +1335,25 @@ AcDbBlockEnd
         }
 
         [Fact]
+        public void VerifyTableItemsReportTableAsOwner()
+        {
+            var file = new DxfFile();
+            var view = new DxfView();
+            file.Views.Add(view);
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms); // not needed, but it forces pointers to bind
+            }
+
+            // check pointer values
+            Assert.NotEqual(0u, view.OwnerHandle);
+            Assert.Equal(view.OwnerHandle, file.TablesSection.ViewTable.Handle);
+
+            // check object values
+            Assert.True(ReferenceEquals(view.Owner, file.TablesSection.ViewTable));
+        }
+
+        [Fact]
         public void WriteLayerWithInvalidValuesTest()
         {
             var file = new DxfFile();

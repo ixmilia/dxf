@@ -8,23 +8,38 @@
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
     <ProjectDir>$(MSBuildThisFileDirectory)IxMilia.Dxf</ProjectDir>
+    <GitLinkExe>$(MSBuildThisFileDirectory)packages\gitlink\lib\net45\GitLink.exe</GitLinkExe>
+    <GitHubUrl>https://github.com/IxMilia/Dxf</GitHubUrl>
   </PropertyGroup>
 
   <Target Name="BuildSource">
-    <MSBuild BuildInParallel="true"
-             Projects="$(MSBuildThisFileDirectory)..\BuildAndTest.proj"
-             Properties="TreatWarningsAsErrors=true;Configuration=$(Configuration)"
-             Targets="Build" />
+    <MSBuild Projects="$(MSBuildThisFileDirectory)..\BuildAndTest.proj"
+             Targets="RestorePackages" />
+    <Exec Command='dotnet build "$(ProjectDir)" --configuration $(Configuration)' />
+  </Target>
+
+  <Target Name="GitLink">
+    <Exec Command="git rev-parse --verify HEAD" ConsoleToMSBuild="true" Condition="'$(CommitHash)' == ''">
+      <Output TaskParameter="ConsoleOutput" PropertyName="CommitHash" />
+    </Exec>
+    <Message Text="Creating package for SHA $(CommitHash)" />
+    <Exec Command='"$(GitLinkExe)" "$(MSBuildThisFileDirectory).." -u $(GitHubUrl) -s $(CommitHash) -d "$(ProjectDir)\bin\$(Configuration)\netstandard1.0" -errorsaswarnings' />
+    <Exec Command='"$(GitLinkExe)" "$(MSBuildThisFileDirectory).." -u $(GitHubUrl) -s $(CommitHash) -d "$(ProjectDir)\bin\$(Configuration)\portable45-net45+win8+wpa81" -errorsaswarnings' />
   </Target>
 
   <Target Name="CreatePackage">
     <PropertyGroup>
       <PackageOutputDir>$(MSBuildThisFileDirectory)Binaries\$(Configuration)</PackageOutputDir>
     </PropertyGroup>
-    <Exec Command="dotnet pack &quot;$(ProjectDir)&quot; --configuration $(Configuration) --output &quot;$(PackageOutputDir)&quot;" />
+    <Exec Command='dotnet pack "$(ProjectDir)" --configuration $(Configuration) --output "$(PackageOutputDir)" --no-build' />
+    <Message Text="#" />
+    <Message Text="#" />
+    <Message Text="# Package created in '$(PackageOutputDir)'.  Consume the *.symbols.nupkg file." />
+    <Message Text="#" />
+    <Message Text="#" />
   </Target>
 
-  <Target Name="Build" DependsOnTargets="BuildSource;CreatePackage">
+  <Target Name="Build" DependsOnTargets="BuildSource;GitLink;CreatePackage">
   </Target>
 
 </Project>

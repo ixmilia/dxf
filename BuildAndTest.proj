@@ -33,6 +33,7 @@
   <Target Name="RestorePackages">
     <DownloadFile Url="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" Destination="$(NuGetExe)" Condition="!Exists('$(NuGetExe)')" />
     <Exec Command="&quot;$(NuGetExe)&quot; restore &quot;$(SolutionFile)&quot; /ConfigFile &quot;$(NuGetConfig)&quot;" />
+    <Exec Command="&quot;$(NuGetExe)&quot; install gitlink -SolutionDir &quot;$(SolutionDir)&quot; -Verbosity quiet -ExcludeVersion" Condition="!Exists('$(SolutionDir)\packages\gitlink')" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="RestorePackages">

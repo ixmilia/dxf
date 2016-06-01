@@ -61,8 +61,8 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="CommitHash" />
     </Exec>
     <Message Text="Creating package for SHA $(CommitHash)" />
-    <Exec Command='"$(GitLinkExe)" "$(MSBuildThisFileDirectory).." -u $(GitHubUrl) -s $(CommitHash) -d "$(ProjectDir)\bin\$(Configuration)\netstandard1.0" -errorsaswarnings' />
-    <Exec Command='"$(GitLinkExe)" "$(MSBuildThisFileDirectory).." -u $(GitHubUrl) -s $(CommitHash) -d "$(ProjectDir)\bin\$(Configuration)\portable45-net45+win8+wpa81" -errorsaswarnings' />
+    <Exec Command='"$(GitLinkExe)" "$(MSBuildThisFileDirectory).." -u $(GitHubUrl) -s $(CommitHash) -d "$(ProjectDir)\bin\$(Configuration)\netstandard1.0" -ignore IxMilia.Dxf.Test' />
+    <Exec Command='"$(GitLinkExe)" "$(MSBuildThisFileDirectory).." -u $(GitHubUrl) -s $(CommitHash) -d "$(ProjectDir)\bin\$(Configuration)\portable45-net45+win8+wpa81" -ignore IxMilia.Dxf.Test' />
   </Target>
 
   <Target Name="CreatePackage">

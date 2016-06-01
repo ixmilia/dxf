@@ -12,6 +12,44 @@
     <GitHubUrl>https://github.com/IxMilia/Dxf</GitHubUrl>
   </PropertyGroup>
 
+  <UsingTask TaskName="HACK_RemoveFrameworkDependenciesFromNuspec" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <PackagePath ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System" />
+      <Reference Include="System.IO" />
+      <Reference Include="System.Xml" />
+      <Reference Include="System.Xml.Linq" />
+      <Reference Include="WindowsBase" />
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.IO.Packaging" />
+      <Using Namespace="System.Xml.Linq" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+            using (var package = Package.Open(PackagePath))
+            {
+                var part = package.GetPart(new Uri("/IxMilia.Dxf.nuspec", UriKind.Relative));
+                var stream = part.GetStream(FileMode.Open);
+                var xml = XDocument.Load(stream);
+                var metadata = xml.Root.Element(XName.Get("metadata", xml.Root.Name.NamespaceName));
+                var frameworkAssemblies = metadata.Element(XName.Get("frameworkAssemblies", xml.Root.Name.NamespaceName));
+                frameworkAssemblies.Remove();
+                using (var ms = new MemoryStream())
+                {
+                    xml.Save(ms);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.SetLength(ms.Length);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.CopyTo(stream);
+                }
+            }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
   <Target Name="BuildSource">
     <MSBuild Projects="$(MSBuildThisFileDirectory)..\BuildAndTest.proj"
              Targets="RestorePackages" />
@@ -32,6 +70,8 @@
       <PackageOutputDir>$(MSBuildThisFileDirectory)Binaries\$(Configuration)</PackageOutputDir>
     </PropertyGroup>
     <Exec Command='dotnet pack "$(ProjectDir)" --configuration $(Configuration) --output "$(PackageOutputDir)" --no-build' />
+    <HACK_RemoveFrameworkDependenciesFromNuspec PackagePath="$(PackageOutputDir)\IxMilia.Dxf.0.4.0.0.nupkg" />
+    <HACK_RemoveFrameworkDependenciesFromNuspec PackagePath="$(PackageOutputDir)\IxMilia.Dxf.0.4.0.0.symbols.nupkg" />
     <Message Text="#" />
     <Message Text="#" />
     <Message Text="# Package created in '$(PackageOutputDir)'.  Consume the *.symbols.nupkg file." />

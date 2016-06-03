@@ -70,8 +70,8 @@
       <PackageOutputDir>$(MSBuildThisFileDirectory)Binaries\$(Configuration)</PackageOutputDir>
     </PropertyGroup>
     <Exec Command='dotnet pack "$(ProjectDir)" --configuration $(Configuration) --output "$(PackageOutputDir)" --no-build' />
-    <HACK_RemoveFrameworkDependenciesFromNuspec PackagePath="$(PackageOutputDir)\IxMilia.Dxf.0.4.0.0.nupkg" />
-    <HACK_RemoveFrameworkDependenciesFromNuspec PackagePath="$(PackageOutputDir)\IxMilia.Dxf.0.4.0.0.symbols.nupkg" />
+    <HACK_RemoveFrameworkDependenciesFromNuspec PackagePath="$(PackageOutputDir)\IxMilia.Dxf.0.4.0.0-beta1.nupkg" />
+    <HACK_RemoveFrameworkDependenciesFromNuspec PackagePath="$(PackageOutputDir)\IxMilia.Dxf.0.4.0.0-beta1.symbols.nupkg" />
     <Message Text="#" />
     <Message Text="#" />
     <Message Text="# Package created in '$(PackageOutputDir)'.  Consume the *.symbols.nupkg file." />

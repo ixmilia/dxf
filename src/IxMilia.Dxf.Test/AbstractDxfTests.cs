@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using IxMilia.Dxf.Sections;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -37,7 +38,7 @@ EOF
 ", sectionName, string.IsNullOrWhiteSpace(data) ? null : "\r\n" + data.Trim()));
         }
 
-        protected static string ToString(DxfFile file)
+        internal static string ToString(DxfFile file)
         {
             using (var stream = new MemoryStream())
             {
@@ -51,9 +52,25 @@ EOF
             }
         }
 
-        protected static void VerifyFileContents(DxfFile file, string expected, Action<string, string> predicate)
+        internal static string ToString(DxfFile file, DxfSectionType sectionType)
         {
-            var actual = ToString(file);
+            using (var stream = new MemoryStream())
+            {
+                file.WriteSingleSection(stream, sectionType);
+                stream.Flush();
+                stream.Seek(0, SeekOrigin.Begin);
+                using (var reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
+
+        internal static void VerifyFileContents(DxfFile file, string expected, DxfSectionType? sectionType, Action<string, string> predicate)
+        {
+            var actual = sectionType.HasValue
+                ? ToString(file, sectionType.GetValueOrDefault())
+                : ToString(file);
             predicate(
                 RemoveLeadingAndTrailingWhitespaceFromLines(expected),
                 RemoveLeadingAndTrailingWhitespaceFromLines(actual));
@@ -65,19 +82,14 @@ EOF
             return string.Join("\r\n", lines);
         }
 
-        protected static void VerifyFileContains(DxfFile file, string expected)
+        internal static void VerifyFileContains(DxfFile file, string expected, DxfSectionType? sectionType = null)
         {
-            VerifyFileContents(file, expected, (ex, ac) => AssertRegexContains(ex.Trim(), ac));
+            VerifyFileContents(file, expected, sectionType, (ex, ac) => AssertRegexContains(ex.Trim(), ac));
         }
 
-        protected static void VerifyFileDoesNotContain(DxfFile file, string unexpected)
+        internal static void VerifyFileDoesNotContain(DxfFile file, string unexpected)
         {
-            VerifyFileContents(file, unexpected, (ex, ac) => Assert.DoesNotContain(ex.Trim(), ac));
-        }
-
-        protected static void VerifyFileIsExactly(DxfFile file, string expected)
-        {
-            VerifyFileContents(file, expected, (ex, ac) => Assert.Equal(ex.Trim(), ac.Trim()));
+            VerifyFileContents(file, unexpected, sectionType: null, predicate: (ex, ac) => Assert.DoesNotContain(ex.Trim(), ac));
         }
 
         protected static void AssertArrayEqual<T>(T[] expected, T[] actual)

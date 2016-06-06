@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Sections;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -66,7 +67,7 @@ ill-placed comment
             var file = new DxfFile();
             file.Header.Version = version;
             file.Entities.Add(entity);
-            VerifyFileContains(file, text);
+            VerifyFileContains(file, text, sectionType: DxfSectionType.Entities);
         }
 
         #endregion

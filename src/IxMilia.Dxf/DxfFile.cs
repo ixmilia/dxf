@@ -299,6 +299,12 @@ namespace IxMilia.Dxf
 
         private void WriteStream(Stream stream, bool asText)
         {
+            var writer = PrepareWriter(stream, asText);
+            WriteSectionsAndClose(writer, Sections);
+        }
+
+        private DxfWriter PrepareWriter(Stream stream, bool asText)
+        {
             UpdateTimes();
             Normalize();
 
@@ -308,16 +314,32 @@ namespace IxMilia.Dxf
             var nextHandle = DxfPointer.AssignHandles(this);
             Header.NextAvailableHandle = nextHandle;
 
-            // write sections
+            return writer;
+        }
+
+        private void WriteSectionsAndClose(DxfWriter writer, IEnumerable<DxfSection> sections)
+        {
             var writtenItems = new HashSet<IDxfItem>();
             var outputHandles = Header.Version >= DxfAcadVersion.R13 || Header.HandlesEnabled; // handles are always enabled on R13+
-            foreach (var section in Sections)
+            foreach (var section in sections)
             {
                 foreach (var pair in section.GetValuePairs(Header.Version, outputHandles, writtenItems))
+                {
                     writer.WriteCodeValuePair(pair);
+                }
             }
 
             writer.Close();
+        }
+
+        /// <summary>
+        /// Internal for testing.
+        /// </summary>
+        internal void WriteSingleSection(Stream stream, DxfSectionType sectionType)
+        {
+            var sections = Sections.Where(s => s.Type == sectionType);
+            var writer = PrepareWriter(stream, asText: true);
+            WriteSectionsAndClose(writer, sections);
         }
 
         internal IEnumerable<IDxfItemInternal> GetFileItems()

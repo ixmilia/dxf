@@ -58,6 +58,12 @@ AcDbProxyObject
         public void ReadDataTableTest()
         {
             var table = (DxfDataTable)GenObject("DATATABLE", @"
+330
+0
+100
+AcDbDataTable
+ 70
+2
  90
 2
  91

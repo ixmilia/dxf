@@ -141,8 +141,16 @@ namespace IxMilia.Dxf.Objects
                 case 350:
                 case 340:
                 case 330:
-                    // TODO: differentiate between handle types
-                    SetValue(UIntHandle(pair.StringValue));
+                    if (_readRowCount || _readColumnCount)
+                    {
+                        // TODO: differentiate between handle types
+                        SetValue(UIntHandle(pair.StringValue));
+                    }
+                    else
+                    {
+                        // still reading AcDbObject values
+                        goto default;
+                    }
                     break;
 
                 default:

@@ -866,6 +866,61 @@ ENDSEC
         }
 
         [Fact]
+        public void ReadBlockWithUnsupportedEntityTest()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+100
+AcDbBlockBegin
+  0
+POINT
+ 10
+1.1
+ 20
+2.2
+ 30
+3.3
+999
+================================================================================
+999
+                       unsupported entity (HATCH) between two supported entities
+999
+================================================================================
+  0
+HATCH
+  0
+POINT
+ 10
+4.4
+ 20
+5.5
+ 30
+6.6
+  0
+ENDBLK
+  5
+42
+100
+AcDbBlockEnd
+  0
+ENDSEC
+  0
+EOF
+");
+            var block = file.Blocks.Single();
+            Assert.Equal(2, block.Entities.Count);
+            var p1 = (DxfModelPoint)block.Entities.First();
+            Assert.Equal(new DxfPoint(1.1, 2.2, 3.3), p1.Location);
+            var p2 = (DxfModelPoint)block.Entities.Last();
+            Assert.Equal(new DxfPoint(4.4, 5.5, 6.6), p2.Location);
+        }
+
+        [Fact]
         public void ReadTableTest()
         {
             var file = Parse(@"

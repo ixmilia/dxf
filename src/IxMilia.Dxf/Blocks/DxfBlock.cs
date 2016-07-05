@@ -203,9 +203,11 @@ namespace IxMilia.Dxf.Blocks
                 {
                     // should be an entity
                     var entity = DxfEntity.FromBuffer(buffer);
-                    Debug.Assert(entity != null);
                     if (entity != null)
+                    {
+                        // entity could be null if it's unsupported
                         block.Entities.Add(entity);
+                    }
                 }
                 else
                 {

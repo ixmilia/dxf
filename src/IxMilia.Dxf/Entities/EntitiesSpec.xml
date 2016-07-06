@@ -108,8 +108,8 @@
 
     -->
     <Entity Name="DxfArc" EntityType="Arc" SubclassMarker="AcDbArc" TypeString="ARC" BaseClass="DxfCircle">
-        <Property Name="StartAngle" Code="50" Type="double" DefaultValue="0.0" />
-        <Property Name="EndAngle" Code="51" Type="double" DefaultValue="360.0" />
+        <Property Name="StartAngle" Code="50" Type="double" DefaultValue="0.0" Comment="Arc start angle in degrees" />
+        <Property Name="EndAngle" Code="51" Type="double" DefaultValue="360.0" Comment="Arc end angle in degrees" />
         <Constructor>
             <ConstructorParameter Property="Center" Type="DxfPoint" />
             <ConstructorParameter Property="Radius" Type="double" />
@@ -402,8 +402,8 @@
         <Property Name="MajorAxis" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Property Name="MinorAxisRatio" Code="40" Type="double" DefaultValue="1.0" />
-        <Property Name="StartParameter" Code="41" Type="double" DefaultValue="0.0" />
-        <Property Name="EndParameter" Code="42" Type="double" DefaultValue="Math.PI * 2" />
+        <Property Name="StartParameter" Code="41" Type="double" DefaultValue="0.0" Comment="Ellipse start angle in radians" />
+        <Property Name="EndParameter" Code="42" Type="double" DefaultValue="Math.PI * 2" Comment="Ellipse end angle in radians" />
         <Constructor>
             <ConstructorParameter Property="Center" Type="DxfPoint" />
             <ConstructorParameter Property="MajorAxis" Type="DxfVector" />

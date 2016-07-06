@@ -22,7 +22,15 @@ namespace IxMilia.Dxf.Entities
         public DxfVector MajorAxis { get; set; }
         public DxfVector Normal { get; set; }
         public double MinorAxisRatio { get; set; }
+
+        /// <Summary>
+        /// Ellipse start angle in radians
+        /// </Summary>
         public double StartParameter { get; set; }
+
+        /// <Summary>
+        /// Ellipse end angle in radians
+        /// </Summary>
         public double EndParameter { get; set; }
 
         public DxfEllipse()

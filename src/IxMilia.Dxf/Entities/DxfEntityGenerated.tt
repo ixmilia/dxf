@@ -118,6 +118,17 @@ foreach (var property in GetPropertiesAndPointers(baseEntity))
     {
         getset = string.Format("{{ get {{ return {0}.Item as {1}; }} set {{ {0}.Item = value; }} }}", Name(property) + "Pointer", typeString);
     }
+
+    var comment = Comment(property);
+    if (comment != null)
+    {
+#>
+
+        /// <Summary>
+        /// <#= comment #>
+        /// </Summary>
+<#
+    }
 #>
         public <#= typeString #> <#= Name(property) #> <#= getset #>
 <#
@@ -476,6 +487,17 @@ foreach (var entity in entities)
         if (AllowMultiples(property))
         {
             propertyType = string.Format("IList<{0}>", propertyType);
+        }
+
+        var comment = Comment(property);
+        if (comment != null)
+        {
+#>
+
+        /// <Summary>
+        /// <#= comment #>
+        /// </Summary>
+<#
         }
 #>
         <#= Accessibility(property) #> <#= propertyType #> <#= Name(property) #> <#= getset #>

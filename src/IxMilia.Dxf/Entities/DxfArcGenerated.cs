@@ -17,7 +17,15 @@ namespace IxMilia.Dxf.Entities
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Arc; } }
 
+
+        /// <Summary>
+        /// Arc start angle in degrees
+        /// </Summary>
         public double StartAngle { get; set; }
+
+        /// <Summary>
+        /// Arc end angle in degrees
+        /// </Summary>
         public double EndAngle { get; set; }
 
         public DxfArc()

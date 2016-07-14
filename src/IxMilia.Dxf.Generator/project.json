@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable",
+    "define": [
+      "DXF"
+    ],
+    "emitEntryPoint": true,
+    "compile": {
+      "include": "**\\*.cs",
+      "includeFiles": [
+        "..\\IxMilia.Dxf\\DxfCodePair.ExpectedType.cs"
+      ]
+    },
+    "copyToOutput": [
+      "EntitiesSpec.xml"
+    ]
+  },
+  "dependencies": {},
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        }
+      },
+      "imports": "dnxcore50"
+    }
+  }
+}

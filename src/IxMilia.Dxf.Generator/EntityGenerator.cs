@@ -3,15 +3,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using IxMilia.Dxf;
 
 namespace IxMilia.Dxf.Generator
 {
     public class EntityGenerator : GeneratorBase
     {
         private string _outputDir;
+        private XElement _xml;
+        private string _xmlns;
+        private IEnumerable<XElement> _entities;
 
         public const string EntityNamespace = "IxMilia.Dxf.Entities";
 
@@ -23,23 +24,23 @@ namespace IxMilia.Dxf.Generator
 
         public void Run()
         {
-            var xml = XDocument.Load("EntitiesSpec.xml").Root;
-            var xmlns = xml.Name.NamespaceName;
-            var entities = xml.Elements(XName.Get("Entity", xmlns)).Where(x => x.Attribute("Name").Value != "DxfEntity");
+            _xml = XDocument.Load("EntitiesSpec.xml").Root;
+            _xmlns = _xml.Name.NamespaceName;
+            _entities = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => x.Attribute("Name").Value != "DxfEntity");
 
-            OutputDxfEntityType(entities);
-            OutputDxfEntity(entities, xml, xmlns);
-            OutputDxfEntities(entities, xmlns);
+            OutputDxfEntityType();
+            OutputDxfEntity();
+            OutputDxfEntities();
         }
 
-        private void OutputDxfEntityType(IEnumerable<XElement> entities)
+        private void OutputDxfEntityType()
         {
-            CreateNewFile(EntityNamespace);
+            CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
             IncreaseIndent();
             AppendLine("public enum DxfEntityType");
             AppendLine("{");
             IncreaseIndent();
-            var enumNames = entities.Select(e => EntityType(e)).Distinct().OrderBy(e => e);
+            var enumNames = _entities.Select(e => EntityType(e)).Distinct().OrderBy(e => e);
             var enumStr = string.Join(",\r\n        ", enumNames);
             AppendLine(enumStr);
             DecreaseIndent();
@@ -49,10 +50,10 @@ namespace IxMilia.Dxf.Generator
             WriteFile(Path.Combine(_outputDir, "DxfEntityTypeGenerated.cs"));
         }
 
-        private void OutputDxfEntity(IEnumerable<XElement> entities, XElement xml, string xmlns)
+        private void OutputDxfEntity()
         {
-            var baseEntity = xml.Elements(XName.Get("Entity", xmlns)).Where(x => Name(x) == "DxfEntity").Single();
-            CreateNewFile(EntityNamespace);
+            var baseEntity = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => Name(x) == "DxfEntity").Single();
+            CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
             IncreaseIndent();
             AppendLine("/// <summary>");
             AppendLine("/// DxfEntity class");
@@ -71,64 +72,8 @@ namespace IxMilia.Dxf.Generator
             DecreaseIndent();
             AppendLine("}");
 
-            //
-            // Pointers
-            //
-            var pointers = GetPointers(baseEntity);
-            if (pointers.Any())
-            {
-                AppendLine();
-                AppendLine("IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()");
-                AppendLine("{");
-                IncreaseIndent();
-                foreach (var pointer in pointers)
-                {
-                    AppendLine($"yield return {Name(pointer)}Pointer;");
-                }
-
-                DecreaseIndent();
-                AppendLine("}");
-                AppendLine();
-
-                AppendLine("IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()");
-                AppendLine("{");
-                AppendLine("    return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);");
-                AppendLine("}");
-                AppendLine();
-
-                foreach (var pointer in pointers)
-                {
-                    AppendLine($"internal DxfPointer {Name(pointer)}Pointer {{ get; }} = new DxfPointer();");
-                }
-            }
-
-            //
-            // Properties
-            //
-            foreach (var property in GetPropertiesAndPointers(baseEntity))
-            {
-                var typeString = Type(property);
-                if (AllowMultiples(property))
-                {
-                    typeString = $"List<{typeString}>";
-                }
-
-                var getset = $"{{ get; {SetterAccessibility(property)}set; }}";
-                if (IsPointer(property))
-                {
-                    getset = $"{{ get {{ return {Name(property)}Pointer.Item as {typeString}; }} set {{ {Name(property)}Pointer.Item = value; }} }}";
-                }
-
-                var comment = Comment(property);
-                if (comment != null)
-                {
-                    AppendLine("/// <summary>");
-                    AppendLine($"/// {comment}>");
-                    AppendLine("/// </summary>");
-                }
-
-                AppendLine($"public {typeString} {Name(property)} {getset}");
-            }
+            AppendPointers(baseEntity);
+            AppendProperties(baseEntity);
 
             AppendLine();
             AppendLine("public string EntityTypeString");
@@ -137,7 +82,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine("    {");
             AppendLine("        switch (EntityType)");
             AppendLine("        {");
-            foreach (var entity in entities)
+            foreach (var entity in _entities)
             {
                 var typeString = TypeString(entity);
                 var commaIndex = typeString.IndexOf(',');
@@ -304,7 +249,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine("    DxfEntity entity;");
             AppendLine("    switch (first.StringValue)");
             AppendLine("    {");
-            foreach (var entity in entities)
+            foreach (var entity in _entities)
             {
                 var typeString = TypeString(entity);
                 if (!string.IsNullOrEmpty(typeString))
@@ -341,27 +286,21 @@ namespace IxMilia.Dxf.Generator
             WriteFile(Path.Combine(_outputDir, "DxfEntityGenerated.cs"));
         }
 
-        private void OutputDxfEntities(IEnumerable<XElement> entities, string xmlns)
+        private void OutputDxfEntities()
         {
-            foreach (var entity in entities)
+            foreach (var entity in _entities)
             {
                 var className = Name(entity);
-                var baseClass = BaseClass(entity, "DxfEntity");
-                if (GetPointers(entity).Any())
-                {
-                    baseClass += ", IDxfItemInternal";
-                }
-
-                CreateNewFile(EntityNamespace);
+                CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
                 IncreaseIndent();
-                OutputSingleDxfEntity(entities, entity, xmlns);
+                OutputSingleDxfEntity(entity);
                 DecreaseIndent();
                 FinishFile();
                 WriteFile(Path.Combine(_outputDir, className + "Generated.cs"));
             }
         }
 
-        private void OutputSingleDxfEntity(IEnumerable<XElement> entities, XElement entity, string xmlns)
+        private void OutputSingleDxfEntity(XElement entity)
         {
             AppendLine("/// <summary>");
             AppendLine($"/// {Name(entity)} class");
@@ -376,350 +315,17 @@ namespace IxMilia.Dxf.Generator
             AppendLine("{");
             IncreaseIndent();
             AppendLine($"public override DxfEntityType EntityType {{ get {{ return DxfEntityType.{EntityType(entity)}; }} }}");
-
-            // min and max entity supported versions
-            var minVersion = MinVersion(entity);
-            if (minVersion != null)
-            {
-                AppendLine($"protected override DxfAcadVersion MinVersion {{ get {{ return DxfAcadVersion.{minVersion}; }} }}");
-            }
-
-            var maxVersion = MaxVersion(entity);
-            if (maxVersion != null)
-            {
-                AppendLine($"protected override DxfAcadVersion MaxVersion {{ get {{ return DxfAcadVersion.{maxVersion}; }} }}");
-            }
-
-            //
-            // Pointers
-            //
-            var pointers = GetPointers(entity);
-            if (pointers.Any())
-            {
-                AppendLine();
-                AppendLine("IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()");
-                AppendLine("{");
-                foreach (var pointer in pointers)
-                {
-                    if (AllowMultiples(pointer))
-                    {
-                        AppendLine($"    foreach (var pointer in {Name(pointer)}Pointers.Pointers)");
-                        AppendLine("    {");
-                        AppendLine("        yield return pointer;");
-                        AppendLine("    }");
-                    }
-                    else
-                    {
-                        AppendLine($"    yield return {Name(pointer)}Pointer;");
-                    }
-                }
-
-                AppendLine("}"); // end method
-
-                AppendLine();
-                AppendLine("IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()");
-                AppendLine("{");
-                AppendLine("    return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);");
-                AppendLine("}");
-                AppendLine();
-
-                foreach (var pointer in pointers)
-                {
-                    var defaultValue = "new DxfPointer()";
-                    var typeString = "DxfPointer";
-                    var suffix = "Pointer";
-                    if (AllowMultiples(pointer))
-                    {
-                        var type = Type(pointer);
-                        defaultValue = string.Format("new DxfPointerList<{0}>()", type);
-                        typeString = string.Format("DxfPointerList<{0}>", type);
-                        suffix += "s";
-                    }
-                    
-                    AppendLine($"internal {typeString} {Name(pointer)}{suffix} {{ get; }} = {defaultValue};");
-                }
-            }
-
-            //
-            // Properties
-            //
-            foreach (var property in GetPropertiesAndPointers(entity))
-            {
-                var propertyType = Type(property);
-                var getset = $"{{ get; {SetterAccessibility(property)}set; }}";
-                if (IsPointer(property))
-                {
-                    if (AllowMultiples(property))
-                    {
-                        getset = $"{{ get {{ return {Name(property)}Pointers; }} }}";
-                    }
-                    else
-                    {
-                        getset = $"{{ get {{ return {Name(property)}Pointer.Item as {propertyType}; }} set {{ {Name(property)}Pointer.Item = value; }} }}";
-                    }
-                }
-
-                if (AllowMultiples(property))
-                {
-                    propertyType = string.Format("IList<{0}>", propertyType);
-                }
-
-                var comment = Comment(property);
-                if (comment != null)
-                {
-                    AppendLine("/// <summary>");
-                    AppendLine($"/// {comment}");
-                    AppendLine("/// </summary>");
-                }
-
-                AppendLine($"{Accessibility(property)} {propertyType} {Name(property)} {getset}");
-            }
-
-            //
-            // Flags
-            //
-            foreach (var property in GetProperties(entity))
-            {
-                var flags = property.Elements(XName.Get("Flag", xmlns));
-                if (flags.Any())
-                {
-                    AppendLine();
-                    AppendLine($"// {Name(property)} flags");
-                    foreach (var flag in flags)
-                    {
-                        AppendLine();
-                        AppendLine($"public bool {Name(flag)}");
-                        AppendLine("{");
-                        AppendLine($"    get {{ return DxfHelpers.GetFlag({Name(property)}, {Mask(flag)}); }}");
-                        AppendLine("    set");
-                        AppendLine("    {");
-                        AppendLine($"        var flags = {Name(property)};");
-                        AppendLine($"        DxfHelpers.SetFlag(value, ref flags, {Mask(flag)});");
-                        AppendLine($"        {Name(property)} = flags;");
-                        AppendLine("    }");
-                        AppendLine("}");
-                    }
-                }
-            }
-
-            //
-            // XData
-            //
-            if (HasXData(entity))
-            {
-                AppendLine();
-                AppendLine("public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }");
-            }
-
-            //
-            // Default constructor
-            //
-            var defaultConstructorType = DefaultConstructor(entity);
-            if (defaultConstructorType != null)
-            {
-                AppendLine();
-                AppendLine($"{defaultConstructorType} {Name(entity)}()");
-                AppendLine("    : base()");
-                AppendLine("{");
-                AppendLine("}");
-            }
-
-            //
-            // Parameterized constructors
-            //
-            var constructors = entity.Elements(XName.Get("Constructor", xmlns));
-            if (constructors.Any())
-            {
-                foreach (var constructor in constructors)
-                {
-                    var parameters = constructor.Elements(XName.Get("ConstructorParameter", xmlns));
-                    var argList = new List<string>();
-                    foreach (var parameter in parameters)
-                    {
-                        var paramName = CamlCase(Property(parameter));
-                        var paramType = Type(parameter);
-                        argList.Add(paramType + " " + paramName);
-                    }
-
-                    var sig = string.Join(", ", argList);
-                    AppendLine();
-                    AppendLine($"public {Name(entity)}({sig})");
-                    AppendLine("    : this()");
-                    AppendLine("{");
-                    IncreaseIndent();
-
-                    foreach (var parameter in parameters)
-                    {
-                        AppendLine($"this.{Property(parameter)} = {CamlCase(Property(parameter))};");
-                    }
-
-                    DecreaseIndent();
-                    AppendLine("}"); // end constructor
-                }
-            }
-
-            //
-            // Copy constructor
-            //
-            var copyConstructorAccessibility = CopyConstructor(entity);
-            if (copyConstructorAccessibility != null)
-            {
-                AppendLine();
-                if (copyConstructorAccessibility == "inherited")
-                {
-                    AppendLine($"internal {Name(entity)}({BaseClass(entity, "DxfEntity")} other)");
-                    AppendLine("    : base(other)");
-                    AppendLine("{");
-                }
-                else
-                {
-                    AppendLine($"{copyConstructorAccessibility} {Name(entity)}({Name(entity)} other)");
-                    AppendLine("    : base(other)");
-                    AppendLine("{");
-                    IncreaseIndent();
-                    foreach (var property in GetPropertiesAndPointers(entity))
-                    {
-                        var name = Name(property);
-                        if (IsPointer(property))
-                        {
-                            name += "Pointer";
-                            AppendLine($"this.{name}.Handle = other.{name}.Handle;");
-                            AppendLine($"this.{name}.Item = other.{name}.Item;");
-                        }
-                        else
-                        {
-                            AppendLine($"this.{name} = other.{name};");
-                        }
-                    }
-
-                    DecreaseIndent();
-                }
-
-                AppendLine("}"); // end method
-            }
-
-            //
-            // Initialize
-            //
-            AppendLine();
-            AppendLine("protected override void Initialize()");
-            AppendLine("{");
-            IncreaseIndent();
-            AppendLine("base.Initialize();");
-            if (BaseClass(entity, "") == "DxfDimensionBase")
-            {
-                AppendLine($"this.DimensionType = DxfDimensionType.{Tag(entity)};");
-            }
-
-            foreach (var property in GetProperties(entity))
-            {
-                var defaultValue = AllowMultiples(property)
-                    ? string.Format("new List<{0}>()", Type(property))
-                    : DefaultValue(property);
-                AppendLine($"this.{Name(property)} = {defaultValue};");
-            }
-
-            DecreaseIndent();
-            AppendLine("}"); // end method
-
-            //
-            // AddValuePairs
-            //
-            AppendLine();
-            AppendLine("protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)");
-            AppendLine("{");
-            IncreaseIndent();
-            AppendLine("base.AddValuePairs(pairs, version, outputHandles);");
-            foreach (var line in GetWriteCommands(entity))
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    AppendLine();
-                }
-                else
-                {
-                    AppendLine(line);
-                }
-            }
-
-            if (HasXData(entity))
-            {
-                AppendLine("if (XData != null)");
-                AppendLine("{");
-                AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
-                AppendLine("}");
-            }
-
-            DecreaseIndent();
-            AppendLine("}"); // end method
-
-            //
-            // TrySetPair
-            //
-            if (GetPropertiesAndPointers(entity).Any() && GenerateReaderFunction(entity))
-            {
-                AppendLine();
-                AppendLine("internal override bool TrySetPair(DxfCodePair pair)");
-                AppendLine("{");
-                IncreaseIndent();
-                AppendLine("switch (pair.Code)");
-                AppendLine("{");
-                IncreaseIndent();
-                foreach (var propertyGroup in GetPropertiesAndPointers(entity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
-                {
-                    var code = propertyGroup.Key;
-                    if (propertyGroup.Count() == 1)
-                    {
-                        var property = propertyGroup.Single();
-                        var name = Name(property);
-                        var codes = GetCodeOverrides(property);
-                        if (codes != null)
-                        {
-                            var suffix = 'X';
-                            for (int i = 0; i < codes.Length; i++, suffix++)
-                            {
-                                AppendLine($"case {codes[i]}:");
-                                AppendLine($"    this.{name}.{suffix} = pair.DoubleValue;");
-                                AppendLine("    break;");
-                            }
-                        }
-                        else
-                        {
-                            var codeType = DxfCodePair.ExpectedType(code);
-                            var codeTypeValue = TypeToString(codeType);
-                            if (IsPointer(property))
-                            {
-                                name += "Pointer.Handle";
-                            }
-
-                            var assignCode = AllowMultiples(property)
-                                ? string.Format("this.{0}.Add(", name)
-                                : string.Format("this.{0} = ", name);
-                            var assignSuffix = AllowMultiples(property)
-                                ? ")"
-                                : "";
-                            AppendLine($"case {code}:");
-                            AppendLine($"    {assignCode}{ReadConverter(property)}(pair.{codeTypeValue}){assignSuffix};");
-                            AppendLine("    break;");
-                        }
-                    }
-                    else
-                    {
-                        AppendLine($"case {code}:");
-                        AppendLine($"    // TODO: code is shared by properties {string.Join(", ", propertyGroup.Select(p => Name(p)))}");
-                        AppendLine("    break;");
-                    }
-                }
-
-                AppendLine("default:");
-                AppendLine("    return base.TrySetPair(pair);");
-                DecreaseIndent();
-                AppendLine("}"); // end switch
-                AppendLine();
-                AppendLine("return true;");
-                DecreaseIndent();
-                AppendLine("}"); // end method
-            }
+            AppendMinAndMaxVersions(entity);
+            AppendPointers(entity);
+            AppendProperties(entity);
+            AppendFlags(entity);
+            AppendXData(entity);
+            AppendDefaultConstructor(entity);
+            AppendParameterizedConstructors(entity);
+            AppendCopyConstructor(entity, "DxfEntity");
+            AppendInitializeMethod(entity, BaseClass(entity, "") == "DxfDimensionBase" ? $"this.DimensionType = DxfDimensionType.{Tag(entity)};" : null);
+            AppendAddValuePairsMethod(entity);
+            AppendTrySetPairMethod(entity);
 
             //
             // PostParse
@@ -732,7 +338,7 @@ namespace IxMilia.Dxf.Generator
                 AppendLine("    DxfDimensionBase newDimension = null;");
                 AppendLine("    switch (DimensionType)");
                 AppendLine("    {");
-                foreach (var ent in entities.OrderBy(e => EntityType(e)).Where(e => BaseClass(e, "DxfEntity") == "DxfDimensionBase"))
+                foreach (var ent in _entities.OrderBy(e => EntityType(e)).Where(e => BaseClass(e, "DxfEntity") == "DxfDimensionBase"))
                 {
                     AppendLine($"        case DxfDimensionType.{Tag(ent)}:");
                     AppendLine($"            newDimension = new {Name(ent)}(this);");

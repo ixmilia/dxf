@@ -13,7 +13,8 @@
       ]
     },
     "copyToOutput": [
-      "EntitiesSpec.xml"
+      "EntitiesSpec.xml",
+      "ObjectsSpec.xml"
     ]
   },
   "dependencies": {},

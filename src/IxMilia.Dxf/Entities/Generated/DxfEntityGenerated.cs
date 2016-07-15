@@ -44,7 +44,7 @@ namespace IxMilia.Dxf.Entities
         public double LinetypeScale { get; set; }
         public bool IsVisible { get; set; }
         public int ImageByteCount { get; set; }
-        public List<string> PreviewImageData { get; private set; }
+        public IList<string> PreviewImageData { get; private set; }
         public int Color24Bit { get; set; }
         public string ColorName { get; set; }
         public int Transparency { get; set; }

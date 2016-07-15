@@ -34,6 +34,396 @@ namespace IxMilia.Dxf.Generator
             return att != null && bool.Parse(att.Value);
         }
 
+        public void AppendAddValuePairsMethod(XElement item)
+        {
+            if (GenerateWriterFunction(item))
+            {
+                AppendLine();
+                AppendLine("protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)");
+                AppendLine("{");
+                IncreaseIndent();
+                AppendLine("base.AddValuePairs(pairs, version, outputHandles);");
+                foreach (var line in GetWriteCommands(item))
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        AppendLine();
+                    }
+                    else
+                    {
+                        AppendLine(line);
+                    }
+                }
+
+                if (HasXData(item))
+                {
+                    AppendLine("if (XData != null)");
+                    AppendLine("{");
+                    AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
+                    AppendLine("}");
+                }
+
+                DecreaseIndent();
+                AppendLine("}");
+            }
+        }
+
+        public void AppendCopyConstructor(XElement item, string baseClass)
+        {
+            var copyConstructorAccessibility = CopyConstructor(item);
+            if (copyConstructorAccessibility != null)
+            {
+                AppendLine();
+                if (copyConstructorAccessibility == "inherited")
+                {
+                    AppendLine($"internal {Name(item)}({BaseClass(item, "baseClass")} other)");
+                    AppendLine("    : base(other)");
+                    AppendLine("{");
+                }
+                else
+                {
+                    AppendLine($"{copyConstructorAccessibility} {Name(item)}({Name(item)} other)");
+                    AppendLine("    : base(other)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    foreach (var property in GetPropertiesAndPointers(item))
+                    {
+                        var name = Name(property);
+                        if (IsPointer(property))
+                        {
+                            name += "Pointer";
+                            AppendLine($"this.{name}.Handle = other.{name}.Handle;");
+                            AppendLine($"this.{name}.Item = other.{name}.Item;");
+                        }
+                        else
+                        {
+                            AppendLine($"this.{name} = other.{name};");
+                        }
+                    }
+
+                    DecreaseIndent();
+                }
+
+                AppendLine("}"); // end method
+            }
+        }
+
+        public void AppendDefaultConstructor(XElement item)
+        {
+            var defaultConstructorType = DefaultConstructor(item);
+            if (defaultConstructorType != null)
+            {
+                AppendLine();
+                AppendLine($"{defaultConstructorType} {Name(item)}()");
+                AppendLine("    : base()");
+                AppendLine("{");
+                AppendLine("}");
+            }
+        }
+
+        public void AppendFlags(XElement item)
+        {
+            foreach (var property in GetProperties(item))
+            {
+                var flags = property.Elements(XName.Get("Flag", item.Name.NamespaceName));
+                if (flags.Any())
+                {
+                    AppendLine();
+                    AppendLine($"// {Name(property)} flags");
+                    foreach (var flag in flags)
+                    {
+                        AppendLine();
+                        AppendLine($"public bool {Name(flag)}");
+                        AppendLine("{");
+                        AppendLine($"    get {{ return DxfHelpers.GetFlag({Name(property)}, {Mask(flag)}); }}");
+                        AppendLine("    set");
+                        AppendLine("    {");
+                        AppendLine($"        var flags = {Name(property)};");
+                        AppendLine($"        DxfHelpers.SetFlag(value, ref flags, {Mask(flag)});");
+                        AppendLine($"        {Name(property)} = flags;");
+                        AppendLine("    }");
+                        AppendLine("}");
+                    }
+                }
+            }
+        }
+
+        public void AppendInitializeMethod(XElement item, string customInitializeLine = null)
+        {
+            AppendLine();
+            AppendLine("protected override void Initialize()");
+            AppendLine("{");
+            IncreaseIndent();
+            AppendLine("base.Initialize();");
+            if (customInitializeLine != null)
+            {
+                AppendLine(customInitializeLine);
+            }
+
+            var seenProperties = new HashSet<string>();
+            foreach (var property in GetProperties(item))
+            {
+                var propertyName = Name(property);
+                if (seenProperties.Contains(propertyName))
+                {
+                    continue;
+                }
+
+                seenProperties.Add(propertyName);
+                var defaultValue = AllowMultiples(property)
+                    ? string.Format("new List<{0}>()", Type(property))
+                    : DefaultValue(property);
+                AppendLine($"this.{propertyName} = {defaultValue};");
+            }
+
+            DecreaseIndent();
+            AppendLine("}");
+        }
+
+        public void AppendMinAndMaxVersions(XElement item)
+        {
+            // min and max supported versions
+            var minVersion = MinVersion(item);
+            if (minVersion != null)
+            {
+                AppendLine($"protected override DxfAcadVersion MinVersion {{ get {{ return DxfAcadVersion.{minVersion}; }} }}");
+            }
+
+            var maxVersion = MaxVersion(item);
+            if (maxVersion != null)
+            {
+                AppendLine($"protected override DxfAcadVersion MaxVersion {{ get {{ return DxfAcadVersion.{maxVersion}; }} }}");
+            }
+        }
+
+        public void AppendParameterizedConstructors(XElement item)
+        {
+            var constructors = item.Elements(XName.Get("Constructor", item.Name.NamespaceName));
+            if (constructors.Any())
+            {
+                foreach (var constructor in constructors)
+                {
+                    var parameters = constructor.Elements(XName.Get("ConstructorParameter", item.Name.NamespaceName));
+                    var argList = new List<string>();
+                    foreach (var parameter in parameters)
+                    {
+                        var paramName = CamlCase(Property(parameter));
+                        var paramType = Type(parameter);
+                        argList.Add(paramType + " " + paramName);
+                    }
+
+                    var sig = string.Join(", ", argList);
+                    AppendLine();
+                    AppendLine($"public {Name(item)}({sig})");
+                    AppendLine("    : this()");
+                    AppendLine("{");
+                    IncreaseIndent();
+
+                    foreach (var parameter in parameters)
+                    {
+                        AppendLine($"this.{Property(parameter)} = {CamlCase(Property(parameter))};");
+                    }
+
+                    DecreaseIndent();
+                    AppendLine("}"); // end constructor
+                }
+            }
+        }
+
+        public void AppendPointers(XElement item)
+        {
+            var pointers = GetPointers(item);
+            if (pointers.Any())
+            {
+                AppendLine();
+                AppendLine("IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()");
+                AppendLine("{");
+                foreach (var pointer in pointers)
+                {
+                    if (AllowMultiples(pointer))
+                    {
+                        AppendLine($"    foreach (var pointer in {Name(pointer)}Pointers.Pointers)");
+                        AppendLine("    {");
+                        AppendLine("        yield return pointer;");
+                        AppendLine("    }");
+                    }
+                    else
+                    {
+                        AppendLine($"    yield return {Name(pointer)}Pointer;");
+                    }
+                }
+
+                AppendLine("}"); // end method
+
+                AppendLine();
+                AppendLine("IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()");
+                AppendLine("{");
+                AppendLine("    return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);");
+                AppendLine("}");
+                AppendLine();
+
+                foreach (var pointer in pointers)
+                {
+                    var defaultValue = "new DxfPointer()";
+                    var typeString = "DxfPointer";
+                    var suffix = "Pointer";
+                    if (AllowMultiples(pointer))
+                    {
+                        var type = Type(pointer);
+                        defaultValue = string.Format("new DxfPointerList<{0}>()", type);
+                        typeString = string.Format("DxfPointerList<{0}>", type);
+                        suffix += "s";
+                    }
+                    
+                    AppendLine($"internal {typeString} {Name(pointer)}{suffix} {{ get; }} = {defaultValue};");
+                }
+            }
+        }
+
+        public void AppendProperties(XElement item)
+        {
+            foreach (var property in GetPropertiesAndPointers(item))
+            {
+                var propertyType = Type(property);
+                var getset = $"{{ get; {SetterAccessibility(property)}set; }}";
+                if (IsPointer(property))
+                {
+                    if (AllowMultiples(property))
+                    {
+                        getset = $"{{ get {{ return {Name(property)}Pointers; }} }}";
+                    }
+                    else
+                    {
+                        getset = $"{{ get {{ return {Name(property)}Pointer.Item as {propertyType}; }} set {{ {Name(property)}Pointer.Item = value; }} }}";
+                    }
+                }
+
+                if (AllowMultiples(property))
+                {
+                    propertyType = string.Format("IList<{0}>", propertyType);
+                }
+
+                var comment = Comment(property);
+                if (comment != null)
+                {
+                    AppendLine("/// <summary>");
+                    AppendLine($"/// {comment}");
+                    AppendLine("/// </summary>");
+                }
+
+                AppendLine($"{Accessibility(property)} {propertyType} {Name(property)} {getset}");
+            }
+        }
+
+        public void AppendTrySetPairMethod(XElement item)
+        {
+            if (GetPropertiesAndPointers(item).Any() && GenerateReaderFunction(item))
+            {
+                AppendLine();
+                AppendLine("internal override bool TrySetPair(DxfCodePair pair)");
+                AppendLine("{");
+                IncreaseIndent();
+                AppendLine("switch (pair.Code)");
+                AppendLine("{");
+                IncreaseIndent();
+                foreach (var propertyGroup in GetPropertiesAndPointers(item).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
+                {
+                    var code = propertyGroup.Key;
+                    if (propertyGroup.Count() == 1)
+                    {
+                        var property = propertyGroup.Single();
+                        var name = Name(property);
+                        var codes = GetCodeOverrides(property);
+                        if (codes != null)
+                        {
+                            var suffix = 'X';
+                            for (int i = 0; i < codes.Length; i++, suffix++)
+                            {
+                                AppendLine($"case {codes[i]}:");
+                                AppendLine($"    this.{name}.{suffix} = pair.DoubleValue;");
+                                AppendLine("    break;");
+                            }
+                        }
+                        else
+                        {
+                            var codeType = DxfCodePair.ExpectedType(code);
+                            var codeTypeValue = TypeToString(codeType);
+                            if (IsPointer(property))
+                            {
+                                name += AllowMultiples(property) ? "Pointers.Pointers" : "Pointer.Handle";
+                            }
+
+                            var assignCode = AllowMultiples(property)
+                                ? string.Format("this.{0}.Add(", name)
+                                : string.Format("this.{0} = ", name);
+                            var assignSuffix = AllowMultiples(property)
+                                ? ")"
+                                : "";
+                            var value = string.Format("{0}(pair.{1})", ReadConverter(property), codeTypeValue);
+                            if (IsPointer(property) && AllowMultiples(property))
+                            {
+                                value = "new DxfPointer(" + value + ")";
+                            }
+
+                            AppendLine($"case {code}:");
+                            AppendLine($"    {assignCode}{value}{assignSuffix};");
+                            AppendLine("    break;");
+                        }
+                    }
+                    else
+                    {
+                        AppendLine($"case {code}:");
+                        if (item.Name.LocalName == "Object" && code > 0)
+                        {
+                            IncreaseIndent();
+                            AppendLine($"switch (_code_{code}_index)");
+                            AppendLine("{");
+                            IncreaseIndent();
+                            for (int i = 0; i < propertyGroup.Count(); i++)
+                            {
+                                var property = propertyGroup.Skip(i).First();
+                                AppendLine($"case {i}:");
+                                AppendLine($"    this.{Name(property)} = {ReadConverter(property)}(pair.{TypeToString(DxfCodePair.ExpectedType(code))});");
+                                AppendLine($"    _code_{code}_index++;");
+                                AppendLine("    break;");
+                            }
+
+                            AppendLine("default:");
+                            AppendLine($"    Debug.Assert(false, \"Unexpected extra values for code {code}\");");
+                            AppendLine("    break;");
+                            DecreaseIndent();
+                            AppendLine("}");
+                            DecreaseIndent();
+                        }
+                        else
+                        {
+                            AppendLine($"    // code is custom-handled and shared by properties {string.Join(", ", propertyGroup.Select(p => Name(p)))}");
+                        }
+
+                        AppendLine("    break;");
+                    }
+                }
+
+                AppendLine("default:");
+                AppendLine("    return base.TrySetPair(pair);");
+                DecreaseIndent();
+                AppendLine("}"); // end switch
+                AppendLine();
+                AppendLine("return true;");
+                DecreaseIndent();
+                AppendLine("}"); // end method
+            }
+        }
+
+        public void AppendXData(XElement item)
+        {
+            if (HasXData(item))
+            {
+                AppendLine();
+                AppendLine("public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }");
+            }
+        }
+
         public string AttributeOrDefault(XElement xml, string attributeName, string defaultValue = null)
         {
             var att = xml.Attribute(attributeName);
@@ -103,6 +493,11 @@ namespace IxMilia.Dxf.Generator
         public bool GenerateReaderFunction(XElement entity)
         {
             return bool.Parse(AttributeOrDefault(entity, "GenerateReaderFunction", "true"));
+        }
+
+        public bool GenerateWriterFunction(XElement entity)
+        {
+            return bool.Parse(AttributeOrDefault(entity, "GenerateWriterFunction", "true"));
         }
 
         public int[] GetCodeOverrides(XElement property)
@@ -266,6 +661,11 @@ namespace IxMilia.Dxf.Generator
         public string Name(XElement property)
         {
             return property.Attribute("Name").Value;
+        }
+
+        public string ObjectType(XElement obj)
+        {
+            return obj.Attribute("ObjectType").Value;
         }
 
         public string Property(XElement flag)
@@ -450,7 +850,7 @@ namespace IxMilia.Dxf.Generator
             }
         }
 
-        public void CreateNewFile(string ns)
+        public void CreateNewFile(string ns, params string[] usings)
         {
             if (_sb != null)
             {
@@ -463,10 +863,11 @@ namespace IxMilia.Dxf.Generator
             AppendLine();
             AppendLine("// The contents of this file are automatically generated by a tool, and should not be directly modified.");
             AppendLine();
-            AppendLine("using System;");
-            AppendLine("using System.Collections.Generic;");
-            AppendLine("using System.Linq;");
-            AppendLine("using IxMilia.Dxf.Collections;");
+            foreach (var u in usings)
+            {
+                AppendLine($"using {u};");
+            }
+
             AppendLine();
             AppendLine($"namespace {ns}");
             AppendLine("{");

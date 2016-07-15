@@ -7,21 +7,28 @@ namespace IxMilia.Dxf.Generator
     public class Program
     {
         private const string EntityDirString = "--entityDir=";
+        private const string ObjectDirString = "--objectDir=";
 
         public static void Main(string[] args)
         {
             string entityDir = "Entities";
+            string objectDir = "Objects";
             foreach (var arg in args)
             {
                 if (arg.StartsWith(EntityDirString))
                 {
                     entityDir = arg.Substring(EntityDirString.Length);
                 }
+                else if (arg.StartsWith(ObjectDirString))
+                {
+                    objectDir = arg.Substring(ObjectDirString.Length);
+                }
             }
 
             Console.WriteLine($"Generating entities into: {entityDir}");
-            var generator = new EntityGenerator(entityDir);
-            generator.Run();
+            Console.WriteLine($"Generating objects into: {objectDir}");
+            new EntityGenerator(entityDir).Run();
+            new ObjectGenerator(objectDir).Run();
         }
     }
 }

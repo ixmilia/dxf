@@ -106,7 +106,7 @@ namespace IxMilia.Dxf.Entities
                     this._objectDrawingFormat = (uint)(pair.IntegerValue);
                     break;
                 case 310:
-                    // TODO: code is shared by properties GraphicsDataString, EntityDataString
+                    // code is custom-handled and shared by properties GraphicsDataString, EntityDataString
                     break;
                 case 330:
                     this.ObjectID1.Add((pair.StringValue));

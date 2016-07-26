@@ -159,6 +159,8 @@
   </Target>
   <Target Name="BeforeBuild">
     <Exec WorkingDirectory="$(GeneratorLocation)"
+          Command="dotnet restore" />
+    <Exec WorkingDirectory="$(GeneratorLocation)"
           Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)"' />
   </Target>
 </Project>

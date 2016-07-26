@@ -100,11 +100,6 @@
     <Compile Include="Sections\DxfClassesSection.cs" />
     <Compile Include="Sections\DxfEntitiesSection.cs" />
     <Compile Include="Sections\DxfHeader.cs" />
-    <Compile Include="Sections\DxfHeaderGenerated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DxfHeaderGenerated.tt</DependentUpon>
-    </Compile>
     <Compile Include="Sections\DxfHeaderSection.cs" />
     <Compile Include="Sections\DxfObjectsSection.cs" />
     <Compile Include="Sections\DxfSection.cs" />
@@ -125,21 +120,12 @@
     <!-- Generated files -->
     <Compile Include="Entities\Generated\*.cs" />
     <Compile Include="Objects\Generated\*.cs" />
+    <Compile Include="Sections\Generated\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DxfCommon.t4" />
     <None Include="MultipleOutputHelper.t4" />
     <None Include="project.json" />
-    <None Include="Sections\HeaderVariablesSpec.xml">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Sections\HeaderVariablesSpec.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Sections\DxfHeaderGenerated.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DxfHeaderGenerated.cs</LastGenOutput>
-    </None>
     <None Include="Tables\DxfTableGenerated.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DxfTableGenerated.cs</LastGenOutput>
@@ -161,15 +147,18 @@
     <GeneratorLocation>$(MSBuildThisFileDirectory)..\IxMilia.Dxf.Generator</GeneratorLocation>
     <EntitiesOutputLocation>$(MSBuildThisFileDirectory)Entities\Generated</EntitiesOutputLocation>
     <ObjectsOutputLocation>$(MSBuildThisFileDirectory)Objects\Generated</ObjectsOutputLocation>
+    <SectionsOutputLocation>$(MSBuildThisFileDirectory)Sections\Generated</SectionsOutputLocation>
   </PropertyGroup>
   <ItemGroup>
     <DirsToClean Include="$(EntitiesOutputLocation)" />
     <DirsToClean Include="$(ObjectsOutputLocation)" />
+    <DirsToClean Include="$(SectionsOutputLocation)" />
   </ItemGroup>
   <Target Name="BeforeClean">
     <RemoveDir Directories="@(DirsToClean)" />
   </Target>
   <Target Name="BeforeBuild">
-    <Exec Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)"' WorkingDirectory="$(GeneratorLocation)" />
+    <Exec WorkingDirectory="$(GeneratorLocation)"
+          Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)"' />
   </Target>
 </Project>

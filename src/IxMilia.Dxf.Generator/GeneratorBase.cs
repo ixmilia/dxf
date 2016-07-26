@@ -636,6 +636,11 @@ namespace IxMilia.Dxf.Generator
             return bool.Parse(AttributeOrDefault(xml, "HasXData", "false"));
         }
 
+        public string Identifier(string value)
+        {
+            return value[0] >= '0' && value[0] <= '9' ? "_" + value : value;
+        }
+
         public bool IsPointer(XElement entity)
         {
             return entity.Name.LocalName == "Pointer";
@@ -703,6 +708,12 @@ namespace IxMilia.Dxf.Generator
         {
             var value = entity.Attribute("SubclassMarker").Value;
             return value == "null" ? null : value;
+        }
+
+        public bool SuppressWriting(XElement property)
+        {
+            var att = property.Attribute("SuppressWriting");
+            return att != null && bool.Parse(att.Value);
         }
 
         public string Tag(XElement entity)

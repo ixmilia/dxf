@@ -24,7 +24,7 @@ namespace IxMilia.Dxf.Generator
 
         public void Run()
         {
-            _xml = XDocument.Load("ObjectsSpec.xml").Root;
+            _xml = XDocument.Load("Specs\\ObjectsSpec.xml").Root;
             _xmlns = _xml.Name.NamespaceName;
             _objects = _xml.Elements(XName.Get("Object", _xmlns)).Where(x => x.Attribute("Name").Value != "DxfObject");
 

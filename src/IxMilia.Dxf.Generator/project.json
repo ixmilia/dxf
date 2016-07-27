@@ -2,9 +2,6 @@
   "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable",
-    "define": [
-      "DXF"
-    ],
     "emitEntryPoint": true,
     "compile": {
       "include": "**\\*.cs",
@@ -13,14 +10,20 @@
       ]
     },
     "copyToOutput": [
-      "EntitiesSpec.xml",
-      "HeaderVariablesSpec.xml",
-      "ObjectsSpec.xml",
-      "TableSpec.xml"
+      "Specs\\EntitiesSpec.xml",
+      "Specs\\HeaderVariablesSpec.xml",
+      "Specs\\ObjectsSpec.xml",
+      "Specs\\TableSpec.xml"
     ]
   },
   "dependencies": {},
   "frameworks": {
+    ".NETFramework,Version=v4.5": {
+      "frameworkAssemblies": {
+        "System.Xml": "",
+        "System.Xml.Linq": ""
+      }
+    },
     "netcoreapp1.0": {
       "dependencies": {
         "Microsoft.NETCore.App": {
@@ -30,5 +33,8 @@
       },
       "imports": "dnxcore50"
     }
+  },
+  "runtimes": {
+    "win": {}
   }
 }

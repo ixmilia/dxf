@@ -24,7 +24,7 @@ namespace IxMilia.Dxf.Generator
 
         public void Run()
         {
-            _xml = XDocument.Load("EntitiesSpec.xml").Root;
+            _xml = XDocument.Load("Specs\\EntitiesSpec.xml").Root;
             _xmlns = _xml.Name.NamespaceName;
             _entities = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => x.Attribute("Name").Value != "DxfEntity");
 

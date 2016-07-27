@@ -14,13 +14,19 @@
     <AssemblyName>IxMilia.Dxf</AssemblyName>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <DefineConstants>$(DefineConstants);DXF</DefineConstants>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <ItemGroup Label="Project References">
+    <ProjectReference Include="..\IxMilia.Dxf.Generator\IxMilia.Dxf.Generator.csproj">
+      <Project>{34D31EC8-883B-4C37-AF98-A4BD5D0E2D3B}</Project>
+      <Name>IxMilia.Dxf.Generator</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Blocks\DxfBlock.DxfEndBlock.cs" />
     <Compile Include="Collections\DxfPointerList.cs" />

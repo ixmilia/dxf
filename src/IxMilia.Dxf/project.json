@@ -11,10 +11,6 @@
     "requireLicenseAcceptance": false,
     "tags": [ "AutoCAD", "CAD", "DXB", "DXF" ]
   },
-
-  "buildOptions": {
-    "define": [ "DXF" ]
-  },
   "frameworks": {
     "netstandard1.0": {
       "dependencies": {

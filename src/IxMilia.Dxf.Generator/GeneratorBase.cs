@@ -441,9 +441,25 @@ namespace IxMilia.Dxf.Generator
             return char.ToLower(value[0]) + value.Substring(1);
         }
 
+        public string ClassName(XElement xml)
+        {
+            return AttributeOrDefault(xml, "ClassName");
+        }
+
         public int Code(XElement property)
         {
             return int.Parse(property.Attribute("Code").Value);
+        }
+
+        public int[] CodeOverrides(XElement xml)
+        {
+            var text = AttributeOrDefault(xml, "CodeOverrides");
+            if (text == null)
+            {
+                return null;
+            }
+
+            return text.Split(",".ToCharArray()).Select(i => int.Parse(i)).ToArray();
         }
 
         public string Comment(XElement xml)
@@ -631,6 +647,11 @@ namespace IxMilia.Dxf.Generator
             return lines;
         }
 
+        public bool HasFlags(XElement xml)
+        {
+            return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true"));
+        }
+
         public bool HasXData(XElement xml)
         {
             return bool.Parse(AttributeOrDefault(xml, "HasXData", "false"));
@@ -716,6 +737,11 @@ namespace IxMilia.Dxf.Generator
             return att != null && bool.Parse(att.Value);
         }
 
+        public string TableClassName(XElement table)
+        {
+            return AttributeOrDefault(table, "TableClassName");
+        }
+
         public string Tag(XElement entity)
         {
             var att = entity.Attribute("Tag");
@@ -736,6 +762,11 @@ namespace IxMilia.Dxf.Generator
             }
 
             return typeString;
+        }
+
+        public string TypeStringVariable(XElement entity)
+        {
+            return entity.Attribute("TypeStringVariable").Value;
         }
 
         public string TypeToString(Type type)

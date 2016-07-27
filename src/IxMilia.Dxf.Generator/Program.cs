@@ -9,12 +9,14 @@ namespace IxMilia.Dxf.Generator
         private const string EntityDirString = "--entityDir=";
         private const string ObjectDirString = "--objectDir=";
         private const string SectionDirString = "--sectionDir=";
+        private const string TableDirString = "--tableDir=";
 
         public static void Main(string[] args)
         {
             string entityDir = "Entities";
             string objectDir = "Objects";
             string sectionDir = "Sections";
+            string tableDir = "Tables";
             foreach (var arg in args)
             {
                 if (arg.StartsWith(EntityDirString))
@@ -29,14 +31,20 @@ namespace IxMilia.Dxf.Generator
                 {
                     sectionDir = arg.Substring(SectionDirString.Length);
                 }
+                else if (arg.StartsWith(TableDirString))
+                {
+                    tableDir = arg.Substring(TableDirString.Length);
+                }
             }
 
             Console.WriteLine($"Generating entities into: {entityDir}");
             Console.WriteLine($"Generating objects into: {objectDir}");
             Console.WriteLine($"Generating sections into: {sectionDir}");
+            Console.WriteLine($"Generating tables into: {tableDir}");
             new EntityGenerator(entityDir).Run();
             new ObjectGenerator(objectDir).Run();
             new SectionGenerator(sectionDir).Run();
+            new TableGenerator(tableDir).Run();
         }
     }
 }

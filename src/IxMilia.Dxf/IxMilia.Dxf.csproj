@@ -108,11 +108,6 @@
     <Compile Include="Sections\DxfThumbnailImageSection.cs" />
     <Compile Include="Tables\DxfSymbolTableFlags.cs" />
     <Compile Include="Tables\DxfTable.cs" />
-    <Compile Include="Tables\DxfTableGenerated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DxfTableGenerated.tt</DependentUpon>
-    </Compile>
     <Compile Include="Tables\DxfTableItems.cs" />
     <Compile Include="Tables\DxfTableType.cs" />
     <Compile Include="Tables\DxfViewMode.cs" />
@@ -121,21 +116,10 @@
     <Compile Include="Entities\Generated\*.cs" />
     <Compile Include="Objects\Generated\*.cs" />
     <Compile Include="Sections\Generated\*.cs" />
+    <Compile Include="Tables\Generated\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DxfCommon.t4" />
-    <None Include="MultipleOutputHelper.t4" />
     <None Include="project.json" />
-    <None Include="Tables\DxfTableGenerated.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DxfTableGenerated.cs</LastGenOutput>
-    </None>
-    <None Include="Tables\TableSpec.xml">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Tables\TableSpec.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -148,11 +132,13 @@
     <EntitiesOutputLocation>$(MSBuildThisFileDirectory)Entities\Generated</EntitiesOutputLocation>
     <ObjectsOutputLocation>$(MSBuildThisFileDirectory)Objects\Generated</ObjectsOutputLocation>
     <SectionsOutputLocation>$(MSBuildThisFileDirectory)Sections\Generated</SectionsOutputLocation>
+    <TablesOutputLocation>$(MSBuildThisFileDirectory)Tables\Generated</TablesOutputLocation>
   </PropertyGroup>
   <ItemGroup>
     <DirsToClean Include="$(EntitiesOutputLocation)" />
     <DirsToClean Include="$(ObjectsOutputLocation)" />
     <DirsToClean Include="$(SectionsOutputLocation)" />
+    <DirsToClean Include="$(TablesOutputLocation)" />
   </ItemGroup>
   <Target Name="BeforeClean">
     <RemoveDir Directories="@(DirsToClean)" />
@@ -161,6 +147,6 @@
     <Exec WorkingDirectory="$(GeneratorLocation)"
           Command="dotnet restore" />
     <Exec WorkingDirectory="$(GeneratorLocation)"
-          Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)"' />
+          Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)" "--tableDir=$(TablesOutputLocation)"' />
   </Target>
 </Project>

@@ -15,7 +15,8 @@
     "copyToOutput": [
       "EntitiesSpec.xml",
       "HeaderVariablesSpec.xml",
-      "ObjectsSpec.xml"
+      "ObjectsSpec.xml",
+      "TableSpec.xml"
     ]
   },
   "dependencies": {},

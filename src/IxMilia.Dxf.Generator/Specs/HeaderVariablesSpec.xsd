@@ -36,6 +36,7 @@
         <xs:complexType>
             <xs:attribute name="Name" type="xs:string" use="required" />
             <xs:attribute name="Mask" type="xs:int" use="required" />
+            <xs:attribute name="Comment" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
 
@@ -57,6 +58,7 @@
             <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
             <xs:attribute name="SuppressWriting" type="xs:boolean" use="optional" />
             <xs:attribute name="DontWriteDefault" type="xs:boolean" use="optional" />
+            <xs:attribute name="Comment" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
 

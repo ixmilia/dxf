@@ -65,9 +65,22 @@ namespace IxMilia.Dxf.Generator
                 if (!seenProperties.Contains(propertyName))
                 {
                     seenProperties.Add(propertyName); // don't write duplicate properties
+                    var comment = $"/// {$"The ${Name(property)} header variable.  {Comment(property)}"}";
+                    var minVersion = MinVersion(property);
+                    if (minVersion != null)
+                    {
+                        comment += $"  Minimum AutoCAD version: {minVersion}.";
+                    }
+
+                    var maxVersion = MaxVersion(property);
+                    if (maxVersion != null)
+                    {
+                        comment += $"  Maximum AutoCAD version: {maxVersion}.";
+                    }
+
                     AppendLine();
                     AppendLine("/// <summary>");
-                    AppendLine($"/// The ${Name(property)} header variable.");
+                    AppendLine(comment);
                     AppendLine("/// </summary>");
                     AppendLine($"public {Type(property)} {Property(property)} {{ get; set; }}");
                 }
@@ -267,6 +280,22 @@ namespace IxMilia.Dxf.Generator
                     foreach (var flag in flags)
                     {
                         AppendLine();
+                        var comment = Comment(flag);
+                        var minVersion = MinVersion(property);
+                        if (minVersion != null)
+                        {
+                            comment += $"  Minimum AutoCAD version: {minVersion}.";
+                        }
+
+                        var maxVersion = MaxVersion(property);
+                        if (maxVersion != null)
+                        {
+                            comment += $"  Maximum AutoCAD version: {maxVersion}.";
+                        }
+
+                        AppendLine("/// <summary>");
+                        AppendLine($"/// {Comment(flag)}");
+                        AppendLine("/// </summary>");
                         AppendLine($"public bool {Name(flag)}");
                         AppendLine("{");
                         AppendLine($"    get {{ return DxfHelpers.GetFlag({Property(property)}, {Mask(flag)}); }}");

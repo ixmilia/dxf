@@ -291,1377 +291,1377 @@ namespace IxMilia.Dxf
         private const string VIEWSIZE = "$VIEWSIZE";
 
         /// <summary>
-        /// The $ACADVER header variable.
+        /// The $ACADVER header variable.  The AutoCAD drawing database version number.
         /// </summary>
         public DxfAcadVersion Version { get; set; }
 
         /// <summary>
-        /// The $ACADMAINTVER header variable.
+        /// The $ACADMAINTVER header variable.  Maintenance version number (should be ignored).  Minimum AutoCAD version: R14.
         /// </summary>
         public short MaintenenceVersion { get; set; }
 
         /// <summary>
-        /// The $DWGCODEPAGE header variable.
+        /// The $DWGCODEPAGE header variable.  Drawing code page; set to the system code page when a new drawing is created, but not otherwise maintained by AutoCAD.  Minimum AutoCAD version: R13.
         /// </summary>
         public string DrawingCodePage { get; set; }
 
         /// <summary>
-        /// The $LASTSAVEDBY header variable.
+        /// The $LASTSAVEDBY header variable.  Name of the last user to modify the file.  Minimum AutoCAD version: R2004.
         /// </summary>
         public string LastSavedBy { get; set; }
 
         /// <summary>
-        /// The $REQUIREDVERSIONS header variable.
+        /// The $REQUIREDVERSIONS header variable.  Unknown.  Minimum AutoCAD version: R2013.
         /// </summary>
         public long RequiredVersions { get; set; }
 
         /// <summary>
-        /// The $INSBASE header variable.
+        /// The $INSBASE header variable.  Insertion base set by BASE command (in WCS).
         /// </summary>
         public DxfPoint InsertionBase { get; set; }
 
         /// <summary>
-        /// The $EXTMIN header variable.
+        /// The $EXTMIN header variable.  X, Y, and Z drawing extents lower-left corner (in WCS).
         /// </summary>
         public DxfPoint MinimumDrawingExtents { get; set; }
 
         /// <summary>
-        /// The $EXTMAX header variable.
+        /// The $EXTMAX header variable.  X, Y, and Z drawing extents upper-right corner (in WCS).
         /// </summary>
         public DxfPoint MaximumDrawingExtents { get; set; }
 
         /// <summary>
-        /// The $LIMMIN header variable.
+        /// The $LIMMIN header variable.  XY drawing limits lower-left corner (in WCS).
         /// </summary>
         public DxfPoint MinimumDrawingLimits { get; set; }
 
         /// <summary>
-        /// The $LIMMAX header variable.
+        /// The $LIMMAX header variable.  XY drawing limits upper-right corner (in WCS).
         /// </summary>
         public DxfPoint MaximumDrawingLimits { get; set; }
 
         /// <summary>
-        /// The $ORTHOMODE header variable.
+        /// The $ORTHOMODE header variable.  Ortho mode on.
         /// </summary>
         public bool DrawOrthoganalLines { get; set; }
 
         /// <summary>
-        /// The $REGENMODE header variable.
+        /// The $REGENMODE header variable.  REGENAUTO mode on.
         /// </summary>
         public bool UseRegenMode { get; set; }
 
         /// <summary>
-        /// The $FILLMODE header variable.
+        /// The $FILLMODE header variable.  Fill mode on.
         /// </summary>
         public bool FillModeOn { get; set; }
 
         /// <summary>
-        /// The $QTEXTMODE header variable.
+        /// The $QTEXTMODE header variable.  Quick text mode on.
         /// </summary>
         public bool UseQuickTextMode { get; set; }
 
         /// <summary>
-        /// The $MIRRTEXT header variable.
+        /// The $MIRRTEXT header variable.  Mirror text.
         /// </summary>
         public bool MirrorText { get; set; }
 
         /// <summary>
-        /// The $DRAGMODE header variable.
+        /// The $DRAGMODE header variable.  Controls the way dragged objects are displayed.  Maximum AutoCAD version: R14.
         /// </summary>
         public DxfDragMode DragMode { get; set; }
 
         /// <summary>
-        /// The $LTSCALE header variable.
+        /// The $LTSCALE header variable.  Global linetype scale.
         /// </summary>
         public double LinetypeScale { get; set; }
 
         /// <summary>
-        /// The $OSMODE header variable.
+        /// The $OSMODE header variable.  Running object snap modes.  Maximum AutoCAD version: R14.
         /// </summary>
         public int ObjectSnapFlags { get; set; }
 
         /// <summary>
-        /// The $ATTMODE header variable.
+        /// The $ATTMODE header variable.  Attribute visibility.
         /// </summary>
         public DxfAttributeVisibility AttributeVisibility { get; set; }
 
         /// <summary>
-        /// The $TEXTSIZE header variable.
+        /// The $TEXTSIZE header variable.  Default text height.
         /// </summary>
         public double DefaultTextHeight { get; set; }
 
         /// <summary>
-        /// The $TRACEWID header variable.
+        /// The $TRACEWID header variable.  Default trace width.
         /// </summary>
         public double TraceWidth { get; set; }
 
         /// <summary>
-        /// The $TEXTSTYLE header variable.
+        /// The $TEXTSTYLE header variable.  Current text style name.
         /// </summary>
         public string TextStyle { get; set; }
 
         /// <summary>
-        /// The $CLAYER header variable.
+        /// The $CLAYER header variable.  Current layer name.
         /// </summary>
         public string CurrentLayer { get; set; }
 
         /// <summary>
-        /// The $CELTYPE header variable.
+        /// The $CELTYPE header variable.  Entity linetype name, or BYBLOCK or BYLAYER.
         /// </summary>
         public string CurrentEntityLinetype { get; set; }
 
         /// <summary>
-        /// The $CECOLOR header variable.
+        /// The $CECOLOR header variable.  Current entity color.
         /// </summary>
         public DxfColor CurrentEntityColor { get; set; }
 
         /// <summary>
-        /// The $CELTSCALE header variable.
+        /// The $CELTSCALE header variable.  Current entity linetype scale.  Minimum AutoCAD version: R13.
         /// </summary>
         public double CurrentEntityLinetypeScale { get; set; }
 
         /// <summary>
-        /// The $DELOBJ header variable.
+        /// The $DELOBJ header variable.  Controls object deletion.  Minimum AutoCAD version: R13.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool RetainDeletedObjects { get; set; }
 
         /// <summary>
-        /// The $DISPSILH header variable.
+        /// The $DISPSILH header variable.  Controls the display of silhouette curves of body objects in wireframe mode.  Minimum AutoCAD version: R13.
         /// </summary>
         public bool DisplaySilhouetteCurvesInWireframeMode { get; set; }
 
         /// <summary>
-        /// The $DIMSCALE header variable.
+        /// The $DIMSCALE header variable.  Overall dimensioning scale factor.
         /// </summary>
         public double DimensioningScaleFactor { get; set; }
 
         /// <summary>
-        /// The $DIMASZ header variable.
+        /// The $DIMASZ header variable.  Dimensioning arrow size.
         /// </summary>
         public double DimensioningArrowSize { get; set; }
 
         /// <summary>
-        /// The $DIMEXO header variable.
+        /// The $DIMEXO header variable.  Extension line offset.
         /// </summary>
         public double DimensionExtensionLineOffset { get; set; }
 
         /// <summary>
-        /// The $DIMDLI header variable.
+        /// The $DIMDLI header variable.  Dimension line increment.
         /// </summary>
         public double DimensionLineIncrement { get; set; }
 
         /// <summary>
-        /// The $DIMRND header variable.
+        /// The $DIMRND header variable.  Rounding value for dimension distances.
         /// </summary>
         public double DimensionDistanceRoundingValue { get; set; }
 
         /// <summary>
-        /// The $DIMDLE header variable.
+        /// The $DIMDLE header variable.  Dimension line extension.
         /// </summary>
         public double DimensionLineExtension { get; set; }
 
         /// <summary>
-        /// The $DIMEXE header variable.
+        /// The $DIMEXE header variable.  Extension line extension.
         /// </summary>
         public double DimensionExtensionLineExtension { get; set; }
 
         /// <summary>
-        /// The $DIMTP header variable.
+        /// The $DIMTP header variable.  Plus tolerance.
         /// </summary>
         public double DimensionPlusTolerance { get; set; }
 
         /// <summary>
-        /// The $DIMTM header variable.
+        /// The $DIMTM header variable.  Minus tolerance.
         /// </summary>
         public double DimensionMinusTolerance { get; set; }
 
         /// <summary>
-        /// The $DIMTXT header variable.
+        /// The $DIMTXT header variable.  Dimensioning text height.
         /// </summary>
         public double DimensioningTextHeight { get; set; }
 
         /// <summary>
-        /// The $DIMCEN header variable.
+        /// The $DIMCEN header variable.  Size of center mark/lines.
         /// </summary>
         public double CenterMarkSize { get; set; }
 
         /// <summary>
-        /// The $DIMTSZ header variable.
+        /// The $DIMTSZ header variable.  Dimensioning tick size.
         /// </summary>
         public double DimensioningTickSize { get; set; }
 
         /// <summary>
-        /// The $DIMTOL header variable.
+        /// The $DIMTOL header variable.  Dimension tolerances generated.
         /// </summary>
         public bool GenerateDimensionTolerances { get; set; }
 
         /// <summary>
-        /// The $DIMLIM header variable.
+        /// The $DIMLIM header variable.  Dimension limits generated.
         /// </summary>
         public bool GenerateDimensionLimits { get; set; }
 
         /// <summary>
-        /// The $DIMTIH header variable.
+        /// The $DIMTIH header variable.  Text inside horizontal.
         /// </summary>
         public bool DimensionTextInsideHorizontal { get; set; }
 
         /// <summary>
-        /// The $DIMTOH header variable.
+        /// The $DIMTOH header variable.  Text outside horizontal.
         /// </summary>
         public bool DimensionTextOutsideHorizontal { get; set; }
 
         /// <summary>
-        /// The $DIMSE1 header variable.
+        /// The $DIMSE1 header variable.  Suppression of first extension line.  Minimum AutoCAD version: R12.
         /// </summary>
         public bool SuppressFirstDimensionExtensionLine { get; set; }
 
         /// <summary>
-        /// The $DIMSE2 header variable.
+        /// The $DIMSE2 header variable.  Suppression of second extension line.  Minimum AutoCAD version: R12.
         /// </summary>
         public bool SuppressSecondDimensionExtensionLine { get; set; }
 
         /// <summary>
-        /// The $DIMTAD header variable.
+        /// The $DIMTAD header variable.  Text above dimension line.
         /// </summary>
         public bool TextAboveDimensionLine { get; set; }
 
         /// <summary>
-        /// The $DIMZIN header variable.
+        /// The $DIMZIN header variable.  Controls suppression of zeros for primary unit values.
         /// </summary>
         public DxfUnitZeroSuppression DimensionUnitZeroSuppression { get; set; }
 
         /// <summary>
-        /// The $DIMBLK header variable.
+        /// The $DIMBLK header variable.  Arrow block name.
         /// </summary>
         public string ArrowBlockName { get; set; }
 
         /// <summary>
-        /// The $DIMASO header variable.
+        /// The $DIMASO header variable.  Controls associative dimensioning.
         /// </summary>
         public bool CreateAssociativeDimensioning { get; set; }
 
         /// <summary>
-        /// The $DIMSHO header variable.
+        /// The $DIMSHO header variable.  Recompute dimensions while dragging.
         /// </summary>
         public bool RecomputeDimensionsWhileDragging { get; set; }
 
         /// <summary>
-        /// The $DIMPOST header variable.
+        /// The $DIMPOST header variable.  General dimensioning suffix.
         /// </summary>
         public string DimensioningSuffix { get; set; }
 
         /// <summary>
-        /// The $DIMAPOST header variable.
+        /// The $DIMAPOST header variable.  Alternate dimensioning suffix.
         /// </summary>
         public string AlternateDimensioningSuffix { get; set; }
 
         /// <summary>
-        /// The $DIMALT header variable.
+        /// The $DIMALT header variable.  Alternate unit dimensioning performed.
         /// </summary>
         public bool UseAlternateDimensioning { get; set; }
 
         /// <summary>
-        /// The $DIMALTD header variable.
+        /// The $DIMALTD header variable.  Alternate unit decimal places.
         /// </summary>
         public short AlternateDimensioningDecimalPlaces { get; set; }
 
         /// <summary>
-        /// The $DIMALTF header variable.
+        /// The $DIMALTF header variable.  Alternate unit scale factor.
         /// </summary>
         public double AlternateDimensioningScaleFactor { get; set; }
 
         /// <summary>
-        /// The $DIMLFAC header variable.
+        /// The $DIMLFAC header variable.  Linear measurements scale factor.
         /// </summary>
         public double DimensionLinearMeasurementsScaleFactor { get; set; }
 
         /// <summary>
-        /// The $DIMTOFL header variable.
+        /// The $DIMTOFL header variable.  If text is outside extensions, force line extensions between extensions.
         /// </summary>
         public bool ForceDimensionLineExtensionsOutsideIfTextIs { get; set; }
 
         /// <summary>
-        /// The $DIMTVP header variable.
+        /// The $DIMTVP header variable.  Text vertical position.
         /// </summary>
         public double DimensionVerticalTextPosition { get; set; }
 
         /// <summary>
-        /// The $DIMTIX header variable.
+        /// The $DIMTIX header variable.  Force text inside extensions.
         /// </summary>
         public bool ForceDimensionTextInsideExtensions { get; set; }
 
         /// <summary>
-        /// The $DIMSOXD header variable.
+        /// The $DIMSOXD header variable.  Suppress outside-extensions dimension lines.
         /// </summary>
         public bool SuppressOutsideExtensionDimensionLines { get; set; }
 
         /// <summary>
-        /// The $DIMSAH header variable.
+        /// The $DIMSAH header variable.  Use separate arrow blocks.
         /// </summary>
         public bool UseSeparateArrowBlocksForDimensions { get; set; }
 
         /// <summary>
-        /// The $DIMBLK1 header variable.
+        /// The $DIMBLK1 header variable.  First arrow block name.
         /// </summary>
         public string FirstArrowBlockName { get; set; }
 
         /// <summary>
-        /// The $DIMBLK2 header variable.
+        /// The $DIMBLK2 header variable.  Second arrow block name.
         /// </summary>
         public string SecondArrowBlockName { get; set; }
 
         /// <summary>
-        /// The $DIMSTYLE header variable.
+        /// The $DIMSTYLE header variable.  Dimension style name.
         /// </summary>
         public string DimensionStyleName { get; set; }
 
         /// <summary>
-        /// The $DIMCLRD header variable.
+        /// The $DIMCLRD header variable.  Dimension line color.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfColor DimensionLineColor { get; set; }
 
         /// <summary>
-        /// The $DIMCLRE header variable.
+        /// The $DIMCLRE header variable.  Dimension extension line color.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfColor DimensionExtensionLineColor { get; set; }
 
         /// <summary>
-        /// The $DIMCLRT header variable.
+        /// The $DIMCLRT header variable.  Dimension text color.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfColor DimensionTextColor { get; set; }
 
         /// <summary>
-        /// The $DIMTFAC header variable.
+        /// The $DIMTFAC header variable.  Dimension tolerance display factor.  Minimum AutoCAD version: R12.
         /// </summary>
         public double DimensionToleranceDisplayScaleFactor { get; set; }
 
         /// <summary>
-        /// The $DIMGAP header variable.
+        /// The $DIMGAP header variable.  Dimension line gap.  Minimum AutoCAD version: R11.
         /// </summary>
         public double DimensionLineGap { get; set; }
 
         /// <summary>
-        /// The $DIMJUST header variable.
+        /// The $DIMJUST header variable.  Horizontal dimension text position.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfDimensionTextJustification DimensionTextJustification { get; set; }
 
         /// <summary>
-        /// The $DIMTOLJ header variable.
+        /// The $DIMTOLJ header variable.  Vertical justification for tolerance values.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfJustification DimensionToleranceVerticalJustification { get; set; }
 
         /// <summary>
-        /// The $DIMTZIN header variable.
+        /// The $DIMTZIN header variable.  Controls suppression of zeros for tolerance values.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfUnitZeroSuppression DimensionToleranceZeroSuppression { get; set; }
 
         /// <summary>
-        /// The $DIMALTZ header variable.
+        /// The $DIMALTZ header variable.  Controls suppression of zeros for alternate unit dimension values.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfUnitZeroSuppression AlternateDimensioningZeroSupression { get; set; }
 
         /// <summary>
-        /// The $DIMALTTZ header variable.
+        /// The $DIMALTTZ header variable.  Controls suppression of zeros for alternate tolerance values.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfUnitZeroSuppression AlternateDimensioningToleranceZeroSupression { get; set; }
 
         /// <summary>
-        /// The $DIMFIT header variable.
+        /// The $DIMFIT header variable.  Placement of text and arrowheads.  Minimum AutoCAD version: R13.  Maximum AutoCAD version: R14.
         /// </summary>
         public DxfDimensionFit DimensionTextAndArrowPlacement { get; set; }
 
         /// <summary>
-        /// The $DIMUPT header variable.
+        /// The $DIMUPT header variable.  Cursor functionality for user-positioned text.  Minimum AutoCAD version: R13.
         /// </summary>
         public bool DimensionCursorControlsTextPosition { get; set; }
 
         /// <summary>
-        /// The $DIMUNIT header variable.
+        /// The $DIMUNIT header variable.  Units format for all dimension style family members except angular.  Minimum AutoCAD version: R13.  Maximum AutoCAD version: R14.
         /// </summary>
         public DxfUnitFormat DimensionUnitFormat { get; set; }
 
         /// <summary>
-        /// The $DIMDEC header variable.
+        /// The $DIMDEC header variable.  Number of decimal places for the tolerance values of a primary units dimension.  Minimum AutoCAD version: R13.
         /// </summary>
         public short DimensionUnitToleranceDecimalPlaces { get; set; }
 
         /// <summary>
-        /// The $DIMTDEC header variable.
+        /// The $DIMTDEC header variable.  Number of decimal places to display the tolerance values.  Minimum AutoCAD version: R13.
         /// </summary>
         public short DimensionToleranceDecimalPlaces { get; set; }
 
         /// <summary>
-        /// The $DIMALTU header variable.
+        /// The $DIMALTU header variable.  Units format for alternate units of all dimension style family members except angular.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfUnitFormat AlternateDimensioningUnits { get; set; }
 
         /// <summary>
-        /// The $DIMALTTD header variable.
+        /// The $DIMALTTD header variable.  Number of decimal places for tolerance values of an alternate units dimension.  Minimum AutoCAD version: R13.
         /// </summary>
         public short AlternateDimensioningToleranceDecimalPlaces { get; set; }
 
         /// <summary>
-        /// The $DIMTXSTY header variable.
+        /// The $DIMTXSTY header variable.  Dimension text style.  Minimum AutoCAD version: R13.
         /// </summary>
         public string DimensionTextStyle { get; set; }
 
         /// <summary>
-        /// The $DIMAUNIT header variable.
+        /// The $DIMAUNIT header variable.  Angle format for angular dimensions.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfAngleFormat DimensioningAngleFormat { get; set; }
 
         /// <summary>
-        /// The $DIMADEC header variable.
+        /// The $DIMADEC header variable.  Number of precision places displayed in angular dimensions.  Minimum AutoCAD version: R2000.
         /// </summary>
         public short AngularDimensionPrecision { get; set; }
 
         /// <summary>
-        /// The $DIMALTRND header variable.
+        /// The $DIMALTRND header variable.  Determines rounding of alternate units.  Minimum AutoCAD version: R2000.
         /// </summary>
         public double AlternateDimensioningUnitRounding { get; set; }
 
         /// <summary>
-        /// The $DIMAZIN header variable.
+        /// The $DIMAZIN header variable.  Controls suppression of zeros for angular dimensions.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfUnitZeroSuppression DimensionAngleZeroSuppression { get; set; }
 
         /// <summary>
-        /// The $DIMDSEP header variable.
+        /// The $DIMDSEP header variable.  Single-character decimal separator used when creating dimensions whose unit format is decimal.  Minimum AutoCAD version: R2000.
         /// </summary>
         public char DimensionDecimalSeparatorChar { get; set; }
 
         /// <summary>
-        /// The $DIMFRAC header variable.
+        /// The $DIMFRAC header variable.  Sets the fraction format when DIMLUNIT is set to Architectural or Fractional.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfDimensionFractionFormat DimensionTextHeightScaleFactor { get; set; }
 
         /// <summary>
-        /// The $DIMLDRBLK header variable.
+        /// The $DIMLDRBLK header variable.  Arrow block name for leaders.  Minimum AutoCAD version: R2000.
         /// </summary>
         public string DimensionLeaderBlockName { get; set; }
 
         /// <summary>
-        /// The $DIMLUNIT header variable.
+        /// The $DIMLUNIT header variable.  Sets units for all dimension types except angular.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfNonAngularUnits DimensionNonAngularUnits { get; set; }
 
         /// <summary>
-        /// The $DIMLWD header variable.
+        /// The $DIMLWD header variable.  Dimension line lineweight.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfLineWeight DimensionLineWeight { get; set; }
 
         /// <summary>
-        /// The $DIMLWE header variable.
+        /// The $DIMLWE header variable.  Extension line lineweight.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfLineWeight DimensionExtensionLineWeight { get; set; }
 
         /// <summary>
-        /// The $DIMTMOVE header variable.
+        /// The $DIMTMOVE header variable.  Dimension text movement rules.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfDimensionTextMovementRule DimensionTextMovementRule { get; set; }
 
         /// <summary>
-        /// The $DIMFXL header variable.
+        /// The $DIMFXL header variable.  Sets the total length of the extension lines starting from the dimension line toward the dimension origin.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double DimensionLineFixedLength { get; set; }
 
         /// <summary>
-        /// The $DIMFXLON header variable.
+        /// The $DIMFXLON header variable.  Controls whether extension lines are set to a fixed length.  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool DimensionLineFixedLengthOn { get; set; }
 
         /// <summary>
-        /// The $DIMJOGANG header variable.
+        /// The $DIMJOGANG header variable.  Determines the angle of the transverse segment of the dimension line in a jogged radius dimension.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double DimensionTransverseSegmentAngleInJoggedRadius { get; set; }
 
         /// <summary>
-        /// The $DIMTFILL header variable.
+        /// The $DIMTFILL header variable.  Controls the background of dimension text.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfDimensionTextBackgroundColorMode DimensionTextBackgroundColorMode { get; set; }
 
         /// <summary>
-        /// The $DIMTFILLCLR header variable.
+        /// The $DIMTFILLCLR header variable.  Sets the color for the text background in dimensions.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfColor DxfDimensionTextBackgroundCustomColor { get; set; }
 
         /// <summary>
-        /// The $DIMARCSYM header variable.
+        /// The $DIMARCSYM header variable.  Controls the display of the arc symbol in an arc length dimension.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfDimensionArcSymbolDisplayMode DimensionArcSymbolDisplayMode { get; set; }
 
         /// <summary>
-        /// The $DIMLTYPE header variable.
+        /// The $DIMLTYPE header variable.  Sets the linetype of the dimension line.  Minimum AutoCAD version: R2007.
         /// </summary>
         public string DimensionLineType { get; set; }
 
         /// <summary>
-        /// The $DIMLTEX1 header variable.
+        /// The $DIMLTEX1 header variable.  Sets the linetype of the first extension line.  Minimum AutoCAD version: R2007.
         /// </summary>
         public string DimensionFirstExtensionLineType { get; set; }
 
         /// <summary>
-        /// The $DIMLTEX2 header variable.
+        /// The $DIMLTEX2 header variable.  Sets the linetype of the second extension line.  Minimum AutoCAD version: R2007.
         /// </summary>
         public string DimensionSecondExtensionLineType { get; set; }
 
         /// <summary>
-        /// The $DIMTXTDIRECTION header variable.
+        /// The $DIMTXTDIRECTION header variable.  Specifies the reading direction of the dimension text.  Minimum AutoCAD version: R2010.
         /// </summary>
         public DxfTextDirection DimensionTextDirection { get; set; }
 
         /// <summary>
-        /// The $LUNITS header variable.
+        /// The $LUNITS header variable.  Units format for coordinates and distances.
         /// </summary>
         public DxfUnitFormat UnitFormat { get; set; }
 
         /// <summary>
-        /// The $LUPREC header variable.
+        /// The $LUPREC header variable.  Units precision for coordinates and distances.
         /// </summary>
         public short UnitPrecision { get; set; }
 
         /// <summary>
-        /// The $SKETCHINC header variable.
+        /// The $SKETCHINC header variable.  Sketch record increment.
         /// </summary>
         public double SketchRecordIncrement { get; set; }
 
         /// <summary>
-        /// The $FILLETRAD header variable.
+        /// The $FILLETRAD header variable.  Fillet radius.
         /// </summary>
         public double FilletRadius { get; set; }
 
         /// <summary>
-        /// The $AUNITS header variable.
+        /// The $AUNITS header variable.  Units format for angles.
         /// </summary>
         public DxfAngleFormat AngleUnitFormat { get; set; }
 
         /// <summary>
-        /// The $AUPREC header variable.
+        /// The $AUPREC header variable.  Units precision for angles.
         /// </summary>
         public short AngleUnitPrecision { get; set; }
 
         /// <summary>
-        /// The $MENU header variable.
+        /// The $MENU header variable.  Name of menu file.
         /// </summary>
         public string FileName { get; set; }
 
         /// <summary>
-        /// The $ELEVATION header variable.
+        /// The $ELEVATION header variable.  Current elevation set by ELEV command.
         /// </summary>
         public double Elevation { get; set; }
 
         /// <summary>
-        /// The $PELEVATION header variable.
+        /// The $PELEVATION header variable.  Current paper space elevation.  Minimum AutoCAD version: R11.
         /// </summary>
         public double PaperspaceElevation { get; set; }
 
         /// <summary>
-        /// The $THICKNESS header variable.
+        /// The $THICKNESS header variable.  Current thickness set by ELEV command.
         /// </summary>
         public double Thickness { get; set; }
 
         /// <summary>
-        /// The $LIMCHECK header variable.
+        /// The $LIMCHECK header variable.  Limits checking.
         /// </summary>
         public bool UseLimitsChecking { get; set; }
 
         /// <summary>
-        /// The $BLIPMODE header variable.
+        /// The $BLIPMODE header variable.  Display blips for click locations.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool BlipMode { get; set; }
 
         /// <summary>
-        /// The $CHAMFERA header variable.
+        /// The $CHAMFERA header variable.  First chamfer distance.
         /// </summary>
         public double FirstChamferDistance { get; set; }
 
         /// <summary>
-        /// The $CHAMFERB header variable.
+        /// The $CHAMFERB header variable.  Second chamfer distance.
         /// </summary>
         public double SecondChamferDistance { get; set; }
 
         /// <summary>
-        /// The $CHAMFERC header variable.
+        /// The $CHAMFERC header variable.  Chamfer length.  Minimum AutoCAD version: R14.
         /// </summary>
         public double ChamferLength { get; set; }
 
         /// <summary>
-        /// The $CHAMFERD header variable.
+        /// The $CHAMFERD header variable.  Chamfer angle.  Minimum AutoCAD version: R14.
         /// </summary>
         public double ChamferAngle { get; set; }
 
         /// <summary>
-        /// The $SKPOLY header variable.
+        /// The $SKPOLY header variable.  Controls polyline sketch mode.
         /// </summary>
         public DxfPolySketchMode PolylineSketchMode { get; set; }
 
         /// <summary>
-        /// The $TDCREATE header variable.
+        /// The $TDCREATE header variable.  Local date/time of drawing creation.
         /// </summary>
         public DateTime CreationDate { get; set; }
 
         /// <summary>
-        /// The $TDUCREATE header variable.
+        /// The $TDUCREATE header variable.  Universal date/time the drawing was created.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DateTime CreationDateUniversal { get; set; }
 
         /// <summary>
-        /// The $TDUPDATE header variable.
+        /// The $TDUPDATE header variable.  Local date/time of last drawing update.
         /// </summary>
         public DateTime UpdateDate { get; set; }
 
         /// <summary>
-        /// The $TDUUPDATE header variable.
+        /// The $TDUUPDATE header variable.  Universal date/time of the last update/save.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DateTime UpdateDateUniversal { get; set; }
 
         /// <summary>
-        /// The $TDINDWG header variable.
+        /// The $TDINDWG header variable.  Cumulative editing time for this drawing.
         /// </summary>
         public TimeSpan TimeInDrawing { get; set; }
 
         /// <summary>
-        /// The $TDUSRTIMER header variable.
+        /// The $TDUSRTIMER header variable.  User-elapsed timer.
         /// </summary>
         public TimeSpan UserElapsedTimer { get; set; }
 
         /// <summary>
-        /// The $USRTIMER header variable.
+        /// The $USRTIMER header variable.  User timer on.
         /// </summary>
         public bool UserTimerOn { get; set; }
 
         /// <summary>
-        /// The $ANGBASE header variable.
+        /// The $ANGBASE header variable.  Angle 0 direction.
         /// </summary>
         public double AngleZeroDirection { get; set; }
 
         /// <summary>
-        /// The $ANGDIR header variable.
+        /// The $ANGDIR header variable.  Angle directions.
         /// </summary>
         public DxfAngleDirection AngleDirection { get; set; }
 
         /// <summary>
-        /// The $PDMODE header variable.
+        /// The $PDMODE header variable.  Point display mode.
         /// </summary>
         public int PointDisplayMode { get; set; }
 
         /// <summary>
-        /// The $PDSIZE header variable.
+        /// The $PDSIZE header variable.  Point display size.
         /// </summary>
         public double PointDisplaySize { get; set; }
 
         /// <summary>
-        /// The $PLINEWID header variable.
+        /// The $PLINEWID header variable.  Default polyline width.
         /// </summary>
         public double DefaultPolylineWidth { get; set; }
 
         /// <summary>
-        /// The $COORDS header variable.
+        /// The $COORDS header variable.  Controls the display of coordinates.  Maximum AutoCAD version: R14.
         /// </summary>
         public DxfCoordinateDisplay CoordinateDisplay { get; set; }
 
         /// <summary>
-        /// The $SPLFRAME header variable.
+        /// The $SPLFRAME header variable.  Controls the display of helixes and smoothed mesh objects.  Maximum AutoCAD version: R2013.
         /// </summary>
         public bool DisplaySplinePolygonControl { get; set; }
 
         /// <summary>
-        /// The $SPLINETYPE header variable.
+        /// The $SPLINETYPE header variable.  Spline curve type for PEDIT Spline.
         /// </summary>
         public DxfPolylineCurvedAndSmoothSurfaceType PEditSplineCurveType { get; set; }
 
         /// <summary>
-        /// The $SPLINESEGS header variable.
+        /// The $SPLINESEGS header variable.  Number of line segments per spline hatch.
         /// </summary>
         public short LineSegmentsPerSplinePatch { get; set; }
 
         /// <summary>
-        /// The $ATTDIA header variable.
+        /// The $ATTDIA header variable.  Controls whether the INSERT command uses a dialog box for attribute value entry.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool ShowAttributeEntryDialogs { get; set; }
 
         /// <summary>
-        /// The $ATTREQ header variable.
+        /// The $ATTREQ header variable.  Controls whether INSERT uses default attribute settings during insertion of blocks.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool PromptForAttributeOnInsert { get; set; }
 
         /// <summary>
-        /// The $HANDLING header variable.
+        /// The $HANDLING header variable.  Handles available.  Maximum AutoCAD version: R12.
         /// </summary>
         public bool HandlesEnabled { get; set; }
 
         /// <summary>
-        /// The $HANDSEED header variable.
+        /// The $HANDSEED header variable.  Next available handle.
         /// </summary>
         public uint NextAvailableHandle { get; set; }
 
         /// <summary>
-        /// The $SURFTAB1 header variable.
+        /// The $SURFTAB1 header variable.  Number of mesh tabulations in first direction.
         /// </summary>
         public short MeshTabulationsInFirstDirection { get; set; }
 
         /// <summary>
-        /// The $SURFTAB2 header variable.
+        /// The $SURFTAB2 header variable.  Number of mesh tabulations in second direction.
         /// </summary>
         public short MeshTabulationsInSecondDirection { get; set; }
 
         /// <summary>
-        /// The $SURFTYPE header variable.
+        /// The $SURFTYPE header variable.  Surface type for PEDIT Smooth.
         /// </summary>
         public DxfPolylineCurvedAndSmoothSurfaceType PEditSmoothSurfaceType { get; set; }
 
         /// <summary>
-        /// The $SURFU header variable.
+        /// The $SURFU header variable.  Surface density (for PEDIT Smooth) in M direction.
         /// </summary>
         public short PEditSmoothMDensith { get; set; }
 
         /// <summary>
-        /// The $SURFV header variable.
+        /// The $SURFV header variable.  Surface density (for PEDIT Smooth) in N direction.
         /// </summary>
         public short PEditSmoothNDensith { get; set; }
 
         /// <summary>
-        /// The $UCSBASE header variable.
+        /// The $UCSBASE header variable.  Name of the UCS that defines the origin and orientation of orthographic UCS settings.  Minimum AutoCAD version: R2000.
         /// </summary>
         public string UCSDefinitionName { get; set; }
 
         /// <summary>
-        /// The $UCSNAME header variable.
+        /// The $UCSNAME header variable.  Name of current UCS.
         /// </summary>
         public string UCSName { get; set; }
 
         /// <summary>
-        /// The $UCSORG header variable.
+        /// The $UCSORG header variable.  Origin of current UCS (in WCS).
         /// </summary>
         public DxfPoint UCSOrigin { get; set; }
 
         /// <summary>
-        /// The $UCSXDIR header variable.
+        /// The $UCSXDIR header variable.  Direction of the current UCS X axis (in WCS).
         /// </summary>
         public DxfVector UCSXAxis { get; set; }
 
         /// <summary>
-        /// The $UCSYDIR header variable.
+        /// The $UCSYDIR header variable.  Direction of the current UCS Y axis (in WCS).
         /// </summary>
         public DxfVector UCSYAxis { get; set; }
 
         /// <summary>
-        /// The $UCSORTHOREF header variable.
+        /// The $UCSORTHOREF header variable.  If model space UCS is orthographic (UCSORTHOVIEW not equal to 0), this is the name of the UCS that the orthographic UCS is relative to. If blank, UCS is relative to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public string OrthoUCSReference { get; set; }
 
         /// <summary>
-        /// The $UCSORTHOVIEW header variable.
+        /// The $UCSORTHOVIEW header variable.  Orthographic view type of model space UCS.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfOrthographicViewType OrthgraphicViewType { get; set; }
 
         /// <summary>
-        /// The $UCSORGTOP header variable.
+        /// The $UCSORGTOP header variable.  Point which becomes the new UCS origin after changing model space UCS to TOP when UCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint UCSOriginTop { get; set; }
 
         /// <summary>
-        /// The $UCSORGBOTTOM header variable.
+        /// The $UCSORGBOTTOM header variable.  Point which becomes the new UCS origin after changing model space UCS to BOTTOM when UCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint UCSOriginBottom { get; set; }
 
         /// <summary>
-        /// The $UCSORGLEFT header variable.
+        /// The $UCSORGLEFT header variable.  Point which becomes the new UCS origin after changing model space UCS to LEFT when UCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint UCSOriginLeft { get; set; }
 
         /// <summary>
-        /// The $UCSORGRIGHT header variable.
+        /// The $UCSORGRIGHT header variable.  Point which becomes the new UCS origin after changing model space UCS to RIGHT when UCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint UCSOriginRight { get; set; }
 
         /// <summary>
-        /// The $UCSORGFRONT header variable.
+        /// The $UCSORGFRONT header variable.  Point which becomes the new UCS origin after changing model space UCS to FRONT when UCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint UCSOriginFront { get; set; }
 
         /// <summary>
-        /// The $UCSORGBACK header variable.
+        /// The $UCSORGBACK header variable.  Point which becomes the new UCS origin after changing model space UCS to BACK when UCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint UCSOriginBack { get; set; }
 
         /// <summary>
-        /// The $PUCSBASE header variable.
+        /// The $PUCSBASE header variable.  Name of the UCS that defines the origin and orientation of orthographics UCS settings (paper space only).  Minimum AutoCAD version: R2000.
         /// </summary>
         public string PaperspaceUCSDefinitionName { get; set; }
 
         /// <summary>
-        /// The $PUCSNAME header variable.
+        /// The $PUCSNAME header variable.  Current paper space UCS name.  Minimum AutoCAD version: R11.
         /// </summary>
         public string PaperspaceUCSName { get; set; }
 
         /// <summary>
-        /// The $PUCSORG header variable.
+        /// The $PUCSORG header variable.  Current paper space UCS origin.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfPoint PaperspaceUCSOrigin { get; set; }
 
         /// <summary>
-        /// The $PUCSXDIR header variable.
+        /// The $PUCSXDIR header variable.  Current paper space UCS X axis.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfVector PaperspaceXAxis { get; set; }
 
         /// <summary>
-        /// The $PUCSYDIR header variable.
+        /// The $PUCSYDIR header variable.  Current paper space UCS Y axis.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfVector PaperspaceYAxis { get; set; }
 
         /// <summary>
-        /// The $PUCSORTHOREF header variable.
+        /// The $PUCSORTHOREF header variable.  If paper space UCS is orthographic (PUCSORTHOVIEW not equal to 0), this is the name of the UCS that the orthographic UCS is relative to. If blank, UCS is relative to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public string PaperspaceOrthoUCSReference { get; set; }
 
         /// <summary>
-        /// The $PUCSORTHOVIEW header variable.
+        /// The $PUCSORTHOVIEW header variable.  Orthographic view type of paper space UCS.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfOrthographicViewType PaperspaceOrthographicViewType { get; set; }
 
         /// <summary>
-        /// The $PUCSORGTOP header variable.
+        /// The $PUCSORGTOP header variable.  Point which becomes the new UCS origin after changing paper space UCS to TOP when PUCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint PaperspaceUCSOriginTop { get; set; }
 
         /// <summary>
-        /// The $PUCSORGBOTTOM header variable.
+        /// The $PUCSORGBOTTOM header variable.  Point which becomes the new UCS origin after changing paper space UCS to BOTTOM when PUCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint PaperspaceUCSOriginBottom { get; set; }
 
         /// <summary>
-        /// The $PUCSORGLEFT header variable.
+        /// The $PUCSORGLEFT header variable.  Point which becomes the new UCS origin after changing paper space UCS to LEFT when PUCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint PaperspaceUCSOriginLeft { get; set; }
 
         /// <summary>
-        /// The $PUCSORGRIGHT header variable.
+        /// The $PUCSORGRIGHT header variable.  Point which becomes the new UCS origin after changing paper space UCS to RIGHT when PUCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint PaperspaceUCSOriginRight { get; set; }
 
         /// <summary>
-        /// The $PUCSORGFRONT header variable.
+        /// The $PUCSORGFRONT header variable.  Point which becomes the new UCS origin after changing paper space UCS to FRONT when PUCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint PaperspaceUCSOriginFront { get; set; }
 
         /// <summary>
-        /// The $PUCSORGBACK header variable.
+        /// The $PUCSORGBACK header variable.  Point which becomes the new UCS origin after changing paper space UCS to BACK when PUCSBASE is set to WORLD.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPoint PaperspaceUCSOriginBack { get; set; }
 
         /// <summary>
-        /// The $USERI1 header variable.
+        /// The $USERI1 header variable.  Integer variable intended for use by third-party developers.
         /// </summary>
         public short UserInt1 { get; set; }
 
         /// <summary>
-        /// The $USERI2 header variable.
+        /// The $USERI2 header variable.  Integer variable intended for use by third-party developers.
         /// </summary>
         public short UserInt2 { get; set; }
 
         /// <summary>
-        /// The $USERI3 header variable.
+        /// The $USERI3 header variable.  Integer variable intended for use by third-party developers.
         /// </summary>
         public short UserInt3 { get; set; }
 
         /// <summary>
-        /// The $USERI4 header variable.
+        /// The $USERI4 header variable.  Integer variable intended for use by third-party developers.
         /// </summary>
         public short UserInt4 { get; set; }
 
         /// <summary>
-        /// The $USERI5 header variable.
+        /// The $USERI5 header variable.  Integer variable intended for use by third-party developers.
         /// </summary>
         public short UserInt5 { get; set; }
 
         /// <summary>
-        /// The $USERR1 header variable.
+        /// The $USERR1 header variable.  Real variable indented for use by third-party developers.
         /// </summary>
         public double UserReal1 { get; set; }
 
         /// <summary>
-        /// The $USERR2 header variable.
+        /// The $USERR2 header variable.  Real variable indented for use by third-party developers.
         /// </summary>
         public double UserReal2 { get; set; }
 
         /// <summary>
-        /// The $USERR3 header variable.
+        /// The $USERR3 header variable.  Real variable indented for use by third-party developers.
         /// </summary>
         public double UserReal3 { get; set; }
 
         /// <summary>
-        /// The $USERR4 header variable.
+        /// The $USERR4 header variable.  Real variable indented for use by third-party developers.
         /// </summary>
         public double UserReal4 { get; set; }
 
         /// <summary>
-        /// The $USERR5 header variable.
+        /// The $USERR5 header variable.  Real variable indented for use by third-party developers.
         /// </summary>
         public double UserReal5 { get; set; }
 
         /// <summary>
-        /// The $WORLDVIEW header variable.
+        /// The $WORLDVIEW header variable.  Set UCS to WCS during DVIEW/VPOINT.
         /// </summary>
         public bool SetUCSToWCSInDViewOrVPoint { get; set; }
 
         /// <summary>
-        /// The $SHADEDGE header variable.
+        /// The $SHADEDGE header variable.  Controls shading of faces.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfShadeEdgeMode EdgeShading { get; set; }
 
         /// <summary>
-        /// The $SHADEDIF header variable.
+        /// The $SHADEDIF header variable.  Percent ambient/diffuse light; range 1-100.  Minimum AutoCAD version: R11.
         /// </summary>
         public short PercentAmbientToDiffuse { get; set; }
 
         /// <summary>
-        /// The $TILEMODE header variable.
+        /// The $TILEMODE header variable.  Use previous release compatibility mode.  Minimum AutoCAD version: R11.
         /// </summary>
         public bool PreviousReleaseTileCompatability { get; set; }
 
         /// <summary>
-        /// The $MAXACTVP header variable.
+        /// The $MAXACTVP header variable.  Sets the maximum number of viewports to be regenerated.  Minimum AutoCAD version: R11.
         /// </summary>
         public short MaximumActiveViewports { get; set; }
 
         /// <summary>
-        /// The $PINSBASE header variable.
+        /// The $PINSBASE header variable.  Paper space insertion base point.  Minimum AutoCAD version: R14.
         /// </summary>
         public DxfPoint PaperspaceInsertionBase { get; set; }
 
         /// <summary>
-        /// The $PLIMCHECK header variable.
+        /// The $PLIMCHECK header variable.  Limits checking in paper space.  Minimum AutoCAD version: R11.
         /// </summary>
         public bool LimitCheckingInPaperspace { get; set; }
 
         /// <summary>
-        /// The $PEXTMIN header variable.
+        /// The $PEXTMIN header variable.  Minimum X, Y, and Z extents for paper space.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfPoint PaperspaceMinimumDrawingExtents { get; set; }
 
         /// <summary>
-        /// The $PEXTMAX header variable.
+        /// The $PEXTMAX header variable.  Maximum X, Y, and Z extents for paper space.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfPoint PaperspaceMaximumDrawingExtents { get; set; }
 
         /// <summary>
-        /// The $PLIMMIN header variable.
+        /// The $PLIMMIN header variable.  Minimum X and Y limits in paper space.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfPoint PaperspaceMinimumDrawingLimits { get; set; }
 
         /// <summary>
-        /// The $PLIMMAX header variable.
+        /// The $PLIMMAX header variable.  Maximum X and Y limits in paper space.  Minimum AutoCAD version: R11.
         /// </summary>
         public DxfPoint PaperspaceMaximumDrawingLimits { get; set; }
 
         /// <summary>
-        /// The $UNITMODE header variable.
+        /// The $UNITMODE header variable.  Display fractions, feet-and-inches, and surveyor's angles in input format.  Minimum AutoCAD version: R11.
         /// </summary>
         public bool DisplayFractionsInInput { get; set; }
 
         /// <summary>
-        /// The $VISRETAIN header variable.
+        /// The $VISRETAIN header variable.  Retain xref-dependent visibility settings.  Minimum AutoCAD version: R12.
         /// </summary>
         public bool RetainXRefDependentVisibilitySettings { get; set; }
 
         /// <summary>
-        /// The $PLINEGEN header variable.
+        /// The $PLINEGEN header variable.  Governs the generation of linetype patterns around the vertices of a 2D polyline.  Minimum AutoCAD version: R11.
         /// </summary>
         public bool IsPolylineContinuousAroundVerticies { get; set; }
 
         /// <summary>
-        /// The $PSLTSCALE header variable.
+        /// The $PSLTSCALE header variable.  Controls paper space linetype scaling.  Minimum AutoCAD version: R11.
         /// </summary>
         public bool ScaleLinetypesInPaperspace { get; set; }
 
         /// <summary>
-        /// The $TREEDEPTH header variable.
+        /// The $TREEDEPTH header variable.  Specifies the maximum depth of the spatial index.  Minimum AutoCAD version: R14.
         /// </summary>
         public short SpacialIndexMaxDepth { get; set; }
 
         /// <summary>
-        /// The $PICKSTYLE header variable.
+        /// The $PICKSTYLE header variable.  Controls the group selection and associative hatch selection.  Minimum AutoCAD version: R13.  Maximum AutoCAD version: R14.
         /// </summary>
         public DxfPickStyle PickStyle { get; set; }
 
         /// <summary>
-        /// The $CMLSTYLE header variable.
+        /// The $CMLSTYLE header variable.  Current multiline style name.  Minimum AutoCAD version: R13.  Maximum AutoCAD version: R13.
         /// </summary>
         public string CurrentMultilineStyle { get; set; }
 
         /// <summary>
-        /// The $CMLJUST header variable.
+        /// The $CMLJUST header variable.  Current multiline justification.  Minimum AutoCAD version: R13.
         /// </summary>
         public DxfJustification CurrentMultilineJustification { get; set; }
 
         /// <summary>
-        /// The $CMLSCALE header variable.
+        /// The $CMLSCALE header variable.  Current multiline scale.  Minimum AutoCAD version: R13.
         /// </summary>
         public double CurrentMultilineScale { get; set; }
 
         /// <summary>
-        /// The $PROXYGRAPHICS header variable.
+        /// The $PROXYGRAPHICS header variable.  Controls the saving of proxy object images.  Minimum AutoCAD version: R14.
         /// </summary>
         public bool SaveProxyGraphics { get; set; }
 
         /// <summary>
-        /// The $MEASUREMENT header variable.
+        /// The $MEASUREMENT header variable.  Sets drawing units.  Minimum AutoCAD version: R14.
         /// </summary>
         public DxfDrawingUnits DrawingUnits { get; set; }
 
         /// <summary>
-        /// The $CELWEIGHT header variable.
+        /// The $CELWEIGHT header variable.  Lineweight of new objects.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfLineWeight NewObjectLineWeight { get; set; }
 
         /// <summary>
-        /// The $ENDCAPS header variable.
+        /// The $ENDCAPS header variable.  Lineweight endcaps setting for new objects.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfEndCapSetting EndCapSetting { get; set; }
 
         /// <summary>
-        /// The $JOINSTYLE header variable.
+        /// The $JOINSTYLE header variable.  Lineweight join setting for new objects.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfJoinStyle LineweightJointSetting { get; set; }
 
         /// <summary>
-        /// The $LWDISPLAY header variable.
+        /// The $LWDISPLAY header variable.  Controls the display of lineweights on the Model or Layout tab.  Minimum AutoCAD version: R2000.
         /// </summary>
         public bool DisplayLinewieghtInModelAndLayoutTab { get; set; }
 
         /// <summary>
-        /// The $INSUNITS header variable.
+        /// The $INSUNITS header variable.  Default drawing units for AutoCAD DesignCenter blocks.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfUnits DefaultDrawingUnits { get; set; }
 
         /// <summary>
-        /// The $HYPERLINKBASE header variable.
+        /// The $HYPERLINKBASE header variable.  Path for all relative hyperlinks in the drawing.  If null, the drawing path is used.  Minimum AutoCAD version: R2000.
         /// </summary>
         public string HyperlinkBase { get; set; }
 
         /// <summary>
-        /// The $STYLESHEET header variable.
+        /// The $STYLESHEET header variable.  Path to the stylesheet for the drawing.  Minimum AutoCAD version: R2000.
         /// </summary>
         public string Stylesheet { get; set; }
 
         /// <summary>
-        /// The $XEDIT header variable.
+        /// The $XEDIT header variable.  Controls whether the current drawing can be edited in-place when being referenced by another drawing.  Minimum AutoCAD version: R2000.
         /// </summary>
         public bool CanUseInPlaceReferenceEditing { get; set; }
 
         /// <summary>
-        /// The $CEPSNTYPE header variable.
+        /// The $CEPSNTYPE header variable.  Plot style of new objects.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPlotStyle NewObjectPlotStyle { get; set; }
 
         /// <summary>
-        /// The $PSTYLEMODE header variable.
+        /// The $PSTYLEMODE header variable.  Indicates whether the current drawing is in a Color-Dependent or Named Plot Style mode.  Minimum AutoCAD version: R2000.
         /// </summary>
         public bool UsesColorDependentPlotStyleTables { get; set; }
 
         /// <summary>
-        /// The $FINGERPRINTGUID header variable.
+        /// The $FINGERPRINTGUID header variable.  Set at creation time, uniquely identifies a particular drawing.  Minimum AutoCAD version: R2000.
         /// </summary>
         public Guid FingerprintGuid { get; set; }
 
         /// <summary>
-        /// The $VERSIONGUID header variable.
+        /// The $VERSIONGUID header variable.  Uniquely identifies a particular version of a drawing.  Updated when the drawing is modified.  Minimum AutoCAD version: R2000.
         /// </summary>
         public Guid VersionGuid { get; set; }
 
         /// <summary>
-        /// The $EXTNAMES header variable.
+        /// The $EXTNAMES header variable.  Controls symbol table naming.  Minimum AutoCAD version: R2000.
         /// </summary>
         public bool UseACad2000SymbolTableNaming { get; set; }
 
         /// <summary>
-        /// The $PSVPSCALE header variable.
+        /// The $PSVPSCALE header variable.  View scale factor for new viewports.  Minimum AutoCAD version: R2000.
         /// </summary>
         public double ViewportViewScaleFactor { get; set; }
 
         /// <summary>
-        /// The $OLESTARTUP header variable.
+        /// The $OLESTARTUP header variable.  Controls whether the source application of an embedded OLE object loads when plotting.  Minimum AutoCAD version: R2000.
         /// </summary>
         public bool OleStartup { get; set; }
 
         /// <summary>
-        /// The $SORTENTS header variable.
+        /// The $SORTENTS header variable.  Controls the object sorting methods; accessible from the Options dialog box User Preferences tab.  Minimum AutoCAD version: R2004.
         /// </summary>
         public int ObjectSortingMethodsFlags { get; set; }
 
         /// <summary>
-        /// The $INDEXCTL header variable.
+        /// The $INDEXCTL header variable.  Controls whether layer and spatial indexes are created and saved in drawing files.  Minimum AutoCAD version: R2004.
         /// </summary>
         public DxfLayerAndSpatialIndexSaveMode LayerAndSpatialIndexSaveMode { get; set; }
 
         /// <summary>
-        /// The $HIDETEXT header variable.
+        /// The $HIDETEXT header variable.  Ignore text objects.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool HideTextObjectsWhenProducintHiddenView { get; set; }
 
         /// <summary>
-        /// The $XCLIPFRAME header variable.
+        /// The $XCLIPFRAME header variable.  Controls the visibility of xref clipping boundaries.  Minimum AutoCAD version: R2004.  Maximum AutoCAD version: R2007.
         /// </summary>
         public DxfXrefClippingBoundaryVisibility IsXRefClippingBoundaryVisible { get; set; }
 
         /// <summary>
-        /// The $HALOGAP header variable.
+        /// The $HALOGAP header variable.  Specifies a gap to be displayed where an object is hidden by another object; the value is specified as a percent of one unit and is independent of the zoom level.  A haloed line is shortened at the point where it is hidden when HIDE or the Hidden option of SHADEMODE is used.  Minimum AutoCAD version: R2004.
         /// </summary>
         public double HaloGapPercent { get; set; }
 
         /// <summary>
-        /// The $OBSCOLOR header variable.
+        /// The $OBSCOLOR header variable.  Specifies the color of obscured lines.  An obscured line is a hidden line made visible by changing its color and linetype and is visible only when the HIDE or SHADEMODE command is used.  The OBSCUREDCOLOR setting is visible only if the OBSCUREDLTYPE is turned ON by setting it to a value other than 0.  Minimum AutoCAD version: R2004.
         /// </summary>
         public DxfColor ObscuredLineColor { get; set; }
 
         /// <summary>
-        /// The $OBSLTYPE header variable.
+        /// The $OBSLTYPE header variable.  Specifies the linetype of obscured lines.  Obscured linetypes are independent of zoom level, unlike regular AutoCAD linetypes.  Value 0 turns off display of obscured lines and is the default.  Minimum AutoCAD version: R2004.
         /// </summary>
         public DxfLinetypeStyle ObscuredLineTypeStyle { get; set; }
 
         /// <summary>
-        /// The $INTERSECTIONDISPLAY header variable.
+        /// The $INTERSECTIONDISPLAY header variable.  Specifies the display of intersection polylines.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool DisplayIntersectionPolylines { get; set; }
 
         /// <summary>
-        /// The $INTERSECTIONCOLOR header variable.
+        /// The $INTERSECTIONCOLOR header variable.  Specifies the entity color of intersection polylines.  Minimum AutoCAD version: R2004.
         /// </summary>
         public DxfColor IntersectionPolylineColor { get; set; }
 
         /// <summary>
-        /// The $DIMASSOC header variable.
+        /// The $DIMASSOC header variable.  Controls the associativity of dimension objects.  Minimum AutoCAD version: R2004.
         /// </summary>
         public DxfDimensionAssociativity DimensionObjectAssociativity { get; set; }
 
         /// <summary>
-        /// The $PROJECTNAME header variable.
+        /// The $PROJECTNAME header variable.  Assigns a project name to the current drawing.  Used when an external reference or image is not found on its original path.  The project name points to a section in the registry that can contain one or more search paths for each project name defined.  Project names and their search directories are created from the Files tab of the Options dialog box.  Minimum AutoCAD version: R2004.
         /// </summary>
         public string ProjectName { get; set; }
 
         /// <summary>
-        /// The $CAMERADISPLAY header variable.
+        /// The $CAMERADISPLAY header variable.  Turns the display of camera objects on or off.  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool UseCameraDisplay { get; set; }
 
         /// <summary>
-        /// The $LENSLENGTH header variable.
+        /// The $LENSLENGTH header variable.  Stores the length of the lens in millimeters used in perspective viewing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double LensLength { get; set; }
 
         /// <summary>
-        /// The $CAMERAHEIGHT header variable.
+        /// The $CAMERAHEIGHT header variable.  Specifies the default height for new camera objects.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double CameraHeight { get; set; }
 
         /// <summary>
-        /// The $STEPSPERSEC header variable.
+        /// The $STEPSPERSEC header variable.  Specifies the number of steps taken per second when you are in walk or fly mode.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double StepsPerSecondInWalkOrFlyMode { get; set; }
 
         /// <summary>
-        /// The $STEPSIZE header variable.
+        /// The $STEPSIZE header variable.  Specifies the size of each step when in walk or fly mode, in drawing units.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double StepSizeInWalkOrFlyMode { get; set; }
 
         /// <summary>
-        /// The $3DDWFPREC header variable.
+        /// The $3DDWFPREC header variable.  Controls the precision of 3D DWF or 3D DWFx publishing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public Dxf3DDwfPrecision Dwf3DPrecision { get; set; }
 
         /// <summary>
-        /// The $PSOLWIDTH header variable.
+        /// The $PSOLWIDTH header variable.  Controls the default width for a swept solid object created with the POLYSOLID command.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double LastPolySolidWidth { get; set; }
 
         /// <summary>
-        /// The $PSOLHEIGHT header variable.
+        /// The $PSOLHEIGHT header variable.  Controls the default height for a swept solid object created with the POLYSOLID command.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double LastPolySolidHeight { get; set; }
 
         /// <summary>
-        /// The $LOFTANG1 header variable.
+        /// The $LOFTANG1 header variable.  Sets the draft angle through the first cross section in a loft operation.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double LoftOperationFirstDraftAngle { get; set; }
 
         /// <summary>
-        /// The $LOFTANG2 header variable.
+        /// The $LOFTANG2 header variable.  Sets the draft angle through the second cross section in a loft operation.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double LoftOperationSecondDraftAngle { get; set; }
 
         /// <summary>
-        /// The $LOFTMAG1 header variable.
+        /// The $LOFTMAG1 header variable.  Sets the magnitude of the draft angle through the first cross section in a loft operation.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double LoftOperationFirstMagnitude { get; set; }
 
         /// <summary>
-        /// The $LOFTMAG2 header variable.
+        /// The $LOFTMAG2 header variable.  Sets the magnitude of the draft angle through the second cross section in a loft operation.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double LoftOperationSecondMagnitude { get; set; }
 
         /// <summary>
-        /// The $LOFTPARAM header variable.
+        /// The $LOFTPARAM header variable.  Controls the shape of lofted solids and surfaces.  Minimum AutoCAD version: R2007.
         /// </summary>
         public int LoftFlags { get; set; }
 
         /// <summary>
-        /// The $LOFTNORMALS header variable.
+        /// The $LOFTNORMALS header variable.  Controls the normals of a lofted object where it passes through cross sections.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfLoftedObjectNormalMode LoftedObjectNormalMode { get; set; }
 
         /// <summary>
-        /// The $LATITUDE header variable.
+        /// The $LATITUDE header variable.  The latitude of the geographic location assigned to the drawing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double Latitude { get; set; }
 
         /// <summary>
-        /// The $LONGITUDE header variable.
+        /// The $LONGITUDE header variable.  The longitude of the geographic location assigned to the drawing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double Longitude { get; set; }
 
         /// <summary>
-        /// The $NORTHDIRECTION header variable.
+        /// The $NORTHDIRECTION header variable.  Specifies the angle between the Y axis of WCS and the grid north.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double AngleBetweenYAxisAndNorth { get; set; }
 
         /// <summary>
-        /// The $TIMEZONE header variable.
+        /// The $TIMEZONE header variable.  Sets the time zone for the sun in the drawing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfTimeZone TimeZone { get; set; }
 
         /// <summary>
-        /// The $LIGHTGLYPHDISPLAY header variable.
+        /// The $LIGHTGLYPHDISPLAY header variable.  Turns on and off the display of light glyphs.  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool UseLightGlyphDisplay { get; set; }
 
         /// <summary>
-        /// The $TILEMODELIGHTSYNCH header variable.
+        /// The $TILEMODELIGHTSYNCH header variable.  Unknown.  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool UseTileModeLightSync { get; set; }
 
         /// <summary>
-        /// The $CMATERIAL header variable.
+        /// The $CMATERIAL header variable.  Sets the material of new objects.  Minimum AutoCAD version: R2007.
         /// </summary>
         public uint CurrentMaterialHandle { get; set; }
 
         /// <summary>
-        /// The $SOLIDHIST header variable.
+        /// The $SOLIDHIST header variable.  Controls whether new composite solids retain a history of their original components.  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool NewSolidsContainHistory { get; set; }
 
         /// <summary>
-        /// The $SHOWHIST header variable.
+        /// The $SHOWHIST header variable.  Controls the Show History property for solids in a drawing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfSolidHistoryMode SolidHistoryMode { get; set; }
 
         /// <summary>
-        /// The $DWFFRAME header variable.
+        /// The $DWFFRAME header variable.  Determines whether DWF or DWFx underlay frames are visible or plotted in the current drawing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfUnderlayFrameMode DwfUnderlayFrameMode { get; set; }
 
         /// <summary>
-        /// The $DGNFRAME header variable.
+        /// The $DGNFRAME header variable.  Determines whether DGN underlay frames are visible or plotted in the current drawing.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfUnderlayFrameMode DgnUnderlayFrameMode { get; set; }
 
         /// <summary>
-        /// The $REALWORLDSCALE header variable.
+        /// The $REALWORLDSCALE header variable.  Drawing is scaled to the real world.  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool UseRealWorldScale { get; set; }
 
         /// <summary>
-        /// The $INTERFERECOLOR header variable.
+        /// The $INTERFERECOLOR header variable.  Represents the ACI color index of the "interference objects" created during the interfere command.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfColor InterferenceObjectColor { get; set; }
 
         /// <summary>
-        /// The $INTERFEREOBJVS header variable.
+        /// The $INTERFEREOBJVS header variable.  Hard-pointer ID to the visual stype for interference objects.  Minimum AutoCAD version: R2007.
         /// </summary>
         public uint InterferenceObjectVisualStylePointer { get; set; }
 
         /// <summary>
-        /// The $INTERFEREVPVS header variable.
+        /// The $INTERFEREVPVS header variable.  Hard-pointer ID to the visual styoe for the viewport during interference checking.  Minimum AutoCAD version: R2007.
         /// </summary>
         public uint InterferenceViewPortVisualStylePointer { get; set; }
 
         /// <summary>
-        /// The $CSHADOW header variable.
+        /// The $CSHADOW header variable.  Shadow mode for a 3D object.  Minimum AutoCAD version: R2007.
         /// </summary>
         public DxfShadowMode ShadowMode { get; set; }
 
         /// <summary>
-        /// The $SHADOWPLANELOCATION header variable.
+        /// The $SHADOWPLANELOCATION header variable.  Locatio of the ground shadow plane.  This is a Z axis ordinate.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double ShadowPlaneZOffset { get; set; }
 
         /// <summary>
-        /// The $AXISMODE header variable.
+        /// The $AXISMODE header variable.  Axis on.  Maximum AutoCAD version: R10.
         /// </summary>
         public bool AxisOn { get; set; }
 
         /// <summary>
-        /// The $AXISUNIT header variable.
+        /// The $AXISUNIT header variable.  Axis X and Y tick spacing.  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfVector AxisTickSpacing { get; set; }
 
         /// <summary>
-        /// The $FASTZOOM header variable.
+        /// The $FASTZOOM header variable.  Fast zoom enabled.  Maximum AutoCAD version: R10.
         /// </summary>
         public bool FastZoom { get; set; }
 
         /// <summary>
-        /// The $GRIDMODE header variable.
+        /// The $GRIDMODE header variable.  Grid mode on.  Maximum AutoCAD version: R10.
         /// </summary>
         public bool GridOn { get; set; }
 
         /// <summary>
-        /// The $GRIDUNIT header variable.
+        /// The $GRIDUNIT header variable.  Grid X and Y spacing.  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfVector GridSpacing { get; set; }
 
         /// <summary>
-        /// The $SNAPANG header variable.
+        /// The $SNAPANG header variable.  Snap grid rotation angle.  Maximum AutoCAD version: R10.
         /// </summary>
         public double SnapRotationAngle { get; set; }
 
         /// <summary>
-        /// The $SNAPBASE header variable.
+        /// The $SNAPBASE header variable.  Snap/grid/base point (in UCS).  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfPoint SnapBasePoint { get; set; }
 
         /// <summary>
-        /// The $SNAPISOPAIR header variable.
+        /// The $SNAPISOPAIR header variable.  Isometric plane.  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfSnapIsometricPlane SnapIsometricPlane { get; set; }
 
         /// <summary>
-        /// The $SNAPMODE header variable.
+        /// The $SNAPMODE header variable.  Snap mode on.  Maximum AutoCAD version: R10.
         /// </summary>
         public bool SnapOn { get; set; }
 
         /// <summary>
-        /// The $SNAPSTYLE header variable.
+        /// The $SNAPSTYLE header variable.  Snap style.  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfSnapStyle SnapStyle { get; set; }
 
         /// <summary>
-        /// The $SNAPUNIT header variable.
+        /// The $SNAPUNIT header variable.  Snap grid X and Y spacing.  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfVector SnapSpacing { get; set; }
 
         /// <summary>
-        /// The $VIEWCTR header variable.
+        /// The $VIEWCTR header variable.  XY center of current view on screen.  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfPoint ViewCenter { get; set; }
 
         /// <summary>
-        /// The $VIEWDIR header variable.
+        /// The $VIEWDIR header variable.  Viewing direction (direction from target in WCS).  Maximum AutoCAD version: R10.
         /// </summary>
         public DxfVector ViewDirection { get; set; }
 
         /// <summary>
-        /// The $VIEWSIZE header variable.
+        /// The $VIEWSIZE header variable.  Height of view.  Maximum AutoCAD version: R10.
         /// </summary>
         public double ViewHeight { get; set; }
 
@@ -4798,6 +4798,9 @@ namespace IxMilia.Dxf
 
         // OSMODE flags
 
+        /// <summary>
+        /// Snap to line segment endpoints.
+        /// </summary>
         public bool EndPointSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 1); }
@@ -4809,6 +4812,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to line segment midpoints.
+        /// </summary>
         public bool MidPointSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 2); }
@@ -4820,6 +4826,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to circle and arc center points.
+        /// </summary>
         public bool CenterSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 4); }
@@ -4831,6 +4840,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to nodes.
+        /// </summary>
         public bool NodeSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 8); }
@@ -4842,6 +4854,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to circle quadrants.
+        /// </summary>
         public bool QuadrantSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 16); }
@@ -4853,6 +4868,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to segment intersections.
+        /// </summary>
         public bool IntersectionSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 32); }
@@ -4864,6 +4882,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to block insertion points.
+        /// </summary>
         public bool InsertionSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 64); }
@@ -4875,6 +4896,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to perpendicular points.
+        /// </summary>
         public bool PerpendicularSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 128); }
@@ -4886,6 +4910,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to tangent points.
+        /// </summary>
         public bool TangentSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 256); }
@@ -4897,6 +4924,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to nearest object points.
+        /// </summary>
         public bool NearestSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 512); }
@@ -4908,6 +4938,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to apparent intersection points.
+        /// </summary>
         public bool ApparentIntersectionSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 2048); }
@@ -4919,6 +4952,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to extension points.
+        /// </summary>
         public bool ExtensionSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 4096); }
@@ -4930,6 +4966,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Snap to parallel points.
+        /// </summary>
         public bool ParallelSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSnapFlags, 8192); }
@@ -4943,6 +4982,9 @@ namespace IxMilia.Dxf
 
         // SORTENTS flags
 
+        /// <summary>
+        /// Sorts for object selection.
+        /// </summary>
         public bool SortObjectsForObjectSelection
         {
             get { return DxfHelpers.GetFlag(ObjectSortingMethodsFlags, 1); }
@@ -4954,6 +4996,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Sorts for object snap.
+        /// </summary>
         public bool SortObjectsForObjectSnap
         {
             get { return DxfHelpers.GetFlag(ObjectSortingMethodsFlags, 2); }
@@ -4965,6 +5010,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Sorts for redraws.
+        /// </summary>
         public bool SortObjectsForRedraw
         {
             get { return DxfHelpers.GetFlag(ObjectSortingMethodsFlags, 4); }
@@ -4976,6 +5024,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Sorts for MSLIDE command slide creation.
+        /// </summary>
         public bool SortObjectsForMSlide
         {
             get { return DxfHelpers.GetFlag(ObjectSortingMethodsFlags, 8); }
@@ -4987,6 +5038,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Sorts for REGEN commands.
+        /// </summary>
         public bool SortObjectsForRegen
         {
             get { return DxfHelpers.GetFlag(ObjectSortingMethodsFlags, 16); }
@@ -4998,6 +5052,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Sorts for plotting.
+        /// </summary>
         public bool SortObjectsForPlotting
         {
             get { return DxfHelpers.GetFlag(ObjectSortingMethodsFlags, 32); }
@@ -5009,6 +5066,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Sorts for PostScript output.
+        /// </summary>
         public bool SortObjectsForPostScriptOutput
         {
             get { return DxfHelpers.GetFlag(ObjectSortingMethodsFlags, 64); }
@@ -5022,6 +5082,9 @@ namespace IxMilia.Dxf
 
         // LOFTPARAM flags
 
+        /// <summary>
+        /// No twist (minimizes the twist between cross sections).
+        /// </summary>
         public bool NoTwist
         {
             get { return DxfHelpers.GetFlag(LoftFlags, 1); }
@@ -5033,6 +5096,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Align direction (aligns the start to end direction of each cross section curve).
+        /// </summary>
         public bool AlignDirection
         {
             get { return DxfHelpers.GetFlag(LoftFlags, 2); }
@@ -5044,6 +5110,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Simplify (produces simple solids and surfaces, such as a cylinder or plane, instead of spline solids and surfaces).
+        /// </summary>
         public bool Simplify
         {
             get { return DxfHelpers.GetFlag(LoftFlags, 4); }
@@ -5055,6 +5124,9 @@ namespace IxMilia.Dxf
             }
         }
 
+        /// <summary>
+        /// Close (closes the surface or solid between the first and the last cross sections).
+        /// </summary>
         public bool Close
         {
             get { return DxfHelpers.GetFlag(LoftFlags, 8); }

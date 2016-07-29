@@ -4799,7 +4799,7 @@ namespace IxMilia.Dxf
         // OSMODE flags
 
         /// <summary>
-        /// Snap to line segment endpoints.
+        /// Snap to line segment endpoints.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool EndPointSnap
         {
@@ -4813,7 +4813,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to line segment midpoints.
+        /// Snap to line segment midpoints.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool MidPointSnap
         {
@@ -4827,7 +4827,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to circle and arc center points.
+        /// Snap to circle and arc center points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool CenterSnap
         {
@@ -4841,7 +4841,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to nodes.
+        /// Snap to nodes.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool NodeSnap
         {
@@ -4855,7 +4855,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to circle quadrants.
+        /// Snap to circle quadrants.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool QuadrantSnap
         {
@@ -4869,7 +4869,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to segment intersections.
+        /// Snap to segment intersections.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool IntersectionSnap
         {
@@ -4883,7 +4883,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to block insertion points.
+        /// Snap to block insertion points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool InsertionSnap
         {
@@ -4897,7 +4897,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to perpendicular points.
+        /// Snap to perpendicular points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool PerpendicularSnap
         {
@@ -4911,7 +4911,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to tangent points.
+        /// Snap to tangent points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool TangentSnap
         {
@@ -4925,7 +4925,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to nearest object points.
+        /// Snap to nearest object points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool NearestSnap
         {
@@ -4939,7 +4939,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to apparent intersection points.
+        /// Snap to apparent intersection points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool ApparentIntersectionSnap
         {
@@ -4953,7 +4953,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to extension points.
+        /// Snap to extension points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool ExtensionSnap
         {
@@ -4967,7 +4967,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Snap to parallel points.
+        /// Snap to parallel points.  Maximum AutoCAD version: R14.
         /// </summary>
         public bool ParallelSnap
         {
@@ -4983,7 +4983,7 @@ namespace IxMilia.Dxf
         // SORTENTS flags
 
         /// <summary>
-        /// Sorts for object selection.
+        /// Sorts for object selection.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool SortObjectsForObjectSelection
         {
@@ -4997,7 +4997,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Sorts for object snap.
+        /// Sorts for object snap.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool SortObjectsForObjectSnap
         {
@@ -5011,7 +5011,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Sorts for redraws.
+        /// Sorts for redraws.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool SortObjectsForRedraw
         {
@@ -5025,7 +5025,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Sorts for MSLIDE command slide creation.
+        /// Sorts for MSLIDE command slide creation.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool SortObjectsForMSlide
         {
@@ -5039,7 +5039,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Sorts for REGEN commands.
+        /// Sorts for REGEN commands.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool SortObjectsForRegen
         {
@@ -5053,7 +5053,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Sorts for plotting.
+        /// Sorts for plotting.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool SortObjectsForPlotting
         {
@@ -5067,7 +5067,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Sorts for PostScript output.
+        /// Sorts for PostScript output.  Minimum AutoCAD version: R2004.
         /// </summary>
         public bool SortObjectsForPostScriptOutput
         {
@@ -5083,7 +5083,7 @@ namespace IxMilia.Dxf
         // LOFTPARAM flags
 
         /// <summary>
-        /// No twist (minimizes the twist between cross sections).
+        /// No twist (minimizes the twist between cross sections).  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool NoTwist
         {
@@ -5097,7 +5097,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Align direction (aligns the start to end direction of each cross section curve).
+        /// Align direction (aligns the start to end direction of each cross section curve).  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool AlignDirection
         {
@@ -5111,7 +5111,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Simplify (produces simple solids and surfaces, such as a cylinder or plane, instead of spline solids and surfaces).
+        /// Simplify (produces simple solids and surfaces, such as a cylinder or plane, instead of spline solids and surfaces).  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool Simplify
         {
@@ -5125,7 +5125,7 @@ namespace IxMilia.Dxf
         }
 
         /// <summary>
-        /// Close (closes the surface or solid between the first and the last cross sections).
+        /// Close (closes the surface or solid between the first and the last cross sections).  Minimum AutoCAD version: R2007.
         /// </summary>
         public bool Close
         {

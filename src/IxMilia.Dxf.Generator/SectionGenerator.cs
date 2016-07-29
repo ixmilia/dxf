@@ -294,7 +294,7 @@ namespace IxMilia.Dxf.Generator
                         }
 
                         AppendLine("/// <summary>");
-                        AppendLine($"/// {Comment(flag)}");
+                        AppendLine($"/// {comment}");
                         AppendLine("/// </summary>");
                         AppendLine($"public bool {Name(flag)}");
                         AppendLine("{");

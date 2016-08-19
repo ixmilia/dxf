@@ -312,7 +312,7 @@
     <Variable Name="INTERFEREOBJVS" Code="345" Type="uint" Property="InterferenceObjectVisualStylePointer" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DontWriteDefault="true" MinVersion="R2007" Comment="Hard-pointer ID to the visual stype for interference objects." />
     <Variable Name="INTERFEREVPVS" Code="346" Type="uint" Property="InterferenceViewPortVisualStylePointer" DefaultValue="0u" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DontWriteDefault="true" MinVersion="R2007" Comment="Hard-pointer ID to the visual styoe for the viewport during interference checking." />
     <Variable Name="CSHADOW" Code="280" Type="DxfShadowMode" Property="ShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode)" WriteConverter="(short)" MinVersion="R2007" Comment="Shadow mode for a 3D object." />
-    <Variable Name="SHADOWPLANELOCATION" Code="40" Type="double" Property="ShadowPlaneZOffset" DefaultValue="0.0" MinVersion="R2007" Comment="Locatio of the ground shadow plane.  This is a Z axis ordinate." />
+    <Variable Name="SHADOWPLANELOCATION" Code="40" Type="double" Property="ShadowPlaneZOffset" DefaultValue="0.0" MinVersion="R2007" Comment="Location of the ground shadow plane.  This is a Z axis ordinate." />
 
     <!-- Misc. R10 variables -->
     <Variable Name="AXISMODE" Code="70" Type="bool" Property="AxisOn" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R10" Comment="Axis on." />

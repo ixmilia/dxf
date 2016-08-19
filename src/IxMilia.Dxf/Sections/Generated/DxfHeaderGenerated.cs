@@ -1591,7 +1591,7 @@ namespace IxMilia.Dxf
         public DxfShadowMode ShadowMode { get; set; }
 
         /// <summary>
-        /// The $SHADOWPLANELOCATION header variable.  Locatio of the ground shadow plane.  This is a Z axis ordinate.  Minimum AutoCAD version: R2007.
+        /// The $SHADOWPLANELOCATION header variable.  Location of the ground shadow plane.  This is a Z axis ordinate.  Minimum AutoCAD version: R2007.
         /// </summary>
         public double ShadowPlaneZOffset { get; set; }
 

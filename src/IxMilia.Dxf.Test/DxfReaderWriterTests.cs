@@ -250,6 +250,49 @@ EOF
         }
 
         [Fact]
+        public void ReadDoubleAsIntegralTest()
+        {
+            // Some files encountered in the wild have double-like values for the integral types.  Ensure that those still parse
+            // and are within the valid ranges.
+
+            // short
+            var file = Section("HEADER", @"
+  9
+$ACADMAINTVER
+ 70
+2.0
+");
+            Assert.Equal(2, file.Header.MaintenenceVersion);
+
+            // int
+            file = Section("ENTITIES", @"
+  0
+ARCALIGNEDTEXT
+ 90
+15e10
+");
+            Assert.Equal(int.MaxValue, ((DxfArcAlignedText)file.Entities.Single()).ColorIndex);
+
+            // long
+            file = Section("HEADER", @"
+  9
+$REQUIREDVERSIONS
+160
+-15e20
+");
+            Assert.Equal(long.MinValue, file.Header.RequiredVersions);
+
+            // bool
+            file = Section("HEADER", @"
+  9
+$LWDISPLAY
+290
+15e10
+");
+            Assert.True(file.Header.DisplayLinewieghtInModelAndLayoutTab);
+        }
+
+        [Fact]
         public void ReadThumbnailTest()
         {
             var file = Section("THUMBNAILIMAGE", @" 90
@@ -1178,6 +1221,15 @@ $XCLIPFRAME
             Assert.True(file.Header.DisplayIntersectionPolylines);
             Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
 
+            // now test the code 290 bool with a double-formated value
+            file = Section("HEADER", @"
+  9
+$HIDETEXT
+290
+1.0
+");
+            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
+
             // now test code 280 short
             file = Section("HEADER", @"
   9
@@ -1200,6 +1252,15 @@ $XCLIPFRAME
             Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
             Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
+
+            // now test the code 280 short with a double-formatted value
+            file = Section("HEADER", @"
+  9
+$HIDETEXT
+280
+3.0
+");
+            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
 
             // verify that these variables aren't written twice
             file = new DxfFile();

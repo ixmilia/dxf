@@ -762,6 +762,8 @@ SEQEND
         public void ReadLwPolylineWithOptionalValuesTest()
         {
             var lwpolyline = (DxfLwPolyline)Entity("LWPOLYLINE", @"
+ 43
+43.0
  90
 4
  10
@@ -785,6 +787,7 @@ SEQEND
  20
 0.0
 ");
+            Assert.Equal(43.0, lwpolyline.ConstantWidth);
             Assert.Equal(4, lwpolyline.Vertices.Count);
 
             Assert.Equal(2.0, lwpolyline.Vertices[0].X);

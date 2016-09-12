@@ -23,6 +23,7 @@ namespace IxMilia.Dxf.Entities
 
                 switch (pair.Code)
                 {
+                    // vertex-specific pairs
                     case 10:
                         // start a new vertex
                         Vertices.Add(new DxfLwPolylineVertex());
@@ -42,6 +43,25 @@ namespace IxMilia.Dxf.Entities
                         break;
                     case 91:
                         Vertices.Last().Identifier = pair.IntegerValue;
+                        break;
+                    // all other pairs
+                    case 39:
+                        Thickness = pair.DoubleValue;
+                        break;
+                    case 43:
+                        ConstantWidth = pair.DoubleValue;
+                        break;
+                    case 70:
+                        Flags = pair.ShortValue;
+                        break;
+                    case 210:
+                        ExtrusionDirection.X = pair.DoubleValue;
+                        break;
+                    case 220:
+                        ExtrusionDirection.Y = pair.DoubleValue;
+                        break;
+                    case 230:
+                        ExtrusionDirection.Z = pair.DoubleValue;
                         break;
                     default:
                         if (!base.TrySetPair(pair))

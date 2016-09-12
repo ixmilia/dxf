@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf.Entities
 {

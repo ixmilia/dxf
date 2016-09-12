@@ -6,28 +6,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf.Entities
 {
     /// <summary>
     /// DxfImage class
     /// </summary>
-    public partial class DxfImage : DxfEntity
+    public partial class DxfImage : DxfEntity, IDxfItemInternal
     {
         public override DxfEntityType EntityType { get { return DxfEntityType.Image; } }
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
+
+        IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
+        {
+            yield return ImageDefinitionPointer;
+            yield return ImageDefinitionReactorPointer;
+        }
+
+        IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
+        {
+            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+        }
+
+        internal DxfPointer ImageDefinitionPointer { get; } = new DxfPointer();
+        internal DxfPointer ImageDefinitionReactorPointer { get; } = new DxfPointer();
         public int ClassVersion { get; set; }
         public DxfPoint Location { get; set; }
         public DxfVector UVector { get; set; }
         public DxfVector VVector { get; set; }
         public DxfVector ImageSize { get; set; }
-        public string ImageDefReference { get; set; }
+        public DxfImageDefinition ImageDefinition { get { return ImageDefinitionPointer.Item as DxfImageDefinition; } set { ImageDefinitionPointer.Item = value; } }
         public int DisplayOptionsFlags { get; set; }
         public bool UseClipping { get; set; }
         public short Brightness { get; set; }
         public short Contrast { get; set; }
         public short Fade { get; set; }
-        public string ImageDefReactorReference { get; set; }
+        public DxfImageDefinitionReactor ImageDefinitionReactor { get { return ImageDefinitionReactorPointer.Item as DxfImageDefinitionReactor; } set { ImageDefinitionReactorPointer.Item = value; } }
         public DxfImageClippingBoundaryType ClippingType { get; set; }
         public int ClippingVertexCount { get; set; }
         private IList<double> _clippingVerticesX { get; set; }
@@ -93,13 +108,11 @@ namespace IxMilia.Dxf.Entities
             this.UVector = DxfVector.XAxis;
             this.VVector = DxfVector.YAxis;
             this.ImageSize = DxfVector.Zero;
-            this.ImageDefReference = null;
             this.DisplayOptionsFlags = 0;
             this.UseClipping = true;
             this.Brightness = 50;
             this.Contrast = 50;
             this.Fade = 0;
-            this.ImageDefReactorReference = null;
             this.ClippingType = DxfImageClippingBoundaryType.Rectangular;
             this.ClippingVertexCount = 0;
             this._clippingVerticesX = new List<double>();
@@ -123,13 +136,13 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(32, VVector?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(13, ImageSize?.X ?? default(double)));
             pairs.Add(new DxfCodePair(23, ImageSize?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(340, (this.ImageDefReference)));
+            pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.ImageDefinitionPointer.Handle)));
             pairs.Add(new DxfCodePair(70, (short)(this.DisplayOptionsFlags)));
             pairs.Add(new DxfCodePair(280, BoolShort(this.UseClipping)));
             pairs.Add(new DxfCodePair(281, (this.Brightness)));
             pairs.Add(new DxfCodePair(282, (this.Contrast)));
             pairs.Add(new DxfCodePair(283, (this.Fade)));
-            pairs.Add(new DxfCodePair(360, (this.ImageDefReactorReference)));
+            pairs.Add(new DxfCodePair(360, DxfCommonConverters.UIntHandle(this.ImageDefinitionReactorPointer.Handle)));
             pairs.Add(new DxfCodePair(71, (short)(this.ClippingType)));
             pairs.Add(new DxfCodePair(91, ClippingVertices.Count));
             foreach (var item in ClippingVertices)
@@ -216,10 +229,10 @@ namespace IxMilia.Dxf.Entities
                     this.IsInsideClipping = (pair.BoolValue);
                     break;
                 case 340:
-                    this.ImageDefReference = (pair.StringValue);
+                    this.ImageDefinitionPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 case 360:
-                    this.ImageDefReactorReference = (pair.StringValue);
+                    this.ImageDefinitionReactorPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

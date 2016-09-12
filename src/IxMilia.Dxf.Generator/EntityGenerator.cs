@@ -291,7 +291,7 @@ namespace IxMilia.Dxf.Generator
             foreach (var entity in _entities)
             {
                 var className = Name(entity);
-                CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
+                CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Objects");
                 IncreaseIndent();
                 OutputSingleDxfEntity(entity);
                 DecreaseIndent();

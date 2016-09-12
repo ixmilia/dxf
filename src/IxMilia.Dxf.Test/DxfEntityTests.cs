@@ -830,6 +830,54 @@ mtext-value
             Assert.Equal("mtext-value", attdef.MText.Text);
         }
 
+        [Fact]
+        public void ReadImageWithImageDefinitionAndReactorTest()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+IMAGE
+999
+==================================== the 340 pair points to the image definition
+340
+FFFF0340
+999
+============================ the 360 pair points to the image definition reactor
+360
+FFFF0360
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+999
+======================================================== from the code 340 above
+  0
+IMAGEDEF
+  5
+FFFF0340
+  1
+image-def-file-path
+999
+======================================================== from the code 360 above
+  0
+IMAGEDEF_REACTOR
+  5
+FFFF0360
+  0
+ENDSEC
+  0
+EOF
+");
+            var image = (DxfImage)file.Entities.Single();
+            Assert.Equal("image-def-file-path", image.ImageDefinition.FilePath);
+            Assert.Equal(image, image.ImageDefinitionReactor.Owner);
+        }
+
         #endregion
 
         #region Write default value tests

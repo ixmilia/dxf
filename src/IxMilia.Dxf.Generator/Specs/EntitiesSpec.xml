@@ -444,7 +444,7 @@
         <Property Name="UVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
         <Property Name="VVector" Code="12" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="12,22,32" />
         <Property Name="ImageSize" Code="13" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="13,23" />
-        <Property Name="ImageDefReference" Code="340" Type="string" DefaultValue="null" />
+        <Pointer Name="ImageDefinition" Code="340" Type="DxfImageDefinition" />
         <Property Name="DisplayOptionsFlags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
             <Flag Name="ShowImage" Mask="1" />
             <Flag Name="ShowImageWhenNotAligned" Mask="2" />
@@ -455,7 +455,7 @@
         <Property Name="Brightness" Code="281" Type="short" DefaultValue="50" />
         <Property Name="Contrast" Code="282" Type="short" DefaultValue="50" />
         <Property Name="Fade" Code="283" Type="short" DefaultValue="0" />
-        <Property Name="ImageDefReactorReference" Code="360" Type="string" DefaultValue="null" />
+        <Pointer Name="ImageDefinitionReactor" Code="360" Type="DxfImageDefinitionReactor" />
         <Property Name="ClippingType" Code="71" Type="DxfImageClippingBoundaryType" DefaultValue="DxfImageClippingBoundaryType.Rectangular" ReadConverter="(DxfImageClippingBoundaryType)" WriteConverter="(short)" />
         <Property Name="ClippingVertexCount" Code="91" Type="int" DefaultValue="0" />
         <Property Name="_clippingVerticesX" Code="14" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
@@ -468,13 +468,13 @@
             <WriteProperty Property="UVector" />
             <WriteProperty Property="VVector" />
             <WriteProperty Property="ImageSize" />
-            <WriteProperty Property="ImageDefReference" />
+            <WriteProperty Property="ImageDefinition" />
             <WriteProperty Property="DisplayOptionsFlags" />
             <WriteProperty Property="UseClipping" />
             <WriteProperty Property="Brightness" />
             <WriteProperty Property="Contrast" />
             <WriteProperty Property="Fade" />
-            <WriteProperty Property="ImageDefReactorReference" />
+            <WriteProperty Property="ImageDefinitionReactor" />
             <WriteProperty Property="ClippingType" />
             <WriteSpecificValue Code="91" Value="ClippingVertices.Count" />
             <Foreach Property="ClippingVertices">

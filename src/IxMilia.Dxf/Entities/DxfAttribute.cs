@@ -114,7 +114,7 @@ namespace IxMilia.Dxf.Entities
                     this.Normal.Z = pair.DoubleValue;
                     break;
                 case 280:
-                    if (_lastSubclassMarker == AcDbXrecordText) KeepDuplicateRecords = pair.BoolValue;
+                    if (_lastSubclassMarker == AcDbXrecordText) KeepDuplicateRecords = BoolShort(pair.ShortValue);
                     else if (!_isVersionSet)
                     {
                         Version = (DxfVersion)pair.ShortValue;

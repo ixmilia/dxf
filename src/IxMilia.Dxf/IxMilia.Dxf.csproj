@@ -30,6 +30,7 @@
   <ItemGroup>
     <Compile Include="Blocks\DxfBlock.DxfEndBlock.cs" />
     <Compile Include="Collections\DxfPointerList.cs" />
+    <Compile Include="Collections\ListWithPredicates`1.cs" />
     <Compile Include="DxbItemType.cs" />
     <Compile Include="DxbReader.cs" />
     <Compile Include="DxbWriter.cs" />
@@ -117,7 +118,6 @@
     <Compile Include="Tables\DxfTableItems.cs" />
     <Compile Include="Tables\DxfTableType.cs" />
     <Compile Include="Tables\DxfViewMode.cs" />
-
     <!-- Generated files -->
     <Compile Include="Entities\Generated\*.cs" />
     <Compile Include="Objects\Generated\*.cs" />
@@ -131,7 +131,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-
   <!-- Dynamically generate code from the spec files -->
   <PropertyGroup>
     <GeneratorLocation>$(MSBuildThisFileDirectory)..\IxMilia.Dxf.Generator</GeneratorLocation>
@@ -150,9 +149,7 @@
     <RemoveDir Directories="@(DirsToClean)" />
   </Target>
   <Target Name="BeforeBuild">
-    <Exec WorkingDirectory="$(GeneratorLocation)"
-          Command="dotnet restore" />
-    <Exec WorkingDirectory="$(GeneratorLocation)"
-          Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)" "--tableDir=$(TablesOutputLocation)"' />
+    <Exec WorkingDirectory="$(GeneratorLocation)" Command="dotnet restore" />
+    <Exec WorkingDirectory="$(GeneratorLocation)" Command="dotnet run &quot;--entityDir=$(EntitiesOutputLocation)&quot; &quot;--objectDir=$(ObjectsOutputLocation)&quot; &quot;--sectionDir=$(SectionsOutputLocation)&quot; &quot;--tableDir=$(TablesOutputLocation)&quot;" />
   </Target>
 </Project>

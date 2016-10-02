@@ -158,7 +158,10 @@ namespace IxMilia.Dxf
             else
             {
                 // just a normal collection of entities
-                file.Entities.AddRange(entities);
+                foreach (var entity in entities)
+                {
+                    file.Entities.Add(entity);
+                }
             }
 
             return file;

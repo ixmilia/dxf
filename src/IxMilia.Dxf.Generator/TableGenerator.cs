@@ -39,7 +39,7 @@ namespace IxMilia.Dxf.Generator
             {
                 var tableItem = Name(table.Element(XName.Get("TableItem", _xmlns)));
                 var className = "Dxf" + Type(table) + "Table";
-                CreateNewFile(TableNamespace, "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Sections");
+                CreateNewFile(TableNamespace, "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections");
 
                 IncreaseIndent();
                 AppendLine($"public partial class {className} : DxfTable");
@@ -54,7 +54,7 @@ namespace IxMilia.Dxf.Generator
                 }
 
                 AppendLine();
-                AppendLine($"public List<{tableItem}> Items {{ get; private set; }}");
+                AppendLine($"public IList<{tableItem}> Items {{ get; private set; }}");
                 AppendLine();
                 AppendLine("protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()");
                 AppendLine("{");
@@ -67,7 +67,7 @@ namespace IxMilia.Dxf.Generator
                 AppendLine();
                 AppendLine($"public {className}()");
                 AppendLine("{");
-                AppendLine($"    Items = new List<{tableItem}>();");
+                AppendLine($"    Items = new ListNonNull<{tableItem}>();");
                 AppendLine("    Normalize();");
                 AppendLine("}");
 

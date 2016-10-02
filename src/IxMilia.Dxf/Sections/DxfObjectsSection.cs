@@ -2,17 +2,18 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf.Sections
 {
     internal class DxfObjectsSection : DxfSection
     {
-        public List<DxfObject> Objects { get; private set; }
+        public IList<DxfObject> Objects { get; }
 
         public DxfObjectsSection()
         {
-            Objects = new List<DxfObject>();
+            Objects = new ListNonNull<DxfObject>();
         }
 
         public override DxfSectionType Type { get { return DxfSectionType.Objects; } }
@@ -79,7 +80,11 @@ namespace IxMilia.Dxf.Sections
             }
 
             var section = new DxfObjectsSection();
-            section.Objects.AddRange(objects);
+            foreach (var obj in objects)
+            {
+                section.Objects.Add(obj);
+            }
+
             return section;
         }
 

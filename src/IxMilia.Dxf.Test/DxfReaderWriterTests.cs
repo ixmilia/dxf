@@ -1396,39 +1396,30 @@ AcDbBlockEnd
 
             file.ApplicationIds.Add(new DxfAppId());
             file.ApplicationIds.Add(SetAllPropertiesToDefault(new DxfAppId()));
-            file.ApplicationIds.Add(null);
 
             file.BlockRecords.Add(new DxfBlockRecord());
             file.BlockRecords.Add(SetAllPropertiesToDefault(new DxfBlockRecord()));
-            file.BlockRecords.Add(null);
 
             file.DimensionStyles.Add(new DxfDimStyle());
             file.DimensionStyles.Add(SetAllPropertiesToDefault(new DxfDimStyle()));
-            file.DimensionStyles.Add(null);
 
             file.Layers.Add(new DxfLayer());
             file.Layers.Add(SetAllPropertiesToDefault(new DxfLayer()));
-            file.Layers.Add(null);
 
             file.Linetypes.Add(new DxfLineType());
             file.Linetypes.Add(SetAllPropertiesToDefault(new DxfLineType()));
-            file.Linetypes.Add(null);
 
             file.Styles.Add(new DxfStyle());
             file.Styles.Add(SetAllPropertiesToDefault(new DxfStyle()));
-            file.Styles.Add(null);
 
             file.UserCoordinateSystems.Add(new DxfUcs());
             file.UserCoordinateSystems.Add(SetAllPropertiesToDefault(new DxfUcs()));
-            file.UserCoordinateSystems.Add(null);
 
             file.Views.Add(new DxfView());
             file.Views.Add(SetAllPropertiesToDefault(new DxfView()));
-            file.Views.Add(null);
 
             file.ViewPorts.Add(new DxfViewPort());
             file.ViewPorts.Add(SetAllPropertiesToDefault(new DxfViewPort()));
-            file.ViewPorts.Add(null);
 
             using (var ms = new MemoryStream())
             {
@@ -1443,7 +1434,6 @@ AcDbBlockEnd
             file.Header.Version = DxfAcadVersion.R2000;
             file.Blocks.Add(new DxfBlock());
             file.Blocks.Add(SetAllPropertiesToDefault(new DxfBlock()));
-            file.Blocks.Add(null);
             using (var ms = new MemoryStream())
             {
                 file.Save(ms);

@@ -6,6 +6,14 @@ using System.Collections.Generic;
 
 namespace IxMilia.Dxf.Collections
 {
+    internal class ListNonNull<T> : ListWithPredicates<T>
+    {
+        public ListNonNull()
+            : base(item => item != null, 0)
+        {
+        }
+    }
+
     internal class ListWithPredicates<T> : IList<T>
     {
         private List<T> _items = new List<T>();

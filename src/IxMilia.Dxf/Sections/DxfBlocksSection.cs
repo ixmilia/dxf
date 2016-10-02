@@ -3,16 +3,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Blocks;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Sections
 {
     internal class DxfBlocksSection : DxfSection
     {
-        public List<DxfBlock> Blocks { get; private set; }
+        public IList<DxfBlock> Blocks { get; }
 
         public DxfBlocksSection()
         {
-            Blocks = new List<DxfBlock>();
+            Blocks = new ListNonNull<DxfBlock>();
             Normalize();
         }
 

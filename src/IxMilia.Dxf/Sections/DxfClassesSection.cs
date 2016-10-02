@@ -2,16 +2,17 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Sections
 {
     internal class DxfClassesSection : DxfSection
     {
-        public List<DxfClass> Classes { get; private set; }
+        public IList<DxfClass> Classes { get; }
 
         public DxfClassesSection()
         {
-            Classes = new List<DxfClass>();
+            Classes = new ListNonNull<DxfClass>();
         }
 
         public override DxfSectionType Type

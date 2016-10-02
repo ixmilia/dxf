@@ -4,6 +4,7 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf.Tables
@@ -12,7 +13,7 @@ namespace IxMilia.Dxf.Tables
     {
         internal override DxfTableType TableType { get { return DxfTableType.Style; } }
 
-        public List<DxfStyle> Items { get; private set; }
+        public IList<DxfStyle> Items { get; private set; }
 
         protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()
         {
@@ -21,7 +22,7 @@ namespace IxMilia.Dxf.Tables
 
         public DxfStyleTable()
         {
-            Items = new List<DxfStyle>();
+            Items = new ListNonNull<DxfStyle>();
             Normalize();
         }
 

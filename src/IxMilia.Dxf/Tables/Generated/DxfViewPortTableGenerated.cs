@@ -4,6 +4,7 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf.Tables
@@ -12,7 +13,7 @@ namespace IxMilia.Dxf.Tables
     {
         internal override DxfTableType TableType { get { return DxfTableType.ViewPort; } }
 
-        public List<DxfViewPort> Items { get; private set; }
+        public IList<DxfViewPort> Items { get; private set; }
 
         protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()
         {
@@ -21,7 +22,7 @@ namespace IxMilia.Dxf.Tables
 
         public DxfViewPortTable()
         {
-            Items = new List<DxfViewPort>();
+            Items = new ListNonNull<DxfViewPort>();
             Normalize();
         }
 

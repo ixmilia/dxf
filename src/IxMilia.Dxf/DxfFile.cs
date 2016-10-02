@@ -28,33 +28,33 @@ namespace IxMilia.Dxf
 
         private DateTime _lastOpenOrSave;
 
-        public List<DxfEntity> Entities { get { return EntitiesSection.Entities; } }
+        public IList<DxfEntity> Entities { get { return EntitiesSection.Entities; } }
 
-        public List<DxfClass> Classes { get { return ClassSection.Classes; } }
+        public IList<DxfClass> Classes { get { return ClassSection.Classes; } }
 
-        public List<DxfBlock> Blocks { get { return BlocksSection.Blocks; } }
+        public IList<DxfBlock> Blocks { get { return BlocksSection.Blocks; } }
 
-        public List<DxfObject> Objects { get { return ObjectsSection.Objects; } }
+        public IList<DxfObject> Objects { get { return ObjectsSection.Objects; } }
 
         public DxfHeader Header { get { return HeaderSection.Header; } }
 
-        public List<DxfLayer> Layers { get { return TablesSection.LayerTable.Items; } }
+        public IList<DxfLayer> Layers { get { return TablesSection.LayerTable.Items; } }
 
-        public List<DxfViewPort> ViewPorts { get { return TablesSection.ViewPortTable.Items; } }
+        public IList<DxfViewPort> ViewPorts { get { return TablesSection.ViewPortTable.Items; } }
 
-        public List<DxfDimStyle> DimensionStyles { get { return TablesSection.DimStyleTable.Items; } }
+        public IList<DxfDimStyle> DimensionStyles { get { return TablesSection.DimStyleTable.Items; } }
 
-        public List<DxfView> Views { get { return TablesSection.ViewTable.Items; } }
+        public IList<DxfView> Views { get { return TablesSection.ViewTable.Items; } }
 
-        public List<DxfUcs> UserCoordinateSystems { get { return TablesSection.UcsTable.Items; } }
+        public IList<DxfUcs> UserCoordinateSystems { get { return TablesSection.UcsTable.Items; } }
 
-        public List<DxfAppId> ApplicationIds { get { return TablesSection.AppIdTable.Items; } }
+        public IList<DxfAppId> ApplicationIds { get { return TablesSection.AppIdTable.Items; } }
 
-        public List<DxfBlockRecord> BlockRecords { get { return TablesSection.BlockRecordTable.Items; } }
+        public IList<DxfBlockRecord> BlockRecords { get { return TablesSection.BlockRecordTable.Items; } }
 
-        public List<DxfLineType> Linetypes { get { return TablesSection.LTypeTable.Items; } }
+        public IList<DxfLineType> Linetypes { get { return TablesSection.LTypeTable.Items; } }
 
-        public List<DxfStyle> Styles { get { return TablesSection.StyleTable.Items; } }
+        public IList<DxfStyle> Styles { get { return TablesSection.StyleTable.Items; } }
 
         public DxfDictionary NamedObjectDictionary { get { return Objects.FirstOrDefault() as DxfDictionary; } }
 

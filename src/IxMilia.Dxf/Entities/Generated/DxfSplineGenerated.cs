@@ -113,14 +113,14 @@ namespace IxMilia.Dxf.Entities
             this.FitTolerance = 0.0000000001;
             this.StartTangent = DxfPoint.Origin;
             this.EndTangent = DxfPoint.Origin;
-            this.KnotValues = new List<double>();
+            this.KnotValues = new ListNonNull<double>();
             this.Weight = 1.0;
-            this._controlPointX = new List<double>();
-            this._controlPointY = new List<double>();
-            this._controlPointZ = new List<double>();
-            this._fitPointX = new List<double>();
-            this._fitPointY = new List<double>();
-            this._fitPointZ = new List<double>();
+            this._controlPointX = new ListNonNull<double>();
+            this._controlPointY = new ListNonNull<double>();
+            this._controlPointZ = new ListNonNull<double>();
+            this._fitPointX = new ListNonNull<double>();
+            this._fitPointY = new ListNonNull<double>();
+            this._fitPointZ = new ListNonNull<double>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

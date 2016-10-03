@@ -133,9 +133,9 @@ namespace IxMilia.Dxf.Objects
             this.StartAngle = 90.0;
             this.EndAngle = 90.0;
             this._elementCount = 0;
-            this._elementOffsets = new List<double>();
-            this._elementColors = new List<DxfColor>();
-            this._elementLinetypes = new List<string>();
+            this._elementOffsets = new ListNonNull<double>();
+            this._elementColors = new ListNonNull<DxfColor>();
+            this._elementLinetypes = new ListNonNull<string>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

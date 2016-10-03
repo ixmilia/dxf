@@ -31,7 +31,7 @@ namespace IxMilia.Dxf.Entities
             base.Initialize();
             this.VersionNumber = 0;
             this.BinaryDataLength = 0;
-            this.BinaryDataStrings = new List<string>();
+            this.BinaryDataStrings = new ListNonNull<string>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

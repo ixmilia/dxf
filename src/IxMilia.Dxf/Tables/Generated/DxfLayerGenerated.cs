@@ -4,6 +4,7 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Sections;
 using IxMilia.Dxf.Tables;
 

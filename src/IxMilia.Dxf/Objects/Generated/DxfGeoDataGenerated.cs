@@ -77,14 +77,14 @@ namespace IxMilia.Dxf.Objects
             this.ObservationToTag = null;
             this.ObservationCoverageTag = null;
             this._geoMeshPointCount = 0;
-            this._sourceMeshXPoints = new List<double>();
-            this._sourceMeshYPoints = new List<double>();
-            this._destinationMeshXPoints = new List<double>();
-            this._destinationMeshYPoints = new List<double>();
+            this._sourceMeshXPoints = new ListNonNull<double>();
+            this._sourceMeshYPoints = new ListNonNull<double>();
+            this._destinationMeshXPoints = new ListNonNull<double>();
+            this._destinationMeshYPoints = new ListNonNull<double>();
             this._facesCount = 0;
-            this._facePointIndexX = new List<int>();
-            this._facePointIndexY = new List<int>();
-            this._facePointIndexZ = new List<int>();
+            this._facePointIndexX = new ListNonNull<int>();
+            this._facePointIndexY = new ListNonNull<int>();
+            this._facePointIndexZ = new ListNonNull<int>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

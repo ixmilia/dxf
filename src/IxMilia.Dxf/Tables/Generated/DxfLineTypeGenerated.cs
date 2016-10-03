@@ -4,6 +4,7 @@
 
 using System.Linq;
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Sections;
 using IxMilia.Dxf.Tables;
 
@@ -19,15 +20,15 @@ namespace IxMilia.Dxf
         public int AlignmentCode { get; set; }
         public int ElementCount { get; set; }
         public double TotalPatternLength { get; set; }
-        public List<double> DashDotSpaceLengths { get; private set; }
-        public List<short> ComplexLinetypeElementTypes { get; private set; }
-        public List<short> ShapeNumbers { get; private set; }
-        public List<string> StylePointers { get; private set; }
-        public List<double> ScaleValues { get; private set; }
-        public List<double> RotationAngles { get; private set; }
-        public List<double> XOffsets { get; private set; }
-        public List<double> YOffsets { get; private set; }
-        public List<string> TextStrings { get; private set; }
+        public IList<double> DashDotSpaceLengths { get; private set; }
+        public IList<short> ComplexLinetypeElementTypes { get; private set; }
+        public IList<short> ShapeNumbers { get; private set; }
+        public IList<string> StylePointers { get; private set; }
+        public IList<double> ScaleValues { get; private set; }
+        public IList<double> RotationAngles { get; private set; }
+        public IList<double> XOffsets { get; private set; }
+        public IList<double> YOffsets { get; private set; }
+        public IList<string> TextStrings { get; private set; }
 
         public DxfXData XData { get; set; }
 
@@ -38,15 +39,15 @@ namespace IxMilia.Dxf
             AlignmentCode = (int)'A';
             ElementCount = 0;
             TotalPatternLength = 0.0;
-            DashDotSpaceLengths = new List<double>();
-            ComplexLinetypeElementTypes = new List<short>();
-            ShapeNumbers = new List<short>();
-            StylePointers = new List<string>();
-            ScaleValues = new List<double>();
-            RotationAngles = new List<double>();
-            XOffsets = new List<double>();
-            YOffsets = new List<double>();
-            TextStrings = new List<string>();
+            DashDotSpaceLengths = new ListNonNull<double>();
+            ComplexLinetypeElementTypes = new ListNonNull<short>();
+            ShapeNumbers = new ListNonNull<short>();
+            StylePointers = new ListNonNull<string>();
+            ScaleValues = new ListNonNull<double>();
+            RotationAngles = new ListNonNull<double>();
+            XOffsets = new ListNonNull<double>();
+            YOffsets = new ListNonNull<double>();
+            TextStrings = new ListNonNull<string>();
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

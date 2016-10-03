@@ -40,11 +40,11 @@ namespace IxMilia.Dxf.Objects
             this.ProxyObjectClassId = 499;
             this.ApplicationObjectClassId = 500;
             this.SizeInBits = 0;
-            this.BinaryObjectData = new List<string>();
-            this._objectIdsA = new List<string>();
-            this._objectIdsB = new List<string>();
-            this._objectIdsC = new List<string>();
-            this._objectIdsD = new List<string>();
+            this.BinaryObjectData = new ListNonNull<string>();
+            this._objectIdsA = new ListNonNull<string>();
+            this._objectIdsB = new ListNonNull<string>();
+            this._objectIdsC = new ListNonNull<string>();
+            this._objectIdsD = new ListNonNull<string>();
             this._objectDrawingFormat = 0u;
             this.IsOriginalObjectDxfFormat = false;
         }

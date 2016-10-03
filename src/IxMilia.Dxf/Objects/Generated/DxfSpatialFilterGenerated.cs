@@ -37,7 +37,7 @@ namespace IxMilia.Dxf.Objects
         protected override void Initialize()
         {
             base.Initialize();
-            this.ClipBoundaryDefinitionPoints = new List<DxfPoint>();
+            this.ClipBoundaryDefinitionPoints = new ListNonNull<DxfPoint>();
             this.ClipBoundaryNormal = DxfVector.ZAxis;
             this.ClipBoundaryOrigin = DxfPoint.Origin;
             this.IsClipBoundaryEnabled = false;

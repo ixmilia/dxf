@@ -36,7 +36,7 @@ namespace IxMilia.Dxf.Objects
             this.ColumnCount = 0;
             this.RowCount = 0;
             this.Name = null;
-            this.ColumnNames = new List<string>();
+            this.ColumnNames = new ListNonNull<string>();
         }
     }
 }

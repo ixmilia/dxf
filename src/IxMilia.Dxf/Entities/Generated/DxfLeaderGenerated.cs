@@ -55,9 +55,9 @@ namespace IxMilia.Dxf.Entities
             this.TextAnnotationHeight = 1.0;
             this.TextAnnotationWidth = 1.0;
             this.VertexCount = 0;
-            this._verticesX = new List<double>();
-            this._verticesY = new List<double>();
-            this._verticesZ = new List<double>();
+            this._verticesX = new ListNonNull<double>();
+            this._verticesY = new ListNonNull<double>();
+            this._verticesZ = new ListNonNull<double>();
             this.OverrideColor = DxfColor.ByBlock;
             this.AssociatedAnnotationReference = null;
             this.Normal = DxfVector.ZAxis;

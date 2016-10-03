@@ -115,8 +115,8 @@ namespace IxMilia.Dxf.Entities
             this.Fade = 0;
             this.ClippingType = DxfImageClippingBoundaryType.Rectangular;
             this.ClippingVertexCount = 0;
-            this._clippingVerticesX = new List<double>();
-            this._clippingVerticesY = new List<double>();
+            this._clippingVerticesX = new ListNonNull<double>();
+            this._clippingVerticesY = new ListNonNull<double>();
             this.IsInsideClipping = false;
         }
 

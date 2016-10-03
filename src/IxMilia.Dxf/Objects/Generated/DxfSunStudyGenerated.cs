@@ -78,12 +78,12 @@ namespace IxMilia.Dxf.Objects
             this.UseSubset = false;
             this.SheetSubsetName = null;
             this.SelectDatesFromCalendar = false;
-            this.Dates = new List<DateTime>();
+            this.Dates = new ListNonNull<DateTime>();
             this.SelectRangeOfDates = false;
             this.StartTime_SecondsPastMidnight = 0;
             this.EndTime_SecondsPastMidnight = 0;
             this.IntervalInSeconds = 0;
-            this.Hours = new List<int>();
+            this.Hours = new ListNonNull<int>();
             this.ShadePlotType = 0;
             this.ViewportsPerPage = 0;
             this.ViewportDistributionRowCount = 0;

@@ -145,7 +145,10 @@ namespace IxMilia.Dxf
         {
             _bitmapPreviewData.Clear();
             var str = DxfCommonConverters.HexBytes(BitmapData);
-            _bitmapPreviewData.AddRange(DxfCommonConverters.SplitIntoLines(str));
+            foreach (var line in DxfCommonConverters.SplitIntoLines(str))
+            {
+                _bitmapPreviewData.Add(line);
+            }
         }
 
         internal override void AfterRead()

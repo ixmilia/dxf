@@ -171,7 +171,7 @@ namespace IxMilia.Dxf.Generator
 
                 seenProperties.Add(propertyName);
                 var defaultValue = AllowMultiples(property)
-                    ? string.Format("new List<{0}>()", Type(property))
+                    ? string.Format("new ListNonNull<{0}>()", Type(property))
                     : DefaultValue(property);
                 AppendLine($"this.{propertyName} = {defaultValue};");
             }

@@ -41,7 +41,7 @@ namespace IxMilia.Dxf.Entities
             this.ObjectType = DxfOleObjectType.Static;
             this.TileMode = DxfTileModeDescriptor.InTiledViewport;
             this.BinaryDataLength = 0;
-            this.BinaryDataStrings = new List<string>();
+            this.BinaryDataStrings = new ListNonNull<string>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

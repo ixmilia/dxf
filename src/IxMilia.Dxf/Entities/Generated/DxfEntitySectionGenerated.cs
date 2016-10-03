@@ -66,13 +66,13 @@ namespace IxMilia.Dxf.Entities
             this.IndicatorColor = DxfColor.ByLayer;
             this.IndicatorColorName = null;
             this._vertexCount = 0;
-            this._vertexX = new List<double>();
-            this._vertexY = new List<double>();
-            this._vertexZ = new List<double>();
+            this._vertexX = new ListNonNull<double>();
+            this._vertexY = new ListNonNull<double>();
+            this._vertexZ = new ListNonNull<double>();
             this._backLineVertexCount = 0;
-            this._backLineVertexX = new List<double>();
-            this._backLineVertexY = new List<double>();
-            this._backLineVertexZ = new List<double>();
+            this._backLineVertexX = new ListNonNull<double>();
+            this._backLineVertexY = new ListNonNull<double>();
+            this._backLineVertexZ = new ListNonNull<double>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

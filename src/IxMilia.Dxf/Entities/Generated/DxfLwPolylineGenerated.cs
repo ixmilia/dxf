@@ -58,7 +58,7 @@ namespace IxMilia.Dxf.Entities
             this.Flags = 0;
             this.ConstantWidth = 0.0;
             this.Thickness = 0.0;
-            this.Vertices = new List<DxfLwPolylineVertex>();
+            this.Vertices = new ListNonNull<DxfLwPolylineVertex>();
             this.ExtrusionDirection = DxfVector.ZAxis;
         }
 

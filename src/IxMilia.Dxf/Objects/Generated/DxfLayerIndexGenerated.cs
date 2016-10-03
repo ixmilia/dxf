@@ -47,8 +47,8 @@ namespace IxMilia.Dxf.Objects
         {
             base.Initialize();
             this.TimeStamp = DateTime.Now;
-            this.LayerNames = new List<string>();
-            this.IdBufferCounts = new List<int>();
+            this.LayerNames = new ListNonNull<string>();
+            this.IdBufferCounts = new ListNonNull<int>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

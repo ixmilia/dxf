@@ -30,8 +30,8 @@ namespace IxMilia.Dxf.Entities
         {
             base.Initialize();
             this.FormatVersionNumber = 1;
-            this.CustomData = new List<string>();
-            this.CustomData2 = new List<string>();
+            this.CustomData = new ListNonNull<string>();
+            this.CustomData2 = new ListNonNull<string>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

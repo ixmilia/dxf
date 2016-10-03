@@ -140,7 +140,7 @@ namespace IxMilia.Dxf.Generator
             foreach (var property in GetProperties(baseEntity))
             {
                 var defaultValue = AllowMultiples(property)
-                    ? string.Format("new List<{0}>()", Type(property))
+                    ? string.Format("new ListNonNull<{0}>()", Type(property))
                     : DefaultValue(property);
                 AppendLine($"    this.{Name(property)} = {defaultValue};");
             }

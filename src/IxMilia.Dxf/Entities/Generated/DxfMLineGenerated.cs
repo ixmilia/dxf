@@ -114,19 +114,19 @@ namespace IxMilia.Dxf.Entities
             this.StyleElementCount = 0;
             this.StartPoint = DxfPoint.Origin;
             this.Normal = DxfVector.ZAxis;
-            this._vertexX = new List<double>();
-            this._vertexY = new List<double>();
-            this._vertexZ = new List<double>();
-            this._segmentDirectionX = new List<double>();
-            this._segmentDirectionY = new List<double>();
-            this._segmentDirectionZ = new List<double>();
-            this._miterDirectionX = new List<double>();
-            this._miterDirectionY = new List<double>();
-            this._miterDirectionZ = new List<double>();
+            this._vertexX = new ListNonNull<double>();
+            this._vertexY = new ListNonNull<double>();
+            this._vertexZ = new ListNonNull<double>();
+            this._segmentDirectionX = new ListNonNull<double>();
+            this._segmentDirectionY = new ListNonNull<double>();
+            this._segmentDirectionZ = new ListNonNull<double>();
+            this._miterDirectionX = new ListNonNull<double>();
+            this._miterDirectionY = new ListNonNull<double>();
+            this._miterDirectionZ = new ListNonNull<double>();
             this._parameterCount = 0;
-            this.Parameters = new List<double>();
+            this.Parameters = new ListNonNull<double>();
             this._areaFillParameterCount = 0;
-            this.AreaFillParameters = new List<double>();
+            this.AreaFillParameters = new ListNonNull<double>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

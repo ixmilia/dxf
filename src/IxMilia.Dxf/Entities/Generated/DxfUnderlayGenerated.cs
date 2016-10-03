@@ -134,8 +134,8 @@ namespace IxMilia.Dxf.Entities
             this.Flags = 0;
             this.Contrast = 100;
             this.Fade = 0;
-            this._pointX = new List<double>();
-            this._pointY = new List<double>();
+            this._pointX = new ListNonNull<double>();
+            this._pointY = new ListNonNull<double>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

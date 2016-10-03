@@ -61,7 +61,7 @@ namespace IxMilia.Dxf.Entities
             this.ReferenceRectangleWidth = 1.0;
             this.AttachmentPoint = DxfAttachmentPoint.TopLeft;
             this.DrawingDirection = DxfDrawingDirection.LeftToRight;
-            this.ExtendedText = new List<string>();
+            this.ExtendedText = new ListNonNull<string>();
             this.Text = null;
             this.TextStyleName = "STANDARD";
             this.ExtrusionDirection = DxfVector.ZAxis;
@@ -83,7 +83,7 @@ namespace IxMilia.Dxf.Entities
             this.IsColumnAutoHeight = true;
             this.ColumnWidth = 0.0;
             this.ColumnGutter = 0.0;
-            this.ColumnHeights = new List<double>();
+            this.ColumnHeights = new ListNonNull<double>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

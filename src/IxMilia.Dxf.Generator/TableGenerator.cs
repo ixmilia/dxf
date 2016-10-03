@@ -113,7 +113,7 @@ namespace IxMilia.Dxf.Generator
             {
                 var tableItem = table.Element(XName.Get("TableItem", _xmlns));
                 var properties = tableItem.Elements(XName.Get("Property", _xmlns));
-                CreateNewFile("IxMilia.Dxf", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
+                CreateNewFile("IxMilia.Dxf", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
 
                 IncreaseIndent();
                 AppendLine($"public partial class {Name(tableItem)} : DxfSymbolTableFlags");
@@ -142,7 +142,7 @@ namespace IxMilia.Dxf.Generator
                         var propertyType = Type(property);
                         if (AllowMultiples(property))
                         {
-                            propertyType = $"List<{propertyType}>";
+                            propertyType = $"IList<{propertyType}>";
                         }
 
                         var getset = $"{{ get; {SetterAccessibility(property)}set; }}";
@@ -166,7 +166,7 @@ namespace IxMilia.Dxf.Generator
                     var defaultValue = DefaultValue(property);
                     if (AllowMultiples(property))
                     {
-                        defaultValue = $"new List<{Type(property)}>()";
+                        defaultValue = $"new ListNonNull<{Type(property)}>()";
                     }
 
                     AppendLine($"{Name(property)} = {defaultValue};");

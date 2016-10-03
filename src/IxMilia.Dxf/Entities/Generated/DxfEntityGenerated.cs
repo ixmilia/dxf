@@ -184,7 +184,7 @@ namespace IxMilia.Dxf.Entities
             this.LinetypeScale = 1.0;
             this.IsVisible = true;
             this.ImageByteCount = 0;
-            this.PreviewImageData = new List<string>();
+            this.PreviewImageData = new ListNonNull<string>();
             this.Color24Bit = 0;
             this.ColorName = null;
             this.Transparency = 0;

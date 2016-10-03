@@ -44,7 +44,7 @@ namespace IxMilia.Dxf.Objects
             this.VerticalCellMargin = 0.06;
             this.IsTitleSuppressed = false;
             this.IsColumnHeadingSuppressed = false;
-            this.CellStyles = new List<DxfTableCellStyle>();
+            this.CellStyles = new ListNonNull<DxfTableCellStyle>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

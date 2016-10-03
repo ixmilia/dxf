@@ -87,7 +87,7 @@ namespace IxMilia.Dxf.Objects
             this.EvaluationErrorCode = 0;
             this._objectIdCount = 0;
             this._dataSetCount = 0;
-            this.FieldDataKeys = new List<string>();
+            this.FieldDataKeys = new ListNonNull<string>();
             this.EvaluatedCacheKey = "ACFD_FIELD_VALUE";
             this._valueTypeCode = 0;
             this._longValue = 0;
@@ -98,7 +98,7 @@ namespace IxMilia.Dxf.Objects
             this._formatStringCode301 = null;
             this._formatStringOverflow = null;
             this._formatStringLength = 0;
-            this._childFieldCount_valueTypeCode = new List<int>();
+            this._childFieldCount_valueTypeCode = new ListNonNull<int>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -14,8 +15,8 @@ namespace IxMilia.Dxf.Objects
             public DxfPoint DestinationPoint { get; set; }
         }
 
-        public List<DxfGeoMeshPoint> GeoMeshPoints { get; } = new List<DxfGeoMeshPoint>();
-        public List<DxfPoint> FaceIndices { get; } = new List<DxfPoint>();
+        public IList<DxfGeoMeshPoint> GeoMeshPoints { get; } = new ListNonNull<DxfGeoMeshPoint>();
+        public IList<DxfPoint> FaceIndices { get; } = new ListNonNull<DxfPoint>();
 
         public IDxfItem HostBlock
         {

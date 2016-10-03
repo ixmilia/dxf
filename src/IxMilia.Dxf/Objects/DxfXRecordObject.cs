@@ -2,12 +2,13 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Objects
 {
     public partial class DxfXRecordObject
     {
-        public List<DxfCodePair> DataPairs { get; } = new List<DxfCodePair>();
+        public IList<DxfCodePair> DataPairs { get; } = new ListNonNull<DxfCodePair>();
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {

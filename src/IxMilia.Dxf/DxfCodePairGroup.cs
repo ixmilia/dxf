@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf
 {
@@ -17,7 +18,7 @@ namespace IxMilia.Dxf
 
         public string GroupName { get; set; }
 
-        public List<IDxfCodePairOrGroup> Items { get; private set; }
+        public IList<IDxfCodePairOrGroup> Items { get; }
 
         public bool IsCodePair { get { return false; } }
 
@@ -29,7 +30,7 @@ namespace IxMilia.Dxf
         public DxfCodePairGroup(string groupName, IEnumerable<IDxfCodePairOrGroup> items)
         {
             GroupName = groupName;
-            Items = items == null ? new List<IDxfCodePairOrGroup>() : items.ToList();
+            Items = items == null ? (IList<IDxfCodePairOrGroup>)(new ListNonNull<IDxfCodePairOrGroup>()) : items.ToList();
         }
 
         internal void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

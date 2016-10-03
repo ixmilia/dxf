@@ -152,7 +152,11 @@ namespace IxMilia.Dxf
                 // entities are all contained in a block
                 var block = new DxfBlock();
                 block.BasePoint = blockBase;
-                block.Entities.AddRange(entities);
+                foreach (var entity in entities)
+                {
+                    block.Entities.Add(entity);
+                }
+
                 file.Blocks.Add(block);
             }
             else

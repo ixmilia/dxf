@@ -3,6 +3,7 @@
 using IxMilia.Dxf.Sections;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Tables
 {
@@ -54,11 +55,11 @@ namespace IxMilia.Dxf.Tables
         internal virtual string TableClassName { get { return null; } }
         public uint Handle { get; set; }
         public uint OwnerHandle { get; set; }
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+        public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
 
         public DxfTable()
         {
-            ExtensionDataGroups = new List<DxfCodePairGroup>();
+            ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
         }
 
         internal virtual void Normalize() { }
@@ -276,7 +277,11 @@ namespace IxMilia.Dxf.Tables
                     }
                 }
 
-                result.ExtensionDataGroups.AddRange(groups);
+                foreach (var group in groups)
+                {
+                    result.ExtensionDataGroups.Add(group);
+                }
+
                 result.AfterRead();
             }
 

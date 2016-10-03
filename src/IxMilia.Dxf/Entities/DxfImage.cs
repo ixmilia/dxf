@@ -3,21 +3,22 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfImage
     {
-        private List<DxfPoint> clippingVertices = new List<DxfPoint>();
-        public List<DxfPoint> ClippingVertices
-        {
-            get { return clippingVertices; }
-        }
+        public IList<DxfPoint> ClippingVertices { get; } = new ListNonNull<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {
             Debug.Assert((ClippingVertexCount == _clippingVerticesX.Count) && (ClippingVertexCount == _clippingVerticesY.Count));
-            clippingVertices.AddRange(_clippingVerticesX.Zip(_clippingVerticesY, (x, y) => new DxfPoint(x, y, 0.0)));
+            foreach (var point in _clippingVerticesX.Zip(_clippingVerticesY, (x, y) => new DxfPoint(x, y, 0.0)))
+            {
+                ClippingVertices.Add(point);
+            }
+
             _clippingVerticesX.Clear();
             _clippingVerticesY.Clear();
             return this;

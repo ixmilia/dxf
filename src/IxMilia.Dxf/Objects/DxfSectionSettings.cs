@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -10,10 +11,10 @@ namespace IxMilia.Dxf.Objects
     {
         public int SectionType { get; set; }
         public bool IsGenerationOption { get; set; }
-        public List<uint> SourceObjectHandles { get; } = new List<uint>();
+        public IList<uint> SourceObjectHandles { get; } = new List<uint>();
         public uint DestinationObjectHandle { get; set; }
         public string DestinationFileName { get; set; }
-        public List<DxfSectionGeometrySettings> GeometrySettings { get; } = new List<DxfSectionGeometrySettings>();
+        public IList<DxfSectionGeometrySettings> GeometrySettings { get; } = new ListNonNull<DxfSectionGeometrySettings>();
 
         internal void AddCodePairs(List<DxfCodePair> pairs)
         {
@@ -222,7 +223,7 @@ namespace IxMilia.Dxf.Objects
 
     public partial class DxfSectionSettings
     {
-        public List<DxfSectionTypeSettings> SectionTypeSettings { get; } = new List<DxfSectionTypeSettings>();
+        public IList<DxfSectionTypeSettings> SectionTypeSettings { get; } = new ListNonNull<DxfSectionTypeSettings>();
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {

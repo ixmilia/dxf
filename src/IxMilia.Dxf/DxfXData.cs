@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf
 {
@@ -29,7 +30,7 @@ namespace IxMilia.Dxf
     public class DxfXData
     {
         public string ApplicationName { get; set; }
-        public List<DxfXDataItem> Items { get; private set; }
+        public List<DxfXDataItem> Items { get; }
 
         public DxfXData(string applicationName, IEnumerable<DxfXDataItem> items)
         {
@@ -232,11 +233,11 @@ namespace IxMilia.Dxf
     {
         public override DxfXDataType Type { get { return DxfXDataType.ControlString; } }
 
-        public List<DxfXDataItem> Items { get; private set; }
+        public IList<DxfXDataItem> Items { get; private set; }
 
         public DxfXDataControlGroup()
         {
-            Items = new List<DxfXDataItem>();
+            Items = new ListNonNull<DxfXDataItem>();
         }
 
         public DxfXDataControlGroup(IEnumerable<DxfXDataItem> items)

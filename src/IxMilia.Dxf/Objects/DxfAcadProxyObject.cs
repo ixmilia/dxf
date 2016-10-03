@@ -1,12 +1,13 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Objects
 {
     public partial class DxfAcadProxyObject
     {
-        public List<string> ObjectIds { get; } = new List<string>();
+        public IList<string> ObjectIds { get; } = new ListNonNull<string>();
 
         public uint DrawingVersion
         {
@@ -22,10 +23,26 @@ namespace IxMilia.Dxf.Objects
 
         protected override DxfObject PostParse()
         {
-            ObjectIds.AddRange(_objectIdsA);
-            ObjectIds.AddRange(_objectIdsB);
-            ObjectIds.AddRange(_objectIdsC);
-            ObjectIds.AddRange(_objectIdsD);
+            foreach (var a in _objectIdsA)
+            {
+                ObjectIds.Add(a);
+            }
+
+            foreach (var b in _objectIdsB)
+            {
+                ObjectIds.Add(b);
+            }
+
+            foreach (var c in _objectIdsC)
+            {
+                ObjectIds.Add(c);
+            }
+
+            foreach (var d in _objectIdsD)
+            {
+                ObjectIds.Add(d);
+            }
+
             _objectIdsA.Clear();
             _objectIdsB.Clear();
             _objectIdsC.Clear();

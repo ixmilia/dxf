@@ -6,7 +6,7 @@ namespace IxMilia.Dxf
 {
     public interface IDxfHasXData
     {
-        List<DxfCodePairGroup> ExtensionDataGroups { get; }
+        IList<DxfCodePairGroup> ExtensionDataGroups { get; }
     }
 
     internal interface IDxfHasXDataHidden

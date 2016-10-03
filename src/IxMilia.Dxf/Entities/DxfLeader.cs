@@ -2,16 +2,13 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfLeader
     {
-        private List<DxfPoint> vertices = new List<DxfPoint>();
-        public List<DxfPoint> Vertices
-        {
-            get { return vertices; }
-        }
+        public IList<DxfPoint> Vertices { get; } = new ListNonNull<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {

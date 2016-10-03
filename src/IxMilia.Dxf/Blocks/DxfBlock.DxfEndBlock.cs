@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Blocks
 {
@@ -31,12 +32,12 @@ namespace IxMilia.Dxf.Blocks
             #endregion
 
             public DxfBlock Parent => (DxfBlock)Owner;
-            public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+            public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
 
             public DxfEndBlock(DxfBlock parent)
             {
                 Owner = parent;
-                ExtensionDataGroups = new List<DxfCodePairGroup>();
+                ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
             }
 
             public void ApplyCodePairs(DxfCodePairBufferReader buffer, DxfAcadVersion version)

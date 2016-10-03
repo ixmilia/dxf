@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -175,7 +176,7 @@ namespace IxMilia.Dxf.Entities
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
 
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; } = new List<DxfCodePairGroup>();
+        public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
         DxfXData IDxfHasXDataHidden.XDataHidden{ get; set; }
 
@@ -194,7 +195,7 @@ namespace IxMilia.Dxf.Entities
         protected DxfEntity()
         {
             Initialize();
-            ExtensionDataGroups = new List<DxfCodePairGroup>();
+            ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
         }
 
         protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

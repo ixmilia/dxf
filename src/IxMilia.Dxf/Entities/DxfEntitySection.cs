@@ -2,13 +2,14 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfEntitySection
     {
-        public List<DxfPoint> Vertices { get; } = new List<DxfPoint>();
-        public List<DxfPoint> BackLineVertices { get; } = new List<DxfPoint>();
+        public IList<DxfPoint> Vertices { get; } = new ListNonNull<DxfPoint>();
+        public IList<DxfPoint> BackLineVertices { get; } = new ListNonNull<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {

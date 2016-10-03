@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -14,7 +15,7 @@ namespace IxMilia.Dxf.Objects
             public string Linetype { get; set; }
         }
 
-        public List<DxfMLineStyleElement> Elements { get; } = new List<DxfMLineStyleElement>();
+        public IList<DxfMLineStyleElement> Elements { get; } = new ListNonNull<DxfMLineStyleElement>();
 
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {

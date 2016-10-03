@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -22,24 +23,16 @@ namespace IxMilia.Dxf.Entities
             get { return FitPoints.Count; }
         }
 
-        private List<DxfPoint> controlPoints = new List<DxfPoint>();
-        public List<DxfPoint> ControlPoints
-        {
-            get { return controlPoints; }
-        }
+        public IList<DxfPoint> ControlPoints { get; } = new ListNonNull<DxfPoint>();
 
-        private List<DxfPoint> fitPoints = new List<DxfPoint>();
-        public List<DxfPoint> FitPoints
-        {
-            get { return fitPoints; }
-        }
+        public IList<DxfPoint> FitPoints { get; } = new ListNonNull<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {
             Debug.Assert((_controlPointX.Count == _controlPointY.Count) && (_controlPointX.Count == _controlPointZ.Count));
             for (int i = 0; i < _controlPointX.Count; i++)
             {
-                controlPoints.Add(new DxfPoint(_controlPointX[i], _controlPointY[i], _controlPointZ[i]));
+                ControlPoints.Add(new DxfPoint(_controlPointX[i], _controlPointY[i], _controlPointZ[i]));
             }
 
             _controlPointX.Clear();
@@ -49,7 +42,7 @@ namespace IxMilia.Dxf.Entities
             Debug.Assert((_fitPointX.Count == _fitPointY.Count) && (_fitPointX.Count == _fitPointZ.Count));
             for (int i = 0; i < _fitPointX.Count; i++)
             {
-                fitPoints.Add(new DxfPoint(_fitPointX[i], _fitPointY[i], _fitPointZ[i]));
+                FitPoints.Add(new DxfPoint(_fitPointX[i], _fitPointY[i], _fitPointZ[i]));
             }
 
             _fitPointX.Clear();

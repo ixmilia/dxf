@@ -2,12 +2,13 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfUnderlay
     {
-        public List<DxfPoint> BoundaryPoints { get; } = new List<DxfPoint>();
+        public IList<DxfPoint> BoundaryPoints { get; } = new ListNonNull<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {

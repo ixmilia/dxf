@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Tables;
 
 namespace IxMilia.Dxf
@@ -28,11 +29,11 @@ namespace IxMilia.Dxf
         protected abstract DxfTableType TableType { get; }
         public uint Handle { get; set; }
         public uint OwnerHandle { get; set; }
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+        public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
 
         public DxfSymbolTableFlags()
         {
-            ExtensionDataGroups = new List<DxfCodePairGroup>();
+            ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
         }
 
         internal void AddCommonValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

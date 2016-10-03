@@ -2,14 +2,15 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfMLine
     {
-        public List<DxfPoint> Vertices { get; } = new List<DxfPoint>();
-        public List<DxfVector> SegmentDirections { get; } = new List<DxfVector>();
-        public List<DxfVector> MiterDirections { get; } = new List<DxfVector>();
+        public IList<DxfPoint> Vertices { get; } = new ListNonNull<DxfPoint>();
+        public IList<DxfVector> SegmentDirections { get; } = new ListNonNull<DxfVector>();
+        public IList<DxfVector> MiterDirections { get; } = new ListNonNull<DxfVector>();
 
         protected override DxfEntity PostParse()
         {

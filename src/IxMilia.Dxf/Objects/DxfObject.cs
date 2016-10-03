@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
@@ -79,7 +80,7 @@ namespace IxMilia.Dxf.Objects
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
 
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; } = new List<DxfCodePairGroup>();
+        public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
         DxfXData IDxfHasXDataHidden.XDataHidden { get; set; }
 

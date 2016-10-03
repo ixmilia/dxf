@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Blocks
@@ -40,10 +41,10 @@ namespace IxMilia.Dxf.Blocks
         public string Name { get; set; }
         public DxfPoint BasePoint { get; set; }
         public string XrefName { get; set; }
-        public List<DxfEntity> Entities { get; private set; }
+        public IList<DxfEntity> Entities { get; }
         public string Description { get; set; }
         public DxfXData XData { get; set; }
-        public List<DxfCodePairGroup> ExtensionDataGroups { get; private set; }
+        public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
         private DxfEndBlock EndBlock
         {
             get { return _endBlockPointer.Item as DxfEndBlock; }
@@ -95,8 +96,8 @@ namespace IxMilia.Dxf.Blocks
         public DxfBlock()
         {
             BasePoint = DxfPoint.Origin;
-            Entities = new List<DxfEntity>();
-            ExtensionDataGroups = new List<DxfCodePairGroup>();
+            Entities = new ListNonNull<DxfEntity>();
+            ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
             EndBlock = new DxfEndBlock(this);
         }
 

@@ -415,18 +415,18 @@ EOF
                 var file = fileGenerator();
                 var allIxMiliaVersions = new[]
                 {
-                DxfAcadVersion.R9,
-                DxfAcadVersion.R10,
-                DxfAcadVersion.R11,
-                DxfAcadVersion.R12,
-                DxfAcadVersion.R13,
-                DxfAcadVersion.R14,
-                DxfAcadVersion.R2000,
-                DxfAcadVersion.R2004,
-                DxfAcadVersion.R2007,
-                DxfAcadVersion.R2010,
-                DxfAcadVersion.R2013
-            };
+                    DxfAcadVersion.R9,
+                    DxfAcadVersion.R10,
+                    DxfAcadVersion.R11,
+                    DxfAcadVersion.R12,
+                    DxfAcadVersion.R13,
+                    DxfAcadVersion.R14,
+                    DxfAcadVersion.R2000,
+                    DxfAcadVersion.R2004,
+                    DxfAcadVersion.R2007,
+                    DxfAcadVersion.R2010,
+                    DxfAcadVersion.R2013
+                };
                 foreach (var version in allIxMiliaVersions)
                 {
                     file.Header.Version = version;

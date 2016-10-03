@@ -51,7 +51,11 @@ namespace IxMilia.Dxf.Collections
         public T this[int index]
         {
             get { return _items[index]; }
-            set { _items[index] = value; }
+            set
+            {
+                ValidatePredicate(value);
+                _items[index] = value;
+            }
         }
 
         public int Count => _items.Count;

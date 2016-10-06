@@ -25,7 +25,7 @@ namespace IxMilia.Dxf.Generator
 
         public void Run()
         {
-            _xml = XDocument.Load("Specs\\HeaderVariablesSpec.xml").Root;
+            _xml = XDocument.Load(Path.Combine("Specs", "HeaderVariablesSpec.xml")).Root;
             _xmlns = _xml.Name.NamespaceName;
             _variables = _xml.Elements(XName.Get("Variable", _xmlns));
 

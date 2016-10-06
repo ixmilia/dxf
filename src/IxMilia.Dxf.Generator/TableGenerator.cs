@@ -25,7 +25,7 @@ namespace IxMilia.Dxf.Generator
 
         public void Run()
         {
-            _xml = XDocument.Load("Specs\\TableSpec.xml").Root;
+            _xml = XDocument.Load(Path.Combine("Specs", "TableSpec.xml")).Root;
             _xmlns = _xml.Name.NamespaceName;
             _tables = _xml.Elements(XName.Get("Table", _xmlns));
 

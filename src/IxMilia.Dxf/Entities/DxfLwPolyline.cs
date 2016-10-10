@@ -21,6 +21,11 @@ namespace IxMilia.Dxf.Entities
                     pair = buffer.Peek();
                 }
 
+                if (pair.Code == 0)
+                {
+                    break;
+                }
+
                 switch (pair.Code)
                 {
                     // vertex-specific pairs

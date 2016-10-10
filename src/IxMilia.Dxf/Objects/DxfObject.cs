@@ -145,6 +145,11 @@ namespace IxMilia.Dxf.Objects
                     pair = buffer.Peek();
                 }
 
+                if (pair.Code == 0)
+                {
+                    break;
+                }
+
                 if (!TrySetPair(pair))
                 {
                     ExcessCodePairs.Add(pair);

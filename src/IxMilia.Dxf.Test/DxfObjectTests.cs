@@ -1683,6 +1683,25 @@ two
         }
 
         [Fact]
+        public void ReadObjectWithUnterminatedXData()
+        {
+            // dictionary value with XDATA
+            var file = Section("OBJECTS", @"
+  0
+ACDBPLACEHOLDER
+1001
+IxMilia.Dxf
+  0
+ACDBPLACEHOLDER
+1001
+IxMilia.Dxf
+");
+            Assert.Equal(2, file.Objects.Count);
+            Assert.IsType<DxfPlaceHolder>(file.Objects[0]);
+            Assert.IsType<DxfPlaceHolder>(file.Objects[1]);
+        }
+
+       [Fact]
         public void ReadXRecordWithMultipleXDataTest1()
         {
             var xrecord = (DxfXRecordObject)GenObject("XRECORD", @"

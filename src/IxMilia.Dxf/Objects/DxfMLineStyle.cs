@@ -71,7 +71,10 @@ namespace IxMilia.Dxf.Objects
                         readElementCount = true;
                         break;
                     default:
-                        ExcessCodePairs.Add(pair);
+                        if (!base.TrySetPair(pair))
+                        {
+                            ExcessCodePairs.Add(pair);
+                        }
                         break;
                 }
 

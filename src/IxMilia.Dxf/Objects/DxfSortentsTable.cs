@@ -45,7 +45,10 @@ namespace IxMilia.Dxf.Objects
                         isReadyForSortHandles = true;
                         break;
                     default:
-                        ExcessCodePairs.Add(pair);
+                        if (!base.TrySetPair(pair))
+                        {
+                            ExcessCodePairs.Add(pair);
+                        }
                         break;
                 }
 

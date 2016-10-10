@@ -333,6 +333,69 @@ value-2
         }
 
         [Fact]
+        public void ReadDictionaryTest5()
+        {
+            // dictionary with MLINESTYLE value
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  5
+42
+  3
+Standard
+350
+43
+  0
+MLINESTYLE
+  5
+43
+330
+42
+  2
+Standard
+");
+            var dict = (DxfDictionary)file.Objects.First();
+            var mlineStyle = (DxfMLineStyle)dict["Standard"];
+            Assert.Equal("Standard", mlineStyle.StyleName);
+
+            // now round-trip it
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms);
+                ms.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                var file2 = DxfFile.Load(ms);
+                var dict2 = (DxfDictionary)file.Objects.First();
+                var mlineStyle2 = (DxfMLineStyle)dict["Standard"];
+                Assert.Equal("Standard", mlineStyle2.StyleName);
+            }
+        }
+
+        [Fact]
+        public void DictionaryWithUnsupportedObjectTest()
+        {
+            var file = Section("OBJECTS", @"
+  0
+DICTIONARY
+  5
+42
+  3
+key
+350
+43
+  0
+UNSUPPORTED_OBJECT
+  5
+43
+330
+42
+");
+            var dict = (DxfDictionary)file.Objects.Single();
+            Assert.Equal(1, dict.Keys.Count);
+            Assert.Null(dict["key"]);
+        }
+
+        [Fact]
         public void WriteDictionaryTest1()
         {
             // dictionary with simple DICTIONARYVAR values

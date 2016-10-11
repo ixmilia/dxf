@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.25802.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IxMilia.Dxf", "IxMilia.Dxf\IxMilia.Dxf.csproj", "{C067E97D-3B96-462A-B09D-33FAD60DE761}"
 EndProject
@@ -13,6 +13,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9207AD
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IxMilia.Dxf.Generator", "IxMilia.Dxf.Generator\IxMilia.Dxf.Generator.csproj", "{34D31EC8-883B-4C37-AF98-A4BD5D0E2D3B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8A98E7D-EF46-4BBC-9AB4-C42848E2D321}"
+	ProjectSection(SolutionItems) = preProject
+		..\BuildAndTest.proj = ..\BuildAndTest.proj
+		CreatePackage.proj = CreatePackage.proj
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

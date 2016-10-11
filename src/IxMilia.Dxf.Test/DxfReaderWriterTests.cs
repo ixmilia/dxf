@@ -1918,7 +1918,7 @@ ENDTAB
         }
 
         [Fact]
-        public void DefaultTableItemsTest()
+        public void DefaultTableItemsExistTest()
         {
             var file = new DxfFile();
             Assert.Equal(new[] { "ACAD", "ACADANNOTATIVE", "ACAD_NAV_VCDISPLAY", "ACAD_MLEADERVER" }, file.ApplicationIds.Select(a => a.Name).ToArray());
@@ -1926,6 +1926,102 @@ ENDTAB
             Assert.Equal("0", file.Layers.Single().Name);
             Assert.Equal(new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" }, file.Linetypes.Select(l => l.Name).ToArray());
             Assert.Equal("*ACTIVE", file.ViewPorts.Single().Name);
+        }
+
+        [Fact]
+        public void DefaultTableItemsNotDuplicatedWithDifferingCaseTest()
+        {
+            // add lower case versions of expected items to an empty file
+            var file = new DxfFile();
+            file.Clear();
+            var expectedAppIds = new[] { "acad", "acadannotative", "acad_nav_vcdisplay", "acad_mleaderver" };
+            var expectedBlockRecords = new[] { "*model_space", "*paper_space" };
+            var expectedDimStyles = new[] { "standard", "annotative" };
+            var expectedLineTypes = new[] { "bylayer", "byblock", "continuous" };
+            var expectedStyles = new[] { "standard", "annotative" };
+            var expectedViewPorts = new[] { "*active" };
+            var expectedLayers = new[] { "0" };
+
+            foreach (var name in expectedAppIds)
+            {
+                file.ApplicationIds.Add(new DxfAppId() { Name = name });
+            }
+
+            foreach (var name in expectedBlockRecords)
+            {
+                file.BlockRecords.Add(new DxfBlockRecord() { Name = name });
+            }
+
+            foreach (var name in expectedDimStyles)
+            {
+                file.DimensionStyles.Add(new DxfDimStyle() { Name = name });
+            }
+
+            foreach (var name in expectedLineTypes)
+            {
+                file.Linetypes.Add(new DxfLineType() { Name = name });
+            }
+
+            foreach (var name in expectedStyles)
+            {
+                file.Styles.Add(new DxfStyle() { Name = name });
+            }
+
+            foreach (var name in expectedViewPorts)
+            {
+                file.ViewPorts.Add(new DxfViewPort() { Name = name });
+            }
+
+            foreach (var name in expectedLayers)
+            {
+                file.Layers.Add(new DxfLayer() { Name = name });
+            }
+
+            // normalize to ensure everything is there
+            file.Normalize();
+
+            // ensure there aren't duplicates of anything
+            Assert.Equal(expectedAppIds.Length, file.ApplicationIds.Count);
+            foreach (var expected in expectedAppIds)
+            {
+                Assert.Equal(1, file.ApplicationIds.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedBlockRecords.Length, file.BlockRecords.Count);
+            foreach (var expected in expectedBlockRecords)
+            {
+                Assert.Equal(1, file.BlockRecords.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedDimStyles.Length, file.DimensionStyles.Count);
+            foreach (var expected in expectedDimStyles)
+            {
+                Assert.Equal(1, file.DimensionStyles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedLineTypes.Length, file.Linetypes.Count);
+            foreach (var expected in expectedLineTypes)
+            {
+                Assert.Equal(1, file.Linetypes.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedStyles.Length, file.Styles.Count);
+            foreach (var expected in expectedStyles)
+            {
+                Assert.Equal(1, file.Styles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedViewPorts.Length, file.ViewPorts.Count);
+            foreach (var expected in expectedViewPorts)
+            {
+                Assert.Equal(1, file.ViewPorts.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedLayers.Length, file.Layers.Count);
+            foreach (var expected in expectedLayers)
+            {
+                Assert.Equal(1, file.Layers.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
         }
 
         [Fact]

@@ -1,9 +1,10 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using IxMilia.Dxf.Sections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf.Tables
 {
@@ -314,7 +315,7 @@ namespace IxMilia.Dxf.Tables
         {
             foreach (var name in new[] { "ACAD", "ACADANNOTATIVE", "ACAD_NAV_VCDISPLAY", "ACAD_MLEADERVER" })
             {
-                if (!Items.Any(a => a.Name == name))
+                if (!Items.Any(a => string.Compare(a.Name, name, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     Items.Add(new DxfAppId() { Name = name });
                 }
@@ -344,7 +345,7 @@ namespace IxMilia.Dxf.Tables
         {
             foreach (var name in new[] { "*MODEL_SPACE", "*PAPER_SPACE" })
             {
-                if (!Items.Any(a => a.Name == name))
+                if (!Items.Any(a => string.Compare(a.Name, name, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     Items.Add(new DxfBlockRecord() { Name = name });
                 }
@@ -358,7 +359,7 @@ namespace IxMilia.Dxf.Tables
         {
             foreach (var name in new[] { "STANDARD", "ANNOTATIVE" })
             {
-                if (!Items.Any(a => a.Name == name))
+                if (!Items.Any(a => string.Compare(a.Name, name, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     Items.Add(new DxfDimStyle() { Name = name });
                 }
@@ -383,7 +384,7 @@ namespace IxMilia.Dxf.Tables
         {
             foreach (var name in new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" })
             {
-                if (!Items.Any(a => a.Name == name))
+                if (!Items.Any(a => string.Compare(a.Name, name, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     Items.Add(new DxfLineType() { Name = name });
                 }
@@ -397,7 +398,7 @@ namespace IxMilia.Dxf.Tables
         {
             foreach (var name in new[] { "STANDARD", "ANNOTATIVE" })
             {
-                if (!Items.Any(a => a.Name == name))
+                if (!Items.Any(a => string.Compare(a.Name, name, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     Items.Add(new DxfStyle() { Name = name });
                 }
@@ -409,7 +410,7 @@ namespace IxMilia.Dxf.Tables
     {
         internal override void Normalize()
         {
-            if (!Items.Any(a => a.Name == DxfViewPort.ActiveViewPortName))
+            if (!Items.Any(a => string.Compare(a.Name, DxfViewPort.ActiveViewPortName, StringComparison.OrdinalIgnoreCase) == 0))
             {
                 Items.Add(new DxfViewPort() { Name = DxfViewPort.ActiveViewPortName });
             }

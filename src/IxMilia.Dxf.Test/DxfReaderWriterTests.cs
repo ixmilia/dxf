@@ -1390,6 +1390,103 @@ AcDbBlockEnd
         }
 
         [Fact]
+        public void ReadLineTypeElementsTest()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+LTYPE
+999
+====================================================== line type with 2 elements
+  0
+LTYPE
+  2
+linetype-name
+ 73
+     2
+ 49
+1.0
+ 74
+     0
+ 49
+2.0
+ 74
+     1
+999
+============================================== pointer to the STYLE object below
+340
+DEADBEEF
+  0
+ENDTAB
+  0
+TABLE
+  2
+STYLE
+999
+=============================================================== the style object
+  0
+STYLE
+  5
+DEADBEEF
+  2
+style-name
+  0
+ENDTAB
+");
+            var ltype = file.Linetypes.Where(l => l.Name == "linetype-name").Single();
+            Assert.Equal(2, ltype.Elements.Count);
+
+            Assert.Equal(1.0, ltype.Elements[0].DashDotSpaceLength);
+            Assert.Equal(0, ltype.Elements[0].ComplexFlags);
+            Assert.Null(ltype.Elements[0].Style);
+
+            Assert.Equal(2.0, ltype.Elements[1].DashDotSpaceLength);
+            Assert.Equal(1, ltype.Elements[1].ComplexFlags);
+            Assert.Equal("style-name", ltype.Elements[1].Style.Name);
+        }
+
+        [Fact]
+        public void WriteLineTypeElementsTest()
+        {
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R2013;
+            var ltype = new DxfLineType();
+            file.Linetypes.Add(ltype);
+            ltype.Name = "linetype-name";
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 1.0,
+                ComplexFlags = 0,
+            });
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 2.0,
+                ComplexFlags = 0,
+            });
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 3.0,
+                ComplexFlags = 0,
+            });
+            VerifyFileContains(file, @"
+ 49
+1.0
+ 74
+     0
+ 49
+2.0
+ 74
+     0
+ 49
+3.0
+ 74
+     0
+");
+        }
+
+        [Fact]
         public void WriteTablesWithDefaultValuesTest()
         {
             var file = new DxfFile();

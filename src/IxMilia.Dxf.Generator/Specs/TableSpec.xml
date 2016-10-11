@@ -101,20 +101,12 @@
         </TableItem>
     </Table>
     <Table Type="LType" TypeStringVariable="LTypeText">
-        <TableItem Name="DxfLineType" ClassName="AcDbLinetypeTableRecord">
+        <TableItem Name="DxfLineType" ClassName="AcDbLinetypeTableRecord" GenerateReaderFunction="false" GenerateWriterFunction="false">
             <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
             <Property Name="AlignmentCode" Code="72" Type="int" DefaultValue="(int)'A'" WriteConverter="(short)" />
-            <Property Name="ElementCount" Code="73" Type="int" DefaultValue="0" WriteConverter="(short)" />
+            <Property Name="_elementCount" Code="73" Type="int" DefaultValue="0" WriteConverter="(short)" Accessibility="private" />
             <Property Name="TotalPatternLength" Code="40" Type="double" DefaultValue="0.0" />
-            <Property Name="DashDotSpaceLengths" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" />
-            <Property Name="ComplexLinetypeElementTypes" Code="74" Type="short" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
-            <Property Name="ShapeNumbers" Code="75" Type="short" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
-            <Property Name="StylePointers" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
-            <Property Name="ScaleValues" Code="46" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
-            <Property Name="RotationAngles" Code="50" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
-            <Property Name="XOffsets" Code="44" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
-            <Property Name="YOffsets" Code="45" Type="double" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
-            <Property Name="TextStrings" Code="9" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R13" />
+            <Property Name="Elements" Code="0" Type="DxfLineTypeElement" DefaultValue="null" AllowMultiples="true" />
         </TableItem>
     </Table>
     <Table Type="Style" TypeStringVariable="StyleText">

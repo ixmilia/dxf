@@ -178,87 +178,108 @@ namespace IxMilia.Dxf.Generator
                 //
                 // AddValuePairs
                 //
-                AppendLine();
-                AppendLine("internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)");
-                AppendLine("{");
-                IncreaseIndent();
-                AppendLine("if (version >= DxfAcadVersion.R13)");
-                AppendLine("{");
-                AppendLine("    pairs.Add(new DxfCodePair(100, AcDbText));");
-                AppendLine("}");
-                AppendLine();
-                AppendLine("pairs.Add(new DxfCodePair(2, Name));");
-                if (HasFlags(tableItem))
+                if (GenerateWriterFunction(tableItem))
                 {
-                    AppendLine("pairs.Add(new DxfCodePair(70, (short)StandardFlags));");
-                }
-
-                foreach (var property in properties)
-                {
-                    var disableWritingDefault = DisableWritingDefault(property);
-                    var writeCondition = WriteCondition(property);
-                    var minVersion = MinVersion(property);
-                    var maxVersion = MaxVersion(property);
-                    var hasPredicate = disableWritingDefault || writeCondition != null || minVersion != null || maxVersion != null;
-                    string predicate = null;
-                    if (hasPredicate)
+                    AppendLine();
+                    AppendLine("internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    AppendLine("if (version >= DxfAcadVersion.R13)");
+                    AppendLine("{");
+                    AppendLine("    pairs.Add(new DxfCodePair(100, AcDbText));");
+                    AppendLine("}");
+                    AppendLine();
+                    AppendLine("pairs.Add(new DxfCodePair(2, Name));");
+                    if (HasFlags(tableItem))
                     {
-                        var parts = new List<string>();
-                        if (disableWritingDefault)
+                        AppendLine("pairs.Add(new DxfCodePair(70, (short)StandardFlags));");
+                    }
+
+                    foreach (var property in properties)
+                    {
+                        var disableWritingDefault = DisableWritingDefault(property);
+                        var writeCondition = WriteCondition(property);
+                        var minVersion = MinVersion(property);
+                        var maxVersion = MaxVersion(property);
+                        var hasPredicate = disableWritingDefault || writeCondition != null || minVersion != null || maxVersion != null;
+                        string predicate = null;
+                        if (hasPredicate)
                         {
-                            parts.Add(string.Format("{0} != {1}", Name(property), DefaultValue(property)));
+                            var parts = new List<string>();
+                            if (disableWritingDefault)
+                            {
+                                parts.Add(string.Format("{0} != {1}", Name(property), DefaultValue(property)));
+                            }
+
+                            if (writeCondition != null)
+                            {
+                                parts.Add(writeCondition);
+                            }
+
+                            if ((minVersion != null || maxVersion != null) && minVersion == maxVersion)
+                            {
+                                parts.Add("version == DxfAcadVersion." + minVersion);
+                            }
+                            else
+                            {
+                                if (minVersion != null)
+                                {
+                                    parts.Add("version >= DxfAcadVersion." + minVersion);
+                                }
+
+                                if (maxVersion != null)
+                                {
+                                    parts.Add("version <= DxfAcadVersion." + maxVersion);
+                                }
+                            }
+
+                            predicate = string.Join(" && ", parts);
                         }
 
-                        if (writeCondition != null)
+                        if (AllowMultiples(property))
                         {
-                            parts.Add(writeCondition);
-                        }
+                            if (hasPredicate)
+                            {
+                                AppendLine($"if ({predicate})");
+                                AppendLine("{");
+                                IncreaseIndent();
+                            }
 
-                        if ((minVersion != null || maxVersion != null) && minVersion == maxVersion)
-                        {
-                            parts.Add("version == DxfAcadVersion." + minVersion);
+                            AppendLine($"pairs.AddRange({Name(property)}.Select(value => new DxfCodePair({Code(property)}, value)));");
+
+                            if (hasPredicate)
+                            {
+                                DecreaseIndent();
+                                AppendLine("}");
+                                AppendLine();
+                            }
                         }
                         else
                         {
-                            if (minVersion != null)
+                            var codeOverrides = CodeOverrides(property);
+                            if (Code(property) < 0 && codeOverrides != null)
                             {
-                                parts.Add("version >= DxfAcadVersion." + minVersion);
+                                char prop = 'X';
+                                for (int i = 0; i < codeOverrides.Length; i++, prop++)
+                                {
+                                    if (hasPredicate)
+                                    {
+                                        AppendLine($"if ({predicate})");
+                                        AppendLine("{");
+                                        IncreaseIndent();
+                                    }
+
+                                    AppendLine($"pairs.Add(new DxfCodePair({codeOverrides[i]}, {WriteConverter(property)}({Name(property)}?.{prop} ?? 0.0)));");
+
+                                    if (hasPredicate)
+                                    {
+                                        DecreaseIndent();
+                                        AppendLine("}");
+                                        AppendLine();
+                                    }
+                                }
                             }
-
-                            if (maxVersion != null)
-                            {
-                                parts.Add("version <= DxfAcadVersion." + maxVersion);
-                            }
-                        }
-
-                        predicate = string.Join(" && ", parts);
-                    }
-
-                    if (AllowMultiples(property))
-                    {
-                        if (hasPredicate)
-                        {
-                            AppendLine($"if ({predicate})");
-                            AppendLine("{");
-                            IncreaseIndent();
-                        }
-
-                        AppendLine($"pairs.AddRange({Name(property)}.Select(value => new DxfCodePair({Code(property)}, value)));");
-
-                        if (hasPredicate)
-                        {
-                            DecreaseIndent();
-                            AppendLine("}");
-                            AppendLine();
-                        }
-                    }
-                    else
-                    {
-                        var codeOverrides = CodeOverrides(property);
-                        if (Code(property) < 0 && codeOverrides != null)
-                        {
-                            char prop = 'X';
-                            for (int i = 0; i < codeOverrides.Length; i++, prop++)
+                            else
                             {
                                 if (hasPredicate)
                                 {
@@ -267,7 +288,7 @@ namespace IxMilia.Dxf.Generator
                                     IncreaseIndent();
                                 }
 
-                                AppendLine($"pairs.Add(new DxfCodePair({codeOverrides[i]}, {WriteConverter(property)}({Name(property)}?.{prop} ?? 0.0)));");
+                                AppendLine($"pairs.Add(new DxfCodePair({Code(property)}, {WriteConverter(property)}({Name(property)})));");
 
                                 if (hasPredicate)
                                 {
@@ -277,117 +298,102 @@ namespace IxMilia.Dxf.Generator
                                 }
                             }
                         }
-                        else
-                        {
-                            if (hasPredicate)
-                            {
-                                AppendLine($"if ({predicate})");
-                                AppendLine("{");
-                                IncreaseIndent();
-                            }
-
-                            AppendLine($"pairs.Add(new DxfCodePair({Code(property)}, {WriteConverter(property)}({Name(property)})));");
-
-                            if (hasPredicate)
-                            {
-                                DecreaseIndent();
-                                AppendLine("}");
-                                AppendLine();
-                            }
-                        }
                     }
+
+                    AppendLine("if (XData != null)");
+                    AppendLine("{");
+                    AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
+                    AppendLine("}");
+
+                    DecreaseIndent();
+                    AppendLine("}"); // end method
                 }
-
-                AppendLine("if (XData != null)");
-                AppendLine("{");
-                AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
-                AppendLine("}");
-
-                DecreaseIndent();
-                AppendLine("}"); // end method
 
                 //
                 // FromBuffer
                 //
-                AppendLine();
-                AppendLine($"internal static {Name(tableItem)} FromBuffer(DxfCodePairBufferReader buffer)");
-                AppendLine("{");
-                IncreaseIndent();
-                AppendLine($"var item = new {Name(tableItem)}();");
-                AppendLine("while (buffer.ItemsRemain)");
-                AppendLine("{");
-                IncreaseIndent();
-                AppendLine("var pair = buffer.Peek();");
-                AppendLine("if (pair.Code == 0)");
-                AppendLine("{");
-                AppendLine("    break;");
-                AppendLine("}");
-                AppendLine();
-                AppendLine("buffer.Advance();");
-                AppendLine("switch (pair.Code)");
-                AppendLine("{");
-                IncreaseIndent();
-                if (HasFlags(tableItem))
+                if (GenerateReaderFunction(tableItem))
                 {
-                    AppendLine("case 70:");
-                    AppendLine("    item.StandardFlags = (int)pair.ShortValue;");
+                    AppendLine();
+                    AppendLine($"internal static {Name(tableItem)} FromBuffer(DxfCodePairBufferReader buffer)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    AppendLine($"var item = new {Name(tableItem)}();");
+                    AppendLine("while (buffer.ItemsRemain)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    AppendLine("var pair = buffer.Peek();");
+                    AppendLine("if (pair.Code == 0)");
+                    AppendLine("{");
                     AppendLine("    break;");
-                }
-
-                AppendLine("case DxfCodePairGroup.GroupCodeNumber:");
-                AppendLine("    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);");
-                AppendLine("    item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));");
-                AppendLine("    break;");
-
-                foreach (var property in properties)
-                {
-                    var codeOverrides = CodeOverrides(property);
-                    if (Code(property) < 0 && codeOverrides != null)
+                    AppendLine("}");
+                    AppendLine();
+                    AppendLine("buffer.Advance();");
+                    AppendLine("switch (pair.Code)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    if (HasFlags(tableItem))
                     {
-                        char prop = 'X';
-                        for (int i = 0; i < codeOverrides.Length; i++, prop++)
-                        {
-                            var codeType = DxfCodePair.ExpectedType(codeOverrides[i]);
-                            var codeTypeValue = TypeToString(codeType);
-                            AppendLine($"case {codeOverrides[i]}:");
-                            AppendLine($"    item.{Name(property)}.{prop} = {ReadConverter(property)}(pair.{codeTypeValue});");
-                            AppendLine("    break;");
-                        }
+                        AppendLine("case 70:");
+                        AppendLine("    item.StandardFlags = (int)pair.ShortValue;");
+                        AppendLine("    break;");
                     }
-                    else
+
+                    AppendLine("case DxfCodePairGroup.GroupCodeNumber:");
+                    AppendLine("    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);");
+                    AppendLine("    item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));");
+                    AppendLine("    break;");
+
+                    foreach (var property in properties)
                     {
-                        var code = Code(property);
-                        var codeType = DxfCodePair.ExpectedType(code);
-                        var codeTypeValue = TypeToString(codeType);
-                        AppendLine($"case {Code(property)}:");
-                        if (AllowMultiples(property))
+                        var codeOverrides = CodeOverrides(property);
+                        if (Code(property) < 0 && codeOverrides != null)
                         {
-                            AppendLine($"    item.{Name(property)}.Add({ReadConverter(property)}(pair.{codeTypeValue}));");
+                            char prop = 'X';
+                            for (int i = 0; i < codeOverrides.Length; i++, prop++)
+                            {
+                                var codeType = DxfCodePair.ExpectedType(codeOverrides[i]);
+                                var codeTypeValue = TypeToString(codeType);
+                                AppendLine($"case {codeOverrides[i]}:");
+                                AppendLine($"    item.{Name(property)}.{prop} = {ReadConverter(property)}(pair.{codeTypeValue});");
+                                AppendLine("    break;");
+                            }
                         }
                         else
                         {
-                            AppendLine($"    item.{Name(property)} = {ReadConverter(property)}(pair.{codeTypeValue});");
+                            var code = Code(property);
+                            var codeType = DxfCodePair.ExpectedType(code);
+                            var codeTypeValue = TypeToString(codeType);
+                            AppendLine($"case {Code(property)}:");
+                            if (AllowMultiples(property))
+                            {
+                                AppendLine($"    item.{Name(property)}.Add({ReadConverter(property)}(pair.{codeTypeValue}));");
+                            }
+                            else
+                            {
+                                AppendLine($"    item.{Name(property)} = {ReadConverter(property)}(pair.{codeTypeValue});");
+                            }
+
+                            AppendLine("    break;");
                         }
-
-                        AppendLine("    break;");
                     }
+
+                    AppendLine("case (int)DxfXDataType.ApplicationName:");
+                    AppendLine("    item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);");
+                    AppendLine("    break;");
+                    AppendLine("default:");
+                    AppendLine("    item.TrySetPair(pair);");
+                    AppendLine("    break;");
+
+                    DecreaseIndent();
+                    AppendLine("}"); // end switch
+                    DecreaseIndent();
+                    AppendLine("}"); // end while
+                    AppendLine();
+                    AppendLine("return item;");
+                    DecreaseIndent();
+                    AppendLine("}"); // end method
                 }
-
-                AppendLine("case (int)DxfXDataType.ApplicationName:");
-                AppendLine("    item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);");
-                AppendLine("    break;");
-                AppendLine("default:");
-                AppendLine("    item.TrySetPair(pair);");
-                AppendLine("    break;");
-
-                DecreaseIndent();
-                AppendLine("}"); // end switch
-                DecreaseIndent();
-                AppendLine("}"); // end while
-                AppendLine();
-                AppendLine("return item;");
-                DecreaseIndent();
-                AppendLine("}"); // end method
 
                 DecreaseIndent();
                 AppendLine("}"); // end class

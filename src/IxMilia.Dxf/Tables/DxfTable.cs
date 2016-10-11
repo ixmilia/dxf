@@ -44,7 +44,7 @@ namespace IxMilia.Dxf.Tables
         }
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {
-            yield break;
+            return GetSymbolItems().SelectMany(i => ((IDxfItemInternal)i).GetPointers());
         }
 
         IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()

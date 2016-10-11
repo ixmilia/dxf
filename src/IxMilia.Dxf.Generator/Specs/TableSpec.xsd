@@ -50,6 +50,8 @@
             <xs:attribute name="Name" type="xs:string" use="required" />
             <xs:attribute name="ClassName" type="xs:string" use="required" />
             <xs:attribute name="HasFlags" type="xs:boolean" use="optional" />
+            <xs:attribute name="GenerateReaderFunction" type="xs:boolean" use="optional" />
+            <xs:attribute name="GenerateWriterFunction" type="xs:boolean" use="optional" />
         </xs:complexType>
     </xs:element>
 

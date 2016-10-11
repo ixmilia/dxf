@@ -2028,10 +2028,23 @@ ENDTAB
         public void DefaultBlocksTest()
         {
             var file = new DxfFile();
+
+            // validate defaults
             Assert.Equal(new[] { "*MODEL_SPACE", "*PAPER_SPACE" }, file.Blocks.Select(b => b.Name).ToArray());
+
+            // ensure they're added back appropriately
             file.Blocks.Clear();
             file.Normalize();
             Assert.Equal(new[] { "*MODEL_SPACE", "*PAPER_SPACE" }, file.Blocks.Select(b => b.Name).ToArray());
+
+            // ensure they're not duplicated in a different case
+            file.Blocks.Clear();
+            file.Blocks.Add(new DxfBlock() { Name = "*Model_Space" });
+            file.Blocks.Add(new DxfBlock() { Name = "*Paper_Space" });
+            file.Normalize();
+            Assert.Equal(2, file.Blocks.Count);
+            Assert.Equal("*Model_Space", file.Blocks[0].Name);
+            Assert.Equal("*Paper_Space", file.Blocks[1].Name);
         }
 
         [Fact]

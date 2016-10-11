@@ -546,6 +546,17 @@ value-1
         }
 
         [Fact]
+        public void WriteDictionaryWithNullValueTest()
+        {
+            var dict = new DxfDictionary();
+            dict["key"] = null;
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Objects.Add(dict);
+            var _text = ToString(file);
+        }
+
+        [Fact]
         public void DictionaryRoundTripTest1()
         {
             // dictionary with DICTIONARYVAR values

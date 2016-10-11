@@ -38,7 +38,7 @@ namespace IxMilia.Dxf.Objects
 
         protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-            foreach (var child in GetChildren())
+            foreach (var child in GetChildren().Where(c => c != null))
             {
                 if (writtenItems.Add(child))
                 {

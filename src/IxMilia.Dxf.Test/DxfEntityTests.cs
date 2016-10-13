@@ -1482,14 +1482,25 @@ EOF");
         public void WriteVersionSpecificEntityProperties()
         {
             var file = new DxfFile();
-            file.Entities.Add(new DxfLeader());
+            file.Entities.Add(new DxfLeader()
+            {
+                AnnotationOffset = new DxfVector(42.0, 43.0, 44.0),
+            });
 
             // annotation offset is only written for >= R14
+            var annotationOffsetText = @"
+213
+42.0
+223
+43.0
+233
+44.0
+";
             file.Header.Version = DxfAcadVersion.R14;
-            VerifyFileContains(file, "213");
+            VerifyFileContains(file, annotationOffsetText);
 
             file.Header.Version = DxfAcadVersion.R13;
-            VerifyFileDoesNotContain(file, "213");
+            VerifyFileDoesNotContain(file, annotationOffsetText);
         }
 
         #endregion

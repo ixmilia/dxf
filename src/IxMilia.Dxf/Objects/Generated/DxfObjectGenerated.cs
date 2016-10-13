@@ -54,7 +54,7 @@ namespace IxMilia.Dxf.Objects
                     case DxfObjectType.DimensionAssociativity:
                         return "DIMASSOC";
                     case DxfObjectType.Field:
-                        return "FIELD";
+                        return "ACAD_FIELD";
                     case DxfObjectType.GeoData:
                         return "GEODATA";
                     case DxfObjectType.Group:
@@ -186,7 +186,7 @@ namespace IxMilia.Dxf.Objects
                 case "DIMASSOC":
                     obj = new DxfDimensionAssociativity();
                     break;
-                case "FIELD":
+                case "ACAD_FIELD":
                     obj = new DxfField();
                     break;
                 case "GEODATA":

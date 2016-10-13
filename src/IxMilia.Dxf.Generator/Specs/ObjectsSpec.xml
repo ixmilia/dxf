@@ -125,7 +125,7 @@
     FIELD
 
     -->
-    <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="FIELD" MinVersion="R2004">
+    <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="ACAD_FIELD" HasXData="false" MinVersion="R2004">
         <Property Name="EvaluatorId" Code="1" Type="string" DefaultValue="null" />
         <Property Name="FieldCodeString" Code="2" Type="string" DefaultValue="null" />
         <Property Name="FieldCodeStringOverflow" Code="3" Type="string" DefaultValue="null" />

@@ -108,7 +108,7 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        public bool IsLinetypePatternGeneratedContinuously
+        public bool IsLineTypePatternGeneratedContinuously
         {
             get { return DxfHelpers.GetFlag(Flags, 128); }
             set

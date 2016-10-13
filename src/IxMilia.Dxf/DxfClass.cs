@@ -40,13 +40,13 @@ namespace IxMilia.Dxf
             set { DxfHelpers.SetFlag(value, ref Flags, 8); }
         }
 
-        public bool IsLinetypeChangeAllowed
+        public bool IsLineTypeChangeAllowed
         {
             get { return DxfHelpers.GetFlag(Flags, 16); }
             set { DxfHelpers.SetFlag(value, ref Flags, 16); }
         }
 
-        public bool IsLinetypeScaleChangeAllowed
+        public bool IsLineTypeScaleChangeAllowed
         {
             get { return DxfHelpers.GetFlag(Flags, 32); }
             set { DxfHelpers.SetFlag(value, ref Flags, 32); }

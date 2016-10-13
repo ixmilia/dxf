@@ -371,9 +371,9 @@ namespace IxMilia.Dxf
         public DxfDragMode DragMode { get; set; }
 
         /// <summary>
-        /// The $LTSCALE header variable.  Global linetype scale.
+        /// The $LTSCALE header variable.  Global line type scale.
         /// </summary>
-        public double LinetypeScale { get; set; }
+        public double LineTypeScale { get; set; }
 
         /// <summary>
         /// The $OSMODE header variable.  Running object snap modes.  Maximum AutoCAD version: R14.
@@ -406,9 +406,9 @@ namespace IxMilia.Dxf
         public string CurrentLayer { get; set; }
 
         /// <summary>
-        /// The $CELTYPE header variable.  Entity linetype name, or BYBLOCK or BYLAYER.
+        /// The $CELTYPE header variable.  Entity line type name, or BYBLOCK or BYLAYER.
         /// </summary>
-        public string CurrentEntityLinetype { get; set; }
+        public string CurrentEntityLineType { get; set; }
 
         /// <summary>
         /// The $CECOLOR header variable.  Current entity color.
@@ -416,9 +416,9 @@ namespace IxMilia.Dxf
         public DxfColor CurrentEntityColor { get; set; }
 
         /// <summary>
-        /// The $CELTSCALE header variable.  Current entity linetype scale.  Minimum AutoCAD version: R13.
+        /// The $CELTSCALE header variable.  Current entity line type scale.  Minimum AutoCAD version: R13.
         /// </summary>
-        public double CurrentEntityLinetypeScale { get; set; }
+        public double CurrentEntityLineTypeScale { get; set; }
 
         /// <summary>
         /// The $DELOBJ header variable.  Controls object deletion.  Minimum AutoCAD version: R13.  Maximum AutoCAD version: R14.
@@ -791,17 +791,17 @@ namespace IxMilia.Dxf
         public DxfDimensionArcSymbolDisplayMode DimensionArcSymbolDisplayMode { get; set; }
 
         /// <summary>
-        /// The $DIMLTYPE header variable.  Sets the linetype of the dimension line.  Minimum AutoCAD version: R2007.
+        /// The $DIMLTYPE header variable.  Sets the line type of the dimension line.  Minimum AutoCAD version: R2007.
         /// </summary>
         public string DimensionLineType { get; set; }
 
         /// <summary>
-        /// The $DIMLTEX1 header variable.  Sets the linetype of the first extension line.  Minimum AutoCAD version: R2007.
+        /// The $DIMLTEX1 header variable.  Sets the line type of the first extension line.  Minimum AutoCAD version: R2007.
         /// </summary>
         public string DimensionFirstExtensionLineType { get; set; }
 
         /// <summary>
-        /// The $DIMLTEX2 header variable.  Sets the linetype of the second extension line.  Minimum AutoCAD version: R2007.
+        /// The $DIMLTEX2 header variable.  Sets the line type of the second extension line.  Minimum AutoCAD version: R2007.
         /// </summary>
         public string DimensionSecondExtensionLineType { get; set; }
 
@@ -1266,14 +1266,14 @@ namespace IxMilia.Dxf
         public bool RetainXRefDependentVisibilitySettings { get; set; }
 
         /// <summary>
-        /// The $PLINEGEN header variable.  Governs the generation of linetype patterns around the vertices of a 2D polyline.  Minimum AutoCAD version: R11.
+        /// The $PLINEGEN header variable.  Governs the generation of line type patterns around the vertices of a 2D polyline.  Minimum AutoCAD version: R11.
         /// </summary>
         public bool IsPolylineContinuousAroundVerticies { get; set; }
 
         /// <summary>
-        /// The $PSLTSCALE header variable.  Controls paper space linetype scaling.  Minimum AutoCAD version: R11.
+        /// The $PSLTSCALE header variable.  Controls paper space line type scaling.  Minimum AutoCAD version: R11.
         /// </summary>
-        public bool ScaleLinetypesInPaperspace { get; set; }
+        public bool ScaleLineTypesInPaperspace { get; set; }
 
         /// <summary>
         /// The $TREEDEPTH header variable.  Specifies the maximum depth of the spatial index.  Minimum AutoCAD version: R14.
@@ -1411,14 +1411,14 @@ namespace IxMilia.Dxf
         public double HaloGapPercent { get; set; }
 
         /// <summary>
-        /// The $OBSCOLOR header variable.  Specifies the color of obscured lines.  An obscured line is a hidden line made visible by changing its color and linetype and is visible only when the HIDE or SHADEMODE command is used.  The OBSCUREDCOLOR setting is visible only if the OBSCUREDLTYPE is turned ON by setting it to a value other than 0.  Minimum AutoCAD version: R2004.
+        /// The $OBSCOLOR header variable.  Specifies the color of obscured lines.  An obscured line is a hidden line made visible by changing its color and line type and is visible only when the HIDE or SHADEMODE command is used.  The OBSCUREDCOLOR setting is visible only if the OBSCUREDLTYPE is turned ON by setting it to a value other than 0.  Minimum AutoCAD version: R2004.
         /// </summary>
         public DxfColor ObscuredLineColor { get; set; }
 
         /// <summary>
-        /// The $OBSLTYPE header variable.  Specifies the linetype of obscured lines.  Obscured linetypes are independent of zoom level, unlike regular AutoCAD linetypes.  Value 0 turns off display of obscured lines and is the default.  Minimum AutoCAD version: R2004.
+        /// The $OBSLTYPE header variable.  Specifies the line type of obscured lines.  Obscured line types are independent of zoom level, unlike regular AutoCAD line types.  Value 0 turns off display of obscured lines and is the default.  Minimum AutoCAD version: R2004.
         /// </summary>
-        public DxfLinetypeStyle ObscuredLineTypeStyle { get; set; }
+        public DxfLineTypeStyle ObscuredLineTypeStyle { get; set; }
 
         /// <summary>
         /// The $INTERSECTIONDISPLAY header variable.  Specifies the display of intersection polylines.  Minimum AutoCAD version: R2004.
@@ -1684,16 +1684,16 @@ namespace IxMilia.Dxf
             this.UseQuickTextMode = false; // QTEXTMODE
             this.MirrorText = false; // MIRRTEXT
             this.DragMode = DxfDragMode.Auto; // DRAGMODE
-            this.LinetypeScale = 1.0; // LTSCALE
+            this.LineTypeScale = 1.0; // LTSCALE
             this.ObjectSnapFlags = 37; // OSMODE
             this.AttributeVisibility = DxfAttributeVisibility.Normal; // ATTMODE
             this.DefaultTextHeight = 0.2; // TEXTSIZE
             this.TraceWidth = 0.05; // TRACEWID
             this.TextStyle = "STANDARD"; // TEXTSTYLE
             this.CurrentLayer = "0"; // CLAYER
-            this.CurrentEntityLinetype = "BYLAYER"; // CELTYPE
+            this.CurrentEntityLineType = "BYLAYER"; // CELTYPE
             this.CurrentEntityColor = DxfColor.ByLayer; // CECOLOR
-            this.CurrentEntityLinetypeScale = 1.0; // CELTSCALE
+            this.CurrentEntityLineTypeScale = 1.0; // CELTSCALE
             this.RetainDeletedObjects = true; // DELOBJ
             this.DisplaySilhouetteCurvesInWireframeMode = false; // DISPSILH
             this.DimensioningScaleFactor = 1.0; // DIMSCALE
@@ -1864,7 +1864,7 @@ namespace IxMilia.Dxf
             this.DisplayFractionsInInput = false; // UNITMODE
             this.RetainXRefDependentVisibilitySettings = true; // VISRETAIN
             this.IsPolylineContinuousAroundVerticies = false; // PLINEGEN
-            this.ScaleLinetypesInPaperspace = true; // PSLTSCALE
+            this.ScaleLineTypesInPaperspace = true; // PSLTSCALE
             this.SpacialIndexMaxDepth = 3020; // TREEDEPTH
             this.PickStyle = DxfPickStyle.Group; // PICKSTYLE
             this.CurrentMultilineStyle = "STANDARD"; // CMLSTYLE
@@ -1893,7 +1893,7 @@ namespace IxMilia.Dxf
             this.IsXRefClippingBoundaryVisible = DxfXrefClippingBoundaryVisibility.DisplayedNotPlotted; // XCLIPFRAME
             this.HaloGapPercent = 0.0; // HALOGAP
             this.ObscuredLineColor = DxfColor.ByEntity; // OBSCOLOR
-            this.ObscuredLineTypeStyle = DxfLinetypeStyle.Off; // OBSLTYPE
+            this.ObscuredLineTypeStyle = DxfLineTypeStyle.Off; // OBSLTYPE
             this.DisplayIntersectionPolylines = false; // INTERSECTIONDISPLAY
             this.IntersectionPolylineColor = DxfColor.ByEntity; // INTERSECTIONCOLOR
             this.DimensionObjectAssociativity = DxfDimensionAssociativity.NonAssociativeObjects; // DIMASSOC
@@ -2037,7 +2037,7 @@ namespace IxMilia.Dxf
 
             // LTSCALE
             list.Add(new DxfCodePair(9, LTSCALE));
-            list.Add(new DxfCodePair(40, (this.LinetypeScale)));
+            list.Add(new DxfCodePair(40, (this.LineTypeScale)));
 
             // OSMODE
             if (Version <= DxfAcadVersion.R14)
@@ -2068,7 +2068,7 @@ namespace IxMilia.Dxf
 
             // CELTYPE
             list.Add(new DxfCodePair(9, CELTYPE));
-            list.Add(new DxfCodePair(6, DefaultIfNullOrEmpty("BYLAYER")(this.CurrentEntityLinetype)));
+            list.Add(new DxfCodePair(6, DefaultIfNullOrEmpty("BYLAYER")(this.CurrentEntityLineType)));
 
             // CECOLOR
             list.Add(new DxfCodePair(9, CECOLOR));
@@ -2078,7 +2078,7 @@ namespace IxMilia.Dxf
             if (Version >= DxfAcadVersion.R13)
             {
                 list.Add(new DxfCodePair(9, CELTSCALE));
-                list.Add(new DxfCodePair(40, (this.CurrentEntityLinetypeScale)));
+                list.Add(new DxfCodePair(40, (this.CurrentEntityLineTypeScale)));
             }
 
             // DELOBJ
@@ -3097,7 +3097,7 @@ namespace IxMilia.Dxf
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PSLTSCALE));
-                list.Add(new DxfCodePair(70, BoolShort(this.ScaleLinetypesInPaperspace)));
+                list.Add(new DxfCodePair(70, BoolShort(this.ScaleLineTypesInPaperspace)));
             }
 
             // TREEDEPTH
@@ -3733,7 +3733,7 @@ namespace IxMilia.Dxf
                     break;
                 case LTSCALE:
                     EnsureCode(pair, 40);
-                    this.LinetypeScale = (pair.DoubleValue);
+                    this.LineTypeScale = (pair.DoubleValue);
                     break;
                 case OSMODE:
                     EnsureCode(pair, 70);
@@ -3761,7 +3761,7 @@ namespace IxMilia.Dxf
                     break;
                 case CELTYPE:
                     EnsureCode(pair, 6);
-                    this.CurrentEntityLinetype = (pair.StringValue);
+                    this.CurrentEntityLineType = (pair.StringValue);
                     break;
                 case CECOLOR:
                     EnsureCode(pair, 62);
@@ -3769,7 +3769,7 @@ namespace IxMilia.Dxf
                     break;
                 case CELTSCALE:
                     EnsureCode(pair, 40);
-                    this.CurrentEntityLinetypeScale = (pair.DoubleValue);
+                    this.CurrentEntityLineTypeScale = (pair.DoubleValue);
                     break;
                 case DELOBJ:
                     EnsureCode(pair, 70);
@@ -4442,7 +4442,7 @@ namespace IxMilia.Dxf
                     break;
                 case PSLTSCALE:
                     EnsureCode(pair, 70);
-                    this.ScaleLinetypesInPaperspace = BoolShort(pair.ShortValue);
+                    this.ScaleLineTypesInPaperspace = BoolShort(pair.ShortValue);
                     break;
                 case TREEDEPTH:
                     EnsureCode(pair, 70);
@@ -4588,7 +4588,7 @@ namespace IxMilia.Dxf
                     break;
                 case OBSLTYPE:
                     EnsureCode(pair, 280);
-                    this.ObscuredLineTypeStyle = (DxfLinetypeStyle)(pair.ShortValue);
+                    this.ObscuredLineTypeStyle = (DxfLineTypeStyle)(pair.ShortValue);
                     break;
                 case INTERSECTIONDISPLAY:
                     switch (pair.Code)
@@ -5175,7 +5175,7 @@ namespace IxMilia.Dxf
                 case DRAGMODE:
                     return this.DragMode;
                 case LTSCALE:
-                    return this.LinetypeScale;
+                    return this.LineTypeScale;
                 case OSMODE:
                     return this.ObjectSnapFlags;
                 case ATTMODE:
@@ -5189,11 +5189,11 @@ namespace IxMilia.Dxf
                 case CLAYER:
                     return this.CurrentLayer;
                 case CELTYPE:
-                    return this.CurrentEntityLinetype;
+                    return this.CurrentEntityLineType;
                 case CECOLOR:
                     return this.CurrentEntityColor;
                 case CELTSCALE:
-                    return this.CurrentEntityLinetypeScale;
+                    return this.CurrentEntityLineTypeScale;
                 case DELOBJ:
                     return this.RetainDeletedObjects;
                 case DISPSILH:
@@ -5541,7 +5541,7 @@ namespace IxMilia.Dxf
                 case PLINEGEN:
                     return this.IsPolylineContinuousAroundVerticies;
                 case PSLTSCALE:
-                    return this.ScaleLinetypesInPaperspace;
+                    return this.ScaleLineTypesInPaperspace;
                 case TREEDEPTH:
                     return this.SpacialIndexMaxDepth;
                 case PICKSTYLE:
@@ -5756,7 +5756,7 @@ namespace IxMilia.Dxf
                     this.DragMode = (DxfDragMode)value;
                     break;
                 case LTSCALE:
-                    this.LinetypeScale = (double)value;
+                    this.LineTypeScale = (double)value;
                     break;
                 case OSMODE:
                     this.ObjectSnapFlags = (int)value;
@@ -5777,13 +5777,13 @@ namespace IxMilia.Dxf
                     this.CurrentLayer = (string)value;
                     break;
                 case CELTYPE:
-                    this.CurrentEntityLinetype = (string)value;
+                    this.CurrentEntityLineType = (string)value;
                     break;
                 case CECOLOR:
                     this.CurrentEntityColor = (DxfColor)value;
                     break;
                 case CELTSCALE:
-                    this.CurrentEntityLinetypeScale = (double)value;
+                    this.CurrentEntityLineTypeScale = (double)value;
                     break;
                 case DELOBJ:
                     this.RetainDeletedObjects = (bool)value;
@@ -6305,7 +6305,7 @@ namespace IxMilia.Dxf
                     this.IsPolylineContinuousAroundVerticies = (bool)value;
                     break;
                 case PSLTSCALE:
-                    this.ScaleLinetypesInPaperspace = (bool)value;
+                    this.ScaleLineTypesInPaperspace = (bool)value;
                     break;
                 case TREEDEPTH:
                     this.SpacialIndexMaxDepth = (short)value;
@@ -6392,7 +6392,7 @@ namespace IxMilia.Dxf
                     this.ObscuredLineColor = (DxfColor)value;
                     break;
                 case OBSLTYPE:
-                    this.ObscuredLineTypeStyle = (DxfLinetypeStyle)value;
+                    this.ObscuredLineTypeStyle = (DxfLineTypeStyle)value;
                     break;
                 case INTERSECTIONDISPLAY:
                     this.DisplayIntersectionPolylines = (bool)value;

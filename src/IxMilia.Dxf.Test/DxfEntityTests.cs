@@ -23,7 +23,7 @@ ill-placed comment
   5
 42
   6
-<linetype-name>
+<line-type-name>
   8
 <layer>
  48
@@ -38,9 +38,9 @@ ill-placed comment
 ", entityType, data.Trim()));
             var entity = file.Entities.Single();
             Assert.Equal(0x42u, ((IDxfItemInternal)entity).Handle);
-            Assert.Equal("<linetype-name>", entity.LinetypeName);
+            Assert.Equal("<line-type-name>", entity.LineTypeName);
             Assert.Equal("<layer>", entity.Layer);
-            Assert.Equal(3.14159, entity.LinetypeScale);
+            Assert.Equal(3.14159, entity.LineTypeScale);
             Assert.False(entity.IsVisible);
             Assert.True(entity.IsInPaperSpace);
             Assert.Equal(DxfColor.FromIndex(1), entity.Color);
@@ -54,8 +54,8 @@ ill-placed comment
 {0}", entityType));
             var entity = file.Entities.Single();
             Assert.Equal("0", entity.Layer);
-            Assert.Equal("BYLAYER", entity.LinetypeName);
-            Assert.Equal(1.0, entity.LinetypeScale);
+            Assert.Equal("BYLAYER", entity.LineTypeName);
+            Assert.Equal(1.0, entity.LineTypeScale);
             Assert.True(entity.IsVisible);
             Assert.False(entity.IsInPaperSpace);
             Assert.Equal(DxfColor.ByLayer, entity.Color);
@@ -319,7 +319,7 @@ AcDbEntity
             Assert.False(poly.Is3DPolygonMesh);
             Assert.False(poly.IsPolygonMeshClosedInNDirection);
             Assert.False(poly.IsPolyfaceMesh);
-            Assert.False(poly.IsLinetypePatternGeneratedContinuously);
+            Assert.False(poly.IsLineTypePatternGeneratedContinuously);
         }
 
         [Fact]
@@ -699,7 +699,7 @@ SEQEND
             Assert.True(poly.Is3DPolygonMesh);
             Assert.True(poly.IsPolygonMeshClosedInNDirection);
             Assert.True(poly.IsPolyfaceMesh);
-            Assert.True(poly.IsLinetypePatternGeneratedContinuously);
+            Assert.True(poly.IsLineTypePatternGeneratedContinuously);
             Assert.Equal(22.0, poly.Normal.X);
             Assert.Equal(33.0, poly.Normal.Y);
             Assert.Equal(44.0, poly.Normal.Z);

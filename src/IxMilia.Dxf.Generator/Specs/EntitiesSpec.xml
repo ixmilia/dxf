@@ -9,12 +9,12 @@
     <Entity Name="DxfEntity" EntityType="" SubclassMarker="" TypeString="">
         <Property Name="IsInPaperSpace" Code="67" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" DisableWritingDefault="true" MinVersion="R12" />
         <Property Name="Layer" Code="8" Type="string" DefaultValue="0" WriteConverter="DefaultIfNullOrEmpty(&quot;0&quot;)" />
-        <Property Name="LinetypeName" Code="6" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" />
+        <Property Name="LineTypeName" Code="6" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" />
         <Property Name="Elevation" Code="38" Type="double" DefaultValue="0.0" DisableWritingDefault="true" MaxVersion="R12" />
         <Property Name="MaterialHandle" Code="347" Type="string" DefaultValue="BYLAYER" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="Color" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" DisableWritingDefault="true" />
         <Property Name="LineweightEnumValue" Code="370" Type="short" DefaultValue="0" MinVersion="R2000" />
-        <Property Name="LinetypeScale" Code="48" Type="double" DefaultValue="1.0" DisableWritingDefault="true" MinVersion="R13" />
+        <Property Name="LineTypeScale" Code="48" Type="double" DefaultValue="1.0" DisableWritingDefault="true" MinVersion="R13" />
         <Property Name="IsVisible" Code="60" Type="bool" DefaultValue="true" ReadConverter="!BoolShort" WriteConverter="NotBoolShort" DisableWritingDefault="true" MinVersion="R13" />
         <Property Name="ImageByteCount" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2000" />
         <Property Name="PreviewImageData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R2000" />
@@ -30,12 +30,12 @@
             <WriteSpecificValue Code="100" Value="&quot;AcDbEntity&quot;" />
             <WriteProperty Property="IsInPaperSpace" />
             <WriteProperty Property="Layer" />
-            <WriteProperty Property="LinetypeName" />
+            <WriteProperty Property="LineTypeName" />
             <WriteProperty Property="Elevation" />
             <WriteProperty Property="MaterialHandle" />
             <WriteProperty Property="Color" />
             <WriteProperty Property="LineweightEnumValue" />
-            <WriteProperty Property="LinetypeScale" />
+            <WriteProperty Property="LineTypeScale" />
             <WriteProperty Property="IsVisible" />
             <WriteProperty Property="ImageByteCount" />
             <WriteProperty Property="PreviewImageData" />
@@ -846,7 +846,7 @@
             <Flag Name="Is3DPolygonMesh" Mask="16" />
             <Flag Name="IsPolygonMeshClosedInNDirection" Mask="32" />
             <Flag Name="IsPolyfaceMesh" Mask="64" />
-            <Flag Name="IsLinetypePatternGeneratedContinuously" Mask="128" />
+            <Flag Name="IsLineTypePatternGeneratedContinuously" Mask="128" />
         </Property>
         <Property Name="DefaultStartingWidth" Code="40" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="DefaultEndingWidth" Code="41" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />

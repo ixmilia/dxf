@@ -2038,8 +2038,8 @@ $SHADOWPLANELOCATION";
             Assert.Equal(DxfCoordinateDisplay.ContinuousUpdate, file.Header.CoordinateDisplay);
             Assert.True(file.Header.CreateAssociativeDimensioning);
             Assert.Equal(DxfColor.ByLayer, file.Header.CurrentEntityColor);
-            Assert.Equal("BYLAYER", file.Header.CurrentEntityLinetype);
-            Assert.Equal(1, file.Header.CurrentEntityLinetypeScale);
+            Assert.Equal("BYLAYER", file.Header.CurrentEntityLineType);
+            Assert.Equal(1, file.Header.CurrentEntityLineTypeScale);
             Assert.Equal("0", file.Header.CurrentLayer);
             Assert.Equal(0u, file.Header.CurrentMaterialHandle);
             Assert.Equal(DxfJustification.Top, file.Header.CurrentMultilineJustification);
@@ -2152,7 +2152,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(50, file.Header.LensLength);
             Assert.False(file.Header.LimitCheckingInPaperspace);
             Assert.Equal(8, file.Header.LineSegmentsPerSplinePatch);
-            Assert.Equal(1, file.Header.LinetypeScale);
+            Assert.Equal(1, file.Header.LineTypeScale);
             Assert.Equal(DxfJoinStyle.None, file.Header.LineweightJointSetting);
             Assert.Equal(DxfLoftedObjectNormalMode.SmoothFit, file.Header.LoftedObjectNormalMode);
             Assert.Equal(7, file.Header.LoftFlags);
@@ -2181,7 +2181,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(37, file.Header.ObjectSnapFlags);
             Assert.Equal(127, file.Header.ObjectSortingMethodsFlags);
             Assert.Equal(DxfColor.ByEntity, file.Header.ObscuredLineColor);
-            Assert.Equal(DxfLinetypeStyle.Off, file.Header.ObscuredLineTypeStyle);
+            Assert.Equal(DxfLineTypeStyle.Off, file.Header.ObscuredLineTypeStyle);
             Assert.False(file.Header.OleStartup);
             Assert.Equal(DxfOrthographicViewType.None, file.Header.OrthgraphicViewType);
             Assert.Equal(null, file.Header.OrthoUCSReference);
@@ -2224,7 +2224,7 @@ $SHADOWPLANELOCATION";
             Assert.True(file.Header.RetainDeletedObjects);
             Assert.True(file.Header.RetainXRefDependentVisibilitySettings);
             Assert.True(file.Header.SaveProxyGraphics);
-            Assert.True(file.Header.ScaleLinetypesInPaperspace);
+            Assert.True(file.Header.ScaleLineTypesInPaperspace);
             Assert.Equal(null, file.Header.SecondArrowBlockName);
             Assert.Equal(0, file.Header.SecondChamferDistance);
             Assert.True(file.Header.SetUCSToWCSInDViewOrVPoint);
@@ -2310,7 +2310,7 @@ $SHADOWPLANELOCATION";
             file.Header.TraceWidth = 0.0; // $TRACEWID, normalized to 0.05
             file.Header.TextStyle = string.Empty; // $TEXTSTYLE, normalized to STANDARD
             file.Header.CurrentLayer = null; // $CLAYER, normalized to 0
-            file.Header.CurrentEntityLinetype = null; // $CELTYPE, normalized to BYLAYER
+            file.Header.CurrentEntityLineType = null; // $CELTYPE, normalized to BYLAYER
             file.Header.DimensionStyleName = null; // $DIMSTYLE, normalized to STANDARD
             file.Header.FileName = null; // $MENU, normalized to .
 

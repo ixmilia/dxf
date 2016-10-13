@@ -109,8 +109,8 @@ namespace IxMilia.Dxf.Objects
         public int BitFlags { get; set; }
         public DxfColor Color { get; set; } = DxfColor.ByBlock;
         public string LayerName { get; set; }
-        public string LinetypeName { get; set; }
-        public double LinetypeScale { get; set; } = 1.0;
+        public string LineTypeName { get; set; }
+        public double LineTypeScale { get; set; } = 1.0;
         public string PlotstyleName { get; set; }
         public short LineWeight { get; set; }
         public short FaceTransparency { get; set; }
@@ -128,8 +128,8 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(92, BitFlags));
             pairs.Add(new DxfCodePair(63, Color?.RawValue ?? 0));
             pairs.Add(new DxfCodePair(8, LayerName));
-            pairs.Add(new DxfCodePair(6, LinetypeName));
-            pairs.Add(new DxfCodePair(40, LinetypeScale));
+            pairs.Add(new DxfCodePair(6, LineTypeName));
+            pairs.Add(new DxfCodePair(40, LineTypeScale));
             pairs.Add(new DxfCodePair(1, PlotstyleName));
             pairs.Add(new DxfCodePair(370, LineWeight));
             pairs.Add(new DxfCodePair(70, FaceTransparency));
@@ -168,13 +168,13 @@ namespace IxMilia.Dxf.Objects
                         stillReading = false;
                         break;
                     case 6:
-                        settings.LinetypeName = pair.StringValue;
+                        settings.LineTypeName = pair.StringValue;
                         break;
                     case 8:
                         settings.LayerName = pair.StringValue;
                         break;
                     case 40:
-                        settings.LinetypeScale = pair.DoubleValue;
+                        settings.LineTypeScale = pair.DoubleValue;
                         break;
                     case 41:
                         settings.HatchAngle = pair.DoubleValue;

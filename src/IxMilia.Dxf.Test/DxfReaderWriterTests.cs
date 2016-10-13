@@ -1402,7 +1402,7 @@ LTYPE
   0
 LTYPE
   2
-linetype-name
+line-type-name
  73
      2
  49
@@ -1434,7 +1434,7 @@ style-name
   0
 ENDTAB
 ");
-            var ltype = file.Linetypes.Where(l => l.Name == "linetype-name").Single();
+            var ltype = file.LineTypes.Where(l => l.Name == "line-type-name").Single();
             Assert.Equal(2, ltype.Elements.Count);
 
             Assert.Equal(1.0, ltype.Elements[0].DashDotSpaceLength);
@@ -1453,8 +1453,8 @@ ENDTAB
             file.Clear();
             file.Header.Version = DxfAcadVersion.R2013;
             var ltype = new DxfLineType();
-            file.Linetypes.Add(ltype);
-            ltype.Name = "linetype-name";
+            file.LineTypes.Add(ltype);
+            ltype.Name = "line-type-name";
             ltype.Elements.Add(new DxfLineTypeElement()
             {
                 DashDotSpaceLength = 1.0,
@@ -1503,8 +1503,8 @@ ENDTAB
             file.Layers.Add(new DxfLayer());
             file.Layers.Add(SetAllPropertiesToDefault(new DxfLayer()));
 
-            file.Linetypes.Add(new DxfLineType());
-            file.Linetypes.Add(SetAllPropertiesToDefault(new DxfLineType()));
+            file.LineTypes.Add(new DxfLineType());
+            file.LineTypes.Add(SetAllPropertiesToDefault(new DxfLineType()));
 
             file.Styles.Add(new DxfStyle());
             file.Styles.Add(SetAllPropertiesToDefault(new DxfStyle()));
@@ -1562,7 +1562,7 @@ ENDTAB
             var file = new DxfFile();
             var layer = file.Layers.Single();
             layer.Color = DxfColor.ByLayer; // code 62, value 256 not valid; normalized to 7
-            layer.LinetypeName = null; // code 6, value null or empty not valid; normalized to CONTINUOUS
+            layer.LineTypeName = null; // code 6, value null or empty not valid; normalized to CONTINUOUS
             VerifyFileContains(file, @"
   0
 LAYER
@@ -2004,7 +2004,7 @@ ENDTAB
             Assert.Equal(0, file.DimensionStyles.Count);
             Assert.Equal(0, file.Entities.Count);
             Assert.Equal(0, file.Layers.Count);
-            Assert.Equal(0, file.Linetypes.Count);
+            Assert.Equal(0, file.LineTypes.Count);
             Assert.Null(file.RawThumbnail);
 
             // there is always a default dictionary
@@ -2021,7 +2021,7 @@ ENDTAB
             Assert.Equal(new[] { "ACAD", "ACADANNOTATIVE", "ACAD_NAV_VCDISPLAY", "ACAD_MLEADERVER" }, file.ApplicationIds.Select(a => a.Name).ToArray());
             Assert.Equal(new[] { "STANDARD", "ANNOTATIVE" }, file.DimensionStyles.Select(d => d.Name).ToArray());
             Assert.Equal("0", file.Layers.Single().Name);
-            Assert.Equal(new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" }, file.Linetypes.Select(l => l.Name).ToArray());
+            Assert.Equal(new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" }, file.LineTypes.Select(l => l.Name).ToArray());
             Assert.Equal("*ACTIVE", file.ViewPorts.Single().Name);
         }
 
@@ -2056,7 +2056,7 @@ ENDTAB
 
             foreach (var name in expectedLineTypes)
             {
-                file.Linetypes.Add(new DxfLineType() { Name = name });
+                file.LineTypes.Add(new DxfLineType() { Name = name });
             }
 
             foreach (var name in expectedStyles)
@@ -2096,10 +2096,10 @@ ENDTAB
                 Assert.Equal(1, file.DimensionStyles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
             }
 
-            Assert.Equal(expectedLineTypes.Length, file.Linetypes.Count);
+            Assert.Equal(expectedLineTypes.Length, file.LineTypes.Count);
             foreach (var expected in expectedLineTypes)
             {
-                Assert.Equal(1, file.Linetypes.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Equal(1, file.LineTypes.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
             }
 
             Assert.Equal(expectedStyles.Length, file.Styles.Count);

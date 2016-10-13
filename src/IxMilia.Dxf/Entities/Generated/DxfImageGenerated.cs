@@ -136,13 +136,21 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(32, VVector?.Z ?? default(double)));
             pairs.Add(new DxfCodePair(13, ImageSize?.X ?? default(double)));
             pairs.Add(new DxfCodePair(23, ImageSize?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.ImageDefinitionPointer.Handle)));
+            if (this.ImageDefinitionPointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.ImageDefinitionPointer.Handle)));
+            }
+
             pairs.Add(new DxfCodePair(70, (short)(this.DisplayOptionsFlags)));
             pairs.Add(new DxfCodePair(280, BoolShort(this.UseClipping)));
             pairs.Add(new DxfCodePair(281, (this.Brightness)));
             pairs.Add(new DxfCodePair(282, (this.Contrast)));
             pairs.Add(new DxfCodePair(283, (this.Fade)));
-            pairs.Add(new DxfCodePair(360, DxfCommonConverters.UIntHandle(this.ImageDefinitionReactorPointer.Handle)));
+            if (this.ImageDefinitionReactorPointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(360, DxfCommonConverters.UIntHandle(this.ImageDefinitionReactorPointer.Handle)));
+            }
+
             pairs.Add(new DxfCodePair(71, (short)(this.ClippingType)));
             pairs.Add(new DxfCodePair(91, ClippingVertices.Count));
             foreach (var item in ClippingVertices)

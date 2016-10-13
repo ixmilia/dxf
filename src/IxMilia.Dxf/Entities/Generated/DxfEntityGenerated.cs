@@ -270,7 +270,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(440, (this.Transparency)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.PlotStylePointer.Handle != 0u)
             {
                 pairs.Add(new DxfCodePair(390, DxfCommonConverters.UIntHandle(this.PlotStylePointer.Handle)));
             }

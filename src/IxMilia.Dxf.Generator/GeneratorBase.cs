@@ -567,6 +567,11 @@ namespace IxMilia.Dxf.Generator
                 writePredicates.Add(string.Format("this.{0} != {1}", name, DefaultValue(property)));
             }
 
+            if (IsPointer(property) && !AllowMultiples(property))
+            {
+                writePredicates.Add(string.Format("this.{0}Pointer.Handle != 0u", name));
+            }
+
             var indentPrefix = string.Empty;
             if (writePredicates.Any())
             {
@@ -592,12 +597,15 @@ namespace IxMilia.Dxf.Generator
                     var value = string.IsNullOrEmpty(writeConverter)
                         ? "p"
                         : string.Format("{0}(p)", writeConverter);
+                    var infixPredicate = string.Empty;
                     if (IsPointer(property))
                     {
                         name += "Pointers.Pointers";
                         value = "DxfCommonConverters.UIntHandle(p.Handle)";
+                        infixPredicate = string.Format(".Where(p => p.Handle != 0u)");
                     }
-                    lines.Add(string.Format("{0}pairs.AddRange(this.{1}.Select(p => new DxfCodePair({2}, {3})));", indentPrefix, name, code, value));
+
+                    lines.Add(string.Format("{0}pairs.AddRange(this.{1}{2}.Select(p => new DxfCodePair({3}, {4})));", indentPrefix, name, infixPredicate, code, value));
                 }
                 else
                 {

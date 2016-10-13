@@ -58,7 +58,7 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(100, "AcDb3dSolid"));
             }
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.HistoryObjectPointer.Handle != 0u)
             {
                 pairs.Add(new DxfCodePair(350, DxfCommonConverters.UIntHandle(this.HistoryObjectPointer.Handle)));
             }

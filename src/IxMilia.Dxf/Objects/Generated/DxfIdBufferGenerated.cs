@@ -49,7 +49,7 @@ namespace IxMilia.Dxf.Objects
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbIdBuffer"));
-            pairs.AddRange(this.EntitiesPointers.Pointers.Select(p => new DxfCodePair(330, DxfCommonConverters.UIntHandle(p.Handle))));
+            pairs.AddRange(this.EntitiesPointers.Pointers.Where(p => p.Handle != 0u).Select(p => new DxfCodePair(330, DxfCommonConverters.UIntHandle(p.Handle))));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

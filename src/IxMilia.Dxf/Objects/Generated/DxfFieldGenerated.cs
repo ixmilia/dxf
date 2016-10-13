@@ -117,7 +117,7 @@ namespace IxMilia.Dxf.Objects
             }
 
             pairs.Add(new DxfCodePair(90, ChildFields.Count));
-            pairs.AddRange(this.ChildFieldsPointers.Pointers.Select(p => new DxfCodePair(360, DxfCommonConverters.UIntHandle(p.Handle))));
+            pairs.AddRange(this.ChildFieldsPointers.Pointers.Where(p => p.Handle != 0u).Select(p => new DxfCodePair(360, DxfCommonConverters.UIntHandle(p.Handle))));
             if (version <= DxfAcadVersion.R2007)
             {
                 pairs.Add(new DxfCodePair(91, (this.EvaluationOption)));

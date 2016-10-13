@@ -474,6 +474,7 @@
         <Property Name="ChannelFlags" Code="94" Type="int" DefaultValue="0" MinVersion="R2010" />
 
         <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbMaterial&quot;" />
             <WriteProperty Property="Name" />
             <WriteProperty Property="Description" />
 

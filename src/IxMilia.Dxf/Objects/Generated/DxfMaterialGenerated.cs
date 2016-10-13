@@ -214,6 +214,7 @@ namespace IxMilia.Dxf.Objects
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             base.AddValuePairs(pairs, version, outputHandles);
+            pairs.Add(new DxfCodePair(100, "AcDbMaterial"));
             pairs.Add(new DxfCodePair(1, (this.Name)));
             pairs.Add(new DxfCodePair(2, (this.Description)));
             pairs.Add(new DxfCodePair(70, BoolShort(this.OverrideAmbientColor)));

@@ -64,7 +64,7 @@ namespace IxMilia.Dxf
         public DxfUnitFormat AlternateDimensioningUnits { get; set; }
         public short AlternateDimensioningToleranceDecimalPlaces { get; set; }
         public DxfAngleFormat DimensioningAngleFormat { get; set; }
-        public short DimensionPrecision { get; set; }
+        public DxfDimensionFractionFormat DimensionFractionFormat { get; set; }
         public DxfNonAngularUnits DimensionNonAngularUnits { get; set; }
         public char DimensionDecimalSeparatorChar { get; set; }
         public DxfDimensionTextMovementRule DimensionTextMovementRule { get; set; }
@@ -126,14 +126,14 @@ namespace IxMilia.Dxf
             DimensionLineColor = null;
             DimensionExtensionLineColor = null;
             DimensionTextColor = null;
-            AngularDimensionPrecision = 12;
+            AngularDimensionPrecision = 0;
             DimensionUnitFormat = DxfUnitFormat.Scientific;
             DimensionUnitToleranceDecimalPlaces = 0;
             DimensionToleranceDecimalPlaces = 0;
             AlternateDimensioningUnits = DxfUnitFormat.Scientific;
             AlternateDimensioningToleranceDecimalPlaces = 0;
             DimensioningAngleFormat = DxfAngleFormat.DecimalDegrees;
-            DimensionPrecision = 12;
+            DimensionFractionFormat = DxfDimensionFractionFormat.HorizontalStacking;
             DimensionNonAngularUnits = DxfNonAngularUnits.Scientific;
             DimensionDecimalSeparatorChar = '.';
             DimensionTextMovementRule = DxfDimensionTextMovementRule.MoveLineWithText;
@@ -263,7 +263,7 @@ namespace IxMilia.Dxf
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(276, (DimensionPrecision)));
+                pairs.Add(new DxfCodePair(276, (short)(DimensionFractionFormat)));
             }
 
             if (version >= DxfAcadVersion.R2000)
@@ -538,7 +538,7 @@ namespace IxMilia.Dxf
                         item.DimensioningAngleFormat = (DxfAngleFormat)(pair.ShortValue);
                         break;
                     case 276:
-                        item.DimensionPrecision = (pair.ShortValue);
+                        item.DimensionFractionFormat = (DxfDimensionFractionFormat)(pair.ShortValue);
                         break;
                     case 277:
                         item.DimensionNonAngularUnits = (DxfNonAngularUnits)(pair.ShortValue);

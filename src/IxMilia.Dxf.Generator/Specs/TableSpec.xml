@@ -60,14 +60,14 @@
             <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
             <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
             <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue" WriteConverter="DxfColor.GetRawValue" />
-            <Property Name="AngularDimensionPrecision" Code="179" Type="short" DefaultValue="12" MinVersion="R2000" />
+            <Property Name="AngularDimensionPrecision" Code="179" Type="short" DefaultValue="0" MinVersion="R2000" />
             <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MinVersion="R13" />
             <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" MinVersion="R13" />
             <Property Name="DimensionToleranceDecimalPlaces" Code="272" Type="short" DefaultValue="0" MinVersion="R13" />
             <Property Name="AlternateDimensioningUnits" Code="273" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat)" WriteConverter="(short)" MinVersion="R13" />
             <Property Name="AlternateDimensioningToleranceDecimalPlaces" Code="274" Type="short" DefaultValue="0" MinVersion="R13" />
             <Property Name="DimensioningAngleFormat" Code="275" Type="DxfAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat)" WriteConverter="(short)" MinVersion="R13" />
-            <Property Name="DimensionPrecision" Code="276" Type="short" DefaultValue="12" MinVersion="R2000" />
+            <Property Name="DimensionFractionFormat" Code="276" Type="DxfDimensionFractionFormat" DefaultValue="DxfDimensionFractionFormat.HorizontalStacking" ReadConverter="(DxfDimensionFractionFormat)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="DimensionNonAngularUnits" Code="277" Type="DxfNonAngularUnits" DefaultValue="DxfNonAngularUnits.Scientific" ReadConverter="(DxfNonAngularUnits)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="DimensionDecimalSeparatorChar" Code="278" Type="char" DefaultValue="'.'" ReadConverter="(char)" WriteConverter="(short)" MinVersion="R2000" />
             <Property Name="DimensionTextMovementRule" Code="279" Type="DxfDimensionTextMovementRule" DefaultValue="DxfDimensionTextMovementRule.MoveLineWithText" ReadConverter="(DxfDimensionTextMovementRule)" WriteConverter="(short)" MinVersion="R2000" />

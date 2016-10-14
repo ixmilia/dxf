@@ -48,7 +48,7 @@
             <Property Name="AlternateDimensioningScaleFactor" Code="143" Type="double" DefaultValue="25.4" />
             <Property Name="DimensionLinearMeasurementScaleFactor" Code="144" Type="double" DefaultValue="1.0" />
             <Property Name="DimensionVerticalTextPosition" Code="145" Type="double" DefaultValue="0.0" />
-            <Property Name="DimensionToleranceDisplacScaleFactor" Code="146" Type="double" DefaultValue="1.0" />
+            <Property Name="DimensionToleranceDisplaceScaleFactor" Code="146" Type="double" DefaultValue="1.0" />
             <Property Name="DimensionLineGap" Code="147" Type="double" DefaultValue="0.09" />
             <Property Name="AlternateDimensioningUnitRounding" Code="148" Type="double" DefaultValue="0.0" MinVersion="R2000" />
             <Property Name="UseAlternateDimensioning" Code="170" Type="bool" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" />

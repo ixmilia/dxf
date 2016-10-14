@@ -45,7 +45,7 @@ namespace IxMilia.Dxf
         public double AlternateDimensioningScaleFactor { get; set; }
         public double DimensionLinearMeasurementScaleFactor { get; set; }
         public double DimensionVerticalTextPosition { get; set; }
-        public double DimensionToleranceDisplacScaleFactor { get; set; }
+        public double DimensionToleranceDisplaceScaleFactor { get; set; }
         public double DimensionLineGap { get; set; }
         public double AlternateDimensioningUnitRounding { get; set; }
         public bool UseAlternateDimensioning { get; set; }
@@ -114,7 +114,7 @@ namespace IxMilia.Dxf
             AlternateDimensioningScaleFactor = 25.4;
             DimensionLinearMeasurementScaleFactor = 1.0;
             DimensionVerticalTextPosition = 0.0;
-            DimensionToleranceDisplacScaleFactor = 1.0;
+            DimensionToleranceDisplaceScaleFactor = 1.0;
             DimensionLineGap = 0.09;
             AlternateDimensioningUnitRounding = 0.0;
             UseAlternateDimensioning = false;
@@ -210,7 +210,7 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(143, (AlternateDimensioningScaleFactor)));
             pairs.Add(new DxfCodePair(144, (DimensionLinearMeasurementScaleFactor)));
             pairs.Add(new DxfCodePair(145, (DimensionVerticalTextPosition)));
-            pairs.Add(new DxfCodePair(146, (DimensionToleranceDisplacScaleFactor)));
+            pairs.Add(new DxfCodePair(146, (DimensionToleranceDisplaceScaleFactor)));
             pairs.Add(new DxfCodePair(147, (DimensionLineGap)));
             if (version >= DxfAcadVersion.R2000)
             {
@@ -481,7 +481,7 @@ namespace IxMilia.Dxf
                         item.DimensionVerticalTextPosition = (pair.DoubleValue);
                         break;
                     case 146:
-                        item.DimensionToleranceDisplacScaleFactor = (pair.DoubleValue);
+                        item.DimensionToleranceDisplaceScaleFactor = (pair.DoubleValue);
                         break;
                     case 147:
                         item.DimensionLineGap = (pair.DoubleValue);

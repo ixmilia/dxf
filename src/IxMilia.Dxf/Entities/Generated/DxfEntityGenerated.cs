@@ -23,6 +23,11 @@ namespace IxMilia.Dxf.Entities
             Owner = owner;
         }
 
+        protected void SetOwner(IDxfItem owner)
+        {
+            ((IDxfItemInternal)this).SetOwner(owner);
+        }
+
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {
             yield return PlotStylePointer;

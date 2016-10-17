@@ -13,7 +13,7 @@ namespace IxMilia.Dxf.Entities
 
         void IDxfItemInternal.SetOwner(IDxfItem owner)
         {
-            ((IDxfItemInternal)this).SetOwner(owner);
+            SetOwner(owner);
         }
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()

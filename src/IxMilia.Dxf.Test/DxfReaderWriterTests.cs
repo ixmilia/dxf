@@ -374,6 +374,74 @@ ENDSEC");
         }
 
         [Fact]
+        public void AssignOwnerHandlesInXDataTest()
+        {
+            // read a layout with its owner handle also specified in the XDATA
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1027
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+DICTIONARY
+  5
+BBBBBBBB
+  3
+some-layout
+350
+CCCCCCCC
+  0
+LAYOUT
+  5
+CCCCCCCC
+330
+BBBBBBBB
+102
+{ACAD_REACTORS
+330
+BBBBBBBB
+102
+}
+  0
+ENDSEC
+  0
+EOF
+");
+            // sanity check to verify that it was read correctly
+            var dict = file.Objects.OfType<DxfDictionary>().Single();
+            var layout = (DxfLayout)dict["some-layout"];
+            Assert.Equal(0xBBBBBBBB, ((IDxfItemInternal)dict).Handle);
+            Assert.Equal(0xCCCCCCCC, ((IDxfItemInternal)layout).Handle);
+
+            // re-save the file to a garbage stream to re-assign handles
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms);
+            }
+
+            // verify new handles and owners; note that the assigned handles are unlikely to be 0xBBBBBBBB and 0xCCCCCCCC again
+            Assert.True(ReferenceEquals(layout.Owner, dict));
+            Assert.NotEqual(0xBBBBBBBB, ((IDxfItemInternal)dict).Handle);
+            Assert.NotEqual(0xCCCCCCCC, ((IDxfItemInternal)layout).Handle);
+            var dictHandle = ((IDxfItemInternal)dict).Handle;
+            Assert.Equal(dictHandle, ((IDxfItemInternal)layout).OwnerHandle);
+            var layoutXDataGroups = ((IDxfHasXData)layout).ExtensionDataGroups.Single(g => g.GroupName == "ACAD_REACTORS");
+            var ownerCodePair = (DxfCodePair)layoutXDataGroups.Items.Single();
+            Assert.Equal(330, ownerCodePair.Code);
+            Assert.Equal(DxfCommonConverters.UIntHandle(dictHandle), ownerCodePair.StringValue);
+        }
+
+        [Fact]
         public void ReadVersionSpecificClassTest_R13()
         {
             var file = Parse(@"

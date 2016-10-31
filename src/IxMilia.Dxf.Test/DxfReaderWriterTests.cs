@@ -1804,6 +1804,32 @@ name
         }
 
         [Fact]
+        public void SetActiveViewPortTest()
+        {
+            var file = new DxfFile();
+            Assert.NotEqual(42.0, file.ActiveViewPort.ViewHeight);
+            var newActive = new DxfViewPort()
+            {
+                Name = "*active",
+                ViewHeight = 42.0,
+            };
+            file.ActiveViewPort = newActive;
+            Assert.True(ReferenceEquals(newActive, file.ActiveViewPort));
+        }
+
+        [Fact]
+        public void GetActiveViewPortTest()
+        {
+            var file = new DxfFile();
+            file.ViewPorts.Clear();
+            var one = new DxfViewPort() { Name = "one" };
+            var two = new DxfViewPort() { Name = DxfViewPort.ActiveViewPortName };
+            file.ViewPorts.Add(one);
+            file.ViewPorts.Add(two);
+            Assert.True(ReferenceEquals(two, file.ActiveViewPort));
+        }
+
+        [Fact]
         public void SelfReferencingRoundTripTest()
         {
             // ensure we don't enter an infinite loop with an item that owns itself

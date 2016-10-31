@@ -58,6 +58,36 @@ namespace IxMilia.Dxf
 
         public DxfDictionary NamedObjectDictionary { get { return Objects.FirstOrDefault() as DxfDictionary; } }
 
+        public DxfViewPort ActiveViewPort
+        {
+            get
+            {
+                // prefer the view port named `*ACTIVE` then fall back to the first available one
+                return ViewPorts.FirstOrDefault(v => string.Compare(v.Name, DxfViewPort.ActiveViewPortName, StringComparison.OrdinalIgnoreCase) == 0)
+                    ?? ViewPorts.FirstOrDefault();
+            }
+            set
+            {
+                // replace `*ACTIVE`, ensuring the name is correct
+                if (string.Compare(value.Name, DxfViewPort.ActiveViewPortName, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    value.Name = DxfViewPort.ActiveViewPortName;
+                }
+
+                for (int i = 0; i < ViewPorts.Count; i++)
+                {
+                    if (string.Compare(ViewPorts[i].Name, DxfViewPort.ActiveViewPortName, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        ViewPorts[i] = value;
+                        return;
+                    }
+                }
+
+                // `*ACTIVE` couldn't be found, just add it on the end
+                ViewPorts.Add(value);
+            }
+        }
+
         /// <summary>
         /// Gets the thumbnail bitmap.
         /// </summary>

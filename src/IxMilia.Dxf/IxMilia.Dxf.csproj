@@ -138,6 +138,8 @@
     <ObjectsOutputLocation>$(MSBuildThisFileDirectory)Objects\Generated</ObjectsOutputLocation>
     <SectionsOutputLocation>$(MSBuildThisFileDirectory)Sections\Generated</SectionsOutputLocation>
     <TablesOutputLocation>$(MSBuildThisFileDirectory)Tables\Generated</TablesOutputLocation>
+    <NuGetDir>$(MSBuildThisFileDirectory)..\.nuget</NuGetDir>
+    <NuGetExe>$(NuGetDir)\NuGet.exe</NuGetExe>
   </PropertyGroup>
   <ItemGroup>
     <DirsToClean Include="$(EntitiesOutputLocation)" />
@@ -149,7 +151,11 @@
     <RemoveDir Directories="@(DirsToClean)" />
   </Target>
   <Target Name="BeforeBuild">
-    <Exec WorkingDirectory="$(GeneratorLocation)" Command="dotnet restore" />
-    <Exec WorkingDirectory="$(GeneratorLocation)" Command="dotnet run &quot;--entityDir=$(EntitiesOutputLocation)&quot; &quot;--objectDir=$(ObjectsOutputLocation)&quot; &quot;--sectionDir=$(SectionsOutputLocation)&quot; &quot;--tableDir=$(TablesOutputLocation)&quot;" />
+    <Exec WorkingDirectory="$(GeneratorLocation)"
+          Command='"$(NuGetExe)" restore' />
+    <MSBuild Projects="$(GeneratorLocation)\IxMilia.Dxf.Generator.csproj"
+             Targets="Build" />
+    <Exec WorkingDirectory="$(GeneratorLocation)"
+          Command='"$(OutputPath)\IxMilia.Dxf.Generator.exe" "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)" "--tableDir=$(TablesOutputLocation)"' />
   </Target>
 </Project>

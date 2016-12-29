@@ -735,6 +735,8 @@ SECTION
 OBJECTS
   0
 LIGHTLIST
+  5
+DEADBEEF
  90
 43
  90
@@ -749,6 +751,7 @@ ENDSEC
 EOF
 ");
             var lightList = (DxfLightList)file.Objects.Last();
+            Assert.Equal(0xDEADBEEF, ((IDxfItemInternal)lightList).Handle);
             Assert.Equal(43, lightList.Version);
             Assert.Equal("light-name", lightList.Lights.Single().Name);
         }

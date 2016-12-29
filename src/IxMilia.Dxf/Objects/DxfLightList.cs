@@ -26,8 +26,19 @@ namespace IxMilia.Dxf.Objects
                 switch (pair.Code)
                 {
                     case 5:
-                        // pointer to a new light
-                        LightsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
+                        if (readVersionNumber)
+                        {
+                            // pointer to a new light
+                            LightsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
+                        }
+                        else
+                        {
+                            // might still be the handle
+                            if (!base.TrySetPair(pair))
+                            {
+                                ExcessCodePairs.Add(pair);
+                            }
+                        }
                         break;
                     case 1:
                         // don't worry about the name; it'll be read from the light entity directly

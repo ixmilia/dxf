@@ -7,15 +7,7 @@ namespace IxMilia.Dxf.Entities
 {
     public partial class DxfPolyline : IDxfItemInternal
     {
-        #region IDxfItem and IDxfItemInternal
-        uint IDxfItemInternal.Handle { get; set; }
-        uint IDxfItemInternal.OwnerHandle { get; set; }
-
-        void IDxfItemInternal.SetOwner(IDxfItem owner)
-        {
-            ((IDxfItemInternal)this).SetOwner(owner);
-        }
-
+        #region IDxfItemInternal
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {
             foreach (var pointer in _vertices.Pointers)

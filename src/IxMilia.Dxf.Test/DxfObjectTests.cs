@@ -1824,6 +1824,55 @@ VTR_0.000_0.000_1.000_1.000_CONTRAST
         }
 
         [Fact]
+        public void ReadDictionaryWithEveryEntityTest()
+        {
+            // read a dictionary with a reference to every entity
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                // dimensions are hard
+                if (IsDxfEntityOrDerived(type) && type.BaseType != typeof(DxfDimensionBase))
+                {
+                    var ctor = type.GetConstructor(Type.EmptyTypes);
+                    if (ctor != null)
+                    {
+                        var ent = (DxfEntity)ctor.Invoke(new object[0]);
+                        var fileContents = $@"
+  0
+SECTION
+  2
+ENTITIES
+  0
+{ent.EntityTypeString}
+  5
+AAAA
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+DICTIONARY
+  3
+the-entity
+350
+AAAA
+  0
+ENDSEC
+  0
+EOF
+";
+                        var file = Parse(fileContents);
+                        var dict = (DxfDictionary)file.Objects.Single();
+                        var parsedEntity = dict["the-entity"] as DxfEntity;
+                        Assert.Equal(type, parsedEntity.GetType());
+                    }
+                }
+            }
+        }
+
+        [Fact]
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();
@@ -1871,16 +1920,26 @@ VTR_0.000_0.000_1.000_1.000_CONTRAST
             }
         }
 
+        private static bool IsDxfEntityOrDerived(Type type)
+        {
+            return IsTypeOrDerived(type, typeof(DxfEntity));
+        }
+
         private static bool IsDxfObjectOrDerived(Type type)
         {
-            if (type == typeof(DxfObject))
+            return IsTypeOrDerived(type, typeof(DxfObject));
+        }
+
+        private static bool IsTypeOrDerived(Type type, Type expectedType)
+        {
+            if (type == expectedType)
             {
                 return true;
             }
 
             if (type.BaseType != null)
             {
-                return IsDxfObjectOrDerived(type.BaseType);
+                return IsTypeOrDerived(type.BaseType, expectedType);
             }
 
             return false;

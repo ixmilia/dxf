@@ -964,6 +964,70 @@ EOF
         }
 
         [Fact]
+        public void ReadBlockWithPolylineTest()
+        {
+            var file = Parse(@"
+  0
+SECTION
+  2
+BLOCKS
+  0
+BLOCK
+100
+AcDbBlockBegin
+  0
+POLYLINE
+  0
+VERTEX
+ 10
+1.1
+ 20
+2.2
+ 30
+3.3
+  0
+VERTEX
+ 10
+4.4
+ 20
+5.5
+ 30
+6.6
+  0
+VERTEX
+ 10
+7.7
+ 20
+8.8
+ 30
+9.9
+  0
+VERTEX
+ 10
+10.0
+ 20
+11.1
+ 30
+12.2
+  0
+SEQEND
+  0
+ENDBLK
+  0
+ENDSEC
+  0
+EOF
+");
+            var block = file.Blocks.Single();
+            var pl = (DxfPolyline)block.Entities.Single();
+            Assert.Equal(4, pl.Vertices.Count);
+            Assert.Equal(new DxfPoint(1.1, 2.2, 3.3), pl.Vertices[0].Location);
+            Assert.Equal(new DxfPoint(4.4, 5.5, 6.6), pl.Vertices[1].Location);
+            Assert.Equal(new DxfPoint(7.7, 8.8, 9.9), pl.Vertices[2].Location);
+            Assert.Equal(new DxfPoint(10.0, 11.1, 12.2), pl.Vertices[3].Location);
+        }
+
+        [Fact]
         public void ReadTableTest()
         {
             var file = Parse(@"

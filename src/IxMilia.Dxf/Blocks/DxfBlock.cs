@@ -1,10 +1,10 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf.Blocks
 {
@@ -174,6 +174,7 @@ namespace IxMilia.Dxf.Blocks
             var block = new DxfBlock();
             var readingBlockStart = true;
             var readingBlockEnd = false;
+            var entities = new List<DxfEntity>();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
@@ -207,7 +208,7 @@ namespace IxMilia.Dxf.Blocks
                     if (entity != null)
                     {
                         // entity could be null if it's unsupported
-                        block.Entities.Add(entity);
+                        entities.Add(entity);
                     }
                 }
                 else
@@ -271,6 +272,12 @@ namespace IxMilia.Dxf.Blocks
                         throw new DxfReadException("Unexpected pair in block", pair);
                     }
                 }
+            }
+
+            var collected = DxfEntitiesSection.GatherEntities(entities);
+            foreach (var entity in collected)
+            {
+                block.Entities.Add(entity);
             }
 
             return block;

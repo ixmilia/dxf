@@ -52,7 +52,7 @@ namespace IxMilia.Dxf
 
         public IList<DxfBlockRecord> BlockRecords { get { return TablesSection.BlockRecordTable.Items; } }
 
-        public IList<DxfLineType> Linetypes { get { return TablesSection.LTypeTable.Items; } }
+        public IList<DxfLineType> LineTypes { get { return TablesSection.LTypeTable.Items; } }
 
         public IList<DxfStyle> Styles { get { return TablesSection.StyleTable.Items; } }
 

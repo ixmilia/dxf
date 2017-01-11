@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Blocks;
@@ -21,7 +22,7 @@ namespace IxMilia.Dxf.Sections
         {
             foreach (var name in new[] { "*MODEL_SPACE", "*PAPER_SPACE" })
             {
-                if (!Blocks.Any(b => b.Name == name))
+                if (!Blocks.Any(b => string.Compare(b.Name, name, StringComparison.OrdinalIgnoreCase) == 0))
                 {
                     Blocks.Add(new DxfBlock() { Name = name, Layer = "0" });
                 }

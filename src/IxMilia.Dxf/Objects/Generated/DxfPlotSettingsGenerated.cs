@@ -304,7 +304,11 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(147, (this.StandardScaleValue)));
             pairs.Add(new DxfCodePair(148, (this.PaperImageOriginX)));
             pairs.Add(new DxfCodePair(149, (this.PaperImageOriginY)));
-            pairs.Add(new DxfCodePair(333, DxfCommonConverters.UIntHandle(this.ShadePlotObjectPointer.Handle)));
+            if (this.ShadePlotObjectPointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(333, DxfCommonConverters.UIntHandle(this.ShadePlotObjectPointer.Handle)));
+            }
+
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

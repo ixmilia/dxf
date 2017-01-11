@@ -17,7 +17,7 @@ namespace IxMilia.Dxf
         protected override DxfTableType TableType { get { return DxfTableType.Layer; } }
 
         public DxfColor Color { get; set; }
-        public string LinetypeName { get; set; }
+        public string LineTypeName { get; set; }
         public bool IsLayerPlotted { get; set; }
         public DxfLineWeight LineWeight { get; set; }
         public uint PlotStylePointer { get; set; }
@@ -29,7 +29,7 @@ namespace IxMilia.Dxf
             : base()
         {
             Color = DxfColor.FromIndex(7);
-            LinetypeName = "CONTINUOUS";
+            LineTypeName = "CONTINUOUS";
             IsLayerPlotted = true;
             LineWeight = new DxfLineWeight();
             PlotStylePointer = 0u;
@@ -46,7 +46,7 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(62, GetWritableColorValue(Color)));
-            pairs.Add(new DxfCodePair(6, GetWritableLinetypeName(LinetypeName)));
+            pairs.Add(new DxfCodePair(6, GetWritableLineTypeName(LineTypeName)));
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(290, (IsLayerPlotted)));
@@ -98,7 +98,7 @@ namespace IxMilia.Dxf
                         item.Color = item.ReadColorValue(pair.ShortValue);
                         break;
                     case 6:
-                        item.LinetypeName = (pair.StringValue);
+                        item.LineTypeName = (pair.StringValue);
                         break;
                     case 290:
                         item.IsLayerPlotted = (pair.BoolValue);

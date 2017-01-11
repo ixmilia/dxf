@@ -130,9 +130,21 @@ namespace IxMilia.Dxf.Objects
 
             pairs.Add(new DxfCodePair(73, (short)Hours.Count));
             pairs.AddRange(this.Hours.Select(p => new DxfCodePair(290, (short)(p))));
-            pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.PageSetupWizardPointer.Handle)));
-            pairs.Add(new DxfCodePair(341, DxfCommonConverters.UIntHandle(this.ViewPointer.Handle)));
-            pairs.Add(new DxfCodePair(342, DxfCommonConverters.UIntHandle(this.VisualStylePointer.Handle)));
+            if (this.PageSetupWizardPointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.PageSetupWizardPointer.Handle)));
+            }
+
+            if (this.ViewPointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(341, DxfCommonConverters.UIntHandle(this.ViewPointer.Handle)));
+            }
+
+            if (this.VisualStylePointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(342, DxfCommonConverters.UIntHandle(this.VisualStylePointer.Handle)));
+            }
+
             pairs.Add(new DxfCodePair(74, (this.ShadePlotType)));
             pairs.Add(new DxfCodePair(75, (short)(this.ViewportsPerPage)));
             pairs.Add(new DxfCodePair(76, (short)(this.ViewportDistributionRowCount)));
@@ -140,7 +152,11 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(40, (this.Spacing)));
             pairs.Add(new DxfCodePair(293, (this.LockViewports)));
             pairs.Add(new DxfCodePair(294, (this.LabelViewports)));
-            pairs.Add(new DxfCodePair(343, DxfCommonConverters.UIntHandle(this.TextStylePointer.Handle)));
+            if (this.TextStylePointer.Handle != 0u)
+            {
+                pairs.Add(new DxfCodePair(343, DxfCommonConverters.UIntHandle(this.TextStylePointer.Handle)));
+            }
+
         }
     }
 }

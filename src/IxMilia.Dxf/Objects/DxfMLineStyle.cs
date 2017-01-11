@@ -12,7 +12,7 @@ namespace IxMilia.Dxf.Objects
         {
             public double Offset { get; set; }
             public DxfColor Color { get; set; }
-            public string Linetype { get; set; }
+            public string LineType { get; set; }
         }
 
         public IList<DxfMLineStyleElement> Elements { get; } = new ListNonNull<DxfMLineStyleElement>();
@@ -42,7 +42,7 @@ namespace IxMilia.Dxf.Objects
                         this.Description = (pair.StringValue);
                         break;
                     case 6:
-                        this._elementLinetypes.Add((pair.StringValue));
+                        this._elementLineTypes.Add((pair.StringValue));
                         break;
                     case 49:
                         this._elementOffsets.Add((pair.DoubleValue));
@@ -88,15 +88,15 @@ namespace IxMilia.Dxf.Objects
         {
             Debug.Assert(_elementCount == _elementOffsets.Count);
             Debug.Assert(_elementCount == _elementColors.Count);
-            Debug.Assert(_elementCount == _elementLinetypes.Count);
+            Debug.Assert(_elementCount == _elementLineTypes.Count);
             for (int i = 0; i < _elementCount; i++)
             {
-                Elements.Add(new DxfMLineStyleElement() { Offset = _elementOffsets[i], Color = _elementColors[i], Linetype = _elementLinetypes[i] });
+                Elements.Add(new DxfMLineStyleElement() { Offset = _elementOffsets[i], Color = _elementColors[i], LineType = _elementLineTypes[i] });
             }
 
             _elementOffsets.Clear();
             _elementColors.Clear();
-            _elementLinetypes.Clear();
+            _elementLineTypes.Clear();
 
             return this;
         }

@@ -374,6 +374,74 @@ ENDSEC");
         }
 
         [Fact]
+        public void AssignOwnerHandlesInXDataTest()
+        {
+            // read a layout with its owner handle also specified in the XDATA
+            var file = Parse(@"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1027
+  0
+ENDSEC
+  0
+SECTION
+  2
+OBJECTS
+  0
+DICTIONARY
+  5
+BBBBBBBB
+  3
+some-layout
+350
+CCCCCCCC
+  0
+LAYOUT
+  5
+CCCCCCCC
+330
+BBBBBBBB
+102
+{ACAD_REACTORS
+330
+BBBBBBBB
+102
+}
+  0
+ENDSEC
+  0
+EOF
+");
+            // sanity check to verify that it was read correctly
+            var dict = file.Objects.OfType<DxfDictionary>().Single();
+            var layout = (DxfLayout)dict["some-layout"];
+            Assert.Equal(0xBBBBBBBB, ((IDxfItemInternal)dict).Handle);
+            Assert.Equal(0xCCCCCCCC, ((IDxfItemInternal)layout).Handle);
+
+            // re-save the file to a garbage stream to re-assign handles
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms);
+            }
+
+            // verify new handles and owners; note that the assigned handles are unlikely to be 0xBBBBBBBB and 0xCCCCCCCC again
+            Assert.True(ReferenceEquals(layout.Owner, dict));
+            Assert.NotEqual(0xBBBBBBBB, ((IDxfItemInternal)dict).Handle);
+            Assert.NotEqual(0xCCCCCCCC, ((IDxfItemInternal)layout).Handle);
+            var dictHandle = ((IDxfItemInternal)dict).Handle;
+            Assert.Equal(dictHandle, ((IDxfItemInternal)layout).OwnerHandle);
+            var layoutXDataGroups = ((IDxfHasXData)layout).ExtensionDataGroups.Single(g => g.GroupName == "ACAD_REACTORS");
+            var ownerCodePair = (DxfCodePair)layoutXDataGroups.Items.Single();
+            Assert.Equal(330, ownerCodePair.Code);
+            Assert.Equal(DxfCommonConverters.UIntHandle(dictHandle), ownerCodePair.StringValue);
+        }
+
+        [Fact]
         public void ReadVersionSpecificClassTest_R13()
         {
             var file = Parse(@"
@@ -1454,6 +1522,103 @@ AcDbBlockEnd
         }
 
         [Fact]
+        public void ReadLineTypeElementsTest()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+LTYPE
+999
+====================================================== line type with 2 elements
+  0
+LTYPE
+  2
+line-type-name
+ 73
+     2
+ 49
+1.0
+ 74
+     0
+ 49
+2.0
+ 74
+     1
+999
+============================================== pointer to the STYLE object below
+340
+DEADBEEF
+  0
+ENDTAB
+  0
+TABLE
+  2
+STYLE
+999
+=============================================================== the style object
+  0
+STYLE
+  5
+DEADBEEF
+  2
+style-name
+  0
+ENDTAB
+");
+            var ltype = file.LineTypes.Where(l => l.Name == "line-type-name").Single();
+            Assert.Equal(2, ltype.Elements.Count);
+
+            Assert.Equal(1.0, ltype.Elements[0].DashDotSpaceLength);
+            Assert.Equal(0, ltype.Elements[0].ComplexFlags);
+            Assert.Null(ltype.Elements[0].Style);
+
+            Assert.Equal(2.0, ltype.Elements[1].DashDotSpaceLength);
+            Assert.Equal(1, ltype.Elements[1].ComplexFlags);
+            Assert.Equal("style-name", ltype.Elements[1].Style.Name);
+        }
+
+        [Fact]
+        public void WriteLineTypeElementsTest()
+        {
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R2013;
+            var ltype = new DxfLineType();
+            file.LineTypes.Add(ltype);
+            ltype.Name = "line-type-name";
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 1.0,
+                ComplexFlags = 0,
+            });
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 2.0,
+                ComplexFlags = 0,
+            });
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 3.0,
+                ComplexFlags = 0,
+            });
+            VerifyFileContains(file, @"
+ 49
+1.0
+ 74
+     0
+ 49
+2.0
+ 74
+     0
+ 49
+3.0
+ 74
+     0
+");
+        }
+
+        [Fact]
         public void WriteTablesWithDefaultValuesTest()
         {
             var file = new DxfFile();
@@ -1470,8 +1635,8 @@ AcDbBlockEnd
             file.Layers.Add(new DxfLayer());
             file.Layers.Add(SetAllPropertiesToDefault(new DxfLayer()));
 
-            file.Linetypes.Add(new DxfLineType());
-            file.Linetypes.Add(SetAllPropertiesToDefault(new DxfLineType()));
+            file.LineTypes.Add(new DxfLineType());
+            file.LineTypes.Add(SetAllPropertiesToDefault(new DxfLineType()));
 
             file.Styles.Add(new DxfStyle());
             file.Styles.Add(SetAllPropertiesToDefault(new DxfStyle()));
@@ -1529,7 +1694,7 @@ AcDbBlockEnd
             var file = new DxfFile();
             var layer = file.Layers.Single();
             layer.Color = DxfColor.ByLayer; // code 62, value 256 not valid; normalized to 7
-            layer.LinetypeName = null; // code 6, value null or empty not valid; normalized to CONTINUOUS
+            layer.LineTypeName = null; // code 6, value null or empty not valid; normalized to CONTINUOUS
             VerifyFileContains(file, @"
   0
 LAYER
@@ -1997,7 +2162,7 @@ ENDTAB
             Assert.Equal(0, file.DimensionStyles.Count);
             Assert.Equal(0, file.Entities.Count);
             Assert.Equal(0, file.Layers.Count);
-            Assert.Equal(0, file.Linetypes.Count);
+            Assert.Equal(0, file.LineTypes.Count);
             Assert.Null(file.RawThumbnail);
 
             // there is always a default dictionary
@@ -2008,24 +2173,133 @@ ENDTAB
         }
 
         [Fact]
-        public void DefaultTableItemsTest()
+        public void DefaultTableItemsExistTest()
         {
             var file = new DxfFile();
             Assert.Equal(new[] { "ACAD", "ACADANNOTATIVE", "ACAD_NAV_VCDISPLAY", "ACAD_MLEADERVER" }, file.ApplicationIds.Select(a => a.Name).ToArray());
             Assert.Equal(new[] { "STANDARD", "ANNOTATIVE" }, file.DimensionStyles.Select(d => d.Name).ToArray());
             Assert.Equal("0", file.Layers.Single().Name);
-            Assert.Equal(new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" }, file.Linetypes.Select(l => l.Name).ToArray());
+            Assert.Equal(new[] { "BYLAYER", "BYBLOCK", "CONTINUOUS" }, file.LineTypes.Select(l => l.Name).ToArray());
             Assert.Equal("*ACTIVE", file.ViewPorts.Single().Name);
+        }
+
+        [Fact]
+        public void DefaultTableItemsNotDuplicatedWithDifferingCaseTest()
+        {
+            // add lower case versions of expected items to an empty file
+            var file = new DxfFile();
+            file.Clear();
+            var expectedAppIds = new[] { "acad", "acadannotative", "acad_nav_vcdisplay", "acad_mleaderver" };
+            var expectedBlockRecords = new[] { "*model_space", "*paper_space" };
+            var expectedDimStyles = new[] { "standard", "annotative" };
+            var expectedLineTypes = new[] { "bylayer", "byblock", "continuous" };
+            var expectedStyles = new[] { "standard", "annotative" };
+            var expectedViewPorts = new[] { "*active" };
+            var expectedLayers = new[] { "0" };
+
+            foreach (var name in expectedAppIds)
+            {
+                file.ApplicationIds.Add(new DxfAppId() { Name = name });
+            }
+
+            foreach (var name in expectedBlockRecords)
+            {
+                file.BlockRecords.Add(new DxfBlockRecord() { Name = name });
+            }
+
+            foreach (var name in expectedDimStyles)
+            {
+                file.DimensionStyles.Add(new DxfDimStyle() { Name = name });
+            }
+
+            foreach (var name in expectedLineTypes)
+            {
+                file.LineTypes.Add(new DxfLineType() { Name = name });
+            }
+
+            foreach (var name in expectedStyles)
+            {
+                file.Styles.Add(new DxfStyle() { Name = name });
+            }
+
+            foreach (var name in expectedViewPorts)
+            {
+                file.ViewPorts.Add(new DxfViewPort() { Name = name });
+            }
+
+            foreach (var name in expectedLayers)
+            {
+                file.Layers.Add(new DxfLayer() { Name = name });
+            }
+
+            // normalize to ensure everything is there
+            file.Normalize();
+
+            // ensure there aren't duplicates of anything
+            Assert.Equal(expectedAppIds.Length, file.ApplicationIds.Count);
+            foreach (var expected in expectedAppIds)
+            {
+                Assert.Equal(1, file.ApplicationIds.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedBlockRecords.Length, file.BlockRecords.Count);
+            foreach (var expected in expectedBlockRecords)
+            {
+                Assert.Equal(1, file.BlockRecords.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedDimStyles.Length, file.DimensionStyles.Count);
+            foreach (var expected in expectedDimStyles)
+            {
+                Assert.Equal(1, file.DimensionStyles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedLineTypes.Length, file.LineTypes.Count);
+            foreach (var expected in expectedLineTypes)
+            {
+                Assert.Equal(1, file.LineTypes.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedStyles.Length, file.Styles.Count);
+            foreach (var expected in expectedStyles)
+            {
+                Assert.Equal(1, file.Styles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedViewPorts.Length, file.ViewPorts.Count);
+            foreach (var expected in expectedViewPorts)
+            {
+                Assert.Equal(1, file.ViewPorts.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
+
+            Assert.Equal(expectedLayers.Length, file.Layers.Count);
+            foreach (var expected in expectedLayers)
+            {
+                Assert.Equal(1, file.Layers.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+            }
         }
 
         [Fact]
         public void DefaultBlocksTest()
         {
             var file = new DxfFile();
+
+            // validate defaults
             Assert.Equal(new[] { "*MODEL_SPACE", "*PAPER_SPACE" }, file.Blocks.Select(b => b.Name).ToArray());
+
+            // ensure they're added back appropriately
             file.Blocks.Clear();
             file.Normalize();
             Assert.Equal(new[] { "*MODEL_SPACE", "*PAPER_SPACE" }, file.Blocks.Select(b => b.Name).ToArray());
+
+            // ensure they're not duplicated in a different case
+            file.Blocks.Clear();
+            file.Blocks.Add(new DxfBlock() { Name = "*Model_Space" });
+            file.Blocks.Add(new DxfBlock() { Name = "*Paper_Space" });
+            file.Normalize();
+            Assert.Equal(2, file.Blocks.Count);
+            Assert.Equal("*Model_Space", file.Blocks[0].Name);
+            Assert.Equal("*Paper_Space", file.Blocks[1].Name);
         }
 
         [Fact]

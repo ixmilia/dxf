@@ -67,9 +67,12 @@ namespace IxMilia.Dxf.Generator
             AppendLine();
             AppendLine("void IDxfItemInternal.SetOwner(IDxfItem owner)");
             AppendLine("{");
-            IncreaseIndent();
-            AppendLine("Owner = owner;");
-            DecreaseIndent();
+            AppendLine("    Owner = owner;");
+            AppendLine("}");
+            AppendLine();
+            AppendLine("protected void SetOwner(IDxfItem owner)");
+            AppendLine("{");
+            AppendLine("    ((IDxfItemInternal)this).SetOwner(owner);");
             AppendLine("}");
 
             AppendPointers(baseEntity);

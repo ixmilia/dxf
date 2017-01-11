@@ -55,7 +55,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(100, "AcDbSectionManager"));
             pairs.Add(new DxfCodePair(70, BoolShort(this.RequiresFullUpdate)));
             pairs.Add(new DxfCodePair(90, SectionEntities.Count));
-            pairs.AddRange(this.SectionEntitiesPointers.Pointers.Select(p => new DxfCodePair(330, DxfCommonConverters.UIntHandle(p.Handle))));
+            pairs.AddRange(this.SectionEntitiesPointers.Pointers.Where(p => p.Handle != 0u).Select(p => new DxfCodePair(330, DxfCommonConverters.UIntHandle(p.Handle))));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

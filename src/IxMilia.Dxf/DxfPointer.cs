@@ -82,7 +82,7 @@ namespace IxMilia.Dxf
                     {
                         child.Item = handleMap[child.Handle];
                         BindPointers((IDxfItemInternal)child.Item, handleMap, visitedItems, visitedChildren);
-                        ((IDxfItemInternal)child.Item).SetOwner(item);
+                        SetOwner((IDxfItemInternal)child.Item, item);
                     }
                 }
             }
@@ -94,8 +94,47 @@ namespace IxMilia.Dxf
             {
                 if (child != null && visitedChildren.Add(child))
                 {
-                    child.SetOwner(item);
+                    SetOwner(child, item);
                     SetChildOwners(child, visitedChildren);
+                }
+            }
+        }
+
+        private static void SetOwner(IDxfItemInternal item, IDxfItemInternal owner)
+        {
+            if (item != null && owner != null)
+            {
+                item.SetOwner(owner);
+                var hasXData = item as IDxfHasXData;
+                if (hasXData != null)
+                {
+                    var reactors = hasXData.ExtensionDataGroups.FirstOrDefault(e => e.GroupName == "ACAD_REACTORS");
+                    if (reactors != null)
+                    {
+                        foreach (var pair in reactors.Items)
+                        {
+                            SetOwnerPair(pair, owner);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void SetOwnerPair(IDxfCodePairOrGroup codePairOrGroup, IDxfItemInternal owner)
+        {
+            if (codePairOrGroup.IsCodePair)
+            {
+                var pair = (DxfCodePair)codePairOrGroup;
+                if (pair.Code == 330)
+                {
+                    pair.Value = DxfCommonConverters.UIntHandle(owner.Handle);
+                }
+            }
+            else
+            {
+                foreach (var item in ((DxfCodePairGroup)codePairOrGroup).Items)
+                {
+                    SetOwnerPair(item, owner);
                 }
             }
         }
@@ -117,7 +156,7 @@ namespace IxMilia.Dxf
                 foreach (var child in item.GetChildItems().Where(c => c != null))
                 {
                     nextPointer = AssignHandles(child, nextPointer, item.Handle, visitedItems);
-                    child.SetOwner(item);
+                    SetOwner(child, item);
                 }
             }
 

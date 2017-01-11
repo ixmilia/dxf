@@ -33,8 +33,8 @@ namespace IxMilia.Dxf.Objects
         public int EdgeStyle { get; set; }
         public DxfColor EdgeIntersectionColor { get; set; }
         public DxfColor EdgeObscuredColor { get; set; }
-        public short EdgeObscuredLinetype { get; set; }
-        public short EdgeIntersectionLinetype { get; set; }
+        public short EdgeObscuredLineType { get; set; }
+        public short EdgeIntersectionLineType { get; set; }
         public double EdgeCreaseAngle { get; set; }
         public int EdgeModifiers { get; set; }
         public DxfColor EdgeColor { get; set; }
@@ -76,8 +76,8 @@ namespace IxMilia.Dxf.Objects
             this.EdgeStyle = 0;
             this.EdgeIntersectionColor = DxfColor.ByBlock;
             this.EdgeObscuredColor = DxfColor.ByBlock;
-            this.EdgeObscuredLinetype = 0;
-            this.EdgeIntersectionLinetype = 0;
+            this.EdgeObscuredLineType = 0;
+            this.EdgeIntersectionLineType = 0;
             this.EdgeCreaseAngle = 0.0;
             this.EdgeModifiers = 0;
             this.EdgeColor = DxfColor.ByBlock;
@@ -116,8 +116,8 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(91, (this.EdgeStyle)));
             pairs.Add(new DxfCodePair(64, GetRawValue(this.EdgeIntersectionColor)));
             pairs.Add(new DxfCodePair(65, GetRawValue(this.EdgeObscuredColor)));
-            pairs.Add(new DxfCodePair(75, (this.EdgeObscuredLinetype)));
-            pairs.Add(new DxfCodePair(175, (this.EdgeIntersectionLinetype)));
+            pairs.Add(new DxfCodePair(75, (this.EdgeObscuredLineType)));
+            pairs.Add(new DxfCodePair(175, (this.EdgeIntersectionLineType)));
             pairs.Add(new DxfCodePair(42, (this.EdgeCreaseAngle)));
             pairs.Add(new DxfCodePair(92, (this.EdgeModifiers)));
             pairs.Add(new DxfCodePair(66, GetRawValue(this.EdgeColor)));
@@ -193,7 +193,7 @@ namespace IxMilia.Dxf.Objects
                     this.EdgeStyleModel = (DxfEdgeStyleModel)(pair.ShortValue);
                     break;
                 case 75:
-                    this.EdgeObscuredLinetype = (pair.ShortValue);
+                    this.EdgeObscuredLineType = (pair.ShortValue);
                     break;
                 case 76:
                     this.EdgeWidth = (pair.ShortValue);
@@ -232,7 +232,7 @@ namespace IxMilia.Dxf.Objects
                     this.EdgeStyleApplyFlags = (pair.ShortValue);
                     break;
                 case 175:
-                    this.EdgeIntersectionLinetype = (pair.ShortValue);
+                    this.EdgeIntersectionLineType = (pair.ShortValue);
                     break;
                 case 290:
                     this.HideEdgeLinePrecision = (pair.BoolValue);

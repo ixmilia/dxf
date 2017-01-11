@@ -113,6 +113,8 @@
     <Compile Include="Sections\DxfSectionType.cs" />
     <Compile Include="Sections\DxfTablesSection.cs" />
     <Compile Include="Sections\DxfThumbnailImageSection.cs" />
+    <Compile Include="Tables\DxfLineType.cs" />
+    <Compile Include="Tables\DxfLineTypeElement.cs" />
     <Compile Include="Tables\DxfSymbolTableFlags.cs" />
     <Compile Include="Tables\DxfTable.cs" />
     <Compile Include="Tables\DxfTableItems.cs" />

@@ -125,7 +125,7 @@
     FIELD
 
     -->
-    <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="FIELD" MinVersion="R2004">
+    <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="ACAD_FIELD" HasXData="false" MinVersion="R2004">
         <Property Name="EvaluatorId" Code="1" Type="string" DefaultValue="null" />
         <Property Name="FieldCodeString" Code="2" Type="string" DefaultValue="null" />
         <Property Name="FieldCodeStringOverflow" Code="3" Type="string" DefaultValue="null" />
@@ -474,6 +474,7 @@
         <Property Name="ChannelFlags" Code="94" Type="int" DefaultValue="0" MinVersion="R2010" />
 
         <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbMaterial&quot;" />
             <WriteProperty Property="Name" />
             <WriteProperty Property="Description" />
 
@@ -666,7 +667,7 @@
         <Property Name="_elementCount" Code="71" Type="int" DefaultValue="0" WriteConverter="(short)" Accessibility="private" />
         <Property Name="_elementOffsets" Code="49" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_elementColors" Code="62" Type="DxfColor" DefaultValue="null" AllowMultiples="true" ReadConverter="FromRawValue" WriteConverter="GetRawValue" Accessibility="private" />
-        <Property Name="_elementLinetypes" Code="6" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_elementLineTypes" Code="6" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbMlineStyle&quot;" />
             <WriteProperty Property="StyleName" />
@@ -679,7 +680,7 @@
             <Foreach Property="Elements">
                 <WriteSpecificValue Code="49" Value="item.Offset" />
                 <WriteSpecificValue Code="62" Value="GetRawValue(item.Color)" />
-                <WriteSpecificValue Code="6" Value="item.Linetype" />
+                <WriteSpecificValue Code="6" Value="item.LineType" />
             </Foreach>
         </WriteOrder>
     </Object>
@@ -1154,8 +1155,8 @@
         <Property Name="EdgeStyle" Code="91" Type="int" DefaultValue="0" />
         <Property Name="EdgeIntersectionColor" Code="64" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
         <Property Name="EdgeObscuredColor" Code="65" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />
-        <Property Name="EdgeObscuredLinetype" Code="75" Type="short" DefaultValue="0" />
-        <Property Name="EdgeIntersectionLinetype" Code="175" Type="short" DefaultValue="0" />
+        <Property Name="EdgeObscuredLineType" Code="75" Type="short" DefaultValue="0" />
+        <Property Name="EdgeIntersectionLineType" Code="175" Type="short" DefaultValue="0" />
         <Property Name="EdgeCreaseAngle" Code="42" Type="double" DefaultValue="0.0" />
         <Property Name="EdgeModifiers" Code="92" Type="int" DefaultValue="0" />
         <Property Name="EdgeColor" Code="66" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="FromRawValue" WriteConverter="GetRawValue" />

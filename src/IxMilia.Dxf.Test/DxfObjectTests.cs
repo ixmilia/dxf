@@ -933,11 +933,11 @@ quatro
 
             Assert.Equal(3.0, mlineStyle.Elements[0].Offset);
             Assert.Equal(3, mlineStyle.Elements[0].Color.RawValue);
-            Assert.Equal("tres", mlineStyle.Elements[0].Linetype);
+            Assert.Equal("tres", mlineStyle.Elements[0].LineType);
 
             Assert.Equal(4.0, mlineStyle.Elements[1].Offset);
             Assert.Equal(4, mlineStyle.Elements[1].Color.RawValue);
-            Assert.Equal("quatro", mlineStyle.Elements[1].Linetype);
+            Assert.Equal("quatro", mlineStyle.Elements[1].LineType);
         }
 
         [Fact]
@@ -949,8 +949,8 @@ quatro
             mlineStyle.FillColor = DxfColor.FromRawValue(1);
             mlineStyle.StartAngle = 99.9;
             mlineStyle.EndAngle = 100.0;
-            mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 3.0, Color = DxfColor.FromRawValue(3), Linetype = "tres" });
-            mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 4.0, Color = DxfColor.FromRawValue(4), Linetype = "quatro" });
+            mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 3.0, Color = DxfColor.FromRawValue(3), LineType = "tres" });
+            mlineStyle.Elements.Add(new DxfMLineStyle.DxfMLineStyleElement() { Offset = 4.0, Color = DxfColor.FromRawValue(4), LineType = "quatro" });
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(mlineStyle);
@@ -1398,12 +1398,6 @@ AcDbSunStudy
 43
 290
 44
-340
-0
-341
-0
-342
-0
  74
 0
  75
@@ -1417,8 +1411,6 @@ AcDbSunStudy
 293
 0
 294
-0
-343
 0
 ");
 

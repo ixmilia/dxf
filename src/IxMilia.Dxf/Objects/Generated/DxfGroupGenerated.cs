@@ -57,7 +57,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(300, (this.Description)));
             pairs.Add(new DxfCodePair(70, NotBoolShort(this.IsNamed)));
             pairs.Add(new DxfCodePair(71, BoolShort(this.IsSelectable)));
-            pairs.AddRange(this.EntitiesPointers.Pointers.Select(p => new DxfCodePair(340, DxfCommonConverters.UIntHandle(p.Handle))));
+            pairs.AddRange(this.EntitiesPointers.Pointers.Where(p => p.Handle != 0u).Select(p => new DxfCodePair(340, DxfCommonConverters.UIntHandle(p.Handle))));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)

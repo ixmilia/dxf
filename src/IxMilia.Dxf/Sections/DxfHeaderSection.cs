@@ -193,7 +193,7 @@ namespace IxMilia.Dxf
         Flat = 3
     }
 
-    public enum DxfLinetypeStyle
+    public enum DxfLineTypeStyle
     {
         Off = 0,
         Solid = 1,

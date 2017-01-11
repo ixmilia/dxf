@@ -18,17 +18,9 @@ namespace IxMilia.Dxf
 
         public string Description { get; set; }
         public int AlignmentCode { get; set; }
-        public int ElementCount { get; set; }
+        private int _elementCount { get; set; }
         public double TotalPatternLength { get; set; }
-        public IList<double> DashDotSpaceLengths { get; private set; }
-        public IList<short> ComplexLinetypeElementTypes { get; private set; }
-        public IList<short> ShapeNumbers { get; private set; }
-        public IList<string> StylePointers { get; private set; }
-        public IList<double> ScaleValues { get; private set; }
-        public IList<double> RotationAngles { get; private set; }
-        public IList<double> XOffsets { get; private set; }
-        public IList<double> YOffsets { get; private set; }
-        public IList<string> TextStrings { get; private set; }
+        public IList<DxfLineTypeElement> Elements { get; private set; }
 
         public DxfXData XData { get; set; }
 
@@ -37,149 +29,9 @@ namespace IxMilia.Dxf
         {
             Description = null;
             AlignmentCode = (int)'A';
-            ElementCount = 0;
+            _elementCount = 0;
             TotalPatternLength = 0.0;
-            DashDotSpaceLengths = new ListNonNull<double>();
-            ComplexLinetypeElementTypes = new ListNonNull<short>();
-            ShapeNumbers = new ListNonNull<short>();
-            StylePointers = new ListNonNull<string>();
-            ScaleValues = new ListNonNull<double>();
-            RotationAngles = new ListNonNull<double>();
-            XOffsets = new ListNonNull<double>();
-            YOffsets = new ListNonNull<double>();
-            TextStrings = new ListNonNull<string>();
-        }
-
-        internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
-        {
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.Add(new DxfCodePair(100, AcDbText));
-            }
-
-            pairs.Add(new DxfCodePair(2, Name));
-            pairs.Add(new DxfCodePair(70, (short)StandardFlags));
-            pairs.Add(new DxfCodePair(3, (Description)));
-            pairs.Add(new DxfCodePair(72, (short)(AlignmentCode)));
-            pairs.Add(new DxfCodePair(73, (short)(ElementCount)));
-            pairs.Add(new DxfCodePair(40, (TotalPatternLength)));
-            pairs.AddRange(DashDotSpaceLengths.Select(value => new DxfCodePair(49, value)));
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(ComplexLinetypeElementTypes.Select(value => new DxfCodePair(74, value)));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(ShapeNumbers.Select(value => new DxfCodePair(75, value)));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(StylePointers.Select(value => new DxfCodePair(340, value)));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(ScaleValues.Select(value => new DxfCodePair(46, value)));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(RotationAngles.Select(value => new DxfCodePair(50, value)));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(XOffsets.Select(value => new DxfCodePair(44, value)));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(YOffsets.Select(value => new DxfCodePair(45, value)));
-            }
-
-            if (version >= DxfAcadVersion.R13)
-            {
-                pairs.AddRange(TextStrings.Select(value => new DxfCodePair(9, value)));
-            }
-
-            if (XData != null)
-            {
-                XData.AddValuePairs(pairs, version, outputHandles);
-            }
-        }
-
-        internal static DxfLineType FromBuffer(DxfCodePairBufferReader buffer)
-        {
-            var item = new DxfLineType();
-            while (buffer.ItemsRemain)
-            {
-                var pair = buffer.Peek();
-                if (pair.Code == 0)
-                {
-                    break;
-                }
-
-                buffer.Advance();
-                switch (pair.Code)
-                {
-                    case 70:
-                        item.StandardFlags = (int)pair.ShortValue;
-                        break;
-                    case DxfCodePairGroup.GroupCodeNumber:
-                        var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);
-                        item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
-                        break;
-                    case 3:
-                        item.Description = (pair.StringValue);
-                        break;
-                    case 72:
-                        item.AlignmentCode = (pair.ShortValue);
-                        break;
-                    case 73:
-                        item.ElementCount = (pair.ShortValue);
-                        break;
-                    case 40:
-                        item.TotalPatternLength = (pair.DoubleValue);
-                        break;
-                    case 49:
-                        item.DashDotSpaceLengths.Add((pair.DoubleValue));
-                        break;
-                    case 74:
-                        item.ComplexLinetypeElementTypes.Add((pair.ShortValue));
-                        break;
-                    case 75:
-                        item.ShapeNumbers.Add((pair.ShortValue));
-                        break;
-                    case 340:
-                        item.StylePointers.Add((pair.StringValue));
-                        break;
-                    case 46:
-                        item.ScaleValues.Add((pair.DoubleValue));
-                        break;
-                    case 50:
-                        item.RotationAngles.Add((pair.DoubleValue));
-                        break;
-                    case 44:
-                        item.XOffsets.Add((pair.DoubleValue));
-                        break;
-                    case 45:
-                        item.YOffsets.Add((pair.DoubleValue));
-                        break;
-                    case 9:
-                        item.TextStrings.Add((pair.StringValue));
-                        break;
-                    case (int)DxfXDataType.ApplicationName:
-                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
-                        break;
-                    default:
-                        item.TrySetPair(pair);
-                        break;
-                }
-            }
-
-            return item;
+            Elements = new ListNonNull<DxfLineTypeElement>();
         }
     }
 }

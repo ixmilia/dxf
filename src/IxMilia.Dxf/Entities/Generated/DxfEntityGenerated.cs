@@ -23,6 +23,11 @@ namespace IxMilia.Dxf.Entities
             Owner = owner;
         }
 
+        protected void SetOwner(IDxfItem owner)
+        {
+            ((IDxfItemInternal)this).SetOwner(owner);
+        }
+
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {
             yield return PlotStylePointer;
@@ -36,12 +41,12 @@ namespace IxMilia.Dxf.Entities
         internal DxfPointer PlotStylePointer { get; } = new DxfPointer();
         public bool IsInPaperSpace { get; set; }
         public string Layer { get; set; }
-        public string LinetypeName { get; set; }
+        public string LineTypeName { get; set; }
         public double Elevation { get; set; }
         public string MaterialHandle { get; set; }
         public DxfColor Color { get; set; }
         public short LineweightEnumValue { get; set; }
-        public double LinetypeScale { get; set; }
+        public double LineTypeScale { get; set; }
         public bool IsVisible { get; set; }
         public int ImageByteCount { get; set; }
         public IList<string> PreviewImageData { get; private set; }
@@ -155,12 +160,12 @@ namespace IxMilia.Dxf.Entities
             ((IDxfItemInternal)this).SetOwner(((IDxfItemInternal)other).Owner);
             this.IsInPaperSpace = other.IsInPaperSpace;
             this.Layer = other.Layer;
-            this.LinetypeName = other.LinetypeName;
+            this.LineTypeName = other.LineTypeName;
             this.Elevation = other.Elevation;
             this.MaterialHandle = other.MaterialHandle;
             this.Color = other.Color;
             this.LineweightEnumValue = other.LineweightEnumValue;
-            this.LinetypeScale = other.LinetypeScale;
+            this.LineTypeScale = other.LineTypeScale;
             this.IsVisible = other.IsVisible;
             this.ImageByteCount = other.ImageByteCount;
             this.PreviewImageData = other.PreviewImageData;
@@ -176,12 +181,12 @@ namespace IxMilia.Dxf.Entities
         {
             this.IsInPaperSpace = false;
             this.Layer = "0";
-            this.LinetypeName = "BYLAYER";
+            this.LineTypeName = "BYLAYER";
             this.Elevation = 0.0;
             this.MaterialHandle = "BYLAYER";
             this.Color = DxfColor.ByLayer;
             this.LineweightEnumValue = 0;
-            this.LinetypeScale = 1.0;
+            this.LineTypeScale = 1.0;
             this.IsVisible = true;
             this.ImageByteCount = 0;
             this.PreviewImageData = new ListNonNull<string>();
@@ -210,9 +215,9 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(8, DefaultIfNullOrEmpty("0")(this.Layer)));
-            if (this.LinetypeName != "BYLAYER")
+            if (this.LineTypeName != "BYLAYER")
             {
-                pairs.Add(new DxfCodePair(6, (this.LinetypeName)));
+                pairs.Add(new DxfCodePair(6, (this.LineTypeName)));
             }
 
             if (version <= DxfAcadVersion.R12 && this.Elevation != 0.0)
@@ -235,9 +240,9 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(370, (this.LineweightEnumValue)));
             }
 
-            if (version >= DxfAcadVersion.R13 && this.LinetypeScale != 1.0)
+            if (version >= DxfAcadVersion.R13 && this.LineTypeScale != 1.0)
             {
-                pairs.Add(new DxfCodePair(48, (this.LinetypeScale)));
+                pairs.Add(new DxfCodePair(48, (this.LineTypeScale)));
             }
 
             if (version >= DxfAcadVersion.R13 && this.IsVisible != true)
@@ -270,7 +275,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(440, (this.Transparency)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.PlotStylePointer.Handle != 0u)
             {
                 pairs.Add(new DxfCodePair(390, DxfCommonConverters.UIntHandle(this.PlotStylePointer.Handle)));
             }
@@ -293,7 +298,7 @@ namespace IxMilia.Dxf.Entities
                     ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);
                     break;
                 case 6:
-                    this.LinetypeName = (pair.StringValue);
+                    this.LineTypeName = (pair.StringValue);
                     break;
                 case 8:
                     this.Layer = (pair.StringValue);
@@ -302,7 +307,7 @@ namespace IxMilia.Dxf.Entities
                     this.Elevation = (pair.DoubleValue);
                     break;
                 case 48:
-                    this.LinetypeScale = (pair.DoubleValue);
+                    this.LineTypeScale = (pair.DoubleValue);
                     break;
                 case 60:
                     this.IsVisible = !BoolShort(pair.ShortValue);

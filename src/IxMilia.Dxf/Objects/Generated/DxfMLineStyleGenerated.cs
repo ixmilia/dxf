@@ -26,7 +26,7 @@ namespace IxMilia.Dxf.Objects
         private int _elementCount { get; set; }
         private IList<double> _elementOffsets { get; set; }
         private IList<DxfColor> _elementColors { get; set; }
-        private IList<string> _elementLinetypes { get; set; }
+        private IList<string> _elementLineTypes { get; set; }
 
         // _flags flags
 
@@ -135,7 +135,7 @@ namespace IxMilia.Dxf.Objects
             this._elementCount = 0;
             this._elementOffsets = new ListNonNull<double>();
             this._elementColors = new ListNonNull<DxfColor>();
-            this._elementLinetypes = new ListNonNull<string>();
+            this._elementLineTypes = new ListNonNull<string>();
         }
 
         protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -153,7 +153,7 @@ namespace IxMilia.Dxf.Objects
             {
                 pairs.Add(new DxfCodePair(49, item.Offset));
                 pairs.Add(new DxfCodePair(62, GetRawValue(item.Color)));
-                pairs.Add(new DxfCodePair(6, item.Linetype));
+                pairs.Add(new DxfCodePair(6, item.LineType));
             }
 
         }

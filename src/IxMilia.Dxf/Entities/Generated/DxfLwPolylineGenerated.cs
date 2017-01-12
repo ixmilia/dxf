@@ -20,7 +20,6 @@ namespace IxMilia.Dxf.Entities
         public int Flags { get; set; }
         public double ConstantWidth { get; set; }
         public double Thickness { get; set; }
-        public IList<DxfLwPolylineVertex> Vertices { get; private set; }
         public DxfVector ExtrusionDirection { get; set; }
 
         // Flags flags
@@ -47,7 +46,7 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        public DxfLwPolyline()
+        internal DxfLwPolyline()
             : base()
         {
         }
@@ -58,7 +57,6 @@ namespace IxMilia.Dxf.Entities
             this.Flags = 0;
             this.ConstantWidth = 0.0;
             this.Thickness = 0.0;
-            this.Vertices = new ListNonNull<DxfLwPolylineVertex>();
             this.ExtrusionDirection = DxfVector.ZAxis;
         }
 

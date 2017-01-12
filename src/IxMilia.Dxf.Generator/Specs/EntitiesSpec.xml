@@ -508,7 +508,7 @@
     LEADER
 
     -->
-    <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" HasXData="true">
+    <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" HasXData="true" DefaultConstructor="Internal">
         <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
         <Property Name="UseArrowheads" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <Property Name="PathType" Code="72" Type="DxfLeaderPathType" DefaultValue="DxfLeaderPathType.StraightLineSegments" ReadConverter="(DxfLeaderPathType)" WriteConverter="(short)" />
@@ -596,14 +596,13 @@
     LWPOLYLINE
 
     -->
-    <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE" MinVersion="R14" GenerateReaderFunction="false">
+    <Entity Name="DxfLwPolyline" EntityType="LwPolyline" SubclassMarker="AcDbPolyline" TypeString="LWPOLYLINE" MinVersion="R14" DefaultConstructor="Internal" GenerateReaderFunction="false">
         <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
             <Flag Name="IsClosed" Mask="1" />
             <Flag Name="IsPLineGen" Mask="128" />
         </Property>
         <Property Name="ConstantWidth" Code="43" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
-        <Property Name="Vertices" Code="10" Type="DxfLwPolylineVertex" DefaultValue="null" AllowMultiples="true" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbPolyline&quot;" />

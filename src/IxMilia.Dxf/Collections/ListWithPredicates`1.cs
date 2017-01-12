@@ -14,6 +14,14 @@ namespace IxMilia.Dxf.Collections
         }
     }
 
+    internal class ListNonNullWithMinimum<T> : ListWithPredicates<T>
+    {
+        public ListNonNullWithMinimum(int minimum)
+            : base(item => item != null, minimum, false)
+        {
+        }
+    }
+
     internal class ListWithPredicates<T> : IList<T>
     {
         private List<T> _items = new List<T>();
@@ -21,6 +29,11 @@ namespace IxMilia.Dxf.Collections
         public int MinimumCount { get; }
 
         public ListWithPredicates(Func<T, bool> itemPredicate, int minimumCount, params T[] initialItems)
+            : this(itemPredicate, minimumCount, true, initialItems)
+        {
+        }
+
+        public ListWithPredicates(Func<T, bool> itemPredicate, int minimumCount, bool validateInitialCount, params T[] initialItems)
         {
             ItemPredicate = itemPredicate;
             MinimumCount = minimumCount;
@@ -29,7 +42,10 @@ namespace IxMilia.Dxf.Collections
                 Add(item);
             }
 
-            ValidateCount();
+            if (validateInitialCount)
+            {
+                ValidateCount();
+            }
         }
 
         private void ValidatePredicate(T item)
@@ -40,7 +56,7 @@ namespace IxMilia.Dxf.Collections
             }
         }
 
-        private void ValidateCount()
+        public void ValidateCount()
         {
             if (Count < MinimumCount)
             {

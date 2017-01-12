@@ -1,11 +1,34 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfLwPolyline
     {
+        private ListNonNullWithMinimum<DxfLwPolylineVertex> _vertices = new ListNonNullWithMinimum<DxfLwPolylineVertex>(2);
+
+        public IList<DxfLwPolylineVertex> Vertices { get { return _vertices; } }
+
+        /// <summary>
+        /// Creates a new LW polyline entity with the specified vertices.  NOTE, at least 2 vertices must be specified.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"/>
+        /// <param name="vertices">The vertices to add.</param>
+        public DxfLwPolyline(IEnumerable<DxfLwPolylineVertex> vertices)
+            : this()
+        {
+            foreach (var vertex in vertices)
+            {
+                _vertices.Add(vertex);
+            }
+
+            _vertices.ValidateCount();
+        }
+
         internal override DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)

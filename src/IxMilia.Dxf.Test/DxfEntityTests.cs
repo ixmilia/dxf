@@ -881,6 +881,34 @@ EOF
             Assert.Equal(image, image.ImageDefinitionReactor.Owner);
         }
 
+        [Fact]
+        public void EnforceMinimumVertexCountOnLeadersTest()
+        {
+            // need at least 2 vertices
+            Assert.Throws<InvalidOperationException>(() => new DxfLeader(new[] { DxfPoint.Origin }));
+
+            var leader = new DxfLeader(new[] { DxfPoint.Origin, DxfPoint.Origin }); // but this should be good
+            Assert.Equal(2, leader.Vertices.Count);
+            leader.Vertices.Add(DxfPoint.Origin);
+            leader.Vertices.RemoveAt(0); // should be allowed because there will be 2 left
+            Assert.Throws<InvalidOperationException>(() => leader.Vertices.RemoveAt(0)); // throws because there is only 1 left
+        }
+
+        [Fact]
+        public void ReadLeaderWithTooFewVerticesTest()
+        {
+            // a leader with 0 vertices can't be created manually, but it can be read from disk
+            var leader = (DxfLeader)Entity("LEADER", "");
+            Assert.Equal(0, leader.Vertices.Count);
+            leader.Vertices.Add(DxfPoint.Origin); // this is fine, even though we're still under the minimum
+            Assert.Equal(1, leader.Vertices.Count);
+            leader.Vertices.Add(DxfPoint.Origin); // now we're up to 2
+            Assert.Equal(2, leader.Vertices.Count);
+            leader.Vertices.Add(DxfPoint.Origin); // now we're up to 3
+            leader.Vertices.RemoveAt(0); // should be fine because we still have 2
+            Assert.Equal(2, leader.Vertices.Count);
+        }
+
         #endregion
 
         #region Write default value tests

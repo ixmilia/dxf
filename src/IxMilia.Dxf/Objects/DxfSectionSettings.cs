@@ -111,7 +111,7 @@ namespace IxMilia.Dxf.Objects
         public string LayerName { get; set; }
         public string LineTypeName { get; set; }
         public double LineTypeScale { get; set; } = 1.0;
-        public string PlotstyleName { get; set; }
+        public string PlotStyleName { get; set; }
         public short LineWeight { get; set; }
         public short FaceTransparency { get; set; }
         public short EdgeTransparency { get; set; }
@@ -130,7 +130,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(8, LayerName));
             pairs.Add(new DxfCodePair(6, LineTypeName));
             pairs.Add(new DxfCodePair(40, LineTypeScale));
-            pairs.Add(new DxfCodePair(1, PlotstyleName));
+            pairs.Add(new DxfCodePair(1, PlotStyleName));
             pairs.Add(new DxfCodePair(370, LineWeight));
             pairs.Add(new DxfCodePair(70, FaceTransparency));
             pairs.Add(new DxfCodePair(71, EdgeTransparency));
@@ -158,7 +158,7 @@ namespace IxMilia.Dxf.Objects
                 switch (pair.Code)
                 {
                     case 1:
-                        settings.PlotstyleName = pair.StringValue;
+                        settings.PlotStyleName = pair.StringValue;
                         break;
                     case 2:
                         settings.HatchPatternName = pair.StringValue;

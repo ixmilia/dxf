@@ -53,7 +53,7 @@ namespace IxMilia.Dxf.Sections
             Blocks.Clear();
         }
 
-        internal static DxfBlocksSection BlocksSectionFromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
+        internal static DxfBlocksSection BlocksSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             var section = new DxfBlocksSection();
             section.Clear();
@@ -78,7 +78,7 @@ namespace IxMilia.Dxf.Sections
                 }
 
                 buffer.Advance(); // swallow (0, CLASS)
-                var block = DxfBlock.FromBuffer(buffer, version);
+                var block = DxfBlock.FromBuffer(buffer);
                 if (block != null)
                 {
                     section.Blocks.Add(block);

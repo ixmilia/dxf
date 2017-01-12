@@ -59,7 +59,7 @@ namespace IxMilia.Dxf.Sections
             switch (sectionType.StringValue)
             {
                 case BlocksSectionText:
-                    section = DxfBlocksSection.BlocksSectionFromBuffer(buffer, version);
+                    section = DxfBlocksSection.BlocksSectionFromBuffer(buffer);
                     break;
                 case ClassesSectionText:
                     section = DxfClassesSection.ClassesSectionFromBuffer(buffer, version);

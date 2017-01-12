@@ -2303,6 +2303,21 @@ ENDTAB
         }
 
         [Fact]
+        public void AddMissingLayersOnNormalizeTest()
+        {
+            var file = new DxfFile();
+            file.Entities.Add(new DxfLine() { Layer = null });
+            file.Entities.Add(new DxfLine() { Layer = "some-layer" });
+            file.Normalize();
+
+            // ensure we can find the expected layer
+            file.Layers.Single(l => l.Name == "some-layer");
+
+            // ensure the `null` item wasn't added
+            Assert.Empty(file.Layers.Where(l => l.Name == null));
+        }
+
+        [Fact]
         public void WriteAllDefaultEntitiesTest()
         {
             var file = new DxfFile();

@@ -40,7 +40,7 @@ namespace IxMilia.Dxf.Blocks
                 ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
             }
 
-            public void ApplyCodePairs(DxfCodePairBufferReader buffer, DxfAcadVersion version)
+            public void ApplyCodePairs(DxfCodePairBufferReader buffer)
             {
                 var pair = buffer.Peek();
                 buffer.Advance();

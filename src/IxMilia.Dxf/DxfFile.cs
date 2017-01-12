@@ -391,6 +391,8 @@ namespace IxMilia.Dxf
 
         public void Normalize()
         {
+            EnsureStyleObjects();
+            EnsureTableItems();
             foreach (var table in TablesSection.GetAllTables())
             {
                 table.Normalize();
@@ -398,6 +400,117 @@ namespace IxMilia.Dxf
 
             BlocksSection.Normalize();
             ObjectsSection.Normalize();
+        }
+
+        private void EnsureStyleObjects()
+        {
+            var existingMLineStyles = GenerateHashSet(Objects.OfType<DxfMLineStyle>().Select(m => m.StyleName));
+            AddMissingItems(existingMLineStyles, Entities.OfType<DxfMLine>().Select(m => m.StyleName), name => Objects.Add(new DxfMLineStyle() { StyleName = name }));
+        }
+
+        private void EnsureTableItems()
+        {
+            var existingDimStyles = GetExistingNames(DimensionStyles);
+            AddMissingDimensionStyles(existingDimStyles, new[] { Header.DimensionStyleName });
+            AddMissingDimensionStyles(existingDimStyles, Entities.OfType<DxfDimensionBase>().Select(d => d.DimensionStyleName));
+            AddMissingDimensionStyles(existingDimStyles, Entities.OfType<DxfLeader>().Select(d => d.DimensionStyleName));
+            AddMissingDimensionStyles(existingDimStyles, Entities.OfType<DxfTolerance>().Select(d => d.DimensionStyleName));
+
+            var existingLayers = GetExistingNames(Layers);
+            AddMissingLayers(existingLayers, new[] { Header.CurrentLayer });
+            AddMissingLayers(existingLayers, Blocks.Select(b => b.Layer));
+            AddMissingLayers(existingLayers, Blocks.SelectMany(b => b.Entities.Select(e => e.Layer)));
+            AddMissingLayers(existingLayers, Entities.Select(e => e.Layer));
+            AddMissingLayers(existingLayers, Objects.OfType<DxfLayerFilter>().SelectMany(l => l.LayerNames));
+            AddMissingLayers(existingLayers, Objects.OfType<DxfLayerIndex>().SelectMany(l => l.LayerNames));
+
+            var existingLineTypes = GetExistingNames(LineTypes);
+            AddMissingLineTypes(existingLineTypes, new[] { Header.CurrentEntityLineType, Header.DimensionLineType });
+            AddMissingLineTypes(existingLineTypes, Layers.Select(l => l.LineTypeName));
+            AddMissingLineTypes(existingLineTypes, Blocks.SelectMany(b => b.Entities.Select(e => e.LineTypeName)));
+            AddMissingLineTypes(existingLineTypes, Entities.Select(e => e.LineTypeName));
+            AddMissingLineTypes(existingLineTypes, Objects.OfType<DxfMLineStyle>().SelectMany(m => m.Elements.Select(e => e.LineType)));
+
+            var existingStyles = GetExistingNames(Styles);
+            AddMissingStyles(existingStyles, Entities.OfType<DxfArcAlignedText>().Select(a => a.TextStyleName));
+            AddMissingStyles(existingStyles, Entities.OfType<DxfAttribute>().Select(a => a.TextStyleName));
+            AddMissingStyles(existingStyles, Entities.OfType<DxfAttributeDefinition>().Select(a => a.TextStyleName));
+            AddMissingStyles(existingStyles, Entities.OfType<DxfMText>().Select(m => m.TextStyleName));
+            AddMissingStyles(existingStyles, Entities.OfType<DxfText>().Select(t => t.TextStyleName));
+            AddMissingStyles(existingStyles, Objects.OfType<DxfMLineStyle>().Select(m => m.StyleName));
+
+            var existingViews = GetExistingNames(Views);
+            AddMissingViews(existingViews, Objects.OfType<DxfPlotSettings>().Select(p => p.PlotViewName));
+
+            var existingUcs = GetExistingNames(UserCoordinateSystems);
+            AddMissingUcs(existingUcs, new[] {
+                Header.UCSDefinitionName,
+                Header.UCSName,
+                Header.OrthoUCSReference,
+                Header.PaperspaceUCSDefinitionName,
+                Header.PaperspaceUCSName,
+                Header.PaperspaceOrthoUCSReference,
+            });
+
+            // don't need to do anything special for AppIds, BlockRecords, or ViewPorts
+        }
+
+        private static HashSet<string> GenerateHashSet(IEnumerable<string> items)
+        {
+            return new HashSet<string>(items, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static HashSet<string> GetExistingNames(IEnumerable<DxfSymbolTableFlags> items)
+        {
+            return GenerateHashSet(items.Select(i => i.Name));
+        }
+
+        private void AddMissingDimensionStyles(HashSet<string> existingDimensionStyles, IEnumerable<string> dimensionStylesToAdd)
+        {
+            AddMissingTableItems<DxfDimStyle>(existingDimensionStyles, dimensionStylesToAdd, ds => DimensionStyles.Add(ds));
+        }
+
+        private void AddMissingLayers(HashSet<string> existingLayers, IEnumerable<string> layersToAdd)
+        {
+            AddMissingTableItems<DxfLayer>(existingLayers, layersToAdd, l => Layers.Add(l));
+        }
+
+        private void AddMissingLineTypes(HashSet<string> existingLineTypes, IEnumerable<string> lineTypesToAdd)
+        {
+            AddMissingTableItems<DxfLineType>(existingLineTypes, lineTypesToAdd, lt => LineTypes.Add(lt));
+        }
+
+        private void AddMissingStyles(HashSet<string> existingStyles, IEnumerable<string> stylesToAdd)
+        {
+            AddMissingTableItems<DxfStyle>(existingStyles, stylesToAdd, s => Styles.Add(s));
+        }
+
+        private void AddMissingViews(HashSet<string> existingViews, IEnumerable<string> viewsToAdd)
+        {
+            AddMissingTableItems<DxfView>(existingViews, viewsToAdd, v => Views.Add(v));
+        }
+
+        private void AddMissingUcs(HashSet<string> existingUcs, IEnumerable<string> ucsToAdd)
+        {
+            AddMissingTableItems<DxfUcs>(existingUcs, ucsToAdd, u => UserCoordinateSystems.Add(u));
+        }
+
+        private static void AddMissingItems(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Action<string> addItem)
+        {
+            foreach (var itemToAdd in itemsToAdd)
+            {
+                if (itemToAdd != null && !existingItems.Contains(itemToAdd))
+                {
+                    addItem(itemToAdd);
+                    existingItems.Add(itemToAdd);
+                }
+            }
+        }
+
+        private static void AddMissingTableItems<T>(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Action<T> addItem)
+            where T: DxfSymbolTableFlags, new()
+        {
+            AddMissingItems(existingItems, itemsToAdd, name => addItem(new T() { Name = name }));
         }
     }
 }

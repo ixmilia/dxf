@@ -164,7 +164,7 @@ namespace IxMilia.Dxf.Blocks
             return list;
         }
 
-        internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer, DxfAcadVersion version)
+        internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer)
         {
             if (!buffer.ItemsRemain)
             {
@@ -265,7 +265,7 @@ namespace IxMilia.Dxf.Blocks
                     }
                     else if (readingBlockEnd)
                     {
-                        block.EndBlock.ApplyCodePairs(buffer, version);
+                        block.EndBlock.ApplyCodePairs(buffer);
                     }
                     else
                     {

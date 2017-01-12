@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,26 @@ namespace IxMilia.Dxf.Collections
     internal class DxfPointerList<TItem> : IList<TItem> where TItem : IDxfItem
     {
         private List<DxfPointer> _items = new List<DxfPointer>();
+
+        public int MinimumCount { get; }
+
+        public DxfPointerList()
+            : this(0)
+        {
+        }
+
+        public DxfPointerList(int minimum)
+        {
+            MinimumCount = minimum;
+        }
+
+        public void ValidateCount()
+        {
+            if (Count < MinimumCount)
+            {
+                throw new InvalidOperationException($"This collection must contain at least {MinimumCount} items at all times.");
+            }
+        }
 
         internal IList<DxfPointer> Pointers => _items;
 
@@ -24,7 +45,11 @@ namespace IxMilia.Dxf.Collections
 
         public void Add(TItem item) => _items.Add(new DxfPointer(item));
 
-        public void Clear() => _items.Clear();
+        public void Clear()
+        {
+            _items.Clear();
+            ValidateCount();
+        }
 
         public bool Contains(TItem item) => GetItems().Contains(item);
 
@@ -54,6 +79,7 @@ namespace IxMilia.Dxf.Collections
                 if (item.Equals(_items[i].Item))
                 {
                     _items.RemoveAt(i);
+                    ValidateCount();
                     return true;
                 }
             }
@@ -61,7 +87,11 @@ namespace IxMilia.Dxf.Collections
             return false;
         }
 
-        public void RemoveAt(int index) => _items.RemoveAt(index);
+        public void RemoveAt(int index)
+        {
+            _items.RemoveAt(index);
+            ValidateCount();
+        }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

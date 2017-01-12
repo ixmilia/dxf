@@ -909,6 +909,34 @@ EOF
             Assert.Equal(2, leader.Vertices.Count);
         }
 
+        [Fact]
+        public void EnforceMinimumVertexCountOnPolylineTest()
+        {
+            // need at least 2 vertices
+            Assert.Throws<InvalidOperationException>(() => new DxfPolyline(new[] { new DxfVertex() }));
+
+            var poly = new DxfPolyline(new[] { new DxfVertex(), new DxfVertex() }); // but this should be good
+            Assert.Equal(2, poly.Vertices.Count);
+            poly.Vertices.Add(new DxfVertex());
+            poly.Vertices.RemoveAt(0); // should be allowed because there will be 2 left
+            Assert.Throws<InvalidOperationException>(() => poly.Vertices.RemoveAt(0)); // throws because there is only 1 left
+        }
+
+        [Fact]
+        public void ReadPolylineWithTooFewVerticesTest()
+        {
+            // a polyline with 0 vertices can't be created manually, but it can be read from disk
+            var poly = (DxfPolyline)Entity("POLYLINE", "");
+            Assert.Equal(0, poly.Vertices.Count);
+            poly.Vertices.Add(new DxfVertex()); // this is fine, even though we're still under the minimum
+            Assert.Equal(1, poly.Vertices.Count);
+            poly.Vertices.Add(new DxfVertex()); // now we're up to 2
+            Assert.Equal(2, poly.Vertices.Count);
+            poly.Vertices.Add(new DxfVertex()); // now we're up to 3
+            poly.Vertices.RemoveAt(0); // should be fine because we still have 2
+            Assert.Equal(2, poly.Vertices.Count);
+        }
+
         #endregion
 
         #region Write default value tests

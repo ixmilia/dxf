@@ -121,7 +121,7 @@ namespace IxMilia.Dxf.Entities
 
         public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }
 
-        public DxfPolyline()
+        internal DxfPolyline()
             : base()
         {
         }

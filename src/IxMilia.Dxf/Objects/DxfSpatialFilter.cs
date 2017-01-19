@@ -45,10 +45,10 @@ namespace IxMilia.Dxf.Objects
                     case 11:
                         ClipBoundaryOrigin.X = pair.DoubleValue;
                         break;
-                    case 12:
+                    case 21:
                         ClipBoundaryOrigin.Y = pair.DoubleValue;
                         break;
-                    case 13:
+                    case 31:
                         ClipBoundaryOrigin.Z = pair.DoubleValue;
                         break;
                     case 40:

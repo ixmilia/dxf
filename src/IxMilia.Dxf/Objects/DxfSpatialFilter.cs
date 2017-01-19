@@ -66,17 +66,17 @@ namespace IxMilia.Dxf.Objects
                                 var m21 = matrixList[1];
                                 var m31 = matrixList[2];
                                 var m41 = 0.0;
-                                var m12 = matrixList[0];
-                                var m22 = matrixList[1];
-                                var m32 = matrixList[2];
+                                var m12 = matrixList[3];
+                                var m22 = matrixList[4];
+                                var m32 = matrixList[5];
                                 var m42 = 0.0;
-                                var m13 = matrixList[0];
-                                var m23 = matrixList[1];
-                                var m33 = matrixList[2];
+                                var m13 = matrixList[6];
+                                var m23 = matrixList[7];
+                                var m33 = matrixList[8];
                                 var m43 = 0.0;
-                                var m14 = matrixList[0];
-                                var m24 = matrixList[1];
-                                var m34 = matrixList[2];
+                                var m14 = matrixList[9];
+                                var m24 = matrixList[10];
+                                var m34 = matrixList[11];
                                 var m44 = 0.0;
                                 var matrix = new DxfTransformationMatrix(
                                         m11, m12, m13, m14,

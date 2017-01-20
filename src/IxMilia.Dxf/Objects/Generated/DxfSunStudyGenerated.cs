@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSunStudy : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SunStudy; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2013; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2013; } }
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {

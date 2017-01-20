@@ -995,7 +995,7 @@
     SUNSTUDY
 
     -->
-    <Object Name="DxfSunStudy" ObjectType="SunStudy" SubclassMarker="AcDbSunStudy" TypeString="SUNSTUDY" GenerateReaderFunction="false" MaxVersion="R2013">
+    <Object Name="DxfSunStudy" ObjectType="SunStudy" SubclassMarker="AcDbSunStudy" TypeString="SUNSTUDY" GenerateReaderFunction="false" MinVersion="R2013">
         <Property Name="Version" Code="90" Type="int" DefaultValue="0" />
         <Property Name="SunSetupName" Code="1" Type="string" DefaultValue="null" />
         <Property Name="Description" Code="2" Type="string" DefaultValue="null" />

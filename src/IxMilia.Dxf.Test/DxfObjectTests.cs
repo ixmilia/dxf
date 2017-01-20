@@ -1361,7 +1361,7 @@ AcDbSortentsTable
             sun.Hours.Add(43);
             sun.Hours.Add(44);
             var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
+            file.Header.Version = DxfAcadVersion.R2013;
             file.Objects.Add(sun);
             VerifyFileContains(file, @"
   0

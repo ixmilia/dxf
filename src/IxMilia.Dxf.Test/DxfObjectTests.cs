@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Objects;
 using Xunit;
@@ -1819,11 +1820,11 @@ VTR_0.000_0.000_1.000_1.000_CONTRAST
         public void ReadDictionaryWithEveryEntityTest()
         {
             // read a dictionary with a reference to every entity
-            var assembly = typeof(DxfFile).Assembly;
+            var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
                 // dimensions are hard
-                if (IsDxfEntityOrDerived(type) && type.BaseType != typeof(DxfDimensionBase))
+                if (IsDxfEntityOrDerived(type) && type.GetTypeInfo().BaseType != typeof(DxfDimensionBase))
                 {
                     var ctor = type.GetConstructor(Type.EmptyTypes);
                     if (ctor != null)
@@ -1868,7 +1869,7 @@ EOF
         public void WriteAllDefaultObjectsTest()
         {
             var file = new DxfFile();
-            var assembly = typeof(DxfFile).Assembly;
+            var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
                 if (IsDxfObjectOrDerived(type))
@@ -1885,7 +1886,7 @@ EOF
                         foreach (var property in type.GetProperties().Where(p => IsListOfT(p.PropertyType)))
                         {
                             var itemType = property.PropertyType.GenericTypeArguments.Single();
-                            var itemValue = itemType.IsValueType
+                            var itemValue = itemType.GetTypeInfo().IsValueType
                                 ? Activator.CreateInstance(itemType)
                                 : null;
                             var addMethod = property.PropertyType.GetMethod("Add");
@@ -1929,9 +1930,9 @@ EOF
                 return true;
             }
 
-            if (type.BaseType != null)
+            if (type.GetTypeInfo().BaseType != null)
             {
-                return IsTypeOrDerived(type.BaseType, expectedType);
+                return IsTypeOrDerived(type.GetTypeInfo().BaseType, expectedType);
             }
 
             return false;

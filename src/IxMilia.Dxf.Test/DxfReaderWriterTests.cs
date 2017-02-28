@@ -4,6 +4,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
@@ -1463,10 +1464,10 @@ a^G^ ^^ b
         public void ParseWithInvariantCultureTest()
         {
             // from https://github.com/IxMilia/Dxf/issues/36
-            var existingCulture = Thread.CurrentThread.CurrentCulture;
+            var existingCulture = CultureInfo.CurrentCulture;
             try
             {
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
+                CultureInfo.CurrentCulture = new CultureInfo("de-DE");
                 var file = Section("HEADER", @"
   9
 $TDCREATE
@@ -1477,17 +1478,17 @@ $TDCREATE
             }
             finally
             {
-                Thread.CurrentThread.CurrentCulture = existingCulture;
+                CultureInfo.CurrentCulture = existingCulture;
             }
         }
 
         [Fact]
         public void WriteWithInvariantCultureTest()
         {
-            var existingCulture = Thread.CurrentThread.CurrentCulture;
+            var existingCulture = CultureInfo.CurrentCulture;
             try
             {
-                Thread.CurrentThread.CurrentCulture = new CultureInfo("de-DE");
+                CultureInfo.CurrentCulture = new CultureInfo("de-DE");
                 var file = new DxfFile();
                 file.Header.CreationDate = new DateTime(2013, 7, 4, 14, 9, 48, 355);
                 VerifyFileContains(file, @"
@@ -1498,7 +1499,7 @@ $TDCREATE
             }
             finally
             {
-                Thread.CurrentThread.CurrentCulture = existingCulture;
+                CultureInfo.CurrentCulture = existingCulture;
             }
         }
 
@@ -2347,7 +2348,7 @@ ENDTAB
         public void WriteAllDefaultEntitiesTest()
         {
             var file = new DxfFile();
-            var assembly = typeof(DxfFile).Assembly;
+            var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
                 if (IsEntityOrDerived(type))
@@ -2364,7 +2365,7 @@ ENDTAB
                         foreach (var property in type.GetProperties().Where(p => IsListOfT(p.PropertyType)))
                         {
                             var itemType = property.PropertyType.GenericTypeArguments.Single();
-                            var itemValue = itemType.IsValueType
+                            var itemValue = itemType.GetTypeInfo().IsValueType
                                 ? Activator.CreateInstance(itemType)
                                 : null;
                             var addMethod = property.PropertyType.GetMethod("Add");
@@ -2398,9 +2399,9 @@ ENDTAB
                 return true;
             }
 
-            if (type.BaseType != null)
+            if (type.GetTypeInfo().BaseType != null)
             {
-                return IsEntityOrDerived(type.BaseType);
+                return IsEntityOrDerived(type.GetTypeInfo().BaseType);
             }
 
             return false;
@@ -2413,9 +2414,9 @@ ENDTAB
                 return true;
             }
 
-            if (type.BaseType != null)
+            if (type.GetTypeInfo().BaseType != null)
             {
-                return IsObjectOrDerived(type.BaseType);
+                return IsObjectOrDerived(type.GetTypeInfo().BaseType);
             }
 
             return false;

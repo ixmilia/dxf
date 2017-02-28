@@ -30,7 +30,8 @@ namespace IxMilia.Dxf.Test
             if (!_pathResolved)
             {
                 _pathResolved = true;
-                var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+                var programFiles = Environment.GetEnvironmentVariable("ProgramFiles(x86)") ??
+                    Environment.GetEnvironmentVariable("ProgramFiles");
                 var oda = Path.Combine(programFiles, "ODA");
                 if (Directory.Exists(oda))
                 {

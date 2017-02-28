@@ -1,163 +1,42 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information. -->
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ImportGroup>
-    <Import Project="..\Targets\IxMilia.targets" />
-  </ImportGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C067E97D-3B96-462A-B09D-33FAD60DE761}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IxMilia.Dxf</RootNamespace>
+    <Description>A portable .NET library for reading and writing DXF and DXB files.  AutoCAD versions 1.0 through R2016 are supported.</Description>
+    <Copyright>Copyright 2017</Copyright>
+    <AssemblyTitle>IxMilia.Dxf</AssemblyTitle>
+    <VersionPrefix>0.4.0.0</VersionPrefix>
+    <Authors>IxMilia</Authors>
+    <TargetFramework>netstandard1.0</TargetFramework>
     <AssemblyName>IxMilia.Dxf</AssemblyName>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <PackageId>IxMilia.Dxf</PackageId>
+    <PackageTags>AutoCAD;CAD;DXB;DXF</PackageTags>
+    <PackageProjectUrl>https://github.com/IxMilia/Dxf</PackageProjectUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
-  <ItemGroup Label="Project References">
-    <ProjectReference Include="..\IxMilia.Dxf.Generator\IxMilia.Dxf.Generator.csproj">
-      <Project>{34D31EC8-883B-4C37-AF98-A4BD5D0E2D3B}</Project>
-      <Name>IxMilia.Dxf.Generator</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Blocks\DxfBlock.DxfEndBlock.cs" />
-    <Compile Include="Collections\DxfPointerList.cs" />
-    <Compile Include="Collections\ListWithPredicates`1.cs" />
-    <Compile Include="DxbItemType.cs" />
-    <Compile Include="DxbReader.cs" />
-    <Compile Include="DxbWriter.cs" />
-    <Compile Include="DxfAcadVersion.cs" />
-    <Compile Include="DxfAsciiReader.cs" />
-    <Compile Include="DxfBinaryReader.cs" />
-    <Compile Include="DxfClass.cs" />
-    <Compile Include="DxfCodePair.cs" />
-    <Compile Include="DxfCodePair.ExpectedType.cs" />
-    <Compile Include="DxfCodePairBufferReader.cs" />
-    <Compile Include="DxfCodePairGroup.cs" />
-    <Compile Include="DxfColor.cs" />
-    <Compile Include="DxfCommonConverters.cs" />
-    <Compile Include="DxfFile.cs" />
-    <Compile Include="DxfHelpers.cs" />
-    <Compile Include="DxfLineWeight.cs" />
-    <Compile Include="DxfPoint.cs" />
-    <Compile Include="DxfPointer.cs" />
-    <Compile Include="DxfReader.cs" />
-    <Compile Include="DxfReadException.cs" />
-    <Compile Include="DxfShadowMode.cs" />
-    <Compile Include="DxfShadowType.cs" />
-    <Compile Include="DxfVersion.cs" />
-    <Compile Include="DxfWriter.cs" />
-    <Compile Include="Blocks\DxfBlock.cs" />
-    <Compile Include="DxfXData.cs" />
-    <Compile Include="Entities\DxfAttribute.cs" />
-    <Compile Include="Entities\DxfAttributeDefinition.cs" />
-    <Compile Include="Entities\DxfDimensionBase.cs" />
-    <Compile Include="Entities\DxfEntity.cs" />
-    <Compile Include="Entities\DxfEntitySection.cs" />
-    <Compile Include="Entities\DxfImage.cs" />
-    <Compile Include="Entities\DxfInsert.cs" />
-    <Compile Include="Entities\DxfLeader.cs" />
-    <Compile Include="Entities\DxfLwPolyline.cs" />
-    <Compile Include="Entities\DxfLwPolylineVertex.cs" />
-    <Compile Include="Entities\DxfMLine.cs" />
-    <Compile Include="Entities\DxfMText.cs" />
-    <Compile Include="Entities\DxfPolyline.cs" />
-    <Compile Include="Entities\DxfProxyEntity.cs" />
-    <Compile Include="Entities\DxfSpline.cs" />
-    <Compile Include="Entities\DxfUnderlay.cs" />
-    <Compile Include="IDxfCodePairReader.cs" />
-    <Compile Include="IDxfHasXData.cs" />
-    <Compile Include="IDxfItem.cs" />
-    <Compile Include="IDxfItemInternal.cs" />
-    <Compile Include="Objects\DxfAcadProxyObject.cs" />
-    <Compile Include="Objects\DxfDictionaryWithDefault.cs" />
-    <Compile Include="Objects\DxfDataTable.cs" />
-    <Compile Include="Objects\DxfDictionary.cs" />
-    <Compile Include="Objects\DxfField.cs" />
-    <Compile Include="Objects\DxfGeoData.cs" />
-    <Compile Include="Objects\DxfImageDefinitionReactor.cs" />
-    <Compile Include="Objects\DxfLayout.cs" />
-    <Compile Include="Objects\DxfLightList.cs" />
-    <Compile Include="Objects\DxfMaterial.cs" />
-    <Compile Include="Objects\DxfMentalRayRenderSettings.cs" />
-    <Compile Include="Objects\DxfMLineStyle.cs" />
-    <Compile Include="Objects\DxfObject.cs" />
-    <Compile Include="Objects\DxfPlotSettings.cs" />
-    <Compile Include="Objects\DxfRasterVariables.cs" />
-    <Compile Include="Objects\DxfRenderGlobal.cs" />
-    <Compile Include="Objects\DxfSectionSettings.cs" />
-    <Compile Include="Objects\DxfSortentsTable.cs" />
-    <Compile Include="Objects\DxfSpatialFilter.cs" />
-    <Compile Include="Objects\DxfSunStudy.cs" />
-    <Compile Include="Objects\DxfTableStyle.cs" />
-    <Compile Include="Objects\DxfTransformationMatrix.cs" />
-    <Compile Include="Objects\DxfVbaProject.cs" />
-    <Compile Include="Objects\DxfVisualStyle.cs" />
-    <Compile Include="Objects\DxfXRecordObject.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sections\DxfBlocksSection.cs" />
-    <Compile Include="Sections\DxfClassesSection.cs" />
-    <Compile Include="Sections\DxfEntitiesSection.cs" />
-    <Compile Include="Sections\DxfHeader.cs" />
-    <Compile Include="Sections\DxfHeaderSection.cs" />
-    <Compile Include="Sections\DxfObjectsSection.cs" />
-    <Compile Include="Sections\DxfSection.cs" />
-    <Compile Include="Sections\DxfSectionType.cs" />
-    <Compile Include="Sections\DxfTablesSection.cs" />
-    <Compile Include="Sections\DxfThumbnailImageSection.cs" />
-    <Compile Include="Tables\DxfLineType.cs" />
-    <Compile Include="Tables\DxfLineTypeElement.cs" />
-    <Compile Include="Tables\DxfSymbolTableFlags.cs" />
-    <Compile Include="Tables\DxfTable.cs" />
-    <Compile Include="Tables\DxfTableItems.cs" />
-    <Compile Include="Tables\DxfTableType.cs" />
-    <Compile Include="Tables\DxfViewMode.cs" />
-    <!-- Generated files -->
-    <Compile Include="Entities\Generated\*.cs" />
-    <Compile Include="Objects\Generated\*.cs" />
-    <Compile Include="Sections\Generated\*.cs" />
-    <Compile Include="Tables\Generated\*.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <!-- Dynamically generate code from the spec files -->
+
   <PropertyGroup>
     <GeneratorLocation>$(MSBuildThisFileDirectory)..\IxMilia.Dxf.Generator</GeneratorLocation>
     <EntitiesOutputLocation>$(MSBuildThisFileDirectory)Entities\Generated</EntitiesOutputLocation>
     <ObjectsOutputLocation>$(MSBuildThisFileDirectory)Objects\Generated</ObjectsOutputLocation>
     <SectionsOutputLocation>$(MSBuildThisFileDirectory)Sections\Generated</SectionsOutputLocation>
     <TablesOutputLocation>$(MSBuildThisFileDirectory)Tables\Generated</TablesOutputLocation>
-    <NuGetDir>$(MSBuildThisFileDirectory)..\.nuget</NuGetDir>
-    <NuGetExe>$(NuGetDir)\NuGet.exe</NuGetExe>
   </PropertyGroup>
+
   <ItemGroup>
     <DirsToClean Include="$(EntitiesOutputLocation)" />
     <DirsToClean Include="$(ObjectsOutputLocation)" />
     <DirsToClean Include="$(SectionsOutputLocation)" />
     <DirsToClean Include="$(TablesOutputLocation)" />
   </ItemGroup>
-  <Target Name="BeforeClean">
+
+  <Target Name="CleanGeneratedCode" BeforeTargets="Clean">
     <RemoveDir Directories="@(DirsToClean)" />
   </Target>
-  <Target Name="BeforeBuild">
-    <Exec WorkingDirectory="$(GeneratorLocation)"
-          Command='"$(NuGetExe)" restore' />
-    <MSBuild Projects="$(GeneratorLocation)\IxMilia.Dxf.Generator.csproj"
-             Targets="Build" />
-    <Exec WorkingDirectory="$(GeneratorLocation)"
-          Command='"$(OutputPath)\IxMilia.Dxf.Generator.exe" "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)" "--tableDir=$(TablesOutputLocation)"' />
+
+  <Target Name="GenerateCode" BeforeTargets="Build">
+    <Exec Command="dotnet restore" WorkingDirectory="$(GeneratorLocation)" />
+    <Exec Command="dotnet build" WorkingDirectory="$(GeneratorLocation)" />
+    <Exec Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)" "--tableDir=$(TablesOutputLocation)"' WorkingDirectory="$(GeneratorLocation)" />
   </Target>
+
 </Project>
+

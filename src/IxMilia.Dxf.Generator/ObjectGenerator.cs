@@ -1,5 +1,6 @@
 // Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine("{");
             IncreaseIndent();
             var enumNames = _objects.Select(o => ObjectType(o)).Distinct().OrderBy(o => o);
-            var enumStr = string.Join(",\r\n        ", enumNames);
+            var enumStr = string.Join($",{Environment.NewLine}        ", enumNames);
             AppendLine(enumStr);
             DecreaseIndent();
             AppendLine("}");

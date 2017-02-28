@@ -122,8 +122,9 @@ Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for t
 
 Requirements to build locally are:
 
-- [Visual Studio 2015](https://www.visualstudio.com)
-- [.NET Core SDK](https://www.microsoft.com/net/download#core)
+- [Latest .NET Core SDK](https://github.com/dotnet/cli/releases)  As of this writing the following was also required on Ubuntu 14.04:
+
+`sudo apt-get install dotnet-sharedframework-microsoft.netcore.app-1.0.3`
 
 ## DXF Reference
 

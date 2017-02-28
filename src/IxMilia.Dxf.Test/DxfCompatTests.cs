@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Objects;
 using Xunit;
@@ -133,7 +134,7 @@ EOF
             // create a file with all entities and ensure Teigha can read it
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2013;
-            var assembly = typeof(DxfFile).Assembly;
+            var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
                 if (DxfReaderWriterTests.IsEntityOrDerived(type))
@@ -167,7 +168,7 @@ EOF
             // create a file with all objects and ensure Teigha can read it
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2013;
-            var assembly = typeof(DxfFile).Assembly;
+            var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
                 if (DxfReaderWriterTests.IsObjectOrDerived(type))
@@ -351,10 +352,10 @@ EOF
             // create a file with all entities and ensure AutoCAD can read it
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2010;
-            var assembly = typeof(DxfFile).Assembly;
+            var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
-                if (DxfReaderWriterTests.IsEntityOrDerived(type) && type.BaseType != typeof(DxfDimensionBase) && !unsupportedTypes.Contains(type))
+                if (DxfReaderWriterTests.IsEntityOrDerived(type) && type.GetTypeInfo().BaseType != typeof(DxfDimensionBase) && !unsupportedTypes.Contains(type))
                 {
                     var ctor = type.GetConstructor(Type.EmptyTypes);
                     if (ctor != null)

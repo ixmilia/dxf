@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using IxMilia.Dxf.Sections;
@@ -109,15 +110,15 @@ EOF
 
         protected static bool IsListOfT(Type type)
         {
-            return type.IsGenericType && type.GenericTypeArguments.Length == 1 && type.Name == "List`1";
+            return type.GetTypeInfo().IsGenericTypeDefinition && type.GenericTypeArguments.Length == 1 && type.Name == "List`1";
         }
 
         protected static T SetAllPropertiesToDefault<T>(T item)
         {
-            foreach (var property in item.GetType().GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
+            foreach (var property in item.GetType().GetTypeInfo().GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
             {
                 var propertyType = property.PropertyType;
-                var defaultValue = propertyType.IsValueType
+                var defaultValue = propertyType.GetTypeInfo().IsValueType
                     ? Activator.CreateInstance(propertyType)
                     : null;
                 property.SetValue(item, defaultValue);

@@ -30,7 +30,8 @@ namespace IxMilia.Dxf.Test
             if (!_pathResolved)
             {
                 _pathResolved = true;
-                var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                var programFiles = Environment.GetEnvironmentVariable("ProgramFiles(x86)") ??
+                    Environment.GetEnvironmentVariable("ProgramFiles");
                 if (programFiles.EndsWith(" (x86)"))
                 {
                     // hack when running in VS

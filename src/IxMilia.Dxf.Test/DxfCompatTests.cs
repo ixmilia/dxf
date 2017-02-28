@@ -466,7 +466,7 @@ EOF
         private void AssertTeighaConvert(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
         {
             WaitForProcess(TeighaConverterExistsFactAttribute.GetPathToFileConverter(), GenerateTeighaArguments(inputDirectory, outputDirectory, desiredVersion));
-            var errors = Directory.EnumerateFiles(outputDirectory, "*.err").Select(path => path + ":\r\n" + File.ReadAllText(path)).ToList();
+            var errors = Directory.EnumerateFiles(outputDirectory, "*.err").Select(path => path + ":" + Environment.NewLine + File.ReadAllText(path)).ToList();
             // TODO: gather the files that couldn't be converted
             if (errors.Count > 0)
             {

@@ -891,7 +891,7 @@ namespace IxMilia.Dxf.Generator
                     lines.Add("{");
                     lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => "    " + l));
                     lines.Add("}");
-                    lines.Add("\n");
+                    lines.Add(Environment.NewLine);
                     return lines;
                 case "WriteExtensionData":
                     return new[] { "AddExtensionValuePairs(pairs, version, outputHandles);" };

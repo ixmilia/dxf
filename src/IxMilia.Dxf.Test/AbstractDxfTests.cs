@@ -36,7 +36,7 @@ SECTION
 ENDSEC
 0
 EOF
-", sectionName, string.IsNullOrWhiteSpace(data) ? null : "\r\n" + data.Trim()));
+", sectionName, string.IsNullOrWhiteSpace(data) ? null : Environment.NewLine + data.Trim()));
         }
 
         internal static string ToString(DxfFile file)
@@ -80,7 +80,7 @@ EOF
         private static string RemoveLeadingAndTrailingWhitespaceFromLines(string s)
         {
             var lines = s.Split("\n".ToCharArray()).Select(l => l.Trim());
-            return string.Join("\r\n", lines);
+            return string.Join(Environment.NewLine, lines);
         }
 
         internal static void VerifyFileContains(DxfFile file, string expected, DxfSectionType? sectionType = null)
@@ -132,7 +132,13 @@ EOF
             var regex = CreateMatcherRegex(expected);
             if (!regex.IsMatch(actual))
             {
-                throw new Exception($"Unable to find\r\n{expected}\r\nin\r\n{actual}");
+                throw new Exception(string.Join(Environment.NewLine, new[]
+                    {
+                        "Unable to find",
+                        expected,
+                        "in",
+                        actual
+                    }));
             }
         }
 

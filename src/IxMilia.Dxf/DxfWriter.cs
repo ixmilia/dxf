@@ -32,7 +32,8 @@ namespace IxMilia.Dxf
             {
                 binWriter = new BinaryWriter(fileStream);
                 binWriter.Write(GetAsciiBytes(DxfFile.BinarySentinel));
-                binWriter.Write("\r\n");
+                binWriter.Write((byte)'\r');
+                binWriter.Write((byte)'\n');
                 binWriter.Write((byte)26);
                 binWriter.Write((byte)0);
             }

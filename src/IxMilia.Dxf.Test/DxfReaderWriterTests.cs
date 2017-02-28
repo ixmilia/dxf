@@ -268,7 +268,7 @@ EOF
             using (var writer = new StreamWriter(stream))
             {
                 writer.Write((char)0xFEFF); // BOM
-                writer.Write("0\r\nEOF");
+                writer.Write("0" + Environment.NewLine + "EOF");
                 writer.Flush();
                 stream.Seek(0, SeekOrigin.Begin);
                 var file = DxfFile.Load(stream);
@@ -2179,7 +2179,7 @@ ENDTAB
         [Fact]
         public void EnsureParsedFileHasNoDefaultItems()
         {
-            var file = Parse("0\r\nEOF");
+            var file = Parse("0" + Environment.NewLine + "EOF");
 
             // all of these must be empty
             Assert.Equal(0, file.ApplicationIds.Count);

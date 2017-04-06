@@ -1,11 +1,12 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
+using System.Text;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Objects;
@@ -268,11 +269,65 @@ EOF
             using (var writer = new StreamWriter(stream))
             {
                 writer.Write((char)0xFEFF); // BOM
-                writer.Write("0" + Environment.NewLine + "EOF");
+                writer.Write("0\r\nEOF");
                 writer.Flush();
                 stream.Seek(0, SeekOrigin.Begin);
                 var file = DxfFile.Load(stream);
                 Assert.Equal(0, file.Layers.Count);
+            }
+        }
+
+        [Fact]
+        public void ReadWithDifferingNewLinesTest()
+        {
+            var lines = new List<string>()
+            {
+                "0", "SECTION",
+                "2", "ENTITIES",
+                "0", "LINE",
+                "0", "ENDSEC",
+                "0", "EOF"
+            };
+
+            // verify reading LF
+            using (var ms = new MemoryStream())
+            {
+                using (var writer = new StreamWriter(ms, Encoding.ASCII, bufferSize: 1024, leaveOpen: true))
+                {
+                    writer.Write(string.Join("\n", lines));
+                }
+
+                ms.Seek(0, SeekOrigin.Begin);
+                var file = DxfFile.Load(ms);
+                Assert.IsType<DxfLine>(file.Entities.Single());
+            }
+
+            // verify reading CRLF
+            using (var ms = new MemoryStream())
+            {
+                using (var writer = new StreamWriter(ms, Encoding.ASCII, bufferSize: 1024, leaveOpen: true))
+                {
+                    writer.Write(string.Join("\r\n", lines));
+                }
+
+                ms.Seek(0, SeekOrigin.Begin);
+                var file = DxfFile.Load(ms);
+                Assert.IsType<DxfLine>(file.Entities.Single());
+            }
+        }
+
+        [Fact]
+        public void WriteCarriageReturnNewLineTest()
+        {
+            using (var ms = new MemoryStream())
+            {
+                new DxfFile().Save(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                using (var reader = new StreamReader(ms))
+                {
+                    var text = reader.ReadToEnd();
+                    Assert.Contains("\r\n", text);
+                }
             }
         }
 
@@ -2179,7 +2234,7 @@ ENDTAB
         [Fact]
         public void EnsureParsedFileHasNoDefaultItems()
         {
-            var file = Parse("0" + Environment.NewLine + "EOF");
+            var file = Parse("0\r\nEOF");
 
             // all of these must be empty
             Assert.Equal(0, file.ApplicationIds.Count);

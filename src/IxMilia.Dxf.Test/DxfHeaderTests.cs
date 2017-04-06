@@ -2315,48 +2315,48 @@ $SHADOWPLANELOCATION";
             file.Header.FileName = null; // $MENU, normalized to .
 
             var content = ToString(file);
-            Assert.Contains(@"
+            Assert.Contains(FixNewLines(@"
   9
 $TEXTSIZE
  40
 0.2
-".Trim(), content);
-            Assert.Contains(@"
+".Trim()), content);
+            Assert.Contains(FixNewLines(@"
   9
 $TRACEWID
  40
 0.05
-".Trim(), content);
-            Assert.Contains(@"
+".Trim()), content);
+            Assert.Contains(FixNewLines(@"
   9
 $TEXTSTYLE
   7
 STANDARD
-".Trim(), content);
-            Assert.Contains(@"
+".Trim()), content);
+            Assert.Contains(FixNewLines(@"
   9
 $CLAYER
   8
 0
-".Trim(), content);
-            Assert.Contains(@"
+".Trim()), content);
+            Assert.Contains(FixNewLines(@"
   9
 $CELTYPE
   6
 BYLAYER
-".Trim(), content);
-            Assert.Contains(@"
+".Trim()), content);
+            Assert.Contains(FixNewLines(@"
   9
 $DIMSTYLE
   2
 STANDARD
-".Trim(), content);
-            Assert.Contains(@"
+".Trim()), content);
+            Assert.Contains(FixNewLines(@"
   9
 $MENU
   1
 .
-".Trim(), content);
+".Trim()), content);
         }
 
         #endregion

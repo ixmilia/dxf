@@ -68,7 +68,7 @@ namespace IxMilia.Dxf
         {
             if (textWriter != null)
             {
-                textWriter.WriteLine(code.ToString(CultureInfo.InvariantCulture).PadLeft(3));
+                WriteLine(code.ToString(CultureInfo.InvariantCulture).PadLeft(3));
             }
             else if (binWriter != null)
             {
@@ -116,7 +116,7 @@ namespace IxMilia.Dxf
         {
             value = TransformControlCharacters(value ?? string.Empty);
             if (textWriter != null)
-                textWriter.WriteLine(value);
+                WriteLine(value);
             else if (binWriter != null)
             {
                 binWriter.Write(GetAsciiBytes(value));
@@ -127,7 +127,7 @@ namespace IxMilia.Dxf
         private void WriteDouble(double value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value.ToString("0.0##############", CultureInfo.InvariantCulture));
+                WriteLine(value.ToString("0.0##############", CultureInfo.InvariantCulture));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -135,7 +135,7 @@ namespace IxMilia.Dxf
         private void WriteShort(short value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(6));
+                WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(6));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -143,7 +143,7 @@ namespace IxMilia.Dxf
         private void WriteInt(int value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(9));
+                WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(9));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -151,7 +151,7 @@ namespace IxMilia.Dxf
         private void WriteLong(long value)
         {
             if (textWriter != null)
-                textWriter.WriteLine(value.ToString(CultureInfo.InvariantCulture));
+                WriteLine(value.ToString(CultureInfo.InvariantCulture));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -159,6 +159,12 @@ namespace IxMilia.Dxf
         private void WriteBool(bool value)
         {
             WriteShort(value ? (short)1 : (short)0);
+        }
+
+        private void WriteLine(string value)
+        {
+            textWriter.Write(value);
+            textWriter.Write("\r\n");
         }
 
         private static byte[] GetAsciiBytes(string value)

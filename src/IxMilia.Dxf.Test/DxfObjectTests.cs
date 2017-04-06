@@ -691,21 +691,21 @@ layout-name
                     var contents = reader.ReadToEnd();
 
                     // verify the plot settings were written
-                    var plotSettingsOffset = contents.IndexOf(@"
+                    var plotSettingsOffset = contents.IndexOf(FixNewLines(@"
 100
 AcDbPlotSettings
   1
 page-setup-name
-".Trim());
+".Trim()));
                     Assert.True(plotSettingsOffset > 0);
 
                     // verify the layout settings were written
-                    var layoutOffset = contents.IndexOf(@"
+                    var layoutOffset = contents.IndexOf(FixNewLines(@"
 100
 AcDbLayout
   1
 layout-name
-".Trim());
+".Trim()));
                     Assert.True(layoutOffset > 0);
 
                     // verify that the layout settings were written after the plot settings

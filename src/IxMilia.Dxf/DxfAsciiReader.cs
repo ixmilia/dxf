@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace IxMilia.Dxf
 {
@@ -30,7 +31,7 @@ namespace IxMilia.Dxf
         {
             _lineNumber = 1;
             yield return firstLine;
-            var streamReader = new StreamReader(stream);
+            var streamReader = new StreamReader(stream, Encoding.GetEncoding("us-ascii"));
             string line;
             while ((line = streamReader.ReadLine()) != null)
             {

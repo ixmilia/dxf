@@ -26,7 +26,7 @@ namespace IxMilia.Dxf
         {
             if (asText)
             {
-                textWriter = new StreamWriter(fileStream);
+                textWriter = new StreamWriter(fileStream, Encoding.GetEncoding("us-ascii"));
             }
             else
             {

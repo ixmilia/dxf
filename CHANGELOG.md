@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.5 (TBD)
+## 0.5 (28 April 2017)
 
 - Doc comment support
 - Enforce collection restrictions:

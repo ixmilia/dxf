@@ -332,6 +332,20 @@ EOF
         }
 
         [Fact]
+        public void ReadWithExtraTrailingNewlinesTest()
+        {
+            // file must be created this way to ensure all appropriate newlines are present for parsing
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms))
+            {
+                writer.Write("0\r\nEOF\r\n\r\n");
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                var file = DxfFile.Load(ms);
+            }
+        }
+
+        [Fact]
         public void ReadDoubleAsIntegralTest()
         {
             // Some files encountered in the wild have double-like values for the integral types.  Ensure that those still parse

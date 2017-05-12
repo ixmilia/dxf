@@ -47,7 +47,12 @@ namespace IxMilia.Dxf
                 var codeLine = _lineEnumerator.Current;
                 var codeLineNumber = _lineNumber;
                 int code;
-                if (int.TryParse(codeLine, NumberStyles.Integer, CultureInfo.InvariantCulture, out code))
+                if (string.IsNullOrEmpty(codeLine))
+                {
+                    // a blank line when expecting a code means we can't parse any further
+                    return null;
+                }
+                else if (int.TryParse(codeLine, NumberStyles.Integer, CultureInfo.InvariantCulture, out code))
                 {
                     if (_lineEnumerator.MoveNext())
                     {

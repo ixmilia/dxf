@@ -39,6 +39,7 @@ namespace IxMilia.Dxf
         private const string CELTSCALE = "$CELTSCALE";
         private const string DELOBJ = "$DELOBJ";
         private const string DISPSILH = "$DISPSILH";
+        private const string DRAGVS = "$DRAGVS";
         private const string DIMSCALE = "$DIMSCALE";
         private const string DIMASZ = "$DIMASZ";
         private const string DIMEXO = "$DIMEXO";
@@ -226,6 +227,7 @@ namespace IxMilia.Dxf
         private const string HYPERLINKBASE = "$HYPERLINKBASE";
         private const string STYLESHEET = "$STYLESHEET";
         private const string XEDIT = "$XEDIT";
+        private const string CEPSNID = "$CEPSNID";
         private const string CEPSNTYPE = "$CEPSNTYPE";
         private const string PSTYLEMODE = "$PSTYLEMODE";
         private const string FINGERPRINTGUID = "$FINGERPRINTGUID";
@@ -429,6 +431,11 @@ namespace IxMilia.Dxf
         /// The $DISPSILH header variable.  Controls the display of silhouette curves of body objects in wireframe mode.  Minimum AutoCAD version: R13.
         /// </summary>
         public bool DisplaySilhouetteCurvesInWireframeMode { get; set; }
+
+        /// <summary>
+        /// The $DRAGVS header variable.  Hard-pointer ID to visual style when creating 3D solid primitives.  Minimum AutoCAD version: R2007.
+        /// </summary>
+        public uint SolidVisualStylePointer { get; set; }
 
         /// <summary>
         /// The $DIMSCALE header variable.  Overall dimensioning scale factor.
@@ -1351,6 +1358,11 @@ namespace IxMilia.Dxf
         public bool CanUseInPlaceReferenceEditing { get; set; }
 
         /// <summary>
+        /// The $CEPSNID header variable.  PlotStyle handle of new objects.  Minimum AutoCAD version: R2000.
+        /// </summary>
+        public uint NewObjectPlotStyleHandle { get; set; }
+
+        /// <summary>
         /// The $CEPSNTYPE header variable.  Plot style of new objects.  Minimum AutoCAD version: R2000.
         /// </summary>
         public DxfPlotStyle NewObjectPlotStyle { get; set; }
@@ -1696,6 +1708,7 @@ namespace IxMilia.Dxf
             this.CurrentEntityLineTypeScale = 1.0; // CELTSCALE
             this.RetainDeletedObjects = true; // DELOBJ
             this.DisplaySilhouetteCurvesInWireframeMode = false; // DISPSILH
+            this.SolidVisualStylePointer = 0; // DRAGVS
             this.DimensioningScaleFactor = 1.0; // DIMSCALE
             this.DimensioningArrowSize = 0.18; // DIMASZ
             this.DimensionExtensionLineOffset = 0.0625; // DIMEXO
@@ -1880,6 +1893,7 @@ namespace IxMilia.Dxf
             this.HyperlinkBase = null; // HYPERLINKBASE
             this.Stylesheet = null; // STYLESHEET
             this.CanUseInPlaceReferenceEditing = true; // XEDIT
+            this.NewObjectPlotStyleHandle = 0; // CEPSNID
             this.NewObjectPlotStyle = DxfPlotStyle.ByLayer; // CEPSNTYPE
             this.UsesColorDependentPlotStyleTables = true; // PSTYLEMODE
             this.FingerprintGuid = Guid.NewGuid(); // FINGERPRINTGUID
@@ -2093,6 +2107,13 @@ namespace IxMilia.Dxf
             {
                 list.Add(new DxfCodePair(9, DISPSILH));
                 list.Add(new DxfCodePair(70, BoolShort(this.DisplaySilhouetteCurvesInWireframeMode)));
+            }
+
+            // DRAGVS
+            if (Version >= DxfAcadVersion.R2007 && this.SolidVisualStylePointer != 0)
+            {
+                list.Add(new DxfCodePair(9, DRAGVS));
+                list.Add(new DxfCodePair(349, UIntHandle(this.SolidVisualStylePointer)));
             }
 
             // DIMSCALE
@@ -3212,6 +3233,13 @@ namespace IxMilia.Dxf
                 list.Add(new DxfCodePair(290, (this.CanUseInPlaceReferenceEditing)));
             }
 
+            // CEPSNID
+            if (Version >= DxfAcadVersion.R2000 && this.NewObjectPlotStyleHandle != 0)
+            {
+                list.Add(new DxfCodePair(9, CEPSNID));
+                list.Add(new DxfCodePair(390, UIntHandle(this.NewObjectPlotStyleHandle)));
+            }
+
             // CEPSNTYPE
             if (Version >= DxfAcadVersion.R2000)
             {
@@ -3778,6 +3806,10 @@ namespace IxMilia.Dxf
                 case DISPSILH:
                     EnsureCode(pair, 70);
                     this.DisplaySilhouetteCurvesInWireframeMode = BoolShort(pair.ShortValue);
+                    break;
+                case DRAGVS:
+                    EnsureCode(pair, 349);
+                    this.SolidVisualStylePointer = UIntHandle(pair.StringValue);
                     break;
                 case DIMSCALE:
                     EnsureCode(pair, 40);
@@ -4514,6 +4546,10 @@ namespace IxMilia.Dxf
                     EnsureCode(pair, 290);
                     this.CanUseInPlaceReferenceEditing = (pair.BoolValue);
                     break;
+                case CEPSNID:
+                    EnsureCode(pair, 390);
+                    this.NewObjectPlotStyleHandle = UIntHandle(pair.StringValue);
+                    break;
                 case CEPSNTYPE:
                     EnsureCode(pair, 380);
                     this.NewObjectPlotStyle = (DxfPlotStyle)(pair.ShortValue);
@@ -5198,6 +5234,8 @@ namespace IxMilia.Dxf
                     return this.RetainDeletedObjects;
                 case DISPSILH:
                     return this.DisplaySilhouetteCurvesInWireframeMode;
+                case DRAGVS:
+                    return this.SolidVisualStylePointer;
                 case DIMSCALE:
                     return this.DimensioningScaleFactor;
                 case DIMASZ:
@@ -5572,6 +5610,8 @@ namespace IxMilia.Dxf
                     return this.Stylesheet;
                 case XEDIT:
                     return this.CanUseInPlaceReferenceEditing;
+                case CEPSNID:
+                    return this.NewObjectPlotStyleHandle;
                 case CEPSNTYPE:
                     return this.NewObjectPlotStyle;
                 case PSTYLEMODE:
@@ -5790,6 +5830,9 @@ namespace IxMilia.Dxf
                     break;
                 case DISPSILH:
                     this.DisplaySilhouetteCurvesInWireframeMode = (bool)value;
+                    break;
+                case DRAGVS:
+                    this.SolidVisualStylePointer = (uint)value;
                     break;
                 case DIMSCALE:
                     this.DimensioningScaleFactor = (double)value;
@@ -6351,6 +6394,9 @@ namespace IxMilia.Dxf
                     break;
                 case XEDIT:
                     this.CanUseInPlaceReferenceEditing = (bool)value;
+                    break;
+                case CEPSNID:
+                    this.NewObjectPlotStyleHandle = (uint)value;
                     break;
                 case CEPSNTYPE:
                     this.NewObjectPlotStyle = (DxfPlotStyle)value;

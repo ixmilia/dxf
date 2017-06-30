@@ -19,6 +19,7 @@
             <xs:enumeration value="R2007" />
             <xs:enumeration value="R2010" />
             <xs:enumeration value="R2013" />
+            <xs:enumeration value="R2018" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -70,6 +71,7 @@
             <xs:attribute name="WriteCondition" type="xs:string" use="optional" />
             <xs:attribute name="MinVersion" type="VersionType" use="optional" />
             <xs:attribute name="MaxVersion" type="VersionType" use="optional" />
+            <xs:attribute name="Comment" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
 

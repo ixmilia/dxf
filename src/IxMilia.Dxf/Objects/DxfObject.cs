@@ -76,6 +76,29 @@ namespace IxMilia.Dxf.Objects
         Inches = 5
     }
 
+    public enum DxfRenderDuration
+    {
+        RenderByTime = 0,
+        RenderByLevel = 1,
+        UntilSatisfactory = 2
+    }
+
+    public enum DxfRenderAccuracy
+    {
+        Low = 0,
+        Draft = 1,
+        Hight = 2
+    }
+
+    public enum DxfSamplingFilter
+    {
+        Box = 0,
+        Triangle = 1,
+        Gauss = 2,
+        Mitchell = 3,
+        Lanczos = 4
+    }
+
     public abstract partial class DxfObject : IDxfItem, IDxfHasXData, IDxfHasXDataHidden
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();

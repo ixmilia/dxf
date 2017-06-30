@@ -43,9 +43,11 @@
     <Variable Name="CELTSCALE" Code="40" Type="double" Property="CurrentEntityLineTypeScale" DefaultValue="1.0" MinVersion="R13" Comment="Current entity line type scale." />
     <Variable Name="DELOBJ" Code="70" Type="bool" Property="RetainDeletedObjects" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" MaxVersion="R14" Comment="Controls object deletion." />
     <Variable Name="DISPSILH" Code="70" Type="bool" Property="DisplaySilhouetteCurvesInWireframeMode" DefaultValue="false" ReadConverter="BoolShort" WriteConverter="BoolShort" MinVersion="R13" Comment="Controls the display of silhouette curves of body objects in wireframe mode." />
+    <Variable Name="DRAGVS" Code="349" Type="uint" Property="SolidVisualStylePointer" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" DontWriteDefault="true" MinVersion="R2007" Comment="Hard-pointer ID to visual style when creating 3D solid primitives." />
     <Variable Name="DIMSCALE" Code="40" Type="double" Property="DimensioningScaleFactor" DefaultValue="1.0" Comment="Overall dimensioning scale factor." />
     <Variable Name="DIMASZ" Code="40" Type="double" Property="DimensioningArrowSize" DefaultValue="0.18" Comment="Dimensioning arrow size." />
     <Variable Name="DIMEXO" Code="40" Type="double" Property="DimensionExtensionLineOffset" DefaultValue="0.0625" Comment="Extension line offset." />
+    <!-- The spec says that DIMFAC should exist, but the Teigha libraries don't like it. -->
     <Variable Name="DIMDLI" Code="40" Type="double" Property="DimensionLineIncrement" DefaultValue="0.38" Comment="Dimension line increment." />
     <Variable Name="DIMRND" Code="40" Type="double" Property="DimensionDistanceRoundingValue" DefaultValue="0.0" Comment="Rounding value for dimension distances." />
     <Variable Name="DIMDLE" Code="40" Type="double" Property="DimensionLineExtension" DefaultValue="0.0" Comment="Dimension line extension." />
@@ -240,6 +242,7 @@
     <Variable Name="HYPERLINKBASE" Code="1" Type="string" Property="HyperlinkBase" DefaultValue="null" MinVersion="R2000" Comment="Path for all relative hyperlinks in the drawing.  If null, the drawing path is used." />
     <Variable Name="STYLESHEET" Code="1" Type="string" Property="Stylesheet" DefaultValue="null" MinVersion="R2000" Comment="Path to the stylesheet for the drawing." />
     <Variable Name="XEDIT" Code="290" Type="bool" Property="CanUseInPlaceReferenceEditing" DefaultValue="true" MinVersion="R2000" Comment="Controls whether the current drawing can be edited in-place when being referenced by another drawing." />
+    <Variable Name="CEPSNID" Code="390" Type="uint" Property="NewObjectPlotStyleHandle" DefaultValue="0" ReadConverter="UIntHandle" WriteConverter="UIntHandle" MinVersion="R2000" DontWriteDefault="true" Comment="PlotStyle handle of new objects." />
     <Variable Name="CEPSNTYPE" Code="380" Type="DxfPlotStyle" Property="NewObjectPlotStyle" DefaultValue="DxfPlotStyle.ByLayer" ReadConverter="(DxfPlotStyle)" WriteConverter="(short)" MinVersion="R2000" Comment="Plot style of new objects." />
     <Variable Name="PSTYLEMODE" Code="290" Type="bool" Property="UsesColorDependentPlotStyleTables" DefaultValue="true" MinVersion="R2000" Comment="Indicates whether the current drawing is in a Color-Dependent or Named Plot Style mode." />
     <Variable Name="FINGERPRINTGUID" Code="2" Type="Guid" Property="FingerprintGuid" DefaultValue="Guid.NewGuid()" ReadConverter="GuidString" WriteConverter="GuidString" MinVersion="R2000" Comment="Set at creation time, uniquely identifies a particular drawing." />

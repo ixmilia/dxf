@@ -763,13 +763,7 @@ namespace IxMilia.Dxf.Generator
 
         public string TypeString(XElement entity)
         {
-            var typeString = entity.Attribute("TypeString").Value;
-            if (typeString.Any(c => char.IsLower(c)))
-            {
-                throw new InvalidOperationException(string.Format("TypeString value '{0}' must be all upper case.", typeString));
-            }
-
-            return typeString;
+            return entity.Attribute("TypeString").Value;
         }
 
         public string TypeStringVariable(XElement entity)

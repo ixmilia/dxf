@@ -29,6 +29,7 @@
             <xs:enumeration value="R2007" />
             <xs:enumeration value="R2010" />
             <xs:enumeration value="R2013" />
+            <xs:enumeration value="R2018" />
         </xs:restriction>
     </xs:simpleType>
 

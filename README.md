@@ -169,5 +169,18 @@ between versions.
 
 [2014](http://images.autodesk.com/adsk/files/autocad_2014_pdf_dxf_reference_enu.pdf)
 
-These links were compiled from the archive.org May 9, 2013 snapshot of http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853
-(https://web.archive.org/web/20130509144333/http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853)
+[2018](http://help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+
+Many of these links were compiled from the archive.org May 9, 2013 snapshot of [http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853](https://web.archive.org/web/20130509144333/http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853)
+
+The R2018 spec can be downloaded for offline use via the command:
+
+``` bash
+wget -r -k -L -e robots=off http://help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm
+```
+
+and a simple launch page can be added via:
+
+``` bash
+echo "<html><meta http-equiv='refresh' content='0; url=files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm' /></html>" > help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/index.html
+```

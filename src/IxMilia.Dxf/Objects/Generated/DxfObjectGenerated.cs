@@ -45,6 +45,8 @@ namespace IxMilia.Dxf.Objects
                         return "ACDBDICTIONARYWDFLT";
                     case DxfObjectType.AcdbPlaceHolder:
                         return "ACDBPLACEHOLDER";
+                    case DxfObjectType.NavisWorksModelDefinition:
+                        return "AcDbNavisworksModelDef";
                     case DxfObjectType.DataTable:
                         return "DATATABLE";
                     case DxfObjectType.Dictionary:
@@ -91,6 +93,10 @@ namespace IxMilia.Dxf.Objects
                         return "RENDERENVIRONMENT";
                     case DxfObjectType.RenderGlobal:
                         return "RENDERGLOBAL";
+                    case DxfObjectType.RapidRTRenderEnvironment:
+                        return "RAPIDRTRENDERENVIRONMENT";
+                    case DxfObjectType.RapidRenderSettings:
+                        return "RAPIDRTRENDERSETTINGS";
                     case DxfObjectType.SectionManager:
                         return "SECTIONMANAGER";
                     case DxfObjectType.SectionSettings:
@@ -174,6 +180,9 @@ namespace IxMilia.Dxf.Objects
                 case "ACDBPLACEHOLDER":
                     obj = new DxfPlaceHolder();
                     break;
+                case "AcDbNavisworksModelDef":
+                    obj = new DxfNavisWorksModelDefinition();
+                    break;
                 case "DATATABLE":
                     obj = new DxfDataTable();
                     break;
@@ -242,6 +251,12 @@ namespace IxMilia.Dxf.Objects
                     break;
                 case "RENDERGLOBAL":
                     obj = new DxfRenderGlobal();
+                    break;
+                case "RAPIDRTRENDERENVIRONMENT":
+                    obj = new DxfRapidRTRenderEnvironment();
+                    break;
+                case "RAPIDRTRENDERSETTINGS":
+                    obj = new DxfRapidRenderSettings();
                     break;
                 case "SECTIONMANAGER":
                     obj = new DxfSectionManager();

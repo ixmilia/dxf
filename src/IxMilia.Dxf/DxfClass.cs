@@ -64,6 +64,18 @@ namespace IxMilia.Dxf
             set { DxfHelpers.SetFlag(value, ref Flags, 128); }
         }
 
+        public bool IsLineWeightChangeAllowed
+        {
+            get { return DxfHelpers.GetFlag(Flags, 256); }
+            set { DxfHelpers.SetFlag(value, ref Flags, 256); }
+        }
+
+        public bool IsPlotStyleNameChangeAllowed
+        {
+            get { return DxfHelpers.GetFlag(Flags, 512); }
+            set { DxfHelpers.SetFlag(value, ref Flags, 512); }
+        }
+
         public bool IsR13FormatProxy
         {
             get { return DxfHelpers.GetFlag(Flags, 32768); }

@@ -182,7 +182,11 @@ namespace IxMilia.Dxf
         Gigameters = 17,
         AstronomicalUnits = 18,
         LightYears = 19,
-        Parsecs = 20
+        Parsecs = 20,
+        USSurveyFeet = 21,
+        USSurveyInch = 22,
+        USSurveyYard = 23,
+        USSurveyMile = 24
     }
 
     public enum DxfJoinStyle

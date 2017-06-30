@@ -26,8 +26,9 @@ namespace IxMilia.Dxf
         R2007,
         R2010,
         R2013,
+        R2018,
         Min = Version_1_0,
-        Max = R2013
+        Max = R2018
     }
 
     public static class DxfAcadVersionStrings
@@ -72,6 +73,7 @@ namespace IxMilia.Dxf
         private const string R2013_Alternate2 = "19.1"; // 2014 (this is a guess)
         private const string R2013_Alternate3 = "19.2"; // 2015 (this is a guess)
         private const string R2013_Alternate4 = "19.3"; // 2016 (this is a guess)
+        private const string R2018 = "AC1032";
 
         public static string VersionToString(DxfAcadVersion version)
         {
@@ -117,6 +119,8 @@ namespace IxMilia.Dxf
                     return R2010;
                 case DxfAcadVersion.R2013:
                     return R2013;
+                case DxfAcadVersion.R2018:
+                    return R2018;
                 default:
                     throw new NotSupportedException();
             }
@@ -185,6 +189,8 @@ namespace IxMilia.Dxf
                 case R2013_Alternate3:
                 case R2013_Alternate4:
                     return DxfAcadVersion.R2013;
+                case R2018:
+                    return DxfAcadVersion.R2018;
                 default:
                     throw new NotSupportedException($"The version string '{str}' was not expected");
             }

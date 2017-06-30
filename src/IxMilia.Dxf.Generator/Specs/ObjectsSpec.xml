@@ -63,6 +63,18 @@
     </Object>
     <!--
 
+    ACDBNAVISWORKSMODELDEF
+
+    -->
+    <Object Name="DxfNavisWorksModelDefinition" ObjectType="NavisWorksModelDefinition" SubclassMarker="AcDbNavisworksModelDef" TypeString="AcDbNavisworksModelDef" MinVersion="R2018">
+        <Property Name="ModelPath" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="IsModelLoadedOnDrawingOpen" Code="290" Type="bool" DefaultValue="false" />
+        <Property Name="MinimumExtent" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+        <Property Name="MaximumExtent" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
+        <Property Name="IsHostGeometryDrawn" Code="290" Type="bool" DefaultValue="false" />
+    </Object>
+    <!--
+
     DATATABLE
 
     -->
@@ -904,6 +916,65 @@
         <Property Name="ImageHeight" Code="90" Type="int" DefaultValue="0" />
         <Property Name="UsePredefinedPresetsFirst" Code="290" Type="bool" DefaultValue="false" />
         <Property Name="UseHighInfoLevel" Code="290" Type="bool" DefaultValue="false" />
+    </Object>
+    <!--
+
+    RAPIDRTRENDERENVIRONMENT
+
+    -->
+    <Object Name="DxfRapidRTRenderEnvironment" ObjectType="RapidRTRenderEnvironment" SubclassMarker="AcDbIBLBackground" TypeString="RAPIDRTRENDERENVIRONMENT" MinVersion="R2018">
+        <Property Name="SubclassVersion" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="IsEnabled" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="ImageBasedLightingMapFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="RotationAngle" Code="40" Type="double" DefaultValue="0.0" Comment="Rotation angle in degrees." />
+        <Property Name="IsMapAsBackground" Code="290" Type="bool" DefaultValue="true" />
+        <Pointer Name="CustomBackground" Code="340" Type="IDxfItem" />
+    </Object>
+    <!--
+
+    RAPIDRTRENDERSETTINGS
+
+    -->
+    <Object Name="DxfRapidRenderSettings" ObjectType="RapidRenderSettings" SubclassMarker="AcDbRenderSettings" TypeString="RAPIDRTRENDERSETTINGS" MinVersion="R2018">
+        <Property Name="SubclassVersion" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="RenderPresetName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="AreMaterialsEnabled" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="IsTextureSamplingEnabled" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="AreBackFacesEnabled" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="AreShadowsEnabled" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="PreviewImageFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="RenderPresetDescription" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="DisplayIndex" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="IsPredefinedRenderPreset" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="RenderDuration" Code="70" Type="DxfRenderDuration" DefaultValue="DxfRenderDuration.RenderByTime" ReadConverter="(DxfRenderDuration)" WriteConverter="(DxfRenderDuration)" />
+        <Property Name="RenderLevelCountLimit" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="RenderTimeLimit" Code="90" Type="int" DefaultValue="0" />
+        <Property Name="RenderAccuracy" Code="70" Type="DxfRenderAccuracy" DefaultValue="DxfRenderAccuracy.Low" ReadConverter="(DxfRenderAccuracy)" WriteConverter="(DxfRenderAccuracy)" />
+        <Property Name="SamplingFilter" Code="70" Type="DxfSamplingFilter" DefaultValue="DxfSamplingFilter.Box" ReadConverter="(DxfSamplingFilter)" WriteConverter="(DxfSamplingFilter)" />
+        <Property Name="FilterWidth" Code="40" Type="double" DefaultValue="1.0" />
+        <Property Name="FilterHeight" Code="40" Type="double" DefaultValue="1.0" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbRenderSettings&quot;" />
+            <WriteProperty Property="SubclassVersion" />
+            <WriteProperty Property="RenderPresetName" />
+            <WriteProperty Property="AreMaterialsEnabled" />
+            <WriteProperty Property="IsTextureSamplingEnabled" />
+            <WriteProperty Property="AreBackFacesEnabled" />
+            <WriteProperty Property="AreShadowsEnabled" />
+            <WriteProperty Property="PreviewImageFileName" />
+            <WriteProperty Property="RenderPresetDescription" />
+            <WriteProperty Property="DisplayIndex" />
+            <WriteProperty Property="IsPredefinedRenderPreset" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbRapidRTRenderSettings&quot;" />
+            <WriteProperty Property="SubclassVersion" />
+            <WriteProperty Property="RenderDuration" />
+            <WriteProperty Property="RenderLevelCountLimit" />
+            <WriteProperty Property="RenderTimeLimit" />
+            <WriteProperty Property="RenderAccuracy" />
+            <WriteProperty Property="SamplingFilter" />
+            <WriteProperty Property="FilterWidth" />
+            <WriteProperty Property="FilterHeight" />
+        </WriteOrder>
     </Object>
     <!--
 

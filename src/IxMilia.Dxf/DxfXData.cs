@@ -168,13 +168,13 @@ namespace IxMilia.Dxf
                 case DxfXDataType.Handle:
                     return new DxfXDataHandle(DxfCommonConverters.UIntHandle(pair.StringValue));
                 case DxfXDataType.RealTriple:
-                    return new DxfXData3Reals(ReadPoint(buffer, pair.Code));
+                    return new DxfXData3Reals(ReadPoint(pair, buffer, pair.Code));
                 case DxfXDataType.WorldSpacePosition:
-                    return new DxfXDataWorldSpacePosition(ReadPoint(buffer, pair.Code));
+                    return new DxfXDataWorldSpacePosition(ReadPoint(pair, buffer, pair.Code));
                 case DxfXDataType.WorldSpaceDisplacement:
-                    return new DxfXDataWorldSpaceDisplacement(ReadPoint(buffer, pair.Code));
+                    return new DxfXDataWorldSpaceDisplacement(ReadPoint(pair, buffer, pair.Code));
                 case DxfXDataType.WorldDirection:
-                    return new DxfXDataWorldDirection(ReadPoint(buffer, pair.Code));
+                    return new DxfXDataWorldDirection(ReadPoint(pair, buffer, pair.Code));
                 case DxfXDataType.Real:
                     return new DxfXDataReal(pair.DoubleValue);
                 case DxfXDataType.Distance:
@@ -190,14 +190,12 @@ namespace IxMilia.Dxf
             }
         }
 
-        private static DxfPoint ReadPoint(DxfCodePairBufferReader buffer, int expectedFirstCode)
+        private static DxfPoint ReadPoint(DxfCodePair xCoord, DxfCodePairBufferReader buffer, int expectedFirstCode)
         {
             // first value
-            Debug.Assert(buffer.ItemsRemain);
-            var pair = buffer.Peek();
+            var pair = xCoord;
             Debug.Assert(pair.Code == expectedFirstCode);
             var x = pair.DoubleValue;
-            buffer.Advance();
 
             // second value
             Debug.Assert(buffer.ItemsRemain);

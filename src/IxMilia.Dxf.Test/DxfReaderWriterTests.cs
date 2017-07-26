@@ -687,6 +687,102 @@ ENDTAB
         }
 
         [Fact]
+        public void ReadRealTriple()
+        {
+            var file = Section("TABLES", @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+  5
+2
+330
+0
+100
+AcDbSymbolTable
+ 70
+0
+  0
+BLOCK_RECORD
+  5
+A
+330
+0
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+<name>
+340
+A1
+310
+010203040506070809
+310
+010203040506070809
+1001
+ACAD
+1000
+DesignCenter Data
+1002
+{
+1070
+0
+1070
+1
+1070
+2
+1010
+3.1
+1020
+4.2
+1030
+5.3
+1002
+}
+  0
+ENDTAB
+");
+            var blockRecord = file.BlockRecords.Single();
+            Assert.Equal("<name>", blockRecord.Name);
+            Assert.Equal(0xA1u, blockRecord.LayoutHandle);
+
+            var xdata = blockRecord.XData;
+            Assert.Equal("ACAD", xdata.ApplicationName);
+            Assert.Equal(2, xdata.Items.Count);
+
+            Assert.Equal(DxfXDataType.String, xdata.Items[0].Type);
+            Assert.Equal("DesignCenter Data", ((DxfXDataString)xdata.Items[0]).Value);
+
+            var group = (DxfXDataControlGroup)xdata.Items[1];
+            Assert.Equal(4, group.Items.Count);
+
+            Assert.Equal(DxfXDataType.Integer, group.Items[0].Type);
+            Assert.Equal((short)0, ((DxfXDataInteger)group.Items[0]).Value);
+
+            Assert.Equal(DxfXDataType.Integer, group.Items[1].Type);
+            Assert.Equal((short)1, ((DxfXDataInteger)group.Items[1]).Value);
+
+            Assert.Equal(DxfXDataType.Integer, group.Items[2].Type);
+            Assert.Equal((short)2, ((DxfXDataInteger)group.Items[2]).Value);
+
+            Assert.Equal(DxfXDataType.RealTriple, group.Items[3].Type);
+            Assert.Equal(3.1, ((DxfXData3Reals)group.Items[3]).Value.X);
+
+            Assert.Equal(DxfXDataType.RealTriple, group.Items[3].Type);
+            Assert.Equal(4.2, ((DxfXData3Reals)group.Items[3]).Value.Y);
+
+            Assert.Equal(DxfXDataType.RealTriple, group.Items[3].Type);
+            Assert.Equal(5.3, ((DxfXData3Reals)group.Items[3]).Value.Z);
+
+            AssertArrayEqual(new byte[]
+            {
+                0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
+                0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09
+            }, blockRecord.BitmapData);
+        }
+
+        [Fact]
         public void WriteVersionSpecificBlockRecordTest_R2000()
         {
             var file = new DxfFile();

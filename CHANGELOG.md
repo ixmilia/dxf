@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 0.5.1 (26 July 2017)
+
+- Improve reading XData points.
+
 ## 0.5 (28 April 2017)
 
 - Doc comment support

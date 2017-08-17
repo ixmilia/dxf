@@ -26,7 +26,7 @@ namespace IxMilia.Dxf.Entities
         /// <exception cref="InvalidOperationException"/>
         /// <param name="vertices">The vertices to add.</param>
         public DxfPolyline(IEnumerable<DxfVertex> vertices)
-            : this(vertices, null)
+            : this(vertices, new DxfSeqend())
         {
         }
 

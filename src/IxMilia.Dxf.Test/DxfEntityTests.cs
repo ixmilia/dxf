@@ -923,6 +923,13 @@ EOF
         }
 
         [Fact]
+        public void EnsurePolylineSeqendIsAlwaysPresentTest()
+        {
+            Assert.NotNull(new DxfPolyline().Seqend); // default .ctor
+            Assert.NotNull(new DxfPolyline(new DxfVertex[] { new DxfVertex(), new DxfVertex() }).Seqend); // IEnumerable<DxfVertex> .ctor
+        }
+
+        [Fact]
         public void ReadPolylineWithTooFewVerticesTest()
         {
             // a polyline with 0 vertices can't be created manually, but it can be read from disk

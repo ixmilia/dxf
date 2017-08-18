@@ -161,7 +161,6 @@ namespace IxMilia.Dxf
             foreach (var item in file.GetFileItems().Where(i => i != null))
             {
                 nextPointer = AssignHandles(item, nextPointer, 0u, visitedItems);
-                var isParentDictionary = item is DxfDictionary;
                 foreach (var child in item.GetChildItems().Where(c => c != null))
                 {
                     var parentHandle = GetParentHandle(item, child);

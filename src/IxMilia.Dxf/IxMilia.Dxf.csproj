@@ -13,30 +13,5 @@
     <PackageProjectUrl>https://github.com/IxMilia/Dxf</PackageProjectUrl>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <GeneratorLocation>$(MSBuildThisFileDirectory)..\IxMilia.Dxf.Generator</GeneratorLocation>
-    <EntitiesOutputLocation>$(MSBuildThisFileDirectory)Entities\Generated</EntitiesOutputLocation>
-    <ObjectsOutputLocation>$(MSBuildThisFileDirectory)Objects\Generated</ObjectsOutputLocation>
-    <SectionsOutputLocation>$(MSBuildThisFileDirectory)Sections\Generated</SectionsOutputLocation>
-    <TablesOutputLocation>$(MSBuildThisFileDirectory)Tables\Generated</TablesOutputLocation>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <DirsToClean Include="$(EntitiesOutputLocation)" />
-    <DirsToClean Include="$(ObjectsOutputLocation)" />
-    <DirsToClean Include="$(SectionsOutputLocation)" />
-    <DirsToClean Include="$(TablesOutputLocation)" />
-  </ItemGroup>
-
-  <Target Name="CleanGeneratedCode" BeforeTargets="Clean">
-    <RemoveDir Directories="@(DirsToClean)" />
-  </Target>
-
-  <Target Name="GenerateCode" BeforeTargets="Build">
-    <Exec Command="dotnet restore" WorkingDirectory="$(GeneratorLocation)" />
-    <Exec Command="dotnet build" WorkingDirectory="$(GeneratorLocation)" />
-    <Exec Command='dotnet run "--entityDir=$(EntitiesOutputLocation)" "--objectDir=$(ObjectsOutputLocation)" "--sectionDir=$(SectionsOutputLocation)" "--tableDir=$(TablesOutputLocation)"' WorkingDirectory="$(GeneratorLocation)" />
-  </Target>
-
 </Project>
 

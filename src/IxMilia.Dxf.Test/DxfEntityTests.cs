@@ -1128,8 +1128,6 @@ AcDb2dPolyline
 SEQEND
   5
 #
-330
-#
 100
 AcDbEntity
   8
@@ -1321,8 +1319,6 @@ AcDb2dPolyline
 VERTEX
   5
 #
-330
-#
 100
 AcDbEntity
   8
@@ -1345,8 +1341,6 @@ AcDbVertex
 VERTEX
   5
 #
-330
-#
 100
 AcDbEntity
   8
@@ -1368,8 +1362,6 @@ AcDbVertex
   0
 SEQEND
   5
-#
-330
 #
 100
 AcDbEntity

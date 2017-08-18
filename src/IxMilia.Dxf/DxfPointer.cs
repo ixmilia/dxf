@@ -3,6 +3,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf
 {
@@ -82,7 +84,7 @@ namespace IxMilia.Dxf
                     {
                         child.Item = handleMap[child.Handle];
                         BindPointers((IDxfItemInternal)child.Item, handleMap, visitedItems, visitedChildren);
-                        SetOwner((IDxfItemInternal)child.Item, item);
+                        SetOwner((IDxfItemInternal)child.Item, item, isWriting: false);
                     }
                 }
             }
@@ -94,16 +96,22 @@ namespace IxMilia.Dxf
             {
                 if (child != null && visitedChildren.Add(child))
                 {
-                    SetOwner(child, item);
+                    SetOwner(child, item, isWriting: false);
                     SetChildOwners(child, visitedChildren);
                 }
             }
         }
 
-        private static void SetOwner(IDxfItemInternal item, IDxfItemInternal owner)
+        private static void SetOwner(IDxfItemInternal item, IDxfItemInternal owner, bool isWriting)
         {
             if (item != null && owner != null)
             {
+                if (isWriting && item is DxfEntity && !(owner is DxfDictionary))
+                {
+                    // entities can only be parented by a dictionary
+                    return;
+                }
+
                 item.SetOwner(owner);
                 var hasXData = item as IDxfHasXData;
                 if (hasXData != null)
@@ -153,10 +161,12 @@ namespace IxMilia.Dxf
             foreach (var item in file.GetFileItems().Where(i => i != null))
             {
                 nextPointer = AssignHandles(item, nextPointer, 0u, visitedItems);
+                var isParentDictionary = item is DxfDictionary;
                 foreach (var child in item.GetChildItems().Where(c => c != null))
                 {
-                    nextPointer = AssignHandles(child, nextPointer, item.Handle, visitedItems);
-                    SetOwner(child, item);
+                    var parentHandle = GetParentHandle(item, child);
+                    nextPointer = AssignHandles(child, nextPointer, parentHandle, visitedItems);
+                    SetOwner(child, item, isWriting: true);
                 }
             }
 
@@ -180,12 +190,24 @@ namespace IxMilia.Dxf
             foreach (var child in item.GetPointers().Where(c => c.Item != null))
             {
                 var childItem = (IDxfItemInternal)child.Item;
-                nextHandle = AssignHandles(childItem, nextHandle, item.Handle, visitedItems);
+                var parentHandle = GetParentHandle(item, childItem);
+                nextHandle = AssignHandles(childItem, nextHandle, parentHandle, visitedItems);
                 child.Handle = childItem.Handle;
-                childItem.OwnerHandle = item.Handle;
+                childItem.OwnerHandle = parentHandle;
             }
 
             return nextHandle;
+        }
+
+        private static uint GetParentHandle(IDxfItemInternal parent, IDxfItemInternal child)
+        {
+            if (child is DxfEntity && !(parent is DxfDictionary))
+            {
+                // entities can only be parented by a dictionary
+                return 0u;
+            }
+
+            return parent.Handle;
         }
 
         private static void ClearPointers(IDxfItemInternal item, HashSet<IDxfItemInternal> visitedItems)

@@ -8,7 +8,7 @@ LIBRARY_DIR=$_SCRIPT_DIR/src/IxMilia.Dxf
 cd $GENERATOR_DIR
 dotnet restore
 dotnet build
-dotnet run "--entityDir=$LIBRARY_DIR/Entities/Generated" "--objectDir=$LIBRARY_DIR/Objects/Generated" "--sectionDir=$LIBRARY_DIR/Sections/Generated" "--tableDir=$LIBRARY_DIR/Tables/Generated"
+dotnet run "$LIBRARY_DIR"
 cd -
 
 # build library

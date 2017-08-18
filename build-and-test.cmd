@@ -8,7 +8,7 @@ dotnet restore
 if errorlevel 1 goto error
 dotnet build
 if errorlevel 1 goto error
-dotnet run "--entityDir=%LIBRARY_DIR%\Entities\Generated" "--objectDir=%LIBRARY_DIR%\Objects\Generated" "--sectionDir=%LIBRARY_DIR%\Sections\Generated" "--tableDir=%LIBRARY_DIR%\Tables\Generated"
+dotnet run "%LIBRARY_DIR%"
 if errorlevel 1 goto error
 popd
 

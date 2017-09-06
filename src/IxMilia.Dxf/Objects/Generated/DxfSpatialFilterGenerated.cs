@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSpatialFilter : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SpatialFilter; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
         public IList<DxfPoint> ClipBoundaryDefinitionPoints { get; private set; }
         public DxfVector ClipBoundaryNormal { get; set; }
         public DxfPoint ClipBoundaryOrigin { get; set; }

@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfMentalRayRenderSettings : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.MentalRayRenderSettings; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
         public int ClassVersion_1 { get; set; }
         public string PresetName { get; set; }
         public bool RenderMaterials { get; set; }

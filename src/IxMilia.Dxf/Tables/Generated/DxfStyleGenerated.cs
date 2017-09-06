@@ -23,6 +23,7 @@ namespace IxMilia.Dxf
         public double LastHeightUsed { get; set; }
         public string PrimaryFontFileName { get; set; }
         public string BigFontFileName { get; set; }
+        public int FontFlags { get; set; }
 
         public DxfXData XData { get; set; }
 
@@ -36,6 +37,7 @@ namespace IxMilia.Dxf
             LastHeightUsed = 0.2;
             PrimaryFontFileName = "txt";
             BigFontFileName = null;
+            FontFlags = 0;
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
@@ -54,6 +56,11 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(42, (LastHeightUsed)));
             pairs.Add(new DxfCodePair(3, (PrimaryFontFileName)));
             pairs.Add(new DxfCodePair(4, (BigFontFileName)));
+            if (version >= DxfAcadVersion.R2010)
+            {
+                pairs.Add(new DxfCodePair(1071, (FontFlags)));
+            }
+
             if (XData != null)
             {
                 XData.AddValuePairs(pairs, version, outputHandles);
@@ -101,6 +108,9 @@ namespace IxMilia.Dxf
                         break;
                     case 4:
                         item.BigFontFileName = (pair.StringValue);
+                        break;
+                    case 1071:
+                        item.FontFlags = (pair.IntegerValue);
                         break;
                     case (int)DxfXDataType.ApplicationName:
                         item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);

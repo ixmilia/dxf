@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfMaterial : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.Material; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2004; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2004; } }
         public string Name { get; set; }
         public string Description { get; set; }
         public bool OverrideAmbientColor { get; set; }
@@ -217,155 +217,347 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(100, "AcDbMaterial"));
             pairs.Add(new DxfCodePair(1, (this.Name)));
             pairs.Add(new DxfCodePair(2, (this.Description)));
-            pairs.Add(new DxfCodePair(70, BoolShort(this.OverrideAmbientColor)));
-            pairs.Add(new DxfCodePair(40, (this.AmbientColorFactor)));
-            pairs.Add(new DxfCodePair(90, (this.AmbientColorValue)));
-            pairs.Add(new DxfCodePair(71, BoolShort(this.OverrideDiffuseColor)));
-            pairs.Add(new DxfCodePair(41, (this.DiffuseColorFactor)));
-            pairs.Add(new DxfCodePair(91, (this.DiffuseColorValue)));
-            pairs.Add(new DxfCodePair(42, (this.DiffuseMapBlendFactor)));
-            pairs.Add(new DxfCodePair(72, BoolShort(this.UseImageFileForDiffuseMap)));
-            pairs.Add(new DxfCodePair(3, (this.DiffuseMapFileName)));
-            pairs.Add(new DxfCodePair(73, (short)(this.DiffuseMapProjectionMethod)));
-            pairs.Add(new DxfCodePair(74, (short)(this.DiffuseMapTilingMethod)));
-            pairs.Add(new DxfCodePair(75, (short)(this.DiffuseMapAutoTransformMethod)));
+            if (this.OverrideAmbientColor != false)
+            {
+                pairs.Add(new DxfCodePair(70, BoolShort(this.OverrideAmbientColor)));
+            }
+
+            if (this.AmbientColorFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(40, (this.AmbientColorFactor)));
+            }
+
+            if (this.AmbientColorValue != 0)
+            {
+                pairs.Add(new DxfCodePair(90, (this.AmbientColorValue)));
+            }
+
+            if (this.OverrideDiffuseColor != false)
+            {
+                pairs.Add(new DxfCodePair(71, BoolShort(this.OverrideDiffuseColor)));
+            }
+
+            if (this.DiffuseColorFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(41, (this.DiffuseColorFactor)));
+            }
+
+            if (this.DiffuseColorValue != 0)
+            {
+                pairs.Add(new DxfCodePair(91, (this.DiffuseColorValue)));
+            }
+
+            if (this.DiffuseMapBlendFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(42, (this.DiffuseMapBlendFactor)));
+            }
+
+            if (this.UseImageFileForDiffuseMap != false)
+            {
+                pairs.Add(new DxfCodePair(72, BoolShort(this.UseImageFileForDiffuseMap)));
+            }
+
+            if (this.DiffuseMapFileName != null)
+            {
+                pairs.Add(new DxfCodePair(3, (this.DiffuseMapFileName)));
+            }
+
+            if (this.DiffuseMapProjectionMethod != DxfMapProjectionMethod.Planar)
+            {
+                pairs.Add(new DxfCodePair(73, (short)(this.DiffuseMapProjectionMethod)));
+            }
+
+            if (this.DiffuseMapTilingMethod != DxfMapTilingMethod.Tile)
+            {
+                pairs.Add(new DxfCodePair(74, (short)(this.DiffuseMapTilingMethod)));
+            }
+
+            if (this.DiffuseMapAutoTransformMethod != DxfMapAutoTransformMethod.NoAutoTransform)
+            {
+                pairs.Add(new DxfCodePair(75, (short)(this.DiffuseMapAutoTransformMethod)));
+            }
+
             foreach (var item in DiffuseMapTransformMatrix?.GetValues() ?? new double[0])
             {
                 pairs.Add(new DxfCodePair(43, item));
             }
 
-            pairs.Add(new DxfCodePair(44, (this.SpecularGlossFactor)));
-            pairs.Add(new DxfCodePair(76, BoolShort(this.OverrideSpecularColor)));
-            pairs.Add(new DxfCodePair(45, (this.SpecularColorFactor)));
-            pairs.Add(new DxfCodePair(92, (this.SpecularColorValue)));
-            pairs.Add(new DxfCodePair(46, (this.SpecularMapBlendFactor)));
-            pairs.Add(new DxfCodePair(77, BoolShort(this.UseImageFileForSpecularMap)));
-            pairs.Add(new DxfCodePair(4, (this.SpecularMapFileName)));
-            pairs.Add(new DxfCodePair(78, (short)(this.SpecularMapProjectionMethod)));
-            pairs.Add(new DxfCodePair(79, (short)(this.SpecularMapTilingMethod)));
-            pairs.Add(new DxfCodePair(170, (short)(this.SpecularMapAutoTransformMethod)));
+            if (this.SpecularGlossFactor != 0.5)
+            {
+                pairs.Add(new DxfCodePair(44, (this.SpecularGlossFactor)));
+            }
+
+            if (this.OverrideSpecularColor != false)
+            {
+                pairs.Add(new DxfCodePair(76, BoolShort(this.OverrideSpecularColor)));
+            }
+
+            if (this.SpecularColorFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(45, (this.SpecularColorFactor)));
+            }
+
+            if (this.SpecularColorValue != 0)
+            {
+                pairs.Add(new DxfCodePair(92, (this.SpecularColorValue)));
+            }
+
+            if (this.SpecularMapBlendFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(46, (this.SpecularMapBlendFactor)));
+            }
+
+            if (this.UseImageFileForSpecularMap != false)
+            {
+                pairs.Add(new DxfCodePair(77, BoolShort(this.UseImageFileForSpecularMap)));
+            }
+
+            if (this.SpecularMapFileName != null)
+            {
+                pairs.Add(new DxfCodePair(4, (this.SpecularMapFileName)));
+            }
+
+            if (this.SpecularMapProjectionMethod != DxfMapProjectionMethod.Planar)
+            {
+                pairs.Add(new DxfCodePair(78, (short)(this.SpecularMapProjectionMethod)));
+            }
+
+            if (this.SpecularMapTilingMethod != DxfMapTilingMethod.Tile)
+            {
+                pairs.Add(new DxfCodePair(79, (short)(this.SpecularMapTilingMethod)));
+            }
+
+            if (this.SpecularMapAutoTransformMethod != DxfMapAutoTransformMethod.NoAutoTransform)
+            {
+                pairs.Add(new DxfCodePair(170, (short)(this.SpecularMapAutoTransformMethod)));
+            }
+
             foreach (var item in SpecularMapTransformMatrix?.GetValues() ?? new double[0])
             {
                 pairs.Add(new DxfCodePair(47, item));
             }
 
-            pairs.Add(new DxfCodePair(48, (this.ReflectionMapBlendFactor)));
-            pairs.Add(new DxfCodePair(171, BoolShort(this.UseImageFileForReflectionMap)));
-            pairs.Add(new DxfCodePair(6, (this.ReflectionMapFileName)));
-            pairs.Add(new DxfCodePair(172, (short)(this.ReflectionMapProjectionMethod)));
-            pairs.Add(new DxfCodePair(173, (short)(this.ReflectionMapTilingMethod)));
-            pairs.Add(new DxfCodePair(174, (short)(this.ReflectionMapAutoTransformMethod)));
+            if (this.ReflectionMapBlendFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(48, (this.ReflectionMapBlendFactor)));
+            }
+
+            if (this.UseImageFileForReflectionMap != false)
+            {
+                pairs.Add(new DxfCodePair(171, BoolShort(this.UseImageFileForReflectionMap)));
+            }
+
+            if (this.ReflectionMapFileName != null)
+            {
+                pairs.Add(new DxfCodePair(6, (this.ReflectionMapFileName)));
+            }
+
+            if (this.ReflectionMapProjectionMethod != DxfMapProjectionMethod.Planar)
+            {
+                pairs.Add(new DxfCodePair(172, (short)(this.ReflectionMapProjectionMethod)));
+            }
+
+            if (this.ReflectionMapTilingMethod != DxfMapTilingMethod.Tile)
+            {
+                pairs.Add(new DxfCodePair(173, (short)(this.ReflectionMapTilingMethod)));
+            }
+
+            if (this.ReflectionMapAutoTransformMethod != DxfMapAutoTransformMethod.NoAutoTransform)
+            {
+                pairs.Add(new DxfCodePair(174, (short)(this.ReflectionMapAutoTransformMethod)));
+            }
+
             foreach (var item in ReflectionMapTransformMatrix?.GetValues() ?? new double[0])
             {
                 pairs.Add(new DxfCodePair(49, item));
             }
 
-            pairs.Add(new DxfCodePair(140, (this.OpacityFactor)));
-            pairs.Add(new DxfCodePair(141, (this.OpacityMapBlendFactor)));
-            pairs.Add(new DxfCodePair(175, BoolShort(this.UseImageFileForOpacityMap)));
-            pairs.Add(new DxfCodePair(7, (this.OpacityMapFileName)));
-            pairs.Add(new DxfCodePair(176, (short)(this.OpacityMapProjectionMethod)));
-            pairs.Add(new DxfCodePair(177, (short)(this.OpacityMapTilingMethod)));
-            pairs.Add(new DxfCodePair(178, (short)(this.OpacityMapAutoTransformMethod)));
+            if (this.OpacityFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(140, (this.OpacityFactor)));
+            }
+
+            if (this.OpacityMapBlendFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(141, (this.OpacityMapBlendFactor)));
+            }
+
+            if (this.UseImageFileForOpacityMap != false)
+            {
+                pairs.Add(new DxfCodePair(175, BoolShort(this.UseImageFileForOpacityMap)));
+            }
+
+            if (this.OpacityMapFileName != null)
+            {
+                pairs.Add(new DxfCodePair(7, (this.OpacityMapFileName)));
+            }
+
+            if (this.OpacityMapProjectionMethod != DxfMapProjectionMethod.Planar)
+            {
+                pairs.Add(new DxfCodePair(176, (short)(this.OpacityMapProjectionMethod)));
+            }
+
+            if (this.OpacityMapTilingMethod != DxfMapTilingMethod.Tile)
+            {
+                pairs.Add(new DxfCodePair(177, (short)(this.OpacityMapTilingMethod)));
+            }
+
+            if (this.OpacityMapAutoTransformMethod != DxfMapAutoTransformMethod.NoAutoTransform)
+            {
+                pairs.Add(new DxfCodePair(178, (short)(this.OpacityMapAutoTransformMethod)));
+            }
+
             foreach (var item in OpacityMapTransformMatrix?.GetValues() ?? new double[0])
             {
                 pairs.Add(new DxfCodePair(142, item));
             }
 
-            pairs.Add(new DxfCodePair(143, (this.BumpMapBlendFactor)));
-            pairs.Add(new DxfCodePair(179, BoolShort(this.UseImageFileForBumpMap)));
-            pairs.Add(new DxfCodePair(8, (this.BumpMapFileName)));
-            pairs.Add(new DxfCodePair(270, (short)(this.BumpMapProjectionMethod)));
-            pairs.Add(new DxfCodePair(271, (short)(this.BumpMapTilingMethod)));
-            pairs.Add(new DxfCodePair(272, (short)(this.BumpMapAutoTransformMethod)));
+            if (this.BumpMapBlendFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(143, (this.BumpMapBlendFactor)));
+            }
+
+            if (this.UseImageFileForBumpMap != false)
+            {
+                pairs.Add(new DxfCodePair(179, BoolShort(this.UseImageFileForBumpMap)));
+            }
+
+            if (this.BumpMapFileName != null)
+            {
+                pairs.Add(new DxfCodePair(8, (this.BumpMapFileName)));
+            }
+
+            if (this.BumpMapProjectionMethod != DxfMapProjectionMethod.Planar)
+            {
+                pairs.Add(new DxfCodePair(270, (short)(this.BumpMapProjectionMethod)));
+            }
+
+            if (this.BumpMapTilingMethod != DxfMapTilingMethod.Tile)
+            {
+                pairs.Add(new DxfCodePair(271, (short)(this.BumpMapTilingMethod)));
+            }
+
+            if (this.BumpMapAutoTransformMethod != DxfMapAutoTransformMethod.NoAutoTransform)
+            {
+                pairs.Add(new DxfCodePair(272, (short)(this.BumpMapAutoTransformMethod)));
+            }
+
             foreach (var item in BumpMapTransformMatrix?.GetValues() ?? new double[0])
             {
                 pairs.Add(new DxfCodePair(144, item));
             }
 
-            pairs.Add(new DxfCodePair(145, (this.RefractionIndex)));
-            pairs.Add(new DxfCodePair(146, (this.RefractionMapBlendFactor)));
-            pairs.Add(new DxfCodePair(273, BoolShort(this.UseImageFileForRefractionMap)));
-            pairs.Add(new DxfCodePair(9, (this.RefractionMapFileName)));
-            pairs.Add(new DxfCodePair(274, (short)(this.RefractionMapProjectionMethod)));
-            pairs.Add(new DxfCodePair(275, (short)(this.RefractionMapTilingMethod)));
-            pairs.Add(new DxfCodePair(276, (short)(this.RefractionMapAutoTransformMethod)));
+            if (this.RefractionIndex != 1.0)
+            {
+                pairs.Add(new DxfCodePair(145, (this.RefractionIndex)));
+            }
+
+            if (this.RefractionMapBlendFactor != 1.0)
+            {
+                pairs.Add(new DxfCodePair(146, (this.RefractionMapBlendFactor)));
+            }
+
+            if (this.UseImageFileForRefractionMap != false)
+            {
+                pairs.Add(new DxfCodePair(273, BoolShort(this.UseImageFileForRefractionMap)));
+            }
+
+            if (this.RefractionMapFileName != null)
+            {
+                pairs.Add(new DxfCodePair(9, (this.RefractionMapFileName)));
+            }
+
+            if (this.RefractionMapProjectionMethod != DxfMapProjectionMethod.Planar)
+            {
+                pairs.Add(new DxfCodePair(274, (short)(this.RefractionMapProjectionMethod)));
+            }
+
+            if (this.RefractionMapTilingMethod != DxfMapTilingMethod.Tile)
+            {
+                pairs.Add(new DxfCodePair(275, (short)(this.RefractionMapTilingMethod)));
+            }
+
+            if (this.RefractionMapAutoTransformMethod != DxfMapAutoTransformMethod.NoAutoTransform)
+            {
+                pairs.Add(new DxfCodePair(276, (short)(this.RefractionMapAutoTransformMethod)));
+            }
+
             foreach (var item in RefractionMapTransformMatrix?.GetValues() ?? new double[0])
             {
                 pairs.Add(new DxfCodePair(147, item));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.ColorBleedScale != 0.0)
             {
                 pairs.Add(new DxfCodePair(460, (this.ColorBleedScale)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.IndirectDumpScale != 0.0)
             {
                 pairs.Add(new DxfCodePair(461, (this.IndirectDumpScale)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.ReflectanceScale != 0.0)
             {
                 pairs.Add(new DxfCodePair(462, (this.ReflectanceScale)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.TransmittanceScale != 0.0)
             {
                 pairs.Add(new DxfCodePair(463, (this.TransmittanceScale)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.IsTwoSided != false)
             {
                 pairs.Add(new DxfCodePair(290, (this.IsTwoSided)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.Luminance != 0.0)
             {
                 pairs.Add(new DxfCodePair(464, (this.Luminance)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.LuminanceMode != 0)
             {
                 pairs.Add(new DxfCodePair(270, (this.LuminanceMode)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.NormalMapMethod != 0)
             {
                 pairs.Add(new DxfCodePair(271, (this.NormalMapMethod)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.NormalMapStrength != 1.0)
             {
                 pairs.Add(new DxfCodePair(465, (this.NormalMapStrength)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.NormalMapBlendFactor != 1.0)
             {
                 pairs.Add(new DxfCodePair(42, (this.NormalMapBlendFactor)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.UseImageFileForNormalMap != false)
             {
                 pairs.Add(new DxfCodePair(72, BoolShort(this.UseImageFileForNormalMap)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.NormalMapFileName != null)
             {
                 pairs.Add(new DxfCodePair(3, (this.NormalMapFileName)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.NormalMapProjectionMethod != DxfMapProjectionMethod.Planar)
             {
                 pairs.Add(new DxfCodePair(73, (short)(this.NormalMapProjectionMethod)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.NormalMapTilingMethod != DxfMapTilingMethod.Tile)
             {
                 pairs.Add(new DxfCodePair(74, (short)(this.NormalMapTilingMethod)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.NormalMapAutoTransformMethod != DxfMapAutoTransformMethod.NoAutoTransform)
             {
                 pairs.Add(new DxfCodePair(75, (short)(this.NormalMapAutoTransformMethod)));
             }
@@ -375,92 +567,92 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(43, item));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.IsAnonymous != false)
             {
                 pairs.Add(new DxfCodePair(293, (this.IsAnonymous)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GlobalIlluminationMode != 0)
             {
                 pairs.Add(new DxfCodePair(272, (this.GlobalIlluminationMode)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.FinalGatherMode != 0)
             {
                 pairs.Add(new DxfCodePair(273, (this.FinalGatherMode)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcName != null)
             {
                 pairs.Add(new DxfCodePair(300, (this.GenProcName)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcBooleanValue != false)
             {
                 pairs.Add(new DxfCodePair(291, (this.GenProcBooleanValue)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcIntegerValue != 0)
             {
                 pairs.Add(new DxfCodePair(271, (this.GenProcIntegerValue)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcRealValue != 0.0)
             {
                 pairs.Add(new DxfCodePair(469, (this.GenProcRealValue)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcTextValue != null)
             {
                 pairs.Add(new DxfCodePair(301, (this.GenProcTextValue)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcTableEnd != false)
             {
                 pairs.Add(new DxfCodePair(292, (this.GenProcTableEnd)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcColorIndexValue != DxfColor.ByLayer)
             {
                 pairs.Add(new DxfCodePair(62, GetRawValue(this.GenProcColorIndexValue)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcColorRGBValue != 0)
             {
                 pairs.Add(new DxfCodePair(420, (this.GenProcColorRGBValue)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.GenProcColorName != null)
             {
                 pairs.Add(new DxfCodePair(430, (this.GenProcColorName)));
             }
 
-            if (version >= DxfAcadVersion.R2007)
+            if (version >= DxfAcadVersion.R2007 && this.MapUTile != 0)
             {
                 pairs.Add(new DxfCodePair(270, (this.MapUTile)));
             }
 
-            if (version >= DxfAcadVersion.R2010)
+            if (version >= DxfAcadVersion.R2010 && this.Translucence != 0.0)
             {
                 pairs.Add(new DxfCodePair(148, (this.Translucence)));
             }
 
-            if (version >= DxfAcadVersion.R2010)
+            if (version >= DxfAcadVersion.R2010 && this.SelfIllumination != 0)
             {
                 pairs.Add(new DxfCodePair(90, (this.SelfIllumination)));
             }
 
-            if (version >= DxfAcadVersion.R2010)
+            if (version >= DxfAcadVersion.R2010 && this.Reflectivity != 0.0)
             {
                 pairs.Add(new DxfCodePair(468, (this.Reflectivity)));
             }
 
-            if (version >= DxfAcadVersion.R2010)
+            if (version >= DxfAcadVersion.R2010 && this.IlluminationModel != 0)
             {
                 pairs.Add(new DxfCodePair(93, (this.IlluminationModel)));
             }
 
-            if (version >= DxfAcadVersion.R2010)
+            if (version >= DxfAcadVersion.R2010 && this.ChannelFlags != 0)
             {
                 pairs.Add(new DxfCodePair(94, (this.ChannelFlags)));
             }

@@ -118,6 +118,7 @@
             <Property Name="LastHeightUsed" Code="42" Type="double" DefaultValue="0.2" />
             <Property Name="PrimaryFontFileName" Code="3" Type="string" DefaultValue="txt" />
             <Property Name="BigFontFileName" Code="4" Type="string" DefaultValue="null" />
+            <Property Name="FontFlags" Code="1071" Type="int" DefaultValue="0" MinVersion="R2010" />
         </TableItem>
     </Table>
     <Table Type="Ucs" TypeStringVariable="UcsText">

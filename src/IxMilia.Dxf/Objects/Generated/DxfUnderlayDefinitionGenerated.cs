@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfUnderlayDefinition : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.UnderlayDefinition; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
         public string FileName { get; set; }
         public string Name { get; set; }
 

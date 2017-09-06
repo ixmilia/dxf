@@ -680,7 +680,7 @@ layout-name
             layout.PageSetupName = "page-setup-name";
             layout.LayoutName = "layout-name";
             var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
+            file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(layout);
             using (var ms = new MemoryStream())
             {
@@ -762,7 +762,7 @@ EOF
         {
             var file = new DxfFile();
             file.Clear();
-            file.Header.Version = DxfAcadVersion.R14;
+            file.Header.Version = DxfAcadVersion.R2007;
             file.Entities.Add(new DxfLight() { Name = "light-name" });
             var lightList = new DxfLightList();
             lightList.Version = 42;
@@ -1124,7 +1124,7 @@ SectionTypeSettingsEnd
             typeSettings.GeometrySettings.Add(new DxfSectionGeometrySettings() { SectionType = 1002 });
             settings.SectionTypeSettings.Add(typeSettings);
             var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
+            file.Header.Version = DxfAcadVersion.R2007;
             file.Objects.Add(settings);
             VerifyFileContains(file, @"
 100
@@ -1563,7 +1563,7 @@ two
             table.CellStyles.Add(new DxfTableCellStyle() { Name = "one" });
             table.CellStyles.Add(new DxfTableCellStyle() { Name = "two" });
             var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R14;
+            file.Header.Version = DxfAcadVersion.R2004;
             file.Objects.Add(table);
             VerifyFileContains(file, @"
 100

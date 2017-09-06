@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSectionSettings : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SectionSettings; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
         public int SectionType { get; set; }
 
         public DxfSectionSettings()

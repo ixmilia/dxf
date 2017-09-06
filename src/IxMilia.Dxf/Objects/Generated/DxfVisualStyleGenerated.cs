@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfVisualStyle : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.VisualStyle; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
         public string Description { get; set; }
         public short Type { get; set; }
         public DxfFaceLightingModel FaceLightingModel { get; set; }

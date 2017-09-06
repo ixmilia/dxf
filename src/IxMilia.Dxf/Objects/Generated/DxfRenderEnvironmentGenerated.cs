@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfRenderEnvironment : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.RenderEnvironment; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
         public int ClassVersion { get; set; }
         public bool IsFogEnabled { get; set; }
         public bool IsBackgroundFogEnabled { get; set; }

@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSpatialIndex : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SpatialIndex; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
         public DateTime Timestamp { get; set; }
 
         public DxfSpatialIndex()

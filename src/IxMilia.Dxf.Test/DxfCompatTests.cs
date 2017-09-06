@@ -169,17 +169,14 @@ EOF
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2013;
             var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
-            foreach (var type in assembly.GetTypes())
+            foreach (var type in assembly.GetTypes().Where(DxfReaderWriterTests.IsObjectOrDerived))
             {
-                if (DxfReaderWriterTests.IsObjectOrDerived(type))
+                var ctor = type.GetConstructor(Type.EmptyTypes);
+                if (ctor != null)
                 {
-                    var ctor = type.GetConstructor(Type.EmptyTypes);
-                    if (ctor != null)
-                    {
-                        // add the object with its default initialized values
-                        var obj = (DxfObject)ctor.Invoke(new object[0]);
-                        file.Objects.Add(obj);
-                    }
+                    // add the object with its default initialized values
+                    var obj = (DxfObject)ctor.Invoke(new object[0]);
+                    file.Objects.Add(obj);
                 }
             }
 

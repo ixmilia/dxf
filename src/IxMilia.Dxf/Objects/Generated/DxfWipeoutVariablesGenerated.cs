@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfWipeoutVariables : DxfObject
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.WipeoutVariables; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2004; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2004; } }
         public int ClassVersion { get; set; }
         public bool DisplayImageFrame { get; set; }
 

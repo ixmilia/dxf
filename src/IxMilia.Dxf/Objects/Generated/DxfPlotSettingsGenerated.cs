@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfPlotSettings : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.PlotSettings; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2000; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2000; } }
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {

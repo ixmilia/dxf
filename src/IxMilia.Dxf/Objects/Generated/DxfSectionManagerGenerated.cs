@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSectionManager : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SectionManager; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {

@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfSortentsTable : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.SortentsTable; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R14; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {

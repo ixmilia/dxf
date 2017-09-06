@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Objects
     public partial class DxfLightList : DxfObject, IDxfItemInternal
     {
         public override DxfObjectType ObjectType { get { return DxfObjectType.LightList; } }
-        protected override DxfAcadVersion MaxVersion { get { return DxfAcadVersion.R2007; } }
+        protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R2007; } }
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
         {

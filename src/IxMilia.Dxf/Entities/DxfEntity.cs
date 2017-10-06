@@ -178,7 +178,7 @@ namespace IxMilia.Dxf.Entities
 
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
-        DxfXData IDxfHasXDataHidden.XDataHidden{ get; set; }
+        DxfXData IDxfHasXDataHidden.XDataHidden { get; set; }
 
         public abstract DxfEntityType EntityType { get; }
 

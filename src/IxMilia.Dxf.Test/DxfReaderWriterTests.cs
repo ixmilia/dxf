@@ -797,6 +797,49 @@ ENDTAB
         }
 
         [Fact]
+        public void ReadXDataUnexpectedValueTest()
+        {
+            var file = Section("ENTITIES", @"
+  0
+LINE
+1001
+group name
+1002
+{
+999
+------------------------------- valid world point
+1011
+1
+1021
+2
+1031
+3
+999
+------ point missing X value; invalid and skipped
+1021
+222
+1031
+333
+999
+------------------------------- valid world point
+1011
+11
+1021
+22
+1031
+33
+1002
+}
+");
+            var line = (DxfLine)file.Entities.Single();
+            var xdata = ((IDxfHasXDataHidden)line).XDataHidden;
+            var controlGroup = (DxfXDataControlGroup)xdata.Items.Single();
+            Assert.Equal(2, controlGroup.Items.Count);
+            Assert.Equal(new DxfPoint(1, 2, 3), ((DxfXDataWorldSpacePosition)controlGroup.Items.First()).Value);
+            Assert.Equal(new DxfPoint(11, 22, 33), ((DxfXDataWorldSpacePosition)controlGroup.Items.Last()).Value);
+        }
+
+        [Fact]
         public void WriteVersionSpecificBlockRecordTest_R2000()
         {
             var file = new DxfFile();

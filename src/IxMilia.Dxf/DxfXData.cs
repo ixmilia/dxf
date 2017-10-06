@@ -62,7 +62,11 @@ namespace IxMilia.Dxf
                     break;
                 }
 
-                items.Add(DxfXDataItem.FromBuffer(buffer));
+                var item = DxfXDataItem.FromBuffer(buffer);
+                if (item != null)
+                {
+                    items.Add(item);
+                }
             }
 
             return new DxfXData(applicationName, items);
@@ -186,7 +190,7 @@ namespace IxMilia.Dxf
                 case DxfXDataType.Long:
                     return new DxfXDataLong(pair.IntegerValue);
                 default:
-                    throw new DxfReadException("Unexpected XDATA code pair", pair);
+                    return null; // unexpected XDATA code pair
             }
         }
 
@@ -259,7 +263,10 @@ namespace IxMilia.Dxf
                 }
 
                 var item = DxfXDataItem.FromBuffer(buffer);
-                items.Add(item);
+                if (item != null)
+                {
+                    items.Add(item);
+                }
             }
 
             return new DxfXDataControlGroup(items);

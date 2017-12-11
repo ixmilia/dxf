@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 0.6 (11 December 2017)
+
+- Improve `SEQEND` creation.
+- Improve handle assignment on file write.
+- Improve reading XDATA code pairs.
+- Fix issue with object minimum versions.
+- Add support for R2018 (AC1032) files.
+
 ## 0.5.1 (26 July 2017)
 
 - Improve reading XData points.

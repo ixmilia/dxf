@@ -87,7 +87,7 @@ namespace IxMilia.Dxf.Objects
     {
         Low = 0,
         Draft = 1,
-        Hight = 2
+        High = 2
     }
 
     public enum DxfSamplingFilter

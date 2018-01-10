@@ -127,5 +127,13 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return FirstCorner;
+            yield return SecondCorner;
+            yield return ThirdCorner;
+            yield return FourthCorner;
+        }
     }
 }

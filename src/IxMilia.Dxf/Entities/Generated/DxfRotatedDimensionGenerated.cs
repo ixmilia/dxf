@@ -110,5 +110,14 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return DefinitionPoint1;
+            yield return TextMidPoint;
+            yield return InsertionPoint;
+            yield return DefinitionPoint2;
+            yield return DefinitionPoint3;
+        }
     }
 }

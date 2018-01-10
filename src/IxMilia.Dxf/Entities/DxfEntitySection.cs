@@ -2,14 +2,15 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfEntitySection
     {
-        public IList<DxfPoint> Vertices { get; } = new ListNonNull<DxfPoint>();
-        public IList<DxfPoint> BackLineVertices { get; } = new ListNonNull<DxfPoint>();
+        public IList<DxfPoint> Vertices { get; } = new List<DxfPoint>();
+        public IList<DxfPoint> BackLineVertices { get; } = new List<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {
@@ -34,6 +35,11 @@ namespace IxMilia.Dxf.Entities
             _backLineVertexZ.Clear();
 
             return this;
+        }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            return Vertices.Concat(BackLineVertices);
         }
     }
 }

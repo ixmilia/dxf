@@ -248,5 +248,11 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return Location;
+            yield return Location + ImageSize;
+        }
     }
 }

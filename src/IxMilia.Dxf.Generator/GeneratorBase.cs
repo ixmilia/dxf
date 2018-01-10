@@ -426,7 +426,7 @@ namespace IxMilia.Dxf.Generator
 
         public string AttributeOrDefault(XElement xml, string attributeName, string defaultValue = null)
         {
-            var att = xml.Attribute(attributeName);
+            var att = xml?.Attribute(attributeName);
             return att == null ? defaultValue : att.Value;
         }
 

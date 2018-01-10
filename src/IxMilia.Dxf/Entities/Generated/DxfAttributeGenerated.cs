@@ -295,5 +295,12 @@ namespace IxMilia.Dxf.Entities
             }
 
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return Location;
+            yield return SecondAlignmentPoint;
+            yield return AlignmentPoint;
+        }
     }
 }

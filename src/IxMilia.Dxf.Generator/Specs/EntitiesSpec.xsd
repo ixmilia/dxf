@@ -149,6 +149,23 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="Value">
+        <xs:complexType mixed="true">
+            <xs:attribute name="Condition" type="xs:string" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Extents">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element ref="Value" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="Custom" type="xs:boolean" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="Entity">
         <xs:complexType>
             <xs:sequence>
@@ -157,6 +174,7 @@
                     <xs:element ref="Property" />
                     <xs:element ref="Pointer" />
                     <xs:element ref="WriteOrder" />
+                    <xs:element ref="Extents" />
                 </xs:choice>
             </xs:sequence>
             <xs:attribute name="Name" type="xs:string" use="required" />

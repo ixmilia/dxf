@@ -70,5 +70,27 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return this.GetPointFromAngle(StartAngle);
+            yield return this.GetPointFromAngle(EndAngle);
+            if (this.ContainsAngle(0.0))
+            {
+                yield return Center + new DxfPoint(Radius, 0.0, 0.0);
+            }
+            if (this.ContainsAngle(90.0))
+            {
+                yield return Center + new DxfPoint(0.0, Radius, 0.0);
+            }
+            if (this.ContainsAngle(180.0))
+            {
+                yield return Center + new DxfPoint(-Radius, 0.0, 0.0);
+            }
+            if (this.ContainsAngle(270.0))
+            {
+                yield return Center + new DxfPoint(0.0, -Radius, 0.0);
+            }
+        }
     }
 }

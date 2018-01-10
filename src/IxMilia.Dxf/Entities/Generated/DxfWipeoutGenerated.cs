@@ -33,5 +33,10 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbWipeout"));
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            return null;
+        }
     }
 }

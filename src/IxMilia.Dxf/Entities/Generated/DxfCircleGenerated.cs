@@ -98,5 +98,13 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return Center + new DxfPoint(Radius, 0.0, 0.0);
+            yield return Center + new DxfPoint(0.0, Radius, 0.0);
+            yield return Center + new DxfPoint(-Radius, 0.0, 0.0);
+            yield return Center + new DxfPoint(0.0, -Radius, 0.0);
+        }
     }
 }

@@ -210,6 +210,11 @@ namespace IxMilia.Dxf.Entities
             return true;
         }
 
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            return null;
+        }
+
         protected override DxfEntity PostParse()
         {
             DxfDimensionBase newDimension = null;

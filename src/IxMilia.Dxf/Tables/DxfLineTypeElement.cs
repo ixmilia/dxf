@@ -18,7 +18,7 @@ namespace IxMilia.Dxf
         /// </summary>
         public double RotationAngle { get; set; }
 
-        public IList<DxfVector> Offsets { get; } = new ListNonNull<DxfVector>();
+        public IList<DxfVector> Offsets { get; } = new List<DxfVector>();
         public string TextString { get; set; }
 
         public DxfStyle Style { get { return StylePointer.Item as DxfStyle; } set { StylePointer.Item = value; } }

@@ -40,5 +40,11 @@ namespace IxMilia.Dxf.Entities
                 pairs.AddRange(Seqend.GetValuePairs(version, outputHandles));
             }
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            // TODO: this requires access to the entities contained by the block being inserted
+            return null;
+        }
     }
 }

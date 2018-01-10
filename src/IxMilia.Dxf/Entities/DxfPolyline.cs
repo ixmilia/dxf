@@ -1,6 +1,5 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
 
@@ -74,6 +73,22 @@ namespace IxMilia.Dxf.Entities
             if (Seqend != null)
             {
                 pairs.AddRange(Seqend.GetValuePairs(version, outputHandles));
+            }
+        }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return Location;
+            var lastLocation = Location;
+            foreach (var vertex in Vertices)
+            {
+                yield return vertex.Location;
+                if (vertex.Bulge != 0.0)
+                {
+                    // TODO: the segment between `lastLocation` and `vertex.Location` is an arc
+                }
+
+                lastLocation = vertex.Location;
             }
         }
     }

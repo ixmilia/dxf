@@ -8,9 +8,9 @@ namespace IxMilia.Dxf.Entities
 {
     public partial class DxfMLine
     {
-        public IList<DxfPoint> Vertices { get; } = new ListNonNull<DxfPoint>();
-        public IList<DxfVector> SegmentDirections { get; } = new ListNonNull<DxfVector>();
-        public IList<DxfVector> MiterDirections { get; } = new ListNonNull<DxfVector>();
+        public IList<DxfPoint> Vertices { get; } = new List<DxfPoint>();
+        public IList<DxfVector> SegmentDirections { get; } = new List<DxfVector>();
+        public IList<DxfVector> MiterDirections { get; } = new List<DxfVector>();
 
         protected override DxfEntity PostParse()
         {
@@ -45,6 +45,11 @@ namespace IxMilia.Dxf.Entities
             _miterDirectionZ.Clear();
 
             return this;
+        }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            return Vertices;
         }
     }
 }

@@ -142,5 +142,11 @@ namespace IxMilia.Dxf.Entities
                 XData.AddValuePairs(pairs, version, outputHandles);
             }
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return InsertionPoint;
+            yield return InsertionPoint + XAxisDirection.Normalize() * HorizontalWidth + ExtrusionDirection.Cross(XAxisDirection).Normalize() * VerticalHeight;
+        }
     }
 }

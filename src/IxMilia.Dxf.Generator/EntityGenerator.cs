@@ -332,6 +332,46 @@ namespace IxMilia.Dxf.Generator
             AppendTrySetPairMethod(entity);
 
             //
+            // Extents
+            //
+            var extentsElement = entity.Element(XName.Get("Extents", entity.Name.NamespaceName));
+            if (AttributeOrDefault(extentsElement, "Custom", "false") != "true")
+            {
+                var extents = extentsElement?.Elements(XName.Get("Value", entity.Name.NamespaceName));
+                AppendLine();
+                AppendLine("protected override IEnumerable<DxfPoint> GetExtentsPoints()");
+                AppendLine("{");
+                IncreaseIndent();
+                if (extents == null)
+                {
+                    AppendLine("return null;");
+                }
+                else
+                {
+                    foreach (var value in extents)
+                    {
+                        var cond = value.Attribute("Condition");
+                        if (cond != null)
+                        {
+                            AppendLine($"if ({cond.Value})");
+                            AppendLine("{");
+                            IncreaseIndent();
+                        }
+
+                        AppendLine($"yield return {value.Value};");
+                        if (cond != null)
+                        {
+                            DecreaseIndent();
+                            AppendLine("}");
+                        }
+                    }
+                }
+
+                DecreaseIndent();
+                AppendLine("}");
+            }
+
+            //
             // PostParse
             //
             if (Name(entity) == "DxfDimensionBase")

@@ -131,5 +131,11 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return InsertionPoint;
+            yield return new DxfPoint(InsertionPoint.X + (Contents?.Length ?? 0) * TextHeight * 7.0 / 12.0, InsertionPoint.Y + TextHeight, InsertionPoint.Z);
+        }
     }
 }

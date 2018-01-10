@@ -31,5 +31,10 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            return null;
+        }
     }
 }

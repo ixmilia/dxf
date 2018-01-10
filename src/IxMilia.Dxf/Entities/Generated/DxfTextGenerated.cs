@@ -218,5 +218,11 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return Location;
+            yield return new DxfPoint(Location.X + (Value?.Length ?? 0) * TextHeight * 7.0 / 12.0, Location.Y + TextHeight, Location.Z);
+        }
     }
 }

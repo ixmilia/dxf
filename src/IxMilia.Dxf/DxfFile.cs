@@ -167,6 +167,14 @@ namespace IxMilia.Dxf
             this.Normalize();
         }
 
+        public DxfBoundingBox GetBoundingBox()
+        {
+            var boundingBoxes = Entities.Select(e => e.GetBoundingBox()).Where(b => b != null).Select(b => b.GetValueOrDefault()).ToList();
+            return boundingBoxes.Count == 0
+                ? default(DxfBoundingBox)
+                : boundingBoxes.Skip(1).Aggregate(boundingBoxes[0], (box1, box2) => box1.Combine(box2));
+        }
+
         public static DxfFile Load(Stream stream)
         {
             var reader = new BinaryReader(stream);
@@ -330,6 +338,7 @@ namespace IxMilia.Dxf
         private void WriteStream(Stream stream, bool asText)
         {
             var writer = PrepareWriter(stream, asText);
+            SetExtents();
             WriteSectionsAndClose(writer, Sections);
         }
 
@@ -345,6 +354,13 @@ namespace IxMilia.Dxf
             Header.NextAvailableHandle = nextHandle;
 
             return writer;
+        }
+
+        private void SetExtents()
+        {
+            var boundingBox = GetBoundingBox();
+            Header.MinimumDrawingExtents = boundingBox.MinimumPoint;
+            Header.MaximumDrawingExtents = boundingBox.MaximumPoint;
         }
 
         private void WriteSectionsAndClose(DxfWriter writer, IEnumerable<DxfSection> sections)

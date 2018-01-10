@@ -23,9 +23,9 @@ namespace IxMilia.Dxf.Entities
             get { return FitPoints.Count; }
         }
 
-        public IList<DxfPoint> ControlPoints { get; } = new ListNonNull<DxfPoint>();
+        public IList<DxfPoint> ControlPoints { get; } = new List<DxfPoint>();
 
-        public IList<DxfPoint> FitPoints { get; } = new ListNonNull<DxfPoint>();
+        public IList<DxfPoint> FitPoints { get; } = new List<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {
@@ -50,6 +50,13 @@ namespace IxMilia.Dxf.Entities
             _fitPointZ.Clear();
 
             return this;
+        }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            // TODO: this doesn't account for the actual body of the curve; including `ControlPoints` would guarantee
+            // that everything is contained, but at the cost of making the bounding box too big
+            return FitPoints;
         }
     }
 }

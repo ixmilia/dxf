@@ -8,7 +8,7 @@ namespace IxMilia.Dxf.Entities
 {
     public partial class DxfUnderlay
     {
-        public IList<DxfPoint> BoundaryPoints { get; } = new ListNonNull<DxfPoint>();
+        public IList<DxfPoint> BoundaryPoints { get; } = new List<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {
@@ -22,6 +22,11 @@ namespace IxMilia.Dxf.Entities
             _pointY.Clear();
 
             return this;
+        }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            return BoundaryPoints;
         }
     }
 }

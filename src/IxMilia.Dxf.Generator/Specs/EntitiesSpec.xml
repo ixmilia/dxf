@@ -62,6 +62,12 @@
             <Flag Name="IsThirdEdgeInvisible" Mask="4" />
             <Flag Name="IsFourthEdgeInvisible" Mask="8" />
         </Property>
+        <Extents>
+            <Value>FirstCorner</Value>
+            <Value>SecondCorner</Value>
+            <Value>ThirdCorner</Value>
+            <Value>FourthCorner</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -116,6 +122,14 @@
             <ConstructorParameter Property="StartAngle" Type="double" />
             <ConstructorParameter Property="EndAngle" Type="double" />
         </Constructor>
+        <Extents>
+            <Value>this.GetPointFromAngle(StartAngle)</Value>
+            <Value>this.GetPointFromAngle(EndAngle)</Value>
+            <Value Condition="this.ContainsAngle(0.0)">Center + new DxfPoint(Radius, 0.0, 0.0)</Value>
+            <Value Condition="this.ContainsAngle(90.0)">Center + new DxfPoint(0.0, Radius, 0.0)</Value>
+            <Value Condition="this.ContainsAngle(180.0)">Center + new DxfPoint(-Radius, 0.0, 0.0)</Value>
+            <Value Condition="this.ContainsAngle(270.0)">Center + new DxfPoint(0.0, -Radius, 0.0)</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -226,6 +240,11 @@
             <WriteProperty Property="AnnotationScale" />
             <WriteProperty Property="XRecordTag" />
         </WriteOrder>
+        <Extents>
+            <Value>Location</Value>
+            <Value>SecondAlignmentPoint</Value>
+            <Value>AlignmentPoint</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -299,6 +318,11 @@
             <WriteProperty Property="AnnotationScale" />
             <WriteProperty Property="XRecordTag" />
         </WriteOrder>
+        <Extents>
+            <Value>Location</Value>
+            <Value>SecondAlignmentPoint</Value>
+            <Value>AlignmentPoint</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -324,6 +348,12 @@
             <ConstructorParameter Property="Center" Type="DxfPoint" />
             <ConstructorParameter Property="Radius" Type="double" />
         </Constructor>
+        <Extents>
+            <Value>Center + new DxfPoint(Radius, 0.0, 0.0)</Value>
+            <Value>Center + new DxfPoint(0.0, Radius, 0.0)</Value>
+            <Value>Center + new DxfPoint(-Radius, 0.0, 0.0)</Value>
+            <Value>Center + new DxfPoint(0.0, -Radius, 0.0)</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -352,6 +382,14 @@
         <!--<Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />-->
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
+        <Extents>
+            <!-- from DxfDimensionBase -->
+            <Value>DefinitionPoint1</Value>
+            <Value>TextMidPoint</Value>
+            <!-- from this entity -->
+            <Value>DefinitionPoint2</Value>
+            <Value>DefinitionPoint3</Value>
+        </Extents>
     </Entity>
     <!-- linear and rotated -->
     <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="RotatedHorizontalOrVertical">
@@ -369,16 +407,39 @@
             <WriteProperty Property="ExtensionLineAngle" />
             <WriteSpecificValue Code="100" Value="&quot;AcDbRotatedDimension&quot;" MinVersion="R13" />
         </WriteOrder>
+        <Extents>
+            <!-- from DxfDimensionBase -->
+            <Value>DefinitionPoint1</Value>
+            <Value>TextMidPoint</Value>
+            <!-- from this entity -->
+            <Value>InsertionPoint</Value>
+            <Value>DefinitionPoint2</Value>
+            <Value>DefinitionPoint3</Value>
+        </Extents>
     </Entity>
     <!-- radial -->
     <Entity Name="DxfRadialDimension" EntityType="Dimension" SubclassMarker="AcDbRadialDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Radius">
         <Property Name="DefinitionPoint2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
         <Property Name="LeaderLength" Code="40" Type="double" DefaultValue="0.0" />
+        <Extents>
+            <!-- from DxfDimensionBase -->
+            <Value>DefinitionPoint1</Value>
+            <Value>TextMidPoint</Value>
+            <!-- from this entity -->
+            <Value>DefinitionPoint2</Value>
+        </Extents>
     </Entity>
     <!-- diametric -->
     <Entity Name="DxfDiameterDimension" EntityType="Dimension" SubclassMarker="AcDbDiametricDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Diameter">
         <Property Name="DefinitionPoint2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
         <Property Name="LeaderLength" Code="40" Type="double" DefaultValue="0.0" />
+        <Extents>
+            <!-- from DxfDimensionBase -->
+            <Value>DefinitionPoint1</Value>
+            <Value>TextMidPoint</Value>
+            <!-- from this entity -->
+            <Value>DefinitionPoint2</Value>
+        </Extents>
     </Entity>
     <!-- angular, 3 point -->
     <Entity Name="DxfAngularThreePointDimension" EntityType="Dimension" SubclassMarker="AcDb3PointAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="AngularThreePoint">
@@ -386,11 +447,29 @@
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Property Name="DefinitionPoint4" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
         <Property Name="DefinitionPoint5" Code="16" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="16,26,36" />
+        <Extents>
+            <!-- from DxfDimensionBase -->
+            <Value>DefinitionPoint1</Value>
+            <Value>TextMidPoint</Value>
+            <!-- from this entity -->
+            <Value>DefinitionPoint2</Value>
+            <Value>DefinitionPoint3</Value>
+            <Value>DefinitionPoint4</Value>
+            <Value>DefinitionPoint5</Value>
+        </Extents>
     </Entity>
     <!-- ordinate -->
     <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate" MinVersion="R11">
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
+        <Extents>
+            <!-- from DxfDimensionBase -->
+            <Value>DefinitionPoint1</Value>
+            <Value>TextMidPoint</Value>
+            <!-- from this entity -->
+            <Value>DefinitionPoint2</Value>
+            <Value>DefinitionPoint3</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -409,6 +488,14 @@
             <ConstructorParameter Property="MajorAxis" Type="DxfVector" />
             <ConstructorParameter Property="MinorAxisRatio" Type="double" />
         </Constructor>
+        <Extents>
+            <Value>this.GetPointFromAngle(StartParameter)</Value>
+            <Value>this.GetPointFromAngle(EndParameter)</Value>
+            <Value Condition="this.ContainsAngle(0.0)">Center + MajorAxis</Value>
+            <Value Condition="this.ContainsAngle(90.0)">Center + new DxfPoint(0.0, MajorAxis.Length * MinorAxisRatio, 0.0)</Value>
+            <Value Condition="this.ContainsAngle(180.0)">Center - MajorAxis</Value>
+            <Value Condition="this.ContainsAngle(270.0)">Center + new DxfPoint(0.0, -MajorAxis.Length * MinorAxisRatio, 0.0)</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -432,6 +519,7 @@
         <Property Name="TurnHeight" Code="42" Type="double" DefaultValue="0.0" />
         <Property Name="IsRightHanded" Code="290" Type="bool" DefaultValue="false" />
         <Property Name="Constraint" Code="280" Type="DxfHelixConstraint" DefaultValue="DxfHelixConstraint.ConstrainTurnHeight" ReadConverter="(DxfHelixConstraint)" WriteConverter="(short)" />
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -483,6 +571,10 @@
             </Foreach>
             <WriteProperty Property="IsInsideClipping" />
         </WriteOrder>
+        <Extents>
+            <Value>Location</Value>
+            <Value>Location + ImageSize</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -502,6 +594,7 @@
         <Property Name="ColumnSpacing" Code="44" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="RowSpacing" Code="45" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -550,6 +643,7 @@
             <WriteProperty Property="BlockOffset" />
             <WriteProperty Property="AnnotationOffset" />
         </WriteOrder>
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -575,6 +669,9 @@
         <Property Name="ShadowType" Code="73" Type="DxfShadowType" DefaultValue="DxfShadowType.RayTraced" ReadConverter="(DxfShadowType)" WriteConverter="(short)" />
         <Property Name="ShadowMapSize" Code="91" Type="int" DefaultValue="0" />
         <Property Name="ShadowMapSoftness" Code="280" Type="short" DefaultValue="0" />
+        <Extents>
+            <Value>Position</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -590,6 +687,10 @@
             <ConstructorParameter Property="P1" Type="DxfPoint" />
             <ConstructorParameter Property="P2" Type="DxfPoint" />
         </Constructor>
+        <Extents>
+            <Value>P1</Value>
+            <Value>P2</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -621,6 +722,7 @@
             </Foreach>
             <WriteProperty Property="ExtrusionDirection" />
         </WriteOrder>
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -692,6 +794,7 @@
             <WriteSpecificValue Code="75" Value="(short?)AreaFillParameters?.Count ?? default(short)" />
             <WriteProperty Property="AreaFillParameters" />
         </WriteOrder>
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -765,6 +868,10 @@
             <WriteSpecificValue Code="50" Value="ColumnHeights?.Count ?? default(double)" />
             <WriteProperty Property="ColumnHeights" />
         </WriteOrder>
+        <Extents>
+            <Value>InsertionPoint</Value>
+            <Value>InsertionPoint + XAxisDirection.Normalize() * HorizontalWidth + ExtrusionDirection.Cross(XAxisDirection).Normalize() * VerticalHeight</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -827,6 +934,9 @@
         <Constructor>
             <ConstructorParameter Property="Location" Type="DxfPoint" />
         </Constructor>
+        <Extents>
+            <Value>Location</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -855,6 +965,7 @@
         <Property Name="SmoothSurfaceNDensity" Code="74" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)" DisableWritingDefault="true" />
         <Property Name="SurfaceType" Code="75" Type="DxfPolylineCurvedAndSmoothSurfaceType" DefaultValue="DxfPolylineCurvedAndSmoothSurfaceType.None" ReadConverter="(DxfPolylineCurvedAndSmoothSurfaceType)" WriteConverter="(short)" DisableWritingDefault="true" />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -868,6 +979,9 @@
             <ConstructorParameter Property="StartPoint" Type="DxfPoint" />
             <ConstructorParameter Property="UnitDirectionVector" Type="DxfVector" />
         </Constructor>
+        <Extents>
+            <Value>StartPoint</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -895,6 +1009,11 @@
             <Flag Name="IsInlineMTextSequencesEnabled" Mask="2" />
         </Property>
         <Property Name="Contents" Code="1" Type="string" DefaultValue="null" />
+        <Extents>
+            <Value>InsertionPoint</Value>
+            <!-- assuming a 7x12 monospaced font; this is horrible but it'll have to do for now -->
+            <Value>new DxfPoint(InsertionPoint.X + (Contents?.Length ?? 0) * TextHeight * 7.0 / 12.0, InsertionPoint.Y + TextHeight, InsertionPoint.Z)</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -945,6 +1064,7 @@
             </Foreach>
             <WriteProperty Property="GeometrySettings" />
         </WriteOrder>
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -968,6 +1088,10 @@
         <Property Name="RelativeXScaleFactor" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="ObliqueAngle" Code="51" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
+        <Extents>
+            <Value>Location</Value>
+            <Value>Location + new DxfPoint(Size, Size, Size)</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -981,6 +1105,12 @@
         <Property Name="FourthCorner" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
+        <Extents>
+            <Value>FirstCorner</Value>
+            <Value>SecondCorner</Value>
+            <Value>ThirdCorner</Value>
+            <Value>FourthCorner</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -1039,6 +1169,7 @@
                 <WriteSpecificValue Code="31" Value="item.Z" />
             </Foreach>
         </WriteOrder>
+        <Extents Custom="true" />
     </Entity>
     <!--
 
@@ -1096,6 +1227,11 @@
             <WriteProperty Property="VerticalTextJustification" />
             <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" />
         </WriteOrder>
+        <Extents>
+            <Value>Location</Value>
+            <!-- assuming a 7x12 monospaced font; this is horrible but it'll have to do for now -->
+            <Value>new DxfPoint(Location.X + (Value?.Length ?? 0) * TextHeight * 7.0 / 12.0, Location.Y + TextHeight, Location.Z)</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -1108,6 +1244,9 @@
         <Property Name="DisplayText" Code="1" Type="string" DefaultValue="null" MinVersion="R2000" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Property Name="DirectionVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
+        <Extents>
+            <Value>InsertionPoint</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -1121,6 +1260,12 @@
         <Property Name="FourthCorner" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
+        <Extents>
+            <Value>FirstCorner</Value>
+            <Value>SecondCorner</Value>
+            <Value>ThirdCorner</Value>
+            <Value>FourthCorner</Value>
+        </Extents>
     </Entity>
     <!--
 
@@ -1163,6 +1308,7 @@
                 <WriteSpecificValue Code="12" Value="item.Y" />
             </Foreach>
         </WriteOrder>
+        <Extents Custom="true" />
     </Entity>
     <Entity Name="DxfDgnUnderlay" EntityType="DgnUnderlay" SubclassMarker="null" TypeString="DGNUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DGN" />
     <Entity Name="DxfDwfUnderlay" EntityType="DwfUnderlay" SubclassMarker="null" TypeString="DWFUNDERLAY" BaseClass="DxfUnderlay" CopyConstructor="Inherited" Tag="DWF" />
@@ -1195,6 +1341,9 @@
         <Constructor>
             <ConstructorParameter Property="Location" Type="DxfPoint" />
         </Constructor>
+        <Extents>
+            <Value>Location</Value>
+        </Extents>
     </Entity>
     <!--
 

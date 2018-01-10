@@ -9,7 +9,7 @@ namespace IxMilia.Dxf.Entities
 {
     public partial class DxfImage
     {
-        public IList<DxfPoint> ClippingVertices { get; } = new ListNonNull<DxfPoint>();
+        public IList<DxfPoint> ClippingVertices { get; } = new List<DxfPoint>();
 
         protected override DxfEntity PostParse()
         {

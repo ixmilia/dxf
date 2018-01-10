@@ -207,6 +207,13 @@ namespace IxMilia.Dxf.Entities
             return this;
         }
 
+        protected abstract IEnumerable<DxfPoint> GetExtentsPoints();
+
+        public DxfBoundingBox? GetBoundingBox()
+        {
+            return DxfBoundingBox.FromPoints(GetExtentsPoints());
+        }
+
         public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
         {
             var pairs = new List<DxfCodePair>();

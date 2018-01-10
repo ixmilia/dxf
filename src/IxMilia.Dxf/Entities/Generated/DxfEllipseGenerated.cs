@@ -122,5 +122,27 @@ namespace IxMilia.Dxf.Entities
 
             return true;
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            yield return this.GetPointFromAngle(StartParameter);
+            yield return this.GetPointFromAngle(EndParameter);
+            if (this.ContainsAngle(0.0))
+            {
+                yield return Center + MajorAxis;
+            }
+            if (this.ContainsAngle(90.0))
+            {
+                yield return Center + new DxfPoint(0.0, MajorAxis.Length * MinorAxisRatio, 0.0);
+            }
+            if (this.ContainsAngle(180.0))
+            {
+                yield return Center - MajorAxis;
+            }
+            if (this.ContainsAngle(270.0))
+            {
+                yield return Center + new DxfPoint(0.0, -MajorAxis.Length * MinorAxisRatio, 0.0);
+            }
+        }
     }
 }

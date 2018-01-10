@@ -1,6 +1,5 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using IxMilia.Dxf.Collections;
@@ -41,6 +40,11 @@ namespace IxMilia.Dxf.Entities
             _verticesY.Clear();
             _verticesZ.Clear();
             return this;
+        }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            return Vertices;
         }
     }
 }

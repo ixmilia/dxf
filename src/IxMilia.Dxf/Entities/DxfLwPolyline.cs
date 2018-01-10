@@ -104,5 +104,21 @@ namespace IxMilia.Dxf.Entities
 
             return PostParse();
         }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            DxfPoint? lastLocation = null;
+            foreach (var vertex in Vertices)
+            {
+                var current = new DxfPoint(vertex.X, vertex.Y, 0.0);
+                yield return current;
+                if (vertex.Bulge != 0.0 && lastLocation != null)
+                {
+                    // TODO: the segment between `lastLocation` and `current` is an arc
+                }
+
+                lastLocation = current;
+            }
+        }
     }
 }

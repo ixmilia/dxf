@@ -82,9 +82,9 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(90, (this.State)));
             pairs.Add(new DxfCodePair(91, (this.Flags)));
             pairs.Add(new DxfCodePair(1, (this.Name)));
-            pairs.Add(new DxfCodePair(10, VerticalDirection?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, VerticalDirection?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, VerticalDirection?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, VerticalDirection.X));
+            pairs.Add(new DxfCodePair(20, VerticalDirection.Y));
+            pairs.Add(new DxfCodePair(30, VerticalDirection.Z));
             pairs.Add(new DxfCodePair(40, (this.TopHeight)));
             pairs.Add(new DxfCodePair(41, (this.BottomHeight)));
             pairs.Add(new DxfCodePair(70, (this.IndicatorTransparency)));
@@ -121,13 +121,13 @@ namespace IxMilia.Dxf.Entities
                     this.Name = (pair.StringValue);
                     break;
                 case 10:
-                    this.VerticalDirection.X = pair.DoubleValue;
+                    this.VerticalDirection = this.VerticalDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.VerticalDirection.Y = pair.DoubleValue;
+                    this.VerticalDirection = this.VerticalDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.VerticalDirection.Z = pair.DoubleValue;
+                    this.VerticalDirection = this.VerticalDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
                     this._vertexX.Add((pair.DoubleValue));

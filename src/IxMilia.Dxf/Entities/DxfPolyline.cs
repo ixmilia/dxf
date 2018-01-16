@@ -50,7 +50,7 @@ namespace IxMilia.Dxf.Entities
         public new double Elevation
         {
             get { return Location.Z; }
-            set { Location.Z = value; }
+            set { Location = Location.WithUpdatedZ(value); }
         }
 
         private DxfPointerList<DxfVertex> _vertices = new DxfPointerList<DxfVertex>(2);

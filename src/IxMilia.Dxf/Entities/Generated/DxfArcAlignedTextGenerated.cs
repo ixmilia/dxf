@@ -91,9 +91,9 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(2, (this.FontName)));
             pairs.Add(new DxfCodePair(3, (this.BigfontName)));
             pairs.Add(new DxfCodePair(7, (this.TextStyleName)));
-            pairs.Add(new DxfCodePair(10, CenterPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, CenterPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, CenterPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, CenterPoint.X));
+            pairs.Add(new DxfCodePair(20, CenterPoint.Y));
+            pairs.Add(new DxfCodePair(30, CenterPoint.Z));
             pairs.Add(new DxfCodePair(40, (this.ArcRadius)));
             pairs.Add(new DxfCodePair(41, (this.WidthFactor)));
             pairs.Add(new DxfCodePair(42, (this.TextHeight)));
@@ -116,9 +116,9 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(90, (this.ColorIndex)));
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
             }
 
             pairs.Add(new DxfCodePair(280, (this.WizardFlag)));
@@ -141,13 +141,13 @@ namespace IxMilia.Dxf.Entities
                     this.TextStyleName = (pair.StringValue);
                     break;
                 case 10:
-                    this.CenterPoint.X = pair.DoubleValue;
+                    this.CenterPoint = this.CenterPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.CenterPoint.Y = pair.DoubleValue;
+                    this.CenterPoint = this.CenterPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.CenterPoint.Z = pair.DoubleValue;
+                    this.CenterPoint = this.CenterPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.ArcRadius = (pair.DoubleValue);
@@ -210,13 +210,13 @@ namespace IxMilia.Dxf.Entities
                     this.ColorIndex = (pair.IntegerValue);
                     break;
                 case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 280:
                     this.WizardFlag = (pair.ShortValue);

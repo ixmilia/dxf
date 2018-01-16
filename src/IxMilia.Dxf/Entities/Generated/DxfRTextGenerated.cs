@@ -71,14 +71,14 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "RText"));
-            pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, InsertionPoint.X));
+            pairs.Add(new DxfCodePair(20, InsertionPoint.Y));
+            pairs.Add(new DxfCodePair(30, InsertionPoint.Z));
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
             }
 
             pairs.Add(new DxfCodePair(50, (this.RotationAngle)));
@@ -99,13 +99,13 @@ namespace IxMilia.Dxf.Entities
                     this.TextStyle = (pair.StringValue);
                     break;
                 case 10:
-                    this.InsertionPoint.X = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.InsertionPoint.Y = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.InsertionPoint.Z = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.TextHeight = (pair.DoubleValue);
@@ -117,13 +117,13 @@ namespace IxMilia.Dxf.Entities
                     this.TypeFlags = (int)(pair.ShortValue);
                     break;
                 case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

@@ -92,21 +92,21 @@ namespace IxMilia.Dxf.Objects
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(90, (int)(this.Version)));
             pairs.Add(new DxfCodePair(70, (short)(this.CoordinateType)));
-            pairs.Add(new DxfCodePair(10, DesignPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, DesignPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, DesignPoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, ReferencePoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, ReferencePoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, ReferencePoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(12, NorthVector?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(22, NorthVector?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(10, DesignPoint.X));
+            pairs.Add(new DxfCodePair(20, DesignPoint.Y));
+            pairs.Add(new DxfCodePair(30, DesignPoint.Z));
+            pairs.Add(new DxfCodePair(11, ReferencePoint.X));
+            pairs.Add(new DxfCodePair(21, ReferencePoint.Y));
+            pairs.Add(new DxfCodePair(31, ReferencePoint.Z));
+            pairs.Add(new DxfCodePair(12, NorthVector.X));
+            pairs.Add(new DxfCodePair(22, NorthVector.Y));
             pairs.Add(new DxfCodePair(40, (this.HorizontalUnitScale)));
             pairs.Add(new DxfCodePair(41, (this.VerticalUnitScale)));
             pairs.Add(new DxfCodePair(91, (int)(this.HorizontalUnits)));
             pairs.Add(new DxfCodePair(92, (int)(this.VerticalUnits)));
-            pairs.Add(new DxfCodePair(210, UpDirection?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(220, UpDirection?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(230, UpDirection?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(210, UpDirection.X));
+            pairs.Add(new DxfCodePair(220, UpDirection.Y));
+            pairs.Add(new DxfCodePair(230, UpDirection.Z));
             pairs.Add(new DxfCodePair(95, (int)(this.ScaleEstimationMethod)));
             pairs.Add(new DxfCodePair(294, (this.UseSeaLevelCorrection)));
             pairs.Add(new DxfCodePair(141, (this.UserSpecifiedScaleFactor)));
@@ -141,37 +141,37 @@ namespace IxMilia.Dxf.Objects
             switch (pair.Code)
             {
                 case 210:
-                    this.UpDirection.X = pair.DoubleValue;
+                    this.UpDirection = this.UpDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.UpDirection.Y = pair.DoubleValue;
+                    this.UpDirection = this.UpDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.UpDirection.Z = pair.DoubleValue;
+                    this.UpDirection = this.UpDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 12:
-                    this.NorthVector.X = pair.DoubleValue;
+                    this.NorthVector = this.NorthVector.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 22:
-                    this.NorthVector.Y = pair.DoubleValue;
+                    this.NorthVector = this.NorthVector.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 11:
-                    this.ReferencePoint.X = pair.DoubleValue;
+                    this.ReferencePoint = this.ReferencePoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.ReferencePoint.Y = pair.DoubleValue;
+                    this.ReferencePoint = this.ReferencePoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.ReferencePoint.Z = pair.DoubleValue;
+                    this.ReferencePoint = this.ReferencePoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 10:
-                    this.DesignPoint.X = pair.DoubleValue;
+                    this.DesignPoint = this.DesignPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.DesignPoint.Y = pair.DoubleValue;
+                    this.DesignPoint = this.DesignPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.DesignPoint.Z = pair.DoubleValue;
+                    this.DesignPoint = this.DesignPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 13:
                     this._sourceMeshXPoints.Add((pair.DoubleValue));

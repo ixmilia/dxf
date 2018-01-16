@@ -30,25 +30,25 @@ namespace IxMilia.Dxf.Entities
                     this.TextStyleName = (pair.StringValue);
                     break;
                 case 10:
-                    if (_lastSubclassMarker == AcDbXrecordText) AlignmentPoint.X = pair.DoubleValue;
-                    else Location.X = pair.DoubleValue;
+                    if (_lastSubclassMarker == AcDbXrecordText) AlignmentPoint = AlignmentPoint.WithUpdatedX(pair.DoubleValue);
+                    else Location = Location.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    if (_lastSubclassMarker == AcDbXrecordText) AlignmentPoint.Y = pair.DoubleValue;
-                    else Location.Y = pair.DoubleValue;
+                    if (_lastSubclassMarker == AcDbXrecordText) AlignmentPoint = AlignmentPoint.WithUpdatedY(pair.DoubleValue);
+                    else Location = Location.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    if (_lastSubclassMarker == AcDbXrecordText) AlignmentPoint.Z = pair.DoubleValue;
-                    else Location.Z = pair.DoubleValue;
+                    if (_lastSubclassMarker == AcDbXrecordText) AlignmentPoint = AlignmentPoint.WithUpdatedZ(pair.DoubleValue);
+                    else Location = Location.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.SecondAlignmentPoint.X = pair.DoubleValue;
+                    this.SecondAlignmentPoint = this.SecondAlignmentPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.SecondAlignmentPoint.Y = pair.DoubleValue;
+                    this.SecondAlignmentPoint = this.SecondAlignmentPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.SecondAlignmentPoint.Z = pair.DoubleValue;
+                    this.SecondAlignmentPoint = this.SecondAlignmentPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 39:
                     this.Thickness = (pair.DoubleValue);
@@ -105,13 +105,13 @@ namespace IxMilia.Dxf.Entities
                     this.VerticalTextJustification = (DxfVerticalTextJustification)(pair.ShortValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 280:
                     if (_lastSubclassMarker == AcDbXrecordText) KeepDuplicateRecords = BoolShort(pair.ShortValue);

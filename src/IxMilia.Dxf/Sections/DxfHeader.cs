@@ -135,21 +135,18 @@ namespace IxMilia.Dxf
             }
         }
 
-        private static void SetPoint(DxfCodePair pair, DxfPoint point)
+        private static DxfPoint UpdatePoint(DxfCodePair pair, DxfPoint point)
         {
             switch (pair.Code)
             {
                 case 10:
-                    point.X = pair.DoubleValue;
-                    break;
+                    return point.WithUpdatedX(pair.DoubleValue);
                 case 20:
-                    point.Y = pair.DoubleValue;
-                    break;
+                    return point.WithUpdatedY(pair.DoubleValue);
                 case 30:
-                    point.Z = pair.DoubleValue;
-                    break;
+                    return point.WithUpdatedZ(pair.DoubleValue);
                 default:
-                    break;
+                    return point;
             }
         }
 

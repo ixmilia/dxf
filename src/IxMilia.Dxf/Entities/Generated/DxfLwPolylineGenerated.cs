@@ -104,9 +104,9 @@ namespace IxMilia.Dxf.Entities
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
             }
 
         }

@@ -45,18 +45,18 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDb3PointAngularDimension"));
-            pairs.Add(new DxfCodePair(13, DefinitionPoint2?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(23, DefinitionPoint2?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(33, DefinitionPoint2?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(14, DefinitionPoint3?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(24, DefinitionPoint3?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(34, DefinitionPoint3?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(15, DefinitionPoint4?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(25, DefinitionPoint4?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(35, DefinitionPoint4?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(16, DefinitionPoint5?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(26, DefinitionPoint5?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(36, DefinitionPoint5?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(13, DefinitionPoint2.X));
+            pairs.Add(new DxfCodePair(23, DefinitionPoint2.Y));
+            pairs.Add(new DxfCodePair(33, DefinitionPoint2.Z));
+            pairs.Add(new DxfCodePair(14, DefinitionPoint3.X));
+            pairs.Add(new DxfCodePair(24, DefinitionPoint3.Y));
+            pairs.Add(new DxfCodePair(34, DefinitionPoint3.Z));
+            pairs.Add(new DxfCodePair(15, DefinitionPoint4.X));
+            pairs.Add(new DxfCodePair(25, DefinitionPoint4.Y));
+            pairs.Add(new DxfCodePair(35, DefinitionPoint4.Z));
+            pairs.Add(new DxfCodePair(16, DefinitionPoint5.X));
+            pairs.Add(new DxfCodePair(26, DefinitionPoint5.Y));
+            pairs.Add(new DxfCodePair(36, DefinitionPoint5.Z));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -64,40 +64,40 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 13:
-                    this.DefinitionPoint2.X = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 23:
-                    this.DefinitionPoint2.Y = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 33:
-                    this.DefinitionPoint2.Z = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 14:
-                    this.DefinitionPoint3.X = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 24:
-                    this.DefinitionPoint3.Y = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 34:
-                    this.DefinitionPoint3.Z = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 15:
-                    this.DefinitionPoint4.X = pair.DoubleValue;
+                    this.DefinitionPoint4 = this.DefinitionPoint4.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 25:
-                    this.DefinitionPoint4.Y = pair.DoubleValue;
+                    this.DefinitionPoint4 = this.DefinitionPoint4.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 35:
-                    this.DefinitionPoint4.Z = pair.DoubleValue;
+                    this.DefinitionPoint4 = this.DefinitionPoint4.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 16:
-                    this.DefinitionPoint5.X = pair.DoubleValue;
+                    this.DefinitionPoint5 = this.DefinitionPoint5.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 26:
-                    this.DefinitionPoint5.Y = pair.DoubleValue;
+                    this.DefinitionPoint5 = this.DefinitionPoint5.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 36:
-                    this.DefinitionPoint5.Z = pair.DoubleValue;
+                    this.DefinitionPoint5 = this.DefinitionPoint5.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

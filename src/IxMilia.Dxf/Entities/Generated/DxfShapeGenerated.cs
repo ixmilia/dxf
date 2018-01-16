@@ -52,9 +52,9 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, Location.X));
+            pairs.Add(new DxfCodePair(20, Location.Y));
+            pairs.Add(new DxfCodePair(30, Location.Z));
             pairs.Add(new DxfCodePair(40, (this.Size)));
             pairs.Add(new DxfCodePair(2, (this.Name)));
             if (this.RotationAngle != 0.0)
@@ -74,9 +74,9 @@ namespace IxMilia.Dxf.Entities
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
             }
 
         }
@@ -89,13 +89,13 @@ namespace IxMilia.Dxf.Entities
                     this.Name = (pair.StringValue);
                     break;
                 case 10:
-                    this.Location.X = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.Location.Y = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.Location.Z = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 39:
                     this.Thickness = (pair.DoubleValue);
@@ -113,13 +113,13 @@ namespace IxMilia.Dxf.Entities
                     this.ObliqueAngle = (pair.DoubleValue);
                     break;
                 case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

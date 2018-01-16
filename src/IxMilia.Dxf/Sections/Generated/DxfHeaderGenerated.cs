@@ -1996,31 +1996,31 @@ namespace IxMilia.Dxf
 
             // INSBASE
             list.Add(new DxfCodePair(9, INSBASE));
-            list.Add(new DxfCodePair(10, this.InsertionBase?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.InsertionBase?.Y ?? default(double)));
-            list.Add(new DxfCodePair(30, this.InsertionBase?.Z ?? default(double)));
+            list.Add(new DxfCodePair(10, this.InsertionBase.X));
+            list.Add(new DxfCodePair(20, this.InsertionBase.Y));
+            list.Add(new DxfCodePair(30, this.InsertionBase.Z));
 
             // EXTMIN
             list.Add(new DxfCodePair(9, EXTMIN));
-            list.Add(new DxfCodePair(10, this.MinimumDrawingExtents?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.MinimumDrawingExtents?.Y ?? default(double)));
-            list.Add(new DxfCodePair(30, this.MinimumDrawingExtents?.Z ?? default(double)));
+            list.Add(new DxfCodePair(10, this.MinimumDrawingExtents.X));
+            list.Add(new DxfCodePair(20, this.MinimumDrawingExtents.Y));
+            list.Add(new DxfCodePair(30, this.MinimumDrawingExtents.Z));
 
             // EXTMAX
             list.Add(new DxfCodePair(9, EXTMAX));
-            list.Add(new DxfCodePair(10, this.MaximumDrawingExtents?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.MaximumDrawingExtents?.Y ?? default(double)));
-            list.Add(new DxfCodePair(30, this.MaximumDrawingExtents?.Z ?? default(double)));
+            list.Add(new DxfCodePair(10, this.MaximumDrawingExtents.X));
+            list.Add(new DxfCodePair(20, this.MaximumDrawingExtents.Y));
+            list.Add(new DxfCodePair(30, this.MaximumDrawingExtents.Z));
 
             // LIMMIN
             list.Add(new DxfCodePair(9, LIMMIN));
-            list.Add(new DxfCodePair(10, this.MinimumDrawingLimits?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.MinimumDrawingLimits?.Y ?? default(double)));
+            list.Add(new DxfCodePair(10, this.MinimumDrawingLimits.X));
+            list.Add(new DxfCodePair(20, this.MinimumDrawingLimits.Y));
 
             // LIMMAX
             list.Add(new DxfCodePair(9, LIMMAX));
-            list.Add(new DxfCodePair(10, this.MaximumDrawingLimits?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.MaximumDrawingLimits?.Y ?? default(double)));
+            list.Add(new DxfCodePair(10, this.MaximumDrawingLimits.X));
+            list.Add(new DxfCodePair(20, this.MaximumDrawingLimits.Y));
 
             // ORTHOMODE
             list.Add(new DxfCodePair(9, ORTHOMODE));
@@ -2778,21 +2778,21 @@ namespace IxMilia.Dxf
 
             // UCSORG
             list.Add(new DxfCodePair(9, UCSORG));
-            list.Add(new DxfCodePair(10, this.UCSOrigin?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.UCSOrigin?.Y ?? default(double)));
-            list.Add(new DxfCodePair(30, this.UCSOrigin?.Z ?? default(double)));
+            list.Add(new DxfCodePair(10, this.UCSOrigin.X));
+            list.Add(new DxfCodePair(20, this.UCSOrigin.Y));
+            list.Add(new DxfCodePair(30, this.UCSOrigin.Z));
 
             // UCSXDIR
             list.Add(new DxfCodePair(9, UCSXDIR));
-            list.Add(new DxfCodePair(10, this.UCSXAxis?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.UCSXAxis?.Y ?? default(double)));
-            list.Add(new DxfCodePair(30, this.UCSXAxis?.Z ?? default(double)));
+            list.Add(new DxfCodePair(10, this.UCSXAxis.X));
+            list.Add(new DxfCodePair(20, this.UCSXAxis.Y));
+            list.Add(new DxfCodePair(30, this.UCSXAxis.Z));
 
             // UCSYDIR
             list.Add(new DxfCodePair(9, UCSYDIR));
-            list.Add(new DxfCodePair(10, this.UCSYAxis?.X ?? default(double)));
-            list.Add(new DxfCodePair(20, this.UCSYAxis?.Y ?? default(double)));
-            list.Add(new DxfCodePair(30, this.UCSYAxis?.Z ?? default(double)));
+            list.Add(new DxfCodePair(10, this.UCSYAxis.X));
+            list.Add(new DxfCodePair(20, this.UCSYAxis.Y));
+            list.Add(new DxfCodePair(30, this.UCSYAxis.Z));
 
             // UCSORTHOREF
             if (Version >= DxfAcadVersion.R2000)
@@ -2812,54 +2812,54 @@ namespace IxMilia.Dxf
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, UCSORGTOP));
-                list.Add(new DxfCodePair(10, this.UCSOriginTop?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.UCSOriginTop?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.UCSOriginTop?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.UCSOriginTop.X));
+                list.Add(new DxfCodePair(20, this.UCSOriginTop.Y));
+                list.Add(new DxfCodePair(30, this.UCSOriginTop.Z));
             }
 
             // UCSORGBOTTOM
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, UCSORGBOTTOM));
-                list.Add(new DxfCodePair(10, this.UCSOriginBottom?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.UCSOriginBottom?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.UCSOriginBottom?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.UCSOriginBottom.X));
+                list.Add(new DxfCodePair(20, this.UCSOriginBottom.Y));
+                list.Add(new DxfCodePair(30, this.UCSOriginBottom.Z));
             }
 
             // UCSORGLEFT
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, UCSORGLEFT));
-                list.Add(new DxfCodePair(10, this.UCSOriginLeft?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.UCSOriginLeft?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.UCSOriginLeft?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.UCSOriginLeft.X));
+                list.Add(new DxfCodePair(20, this.UCSOriginLeft.Y));
+                list.Add(new DxfCodePair(30, this.UCSOriginLeft.Z));
             }
 
             // UCSORGRIGHT
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, UCSORGRIGHT));
-                list.Add(new DxfCodePair(10, this.UCSOriginRight?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.UCSOriginRight?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.UCSOriginRight?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.UCSOriginRight.X));
+                list.Add(new DxfCodePair(20, this.UCSOriginRight.Y));
+                list.Add(new DxfCodePair(30, this.UCSOriginRight.Z));
             }
 
             // UCSORGFRONT
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, UCSORGFRONT));
-                list.Add(new DxfCodePair(10, this.UCSOriginFront?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.UCSOriginFront?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.UCSOriginFront?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.UCSOriginFront.X));
+                list.Add(new DxfCodePair(20, this.UCSOriginFront.Y));
+                list.Add(new DxfCodePair(30, this.UCSOriginFront.Z));
             }
 
             // UCSORGBACK
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, UCSORGBACK));
-                list.Add(new DxfCodePair(10, this.UCSOriginBack?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.UCSOriginBack?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.UCSOriginBack?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.UCSOriginBack.X));
+                list.Add(new DxfCodePair(20, this.UCSOriginBack.Y));
+                list.Add(new DxfCodePair(30, this.UCSOriginBack.Z));
             }
 
             // PUCSBASE
@@ -2880,27 +2880,27 @@ namespace IxMilia.Dxf
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PUCSORG));
-                list.Add(new DxfCodePair(10, this.PaperspaceUCSOrigin?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceUCSOrigin?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceUCSOrigin?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceUCSOrigin.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceUCSOrigin.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceUCSOrigin.Z));
             }
 
             // PUCSXDIR
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PUCSXDIR));
-                list.Add(new DxfCodePair(10, this.PaperspaceXAxis?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceXAxis?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceXAxis?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceXAxis.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceXAxis.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceXAxis.Z));
             }
 
             // PUCSYDIR
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PUCSYDIR));
-                list.Add(new DxfCodePair(10, this.PaperspaceYAxis?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceYAxis?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceYAxis?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceYAxis.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceYAxis.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceYAxis.Z));
             }
 
             // PUCSORTHOREF
@@ -2921,54 +2921,54 @@ namespace IxMilia.Dxf
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, PUCSORGTOP));
-                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginTop?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginTop?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginTop?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginTop.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginTop.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginTop.Z));
             }
 
             // PUCSORGBOTTOM
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, PUCSORGBOTTOM));
-                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginBottom?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginBottom?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginBottom?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginBottom.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginBottom.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginBottom.Z));
             }
 
             // PUCSORGLEFT
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, PUCSORGLEFT));
-                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginLeft?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginLeft?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginLeft?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginLeft.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginLeft.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginLeft.Z));
             }
 
             // PUCSORGRIGHT
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, PUCSORGRIGHT));
-                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginRight?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginRight?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginRight?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginRight.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginRight.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginRight.Z));
             }
 
             // PUCSORGFRONT
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, PUCSORGFRONT));
-                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginFront?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginFront?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginFront?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginFront.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginFront.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginFront.Z));
             }
 
             // PUCSORGBACK
             if (Version >= DxfAcadVersion.R2000)
             {
                 list.Add(new DxfCodePair(9, PUCSORGBACK));
-                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginBack?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginBack?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginBack?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceUCSOriginBack.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceUCSOriginBack.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceUCSOriginBack.Z));
             }
 
             // USERI1
@@ -3047,9 +3047,9 @@ namespace IxMilia.Dxf
             if (Version >= DxfAcadVersion.R14)
             {
                 list.Add(new DxfCodePair(9, PINSBASE));
-                list.Add(new DxfCodePair(10, this.PaperspaceInsertionBase?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceInsertionBase?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceInsertionBase?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceInsertionBase.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceInsertionBase.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceInsertionBase.Z));
             }
 
             // PLIMCHECK
@@ -3063,34 +3063,34 @@ namespace IxMilia.Dxf
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PEXTMIN));
-                list.Add(new DxfCodePair(10, this.PaperspaceMinimumDrawingExtents?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceMinimumDrawingExtents?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceMinimumDrawingExtents?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceMinimumDrawingExtents.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceMinimumDrawingExtents.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceMinimumDrawingExtents.Z));
             }
 
             // PEXTMAX
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PEXTMAX));
-                list.Add(new DxfCodePair(10, this.PaperspaceMaximumDrawingExtents?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceMaximumDrawingExtents?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.PaperspaceMaximumDrawingExtents?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceMaximumDrawingExtents.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceMaximumDrawingExtents.Y));
+                list.Add(new DxfCodePair(30, this.PaperspaceMaximumDrawingExtents.Z));
             }
 
             // PLIMMIN
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PLIMMIN));
-                list.Add(new DxfCodePair(10, this.PaperspaceMinimumDrawingLimits?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceMinimumDrawingLimits?.Y ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceMinimumDrawingLimits.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceMinimumDrawingLimits.Y));
             }
 
             // PLIMMAX
             if (Version >= DxfAcadVersion.R11)
             {
                 list.Add(new DxfCodePair(9, PLIMMAX));
-                list.Add(new DxfCodePair(10, this.PaperspaceMaximumDrawingLimits?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.PaperspaceMaximumDrawingLimits?.Y ?? default(double)));
+                list.Add(new DxfCodePair(10, this.PaperspaceMaximumDrawingLimits.X));
+                list.Add(new DxfCodePair(20, this.PaperspaceMaximumDrawingLimits.Y));
             }
 
             // UNITMODE
@@ -3601,8 +3601,8 @@ namespace IxMilia.Dxf
             if (Version <= DxfAcadVersion.R10)
             {
                 list.Add(new DxfCodePair(9, AXISUNIT));
-                list.Add(new DxfCodePair(10, this.AxisTickSpacing?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.AxisTickSpacing?.Y ?? default(double)));
+                list.Add(new DxfCodePair(10, this.AxisTickSpacing.X));
+                list.Add(new DxfCodePair(20, this.AxisTickSpacing.Y));
             }
 
             // FASTZOOM
@@ -3623,8 +3623,8 @@ namespace IxMilia.Dxf
             if (Version <= DxfAcadVersion.R10)
             {
                 list.Add(new DxfCodePair(9, GRIDUNIT));
-                list.Add(new DxfCodePair(10, this.GridSpacing?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.GridSpacing?.Y ?? default(double)));
+                list.Add(new DxfCodePair(10, this.GridSpacing.X));
+                list.Add(new DxfCodePair(20, this.GridSpacing.Y));
             }
 
             // SNAPANG
@@ -3638,8 +3638,8 @@ namespace IxMilia.Dxf
             if (Version <= DxfAcadVersion.R10)
             {
                 list.Add(new DxfCodePair(9, SNAPBASE));
-                list.Add(new DxfCodePair(10, this.SnapBasePoint?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.SnapBasePoint?.Y ?? default(double)));
+                list.Add(new DxfCodePair(10, this.SnapBasePoint.X));
+                list.Add(new DxfCodePair(20, this.SnapBasePoint.Y));
             }
 
             // SNAPISOPAIR
@@ -3667,25 +3667,25 @@ namespace IxMilia.Dxf
             if (Version <= DxfAcadVersion.R10)
             {
                 list.Add(new DxfCodePair(9, SNAPUNIT));
-                list.Add(new DxfCodePair(10, this.SnapSpacing?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.SnapSpacing?.Y ?? default(double)));
+                list.Add(new DxfCodePair(10, this.SnapSpacing.X));
+                list.Add(new DxfCodePair(20, this.SnapSpacing.Y));
             }
 
             // VIEWCTR
             if (Version <= DxfAcadVersion.R10)
             {
                 list.Add(new DxfCodePair(9, VIEWCTR));
-                list.Add(new DxfCodePair(10, this.ViewCenter?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.ViewCenter?.Y ?? default(double)));
+                list.Add(new DxfCodePair(10, this.ViewCenter.X));
+                list.Add(new DxfCodePair(20, this.ViewCenter.Y));
             }
 
             // VIEWDIR
             if (Version <= DxfAcadVersion.R10)
             {
                 list.Add(new DxfCodePair(9, VIEWDIR));
-                list.Add(new DxfCodePair(10, this.ViewDirection?.X ?? default(double)));
-                list.Add(new DxfCodePair(20, this.ViewDirection?.Y ?? default(double)));
-                list.Add(new DxfCodePair(30, this.ViewDirection?.Z ?? default(double)));
+                list.Add(new DxfCodePair(10, this.ViewDirection.X));
+                list.Add(new DxfCodePair(20, this.ViewDirection.Y));
+                list.Add(new DxfCodePair(30, this.ViewDirection.Z));
             }
 
             // VIEWSIZE
@@ -3721,19 +3721,19 @@ namespace IxMilia.Dxf
                     this.RequiredVersions = (pair.LongValue);
                     break;
                 case INSBASE:
-                    SetPoint(pair, this.InsertionBase);
+                    this.InsertionBase = UpdatePoint(pair, this.InsertionBase);
                     break;
                 case EXTMIN:
-                    SetPoint(pair, this.MinimumDrawingExtents);
+                    this.MinimumDrawingExtents = UpdatePoint(pair, this.MinimumDrawingExtents);
                     break;
                 case EXTMAX:
-                    SetPoint(pair, this.MaximumDrawingExtents);
+                    this.MaximumDrawingExtents = UpdatePoint(pair, this.MaximumDrawingExtents);
                     break;
                 case LIMMIN:
-                    SetPoint(pair, this.MinimumDrawingLimits);
+                    this.MinimumDrawingLimits = UpdatePoint(pair, this.MinimumDrawingLimits);
                     break;
                 case LIMMAX:
-                    SetPoint(pair, this.MaximumDrawingLimits);
+                    this.MaximumDrawingLimits = UpdatePoint(pair, this.MaximumDrawingLimits);
                     break;
                 case ORTHOMODE:
                     EnsureCode(pair, 70);
@@ -4304,13 +4304,13 @@ namespace IxMilia.Dxf
                     this.UCSName = (pair.StringValue);
                     break;
                 case UCSORG:
-                    SetPoint(pair, this.UCSOrigin);
+                    this.UCSOrigin = UpdatePoint(pair, this.UCSOrigin);
                     break;
                 case UCSXDIR:
-                    SetPoint(pair, this.UCSXAxis);
+                    this.UCSXAxis = UpdatePoint(pair, this.UCSXAxis);
                     break;
                 case UCSYDIR:
-                    SetPoint(pair, this.UCSYAxis);
+                    this.UCSYAxis = UpdatePoint(pair, this.UCSYAxis);
                     break;
                 case UCSORTHOREF:
                     EnsureCode(pair, 2);
@@ -4321,22 +4321,22 @@ namespace IxMilia.Dxf
                     this.OrthgraphicViewType = (DxfOrthographicViewType)(pair.ShortValue);
                     break;
                 case UCSORGTOP:
-                    SetPoint(pair, this.UCSOriginTop);
+                    this.UCSOriginTop = UpdatePoint(pair, this.UCSOriginTop);
                     break;
                 case UCSORGBOTTOM:
-                    SetPoint(pair, this.UCSOriginBottom);
+                    this.UCSOriginBottom = UpdatePoint(pair, this.UCSOriginBottom);
                     break;
                 case UCSORGLEFT:
-                    SetPoint(pair, this.UCSOriginLeft);
+                    this.UCSOriginLeft = UpdatePoint(pair, this.UCSOriginLeft);
                     break;
                 case UCSORGRIGHT:
-                    SetPoint(pair, this.UCSOriginRight);
+                    this.UCSOriginRight = UpdatePoint(pair, this.UCSOriginRight);
                     break;
                 case UCSORGFRONT:
-                    SetPoint(pair, this.UCSOriginFront);
+                    this.UCSOriginFront = UpdatePoint(pair, this.UCSOriginFront);
                     break;
                 case UCSORGBACK:
-                    SetPoint(pair, this.UCSOriginBack);
+                    this.UCSOriginBack = UpdatePoint(pair, this.UCSOriginBack);
                     break;
                 case PUCSBASE:
                     EnsureCode(pair, 2);
@@ -4347,13 +4347,13 @@ namespace IxMilia.Dxf
                     this.PaperspaceUCSName = (pair.StringValue);
                     break;
                 case PUCSORG:
-                    SetPoint(pair, this.PaperspaceUCSOrigin);
+                    this.PaperspaceUCSOrigin = UpdatePoint(pair, this.PaperspaceUCSOrigin);
                     break;
                 case PUCSXDIR:
-                    SetPoint(pair, this.PaperspaceXAxis);
+                    this.PaperspaceXAxis = UpdatePoint(pair, this.PaperspaceXAxis);
                     break;
                 case PUCSYDIR:
-                    SetPoint(pair, this.PaperspaceYAxis);
+                    this.PaperspaceYAxis = UpdatePoint(pair, this.PaperspaceYAxis);
                     break;
                 case PUCSORTHOREF:
                     EnsureCode(pair, 2);
@@ -4364,22 +4364,22 @@ namespace IxMilia.Dxf
                     this.PaperspaceOrthographicViewType = (DxfOrthographicViewType)(pair.ShortValue);
                     break;
                 case PUCSORGTOP:
-                    SetPoint(pair, this.PaperspaceUCSOriginTop);
+                    this.PaperspaceUCSOriginTop = UpdatePoint(pair, this.PaperspaceUCSOriginTop);
                     break;
                 case PUCSORGBOTTOM:
-                    SetPoint(pair, this.PaperspaceUCSOriginBottom);
+                    this.PaperspaceUCSOriginBottom = UpdatePoint(pair, this.PaperspaceUCSOriginBottom);
                     break;
                 case PUCSORGLEFT:
-                    SetPoint(pair, this.PaperspaceUCSOriginLeft);
+                    this.PaperspaceUCSOriginLeft = UpdatePoint(pair, this.PaperspaceUCSOriginLeft);
                     break;
                 case PUCSORGRIGHT:
-                    SetPoint(pair, this.PaperspaceUCSOriginRight);
+                    this.PaperspaceUCSOriginRight = UpdatePoint(pair, this.PaperspaceUCSOriginRight);
                     break;
                 case PUCSORGFRONT:
-                    SetPoint(pair, this.PaperspaceUCSOriginFront);
+                    this.PaperspaceUCSOriginFront = UpdatePoint(pair, this.PaperspaceUCSOriginFront);
                     break;
                 case PUCSORGBACK:
-                    SetPoint(pair, this.PaperspaceUCSOriginBack);
+                    this.PaperspaceUCSOriginBack = UpdatePoint(pair, this.PaperspaceUCSOriginBack);
                     break;
                 case USERI1:
                     EnsureCode(pair, 70);
@@ -4442,23 +4442,23 @@ namespace IxMilia.Dxf
                     this.MaximumActiveViewports = (pair.ShortValue);
                     break;
                 case PINSBASE:
-                    SetPoint(pair, this.PaperspaceInsertionBase);
+                    this.PaperspaceInsertionBase = UpdatePoint(pair, this.PaperspaceInsertionBase);
                     break;
                 case PLIMCHECK:
                     EnsureCode(pair, 70);
                     this.LimitCheckingInPaperspace = BoolShort(pair.ShortValue);
                     break;
                 case PEXTMIN:
-                    SetPoint(pair, this.PaperspaceMinimumDrawingExtents);
+                    this.PaperspaceMinimumDrawingExtents = UpdatePoint(pair, this.PaperspaceMinimumDrawingExtents);
                     break;
                 case PEXTMAX:
-                    SetPoint(pair, this.PaperspaceMaximumDrawingExtents);
+                    this.PaperspaceMaximumDrawingExtents = UpdatePoint(pair, this.PaperspaceMaximumDrawingExtents);
                     break;
                 case PLIMMIN:
-                    SetPoint(pair, this.PaperspaceMinimumDrawingLimits);
+                    this.PaperspaceMinimumDrawingLimits = UpdatePoint(pair, this.PaperspaceMinimumDrawingLimits);
                     break;
                 case PLIMMAX:
-                    SetPoint(pair, this.PaperspaceMaximumDrawingLimits);
+                    this.PaperspaceMaximumDrawingLimits = UpdatePoint(pair, this.PaperspaceMaximumDrawingLimits);
                     break;
                 case UNITMODE:
                     EnsureCode(pair, 70);
@@ -4781,7 +4781,7 @@ namespace IxMilia.Dxf
                     this.AxisOn = BoolShort(pair.ShortValue);
                     break;
                 case AXISUNIT:
-                    SetPoint(pair, this.AxisTickSpacing);
+                    this.AxisTickSpacing = UpdatePoint(pair, this.AxisTickSpacing);
                     break;
                 case FASTZOOM:
                     EnsureCode(pair, 70);
@@ -4792,14 +4792,14 @@ namespace IxMilia.Dxf
                     this.GridOn = BoolShort(pair.ShortValue);
                     break;
                 case GRIDUNIT:
-                    SetPoint(pair, this.GridSpacing);
+                    this.GridSpacing = UpdatePoint(pair, this.GridSpacing);
                     break;
                 case SNAPANG:
                     EnsureCode(pair, 50);
                     this.SnapRotationAngle = (pair.DoubleValue);
                     break;
                 case SNAPBASE:
-                    SetPoint(pair, this.SnapBasePoint);
+                    this.SnapBasePoint = UpdatePoint(pair, this.SnapBasePoint);
                     break;
                 case SNAPISOPAIR:
                     EnsureCode(pair, 70);
@@ -4814,13 +4814,13 @@ namespace IxMilia.Dxf
                     this.SnapStyle = (DxfSnapStyle)(pair.ShortValue);
                     break;
                 case SNAPUNIT:
-                    SetPoint(pair, this.SnapSpacing);
+                    this.SnapSpacing = UpdatePoint(pair, this.SnapSpacing);
                     break;
                 case VIEWCTR:
-                    SetPoint(pair, this.ViewCenter);
+                    this.ViewCenter = UpdatePoint(pair, this.ViewCenter);
                     break;
                 case VIEWDIR:
-                    SetPoint(pair, this.ViewDirection);
+                    this.ViewDirection = UpdatePoint(pair, this.ViewDirection);
                     break;
                 case VIEWSIZE:
                     EnsureCode(pair, 40);

@@ -58,17 +58,17 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbEllipse"));
-            pairs.Add(new DxfCodePair(10, Center?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, Center?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, Center?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, MajorAxis?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, MajorAxis?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, MajorAxis?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, Center.X));
+            pairs.Add(new DxfCodePair(20, Center.Y));
+            pairs.Add(new DxfCodePair(30, Center.Z));
+            pairs.Add(new DxfCodePair(11, MajorAxis.X));
+            pairs.Add(new DxfCodePair(21, MajorAxis.Y));
+            pairs.Add(new DxfCodePair(31, MajorAxis.Z));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, Normal.X));
+                pairs.Add(new DxfCodePair(220, Normal.Y));
+                pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
             pairs.Add(new DxfCodePair(40, (this.MinorAxisRatio)));
@@ -81,22 +81,22 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.Center.X = pair.DoubleValue;
+                    this.Center = this.Center.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.Center.Y = pair.DoubleValue;
+                    this.Center = this.Center.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.Center.Z = pair.DoubleValue;
+                    this.Center = this.Center.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.MajorAxis.X = pair.DoubleValue;
+                    this.MajorAxis = this.MajorAxis.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.MajorAxis.Y = pair.DoubleValue;
+                    this.MajorAxis = this.MajorAxis.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.MajorAxis.Z = pair.DoubleValue;
+                    this.MajorAxis = this.MajorAxis.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.MinorAxisRatio = (pair.DoubleValue);
@@ -108,13 +108,13 @@ namespace IxMilia.Dxf.Entities
                     this.EndParameter = (pair.DoubleValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

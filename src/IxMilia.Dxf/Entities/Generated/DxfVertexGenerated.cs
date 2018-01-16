@@ -138,9 +138,9 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbVertex"));
-            pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, Location.X));
+            pairs.Add(new DxfCodePair(20, Location.Y));
+            pairs.Add(new DxfCodePair(30, Location.Z));
             if (this.StartingWidth != 0.0)
             {
                 pairs.Add(new DxfCodePair(40, (this.StartingWidth)));
@@ -190,13 +190,13 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.Location.X = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.Location.Y = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.Location.Z = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.StartingWidth = (pair.DoubleValue);

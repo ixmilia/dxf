@@ -51,15 +51,15 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            pairs.Add(new DxfCodePair(10, Center?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, Center?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, Center?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, Center.X));
+            pairs.Add(new DxfCodePair(20, Center.Y));
+            pairs.Add(new DxfCodePair(30, Center.Z));
             pairs.Add(new DxfCodePair(40, (this.Radius)));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, Normal.X));
+                pairs.Add(new DxfCodePair(220, Normal.Y));
+                pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
         }
@@ -69,13 +69,13 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.Center.X = pair.DoubleValue;
+                    this.Center = this.Center.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.Center.Y = pair.DoubleValue;
+                    this.Center = this.Center.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.Center.Z = pair.DoubleValue;
+                    this.Center = this.Center.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 39:
                     this.Thickness = (pair.DoubleValue);
@@ -84,13 +84,13 @@ namespace IxMilia.Dxf.Entities
                     this.Radius = (pair.DoubleValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

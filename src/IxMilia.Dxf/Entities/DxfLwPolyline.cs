@@ -83,13 +83,13 @@ namespace IxMilia.Dxf.Entities
                         Flags = pair.ShortValue;
                         break;
                     case 210:
-                        ExtrusionDirection.X = pair.DoubleValue;
+                        ExtrusionDirection = ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 220:
-                        ExtrusionDirection.Y = pair.DoubleValue;
+                        ExtrusionDirection = ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 230:
-                        ExtrusionDirection.Z = pair.DoubleValue;
+                        ExtrusionDirection = ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                         break;
                     default:
                         if (!base.TrySetPair(pair))

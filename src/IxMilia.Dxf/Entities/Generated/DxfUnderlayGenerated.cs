@@ -147,16 +147,16 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.ObjectPointer.Handle)));
             }
 
-            pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, InsertionPoint.X));
+            pairs.Add(new DxfCodePair(20, InsertionPoint.Y));
+            pairs.Add(new DxfCodePair(30, InsertionPoint.Z));
             pairs.Add(new DxfCodePair(41, (this.XScale)));
             pairs.Add(new DxfCodePair(42, (this.YScale)));
             pairs.Add(new DxfCodePair(43, (this.ZScale)));
             pairs.Add(new DxfCodePair(50, (this.RotationAngle)));
-            pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(210, Normal.X));
+            pairs.Add(new DxfCodePair(220, Normal.Y));
+            pairs.Add(new DxfCodePair(230, Normal.Z));
             pairs.Add(new DxfCodePair(280, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(281, (this.Contrast)));
             pairs.Add(new DxfCodePair(282, (this.Fade)));
@@ -173,13 +173,13 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.InsertionPoint.X = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.InsertionPoint.Y = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.InsertionPoint.Z = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
                     this._pointX.Add((pair.DoubleValue));
@@ -200,13 +200,13 @@ namespace IxMilia.Dxf.Entities
                     this.RotationAngle = (pair.DoubleValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 280:
                     this.Flags = (int)(pair.ShortValue);

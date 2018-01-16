@@ -43,9 +43,9 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbFcf"));
             pairs.Add(new DxfCodePair(3, (this.DimensionStyleName)));
-            pairs.Add(new DxfCodePair(10, InsertionPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, InsertionPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, InsertionPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, InsertionPoint.X));
+            pairs.Add(new DxfCodePair(20, InsertionPoint.Y));
+            pairs.Add(new DxfCodePair(30, InsertionPoint.Z));
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(1, (this.DisplayText)));
@@ -53,14 +53,14 @@ namespace IxMilia.Dxf.Entities
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
             }
 
-            pairs.Add(new DxfCodePair(11, DirectionVector?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, DirectionVector?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, DirectionVector?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(11, DirectionVector.X));
+            pairs.Add(new DxfCodePair(21, DirectionVector.Y));
+            pairs.Add(new DxfCodePair(31, DirectionVector.Z));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -74,31 +74,31 @@ namespace IxMilia.Dxf.Entities
                     this.DimensionStyleName = (pair.StringValue);
                     break;
                 case 10:
-                    this.InsertionPoint.X = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.InsertionPoint.Y = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.InsertionPoint.Z = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.DirectionVector.X = pair.DoubleValue;
+                    this.DirectionVector = this.DirectionVector.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.DirectionVector.Y = pair.DoubleValue;
+                    this.DirectionVector = this.DirectionVector.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.DirectionVector.Z = pair.DoubleValue;
+                    this.DirectionVector = this.DirectionVector.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

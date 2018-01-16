@@ -43,18 +43,18 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbTrace"));
-            pairs.Add(new DxfCodePair(10, FirstCorner?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, FirstCorner?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, FirstCorner?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, SecondCorner?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, SecondCorner?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, SecondCorner?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(12, ThirdCorner?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(22, ThirdCorner?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(32, ThirdCorner?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(13, FourthCorner?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(23, FourthCorner?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(33, FourthCorner?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, FirstCorner.X));
+            pairs.Add(new DxfCodePair(20, FirstCorner.Y));
+            pairs.Add(new DxfCodePair(30, FirstCorner.Z));
+            pairs.Add(new DxfCodePair(11, SecondCorner.X));
+            pairs.Add(new DxfCodePair(21, SecondCorner.Y));
+            pairs.Add(new DxfCodePair(31, SecondCorner.Z));
+            pairs.Add(new DxfCodePair(12, ThirdCorner.X));
+            pairs.Add(new DxfCodePair(22, ThirdCorner.Y));
+            pairs.Add(new DxfCodePair(32, ThirdCorner.Z));
+            pairs.Add(new DxfCodePair(13, FourthCorner.X));
+            pairs.Add(new DxfCodePair(23, FourthCorner.Y));
+            pairs.Add(new DxfCodePair(33, FourthCorner.Z));
             if (this.Thickness != 0.0)
             {
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
@@ -62,9 +62,9 @@ namespace IxMilia.Dxf.Entities
 
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
             }
 
         }
@@ -74,52 +74,52 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.FirstCorner.X = pair.DoubleValue;
+                    this.FirstCorner = this.FirstCorner.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.FirstCorner.Y = pair.DoubleValue;
+                    this.FirstCorner = this.FirstCorner.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.FirstCorner.Z = pair.DoubleValue;
+                    this.FirstCorner = this.FirstCorner.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.SecondCorner.X = pair.DoubleValue;
+                    this.SecondCorner = this.SecondCorner.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.SecondCorner.Y = pair.DoubleValue;
+                    this.SecondCorner = this.SecondCorner.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.SecondCorner.Z = pair.DoubleValue;
+                    this.SecondCorner = this.SecondCorner.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 12:
-                    this.ThirdCorner.X = pair.DoubleValue;
+                    this.ThirdCorner = this.ThirdCorner.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 22:
-                    this.ThirdCorner.Y = pair.DoubleValue;
+                    this.ThirdCorner = this.ThirdCorner.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 32:
-                    this.ThirdCorner.Z = pair.DoubleValue;
+                    this.ThirdCorner = this.ThirdCorner.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 13:
-                    this.FourthCorner.X = pair.DoubleValue;
+                    this.FourthCorner = this.FourthCorner.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 23:
-                    this.FourthCorner.Y = pair.DoubleValue;
+                    this.FourthCorner = this.FourthCorner.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 33:
-                    this.FourthCorner.Z = pair.DoubleValue;
+                    this.FourthCorner = this.FourthCorner.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 39:
                     this.Thickness = (pair.DoubleValue);
                     break;
                 case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

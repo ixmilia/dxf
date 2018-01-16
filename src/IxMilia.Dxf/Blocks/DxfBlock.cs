@@ -141,9 +141,9 @@ namespace IxMilia.Dxf.Blocks
 
             list.Add(new DxfCodePair(2, Name));
             list.Add(new DxfCodePair(70, (short)Flags));
-            list.Add(new DxfCodePair(10, BasePoint?.X ?? 0.0));
-            list.Add(new DxfCodePair(20, BasePoint?.Y ?? 0.0));
-            list.Add(new DxfCodePair(30, BasePoint?.Z ?? 0.0));
+            list.Add(new DxfCodePair(10, BasePoint.X));
+            list.Add(new DxfCodePair(20, BasePoint.Y));
+            list.Add(new DxfCodePair(30, BasePoint.Z));
             if (version >= DxfAcadVersion.R12)
             {
                 list.Add(new DxfCodePair(3, Name));
@@ -237,13 +237,13 @@ namespace IxMilia.Dxf.Blocks
                                 block.Layer = pair.StringValue;
                                 break;
                             case 10:
-                                block.BasePoint.X = pair.DoubleValue;
+                                block.BasePoint = block.BasePoint.WithUpdatedX(pair.DoubleValue);
                                 break;
                             case 20:
-                                block.BasePoint.Y = pair.DoubleValue;
+                                block.BasePoint = block.BasePoint.WithUpdatedY(pair.DoubleValue);
                                 break;
                             case 30:
-                                block.BasePoint.Z = pair.DoubleValue;
+                                block.BasePoint = block.BasePoint.WithUpdatedZ(pair.DoubleValue);
                                 break;
                             case 67:
                                 block.IsInPaperSpace = DxfCommonConverters.BoolShort(pair.ShortValue);

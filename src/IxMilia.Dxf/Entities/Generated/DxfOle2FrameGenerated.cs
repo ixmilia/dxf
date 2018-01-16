@@ -50,12 +50,12 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(100, "AcDbOle2Frame"));
             pairs.Add(new DxfCodePair(70, (short)(this.VersionNumber)));
             pairs.Add(new DxfCodePair(3, (this.Description)));
-            pairs.Add(new DxfCodePair(10, UpperLeftCorner?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, UpperLeftCorner?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, UpperLeftCorner?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, LowerRightCorner?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, LowerRightCorner?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, LowerRightCorner?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, UpperLeftCorner.X));
+            pairs.Add(new DxfCodePair(20, UpperLeftCorner.Y));
+            pairs.Add(new DxfCodePair(30, UpperLeftCorner.Z));
+            pairs.Add(new DxfCodePair(11, LowerRightCorner.X));
+            pairs.Add(new DxfCodePair(21, LowerRightCorner.Y));
+            pairs.Add(new DxfCodePair(31, LowerRightCorner.Z));
             pairs.Add(new DxfCodePair(71, (short)(this.ObjectType)));
             pairs.Add(new DxfCodePair(72, (short)(this.TileMode)));
             pairs.Add(new DxfCodePair(90, (this.BinaryDataLength)));
@@ -75,22 +75,22 @@ namespace IxMilia.Dxf.Entities
                     this.Description = (pair.StringValue);
                     break;
                 case 10:
-                    this.UpperLeftCorner.X = pair.DoubleValue;
+                    this.UpperLeftCorner = this.UpperLeftCorner.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.UpperLeftCorner.Y = pair.DoubleValue;
+                    this.UpperLeftCorner = this.UpperLeftCorner.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.UpperLeftCorner.Z = pair.DoubleValue;
+                    this.UpperLeftCorner = this.UpperLeftCorner.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.LowerRightCorner.X = pair.DoubleValue;
+                    this.LowerRightCorner = this.LowerRightCorner.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.LowerRightCorner.Y = pair.DoubleValue;
+                    this.LowerRightCorner = this.LowerRightCorner.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.LowerRightCorner.Z = pair.DoubleValue;
+                    this.LowerRightCorner = this.LowerRightCorner.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 70:
                     this.VersionNumber = (int)(pair.ShortValue);

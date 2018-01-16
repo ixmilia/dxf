@@ -33,23 +33,22 @@ namespace IxMilia.Dxf.Objects
                         break;
                     case 10:
                         // code 10 always starts a new point
-                        ClipBoundaryDefinitionPoints.Add(new DxfPoint());
-                        ClipBoundaryDefinitionPoints.Last().X = pair.DoubleValue;
+                        ClipBoundaryDefinitionPoints.Add(new DxfPoint(pair.DoubleValue, 0.0, 0.0));
                         break;
                     case 20:
-                        ClipBoundaryDefinitionPoints.Last().Y = pair.DoubleValue;
+                        ClipBoundaryDefinitionPoints[ClipBoundaryDefinitionPoints.Count - 1] = ClipBoundaryDefinitionPoints[ClipBoundaryDefinitionPoints.Count - 1].WithUpdatedY(pair.DoubleValue);
                         break;
                     case 30:
-                        ClipBoundaryDefinitionPoints.Last().Z = pair.DoubleValue;
+                        ClipBoundaryDefinitionPoints[ClipBoundaryDefinitionPoints.Count - 1] = ClipBoundaryDefinitionPoints[ClipBoundaryDefinitionPoints.Count - 1].WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 11:
-                        ClipBoundaryOrigin.X = pair.DoubleValue;
+                        ClipBoundaryOrigin = ClipBoundaryOrigin.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 21:
-                        ClipBoundaryOrigin.Y = pair.DoubleValue;
+                        ClipBoundaryOrigin = ClipBoundaryOrigin.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 31:
-                        ClipBoundaryOrigin.Z = pair.DoubleValue;
+                        ClipBoundaryOrigin = ClipBoundaryOrigin.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 40:
                         if (!hasReadFrontClippingPlane)
@@ -110,13 +109,13 @@ namespace IxMilia.Dxf.Objects
                         IsBackClippingPlane = BoolShort(pair.ShortValue);
                         break;
                     case 210:
-                        ClipBoundaryNormal.X = pair.DoubleValue;
+                        ClipBoundaryNormal = ClipBoundaryNormal.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 220:
-                        ClipBoundaryNormal.Y = pair.DoubleValue;
+                        ClipBoundaryNormal = ClipBoundaryNormal.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 230:
-                        ClipBoundaryNormal.Z = pair.DoubleValue;
+                        ClipBoundaryNormal = ClipBoundaryNormal.WithUpdatedZ(pair.DoubleValue);
                         break;
                     default:
                         if (!TrySetPair(pair))

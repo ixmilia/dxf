@@ -82,15 +82,15 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
             pairs.Add(new DxfCodePair(40, EnsurePositiveOrDefault(1.0)(ViewHeight)));
-            pairs.Add(new DxfCodePair(10, (ViewCenterPoint?.X ?? 0.0)));
-            pairs.Add(new DxfCodePair(20, (ViewCenterPoint?.Y ?? 0.0)));
+            pairs.Add(new DxfCodePair(10, (ViewCenterPoint.X)));
+            pairs.Add(new DxfCodePair(20, (ViewCenterPoint.Y)));
             pairs.Add(new DxfCodePair(41, EnsurePositiveOrDefault(1.0)(ViewWidth)));
-            pairs.Add(new DxfCodePair(11, (ViewDirection?.X ?? 0.0)));
-            pairs.Add(new DxfCodePair(21, (ViewDirection?.Y ?? 0.0)));
-            pairs.Add(new DxfCodePair(31, (ViewDirection?.Z ?? 0.0)));
-            pairs.Add(new DxfCodePair(12, (TargetPoint?.X ?? 0.0)));
-            pairs.Add(new DxfCodePair(22, (TargetPoint?.Y ?? 0.0)));
-            pairs.Add(new DxfCodePair(32, (TargetPoint?.Z ?? 0.0)));
+            pairs.Add(new DxfCodePair(11, (ViewDirection.X)));
+            pairs.Add(new DxfCodePair(21, (ViewDirection.Y)));
+            pairs.Add(new DxfCodePair(31, (ViewDirection.Z)));
+            pairs.Add(new DxfCodePair(12, (TargetPoint.X)));
+            pairs.Add(new DxfCodePair(22, (TargetPoint.Y)));
+            pairs.Add(new DxfCodePair(32, (TargetPoint.Z)));
             pairs.Add(new DxfCodePair(42, EnsurePositiveOrDefault(1.0)(LensLength)));
             pairs.Add(new DxfCodePair(43, (FrontClippingPlane)));
             pairs.Add(new DxfCodePair(44, (BackClippingPlane)));
@@ -133,47 +133,47 @@ namespace IxMilia.Dxf
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(110, (UCSOrigin?.X ?? 0.0)));
+                pairs.Add(new DxfCodePair(110, (UCSOrigin.X)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(120, (UCSOrigin?.Y ?? 0.0)));
+                pairs.Add(new DxfCodePair(120, (UCSOrigin.Y)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(130, (UCSOrigin?.Z ?? 0.0)));
+                pairs.Add(new DxfCodePair(130, (UCSOrigin.Z)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(111, (UCSXAxis?.X ?? 0.0)));
+                pairs.Add(new DxfCodePair(111, (UCSXAxis.X)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(121, (UCSXAxis?.Y ?? 0.0)));
+                pairs.Add(new DxfCodePair(121, (UCSXAxis.Y)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(131, (UCSXAxis?.Z ?? 0.0)));
+                pairs.Add(new DxfCodePair(131, (UCSXAxis.Z)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(112, (UCSYAxis?.X ?? 0.0)));
+                pairs.Add(new DxfCodePair(112, (UCSYAxis.X)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(122, (UCSYAxis?.Y ?? 0.0)));
+                pairs.Add(new DxfCodePair(122, (UCSYAxis.Y)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(132, (UCSYAxis?.Z ?? 0.0)));
+                pairs.Add(new DxfCodePair(132, (UCSYAxis.Z)));
             }
 
             if (IsAssociatedUCSPresent && version >= DxfAcadVersion.R2000)
@@ -227,31 +227,31 @@ namespace IxMilia.Dxf
                         item.ViewHeight = (pair.DoubleValue);
                         break;
                     case 10:
-                        item.ViewCenterPoint.X = (pair.DoubleValue);
+                        item.ViewCenterPoint = item.ViewCenterPoint.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 20:
-                        item.ViewCenterPoint.Y = (pair.DoubleValue);
+                        item.ViewCenterPoint = item.ViewCenterPoint.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 41:
                         item.ViewWidth = (pair.DoubleValue);
                         break;
                     case 11:
-                        item.ViewDirection.X = (pair.DoubleValue);
+                        item.ViewDirection = item.ViewDirection.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 21:
-                        item.ViewDirection.Y = (pair.DoubleValue);
+                        item.ViewDirection = item.ViewDirection.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 31:
-                        item.ViewDirection.Z = (pair.DoubleValue);
+                        item.ViewDirection = item.ViewDirection.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 12:
-                        item.TargetPoint.X = (pair.DoubleValue);
+                        item.TargetPoint = item.TargetPoint.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 22:
-                        item.TargetPoint.Y = (pair.DoubleValue);
+                        item.TargetPoint = item.TargetPoint.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 32:
-                        item.TargetPoint.Z = (pair.DoubleValue);
+                        item.TargetPoint = item.TargetPoint.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 42:
                         item.LensLength = (pair.DoubleValue);
@@ -290,31 +290,31 @@ namespace IxMilia.Dxf
                         item.SunOwnershipPointer = UIntHandle(pair.StringValue);
                         break;
                     case 110:
-                        item.UCSOrigin.X = (pair.DoubleValue);
+                        item.UCSOrigin = item.UCSOrigin.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 120:
-                        item.UCSOrigin.Y = (pair.DoubleValue);
+                        item.UCSOrigin = item.UCSOrigin.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 130:
-                        item.UCSOrigin.Z = (pair.DoubleValue);
+                        item.UCSOrigin = item.UCSOrigin.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 111:
-                        item.UCSXAxis.X = (pair.DoubleValue);
+                        item.UCSXAxis = item.UCSXAxis.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 121:
-                        item.UCSXAxis.Y = (pair.DoubleValue);
+                        item.UCSXAxis = item.UCSXAxis.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 131:
-                        item.UCSXAxis.Z = (pair.DoubleValue);
+                        item.UCSXAxis = item.UCSXAxis.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 112:
-                        item.UCSYAxis.X = (pair.DoubleValue);
+                        item.UCSYAxis = item.UCSYAxis.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 122:
-                        item.UCSYAxis.Y = (pair.DoubleValue);
+                        item.UCSYAxis = item.UCSYAxis.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 132:
-                        item.UCSYAxis.Z = (pair.DoubleValue);
+                        item.UCSYAxis = item.UCSYAxis.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 79:
                         item.OrthographicViewType = (DxfOrthographicViewType)(pair.ShortValue);

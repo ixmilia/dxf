@@ -4,22 +4,68 @@ using System;
 
 namespace IxMilia.Dxf
 {
-    public class DxfPoint
+    public struct DxfPoint : IEquatable<DxfPoint>
     {
-        public double X;
-        public double Y;
-        public double Z;
-
-        public DxfPoint()
-            : this(0, 0, 0)
-        {
-        }
+        public double X { get; }
+        public double Y { get; }
+        public double Z { get; }
 
         public DxfPoint(double x, double y, double z)
+            : this()
         {
-            X = x;
-            Y = y;
-            Z = z;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
+
+        public static implicit operator DxfVector(DxfPoint point)
+        {
+            return new DxfVector(point.X, point.Y, point.Z);
+        }
+
+        public static bool operator ==(DxfPoint p1, DxfPoint p2)
+        {
+            return p1.X == p2.X && p1.Y == p2.Y && p1.Z == p2.Z;
+        }
+
+        public static bool operator !=(DxfPoint p1, DxfPoint p2)
+        {
+            return !(p1 == p2);
+        }
+
+        public static DxfPoint operator +(DxfPoint p1, DxfVector p2)
+        {
+            return new DxfPoint(p1.X + p2.X, p1.Y + p2.Y, p1.Z + p2.Z);
+        }
+
+        public static DxfVector operator -(DxfPoint p1, DxfVector p2)
+        {
+            return new DxfVector(p1.X - p2.X, p1.Y - p2.Y, p1.Z - p2.Z);
+        }
+
+        public static DxfPoint operator *(DxfPoint p, double scalar)
+        {
+            return new DxfPoint(p.X * scalar, p.Y * scalar, p.Z * scalar);
+        }
+
+        public static DxfPoint operator /(DxfPoint p, double scalar)
+        {
+            return new DxfPoint(p.X / scalar, p.Y / scalar, p.Z / scalar);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is DxfPoint && this == (DxfPoint)obj;
+        }
+
+        public bool Equals(DxfPoint other)
+        {
+            return this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
         }
 
         public override string ToString()
@@ -32,63 +78,21 @@ namespace IxMilia.Dxf
             get { return new DxfPoint(0, 0, 0); }
         }
 
-        public static bool operator ==(DxfPoint a, DxfPoint b)
+        // the following methods are only used to allow setting individual x/y/z values in the auto-generated readers
+
+        internal DxfPoint WithUpdatedX(double x)
         {
-            if (ReferenceEquals(a, b))
-                return true;
-            if (((object)a) == null || ((object)b) == null)
-                return false;
-            return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
+            return new DxfPoint(x, this.Y, this.Z);
         }
 
-        public static bool operator !=(DxfPoint a, DxfPoint b)
+        internal DxfPoint WithUpdatedY(double y)
         {
-            return !(a == b);
+            return new DxfPoint(this.X, y, this.Z);
         }
 
-        public override int GetHashCode()
+        internal DxfPoint WithUpdatedZ(double z)
         {
-            return base.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is DxfPoint)
-                return this == (DxfPoint)obj;
-            return false;
-        }
-    }
-
-    public class DxfVector : DxfPoint
-    {
-        public DxfVector()
-            : base()
-        {
-        }
-
-        public DxfVector(double x, double y, double z)
-            : base(x, y, z)
-        {
-        }
-
-        public static DxfVector Zero
-        {
-            get { return new DxfVector(0, 0, 0); }
-        }
-
-        public static DxfVector XAxis
-        {
-            get { return new DxfVector(1, 0, 0); }
-        }
-
-        public static DxfVector YAxis
-        {
-            get { return new DxfVector(0, 1, 0); }
-        }
-
-        public static DxfVector ZAxis
-        {
-            get { return new DxfVector(0, 0, 1); }
+            return new DxfPoint(this.X, this.Y, z);
         }
     }
 }

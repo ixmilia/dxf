@@ -118,23 +118,23 @@ namespace IxMilia.Dxf.Objects
                     _current2DPoint = new DxfPoint(pair.DoubleValue, 0.0, 0.0);
                     break;
                 case 20:
-                    _current2DPoint.Y = pair.DoubleValue;
+                    _current2DPoint = _current2DPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    _current2DPoint.Z = pair.DoubleValue;
+                    _current2DPoint = _current2DPoint.WithUpdatedZ(pair.DoubleValue);
                     SetValue(_current2DPoint);
-                    _current2DPoint = null;
+                    _current2DPoint = default(DxfPoint);
                     break;
                 case 11:
                     _current3DPoint = new DxfPoint(pair.DoubleValue, 0.0, 0.0);
                     break;
                 case 21:
-                    _current3DPoint.Y = pair.DoubleValue;
+                    _current3DPoint = _current3DPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    _current3DPoint.Z = pair.DoubleValue;
+                    _current3DPoint = _current3DPoint.WithUpdatedZ(pair.DoubleValue);
                     SetValue(_current3DPoint);
-                    _current3DPoint = null;
+                    _current3DPoint = default(DxfPoint);
                     break;
                 case 331:
                 case 360:

@@ -202,7 +202,7 @@ namespace IxMilia.Dxf.Generator
                         for (int i = 0; i < codes.Length; i++, suffix++)
                         {
                             AppendLine($"        case {codes[i]}:");
-                            AppendLine($"            this.{name}.{suffix} = pair.DoubleValue;");
+                            AppendLine($"            this.{name} = this.{name}.WithUpdated{suffix}(pair.DoubleValue);");
                             AppendLine("            break;");
                         }
                     }

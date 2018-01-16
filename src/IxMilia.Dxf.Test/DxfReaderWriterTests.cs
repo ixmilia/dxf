@@ -1972,7 +1972,7 @@ AcDbSymbolTableRecord
 
             // values must be positive; will be normalized on write
             viewPort.SnapSpacing = new DxfVector(double.NaN, double.PositiveInfinity, 0.0); // codes 14, 24; normalized to 1.0, 1.0
-            viewPort.GridSpacing = null; // codes 15, 25; normalized to 1.0, 1.0
+            viewPort.GridSpacing = default(DxfVector); // codes 15, 25; normalized to 1.0, 1.0
             viewPort.ViewHeight = -1.0; // code 40; normalized to 1.0
             viewPort.ViewPortAspectRatio = 0.0; // code 41; normalized to 1.0
             viewPort.LensLength = double.PositiveInfinity; // code 42; normalized to 50.0

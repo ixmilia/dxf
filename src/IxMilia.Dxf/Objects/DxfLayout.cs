@@ -75,70 +75,70 @@ namespace IxMilia.Dxf.Objects
                     this.LayoutName = (pair.StringValue);
                     break;
                 case 10:
-                    this.MinimumLimits.X = pair.DoubleValue;
+                    this.MinimumLimits = this.MinimumLimits.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.MinimumLimits.Y = pair.DoubleValue;
+                    this.MinimumLimits = this.MinimumLimits.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 11:
-                    this.MaximumLimits.X = pair.DoubleValue;
+                    this.MaximumLimits = this.MaximumLimits.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.MaximumLimits.Y = pair.DoubleValue;
+                    this.MaximumLimits = this.MaximumLimits.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 12:
-                    this.InsertionBasePoint.X = pair.DoubleValue;
+                    this.InsertionBasePoint = this.InsertionBasePoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 22:
-                    this.InsertionBasePoint.Y = pair.DoubleValue;
+                    this.InsertionBasePoint = this.InsertionBasePoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 32:
-                    this.InsertionBasePoint.Z = pair.DoubleValue;
+                    this.InsertionBasePoint = this.InsertionBasePoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 13:
-                    this.UcsOrigin.X = pair.DoubleValue;
+                    this.UcsOrigin = this.UcsOrigin.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 23:
-                    this.UcsOrigin.Y = pair.DoubleValue;
+                    this.UcsOrigin = this.UcsOrigin.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 33:
-                    this.UcsOrigin.Z = pair.DoubleValue;
+                    this.UcsOrigin = this.UcsOrigin.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 14:
-                    this.MinimumExtents.X = pair.DoubleValue;
+                    this.MinimumExtents = this.MinimumExtents.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 24:
-                    this.MinimumExtents.Y = pair.DoubleValue;
+                    this.MinimumExtents = this.MinimumExtents.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 34:
-                    this.MinimumExtents.Z = pair.DoubleValue;
+                    this.MinimumExtents = this.MinimumExtents.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 15:
-                    this.MaximumExtents.X = pair.DoubleValue;
+                    this.MaximumExtents = this.MaximumExtents.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 25:
-                    this.MaximumExtents.Y = pair.DoubleValue;
+                    this.MaximumExtents = this.MaximumExtents.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 35:
-                    this.MaximumExtents.Z = pair.DoubleValue;
+                    this.MaximumExtents = this.MaximumExtents.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 16:
-                    this.UcsXAxis.X = pair.DoubleValue;
+                    this.UcsXAxis = this.UcsXAxis.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 26:
-                    this.UcsXAxis.Y = pair.DoubleValue;
+                    this.UcsXAxis = this.UcsXAxis.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 36:
-                    this.UcsXAxis.Z = pair.DoubleValue;
+                    this.UcsXAxis = this.UcsXAxis.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 17:
-                    this.UcsYAxis.X = pair.DoubleValue;
+                    this.UcsYAxis = this.UcsYAxis.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 27:
-                    this.UcsYAxis.Y = pair.DoubleValue;
+                    this.UcsYAxis = this.UcsYAxis.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 37:
-                    this.UcsYAxis.Z = pair.DoubleValue;
+                    this.UcsYAxis = this.UcsYAxis.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 70:
                     this.LayoutFlags = (pair.ShortValue);

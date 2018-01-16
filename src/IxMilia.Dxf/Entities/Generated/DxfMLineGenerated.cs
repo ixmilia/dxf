@@ -144,14 +144,14 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(71, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(72, (short)Vertices.Count));
             pairs.Add(new DxfCodePair(73, (short)(this.StyleElementCount)));
-            pairs.Add(new DxfCodePair(10, StartPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, StartPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, StartPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, StartPoint.X));
+            pairs.Add(new DxfCodePair(20, StartPoint.Y));
+            pairs.Add(new DxfCodePair(30, StartPoint.Z));
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, Normal.X));
+                pairs.Add(new DxfCodePair(220, Normal.Y));
+                pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
             foreach (var item in Vertices)
@@ -189,13 +189,13 @@ namespace IxMilia.Dxf.Entities
                     this.StyleName = (pair.StringValue);
                     break;
                 case 10:
-                    this.StartPoint.X = pair.DoubleValue;
+                    this.StartPoint = this.StartPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.StartPoint.Y = pair.DoubleValue;
+                    this.StartPoint = this.StartPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.StartPoint.Z = pair.DoubleValue;
+                    this.StartPoint = this.StartPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
                     this._vertexX.Add((pair.DoubleValue));
@@ -252,13 +252,13 @@ namespace IxMilia.Dxf.Entities
                     this._areaFillParameterCount = (int)(pair.ShortValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 340:
                     this.StylePointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);

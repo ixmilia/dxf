@@ -45,12 +45,12 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(100, "AcDbNavisworksModelDef"));
             pairs.Add(new DxfCodePair(1, (this.ModelPath)));
             pairs.Add(new DxfCodePair(290, (this.IsModelLoadedOnDrawingOpen)));
-            pairs.Add(new DxfCodePair(10, MinimumExtent?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, MinimumExtent?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, MinimumExtent?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, MaximumExtent?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, MaximumExtent?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, MaximumExtent?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, MinimumExtent.X));
+            pairs.Add(new DxfCodePair(20, MinimumExtent.Y));
+            pairs.Add(new DxfCodePair(30, MinimumExtent.Z));
+            pairs.Add(new DxfCodePair(11, MaximumExtent.X));
+            pairs.Add(new DxfCodePair(21, MaximumExtent.Y));
+            pairs.Add(new DxfCodePair(31, MaximumExtent.Z));
             pairs.Add(new DxfCodePair(290, (this.IsHostGeometryDrawn)));
         }
 
@@ -66,22 +66,22 @@ namespace IxMilia.Dxf.Objects
                     this.ModelPath = (pair.StringValue);
                     break;
                 case 10:
-                    this.MinimumExtent.X = pair.DoubleValue;
+                    this.MinimumExtent = this.MinimumExtent.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.MinimumExtent.Y = pair.DoubleValue;
+                    this.MinimumExtent = this.MinimumExtent.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.MinimumExtent.Z = pair.DoubleValue;
+                    this.MinimumExtent = this.MinimumExtent.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.MaximumExtent.X = pair.DoubleValue;
+                    this.MaximumExtent = this.MaximumExtent.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.MaximumExtent.Y = pair.DoubleValue;
+                    this.MaximumExtent = this.MaximumExtent.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.MaximumExtent.Z = pair.DoubleValue;
+                    this.MaximumExtent = this.MaximumExtent.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 290:
                     switch (_code_290_index)

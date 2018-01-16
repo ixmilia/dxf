@@ -269,7 +269,7 @@ namespace IxMilia.Dxf.Generator
                                         IncreaseIndent();
                                     }
 
-                                    AppendLine($"pairs.Add(new DxfCodePair({codeOverrides[i]}, {WriteConverter(property)}({Name(property)}?.{prop} ?? 0.0)));");
+                                    AppendLine($"pairs.Add(new DxfCodePair({codeOverrides[i]}, {WriteConverter(property)}({Name(property)}.{prop})));");
 
                                     if (hasPredicate)
                                     {
@@ -355,7 +355,7 @@ namespace IxMilia.Dxf.Generator
                                 var codeType = DxfCodePair.ExpectedType(codeOverrides[i]);
                                 var codeTypeValue = TypeToString(codeType);
                                 AppendLine($"case {codeOverrides[i]}:");
-                                AppendLine($"    item.{Name(property)}.{prop} = {ReadConverter(property)}(pair.{codeTypeValue});");
+                                AppendLine($"    item.{Name(property)} = item.{Name(property)}.WithUpdated{prop}(pair.{codeTypeValue});");
                                 AppendLine("    break;");
                             }
                         }

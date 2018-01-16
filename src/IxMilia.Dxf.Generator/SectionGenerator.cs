@@ -175,11 +175,11 @@ namespace IxMilia.Dxf.Generator
                 if (type == "DxfPoint" || type == "DxfVector")
                 {
                     var prop = Property(property);
-                    AppendLine($"list.Add(new DxfCodePair(10, this.{prop}?.X ?? default(double)));");
-                    AppendLine($"list.Add(new DxfCodePair(20, this.{prop}?.Y ?? default(double)));");
+                    AppendLine($"list.Add(new DxfCodePair(10, this.{prop}.X));");
+                    AppendLine($"list.Add(new DxfCodePair(20, this.{prop}.Y));");
                     if (Math.Abs(Code(property)) >= 3)
                     {
-                        AppendLine($"list.Add(new DxfCodePair(30, this.{prop}?.Z ?? default(double)));");
+                        AppendLine($"list.Add(new DxfCodePair(30, this.{prop}.Z));");
                     }
                 }
                 else
@@ -215,7 +215,7 @@ namespace IxMilia.Dxf.Generator
                 var prop = Property(propertyGroup.First());
                 if (type == "DxfPoint" || type == "DxfVector")
                 {
-                    AppendLine($"SetPoint(pair, this.{prop});");
+                    AppendLine($"this.{prop} = UpdatePoint(pair, this.{prop});");
                     AppendLine("break;");
                 }
                 else

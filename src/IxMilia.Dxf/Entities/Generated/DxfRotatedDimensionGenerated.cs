@@ -50,15 +50,15 @@ namespace IxMilia.Dxf.Entities
             {
                 pairs.Add(new DxfCodePair(100, "AcDbAlignedDimension"));
             }
-            pairs.Add(new DxfCodePair(12, InsertionPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(22, InsertionPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(32, InsertionPoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(13, DefinitionPoint2?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(23, DefinitionPoint2?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(33, DefinitionPoint2?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(14, DefinitionPoint3?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(24, DefinitionPoint3?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(34, DefinitionPoint3?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(12, InsertionPoint.X));
+            pairs.Add(new DxfCodePair(22, InsertionPoint.Y));
+            pairs.Add(new DxfCodePair(32, InsertionPoint.Z));
+            pairs.Add(new DxfCodePair(13, DefinitionPoint2.X));
+            pairs.Add(new DxfCodePair(23, DefinitionPoint2.Y));
+            pairs.Add(new DxfCodePair(33, DefinitionPoint2.Z));
+            pairs.Add(new DxfCodePair(14, DefinitionPoint3.X));
+            pairs.Add(new DxfCodePair(24, DefinitionPoint3.Y));
+            pairs.Add(new DxfCodePair(34, DefinitionPoint3.Z));
             pairs.Add(new DxfCodePair(50, (this.RotationAngle)));
             pairs.Add(new DxfCodePair(52, (this.ExtensionLineAngle)));
             if (version >= DxfAcadVersion.R13)
@@ -72,31 +72,31 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 12:
-                    this.InsertionPoint.X = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 22:
-                    this.InsertionPoint.Y = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 32:
-                    this.InsertionPoint.Z = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 13:
-                    this.DefinitionPoint2.X = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 23:
-                    this.DefinitionPoint2.Y = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 33:
-                    this.DefinitionPoint2.Z = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 14:
-                    this.DefinitionPoint3.X = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 24:
-                    this.DefinitionPoint3.Y = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 34:
-                    this.DefinitionPoint3.Z = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 50:
                     this.RotationAngle = (pair.DoubleValue);

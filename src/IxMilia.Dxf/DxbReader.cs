@@ -32,7 +32,7 @@ namespace IxMilia.Dxf
             var nul = reader.ReadChar();
             Debug.Assert(nul == 0x00);
 
-            DxfPoint blockBase = null;
+            DxfPoint? blockBase = null;
             var entities = new List<DxfEntity>();
             var stillReading = true;
             Action<Func<BinaryReader, DxfEntity>> addEntity = (entityReader) =>
@@ -151,7 +151,7 @@ namespace IxMilia.Dxf
             {
                 // entities are all contained in a block
                 var block = new DxfBlock();
-                block.BasePoint = blockBase;
+                block.BasePoint = blockBase.GetValueOrDefault();
                 foreach (var entity in entities)
                 {
                     block.Entities.Add(entity);

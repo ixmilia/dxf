@@ -124,7 +124,8 @@ namespace IxMilia.Dxf
                         // add to last element, add to last offset value
                         if (item.Elements.Count > 0 && item.Elements.Last().Offsets.Count > 0)
                         {
-                            item.Elements.Last().Offsets.Last().Y = pair.DoubleValue;
+                            var offsets = item.Elements.Last().Offsets;
+                            offsets[offsets.Count - 1] = offsets[offsets.Count - 1].WithUpdatedY(pair.DoubleValue);
                         }
                         break;
                     case 9:

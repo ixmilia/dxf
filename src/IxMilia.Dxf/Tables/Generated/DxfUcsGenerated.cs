@@ -49,15 +49,15 @@ namespace IxMilia.Dxf
 
             pairs.Add(new DxfCodePair(2, Name));
             pairs.Add(new DxfCodePair(70, (short)StandardFlags));
-            pairs.Add(new DxfCodePair(10, (Origin?.X ?? 0.0)));
-            pairs.Add(new DxfCodePair(20, (Origin?.Y ?? 0.0)));
-            pairs.Add(new DxfCodePair(30, (Origin?.Z ?? 0.0)));
-            pairs.Add(new DxfCodePair(11, (XAxis?.X ?? 0.0)));
-            pairs.Add(new DxfCodePair(21, (XAxis?.Y ?? 0.0)));
-            pairs.Add(new DxfCodePair(31, (XAxis?.Z ?? 0.0)));
-            pairs.Add(new DxfCodePair(12, (YAxis?.X ?? 0.0)));
-            pairs.Add(new DxfCodePair(22, (YAxis?.Y ?? 0.0)));
-            pairs.Add(new DxfCodePair(32, (YAxis?.Z ?? 0.0)));
+            pairs.Add(new DxfCodePair(10, (Origin.X)));
+            pairs.Add(new DxfCodePair(20, (Origin.Y)));
+            pairs.Add(new DxfCodePair(30, (Origin.Z)));
+            pairs.Add(new DxfCodePair(11, (XAxis.X)));
+            pairs.Add(new DxfCodePair(21, (XAxis.Y)));
+            pairs.Add(new DxfCodePair(31, (XAxis.Z)));
+            pairs.Add(new DxfCodePair(12, (YAxis.X)));
+            pairs.Add(new DxfCodePair(22, (YAxis.Y)));
+            pairs.Add(new DxfCodePair(32, (YAxis.Z)));
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(79, (short)(OrthographicViewType)));
@@ -80,17 +80,17 @@ namespace IxMilia.Dxf
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(13, (OrthographicOrigin?.X ?? 0.0)));
+                pairs.Add(new DxfCodePair(13, (OrthographicOrigin.X)));
             }
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(23, (OrthographicOrigin?.Y ?? 0.0)));
+                pairs.Add(new DxfCodePair(23, (OrthographicOrigin.Y)));
             }
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(33, (OrthographicOrigin?.Z ?? 0.0)));
+                pairs.Add(new DxfCodePair(33, (OrthographicOrigin.Z)));
             }
 
             if (XData != null)
@@ -121,31 +121,31 @@ namespace IxMilia.Dxf
                         item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                         break;
                     case 10:
-                        item.Origin.X = (pair.DoubleValue);
+                        item.Origin = item.Origin.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 20:
-                        item.Origin.Y = (pair.DoubleValue);
+                        item.Origin = item.Origin.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 30:
-                        item.Origin.Z = (pair.DoubleValue);
+                        item.Origin = item.Origin.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 11:
-                        item.XAxis.X = (pair.DoubleValue);
+                        item.XAxis = item.XAxis.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 21:
-                        item.XAxis.Y = (pair.DoubleValue);
+                        item.XAxis = item.XAxis.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 31:
-                        item.XAxis.Z = (pair.DoubleValue);
+                        item.XAxis = item.XAxis.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 12:
-                        item.YAxis.X = (pair.DoubleValue);
+                        item.YAxis = item.YAxis.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 22:
-                        item.YAxis.Y = (pair.DoubleValue);
+                        item.YAxis = item.YAxis.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 32:
-                        item.YAxis.Z = (pair.DoubleValue);
+                        item.YAxis = item.YAxis.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 79:
                         item.OrthographicViewType = (DxfOrthographicViewType)(pair.ShortValue);
@@ -160,13 +160,13 @@ namespace IxMilia.Dxf
                         item.OrthographicType = (DxfOrthographicViewType)(pair.ShortValue);
                         break;
                     case 13:
-                        item.OrthographicOrigin.X = (pair.DoubleValue);
+                        item.OrthographicOrigin = item.OrthographicOrigin.WithUpdatedX(pair.DoubleValue);
                         break;
                     case 23:
-                        item.OrthographicOrigin.Y = (pair.DoubleValue);
+                        item.OrthographicOrigin = item.OrthographicOrigin.WithUpdatedY(pair.DoubleValue);
                         break;
                     case 33:
-                        item.OrthographicOrigin.Z = (pair.DoubleValue);
+                        item.OrthographicOrigin = item.OrthographicOrigin.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case (int)DxfXDataType.ApplicationName:
                         item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);

@@ -74,12 +74,12 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(290, (this.IsActive)));
             pairs.Add(new DxfCodePair(291, (this.PlotGlyph)));
             pairs.Add(new DxfCodePair(40, (this.Intensity)));
-            pairs.Add(new DxfCodePair(10, Position?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, Position?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, Position?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, TargetLocation?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, TargetLocation?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, TargetLocation?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, Position.X));
+            pairs.Add(new DxfCodePair(20, Position.Y));
+            pairs.Add(new DxfCodePair(30, Position.Z));
+            pairs.Add(new DxfCodePair(11, TargetLocation.X));
+            pairs.Add(new DxfCodePair(21, TargetLocation.Y));
+            pairs.Add(new DxfCodePair(31, TargetLocation.Z));
             pairs.Add(new DxfCodePair(72, (short)(this.AttentuationType)));
             pairs.Add(new DxfCodePair(292, (this.UseAttenuationLimits)));
             pairs.Add(new DxfCodePair(41, (this.AttenuationStartLimit)));
@@ -100,22 +100,22 @@ namespace IxMilia.Dxf.Entities
                     this.Name = (pair.StringValue);
                     break;
                 case 10:
-                    this.Position.X = pair.DoubleValue;
+                    this.Position = this.Position.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.Position.Y = pair.DoubleValue;
+                    this.Position = this.Position.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.Position.Z = pair.DoubleValue;
+                    this.Position = this.Position.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.TargetLocation.X = pair.DoubleValue;
+                    this.TargetLocation = this.TargetLocation.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.TargetLocation.Y = pair.DoubleValue;
+                    this.TargetLocation = this.TargetLocation.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.TargetLocation.Z = pair.DoubleValue;
+                    this.TargetLocation = this.TargetLocation.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.Intensity = (pair.DoubleValue);

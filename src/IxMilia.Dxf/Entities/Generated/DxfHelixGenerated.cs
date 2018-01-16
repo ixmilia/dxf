@@ -54,15 +54,15 @@ namespace IxMilia.Dxf.Entities
             pairs.Add(new DxfCodePair(100, "AcDbHelix"));
             pairs.Add(new DxfCodePair(90, (this.MajorReleaseNumber)));
             pairs.Add(new DxfCodePair(91, (this.MaintainenceReleaseNumber)));
-            pairs.Add(new DxfCodePair(10, AxisBasePoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, AxisBasePoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, AxisBasePoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, StartPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, StartPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, StartPoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(12, AxisVector?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(22, AxisVector?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(32, AxisVector?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, AxisBasePoint.X));
+            pairs.Add(new DxfCodePair(20, AxisBasePoint.Y));
+            pairs.Add(new DxfCodePair(30, AxisBasePoint.Z));
+            pairs.Add(new DxfCodePair(11, StartPoint.X));
+            pairs.Add(new DxfCodePair(21, StartPoint.Y));
+            pairs.Add(new DxfCodePair(31, StartPoint.Z));
+            pairs.Add(new DxfCodePair(12, AxisVector.X));
+            pairs.Add(new DxfCodePair(22, AxisVector.Y));
+            pairs.Add(new DxfCodePair(32, AxisVector.Z));
             pairs.Add(new DxfCodePair(40, (this.Radius)));
             pairs.Add(new DxfCodePair(41, (this.NumberOfTurns)));
             pairs.Add(new DxfCodePair(42, (this.TurnHeight)));
@@ -75,31 +75,31 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.AxisBasePoint.X = pair.DoubleValue;
+                    this.AxisBasePoint = this.AxisBasePoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.AxisBasePoint.Y = pair.DoubleValue;
+                    this.AxisBasePoint = this.AxisBasePoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.AxisBasePoint.Z = pair.DoubleValue;
+                    this.AxisBasePoint = this.AxisBasePoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.StartPoint.X = pair.DoubleValue;
+                    this.StartPoint = this.StartPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.StartPoint.Y = pair.DoubleValue;
+                    this.StartPoint = this.StartPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.StartPoint.Z = pair.DoubleValue;
+                    this.StartPoint = this.StartPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 12:
-                    this.AxisVector.X = pair.DoubleValue;
+                    this.AxisVector = this.AxisVector.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 22:
-                    this.AxisVector.Y = pair.DoubleValue;
+                    this.AxisVector = this.AxisVector.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 32:
-                    this.AxisVector.Z = pair.DoubleValue;
+                    this.AxisVector = this.AxisVector.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.Radius = (pair.DoubleValue);

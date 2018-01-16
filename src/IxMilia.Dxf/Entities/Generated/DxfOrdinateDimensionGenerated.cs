@@ -42,12 +42,12 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbOrdinateDimension"));
-            pairs.Add(new DxfCodePair(13, DefinitionPoint2?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(23, DefinitionPoint2?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(33, DefinitionPoint2?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(14, DefinitionPoint3?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(24, DefinitionPoint3?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(34, DefinitionPoint3?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(13, DefinitionPoint2.X));
+            pairs.Add(new DxfCodePair(23, DefinitionPoint2.Y));
+            pairs.Add(new DxfCodePair(33, DefinitionPoint2.Z));
+            pairs.Add(new DxfCodePair(14, DefinitionPoint3.X));
+            pairs.Add(new DxfCodePair(24, DefinitionPoint3.Y));
+            pairs.Add(new DxfCodePair(34, DefinitionPoint3.Z));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -55,22 +55,22 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 13:
-                    this.DefinitionPoint2.X = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 23:
-                    this.DefinitionPoint2.Y = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 33:
-                    this.DefinitionPoint2.Z = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 14:
-                    this.DefinitionPoint3.X = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 24:
-                    this.DefinitionPoint3.Y = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 34:
-                    this.DefinitionPoint3.Z = pair.DoubleValue;
+                    this.DefinitionPoint3 = this.DefinitionPoint3.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

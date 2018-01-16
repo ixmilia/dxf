@@ -41,9 +41,9 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbRadialDimension"));
-            pairs.Add(new DxfCodePair(15, DefinitionPoint2?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(25, DefinitionPoint2?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(35, DefinitionPoint2?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(15, DefinitionPoint2.X));
+            pairs.Add(new DxfCodePair(25, DefinitionPoint2.Y));
+            pairs.Add(new DxfCodePair(35, DefinitionPoint2.Z));
             pairs.Add(new DxfCodePair(40, (this.LeaderLength)));
         }
 
@@ -52,13 +52,13 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 15:
-                    this.DefinitionPoint2.X = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 25:
-                    this.DefinitionPoint2.Y = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 35:
-                    this.DefinitionPoint2.Z = pair.DoubleValue;
+                    this.DefinitionPoint2 = this.DefinitionPoint2.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.LeaderLength = (pair.DoubleValue);

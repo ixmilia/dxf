@@ -62,12 +62,12 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(30, item.Z));
             }
 
-            pairs.Add(new DxfCodePair(210, ClipBoundaryNormal?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(220, ClipBoundaryNormal?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(230, ClipBoundaryNormal?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, ClipBoundaryOrigin?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, ClipBoundaryOrigin?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, ClipBoundaryOrigin?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(210, ClipBoundaryNormal.X));
+            pairs.Add(new DxfCodePair(220, ClipBoundaryNormal.Y));
+            pairs.Add(new DxfCodePair(230, ClipBoundaryNormal.Z));
+            pairs.Add(new DxfCodePair(11, ClipBoundaryOrigin.X));
+            pairs.Add(new DxfCodePair(21, ClipBoundaryOrigin.Y));
+            pairs.Add(new DxfCodePair(31, ClipBoundaryOrigin.Z));
             pairs.Add(new DxfCodePair(71, BoolShort(this.IsClipBoundaryEnabled)));
             pairs.Add(new DxfCodePair(72, BoolShort(this.IsFrontClippingPlane)));
             if (IsFrontClippingPlane)

@@ -145,9 +145,9 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(91, (this.MainObjectGsMarkerIndex)));
             pairs.Add(new DxfCodePair(301, (this.MainObjectXrefHandle)));
             pairs.Add(new DxfCodePair(40, (this.NearOsnapGeometryParameter)));
-            pairs.Add(new DxfCodePair(10, OsnapPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, OsnapPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, OsnapPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, OsnapPoint.X));
+            pairs.Add(new DxfCodePair(20, OsnapPoint.Y));
+            pairs.Add(new DxfCodePair(30, OsnapPoint.Z));
             if (this.IntersectionObjectPointer.Handle != 0u)
             {
                 pairs.Add(new DxfCodePair(332, DxfCommonConverters.UIntHandle(this.IntersectionObjectPointer.Handle)));
@@ -167,13 +167,13 @@ namespace IxMilia.Dxf.Objects
                     this.ClassName = (pair.StringValue);
                     break;
                 case 10:
-                    this.OsnapPoint.X = pair.DoubleValue;
+                    this.OsnapPoint = this.OsnapPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.OsnapPoint.Y = pair.DoubleValue;
+                    this.OsnapPoint = this.OsnapPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.OsnapPoint.Z = pair.DoubleValue;
+                    this.OsnapPoint = this.OsnapPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.NearOsnapGeometryParameter = (pair.DoubleValue);

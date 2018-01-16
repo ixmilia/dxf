@@ -127,9 +127,9 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbSpline"));
-            pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(210, Normal.X));
+            pairs.Add(new DxfCodePair(220, Normal.Y));
+            pairs.Add(new DxfCodePair(230, Normal.Z));
             pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
             pairs.Add(new DxfCodePair(71, (short)(this.DegreeOfCurve)));
             pairs.Add(new DxfCodePair(72, (short?)KnotValues?.Count ?? default(short)));
@@ -150,12 +150,12 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(44, (this.FitTolerance)));
             }
 
-            pairs.Add(new DxfCodePair(12, StartTangent?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(22, StartTangent?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(32, StartTangent?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(13, EndTangent?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(23, EndTangent?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(33, EndTangent?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(12, StartTangent.X));
+            pairs.Add(new DxfCodePair(22, StartTangent.Y));
+            pairs.Add(new DxfCodePair(32, StartTangent.Z));
+            pairs.Add(new DxfCodePair(13, EndTangent.X));
+            pairs.Add(new DxfCodePair(23, EndTangent.Y));
+            pairs.Add(new DxfCodePair(33, EndTangent.Z));
             pairs.AddRange(this.KnotValues.Select(p => new DxfCodePair(40, p)));
             if (this.Weight != 1.0)
             {
@@ -189,22 +189,22 @@ namespace IxMilia.Dxf.Entities
                     this._fitPointX.Add((pair.DoubleValue));
                     break;
                 case 12:
-                    this.StartTangent.X = pair.DoubleValue;
+                    this.StartTangent = this.StartTangent.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 22:
-                    this.StartTangent.Y = pair.DoubleValue;
+                    this.StartTangent = this.StartTangent.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 32:
-                    this.StartTangent.Z = pair.DoubleValue;
+                    this.StartTangent = this.StartTangent.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 13:
-                    this.EndTangent.X = pair.DoubleValue;
+                    this.EndTangent = this.EndTangent.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 23:
-                    this.EndTangent.Y = pair.DoubleValue;
+                    this.EndTangent = this.EndTangent.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 33:
-                    this.EndTangent.Z = pair.DoubleValue;
+                    this.EndTangent = this.EndTangent.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 20:
                     this._controlPointY.Add((pair.DoubleValue));
@@ -249,13 +249,13 @@ namespace IxMilia.Dxf.Entities
                     this._numberOfFitPointsIgnored = (int)(pair.ShortValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

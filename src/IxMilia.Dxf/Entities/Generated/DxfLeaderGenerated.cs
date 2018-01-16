@@ -92,20 +92,20 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(340, (this.AssociatedAnnotationReference)));
-            pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(211, Right?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(221, Right?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(231, Right?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(212, BlockOffset?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(222, BlockOffset?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(232, BlockOffset?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(210, Normal.X));
+            pairs.Add(new DxfCodePair(220, Normal.Y));
+            pairs.Add(new DxfCodePair(230, Normal.Z));
+            pairs.Add(new DxfCodePair(211, Right.X));
+            pairs.Add(new DxfCodePair(221, Right.Y));
+            pairs.Add(new DxfCodePair(231, Right.Z));
+            pairs.Add(new DxfCodePair(212, BlockOffset.X));
+            pairs.Add(new DxfCodePair(222, BlockOffset.Y));
+            pairs.Add(new DxfCodePair(232, BlockOffset.Z));
             if (version >= DxfAcadVersion.R14)
             {
-                pairs.Add(new DxfCodePair(213, AnnotationOffset?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(223, AnnotationOffset?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(233, AnnotationOffset?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(213, AnnotationOffset.X));
+                pairs.Add(new DxfCodePair(223, AnnotationOffset.Y));
+                pairs.Add(new DxfCodePair(233, AnnotationOffset.Z));
             }
 
             if (XData != null)
@@ -158,40 +158,40 @@ namespace IxMilia.Dxf.Entities
                     this.OverrideColor = DxfColor.FromRawValue(pair.ShortValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 211:
-                    this.Right.X = pair.DoubleValue;
+                    this.Right = this.Right.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 221:
-                    this.Right.Y = pair.DoubleValue;
+                    this.Right = this.Right.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 231:
-                    this.Right.Z = pair.DoubleValue;
+                    this.Right = this.Right.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 212:
-                    this.BlockOffset.X = pair.DoubleValue;
+                    this.BlockOffset = this.BlockOffset.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 222:
-                    this.BlockOffset.Y = pair.DoubleValue;
+                    this.BlockOffset = this.BlockOffset.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 232:
-                    this.BlockOffset.Z = pair.DoubleValue;
+                    this.BlockOffset = this.BlockOffset.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 213:
-                    this.AnnotationOffset.X = pair.DoubleValue;
+                    this.AnnotationOffset = this.AnnotationOffset.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 223:
-                    this.AnnotationOffset.Y = pair.DoubleValue;
+                    this.AnnotationOffset = this.AnnotationOffset.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 233:
-                    this.AnnotationOffset.Z = pair.DoubleValue;
+                    this.AnnotationOffset = this.AnnotationOffset.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 340:
                     this.AssociatedAnnotationReference = (pair.StringValue);

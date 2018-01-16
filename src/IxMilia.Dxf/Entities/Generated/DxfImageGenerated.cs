@@ -125,17 +125,17 @@ namespace IxMilia.Dxf.Entities
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbRasterImage"));
             pairs.Add(new DxfCodePair(90, (this.ClassVersion)));
-            pairs.Add(new DxfCodePair(10, Location?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, Location?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, Location?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, UVector?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, UVector?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, UVector?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(12, VVector?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(22, VVector?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(32, VVector?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(13, ImageSize?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(23, ImageSize?.Y ?? default(double)));
+            pairs.Add(new DxfCodePair(10, Location.X));
+            pairs.Add(new DxfCodePair(20, Location.Y));
+            pairs.Add(new DxfCodePair(30, Location.Z));
+            pairs.Add(new DxfCodePair(11, UVector.X));
+            pairs.Add(new DxfCodePair(21, UVector.Y));
+            pairs.Add(new DxfCodePair(31, UVector.Z));
+            pairs.Add(new DxfCodePair(12, VVector.X));
+            pairs.Add(new DxfCodePair(22, VVector.Y));
+            pairs.Add(new DxfCodePair(32, VVector.Z));
+            pairs.Add(new DxfCodePair(13, ImageSize.X));
+            pairs.Add(new DxfCodePair(23, ImageSize.Y));
             if (this.ImageDefinitionPointer.Handle != 0u)
             {
                 pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(this.ImageDefinitionPointer.Handle)));
@@ -171,37 +171,37 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.Location.X = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.Location.Y = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.Location.Z = pair.DoubleValue;
+                    this.Location = this.Location.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.UVector.X = pair.DoubleValue;
+                    this.UVector = this.UVector.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.UVector.Y = pair.DoubleValue;
+                    this.UVector = this.UVector.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.UVector.Z = pair.DoubleValue;
+                    this.UVector = this.UVector.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 12:
-                    this.VVector.X = pair.DoubleValue;
+                    this.VVector = this.VVector.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 22:
-                    this.VVector.Y = pair.DoubleValue;
+                    this.VVector = this.VVector.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 32:
-                    this.VVector.Z = pair.DoubleValue;
+                    this.VVector = this.VVector.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 13:
-                    this.ImageSize.X = pair.DoubleValue;
+                    this.ImageSize = this.ImageSize.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 23:
-                    this.ImageSize.Y = pair.DoubleValue;
+                    this.ImageSize = this.ImageSize.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 14:
                     this._clippingVerticesX.Add((pair.DoubleValue));

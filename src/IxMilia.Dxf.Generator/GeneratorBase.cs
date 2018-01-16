@@ -340,7 +340,7 @@ namespace IxMilia.Dxf.Generator
                             for (int i = 0; i < codes.Length; i++, suffix++)
                             {
                                 AppendLine($"case {codes[i]}:");
-                                AppendLine($"    this.{name}.{suffix} = pair.DoubleValue;");
+                                AppendLine($"    this.{name} = this.{name}.WithUpdated{suffix}(pair.DoubleValue);");
                                 AppendLine("    break;");
                             }
                         }
@@ -585,8 +585,7 @@ namespace IxMilia.Dxf.Generator
                 var suffix = 'X';
                 for (int i = 0; i < codes.Length; i++, suffix++)
                 {
-                    lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}?.{3} ?? default(double)));", indentPrefix, codes[i], name, suffix));
-                    // currently all multi-value codes are doubles, so this is ok:         ^^^^^^^^^^^^^^^
+                    lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}.{3}));", indentPrefix, codes[i], name, suffix));
                 }
             }
             else

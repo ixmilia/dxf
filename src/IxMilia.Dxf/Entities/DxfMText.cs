@@ -21,22 +21,22 @@ namespace IxMilia.Dxf.Entities
                     this.TextStyleName = (pair.StringValue);
                     break;
                 case 10:
-                    this.InsertionPoint.X = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.InsertionPoint.Y = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.InsertionPoint.Z = pair.DoubleValue;
+                    this.InsertionPoint = this.InsertionPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.XAxisDirection.X = pair.DoubleValue;
+                    this.XAxisDirection = this.XAxisDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.XAxisDirection.Y = pair.DoubleValue;
+                    this.XAxisDirection = this.XAxisDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.XAxisDirection.Z = pair.DoubleValue;
+                    this.XAxisDirection = this.XAxisDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 40:
                     this.InitialTextHeight = (pair.DoubleValue);
@@ -110,13 +110,13 @@ namespace IxMilia.Dxf.Entities
                     this.BackgroundFillSetting = (DxfBackgroundFillSetting)(pair.IntegerValue);
                     break;
                 case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 420:
                 case 421:

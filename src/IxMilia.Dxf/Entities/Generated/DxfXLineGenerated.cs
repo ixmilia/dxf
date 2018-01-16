@@ -43,12 +43,12 @@ namespace IxMilia.Dxf.Entities
         {
             base.AddValuePairs(pairs, version, outputHandles);
             pairs.Add(new DxfCodePair(100, "AcDbXline"));
-            pairs.Add(new DxfCodePair(10, FirstPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, FirstPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, FirstPoint?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, UnitDirectionVector?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, UnitDirectionVector?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, UnitDirectionVector?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, FirstPoint.X));
+            pairs.Add(new DxfCodePair(20, FirstPoint.Y));
+            pairs.Add(new DxfCodePair(30, FirstPoint.Z));
+            pairs.Add(new DxfCodePair(11, UnitDirectionVector.X));
+            pairs.Add(new DxfCodePair(21, UnitDirectionVector.Y));
+            pairs.Add(new DxfCodePair(31, UnitDirectionVector.Z));
         }
 
         internal override bool TrySetPair(DxfCodePair pair)
@@ -56,22 +56,22 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.FirstPoint.X = pair.DoubleValue;
+                    this.FirstPoint = this.FirstPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.FirstPoint.Y = pair.DoubleValue;
+                    this.FirstPoint = this.FirstPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.FirstPoint.Z = pair.DoubleValue;
+                    this.FirstPoint = this.FirstPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.UnitDirectionVector.X = pair.DoubleValue;
+                    this.UnitDirectionVector = this.UnitDirectionVector.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.UnitDirectionVector.Y = pair.DoubleValue;
+                    this.UnitDirectionVector = this.UnitDirectionVector.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.UnitDirectionVector.Z = pair.DoubleValue;
+                    this.UnitDirectionVector = this.UnitDirectionVector.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

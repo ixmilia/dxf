@@ -86,12 +86,12 @@ namespace IxMilia.Dxf.Entities
             }
 
             pairs.Add(new DxfCodePair(2, (this.BlockName)));
-            pairs.Add(new DxfCodePair(10, DefinitionPoint1?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, DefinitionPoint1?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, DefinitionPoint1?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, TextMidPoint?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, TextMidPoint?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, TextMidPoint?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, DefinitionPoint1.X));
+            pairs.Add(new DxfCodePair(20, DefinitionPoint1.Y));
+            pairs.Add(new DxfCodePair(30, DefinitionPoint1.Z));
+            pairs.Add(new DxfCodePair(11, TextMidPoint.X));
+            pairs.Add(new DxfCodePair(21, TextMidPoint.Y));
+            pairs.Add(new DxfCodePair(31, TextMidPoint.Z));
             pairs.Add(new DxfCodePair(70, HandleDimensionType(this.DimensionType)));
             if (version >= DxfAcadVersion.R2000)
             {
@@ -126,9 +126,9 @@ namespace IxMilia.Dxf.Entities
 
             if (this.Normal != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, Normal?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, Normal?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, Normal?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, Normal.X));
+                pairs.Add(new DxfCodePair(220, Normal.Y));
+                pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
             if (version >= DxfAcadVersion.R12)
@@ -156,22 +156,22 @@ namespace IxMilia.Dxf.Entities
                     this.DimensionStyleName = (pair.StringValue);
                     break;
                 case 10:
-                    this.DefinitionPoint1.X = pair.DoubleValue;
+                    this.DefinitionPoint1 = this.DefinitionPoint1.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.DefinitionPoint1.Y = pair.DoubleValue;
+                    this.DefinitionPoint1 = this.DefinitionPoint1.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.DefinitionPoint1.Z = pair.DoubleValue;
+                    this.DefinitionPoint1 = this.DefinitionPoint1.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.TextMidPoint.X = pair.DoubleValue;
+                    this.TextMidPoint = this.TextMidPoint.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.TextMidPoint.Y = pair.DoubleValue;
+                    this.TextMidPoint = this.TextMidPoint.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.TextMidPoint.Z = pair.DoubleValue;
+                    this.TextMidPoint = this.TextMidPoint.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 41:
                     this.TextLineSpacingFactor = (pair.DoubleValue);
@@ -192,13 +192,13 @@ namespace IxMilia.Dxf.Entities
                     this.TextLineSpacingStyle = (DxfTextLineSpacingStyle)(pair.ShortValue);
                     break;
                 case 210:
-                    this.Normal.X = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.Normal.Y = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.Normal.Z = pair.DoubleValue;
+                    this.Normal = this.Normal.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 280:
                     this.Version = (DxfVersion)(pair.ShortValue);

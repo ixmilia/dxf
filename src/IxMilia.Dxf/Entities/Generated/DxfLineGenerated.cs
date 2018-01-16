@@ -51,17 +51,17 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(39, (this.Thickness)));
             }
 
-            pairs.Add(new DxfCodePair(10, P1?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(20, P1?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(30, P1?.Z ?? default(double)));
-            pairs.Add(new DxfCodePair(11, P2?.X ?? default(double)));
-            pairs.Add(new DxfCodePair(21, P2?.Y ?? default(double)));
-            pairs.Add(new DxfCodePair(31, P2?.Z ?? default(double)));
+            pairs.Add(new DxfCodePair(10, P1.X));
+            pairs.Add(new DxfCodePair(20, P1.Y));
+            pairs.Add(new DxfCodePair(30, P1.Z));
+            pairs.Add(new DxfCodePair(11, P2.X));
+            pairs.Add(new DxfCodePair(21, P2.Y));
+            pairs.Add(new DxfCodePair(31, P2.Z));
             if (this.ExtrusionDirection != DxfVector.ZAxis)
             {
-                pairs.Add(new DxfCodePair(210, ExtrusionDirection?.X ?? default(double)));
-                pairs.Add(new DxfCodePair(220, ExtrusionDirection?.Y ?? default(double)));
-                pairs.Add(new DxfCodePair(230, ExtrusionDirection?.Z ?? default(double)));
+                pairs.Add(new DxfCodePair(210, ExtrusionDirection.X));
+                pairs.Add(new DxfCodePair(220, ExtrusionDirection.Y));
+                pairs.Add(new DxfCodePair(230, ExtrusionDirection.Z));
             }
 
         }
@@ -71,34 +71,34 @@ namespace IxMilia.Dxf.Entities
             switch (pair.Code)
             {
                 case 10:
-                    this.P1.X = pair.DoubleValue;
+                    this.P1 = this.P1.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 20:
-                    this.P1.Y = pair.DoubleValue;
+                    this.P1 = this.P1.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 30:
-                    this.P1.Z = pair.DoubleValue;
+                    this.P1 = this.P1.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 11:
-                    this.P2.X = pair.DoubleValue;
+                    this.P2 = this.P2.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 21:
-                    this.P2.Y = pair.DoubleValue;
+                    this.P2 = this.P2.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 31:
-                    this.P2.Z = pair.DoubleValue;
+                    this.P2 = this.P2.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 39:
                     this.Thickness = (pair.DoubleValue);
                     break;
                 case 210:
-                    this.ExtrusionDirection.X = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedX(pair.DoubleValue);
                     break;
                 case 220:
-                    this.ExtrusionDirection.Y = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedY(pair.DoubleValue);
                     break;
                 case 230:
-                    this.ExtrusionDirection.Z = pair.DoubleValue;
+                    this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

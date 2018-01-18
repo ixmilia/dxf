@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A portable .NET library for reading and writing DXF and DXB files.  AutoCAD versions 1.0 through R2016 are supported.</Description>
+    <Description>A portable .NET library for reading and writing DXF and DXB files.  AutoCAD versions 1.0 through R2018 are supported.</Description>
     <Copyright>Copyright 2018</Copyright>
     <AssemblyTitle>IxMilia.Dxf</AssemblyTitle>
     <VersionPrefix>0.6.0</VersionPrefix>

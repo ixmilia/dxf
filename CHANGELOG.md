@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 0.7 (29 January 2018)
+
+- Embed commit hash in produced binaries.
+- Convert `DxfPoint` and `DxfVector` to structs.
+- Add simple bounding box computations to file and entities.
+
 ## 0.6 (11 December 2017)
 
 - Improve `SEQEND` creation.

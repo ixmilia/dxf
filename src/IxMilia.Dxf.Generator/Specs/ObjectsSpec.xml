@@ -294,10 +294,10 @@
     <Object Name="DxfImageDefinition" ObjectType="ImageDefinition" SubclassMarker="AcDbRasterImageDef" TypeString="IMAGEDEF" MinVersion="R14">
         <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
         <Property Name="FilePath" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="ImageWidth" Code="10" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(double)" />
-        <Property Name="ImageHeight" Code="20" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(double)" />
-        <Property Name="PixelWidth" Code="11" Type="double" DefaultValue="0.0" />
-        <Property Name="PixelHeight" Code="12" Type="double" DefaultValue="0.0" />
+        <Property Name="ImageWidth" Code="10" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(double)" Comment="Image width in pixels." />
+        <Property Name="ImageHeight" Code="20" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(double)" Comment="Image height in pixels." />
+        <Property Name="PixelWidth" Code="11" Type="double" DefaultValue="1.0" Comment="Default size of one pixel." />
+        <Property Name="PixelHeight" Code="21" Type="double" DefaultValue="1.0" Comment="Default size of one pixel." />
         <Property Name="IsImageLoaded" Code="280" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" />
         <Property Name="ResolutionUnits" Code="281" Type="DxfImageResolutionUnits" DefaultValue="DxfImageResolutionUnits.NoUnits" ReadConverter="(DxfImageResolutionUnits)" WriteConverter="(short)" />
     </Object>

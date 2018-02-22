@@ -32,9 +32,15 @@ namespace IxMilia.Dxf.Entities
         internal DxfPointer ImageDefinitionPointer { get; } = new DxfPointer();
         internal DxfPointer ImageDefinitionReactorPointer { get; } = new DxfPointer();
         public int ClassVersion { get; set; }
+        /// <summary>
+        /// The location of the bottom-left corner of the image
+        /// </summary>
         public DxfPoint Location { get; set; }
         public DxfVector UVector { get; set; }
         public DxfVector VVector { get; set; }
+        /// <summary>
+        /// Image size in pixels
+        /// </summary>
         public DxfVector ImageSize { get; set; }
         public DxfImageDefinition ImageDefinition { get { return ImageDefinitionPointer.Item as DxfImageDefinition; } set { ImageDefinitionPointer.Item = value; } }
         public int DisplayOptionsFlags { get; set; }
@@ -95,7 +101,7 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        public DxfImage()
+        internal DxfImage()
             : base()
         {
         }
@@ -108,7 +114,7 @@ namespace IxMilia.Dxf.Entities
             this.UVector = DxfVector.XAxis;
             this.VVector = DxfVector.YAxis;
             this.ImageSize = DxfVector.Zero;
-            this.DisplayOptionsFlags = 0;
+            this.DisplayOptionsFlags = 1;
             this.UseClipping = true;
             this.Brightness = 50;
             this.Contrast = 50;

@@ -526,14 +526,14 @@
     IMAGE
 
     -->
-    <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE" MinVersion="R14">
+    <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE" DefaultConstructor="Internal" MinVersion="R14">
         <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+        <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" Comment="The location of the bottom-left corner of the image" />
         <Property Name="UVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
         <Property Name="VVector" Code="12" Type="DxfVector" DefaultValue="DxfVector.YAxis" CodeOverrides="12,22,32" />
-        <Property Name="ImageSize" Code="13" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="13,23" />
+        <Property Name="ImageSize" Code="13" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="13,23" Comment="Image size in pixels" />
         <Pointer Name="ImageDefinition" Code="340" Type="DxfImageDefinition" />
-        <Property Name="DisplayOptionsFlags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int)" WriteConverter="(short)">
+        <Property Name="DisplayOptionsFlags" Code="70" Type="int" DefaultValue="1" ReadConverter="(int)" WriteConverter="(short)">
             <Flag Name="ShowImage" Mask="1" />
             <Flag Name="ShowImageWhenNotAligned" Mask="2" />
             <Flag Name="UseClippingBoundary" Mask="4" />

@@ -20,9 +20,21 @@ namespace IxMilia.Dxf.Objects
         protected override DxfAcadVersion MinVersion { get { return DxfAcadVersion.R14; } }
         public int ClassVersion { get; set; }
         public string FilePath { get; set; }
+        /// <summary>
+        /// Image width in pixels.
+        /// </summary>
         public int ImageWidth { get; set; }
+        /// <summary>
+        /// Image height in pixels.
+        /// </summary>
         public int ImageHeight { get; set; }
+        /// <summary>
+        /// Default size of one pixel.
+        /// </summary>
         public double PixelWidth { get; set; }
+        /// <summary>
+        /// Default size of one pixel.
+        /// </summary>
         public double PixelHeight { get; set; }
         public bool IsImageLoaded { get; set; }
         public DxfImageResolutionUnits ResolutionUnits { get; set; }
@@ -39,8 +51,8 @@ namespace IxMilia.Dxf.Objects
             this.FilePath = null;
             this.ImageWidth = 0;
             this.ImageHeight = 0;
-            this.PixelWidth = 0.0;
-            this.PixelHeight = 0.0;
+            this.PixelWidth = 1.0;
+            this.PixelHeight = 1.0;
             this.IsImageLoaded = true;
             this.ResolutionUnits = DxfImageResolutionUnits.NoUnits;
         }
@@ -54,7 +66,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(10, (double)(this.ImageWidth)));
             pairs.Add(new DxfCodePair(20, (double)(this.ImageHeight)));
             pairs.Add(new DxfCodePair(11, (this.PixelWidth)));
-            pairs.Add(new DxfCodePair(12, (this.PixelHeight)));
+            pairs.Add(new DxfCodePair(21, (this.PixelHeight)));
             pairs.Add(new DxfCodePair(280, BoolShort(this.IsImageLoaded)));
             pairs.Add(new DxfCodePair(281, (short)(this.ResolutionUnits)));
         }
@@ -72,11 +84,11 @@ namespace IxMilia.Dxf.Objects
                 case 11:
                     this.PixelWidth = (pair.DoubleValue);
                     break;
-                case 12:
-                    this.PixelHeight = (pair.DoubleValue);
-                    break;
                 case 20:
                     this.ImageHeight = (int)(pair.DoubleValue);
+                    break;
+                case 21:
+                    this.PixelHeight = (pair.DoubleValue);
                     break;
                 case 90:
                     this.ClassVersion = (pair.IntegerValue);

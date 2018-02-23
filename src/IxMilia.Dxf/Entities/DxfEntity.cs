@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -199,6 +200,10 @@ namespace IxMilia.Dxf.Entities
         }
 
         protected virtual void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        {
+        }
+
+        internal virtual void AddObjectsToOutput(List<DxfObject> objects)
         {
         }
 

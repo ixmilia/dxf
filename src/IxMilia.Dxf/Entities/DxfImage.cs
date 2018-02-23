@@ -31,6 +31,12 @@ namespace IxMilia.Dxf.Entities
             VVector = new DxfVector(0.0, displaySize.Y / imageHeight, 0.0);
         }
 
+        internal override void AddObjectsToOutput(List<DxfObject> objects)
+        {
+            objects.Add(ImageDefinition);
+            objects.Add(ImageDefinitionReactor);
+        }
+
         protected override DxfEntity PostParse()
         {
             Debug.Assert((ClippingVertexCount == _clippingVerticesX.Count) && (ClippingVertexCount == _clippingVerticesY.Count));

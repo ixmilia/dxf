@@ -373,6 +373,19 @@ namespace IxMilia.Dxf
                 {
                     writer.WriteCodeValuePair(pair);
                 }
+
+                if (section is DxfEntitiesSection)
+                {
+                    var entitiesSection = (DxfEntitiesSection)section;
+                    var addedObjects = new HashSet<DxfObject>(Objects);
+                    foreach (var additionalObject in entitiesSection.AdditionalObjects)
+                    {
+                        if (additionalObject != null && addedObjects.Add(additionalObject))
+                        {
+                            Objects.Add(additionalObject);
+                        }
+                    }
+                }
             }
 
             writer.Close();

@@ -2553,6 +2553,20 @@ ENDTAB
         }
 
         [Fact]
+        public void WriteAssociatedObjectsWithEntitiesTest()
+        {
+            // DxfImage has an associated DxfImageDefinition object
+            var image = new DxfImage("imagePath", DxfPoint.Origin, 1, 1, new DxfVector(1.0, 1.0, 0.0));
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14; // DxfImage is only supported on >= R14
+            file.Entities.Add(image);
+            // image.ImageDefinition is explicitly not added to the Objects collection until the file is saved
+            Assert.Equal(0, file.Objects.OfType<DxfImageDefinition>().Count());
+            VerifyFileContains(file, @"IMAGEDEF");
+            Assert.Equal("imagePath", file.Objects.OfType<DxfImageDefinition>().Single().FilePath);
+        }
+
+        [Fact]
         public void WriteAllDefaultEntitiesTest()
         {
             var file = new DxfFile();

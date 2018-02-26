@@ -526,7 +526,7 @@
     IMAGE
 
     -->
-    <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE" DefaultConstructor="Internal" MinVersion="R14">
+    <Entity Name="DxfImage" EntityType="Image" SubclassMarker="AcDbRasterImage" TypeString="IMAGE" MinVersion="R14">
         <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" Comment="The location of the bottom-left corner of the image" />
         <Property Name="UVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />

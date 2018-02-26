@@ -101,7 +101,7 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        internal DxfImage()
+        public DxfImage()
             : base()
         {
         }

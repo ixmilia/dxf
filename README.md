@@ -171,9 +171,11 @@ between versions.
 
 [2018](http://help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
 
+[2019](http://help.autodesk.com/cloudhelp/2019/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+
 Many of these links were compiled from the archive.org May 9, 2013 snapshot of [http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853](https://web.archive.org/web/20130509144333/http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853)
 
-The R2018 spec can be downloaded for offline use via the command:
+The R2018 spec can be downloaded for offline use via the command (and R2019 similarly):
 
 ``` bash
 wget -r -k -L -e robots=off http://help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm
@@ -183,4 +185,10 @@ and a simple launch page can be added via:
 
 ``` bash
 echo "<html><meta http-equiv='refresh' content='0; url=files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm' /></html>" > help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/index.html
+```
+
+Alternately, the downloaded files and images can be combined into a standalone HTML file via:
+
+``` bash
+src/IxMilia.Dxf.ReferenceCollector/build.cmd "help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/files"
 ```

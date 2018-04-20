@@ -38,7 +38,12 @@ namespace IxMilia.Dxf
 
         public static Guid GuidString(string s)
         {
-            return Guid.Parse(s);
+            if (Guid.TryParse(s, out var result))
+            {
+                return result;
+            }
+
+            return Guid.Empty;
         }
 
         public static uint UIntHandle(string s)

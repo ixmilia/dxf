@@ -304,6 +304,22 @@ $ACADVER
             Assert.True(file.Header.IsRestrictedVersion);
         }
 
+        [Fact]
+        public void ReadEmptyFingerPrintGuidTest()
+        {
+            var file = Section("HEADER", @"
+  9
+$FINGERPRINTGUID
+2
+
+  9
+$ACADVER
+  1
+AC1012
+");
+            Assert.Equal(Guid.Empty, file.Header.FingerprintGuid);
+        }
+
         #endregion
 
         #region Write tests

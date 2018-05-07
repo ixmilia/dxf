@@ -134,57 +134,6 @@ namespace IxMilia.Dxf.Entities
             this.Identifier = 0;
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
-        {
-            base.AddValuePairs(pairs, version, outputHandles);
-            pairs.Add(new DxfCodePair(100, "AcDbVertex"));
-            pairs.Add(new DxfCodePair(10, Location.X));
-            pairs.Add(new DxfCodePair(20, Location.Y));
-            pairs.Add(new DxfCodePair(30, Location.Z));
-            if (this.StartingWidth != 0.0)
-            {
-                pairs.Add(new DxfCodePair(40, (this.StartingWidth)));
-            }
-
-            if (this.EndingWidth != 0.0)
-            {
-                pairs.Add(new DxfCodePair(41, (this.EndingWidth)));
-            }
-
-            if (this.Bulge != 0.0)
-            {
-                pairs.Add(new DxfCodePair(42, (this.Bulge)));
-            }
-
-            pairs.Add(new DxfCodePair(70, (short)(this.Flags)));
-            pairs.Add(new DxfCodePair(50, (this.CurveFitTangentDirection)));
-            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex1 != 0)
-            {
-                pairs.Add(new DxfCodePair(71, (short)(this.PolyfaceMeshVertexIndex1)));
-            }
-
-            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex2 != 0)
-            {
-                pairs.Add(new DxfCodePair(72, (short)(this.PolyfaceMeshVertexIndex2)));
-            }
-
-            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex3 != 0)
-            {
-                pairs.Add(new DxfCodePair(73, (short)(this.PolyfaceMeshVertexIndex3)));
-            }
-
-            if (version >= DxfAcadVersion.R13 && this.PolyfaceMeshVertexIndex4 != 0)
-            {
-                pairs.Add(new DxfCodePair(74, (short)(this.PolyfaceMeshVertexIndex4)));
-            }
-
-            if (version >= DxfAcadVersion.R2010)
-            {
-                pairs.Add(new DxfCodePair(91, (this.Identifier)));
-            }
-
-        }
-
         internal override bool TrySetPair(DxfCodePair pair)
         {
             switch (pair.Code)

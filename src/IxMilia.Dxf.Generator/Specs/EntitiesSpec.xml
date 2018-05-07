@@ -943,7 +943,7 @@
     POLYLINE
 
     -->
-    <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE" HasXData="true" DefaultConstructor="Internal">
+    <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE" HasXData="true" DefaultConstructor="Internal" GenerateWriterFunction="false">
         <Property Name="ContainsVertices" Code="66" Type="bool" DefaultValue="true" ReadConverter="BoolShort" WriteConverter="BoolShort" MaxVersion="R13" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R12" />
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
@@ -1318,7 +1318,7 @@
     VERTEX
 
     -->
-    <Entity Name="DxfVertex" EntityType="Vertex" SubclassMarker="AcDbVertex" TypeString="VERTEX">
+    <Entity Name="DxfVertex" EntityType="Vertex" SubclassMarker="AcDbVertex" TypeString="VERTEX" GenerateWriterFunction="false">
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="StartingWidth" Code="40" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="EndingWidth" Code="41" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />

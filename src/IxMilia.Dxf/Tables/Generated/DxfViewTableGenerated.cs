@@ -17,7 +17,7 @@ namespace IxMilia.Dxf.Tables
 
         protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()
         {
-            return Items;
+            return Items.Cast<DxfSymbolTableFlags>();
         }
 
         public DxfViewTable()

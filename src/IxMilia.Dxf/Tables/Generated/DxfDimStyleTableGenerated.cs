@@ -18,7 +18,11 @@ namespace IxMilia.Dxf.Tables
 
         protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()
         {
+#if NET35
+            return Items.Cast<DxfSymbolTableFlags>();
+#else
             return Items;
+#endif
         }
 
         public DxfDimStyleTable()

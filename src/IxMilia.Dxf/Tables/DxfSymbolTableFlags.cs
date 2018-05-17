@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Tables;
 
@@ -153,7 +154,11 @@ namespace IxMilia.Dxf
 
         internal override void AfterRead()
         {
+#if NET35
+            var hex = string.Join(string.Empty, _bitmapPreviewData.ToArray());
+#else
             var hex = string.Join(string.Empty, _bitmapPreviewData);
+#endif
             _bitmapPreviewData.Clear(); // don't keep this around
             BitmapData = DxfCommonConverters.HexBytes(hex);
         }
@@ -185,7 +190,7 @@ namespace IxMilia.Dxf
 
         private string GetWritableLineTypeName(string lineTypeName)
         {
-            return string.IsNullOrWhiteSpace(lineTypeName) ? "CONTINUOUS" : lineTypeName;
+            return Compat.IsNullOrWhiteSpace(lineTypeName) ? "CONTINUOUS" : lineTypeName;
         }
     }
 }

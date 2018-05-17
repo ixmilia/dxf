@@ -108,7 +108,11 @@ namespace IxMilia.Dxf.Sections
 
                 var section = new DxfThumbnailImageSection();
                 section.Clear();
+#if NET35
+                section.RawData = DxfCommonConverters.HexBytes(string.Join(string.Empty, lines.ToArray()));
+#else
                 section.RawData = DxfCommonConverters.HexBytes(string.Join(string.Empty, lines));
+#endif
                 return section;
             }
 

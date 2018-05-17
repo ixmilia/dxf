@@ -17,11 +17,11 @@ namespace IxMilia.Dxf.Tables
 
         protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()
         {
-#if NET35
+        #if NET35
             return Items.Cast<DxfSymbolTableFlags>();
-#else
+        #else
             return Items;
-#endif
+        #endif
         }
 
         public DxfLayerTable()

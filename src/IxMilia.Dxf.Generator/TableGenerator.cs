@@ -58,7 +58,11 @@ namespace IxMilia.Dxf.Generator
                 AppendLine();
                 AppendLine("protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()");
                 AppendLine("{");
+                AppendLine("#if NET35");
+                AppendLine("    return Items.Cast<DxfSymbolTableFlags>();");
+                AppendLine("#else");
                 AppendLine("    return Items;");
+                this.AppendLine("#endif");
                 AppendLine("}");
 
                 //

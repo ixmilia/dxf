@@ -154,11 +154,7 @@ namespace IxMilia.Dxf
 
         internal override void AfterRead()
         {
-#if NET35
             var hex = string.Join(string.Empty, _bitmapPreviewData.ToArray());
-#else
-            var hex = string.Join(string.Empty, _bitmapPreviewData);
-#endif
             _bitmapPreviewData.Clear(); // don't keep this around
             BitmapData = DxfCommonConverters.HexBytes(hex);
         }

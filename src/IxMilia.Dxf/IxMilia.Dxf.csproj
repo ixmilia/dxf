@@ -8,6 +8,7 @@
     <Authors>IxMilia</Authors>
     <TargetFrameworks Condition="'$(OS)' != 'Unix'">netstandard1.0;net45;net35</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard1.0</TargetFrameworks>
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35'">$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
     <AssemblyName>IxMilia.Dxf</AssemblyName>
     <PackageId>IxMilia.Dxf</PackageId>
     <PackageTags>AutoCAD;CAD;DXB;DXF</PackageTags>

@@ -40,10 +40,10 @@ namespace IxMilia.Dxf.Entities
         protected override DxfEntity PostParse()
         {
             Debug.Assert((ClippingVertexCount == _clippingVerticesX.Count) && (ClippingVertexCount == _clippingVerticesY.Count));
-            for (int i = 0; i < this.ClippingVertexCount; i++)
+            for (var i = 0; i < this.ClippingVertexCount; i++)
             {
-                double x = this._clippingVerticesX[i];
-                double y = this._clippingVerticesY[i];
+                var x = this._clippingVerticesX[i];
+                var y = this._clippingVerticesY[i];
                 this.ClippingVertices.Add(new DxfPoint(x, y, 0.0));
             }
 

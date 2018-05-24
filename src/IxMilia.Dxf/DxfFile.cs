@@ -439,48 +439,39 @@ namespace IxMilia.Dxf
 
         private void EnsureTableItems()
         {
-#if NET35
             var existingDimStyles = GetExistingNames(DimensionStyles.Cast<DxfSymbolTableFlags>());
-            var existingLayers = GetExistingNames(Layers.Cast<DxfSymbolTableFlags>());
-            var existingLineTypes = GetExistingNames(LineTypes.Cast<DxfSymbolTableFlags>());
-            var existingStyles = GetExistingNames(Styles.Cast<DxfSymbolTableFlags>());
-            var existingViews = GetExistingNames(Views.Cast<DxfSymbolTableFlags>());
-            var existingUcs = GetExistingNames(UserCoordinateSystems.Cast<DxfSymbolTableFlags>());
-#else
-            var existingDimStyles = GetExistingNames(DimensionStyles);
-            var existingLayers = GetExistingNames(Layers);
-            var existingLineTypes = GetExistingNames(LineTypes);
-            var existingStyles = GetExistingNames(Styles);
-            var existingViews = GetExistingNames(Views);
-            var existingUcs = GetExistingNames(UserCoordinateSystems);
-#endif      
             AddMissingDimensionStyles(existingDimStyles, new[] { Header.DimensionStyleName });
             AddMissingDimensionStyles(existingDimStyles, Entities.OfType<DxfDimensionBase>().Select(d => d.DimensionStyleName));
             AddMissingDimensionStyles(existingDimStyles, Entities.OfType<DxfLeader>().Select(d => d.DimensionStyleName));
             AddMissingDimensionStyles(existingDimStyles, Entities.OfType<DxfTolerance>().Select(d => d.DimensionStyleName));
-
+            
+            var existingLayers = GetExistingNames(Layers.Cast<DxfSymbolTableFlags>());
             AddMissingLayers(existingLayers, new[] { Header.CurrentLayer });
             AddMissingLayers(existingLayers, Blocks.Select(b => b.Layer));
             AddMissingLayers(existingLayers, Blocks.SelectMany(b => b.Entities.Select(e => e.Layer)));
             AddMissingLayers(existingLayers, Entities.Select(e => e.Layer));
             AddMissingLayers(existingLayers, Objects.OfType<DxfLayerFilter>().SelectMany(l => l.LayerNames));
             AddMissingLayers(existingLayers, Objects.OfType<DxfLayerIndex>().SelectMany(l => l.LayerNames));
-
+            
+            var existingLineTypes = GetExistingNames(LineTypes.Cast<DxfSymbolTableFlags>());
             AddMissingLineTypes(existingLineTypes, new[] { Header.CurrentEntityLineType, Header.DimensionLineType });
             AddMissingLineTypes(existingLineTypes, Layers.Select(l => l.LineTypeName));
             AddMissingLineTypes(existingLineTypes, Blocks.SelectMany(b => b.Entities.Select(e => e.LineTypeName)));
             AddMissingLineTypes(existingLineTypes, Entities.Select(e => e.LineTypeName));
             AddMissingLineTypes(existingLineTypes, Objects.OfType<DxfMLineStyle>().SelectMany(m => m.Elements.Select(e => e.LineType)));
-
+            
+            var existingStyles = GetExistingNames(Styles.Cast<DxfSymbolTableFlags>());
             AddMissingStyles(existingStyles, Entities.OfType<DxfArcAlignedText>().Select(a => a.TextStyleName));
             AddMissingStyles(existingStyles, Entities.OfType<DxfAttribute>().Select(a => a.TextStyleName));
             AddMissingStyles(existingStyles, Entities.OfType<DxfAttributeDefinition>().Select(a => a.TextStyleName));
             AddMissingStyles(existingStyles, Entities.OfType<DxfMText>().Select(m => m.TextStyleName));
             AddMissingStyles(existingStyles, Entities.OfType<DxfText>().Select(t => t.TextStyleName));
             AddMissingStyles(existingStyles, Objects.OfType<DxfMLineStyle>().Select(m => m.StyleName));
-
+            
+            var existingViews = GetExistingNames(Views.Cast<DxfSymbolTableFlags>());
             AddMissingViews(existingViews, Objects.OfType<DxfPlotSettings>().Select(p => p.PlotViewName));
-
+            
+            var existingUcs = GetExistingNames(UserCoordinateSystems.Cast<DxfSymbolTableFlags>());
             AddMissingUcs(existingUcs, new[] {
                 Header.UCSDefinitionName,
                 Header.UCSName,

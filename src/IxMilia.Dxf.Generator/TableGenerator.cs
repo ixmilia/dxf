@@ -58,7 +58,7 @@ namespace IxMilia.Dxf.Generator
                 AppendLine();
                 AppendLine("protected override IEnumerable<DxfSymbolTableFlags> GetSymbolItems()");
                 AppendLine("{");
-                AppendLine("    return Items;");
+                AppendLine("    return Items.Cast<DxfSymbolTableFlags>();");
                 AppendLine("}");
 
                 //

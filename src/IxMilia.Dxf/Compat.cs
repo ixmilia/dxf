@@ -22,6 +22,7 @@ namespace IxMilia.Dxf
                     }
                 }
             }
+            
             return true;
 #else
             return string.IsNullOrWhiteSpace(value);
@@ -47,6 +48,7 @@ namespace IxMilia.Dxf
             {
                 return result;
             }
+
             return Guid.Empty;
 #endif
         }

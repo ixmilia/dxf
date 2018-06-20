@@ -1,0 +1,5 @@
+steps:
+- task: CmdLine@1
+  displayName: Run build-and-test.sh
+  inputs:
+    filename: './build-and-test.sh'

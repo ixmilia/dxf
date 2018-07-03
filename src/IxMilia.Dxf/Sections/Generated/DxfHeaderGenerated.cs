@@ -300,7 +300,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// The $ACADMAINTVER header variable.  Maintenance version number (should be ignored).  Minimum AutoCAD version: R14.
         /// </summary>
-        public short MaintenenceVersion { get; set; }
+        public int MaintenenceVersion { get; set; }
 
         /// <summary>
         /// The $DWGCODEPAGE header variable.  Drawing code page; set to the system code page when a new drawing is created, but not otherwise maintained by AutoCAD.  Minimum AutoCAD version: R13.
@@ -3706,7 +3706,7 @@ namespace IxMilia.Dxf
                     break;
                 case ACADMAINTVER:
                     EnsureCode(pair, 70);
-                    this.MaintenenceVersion = (pair.ShortValue);
+                    this.MaintenenceVersion = (pair.IntegerValue);
                     break;
                 case DWGCODEPAGE:
                     EnsureCode(pair, 3);

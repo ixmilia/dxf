@@ -13,7 +13,15 @@
     <PackageId>IxMilia.Dxf</PackageId>
     <PackageTags>AutoCAD;CAD;DXB;DXF</PackageTags>
     <PackageProjectUrl>https://github.com/IxMilia/Dxf</PackageProjectUrl>
+
+    <!-- SourceLink settings -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-</Project>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
+  </ItemGroup>
 
+</Project>

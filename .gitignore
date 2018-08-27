@@ -9,3 +9,5 @@
 [Oo]bj/
 [Rr]elease/
 
+# ignore generated code
+Generated/

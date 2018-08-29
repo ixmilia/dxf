@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "IxMilia.Dxf.ReferenceCollector": {
+      "commandName": "Project",
+      "commandLineArgs": "2015"
+    }
+  }
+}

@@ -5,6 +5,8 @@ A portable .NET library for reading and writing DXF and DXB files.  Clone and
 build locally or directly consume the
 [NuGet package](http://www.nuget.org/packages/IxMilia.Dxf/).
 
+[![Build Status](https://dev.azure.com/ixmilia/public/_apis/build/status/Dxf?branchName=master)](https://dev.azure.com/ixmilia/public/_build/latest?definitionId=9)
+
 ## Usage
 
 Open a DXF file:

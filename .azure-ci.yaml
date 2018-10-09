@@ -1,15 +1,11 @@
-phases:
-- phase: Windows
-  queue: Hosted VS2017
+jobs:
+- job: Windows
+  pool:
+    vmImage: vs2017-win2016
   steps:
-  - task: CmdLine@1
-    displayName: Run build-and-test.cmd
-    inputs:
-      filename: 'build-and-test.cmd'
-- phase: Linux
-  queue: Hosted Linux Preview
+  - script: build-and-test.cmd
+- job: Linux
+  pool:
+    vmImage: ubuntu-16.04
   steps:
-  - task: CmdLine@1
-    displayName: Run build-and-test.sh
-    inputs:
-      filename: './build-and-test.sh'
+  - script: ./build-and-test.sh

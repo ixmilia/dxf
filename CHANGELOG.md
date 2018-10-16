@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 0.7.1 (16 October 2018)
+
+- Enable writing entities with embedded objects.
+- Improve writing `VERTEX` and `POLYLINE` entities.
+- Add `net35` framework support (thanks to @nzain).
+
 ## 0.7 (29 January 2018)
 
 - Embed commit hash in produced binaries.

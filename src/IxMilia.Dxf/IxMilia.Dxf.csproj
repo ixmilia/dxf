@@ -4,7 +4,7 @@
     <Description>A portable .NET library for reading and writing DXF and DXB files.  AutoCAD versions 1.0 through R2018 are supported.</Description>
     <Copyright>Copyright 2018</Copyright>
     <AssemblyTitle>IxMilia.Dxf</AssemblyTitle>
-    <VersionPrefix>0.7.0</VersionPrefix>
+    <VersionPrefix>0.7.1</VersionPrefix>
     <Authors>IxMilia</Authors>
     <TargetFrameworks Condition="'$(OS)' != 'Unix'">netstandard1.0;net45;net35</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Unix'">netstandard1.0</TargetFrameworks>

@@ -320,6 +320,28 @@ AC1012
             Assert.Equal(Guid.Empty, file.Header.FingerprintGuid);
         }
 
+        [Fact]
+        public void ReadAlternateMaintenenceVersionTest()
+        {
+            // traditional short value
+            var file = Section("HEADER", @"
+  9
+$ACADMAINTVER
+ 70
+42
+");
+            Assert.Equal(42, file.Header.MaintenenceVersion);
+
+            // alternate long value
+            file = Section("HEADER", @"
+  9
+$ACADMAINTVER
+ 90
+42
+");
+            Assert.Equal(42, file.Header.MaintenenceVersion);
+        }
+
         #endregion
 
         #region Write tests

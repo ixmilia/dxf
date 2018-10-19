@@ -2,7 +2,11 @@
 <!-- Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information. -->
 <Spec xmlns="http://IxMilia.com/Dxf/HeaderVariablesSpec">
     <Variable Name="ACADVER" Code="1" Type="DxfAcadVersion" Property="Version" DefaultValue="DxfAcadVersion.R12" ReadConverter="VersionConverter" WriteConverter="VersionConverter" Comment="The AutoCAD drawing database version number." />
+
+    <!-- The spec says this should be a code 70 short, but some files found in the wild have a code 90 long -->
     <Variable Name="ACADMAINTVER" Code="70" Type="short" Property="MaintenenceVersion" DefaultValue="0" MinVersion="R14" Comment="Maintenance version number (should be ignored)." />
+    <Variable Name="ACADMAINTVER" Code="90" Type="short" Property="MaintenenceVersion" DefaultValue="0" MinVersion="R14" ReadConverter="(short)" SuppressWriting="true" Comment="Maintenance version number (should be ignored)." />
+
     <Variable Name="DWGCODEPAGE" Code="3" Type="string" Property="DrawingCodePage" DefaultValue="ANSI_1252" MinVersion="R13" Comment="Drawing code page; set to the system code page when a new drawing is created, but not otherwise maintained by AutoCAD." />
     <Variable Name="LASTSAVEDBY" Code="1" Type="string" Property="LastSavedBy" DefaultValue="null" MinVersion="R2004" Comment="Name of the last user to modify the file." />
     <Variable Name="REQUIREDVERSIONS" Code="160" Type="long" Property="RequiredVersions" DefaultValue="0" MinVersion="R2013" Comment="Unknown." />

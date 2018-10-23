@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.7.2 (23 October 2018)
+
+- Enable reading files with a long `$ACADMAINTVER` value.
+- Add direct file system support to the platforms that allow it.
+
 ## 0.7.1 (16 October 2018)
 
 - Enable writing entities with embedded objects.

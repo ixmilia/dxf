@@ -23,6 +23,9 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
     dxfFile = DxfFile.Load(fs);
 }
 
+// if on >= .NETFrameworkv3.5 or >= NETStandard1.3 you can use:
+// DxfFile dxfFile = DxfFile.Load(@"C:\Path\To\File.dxf");
+
 foreach (DxfEntity entity in dxfFile.Entities)
 {
     switch (entity.EntityType)
@@ -52,6 +55,9 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Create))
 {
     dxfFile.Save(fs);
 }
+
+// if on >= .NETFrameworkv3.5 or >= NETStandard1.3 you can use:
+// dxfFile.Save(@"C:\Path\To\File.dxf");
 ```
 
 ## Compatibility

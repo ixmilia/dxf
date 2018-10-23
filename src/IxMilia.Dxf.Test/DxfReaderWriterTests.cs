@@ -23,8 +23,7 @@ namespace IxMilia.Dxf.Test
         public void BinaryReaderTest()
         {
             // this file contains 12 lines
-            var stream = new FileStream("diamond-bin.dxf", FileMode.Open, FileAccess.Read);
-            var file = DxfFile.Load(stream);
+            var file = DxfFile.Load("diamond-bin.dxf");
             Assert.Equal(12, file.Entities.Count);
             Assert.Equal(12, file.Entities.Where(e => e.EntityType == DxfEntityType.Line).Count());
             var first = (DxfLine)file.Entities.First();

@@ -175,6 +175,16 @@ namespace IxMilia.Dxf
                 : boundingBoxes.Skip(1).Aggregate(boundingBoxes[0], (box1, box2) => box1.Combine(box2));
         }
 
+#if HAS_FILESYSTEM_ACCESS
+        public static DxfFile Load(string path)
+        {
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                return Load(stream);
+            }
+        }
+#endif
+
         public static DxfFile Load(Stream stream)
         {
             var reader = new BinaryReader(stream);
@@ -307,6 +317,16 @@ namespace IxMilia.Dxf
 
             return file;
         }
+
+#if HAS_FILESYSTEM_ACCESS
+        public void Save(string path, bool asText = true)
+        {
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                Save(stream, asText: asText);
+            }
+        }
+#endif
 
         public void Save(Stream stream, bool asText = true)
         {

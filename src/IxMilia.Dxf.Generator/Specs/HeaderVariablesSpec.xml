@@ -171,8 +171,8 @@
     <Variable Name="SURFTAB1" Code="70" Type="short" Property="MeshTabulationsInFirstDirection" DefaultValue="6" Comment="Number of mesh tabulations in first direction." />
     <Variable Name="SURFTAB2" Code="70" Type="short" Property="MeshTabulationsInSecondDirection" DefaultValue="6" Comment="Number of mesh tabulations in second direction." />
     <Variable Name="SURFTYPE" Code="70" Type="DxfPolylineCurvedAndSmoothSurfaceType" Property="PEditSmoothSurfaceType" DefaultValue="DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline" ReadConverter="(DxfPolylineCurvedAndSmoothSurfaceType)" WriteConverter="(short)" Comment="Surface type for PEDIT Smooth." />
-    <Variable Name="SURFU" Code="70" Type="short" Property="PEditSmoothMDensith" DefaultValue="6" Comment="Surface density (for PEDIT Smooth) in M direction." />
-    <Variable Name="SURFV" Code="70" Type="short" Property="PEditSmoothNDensith" DefaultValue="6" Comment="Surface density (for PEDIT Smooth) in N direction." />
+    <Variable Name="SURFU" Code="70" Type="short" Property="PEditSmoothMDensity" DefaultValue="6" Comment="Surface density (for PEDIT Smooth) in M direction." />
+    <Variable Name="SURFV" Code="70" Type="short" Property="PEditSmoothNDensity" DefaultValue="6" Comment="Surface density (for PEDIT Smooth) in N direction." />
     <Variable Name="UCSBASE" Code="2" Type="string" Property="UCSDefinitionName" DefaultValue="null" MinVersion="R2000" Comment="Name of the UCS that defines the origin and orientation of orthographic UCS settings." />
 
     <!-- spec says code 1 in R10, but AutoCAD only opens if it's a code 2, regardless of version -->

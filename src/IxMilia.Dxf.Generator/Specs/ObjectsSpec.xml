@@ -346,8 +346,8 @@
     LAYOUT
 
     -->
-    <Object Name="DxfLayout" ObjectType="Layout" SubclassMarker="AcDbLayout" TypeString="LAYOUT" BaseClass="DxfPlotSettings" GenerateReaderFunction="false" MinVersion="R2000">
-        <Property Name="LayoutName" Code="1" Type="string" DefaultValue="null" />
+    <Object Name="DxfLayout" ObjectType="Layout" SubclassMarker="AcDbLayout" TypeString="LAYOUT" BaseClass="DxfPlotSettings" GenerateReaderFunction="false" DefaultConstructor="Internal" MinVersion="R2000">
+        <Property Name="_layoutName" Code="1" Type="string" DefaultValue="null" Accessibility="private" />
         <Property Name="LayoutFlags" Code="70" Type="int" DefaultValue="0" WriteConverter="(short)">
             <Flag Name="IsPsLtScale" Mask="1" />
             <Flag Name="IsLimCheck" Mask="2" />
@@ -709,11 +709,11 @@
     PLOTSETTINGS
 
     -->
-    <Object Name="DxfPlotSettings" ObjectType="PlotSettings" SubclassMarker="AcDbPlotSettings" TypeString="PLOTSETTINGS" MinVersion="R2000">
+    <Object Name="DxfPlotSettings" ObjectType="PlotSettings" SubclassMarker="AcDbPlotSettings" TypeString="PLOTSETTINGS" DefaultConstructor="Internal" MinVersion="R2000">
         <Property Name="PageSetupName" Code="1" Type="string" DefaultValue="null" />
         <Property Name="PrinterName" Code="2" Type="string" DefaultValue="null" />
         <Property Name="PaperSize" Code="4" Type="string" DefaultValue="null" />
-        <Property Name="PlotViewName" Code="6" Type="string" DefaultValue="null" />
+        <Property Name="_plotViewName" Code="6" Type="string" DefaultValue="null" Accessibility="private" />
         <Property Name="UnprintableLeftMarginSize" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="UnprintableBottomMarginSize" Code="41" Type="double" DefaultValue="0.0" />
         <Property Name="UnprintableRightMarginSize" Code="42" Type="double" DefaultValue="0.0" />

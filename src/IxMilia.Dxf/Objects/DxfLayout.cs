@@ -1,6 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
-using System.Collections.Generic;
+using System;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -17,6 +17,32 @@ namespace IxMilia.Dxf.Objects
 
     public partial class DxfLayout
     {
+        public string LayoutName
+        {
+            get => _layoutName;
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new InvalidOperationException($"{nameof(LayoutName)} must be non-empty.");
+                }
+
+                _layoutName = value;
+            }
+        }
+
+        public override string PlotViewName
+        {
+            get => string.IsNullOrEmpty(base.PlotViewName) ? LayoutName : base.PlotViewName;
+            set => base.PlotViewName = value;
+        }
+
+        public DxfLayout(string plotViewName, string layoutName)
+            : base(plotViewName)
+        {
+            LayoutName = layoutName;
+        }
+
         public IDxfItem PaperSpaceObject
         {
             get { return Owner; }

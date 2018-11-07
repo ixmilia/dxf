@@ -1,5 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
+
 namespace IxMilia.Dxf.Objects
 {
     public enum DxfPlotPaperUnits
@@ -84,5 +86,24 @@ namespace IxMilia.Dxf.Objects
 
     public partial class DxfPlotSettings
     {
+        public virtual string PlotViewName
+        {
+            get => _plotViewName;
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new InvalidOperationException($"{nameof(PlotViewName)} must be non-empty.");
+                }
+
+                _plotViewName = value;
+            }
+        }
+
+        public DxfPlotSettings(string plotViewName)
+            : this()
+        {
+            PlotViewName = plotViewName;
+        }
     }
 }

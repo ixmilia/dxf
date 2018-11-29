@@ -4,6 +4,11 @@ jobs:
     vmImage: vs2017-win2016
   steps:
   - script: build-and-test.cmd
+  - script: src\create-package.cmd
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: Artifacts/IxMilia.Dxf/bin/Release/IxMilia.Dxf.nupkg
+      artifactName: nuget
 - job: Linux
   pool:
     vmImage: ubuntu-16.04

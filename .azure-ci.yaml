@@ -7,8 +7,8 @@ jobs:
   - script: src\create-package.cmd
   - task: PublishBuildArtifacts@1
     inputs:
-      pathtoPublish: Artifacts/IxMilia.Dxf/bin/Release/IxMilia.Dxf.nupkg
-      artifactName: nuget
+      pathtoPublish: Artifacts/NuGet
+      artifactName: NuGet
 - job: Linux
   pool:
     vmImage: ubuntu-16.04

@@ -19,7 +19,8 @@ namespace IxMilia.Dxf.Objects
 
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
-            bool readElementCount = false;
+            var readElementCount = false;
+            var elementCount = 0;
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
@@ -41,34 +42,43 @@ namespace IxMilia.Dxf.Objects
                     case 3:
                         this.Description = (pair.StringValue);
                         break;
-                    case 6:
-                        this._elementLineTypes.Add((pair.StringValue));
-                        break;
-                    case 49:
-                        this._elementOffsets.Add((pair.DoubleValue));
-                        break;
                     case 51:
                         this.StartAngle = (pair.DoubleValue);
                         break;
                     case 52:
                         this.EndAngle = (pair.DoubleValue);
                         break;
+                    case 70:
+                        this._flags = (pair.ShortValue);
+                        break;
+                    case 71:
+                        elementCount = (pair.ShortValue);
+                        readElementCount = true;
+                        break;
+                    case 49:
+                        // found a new element value
+                        Elements.Add(new DxfMLineStyleElement() { Offset = pair.DoubleValue });
+                        break;
                     case 62:
                         if (readElementCount)
                         {
-                            this._elementColors.Add(FromRawValue(pair.ShortValue));
+                            // update the last element
+                            if (Elements.Count > 0)
+                            {
+                                Elements[Elements.Count - 1].Color = FromRawValue(pair.ShortValue);
+                            }
                         }
                         else
                         {
                             this.FillColor = FromRawValue(pair.ShortValue);
                         }
                         break;
-                    case 70:
-                        this._flags = (pair.ShortValue);
-                        break;
-                    case 71:
-                        this._elementCount = (pair.ShortValue);
-                        readElementCount = true;
+                    case 6:
+                        // update the last element
+                        if (Elements.Count > 0)
+                        {
+                            Elements[Elements.Count - 1].LineType = pair.StringValue;
+                        }
                         break;
                     default:
                         if (!base.TrySetPair(pair))
@@ -80,23 +90,6 @@ namespace IxMilia.Dxf.Objects
 
                 buffer.Advance();
             }
-
-            return PostParse();
-        }
-
-        protected override DxfObject PostParse()
-        {
-            Debug.Assert(_elementCount == _elementOffsets.Count);
-            Debug.Assert(_elementCount == _elementColors.Count);
-            Debug.Assert(_elementCount == _elementLineTypes.Count);
-            for (int i = 0; i < _elementCount; i++)
-            {
-                Elements.Add(new DxfMLineStyleElement() { Offset = _elementOffsets[i], Color = _elementColors[i], LineType = _elementLineTypes[i] });
-            }
-
-            _elementOffsets.Clear();
-            _elementColors.Clear();
-            _elementLineTypes.Clear();
 
             return this;
         }

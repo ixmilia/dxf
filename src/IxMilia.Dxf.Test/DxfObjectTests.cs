@@ -916,8 +916,6 @@ light-name
 3.0
  62
 3
-  6
-tres
  49
 4.0
  62
@@ -934,7 +932,7 @@ quatro
 
             Assert.Equal(3.0, mlineStyle.Elements[0].Offset);
             Assert.Equal(3, mlineStyle.Elements[0].Color.RawValue);
-            Assert.Equal("tres", mlineStyle.Elements[0].LineType);
+            Assert.Equal(null, mlineStyle.Elements[0].LineType);
 
             Assert.Equal(4.0, mlineStyle.Elements[1].Offset);
             Assert.Equal(4, mlineStyle.Elements[1].Color.RawValue);

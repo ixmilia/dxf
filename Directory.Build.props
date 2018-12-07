@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <VersionPrefix>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)version.txt').Trim())</VersionPrefix>
-    <ArtifactsDir>$(MSBuildThisFileDirectory)Artifacts</ArtifactsDir>
-    <BaseOutputPath>$(ArtifactsDir)\$(MSBuildProjectName)\bin</BaseOutputPath>
-    <BaseIntermediateOutputPath>$(ArtifactsDir)\$(MSBuildProjectName)\obj</BaseIntermediateOutputPath>
+    <ArtifactsDir>$(MSBuildThisFileDirectory)artifacts</ArtifactsDir>
+    <ArtifactsPackagesDir>$(ArtifactsDir)\packages</ArtifactsPackagesDir>
+    <BaseOutputPath>$(ArtifactsDir)\bin\$(MSBuildProjectName)</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(ArtifactsDir)\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+    <PackageOutputPath>$(ArtifactsPackagesDir)\$(Configuration)</PackageOutputPath>
   </PropertyGroup>
 
 </Project>

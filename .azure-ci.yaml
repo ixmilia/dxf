@@ -7,8 +7,8 @@ jobs:
   - script: src\create-package.cmd
   - task: PublishBuildArtifacts@1
     inputs:
-      pathtoPublish: Artifacts/NuGet
-      artifactName: NuGet
+      pathtoPublish: artifacts/packages/Release
+      artifactName: packages
 - job: Linux
   pool:
     vmImage: ubuntu-16.04

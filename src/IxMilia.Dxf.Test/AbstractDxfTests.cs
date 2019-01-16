@@ -93,9 +93,9 @@ EOF
             VerifyFileContents(file, expected, sectionType, (ex, ac) => AssertRegexContains(ex.Trim(), ac));
         }
 
-        internal static void VerifyFileDoesNotContain(DxfFile file, string unexpected)
+        internal static void VerifyFileDoesNotContain(DxfFile file, string unexpected, DxfSectionType? sectionType = null)
         {
-            VerifyFileContents(file, unexpected, sectionType: null, predicate: (ex, ac) => Assert.DoesNotContain(ex.Trim(), ac));
+            VerifyFileContents(file, unexpected, sectionType, predicate: (ex, ac) => Assert.DoesNotContain(ex.Trim(), ac));
         }
 
         protected static void AssertArrayEqual<T>(T[] expected, T[] actual)

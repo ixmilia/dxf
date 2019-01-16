@@ -879,11 +879,25 @@ namespace IxMilia.Dxf.Generator
                     return WriteProperty(spec, entity);
                 case "Foreach":
                     var property = spec.Attribute("Property").Value;
+                    var condition = spec.Attribute("Condition")?.Value;
                     var lines = new List<string>();
-                    lines.Add(string.Format("foreach (var item in {0})", property));
-                    lines.Add("{");
-                    lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => "    " + l));
-                    lines.Add("}");
+                    var indent = "";
+                    if (condition != null)
+                    {
+                        indent = "    ";
+                        lines.Add($"if ({condition})");
+                        lines.Add("{");
+                    }
+
+                    lines.Add($"{indent}foreach (var item in {property})");
+                    lines.Add($"{indent}{{");
+                    lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => $"{indent}    {l}"));
+                    lines.Add($"{indent}}}");
+                    if (condition != null)
+                    {
+                        lines.Add("}");
+                    }
+
                     lines.Add(Environment.NewLine);
                     return lines;
                 case "WriteExtensionData":

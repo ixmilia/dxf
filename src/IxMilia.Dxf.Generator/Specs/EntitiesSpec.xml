@@ -1136,7 +1136,7 @@
         <Property Name="StartTangent" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
         <Property Name="EndTangent" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="KnotValues" Code="40" Type="double" DefaultValue="" AllowMultiples="true" />
-        <Property Name="Weight" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
+        <Property Name="_weights" Code="41" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
         <Property Name="_controlPointX" Code="10" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
         <Property Name="_controlPointY" Code="20" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
         <Property Name="_controlPointZ" Code="30" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
@@ -1157,11 +1157,13 @@
             <WriteProperty Property="StartTangent" />
             <WriteProperty Property="EndTangent" />
             <WriteProperty Property="KnotValues" />
-            <WriteProperty Property="Weight" />
+            <Foreach Property="ControlPoints" Condition="ControlPoints.Any(cp =&gt; cp.Weight != 1.0)"><!-- if any weight is not 1.0, write them all -->
+              <WriteSpecificValue Code="41" Value="item.Weight" />
+            </Foreach>
             <Foreach Property="ControlPoints">
-                <WriteSpecificValue Code="10" Value="item.X" />
-                <WriteSpecificValue Code="20" Value="item.Y" />
-                <WriteSpecificValue Code="30" Value="item.Z" />
+                <WriteSpecificValue Code="10" Value="item.Point.X" />
+                <WriteSpecificValue Code="20" Value="item.Point.Y" />
+                <WriteSpecificValue Code="30" Value="item.Point.Z" />
             </Foreach>
             <Foreach Property="FitPoints">
                 <WriteSpecificValue Code="11" Value="item.X" />

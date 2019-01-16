@@ -70,6 +70,14 @@ ill-placed comment
             VerifyFileContains(file, text, sectionType: DxfSectionType.Entities);
         }
 
+        private static void EnsureFileDoesNotContainWithEntity(DxfEntity entity, string unwantedText, DxfAcadVersion version = DxfAcadVersion.R12)
+        {
+            var file = new DxfFile();
+            file.Header.Version = version;
+            file.Entities.Add(entity);
+            VerifyFileDoesNotContain(file, unwantedText, sectionType: DxfSectionType.Entities);
+        }
+
         #endregion
 
         [Fact]
@@ -944,6 +952,62 @@ EOF
             Assert.Equal(2, poly.Vertices.Count);
         }
 
+        [Fact]
+        public void ReadSplineWithWeightsTest()
+        {
+            var spline = (DxfSpline)Entity("SPLINE", @"
+ 73
+2
+ 41
+11.0
+ 41
+22.0
+ 10
+1.1
+ 20
+1.2
+ 30
+1.3
+ 10
+2.1
+ 20
+2.2
+ 30
+2.3
+");
+            Assert.Equal(2, spline.ControlPoints.Count);
+            Assert.Equal(new DxfPoint(1.1, 1.2, 1.3), spline.ControlPoints[0].Point);
+            Assert.Equal(11.0, spline.ControlPoints[0].Weight);
+            Assert.Equal(new DxfPoint(2.1, 2.2, 2.3), spline.ControlPoints[1].Point);
+            Assert.Equal(22.0, spline.ControlPoints[1].Weight);
+        }
+
+        [Fact]
+        public void ReadSplineWithoutWeightsTest()
+        {
+            var spline = (DxfSpline)Entity("SPLINE", @"
+ 73
+2
+ 10
+1.1
+ 20
+1.2
+ 30
+1.3
+ 10
+2.1
+ 20
+2.2
+ 30
+2.3
+");
+            Assert.Equal(2, spline.ControlPoints.Count);
+            Assert.Equal(new DxfPoint(1.1, 1.2, 1.3), spline.ControlPoints[0].Point);
+            Assert.Equal(1.0, spline.ControlPoints[0].Weight);
+            Assert.Equal(new DxfPoint(2.1, 2.2, 2.3), spline.ControlPoints[1].Point);
+            Assert.Equal(1.0, spline.ControlPoints[1].Weight);
+        }
+
         #endregion
 
         #region Write default value tests
@@ -1535,6 +1599,70 @@ ATTRIB
   0
 MTEXT
 ", DxfAcadVersion.R13);
+        }
+
+        [Fact]
+        public void WriteSplineWithWeightsTest()
+        {
+            var spline = new DxfSpline();
+            spline.ControlPoints.Add(new DxfControlPoint(new DxfPoint(1.1, 1.2, 1.3), 11.0));
+            spline.ControlPoints.Add(new DxfControlPoint(new DxfPoint(2.1, 2.2, 2.3), 22.0));
+
+            // control points
+            EnsureFileContainsEntity(spline, @"
+ 10
+1.1
+ 20
+1.2
+ 30
+1.3
+ 10
+2.1
+ 20
+2.2
+ 30
+2.3
+", version: DxfAcadVersion.R13);
+
+            // weights
+            EnsureFileContainsEntity(spline, @"
+ 41
+11.0
+ 41
+22.0
+", version: DxfAcadVersion.R13);
+        }
+
+        [Fact]
+        public void WriteSplineWithoutWeightsTest()
+        {
+            var spline = new DxfSpline();
+            spline.ControlPoints.Add(new DxfControlPoint(new DxfPoint(1.1, 1.2, 1.3), 1.0));
+            spline.ControlPoints.Add(new DxfControlPoint(new DxfPoint(2.1, 2.2, 2.3), 1.0));
+
+            // control points
+            EnsureFileContainsEntity(spline, @"
+ 10
+1.1
+ 20
+1.2
+ 30
+1.3
+ 10
+2.1
+ 20
+2.2
+ 30
+2.3
+", version: DxfAcadVersion.R13);
+
+            // weights
+            EnsureFileDoesNotContainWithEntity(spline, @"
+ 41
+1.0
+ 41
+1.0
+", version: DxfAcadVersion.R13);
         }
 
         #endregion

@@ -130,6 +130,7 @@
                 </xs:choice>
             </xs:sequence>
             <xs:attribute name="Property" type="xs:string" use="required" />
+            <xs:attribute name="Condition" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
 

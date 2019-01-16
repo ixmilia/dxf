@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -23,7 +22,7 @@ namespace IxMilia.Dxf.Entities
             get { return FitPoints.Count; }
         }
 
-        public IList<DxfPoint> ControlPoints { get; } = new List<DxfPoint>();
+        public IList<DxfControlPoint> ControlPoints { get; } = new List<DxfControlPoint>();
 
         public IList<DxfPoint> FitPoints { get; } = new List<DxfPoint>();
 
@@ -32,7 +31,8 @@ namespace IxMilia.Dxf.Entities
             Debug.Assert((_controlPointX.Count == _controlPointY.Count) && (_controlPointX.Count == _controlPointZ.Count));
             for (int i = 0; i < _controlPointX.Count; i++)
             {
-                ControlPoints.Add(new DxfPoint(_controlPointX[i], _controlPointY[i], _controlPointZ[i]));
+                var weight = _controlPointX.Count == _weights.Count ? _weights[i] : 1.0;
+                ControlPoints.Add(new DxfControlPoint(new DxfPoint(_controlPointX[i], _controlPointY[i], _controlPointZ[i]), weight));
             }
 
             _controlPointX.Clear();

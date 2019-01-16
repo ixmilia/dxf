@@ -1136,7 +1136,7 @@
         <Property Name="StartTangent" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
         <Property Name="EndTangent" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="KnotValues" Code="40" Type="double" DefaultValue="" AllowMultiples="true" />
-        <Property Name="Weight" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
+        <Property Name="Weights" Code="41" Type="double" DefaultValue="" AllowMultiples="true" />
         <Property Name="_controlPointX" Code="10" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
         <Property Name="_controlPointY" Code="20" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
         <Property Name="_controlPointZ" Code="30" Type="double" DefaultValue="" AllowMultiples="true" Accessibility="private" />
@@ -1157,7 +1157,9 @@
             <WriteProperty Property="StartTangent" />
             <WriteProperty Property="EndTangent" />
             <WriteProperty Property="KnotValues" />
-            <WriteProperty Property="Weight" />
+            <Foreach Property="Weights">
+              <WriteSpecificValue Code="41" Value="item" />
+            </Foreach>
             <Foreach Property="ControlPoints">
                 <WriteSpecificValue Code="10" Value="item.X" />
                 <WriteSpecificValue Code="20" Value="item.Y" />

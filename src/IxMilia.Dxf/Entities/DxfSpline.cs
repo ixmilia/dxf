@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using IxMilia.Dxf.Collections;
+using System.Linq;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -35,6 +36,11 @@ namespace IxMilia.Dxf.Entities
                 ControlPoints.Add(new DxfPoint(_controlPointX[i], _controlPointY[i], _controlPointZ[i]));
             }
 
+            if(Weights.Count != ControlPoints.Count)
+            {
+                Weights = ControlPoints.Select(curr => 1.0).ToArray();
+            }
+            
             _controlPointX.Clear();
             _controlPointY.Clear();
             _controlPointZ.Clear();

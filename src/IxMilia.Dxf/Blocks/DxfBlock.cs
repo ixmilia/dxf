@@ -95,6 +95,7 @@ namespace IxMilia.Dxf.Blocks
 
         public DxfBlock()
         {
+            Layer = "0";
             BasePoint = DxfPoint.Origin;
             Entities = new ListNonNull<DxfEntity>();
             ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();

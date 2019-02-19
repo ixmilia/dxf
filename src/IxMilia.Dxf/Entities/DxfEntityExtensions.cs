@@ -19,17 +19,32 @@ namespace IxMilia.Dxf.Entities
 
         public static bool ContainsAngle(this DxfArc arc, double angle)
         {
-            var start = arc.StartAngle;
-            var end = arc.EndAngle;
+            // normalize all angles
+            var start = NormalizeAngleDegree(arc.StartAngle);
+            var end = NormalizeAngleDegree(arc.EndAngle);
+            angle = NormalizeAngleDegree(angle);
 
-            // normalize angles such that start is always less than end
-            if (start > end)
+            // simple case: CCW arc from small to large angle.
+            if (start <= end)
             {
-                // arcs specify angles in degrees
-                start -= 360.0;
+                return start <= angle && angle <= end;
             }
+            // if end < start consider two areas
+            return start <= angle && angle < 360 // start ccw ... 360°
+                || 0 <= angle && angle <= end; // overflow: 0° ... end
+        }
 
-            return start <= angle && end >= angle;
+        private static double NormalizeAngleDegree(double angle)
+        {
+            if (angle >= 360)
+            {
+                angle -= 360;
+            }
+            else if (angle < 0)
+            {
+                angle += 360;
+            }
+            return angle;
         }
 
         /// <summary>

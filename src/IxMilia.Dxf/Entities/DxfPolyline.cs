@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
 
@@ -156,17 +157,49 @@ namespace IxMilia.Dxf.Entities
         protected override IEnumerable<DxfPoint> GetExtentsPoints()
         {
             yield return Location;
-            var lastLocation = Location;
-            foreach (var vertex in Vertices)
+            int n = Vertices.Count;
+            for (int i = 0; i < n; i++)
             {
-                yield return vertex.Location;
-                if (vertex.Bulge != 0.0)
+                var vertex = Vertices[i];
+                if (Math.Abs(vertex.Bulge) <= 1e-10)
                 {
-                    // TODO: the segment between `lastLocation` and `vertex.Location` is an arc
+                    yield return vertex.Location;
                 }
-
-                lastLocation = vertex.Location;
+                else
+                {
+                    // the segment between `vertex.Location` and `next.Location` is an arc
+                    var next = Vertices[(i + 1) % n];
+                    if (TryGetArcBoundingBox(vertex, next, out var bbox))
+                    {
+                        yield return bbox.MinimumPoint;
+                        yield return bbox.MaximumPoint;
+                    }
+                    else
+                    {
+                        // fallback if points are too close / bulge is tiny
+                        yield return vertex.Location;
+                    }
+                }
             }
+        }
+
+        private static bool TryGetArcBoundingBox(DxfVertex v1, DxfVertex v2, out DxfBoundingBox bbox)
+        {
+            if (!DxfArc.TryCreateFromVertices(v1, v2, out var arc))
+            {
+                bbox = default(DxfBoundingBox);
+                return false;
+            }
+
+            var boundingBox = arc.GetBoundingBox();
+            if (!boundingBox.HasValue)
+            {
+                bbox = default(DxfBoundingBox);
+                return false;
+            }
+
+            bbox = boundingBox.Value;
+            return true;
         }
     }
 }

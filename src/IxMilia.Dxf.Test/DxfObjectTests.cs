@@ -715,6 +715,90 @@ layout-name
         }
 
         [Fact]
+        public void PlotSettingsPlotViewName()
+        {
+            // ensure invalid values aren't allowed
+            Assert.Throws<InvalidOperationException>(() => new DxfPlotSettings(null));
+            Assert.Throws<InvalidOperationException>(() => new DxfPlotSettings(""));
+
+            // ensure valid values are allowed
+            _ = new DxfPlotSettings("some value");
+        }
+
+        [Fact]
+        public void LayoutName()
+        {
+            // ensure invalid values aren't allowed
+            Assert.Throws<InvalidOperationException>(() => new DxfLayout(null, "layout name"));
+            Assert.Throws<InvalidOperationException>(() => new DxfLayout("", "layout name"));
+            Assert.Throws<InvalidOperationException>(() => new DxfLayout("plot view name", null));
+            Assert.Throws<InvalidOperationException>(() => new DxfLayout("plot view name", ""));
+
+            // ensure valid values are allowed
+            _ = new DxfLayout("plot view name", "layout name");
+        }
+
+        [Fact]
+        public void LayoutNameOverridesPlotViewName()
+        {
+            // artificially create a layout with a null PlotViewName, but valid LayoutName
+            var layout = new DxfLayout();
+            layout.LayoutName = "layout name";
+            Assert.Equal("layout name", layout.PlotViewName);
+
+            // ensure the base plot view name is honored
+            layout = new DxfLayout("plot view name", "layout name");
+            Assert.Equal("layout name", layout.LayoutName);
+            Assert.Equal("plot view name", layout.PlotViewName);
+        }
+
+        [Fact]
+        public void NullPlotSettingsName()
+        {
+            // artificially create a plot settings object without a plot view name
+            var file = new DxfFile();
+            file.Clear();
+            var plotSettings = new DxfPlotSettings();
+
+            // ensure it doesn't end up as a view
+            file.Objects.Add(plotSettings);
+            Assert.Equal(0, file.Views.Count);
+            file.Normalize();
+            Assert.Equal(0, file.Views.Count);
+
+            // ensure that it ends up as a view when it has a valid name
+            plotSettings.PlotViewName = "plot view name";
+            file.Normalize();
+            Assert.Equal(plotSettings.PlotViewName, file.Views.Single().Name);
+        }
+
+        [Fact]
+        public void EmptyPlotSettingsNameFromAFile()
+        {
+            // force a plot settings object with an empty string as a name
+            var file = Section("OBJECTS", @"
+  0
+PLOTSETTINGS
+  6
+
+999
+this comment required so the previous pair has an empty string
+");
+            var plotSettings = (DxfPlotSettings)file.Objects.Single();
+            Assert.Equal("", plotSettings.PlotViewName);
+
+            // ensure it doesn't end up as a view
+            Assert.Equal(0, file.Views.Count);
+            file.Normalize();
+            Assert.Equal(0, file.Views.Count);
+
+            // ensure that it ends up as a view when it has a valid name
+            plotSettings.PlotViewName = "plot view name";
+            file.Normalize();
+            Assert.Equal(plotSettings.PlotViewName, file.Views.Single().Name);
+        }
+
+        [Fact]
         public void ReadLightListTest()
         {
             var file = Parse(@"

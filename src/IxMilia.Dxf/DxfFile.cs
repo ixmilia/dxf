@@ -548,7 +548,7 @@ namespace IxMilia.Dxf
         {
             foreach (var itemToAdd in itemsToAdd)
             {
-                if (itemToAdd != null && !existingItems.Contains(itemToAdd))
+                if (!string.IsNullOrEmpty(itemToAdd) && !existingItems.Contains(itemToAdd))
                 {
                     addItem(itemToAdd);
                     existingItems.Add(itemToAdd);

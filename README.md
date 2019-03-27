@@ -187,6 +187,8 @@ between versions.
 
 [2019](http://help.autodesk.com/cloudhelp/2019/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
 
+[2020](http://help.autodesk.com/cloudhelp/2020/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+
 Many of these links were compiled from an archive.org [May 9, 2013 snapshot](https://web.archive.org/web/20130509144333/http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853)
 
-The 2015-2019 spec can be downloaded for offline use via the [ReferenceCollector](src/IxMilia.Dxf.ReferenceCollector/README.md).
+The 2015-2020 spec can be downloaded for offline use via the [ReferenceCollector](src/IxMilia.Dxf.ReferenceCollector/README.md).

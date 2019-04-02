@@ -98,7 +98,7 @@ namespace IxMilia.Dxf.Objects
             switch (pair.Code)
             {
                 case 1:
-                    this.LayoutName = (pair.StringValue);
+                    this._layoutName = pair.StringValue;
                     break;
                 case 10:
                     this.MinimumLimits = this.MinimumLimits.WithUpdatedX(pair.DoubleValue);

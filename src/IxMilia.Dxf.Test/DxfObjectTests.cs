@@ -674,6 +674,23 @@ layout-name
         }
 
         [Fact]
+        public void ReadLayoutWithEmptyNameTest()
+        {
+            var layout = (DxfLayout)GenObject("LAYOUT", @"
+  1
+page-setup-name
+100
+AcDbLayout
+  1
+
+999
+comment line to ensure the value for the `1` code is an empty string
+");
+            Assert.Equal("page-setup-name", layout.PageSetupName);
+            Assert.Equal("", layout.LayoutName);
+        }
+
+        [Fact]
         public void WriteLayoutTest()
         {
             var layout = new DxfLayout();

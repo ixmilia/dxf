@@ -184,7 +184,7 @@ namespace IxMilia.Dxf.Generator
                 }
                 else
                 {
-                    AppendLine($"list.Add(new DxfCodePair({Code(property)}, {converter}(this.{Property(property)})));");
+                    AppendLine($"list.Add(new DxfCodePair({Code(property)}, {string.Format(converter, $"this.{Property(property)}")}));");
                 }
 
                 if (usingIf)
@@ -232,7 +232,7 @@ namespace IxMilia.Dxf.Generator
                             var codeTypeValue = TypeToString(codeType);
                             var converter = ReadConverter(property);
                             AppendLine($"case {code}:");
-                            AppendLine($"    this.{prop} = {converter}(pair.{codeTypeValue});");
+                            AppendLine($"    this.{prop} = {string.Format(converter, $"pair.{codeTypeValue}")};");
                             AppendLine("    break;");
                         }
 
@@ -249,7 +249,7 @@ namespace IxMilia.Dxf.Generator
                         var codeTypeValue = TypeToString(codeType);
                         var converter = ReadConverter(propertyGroup.First());
                         AppendLine($"EnsureCode(pair, {code});");
-                        AppendLine($"this.{prop} = {converter}(pair.{codeTypeValue});");
+                        AppendLine($"this.{prop} = {string.Format(converter, $"pair.{codeTypeValue}")};");
                     }
 
                     AppendLine("break;");

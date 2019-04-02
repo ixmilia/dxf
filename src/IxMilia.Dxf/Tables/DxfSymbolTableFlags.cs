@@ -127,14 +127,14 @@ namespace IxMilia.Dxf
             return DxfCommonConverters.UIntHandle(u);
         }
 
-        protected static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        protected static double EnsurePositiveOrDefault(double value, double defaultValue)
         {
-            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
+            return DxfCommonConverters.EnsurePositiveOrDefault(value, defaultValue);
         }
 
-        protected static Func<int, int> EnsurePositiveOrDefault(int defaultValue)
+        protected static int EnsurePositiveOrDefault(int value, int defaultValue)
         {
-            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
+            return DxfCommonConverters.EnsurePositiveOrDefault(value, defaultValue);
         }
     }
 

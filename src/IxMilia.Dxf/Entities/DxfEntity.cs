@@ -279,11 +279,6 @@ namespace IxMilia.Dxf.Entities
             return DxfCommonConverters.BoolShort(b);
         }
 
-        private static short NotBoolShort(bool b)
-        {
-            return BoolShort(!b);
-        }
-
         protected static uint UIntHandle(string s)
         {
             return DxfCommonConverters.UIntHandle(s);
@@ -294,9 +289,9 @@ namespace IxMilia.Dxf.Entities
             return DxfCommonConverters.UIntHandle(u);
         }
 
-        protected static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        protected static string DefaultIfNullOrEmpty(string value, string defaultValue)
         {
-            return DxfCommonConverters.DefaultIfNullOrEmpty(defaultValue);
+            return DxfCommonConverters.DefaultIfNullOrEmpty(value, defaultValue);
         }
 
         private static void SwallowEntity(DxfCodePairBufferReader buffer)

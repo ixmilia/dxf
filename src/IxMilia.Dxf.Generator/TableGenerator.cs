@@ -257,6 +257,7 @@ namespace IxMilia.Dxf.Generator
                         else
                         {
                             var codeOverrides = CodeOverrides(property);
+                            var writeConverter = WriteConverter(property);
                             if (Code(property) < 0 && codeOverrides != null)
                             {
                                 char prop = 'X';
@@ -269,7 +270,7 @@ namespace IxMilia.Dxf.Generator
                                         IncreaseIndent();
                                     }
 
-                                    AppendLine($"pairs.Add(new DxfCodePair({codeOverrides[i]}, {WriteConverter(property)}({Name(property)}.{prop})));");
+                                    AppendLine($"pairs.Add(new DxfCodePair({codeOverrides[i]}, {string.Format(writeConverter, $"{Name(property)}.{prop}")}));");
 
                                     if (hasPredicate)
                                     {
@@ -288,7 +289,7 @@ namespace IxMilia.Dxf.Generator
                                     IncreaseIndent();
                                 }
 
-                                AppendLine($"pairs.Add(new DxfCodePair({Code(property)}, {WriteConverter(property)}({Name(property)})));");
+                                AppendLine($"pairs.Add(new DxfCodePair({Code(property)}, {string.Format(writeConverter, $"{Name(property)}")}));");
 
                                 if (hasPredicate)
                                 {
@@ -364,14 +365,15 @@ namespace IxMilia.Dxf.Generator
                             var code = Code(property);
                             var codeType = DxfCodePair.ExpectedType(code);
                             var codeTypeValue = TypeToString(codeType);
+                            var readConverter = ReadConverter(property);
                             AppendLine($"case {Code(property)}:");
                             if (AllowMultiples(property))
                             {
-                                AppendLine($"    item.{Name(property)}.Add({ReadConverter(property)}(pair.{codeTypeValue}));");
+                                AppendLine($"    item.{Name(property)}.Add({string.Format(readConverter, $"pair.{codeTypeValue}")});");
                             }
                             else
                             {
-                                AppendLine($"    item.{Name(property)} = {ReadConverter(property)}(pair.{codeTypeValue});");
+                                AppendLine($"    item.{Name(property)} = {string.Format(readConverter, $"pair.{codeTypeValue}")};");
                             }
 
                             AppendLine("    break;");

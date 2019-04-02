@@ -359,7 +359,8 @@ namespace IxMilia.Dxf.Generator
                             var assignSuffix = AllowMultiples(property)
                                 ? ")"
                                 : "";
-                            var value = string.Format("{0}(pair.{1})", ReadConverter(property), codeTypeValue);
+                            var readConverter = ReadConverter(property);
+                            var value = string.Format(readConverter, $"pair.{codeTypeValue}");
                             if (IsPointer(property) && AllowMultiples(property))
                             {
                                 value = "new DxfPointer(" + value + ")";
@@ -382,8 +383,10 @@ namespace IxMilia.Dxf.Generator
                             for (int i = 0; i < propertyGroup.Count(); i++)
                             {
                                 var property = propertyGroup.Skip(i).First();
+                                var readConverter = ReadConverter(property);
+                                var value = string.Format(readConverter, $"pair.{TypeToString(DxfCodePair.ExpectedType(code))}");
                                 AppendLine($"case {i}:");
-                                AppendLine($"    this.{Name(property)} = {ReadConverter(property)}(pair.{TypeToString(DxfCodePair.ExpectedType(code))});");
+                                AppendLine($"    this.{Name(property)} = {value};");
                                 AppendLine($"    _code_{code}_index++;");
                                 AppendLine("    break;");
                             }
@@ -590,12 +593,10 @@ namespace IxMilia.Dxf.Generator
             }
             else
             {
+                var writeConverter = WriteConverter(property);
                 if (AllowMultiples(property))
                 {
-                    var writeConverter = WriteConverter(property);
-                    var value = string.IsNullOrEmpty(writeConverter)
-                        ? "p"
-                        : string.Format("{0}(p)", writeConverter);
+                    var value = string.Format(writeConverter, "p");
                     var infixPredicate = string.Empty;
                     if (IsPointer(property))
                     {
@@ -612,7 +613,8 @@ namespace IxMilia.Dxf.Generator
                     {
                         name += "Pointer.Handle";
                     }
-                    lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}(this.{3})));", indentPrefix, code, WriteConverter(property), name));
+                    var value = string.Format(writeConverter, $"this.{name}");
+                    lines.Add(string.Format("{0}pairs.Add(new DxfCodePair({1}, {2}));", indentPrefix, code, value));
                 }
             }
 
@@ -716,12 +718,17 @@ namespace IxMilia.Dxf.Generator
         {
             if (IsPointer(property))
             {
-                return "DxfCommonConverters.UIntHandle";
+                return "DxfCommonConverters.UIntHandle({0})";
             }
             else
             {
-                var att = property.Attribute("ReadConverter");
-                return att == null ? string.Empty : att.Value;
+                var converter = property.Attribute("ReadConverter")?.Value ?? "{0}";
+                if (!converter.Contains("{0"))
+                {
+                    throw new InvalidOperationException($"Read converter for '{Name(property)}' must contain a string format hole.");
+                }
+
+                return converter;
             }
         }
 
@@ -795,12 +802,17 @@ namespace IxMilia.Dxf.Generator
         {
             if (IsPointer(property))
             {
-                return "DxfCommonConverters.UIntHandle";
+                return "DxfCommonConverters.UIntHandle({0})";
             }
             else
             {
-                var att = property.Attribute("WriteConverter");
-                return att == null ? string.Empty : att.Value;
+                var converter = property.Attribute("WriteConverter")?.Value ?? "{0}";
+                if (!converter.Contains("{0"))
+                {
+                    throw new InvalidOperationException($"Write converter for '{Name(property)}' must contain a string format hole.");
+                }
+
+                return converter;
             }
         }
 
@@ -813,13 +825,8 @@ namespace IxMilia.Dxf.Generator
         public IEnumerable<string> WriteSpecificValue(XElement spec)
         {
             var code = spec.Attribute("Code").Value;
-            var value = spec.Attribute("Value").Value;
-            var originalValue = value;
             var writeConverter = WriteConverter(spec);
-            if (!string.IsNullOrEmpty(writeConverter))
-            {
-                value = string.Format("{0}({1})", writeConverter, value);
-            }
+            var value = string.Format(writeConverter, spec.Attribute("Value").Value);
 
             var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, value);
             var minVersion = MinVersion(spec);
@@ -848,7 +855,7 @@ namespace IxMilia.Dxf.Generator
 
             if (defaultValue != null)
             {
-                predicate.Add(string.Format("{0} != {1}", originalValue, defaultValue.Value));
+                predicate.Add(string.Format("{0} != {1}", spec.Attribute("Value").Value, defaultValue.Value));
             }
 
             if (condition != null)

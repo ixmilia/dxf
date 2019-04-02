@@ -117,14 +117,14 @@ namespace IxMilia.Dxf
             return t.TotalDays;
         }
 
-        private static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        private static string DefaultIfNullOrEmpty(string value, string defaultValue)
         {
-            return DxfCommonConverters.DefaultIfNullOrEmpty(defaultValue);
+            return DxfCommonConverters.DefaultIfNullOrEmpty(value, defaultValue);
         }
 
-        private static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        private static double EnsurePositiveOrDefault(double value, double defaultValue)
         {
-            return DxfCommonConverters.EnsurePositiveOrDefault(defaultValue);
+            return DxfCommonConverters.EnsurePositiveOrDefault(value, defaultValue);
         }
 
         private static void EnsureCode(DxfCodePair pair, int code)

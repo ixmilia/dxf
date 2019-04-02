@@ -150,21 +150,21 @@ namespace IxMilia.Dxf
             }
         }
 
-        public static Func<double, double> EnsurePositiveOrDefault(double defaultValue)
+        public static double EnsurePositiveOrDefault(double value, double defaultValue)
         {
-            return value => double.IsNaN(value) || double.IsInfinity(value) || value <= 0.0
+            return double.IsNaN(value) || double.IsInfinity(value) || value <= 0.0
                 ? defaultValue
                 : value;
         }
 
-        public static Func<int, int> EnsurePositiveOrDefault(int defaultValue)
+        public static int EnsurePositiveOrDefault(int value, int defaultValue)
         {
-            return value => value <= 0 ? defaultValue : value;
+            return value <= 0 ? defaultValue : value;
         }
 
-        public static Func<string, string> DefaultIfNullOrEmpty(string defaultValue)
+        public static string DefaultIfNullOrEmpty(string value, string defaultValue)
         {
-            return value => Compat.IsNullOrWhiteSpace(value) ? defaultValue : value;
+            return Compat.IsNullOrWhiteSpace(value) ? defaultValue : value;
         }
     }
 }

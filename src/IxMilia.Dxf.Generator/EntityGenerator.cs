@@ -221,8 +221,9 @@ namespace IxMilia.Dxf.Generator
                         var assignSuffix = AllowMultiples(property)
                             ? ")"
                             : "";
+                        var readConverter = ReadConverter(property);
                         AppendLine($"        case {code}:");
-                        AppendLine($"            {assignCode}{ReadConverter(property)}(pair.{codeTypeValue}){assignSuffix};");
+                        AppendLine($"            {assignCode}{string.Format(readConverter, $"pair.{codeTypeValue}")}{assignSuffix};");
                         AppendLine($"            break;");
                     }
                 }

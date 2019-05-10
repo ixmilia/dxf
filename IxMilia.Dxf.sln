@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf", "IxMilia.Dxf\IxMilia.Dxf.csproj", "{C067E97D-3B96-462A-B09D-33FAD60DE761}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf", "src\IxMilia.Dxf\IxMilia.Dxf.csproj", "{C067E97D-3B96-462A-B09D-33FAD60DE761}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf.Test", "IxMilia.Dxf.Test\IxMilia.Dxf.Test.csproj", "{B98F9CB2-3E1E-4072-99FB-B93B1C7E1A19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf.Test", "src\IxMilia.Dxf.Test\IxMilia.Dxf.Test.csproj", "{B98F9CB2-3E1E-4072-99FB-B93B1C7E1A19}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf.Generator", "IxMilia.Dxf.Generator\IxMilia.Dxf.Generator.csproj", "{34D31EC8-883B-4C37-AF98-A4BD5D0E2D3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf.Generator", "src\IxMilia.Dxf.Generator\IxMilia.Dxf.Generator.csproj", "{34D31EC8-883B-4C37-AF98-A4BD5D0E2D3B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf.ReferenceCollector", "IxMilia.Dxf.ReferenceCollector\IxMilia.Dxf.ReferenceCollector.csproj", "{8AA16B3F-4FA0-4132-846B-6640699FF12F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IxMilia.Dxf.ReferenceCollector", "src\IxMilia.Dxf.ReferenceCollector\IxMilia.Dxf.ReferenceCollector.csproj", "{8AA16B3F-4FA0-4132-846B-6640699FF12F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{712CA821-79DE-43D7-8E44-BFFA7A4EFC2C}"
 	ProjectSection(SolutionItems) = preProject
-		..\build-and-test.cmd = ..\build-and-test.cmd
-		..\build-and-test.sh = ..\build-and-test.sh
-		..\README.md = ..\README.md
+		build-and-test.cmd = build-and-test.cmd
+		build-and-test.sh = build-and-test.sh
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global

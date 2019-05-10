@@ -1,16 +1,49 @@
+pr:
+- master
+
+variables:
+  MainProject: $(Build.SourcesDirectory)/src/IxMilia.Dxf/IxMilia.Dxf.csproj
+
 jobs:
+
 - job: Windows
   pool:
-    vmImage: vs2017-win2016
+    vmImage: windows-2019
+  strategy:
+    maxParallel: 2
+    matrix:
+      debug:
+        _configuration: Debug
+      release:
+        _configuration: Release
   steps:
-  - script: build-and-test.cmd
-  - script: src\create-package.cmd
+  - checkout: self
+    clean: true
+  - script: build-and-test.cmd -c $(_configuration)
+    displayName: Build / Test
+  - script: 'dotnet pack --no-restore --no-build -c $(_configuration) -o "$(Build.ArtifactStagingDirectory)" "$(MainProject)"'
+    displayName: Pack
   - task: PublishBuildArtifacts@1
+    displayName: Publish Package
+    condition: and(succeeded(), eq(variables['_configuration'], 'Release'))
     inputs:
-      pathtoPublish: artifacts/packages/Release
+      pathtoPublish: $(Build.ArtifactStagingDirectory)
       artifactName: packages
+
 - job: Linux
   pool:
     vmImage: ubuntu-16.04
+  strategy:
+    maxParallel: 2
+    matrix:
+      debug:
+        _configuration: Debug
+      release:
+        _configuration: Release
   steps:
-  - script: ./build-and-test.sh
+  - checkout: self
+    clean: true
+  - script: ./build-and-test.sh -c $(_configuration)
+    displayName: Build / Test
+  - script: 'dotnet pack --no-restore --no-build -c $(_configuration) -o "$(Build.ArtifactStagingDirectory)" "$(MainProject)"'
+    displayName: Pack

@@ -1,6 +1,7 @@
 @echo off
 setlocal
 
+set thisdir=%~dp0
 set configuration=Debug
 set runtests=true
 
@@ -24,8 +25,8 @@ goto error
 :argsdone
 
 :: run code generator
-set GENERATOR_DIR=%~dp0src\IxMilia.Dxf.Generator
-set LIBRARY_DIR=%~dp0src\IxMilia.Dxf
+set GENERATOR_DIR=%thisdir%src\IxMilia.Dxf.Generator
+set LIBRARY_DIR=%thisdir%src\IxMilia.Dxf
 pushd "%GENERATOR_DIR%"
 dotnet restore
 if errorlevel 1 goto error
@@ -43,7 +44,7 @@ dotnet build "%LIBRARY_PROJECT%" -c %configuration%
 if errorlevel 1 goto error
 
 :: build tests
-set TEST_PROJECT=%~dp0src\IxMilia.Dxf.Test\IxMilia.Dxf.Test.csproj
+set TEST_PROJECT=%thisdir%src\IxMilia.Dxf.Test\IxMilia.Dxf.Test.csproj
 dotnet restore "%TEST_PROJECT%"
 if errorlevel 1 goto error
 dotnet build "%TEST_PROJECT%" -c %configuration%

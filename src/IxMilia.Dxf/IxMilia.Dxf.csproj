@@ -11,7 +11,7 @@
     <AssemblyName>IxMilia.Dxf</AssemblyName>
     <PackageId>IxMilia.Dxf</PackageId>
     <PackageTags>AutoCAD;CAD;DXB;DXF</PackageTags>
-    <PackageProjectUrl>https://github.com/IxMilia/Dxf</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/ixmilia/dxf</PackageProjectUrl>
 
     <!-- SourceLink settings -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

@@ -26,7 +26,7 @@ namespace IxMilia.Dxf.Test
         [Fact]
         public void PolyLineVertexBulgeIsRespected()
         {
-            // Data from https://github.com/IxMilia/Dxf/issues/102
+            // Data from https://github.com/ixmilia/dxf/issues/102
             var vertices = new[]
             {
                 new DxfVertex(new DxfPoint(0, +0.5, 0)),

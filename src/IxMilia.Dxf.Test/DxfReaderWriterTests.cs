@@ -1670,7 +1670,7 @@ a^G^ ^^ b
         [Fact]
         public void ParseWithInvariantCultureTest()
         {
-            // from https://github.com/IxMilia/Dxf/issues/36
+            // from https://github.com/ixmilia/dxf/issues/36
             var existingCulture = CultureInfo.CurrentCulture;
             try
             {

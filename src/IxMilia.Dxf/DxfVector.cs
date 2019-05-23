@@ -141,17 +141,17 @@ namespace IxMilia.Dxf
 
         public static DxfVector RightVectorFromNormal(DxfVector normal)
         {
-            if (normal == DxfVector.XAxis)
-                return DxfVector.ZAxis;
-            var right = DxfVector.XAxis;
-            var up = normal.Cross(right);
-            return up.Cross(normal).Normalize();
-        }
-
-        public static DxfVector NormalFromRightVector(DxfVector right)
-        {
-            // these two functions are identical, but the separate name makes them easier to understand
-            return RightVectorFromNormal(right);
+            // compute a right (x-axis) vector from a given normal as per the Arbitrary Axis Algorithm
+            // http://help.autodesk.com/view/OARX/2020/ENU/?guid=GUID-E19E5B42-0CC7-4EBA-B29F-5E1D595149EE
+            var axisEpsilon = 1.0 / 64.0;
+            if (Math.Abs(normal.X) < axisEpsilon && Math.Abs(normal.Y) < axisEpsilon)
+            {
+                return YAxis.Cross(normal);
+            }
+            else
+            {
+                return ZAxis.Cross(normal);
+            }
         }
 
         // the following methods are only used to allow setting individual x/y/z values in the auto-generated readers

@@ -41,9 +41,17 @@ namespace IxMilia.Dxf
 
     internal class DxfCodePairBufferReader : DxfBufferReader<DxfCodePair>
     {
-        public DxfCodePairBufferReader(IEnumerable<DxfCodePair> pairs)
-            : base(pairs, (pair) => pair.Code == 999)
+        private IDxfCodePairReader reader;
+
+        public DxfCodePairBufferReader(IDxfCodePairReader reader)
+            : base(reader.GetCodePairs(), (pair) => pair.Code == 999)
         {
+            this.reader = reader;
+        }
+
+        public void SetUtf8Reader()
+        {
+            reader.SetUtf8Reader();
         }
     }
 }

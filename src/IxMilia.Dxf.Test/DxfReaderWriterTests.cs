@@ -212,7 +212,7 @@ EOF
                 using (var binaryReader = new BinaryReader(ms))
                 {
                     int readBytes;
-                    var firstLine = DxfFile.GetFirstLine(binaryReader, out readBytes);
+                    var firstLine = DxfFile.GetFirstLine(ms, out readBytes);
                     var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader);
                     var codePairs = dxfReader.GetCodePairs().ToList();
 
@@ -232,7 +232,7 @@ EOF
                 using (var binaryReader = new BinaryReader(fs))
                 {
                     int readBytes;
-                    var firstLine = DxfFile.GetFirstLine(binaryReader, out readBytes);
+                    var firstLine = DxfFile.GetFirstLine(fs, out readBytes);
                     var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader);
                     var codePairs = dxfReader.GetCodePairs().ToList();
 
@@ -2290,6 +2290,83 @@ name
             file.ViewPorts.Add(one);
             file.ViewPorts.Add(two);
             Assert.True(ReferenceEquals(two, file.ActiveViewPort));
+        }
+
+        [Fact]
+        public void ReadUnicodeFromAsciiStreamTest()
+        {
+            // if version <= R2004 (AC1018) stream is ASCII
+
+            // unicode values in the middle of the string
+            var file = Section("HEADER", @"
+  9
+$ACADVER
+  1
+AC1018
+  9
+$PROJECTNAME
+  1
+Rep\U+00E8re pi\U+00E8ce
+");
+            Assert.Equal("Repère pièce", file.Header.ProjectName);
+
+            // unicode values for the entire string
+            file = Section("HEADER", @"
+  9
+$ACADVER
+  1
+AC1018
+  9
+$PROJECTNAME
+  1
+\U+4F60\U+597D
+");
+            Assert.Equal("你好", file.Header.ProjectName);
+        }
+
+        [Fact]
+        public void WriteUnicodeToAsciiStreamTest()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2004;
+            file.Header.ProjectName = "Repère pièce";
+            VerifyFileContains(file, @"
+  9
+$PROJECTNAME
+  1
+Rep\U+00E8re pi\U+00E8ce
+", DxfSectionType.Header);
+        }
+
+        [Fact]
+        public void ReadUnicodeFromUtf8StreamTest()
+        {
+            // if version >= R2007 (AC1021) stream is UTF8
+            var file = Section("HEADER", @"
+  9
+$ACADVER
+  1
+AC1021
+  9
+$PROJECTNAME
+  1
+Repère pièce
+");
+            Assert.Equal("Repère pièce", file.Header.ProjectName);
+        }
+
+        [Fact]
+        public void WriteUnicodeToUtf8StreamTest()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2007;
+            file.Header.ProjectName = "Repère pièce";
+            VerifyFileContains(file, @"
+  9
+$PROJECTNAME
+  1
+Repère pièce
+", DxfSectionType.Header);
         }
 
         [Fact]

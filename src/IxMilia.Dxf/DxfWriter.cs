@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace IxMilia.Dxf
@@ -15,18 +16,21 @@ namespace IxMilia.Dxf
         private Stream fileStream = null;
 
         private bool asText = true;
+        private DxfAcadVersion version;
 
-        public DxfWriter(Stream stream, bool asText)
+        public DxfWriter(Stream stream, bool asText, DxfAcadVersion version)
         {
             fileStream = stream;
             this.asText = asText;
+            this.version = version;
         }
 
         public void Open()
         {
             if (asText)
             {
-                textWriter = new StreamWriter(fileStream, Encoding.GetEncoding("us-ascii"));
+                // always create writer as UTF8; the actual file version will determine if just ASCII is written
+                textWriter = new StreamWriter(fileStream, Encoding.GetEncoding("utf-8"));
             }
             else
             {
@@ -116,11 +120,64 @@ namespace IxMilia.Dxf
         {
             value = TransformControlCharacters(value ?? string.Empty);
             if (textWriter != null)
-                WriteLine(value);
+                WriteStringWithEncoding(value);
             else if (binWriter != null)
             {
                 binWriter.Write(GetAsciiBytes(value));
                 binWriter.Write((byte)0);
+            }
+        }
+
+        private void WriteStringWithEncoding(string value)
+        {
+            if (version <= DxfAcadVersion.R2004)
+            {
+                value = EscapeUnicode(value);
+            }
+
+            WriteLine(value);
+        }
+
+        private static bool IsUnicodeCharacter(char c)
+        {
+            return c > 127;
+        }
+
+        private static bool HasUnicodeCharacter(string value)
+        {
+            foreach (var c in value)
+            {
+                if (IsUnicodeCharacter(c))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static string EscapeUnicode(string value)
+        {
+            if (HasUnicodeCharacter(value))
+            {
+                var sb = new StringBuilder();
+                foreach (var c in value)
+                {
+                    if (IsUnicodeCharacter(c))
+                    {
+                        sb.Append($"\\U+{(uint)c:X4}");
+                    }
+                    else
+                    {
+                        sb.Append(c);
+                    }
+                }
+
+                return sb.ToString();
+            }
+            else
+            {
+                return value;
             }
         }
 

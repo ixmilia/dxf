@@ -245,6 +245,17 @@ EOF
         }
 
         [Fact]
+        public void ReadUnsupportedCodePairsTest()
+        {
+            var _ = Section("ENTITIES", @"
+  0
+LINE
+5555
+unsupported code (5555) treated as string
+");
+        }
+
+        [Fact]
         public void WriteDxbTest()
         {
             // write file

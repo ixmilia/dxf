@@ -96,7 +96,7 @@ namespace IxMilia.Dxf
                 expected = typeof(short);
 
             else
-                throw new ArgumentOutOfRangeException("code", "Unknown type code " + code);
+                expected = typeof(string); // unsupported code, assume string so the value can be swallowed
 
             return expected;
         }

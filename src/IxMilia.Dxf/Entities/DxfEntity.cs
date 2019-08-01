@@ -33,6 +33,27 @@ namespace IxMilia.Dxf.Entities
         Bezier = 8
     }
 
+    /// <summary>
+    /// Values specific to the CLO software.
+    /// </summary>
+    public enum DxfPolylineType
+    {
+        /// <summary>
+        /// Baseline polyline not editable by CLO.
+        /// </summary>
+        Baseline = 0,
+
+        /// <summary>
+        /// Internal line in CLO.
+        /// </summary>
+        Internal = 1,
+
+        /// <summary>
+        /// Outline pattern in CLO.
+        /// </summary>
+        Outline = 2
+    }
+
     public enum DxfImageClippingBoundaryType
     {
         Rectangular = 1,

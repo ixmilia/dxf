@@ -964,6 +964,7 @@
         <Property Name="SmoothSurfaceMDensity" Code="73" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" DisableWritingDefault="true" />
         <Property Name="SmoothSurfaceNDensity" Code="74" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" DisableWritingDefault="true" />
         <Property Name="SurfaceType" Code="75" Type="DxfPolylineCurvedAndSmoothSurfaceType" DefaultValue="DxfPolylineCurvedAndSmoothSurfaceType.None" ReadConverter="(DxfPolylineCurvedAndSmoothSurfaceType){0}" WriteConverter="(short){0}" DisableWritingDefault="true" />
+        <Property Name="CLO_PolylineType" Code="250" Type="DxfPolylineType" DefaultValue="DxfPolylineType.Baseline" ReadConverter="(DxfPolylineType){0}" WriteConverter="(short){0}" DisableWritingDefault="true" Comment="CLO-specific value, not normally used." />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Extents Custom="true" />
     </Entity>

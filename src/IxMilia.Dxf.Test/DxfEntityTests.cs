@@ -676,6 +676,8 @@ text style name
 74
  75
 6
+250
+2
 210
 2.200000E+001
 220
@@ -709,6 +711,7 @@ SEQEND
             Assert.Equal(72, poly.PolygonMeshNVertexCount);
             Assert.Equal(73, poly.SmoothSurfaceMDensity);
             Assert.Equal(74, poly.SmoothSurfaceNDensity);
+            Assert.Equal(DxfPolylineType.Outline, poly.CLO_PolylineType);
             Assert.Equal(DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline, poly.SurfaceType);
             Assert.True(poly.IsClosed);
             Assert.True(poly.CurveFitVerticiesAdded);

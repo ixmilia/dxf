@@ -7,5 +7,6 @@ namespace IxMilia.Dxf
     internal interface IDxfCodePairReader
     {
         IEnumerable<DxfCodePair> GetCodePairs();
+        void SetUtf8Reader();
     }
 }

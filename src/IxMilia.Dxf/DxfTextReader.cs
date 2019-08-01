@@ -5,17 +5,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using IxMilia.Dxf.Extensions;
 
 namespace IxMilia.Dxf
 {
-    internal class DxfAsciiReader : IDxfCodePairReader
+    internal class DxfTextReader : IDxfCodePairReader
     {
         private IEnumerator<string> _lineEnumerator;
         private int _lineNumber;
+        private Stream _stream;
+        private StreamReader _utf8Reader;
 
-        public DxfAsciiReader(Stream stream, string firstLine)
+        public DxfTextReader(Stream stream, string firstLine)
         {
-            _lineEnumerator = GetLines(stream, firstLine).GetEnumerator();
+            _stream = stream;
+            _lineEnumerator = GetLines(firstLine).GetEnumerator();
         }
 
         public IEnumerable<DxfCodePair> GetCodePairs()
@@ -27,16 +31,33 @@ namespace IxMilia.Dxf
             }
         }
 
-        private IEnumerable<string> GetLines(Stream stream, string firstLine)
+        public void SetUtf8Reader()
+        {
+            _utf8Reader = new StreamReader(_stream, Encoding.GetEncoding("utf-8"));
+        }
+
+        private IEnumerable<string> GetLines(string firstLine)
         {
             _lineNumber = 1;
             yield return firstLine;
-            var streamReader = new StreamReader(stream, Encoding.GetEncoding("us-ascii"));
+
             string line;
-            while ((line = streamReader.ReadLine()) != null)
+            while ((line = ReadLine()) != null)
             {
                 _lineNumber++;
                 yield return line;
+            }
+        }
+
+        private string ReadLine()
+        {
+            if (_utf8Reader == null)
+            {
+                return _stream.ReadLine(out var _);
+            }
+            else
+            {
+                return _utf8Reader.ReadLine();
             }
         }
 
@@ -61,29 +82,36 @@ namespace IxMilia.Dxf
                         var expectedType = DxfCodePair.ExpectedType(code);
                         if (expectedType == typeof(short))
                         {
-                            pair = GetCodePair<short>(code, _lineEnumerator.Current, short.TryParse, NumberStyles.Integer, (c, v) => new DxfCodePair(c, v), minValue: short.MinValue, maxValue: short.MaxValue);
+                            pair = GetCodePair<short>(code, valueLine, short.TryParse, NumberStyles.Integer, (c, v) => new DxfCodePair(c, v), minValue: short.MinValue, maxValue: short.MaxValue);
                         }
                         else if (expectedType == typeof(double))
                         {
-                            pair = GetCodePair<double>(code, _lineEnumerator.Current, double.TryParse, NumberStyles.Float, (c, v) => new DxfCodePair(c, v));
+                            pair = GetCodePair<double>(code, valueLine, double.TryParse, NumberStyles.Float, (c, v) => new DxfCodePair(c, v));
                         }
                         else if (expectedType == typeof(int))
                         {
-                            pair = GetCodePair<int>(code, _lineEnumerator.Current, int.TryParse, NumberStyles.Integer, (c, v) => new DxfCodePair(c, v), minValue: int.MinValue, maxValue: int.MaxValue);
+                            pair = GetCodePair<int>(code, valueLine, int.TryParse, NumberStyles.Integer, (c, v) => new DxfCodePair(c, v), minValue: int.MinValue, maxValue: int.MaxValue);
                         }
                         else if (expectedType == typeof(long))
                         {
-                            pair = GetCodePair<long>(code, _lineEnumerator.Current, long.TryParse, NumberStyles.Integer, (c, v) => new DxfCodePair(c, v), minValue: long.MinValue, maxValue: long.MaxValue);
+                            pair = GetCodePair<long>(code, valueLine, long.TryParse, NumberStyles.Integer, (c, v) => new DxfCodePair(c, v), minValue: long.MinValue, maxValue: long.MaxValue);
                         }
                         else if (expectedType == typeof(string))
                         {
-                            pair = new DxfCodePair(code, DxfReader.TransformControlCharacters(_lineEnumerator.Current.Trim()));
+                            var value = valueLine.Trim();
+                            if (_utf8Reader == null)
+                            {
+                                // read as ASCII, transform UTF codes
+                                value = DxfReader.TransformUnicodeCharacters(value);
+                            }
+
+                            pair = new DxfCodePair(code, DxfReader.TransformControlCharacters(value));
                         }
                         else if (expectedType == typeof(bool))
                         {
                             // this should really parse as a short, but it could be anything
                             double result;
-                            if (double.TryParse(_lineEnumerator.Current, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+                            if (double.TryParse(valueLine, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
                             {
                                 if (result < short.MinValue)
                                 {
@@ -101,7 +129,7 @@ namespace IxMilia.Dxf
                             }
                             else
                             {
-                                throw new DxfReadException($"Unsupported value '{_lineEnumerator.Current}' for code '{code}'", _lineNumber);
+                                throw new DxfReadException($"Unsupported value '{valueLine}' for code '{code}'", _lineNumber);
                             }
                         }
                         else

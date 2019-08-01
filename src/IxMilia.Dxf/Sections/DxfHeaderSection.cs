@@ -439,6 +439,11 @@ namespace IxMilia.Dxf.Sections
                 else
                 {
                     section.Header.SetHeaderVariable(keyName, pair);
+                    if (string.Compare(keyName, "$ACADVER", StringComparison.OrdinalIgnoreCase) == 0 && section.Header.Version >= DxfAcadVersion.R2007)
+                    {
+                        // R2007 and up should switch to a UTF8 reader
+                        buffer.SetUtf8Reader();
+                    }
                 }
             }
 

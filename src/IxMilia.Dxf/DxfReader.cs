@@ -1,12 +1,44 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
+using System.Globalization;
 using System.Text;
 
 namespace IxMilia.Dxf
 {
     internal class DxfReader
     {
+        internal const string UnicodeMarker = @"\U+";
+        internal const int UnicodeValueLength = 4;
+
+        internal static string TransformUnicodeCharacters(string str)
+        {
+            var sb = new StringBuilder();
+            int startIndex = 0;
+            int currentIndex;
+            while ((currentIndex = str.IndexOf(UnicodeMarker, startIndex)) >= 0)
+            {
+                var prefix = str.Substring(startIndex, currentIndex - startIndex);
+                sb.Append(prefix);
+                var unicode = str.Substring(currentIndex + UnicodeMarker.Length, UnicodeValueLength);
+                if (int.TryParse(unicode, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var code))
+                {
+                    var c = char.ConvertFromUtf32(code);
+                    sb.Append(c);
+                }
+                else
+                {
+                    // invalid unicode value
+                    sb.Append('?');
+                }
+
+                startIndex = currentIndex + UnicodeMarker.Length + UnicodeValueLength;
+            }
+
+            sb.Append(str.Substring(startIndex));
+            return sb.ToString();
+        }
+
         internal static string TransformControlCharacters(string str)
         {
             var start = str.IndexOf('^');

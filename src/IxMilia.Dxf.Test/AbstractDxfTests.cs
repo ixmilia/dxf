@@ -16,7 +16,7 @@ namespace IxMilia.Dxf.Test
         protected static DxfFile Parse(string data)
         {
             using (var ms = new MemoryStream())
-            using (var writer = new StreamWriter(ms))
+            using (var writer = new StreamWriter(ms, Encoding.UTF8))
             {
                 writer.WriteLine(data.Trim());
                 writer.Flush();
@@ -166,6 +166,7 @@ EOF
                     case ')':
                     case '?':
                     case '*':
+                    case '+':
                     case '$':
                     case '^':
                         // escape special characters

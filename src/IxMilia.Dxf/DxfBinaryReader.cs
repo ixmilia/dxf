@@ -36,6 +36,11 @@ namespace IxMilia.Dxf
             }
         }
 
+        public void SetUtf8Reader()
+        {
+            // noop
+        }
+
         private DxfCodePair GetCodePair()
         {
             var codeOffset = _totalBytesRead + _miniBufferStart;

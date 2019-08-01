@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Extensions;
 using IxMilia.Dxf.Objects;
 using IxMilia.Dxf.Sections;
 
@@ -187,9 +188,9 @@ namespace IxMilia.Dxf
 
         public static DxfFile Load(Stream stream)
         {
-            var reader = new BinaryReader(stream);
             int readBytes;
-            var firstLine = GetFirstLine(reader, out readBytes);
+            var firstLine = GetFirstLine(stream, out readBytes);
+            var reader = new BinaryReader(stream);
 
             // check for binary sentinels
             DxfFile file;
@@ -206,25 +207,14 @@ namespace IxMilia.Dxf
             return file;
         }
 
-        internal static string GetFirstLine(BinaryReader binaryReader, out int readBytes)
+        internal static string GetFirstLine(Stream stream, out int readBytes)
         {
-            // read first line char-by-char
-            readBytes = 0;
-            var sb = new StringBuilder();
-            var c = binaryReader.ReadChar();
-            readBytes++;
-            while (c != '\n')
-            {
-                sb.Append(c);
-                c = binaryReader.ReadChar();
-                readBytes++;
-            }
+            var line = stream.ReadLine(out readBytes);
 
-            // trim BOM
-            var line = sb.ToString().TrimEnd('\r');
-            if (line.Length > 0 && line[0] == 0xFEFF)
+            // trim UTF-8 BOM
+            if (line.Length >= 3 && line[0] == 0xEF && line[1] == 0xBB && line[2] == 0xBF)
             {
-                line = line.Substring(1);
+                line = line.Substring(3);
             }
 
             return line;
@@ -245,7 +235,7 @@ namespace IxMilia.Dxf
                 }
                 else
                 {
-                    dxfReader = new DxfAsciiReader(binaryReader.BaseStream, firstLine);
+                    dxfReader = new DxfTextReader(binaryReader.BaseStream, firstLine);
                 }
 
                 return dxfReader;
@@ -256,7 +246,7 @@ namespace IxMilia.Dxf
         {
             var file = new DxfFile();
             file.Clear();
-            var buffer = new DxfCodePairBufferReader(reader.GetCodePairs());
+            var buffer = new DxfCodePairBufferReader(reader);
             var version = DxfAcadVersion.R14;
             while (buffer.ItemsRemain)
             {
@@ -367,7 +357,7 @@ namespace IxMilia.Dxf
             UpdateTimes();
             Normalize();
 
-            var writer = new DxfWriter(stream, asText);
+            var writer = new DxfWriter(stream, asText, Header.Version);
             writer.Open();
 
             var nextHandle = DxfPointer.AssignHandles(this);

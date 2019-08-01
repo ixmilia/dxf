@@ -13,6 +13,7 @@ namespace IxMilia.Dxf
             Type expected = typeof(string);
             Func<int, int, bool> between = (lower, upper) => code >= lower && code <= upper;
 
+            // official code types
             if (between(0, 9))
                 expected = typeof(string);
             else if (between(10, 39))
@@ -89,6 +90,11 @@ namespace IxMilia.Dxf
                 expected = typeof(short);
             else if (code == 1071)
                 expected = typeof(int);
+
+            // unofficial app-specific types
+            else if (code == 250) // used in POLYLINEs by CLO
+                expected = typeof(short);
+
             else
                 throw new ArgumentOutOfRangeException("code", "Unknown type code " + code);
 

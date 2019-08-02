@@ -151,7 +151,15 @@ namespace IxMilia.Dxf
                 }
                 else
                 {
-                    throw new DxfReadException("Unexpected code value", _lineNumber);
+                    if (codeLineNumber == 1)
+                    {
+                        // parsing the very first code pair failed
+                        throw new DxfReadException($"Not a valid DXF file header: `{codeLine}`.", _lineNumber);
+                    }
+                    else
+                    {
+                        throw new DxfReadException("Unexpected code value", _lineNumber);
+                    }
                 }
             }
             else

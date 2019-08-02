@@ -71,6 +71,38 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ExceptionOnNonDxfFileTest()
+        {
+            using (var ms = new MemoryStream())
+            {
+                // made to look like the start of an R14 DWG
+                var dwgBytes = new[]
+                {
+                    'A', 'C', '1', '0', '1', '4',
+                    0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+                };
+                foreach (var b in dwgBytes)
+                {
+                    ms.WriteByte((byte)b);
+                }
+                ms.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                try
+                {
+                    DxfFile.Load(ms);
+                    throw new Exception("Previous call should have thrown.");
+                }
+                catch (DxfReadException ex)
+                {
+                    if (ex.Message != "Not a valid DXF file header: `AC1014`.")
+                    {
+                        throw new Exception("Improper exception", ex);
+                    }
+                }
+            }
+        }
+
+        [Fact]
         public void ReadDxbNoLengthOrPositionStreamTest()
         {
             var data = DxbSentinel.Concat(new byte[]

@@ -16,7 +16,7 @@ namespace IxMilia.Dxf.Test
         protected static DxfFile Parse(string data)
         {
             using (var ms = new MemoryStream())
-            using (var writer = new StreamWriter(ms, Encoding.UTF8))
+            using (var writer = new StreamWriter(ms, new UTF8Encoding(false)))
             {
                 writer.WriteLine(data.Trim());
                 writer.Flush();

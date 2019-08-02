@@ -56,10 +56,15 @@ namespace IxMilia.Dxf
         {
             get
             {
-                // some intances of code 290 are actually shorts
-                return IsPotentialShortAsBool(Code)
-                    ? (short)Value != 0
-                    : (bool)Value;
+                switch (Value)
+                {
+                    case short s:
+                        return s != 0;
+                    case bool b:
+                        return b;
+                    default:
+                        return false;
+                }
             }
         }
 

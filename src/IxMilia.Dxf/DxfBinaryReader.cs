@@ -11,6 +11,8 @@ namespace IxMilia.Dxf
     internal class DxfBinaryReader : IDxfCodePairReader
     {
         private BinaryReader _reader;
+        private bool _returnedCodePairs;
+        private bool _isPostR13File;
 
         public DxfBinaryReader(BinaryReader reader, int readBytes)
         {
@@ -32,6 +34,7 @@ namespace IxMilia.Dxf
             DxfCodePair pair;
             while ((pair = GetCodePair()) != null)
             {
+                _returnedCodePairs = true;
                 yield return pair;
             }
         }
@@ -105,10 +108,27 @@ namespace IxMilia.Dxf
             }
             else if (expectedType == typeof(bool))
             {
-                var value = _reader.ReadInt16();
-                pair = DxfCodePair.IsPotentialShortAsBool(code)
-                    ? new DxfCodePair(code, value)
-                    : new DxfCodePair(code, value != 0);
+                if (_isPostR13File)
+                {
+                    // after R13 bools are encoded as a single byte
+                    if (!TryReadByte(out var value))
+                    {
+                        return null;
+                    }
+
+                    pair = new DxfCodePair(code, value != 0);
+                }
+                else
+                {
+                    if (!TryReadInt16(out var value))
+                    {
+                        return null;
+                    }
+
+                    pair = DxfCodePair.IsPotentialShortAsBool(code)
+                        ? new DxfCodePair(code, value)
+                        : new DxfCodePair(code, value != 0);
+                }
             }
             else
             {
@@ -121,6 +141,7 @@ namespace IxMilia.Dxf
 
         private bool TryReadCode(out int code)
         {
+            // read the first byte
             code = default(int);
             byte b;
             if (!TryReadByte(out b))
@@ -128,19 +149,34 @@ namespace IxMilia.Dxf
                 return false;
             }
 
-            if (b == 255)
+            code = b;
+
+            if (!_returnedCodePairs && code == 0 && TryPeekByte(out var nextByte) && nextByte == 0x00)
             {
-                short s;
-                if (!TryReadInt16(out s))
+                // The first code/pair in a binary file must be `0/SECTION`; if we're reading the first pair, the code
+                // is `0`, and the next byte is NULL (empty string), then this must be a post R13 file where codes are
+                // always encoded with 2 bytes.
+                _isPostR13File = true;
+            }
+
+            // potentially read the second byte of the code
+            if (_isPostR13File)
+            {
+                if (!TryReadByte(out var b2))
                 {
                     return false;
                 }
 
-                code = s;
+                code = CreateShort(b, b2);
             }
-            else
+            else if (code == 255)
             {
-                code = b;
+                if (!TryReadInt16(out var extendedCode))
+                {
+                    return false;
+                }
+
+                code = extendedCode;
             }
 
             return true;
@@ -154,7 +190,7 @@ namespace IxMilia.Dxf
         int _totalBytesRead = 0;
         byte[] _dataBuffer = new byte[8];
 
-        private bool TryReadByte(out byte result)
+        private bool TryPeekByte(out byte result)
         {
             if (_miniBufferEnd - _miniBufferStart < 1)
             {
@@ -169,32 +205,37 @@ namespace IxMilia.Dxf
                 return false;
             }
 
-            result = _miniBuffer[_miniBufferStart++];
+            result = _miniBuffer[_miniBufferStart];
             return true;
+        }
+
+        private bool TryReadByte(out byte result)
+        {
+            if (TryPeekByte(out result))
+            {
+                _miniBufferStart++;
+                return true;
+            }
+
+            return false;
+        }
+
+        private short CreateShort(byte b1, byte b2)
+        {
+            _dataBuffer[0] = b1;
+            _dataBuffer[1] = b2;
+            return BitConverter.ToInt16(_dataBuffer, 0);
         }
 
         private bool TryReadInt16(out short result)
         {
-            if (TryReadByte(out _dataBuffer[0]) && TryReadByte(out _dataBuffer[1]))
+            if (TryReadByte(out var b1) && TryReadByte(out var b2))
             {
-                result = BitConverter.ToInt16(_dataBuffer, 0);
+                result = CreateShort(b1, b2);
                 return true;
             }
 
             result = default(short);
-            return false;
-        }
-
-        private bool TryReadBool(out bool result)
-        {
-            short s;
-            if (TryReadInt16(out s))
-            {
-                result = s != 0;
-                return true;
-            }
-
-            result = default(bool);
             return false;
         }
 

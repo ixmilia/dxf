@@ -210,6 +210,10 @@ namespace IxMilia.Dxf
         internal static string GetFirstLine(Stream stream, out int readBytes)
         {
             var line = stream.ReadLine(out readBytes);
+            if (line == null)
+            {
+                return null;
+            }
 
             // trim UTF-8 BOM
             if (line.Length >= 3 && line[0] == 0xEF && line[1] == 0xBB && line[2] == 0xBF)

@@ -62,6 +62,15 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadEmptyFileTest()
+        {
+            using (var ms = new MemoryStream())
+            {
+                var _ = DxfFile.Load(ms);
+            }
+        }
+
+        [Fact]
         public void ReadDxbNoLengthOrPositionStreamTest()
         {
             var data = DxbSentinel.Concat(new byte[]

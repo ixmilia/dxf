@@ -30,7 +30,7 @@ namespace IxMilia.Dxf
             if (asText)
             {
                 // always create writer as UTF8; the actual file version will determine if just ASCII is written
-                textWriter = new StreamWriter(fileStream, Encoding.GetEncoding("utf-8"));
+                textWriter = new StreamWriter(fileStream, new UTF8Encoding(false));
             }
             else
             {

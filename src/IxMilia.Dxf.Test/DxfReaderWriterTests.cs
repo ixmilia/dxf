@@ -364,6 +364,22 @@ unsupported code (5555) treated as string
         }
 
         [Fact]
+        public void DontWriteBomTest()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var file = new DxfFile();
+                file.Save(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+                var buffer = new byte[3];
+                stream.Read(buffer, 0, buffer.Length);
+
+                // first three bytes should be "  0", not 0xEF, 0xBB, 0xBF
+                Assert.Equal(new byte[] { (byte)' ', (byte)' ', (byte)'0' }, buffer);
+            }
+        }
+
+        [Fact]
         public void SkipBomTest()
         {
             using (var stream = new MemoryStream())

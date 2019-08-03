@@ -32,6 +32,56 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void BinaryReaderPostR13Test()
+        {
+            var bytes = new List<byte>();
+            void WriteB(params byte[] bs)
+            {
+                foreach (var b in bs)
+                {
+                    bytes.Add(b);
+                }
+            }
+            void WriteS(string s, bool addTerminator = true)
+            {
+                foreach (var c in s)
+                {
+                    bytes.Add((byte)c);
+                }
+
+                if (addTerminator)
+                {
+                    bytes.Add(0x00);
+                }
+            }
+
+            WriteS("AutoCAD Binary DXF\r\n", addTerminator: false);
+            WriteB(0x1A, 0x00);
+
+            WriteB(0x00, 0x00);
+            WriteS("SECTION");
+            WriteB(0x02, 0x00);
+            WriteS("HEADER");
+            WriteB(0x09, 0x00);
+            WriteS("$LWDISPLAY");
+            WriteB(0x22, 0x01);
+            WriteB(0x01);
+            WriteB(0x00, 0x00);
+            WriteS("ENDSEC");
+
+            WriteB(0x00, 0x00);
+            WriteS("EOF");
+
+            using (var ms = new MemoryStream())
+            {
+                ms.Write(bytes.ToArray(), 0, bytes.Count);
+                ms.Seek(0, SeekOrigin.Begin);
+                var file = DxfFile.Load(ms);
+                Assert.True(file.Header.DisplayLinewieghtInModelAndLayoutTab);
+            }
+        }
+
+        [Fact]
         public void ReadDxbTest()
         {
             var data = DxbSentinel.Concat(new byte[]

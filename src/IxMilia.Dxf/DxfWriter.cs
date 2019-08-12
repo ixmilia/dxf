@@ -76,7 +76,12 @@ namespace IxMilia.Dxf
             }
             else if (binWriter != null)
             {
-                if (code >= 255)
+                if (version >= DxfAcadVersion.R13)
+                {
+                    // 2 byte codes
+                    binWriter.Write((short)code);
+                }
+                else if (code >= 255)
                 {
                     binWriter.Write((byte)255);
                     binWriter.Write((short)code);
@@ -215,7 +220,15 @@ namespace IxMilia.Dxf
 
         private void WriteBool(bool value)
         {
-            WriteShort(value ? (short)1 : (short)0);
+            if (version >= DxfAcadVersion.R13 && binWriter != null)
+            {
+                // post R13 binary files write bools as a single byte
+                binWriter.Write((byte)(value ? 0x01 : 0x00));
+            }
+            else
+            {
+                WriteShort(value ? (short)1 : (short)0);
+            }
         }
 
         private void WriteLine(string value)

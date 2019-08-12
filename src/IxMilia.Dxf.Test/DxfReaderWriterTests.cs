@@ -111,6 +111,44 @@ namespace IxMilia.Dxf.Test
             }
         }
 
+        [Theory]
+        [InlineData(DxfAcadVersion.R12)]
+        [InlineData(DxfAcadVersion.R13)]
+        public void RoundTripBinaryFileTest(DxfAcadVersion version)
+        {
+            var file = new DxfFile();
+            file.Header.Version = version;
+            file.Header.CurrentLayer = "current-layer";
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms, asText: false);
+                ms.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                var roundTripped = DxfFile.Load(ms);
+                Assert.Equal("current-layer", roundTripped.Header.CurrentLayer);
+            }
+        }
+
+        [Theory]
+        [InlineData(DxfAcadVersion.R12, 23)]
+        [InlineData(DxfAcadVersion.R13, 24)]
+        public void WriteBinaryFileTest(DxfAcadVersion version, int sectionOffset)
+        {
+            var file = new DxfFile();
+            file.Header.Version = version;
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms, asText: false);
+                ms.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                var buffer = ms.GetBuffer();
+                var sentinel = Encoding.ASCII.GetString(buffer, 0, 20);
+                Assert.Equal("AutoCAD Binary DXF\r\n", sentinel);
+                var sectionText = Encoding.ASCII.GetString(buffer, sectionOffset, 7);
+                Assert.Equal("SECTION", sectionText);
+            }
+        }
+
         [Fact]
         public void ReadEmptyFileTest()
         {

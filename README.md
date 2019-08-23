@@ -137,7 +137,7 @@ Requirements to build locally are:
 ## DXF Reference
 
 Since I don't want to fall afoul of Autodesk's lawyers, this repo can't include the actual DXF documentation.  It can,
-however contain links to the official documents that I've been able to scrape together.  For most scenarios the 2014
+however contain links to the official documents that I've been able to scrape together.  For most scenarios the latest
 documentation should suffice, but all other versions are included here for backwards compatibility and reference
 between versions.
 
@@ -177,17 +177,17 @@ between versions.
 
 [2014](http://images.autodesk.com/adsk/files/autocad_2014_pdf_dxf_reference_enu.pdf)
 
-[2015](http://help.autodesk.com/cloudhelp/2015/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+[2015](http://help.autodesk.com/cloudhelp/2015/ENU/AutoCAD-DXF/files/index.htm)
 
-[2016](http://help.autodesk.com/cloudhelp/2016/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+[2016](http://help.autodesk.com/cloudhelp/2016/ENU/AutoCAD-DXF/files/index.htm)
 
-[2017](http://help.autodesk.com/cloudhelp/2017/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+[2017](http://help.autodesk.com/cloudhelp/2017/ENU/AutoCAD-DXF/files/index.htm)
 
-[2018](http://help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+[2018](http://help.autodesk.com/cloudhelp/2018/ENU/AutoCAD-DXF/files/index.htm)
 
-[2019](http://help.autodesk.com/cloudhelp/2019/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+[2019](http://help.autodesk.com/cloudhelp/2019/ENU/AutoCAD-DXF/files/index.htm)
 
-[2020](http://help.autodesk.com/cloudhelp/2020/ENU/AutoCAD-DXF/files/GUID-235B22E0-A567-4CF6-92D3-38A2306D73F3.htm)
+[2020](http://help.autodesk.com/cloudhelp/2020/ENU/AutoCAD-DXF/files/index.htm)
 
 Many of these links were compiled from an archive.org [May 9, 2013 snapshot](https://web.archive.org/web/20130509144333/http://usa.autodesk.com/adsk/servlet/item?siteID=123112&id=12272454&linkID=10809853)
 

@@ -726,10 +726,10 @@ EOF
             Assert.Equal(1, file.Classes.Count);
 
             var cls = file.Classes.Single();
-            Assert.Equal(cls.ClassDxfRecordName, "<class dxf name>");
-            Assert.Equal(cls.CppClassName, "CPP_CLASS_NAME");
-            Assert.Equal(cls.ApplicationName, "<application name>");
-            Assert.Equal(cls.ClassVersionNumber, 42);
+            Assert.Equal("<class dxf name>", cls.ClassDxfRecordName);
+            Assert.Equal("CPP_CLASS_NAME", cls.CppClassName);
+            Assert.Equal("<application name>", cls.ApplicationName);
+            Assert.Equal(42, cls.ClassVersionNumber);
         }
 
         [Fact]
@@ -768,10 +768,10 @@ EOF
             Assert.Equal(1, file.Classes.Count);
 
             var cls = file.Classes.Single();
-            Assert.Equal(cls.ClassDxfRecordName, "<class dxf name>");
-            Assert.Equal(cls.CppClassName, "CPP_CLASS_NAME");
-            Assert.Equal(cls.ApplicationName, "<application name>");
-            Assert.Equal(cls.ProxyCapabilities.Value, 42);
+            Assert.Equal("<class dxf name>", cls.ClassDxfRecordName);
+            Assert.Equal("CPP_CLASS_NAME", cls.CppClassName);
+            Assert.Equal("<application name>", cls.ApplicationName);
+            Assert.Equal(42, cls.ProxyCapabilities.Value);
         }
 
         [Fact]
@@ -2633,7 +2633,7 @@ ENDTAB
             Assert.Null(file.RawThumbnail);
 
             // there is always a default dictionary
-            Assert.Equal(1, file.NamedObjectDictionary.Count);
+            Assert.Single(file.NamedObjectDictionary);
             Assert.Equal(1, file.Objects.Count);
             Assert.True(ReferenceEquals(file.NamedObjectDictionary, file.Objects.Single()));
             Assert.Equal("ACAD_GROUP", file.NamedObjectDictionary.Single().Key);
@@ -2706,43 +2706,43 @@ ENDTAB
             Assert.Equal(expectedAppIds.Length, file.ApplicationIds.Count);
             foreach (var expected in expectedAppIds)
             {
-                Assert.Equal(1, file.ApplicationIds.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Single(file.ApplicationIds.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0));
             }
 
             Assert.Equal(expectedBlockRecords.Length, file.BlockRecords.Count);
             foreach (var expected in expectedBlockRecords)
             {
-                Assert.Equal(1, file.BlockRecords.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Single(file.BlockRecords.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0));
             }
 
             Assert.Equal(expectedDimStyles.Length, file.DimensionStyles.Count);
             foreach (var expected in expectedDimStyles)
             {
-                Assert.Equal(1, file.DimensionStyles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Single(file.DimensionStyles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0));
             }
 
             Assert.Equal(expectedLineTypes.Length, file.LineTypes.Count);
             foreach (var expected in expectedLineTypes)
             {
-                Assert.Equal(1, file.LineTypes.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Single(file.LineTypes.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0));
             }
 
             Assert.Equal(expectedStyles.Length, file.Styles.Count);
             foreach (var expected in expectedStyles)
             {
-                Assert.Equal(1, file.Styles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Single(file.Styles.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0));
             }
 
             Assert.Equal(expectedViewPorts.Length, file.ViewPorts.Count);
             foreach (var expected in expectedViewPorts)
             {
-                Assert.Equal(1, file.ViewPorts.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Single(file.ViewPorts.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0));
             }
 
             Assert.Equal(expectedLayers.Length, file.Layers.Count);
             foreach (var expected in expectedLayers)
             {
-                Assert.Equal(1, file.Layers.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0).Count());
+                Assert.Single(file.Layers.Where(x => string.Compare(x.Name, expected.ToUpperInvariant(), StringComparison.OrdinalIgnoreCase) == 0));
             }
         }
 
@@ -2793,7 +2793,7 @@ ENDTAB
             file.Header.Version = DxfAcadVersion.R14; // DxfImage is only supported on >= R14
             file.Entities.Add(image);
             // image.ImageDefinition is explicitly not added to the Objects collection until the file is saved
-            Assert.Equal(0, file.Objects.OfType<DxfImageDefinition>().Count());
+            Assert.Empty(file.Objects.OfType<DxfImageDefinition>());
             VerifyFileContains(file, @"IMAGEDEF");
             Assert.Equal("imagePath", file.Objects.OfType<DxfImageDefinition>().Single().FilePath);
         }

@@ -735,6 +735,7 @@ SEQEND
             Assert.Equal(67.0, poly.Vertices[1].Location.Z);
         }
 
+        [Fact]
         public void ReadSolidTest()
         {
             var solid = (DxfSolid)Entity("SOLID", @"
@@ -1213,12 +1214,17 @@ AcDbEntity
 ");
         }
 
+        [Fact]
         public void WriteDefaultSolidTest()
         {
             EnsureFileContainsEntity(new DxfSolid(), @"
   0
 SOLID
- 62
+  5
+#
+100
+AcDbEntity
+  8
 0
 100
 AcDbTrace

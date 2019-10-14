@@ -1033,7 +1033,7 @@ quatro
 
             Assert.Equal(3.0, mlineStyle.Elements[0].Offset);
             Assert.Equal(3, mlineStyle.Elements[0].Color.RawValue);
-            Assert.Equal(null, mlineStyle.Elements[0].LineType);
+            Assert.Null(mlineStyle.Elements[0].LineType);
 
             Assert.Equal(4.0, mlineStyle.Elements[1].Offset);
             Assert.Equal(4, mlineStyle.Elements[1].Color.RawValue);

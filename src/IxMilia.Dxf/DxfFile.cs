@@ -179,17 +179,27 @@ namespace IxMilia.Dxf
 #if HAS_FILESYSTEM_ACCESS
         public static DxfFile Load(string path)
         {
+            return Load(path, defaultEncoding: Encoding.ASCII);
+        }
+
+        public static DxfFile Load(string path, Encoding defaultEncoding)
+        {
             using (var stream = new FileStream(path, FileMode.Open))
             {
-                return Load(stream);
+                return Load(stream, defaultEncoding);
             }
         }
 #endif
 
         public static DxfFile Load(Stream stream)
         {
+            return Load(stream, defaultEncoding: null);
+        }
+
+        public static DxfFile Load(Stream stream, Encoding defaultEncoding)
+        {
             int readBytes;
-            var firstLine = GetFirstLine(stream, out readBytes);
+            var firstLine = GetFirstLine(stream, defaultEncoding, out readBytes);
             var reader = new BinaryReader(stream);
 
             // check for binary sentinels
@@ -200,16 +210,16 @@ namespace IxMilia.Dxf
             }
             else
             {
-                var dxfReader = GetCodePairReader(firstLine, readBytes, reader);
+                var dxfReader = GetCodePairReader(firstLine, readBytes, reader, defaultEncoding);
                 file = LoadFromReader(dxfReader);
             }
 
             return file;
         }
 
-        internal static string GetFirstLine(Stream stream, out int readBytes)
+        internal static string GetFirstLine(Stream stream, Encoding encoding, out int readBytes)
         {
-            var line = stream.ReadLine(out readBytes);
+            var line = stream.ReadLine(encoding, out readBytes);
             if (line == null)
             {
                 return null;
@@ -224,7 +234,7 @@ namespace IxMilia.Dxf
             return line;
         }
 
-        internal static IDxfCodePairReader GetCodePairReader(string firstLine, int readBytes, BinaryReader binaryReader)
+        internal static IDxfCodePairReader GetCodePairReader(string firstLine, int readBytes, BinaryReader binaryReader, Encoding defaultTextEncoding)
         {
             if (firstLine == DxbReader.BinarySentinel)
             {
@@ -239,7 +249,7 @@ namespace IxMilia.Dxf
                 }
                 else
                 {
-                    dxfReader = new DxfTextReader(binaryReader.BaseStream, firstLine);
+                    dxfReader = new DxfTextReader(binaryReader.BaseStream, defaultTextEncoding, firstLine);
                 }
 
                 return dxfReader;

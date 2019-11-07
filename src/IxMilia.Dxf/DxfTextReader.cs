@@ -14,11 +14,12 @@ namespace IxMilia.Dxf
         private IEnumerator<string> _lineEnumerator;
         private int _lineNumber;
         private Stream _stream;
-        private StreamReader _utf8Reader;
+        private Encoding _encoding;
 
-        public DxfTextReader(Stream stream, string firstLine)
+        public DxfTextReader(Stream stream, Encoding defaultEncoding, string firstLine)
         {
             _stream = stream;
+            _encoding = defaultEncoding;
             _lineEnumerator = GetLines(firstLine).GetEnumerator();
         }
 
@@ -33,7 +34,7 @@ namespace IxMilia.Dxf
 
         public void SetUtf8Reader()
         {
-            _utf8Reader = new StreamReader(_stream, Encoding.GetEncoding("utf-8"));
+            _encoding = Encoding.UTF8;
         }
 
         private IEnumerable<string> GetLines(string firstLine)
@@ -51,14 +52,7 @@ namespace IxMilia.Dxf
 
         private string ReadLine()
         {
-            if (_utf8Reader == null)
-            {
-                return _stream.ReadLine(out var _);
-            }
-            else
-            {
-                return _utf8Reader.ReadLine();
-            }
+            return _stream.ReadLine(_encoding, out var _);
         }
 
         private DxfCodePair GetCodePair()
@@ -99,7 +93,7 @@ namespace IxMilia.Dxf
                         else if (expectedType == typeof(string))
                         {
                             var value = valueLine.Trim();
-                            if (_utf8Reader == null)
+                            if (_encoding == null)
                             {
                                 // read as ASCII, transform UTF codes
                                 value = DxfReader.TransformUnicodeCharacters(value);

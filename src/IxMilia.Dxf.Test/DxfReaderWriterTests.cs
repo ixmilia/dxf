@@ -341,8 +341,8 @@ EOF
                 using (var binaryReader = new BinaryReader(ms))
                 {
                     int readBytes;
-                    var firstLine = DxfFile.GetFirstLine(ms, out readBytes);
-                    var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader);
+                    var firstLine = DxfFile.GetFirstLine(ms, Encoding.ASCII, out readBytes);
+                    var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader, Encoding.ASCII);
                     var codePairs = dxfReader.GetCodePairs().ToList();
 
                     // verify code pair offsets correspond to line numbers
@@ -361,8 +361,8 @@ EOF
                 using (var binaryReader = new BinaryReader(fs))
                 {
                     int readBytes;
-                    var firstLine = DxfFile.GetFirstLine(fs, out readBytes);
-                    var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader);
+                    var firstLine = DxfFile.GetFirstLine(fs, Encoding.ASCII, out readBytes);
+                    var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader, Encoding.ASCII);
                     var codePairs = dxfReader.GetCodePairs().ToList();
 
                     // verify code pair offsets correspond to line numbers
@@ -420,10 +420,17 @@ unsupported code (5555) treated as string
         [Fact]
         public void SkipBomTest()
         {
+            // UTF-8 representation of byte order mark
+            var bom = new byte[]
+            {
+                0xEF,
+                0xBB,
+                0xBF,
+            };
             using (var stream = new MemoryStream())
             using (var writer = new StreamWriter(stream))
             {
-                writer.Write((char)0xFEFF); // BOM
+                stream.Write(bom, 0, bom.Length);
                 writer.Write("0\r\nEOF");
                 writer.Flush();
                 stream.Seek(0, SeekOrigin.Begin);
@@ -2523,6 +2530,64 @@ $PROJECTNAME
   1
 Repère pièce
 ", DxfSectionType.Header);
+        }
+
+        [Fact]
+        public void ReadFileWithExplicitNullEncodingTest()
+        {
+            // netstandard1.0 doesn't have `Encoding.ASCII` so `DxfFile` defaults it to null.  This test is to ensure
+            // the null-handling behavior never changes.
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms, Encoding.ASCII))
+            {
+                writer.WriteLine(@"
+  0
+EOF
+".Trim());
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                var _file = DxfFile.Load(ms, defaultEncoding: null);
+            }
+        }
+
+        [Fact]
+        public void ReadGB18030EncodingTest()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var gb18030 = Encoding.GetEncoding("GB18030");
+
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms, Encoding.ASCII))
+            {
+                var head = @"
+  0
+SECTION
+  2
+HEADER
+  9
+$PROJECTNAME
+  1".Trim();
+                var tail = @"
+  0
+ENDSEC
+  0
+EOF".Trim();
+                var gb18030bytes = new byte[]
+                {
+                    0xB2,
+                    0xBB,
+                };
+                writer.WriteLine(head);
+                writer.Flush();
+                ms.Write(gb18030bytes, 0, gb18030bytes.Length);
+                writer.WriteLine();
+                writer.WriteLine(tail);
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var file = DxfFile.Load(ms, gb18030);
+                Assert.Equal("不", file.Header.ProjectName);
+            }
         }
 
         [Fact]

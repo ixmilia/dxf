@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -7,32 +8,52 @@ namespace IxMilia.Dxf.Extensions
 {
     internal static class StreamExtensions
     {
-        public static string ReadLine(this Stream stream, out int bytesRead)
+        public static string ReadLine(this Stream stream, Encoding encoding, out int bytesRead)
         {
             // read line char-by-char
-            var sb = new StringBuilder();
+            bytesRead = 0;
+            var bytes = new List<byte>();
             var b = stream.ReadByte();
-            bytesRead = 1;
             if (b < 0)
             {
                 return null;
             }
 
-            var c = (char)b;
-            while (b > 0 && c != '\n')
+            bytesRead++;
+
+            while (b > 0 && b != '\n')
             {
-                sb.Append(c);
+                bytes.Add((byte)b);
                 b = stream.ReadByte();
                 bytesRead++;
-                c = (char)b;
             }
 
-            if (sb.Length > 0 && sb[sb.Length - 1] == '\r')
+            var byteArray = bytes.ToArray();
+            var result = GetString(encoding, byteArray);
+            if (result.Length > 0 && result[result.Length - 1] == '\r')
             {
-                sb.Remove(sb.Length - 1, 1);
+                result = result.Substring(0, result.Length - 1);
             }
 
-            return sb.ToString();
+            return result;
+        }
+
+        private static string GetString(Encoding encoding, byte[] bytes)
+        {
+            if (encoding == null)
+            {
+                var sb = new StringBuilder(bytes.Length);
+                foreach (var b in bytes)
+                {
+                    sb.Append((char)b);
+                }
+
+                return sb.ToString();
+            }
+            else
+            {
+                return encoding.GetString(bytes, 0, bytes.Length);
+            }
         }
     }
 }

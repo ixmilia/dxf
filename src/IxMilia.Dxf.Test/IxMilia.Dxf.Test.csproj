@@ -5,6 +5,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework Condition="$(VisualStudioVersion.StartsWith('15.'))">netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

@@ -12,8 +12,14 @@ namespace IxMilia.Dxf
 
     public class DxfLineWeight
     {
+        /// <summary>
+        /// A non-zero value indicates 1/100th of a mm.
+        /// </summary>
         public short Value { get; set; }
 
+        /// <summary>
+        /// When the line weight type is <see cref="DxfLineWeightType.Custom" />, the <see cref="Value" /> property represents the width of the line in 1/100th mm increments.
+        /// </summary>
         public DxfLineWeightType LineWeightType
         {
             get

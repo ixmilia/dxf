@@ -55,7 +55,7 @@ namespace IxMilia.Dxf.Entities
                 }
             }
 
-            if (version >= DxfAcadVersion.R2010)
+            if (version >= DxfAcadVersion.R2010 && Identifier != 0)
             {
                 pairs.Add(new DxfCodePair(91, Identifier));
             }

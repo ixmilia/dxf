@@ -11,9 +11,9 @@ jobs:
         configuration: ['Debug', 'Release']
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/setup-dotnet@v1.0.2
+    - uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.0.100'
+        dotnet-version: '3.1.100'
     - name: Build and test
       run: ./build-and-test.sh --configuration ${{ matrix.configuration }}
 
@@ -24,9 +24,9 @@ jobs:
         configuration: ['Debug', 'Release']
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/setup-dotnet@v1.0.2
+    - uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.0.100'
+        dotnet-version: '3.1.100'
     - name: Build and test
       run: .\build-and-test.cmd -c ${{ matrix.configuration }}
 
@@ -36,9 +36,9 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/setup-dotnet@v1.0.2
+    - uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.0.100'
+        dotnet-version: '3.1.100'
     - run: .\build-and-test.cmd -c Release -notest
     - run: .\src\create-package.cmd
     - run: dotnnet nuget push .\artifacts\packages\Release\IxMilia.Dxf.*.nupkg -k ${{ secrets.NUGET_API_KEY }}

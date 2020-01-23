@@ -1367,6 +1367,30 @@ AcDbAlignedDimension
         }
 
         [Fact]
+        public void WriteVertexWithIdentifierTest()
+        {
+            // non-zero identifiers are written
+            var vertex = new DxfVertex()
+            {
+                Identifier = 42
+            };
+            var pairs = vertex.GetValuePairs(DxfAcadVersion.R2010, outputHandles: false);
+            Assert.Contains(pairs, pair => pair.Code == 91 && pair.IntegerValue == 42);
+        }
+
+        [Fact]
+        public void WriteVertexWithoutIdentifierTest()
+        {
+            // zero identifiers are not written
+            var vertex = new DxfVertex()
+            {
+                Identifier = 0
+            };
+            var pairs = vertex.GetValuePairs(DxfAcadVersion.R2010, outputHandles: false);
+            Assert.DoesNotContain(pairs, pair => pair.Code == 91);
+        }
+
+        [Fact]
         public void Write2DPolylineTest()
         {
             var file = new DxfFile();

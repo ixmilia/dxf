@@ -31,7 +31,14 @@ namespace IxMilia.Dxf.Blocks
         }
         IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
         {
-            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+            foreach (var entity in Entities)
+            {
+                yield return entity;
+            }
+            foreach (var pointer in ((IDxfItemInternal)this).GetPointers())
+            {
+                yield return (IDxfItemInternal)pointer.Item;
+            }
         }
 
         private DxfPointer _endBlockPointer { get; } = new DxfPointer();
@@ -157,8 +164,8 @@ namespace IxMilia.Dxf.Blocks
                 list.Add(new DxfCodePair(4, Description));
             }
 
-            // entities in blocks never have handles
-            list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version, outputHandles: false)));
+            // entities in blocks need handles for some applications
+            list.AddRange(Entities.SelectMany(e => e.GetValuePairs(version, outputHandles)));
 
             list.AddRange(EndBlock.GetValuePairs(version, outputHandles));
 

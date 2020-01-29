@@ -513,11 +513,13 @@ ACDBDICTIONARYWDFLT
 AcDbDictionary
 281
 0
-340
-#
   3
 key-1
 350
+#
+100
+AcDbDictionaryWithDefault
+340
 #
   0
 DICTIONARYVAR

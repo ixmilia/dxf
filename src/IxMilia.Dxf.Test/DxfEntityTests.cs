@@ -163,7 +163,7 @@ AcDbEntity
         public void DimensionDefaultValuesTest()
         {
             var dim = new DxfAlignedDimension();
-            Assert.Equal("*MODEL_SPACE", dim.BlockName);
+            Assert.Null(dim.BlockName);
             Assert.Equal("STANDARD", dim.DimensionStyleName);
         }
 
@@ -1329,8 +1329,6 @@ bar
 7
 100
 AcDbDimension
-  2
-*MODEL_SPACE
  10
 330.25
  20

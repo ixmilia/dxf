@@ -363,7 +363,7 @@
     <!-- the class from which all dimensions inherit -->
     <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected" HasXData="true">
         <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion){0}" WriteConverter="(short){0}" MinVersion="R2010" />
-        <Property Name="BlockName" Code="2" Type="string" DefaultValue="*MODEL_SPACE" />
+        <Property Name="BlockName" Code="2" Type="string" DefaultValue="null" DisableWritingDefault="true" />
         <Property Name="DefinitionPoint1" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="TextMidPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="DimensionType" Code="70" Type="DxfDimensionType" DefaultValue="DxfDimensionType.Aligned" ReadConverter="HandleDimensionType({0})" WriteConverter="HandleDimensionType({0})" />

@@ -7,20 +7,24 @@ set runtests=true
 
 :parseargs
 if "%1" == "" goto argsdone
-if /i "%1" == "-c" (
-    set configuration=%2
-    shift
-    shift
-    goto parseargs
-)
-if /i "%1" == "-notest" (
-    set runtests=false
-    shift
-    goto parseargs
-)
+if /i "%1" == "-c" goto set_configuration
+if /i "%1" == "--configuration" goto set_configuration
+if /i "%1" == "-notest" goto set_notest
+if /i "%1" == "--notest" goto set_notest
 
 echo Unsupported argument: %1
 goto error
+
+:set_configuration
+set configuration=%2
+shift
+shift
+goto parseargs
+
+:set_notest
+set runtests=false
+shift
+goto parseargs
 
 :argsdone
 

@@ -31,15 +31,20 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(281, (short)(this.DuplicateRecordHandling)));
             }
 
-            if (DefaultObject != null && DefaultObjectPointer.Handle != 0u)
-            {
-                pairs.Add(new DxfCodePair(340, UIntHandle(DefaultObjectPointer.Handle)));
-            }
-
             foreach (var item in _items.OrderBy(kvp => kvp.Key))
             {
                 pairs.Add(new DxfCodePair(3, item.Key));
                 pairs.Add(new DxfCodePair(350, UIntHandle(item.Value.Handle)));
+            }
+
+
+            if (version >= DxfAcadVersion.R2000)
+            {
+                pairs.Add(new DxfCodePair(100, "AcDbDictionaryWithDefault"));
+                if (DefaultObject != null && DefaultObjectPointer.Handle != 0u)
+                {
+                    pairs.Add(new DxfCodePair(340, UIntHandle(DefaultObjectPointer.Handle)));
+                }
             }
         }
 

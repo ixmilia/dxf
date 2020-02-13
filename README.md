@@ -126,7 +126,8 @@ Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for t
 
 ## Building locally
 
-To build locally, install the [latest .NET Core 3.0 SDK](https://dotnet.microsoft.com/download).
+To build locally, install the [latest .NET Core 3.1 SDK](https://dotnet.microsoft.com/download).  To a limited extent,
+Visual Studio 2017 + .NET Core SDK 2.2 is also supported.
 
 ## DXF Reference
 

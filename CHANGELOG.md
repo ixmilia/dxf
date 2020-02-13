@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 0.7.3 (13 February 2020)
+
+- Fix bug in writing spline weights.
+- Fix ARC bounding box calculation.
+- Numerous compatibility updates including various encoding and unicode support.
+- Support both pre- and post-R13 binary files.
+
 ## 0.7.2 (23 October 2018)
 
 - Enable reading files with a long `$ACADMAINTVER` value.

@@ -68,12 +68,25 @@ EOF
             }
         }
 
-        [TeighaConverterExistsFact]
-        public void IxMiliaReadTeighaTest()
+        [ODAConverterExistsFact]
+        public void IxMiliaReadODATest()
         {
-            // use Teigha to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
+            // use ODA to convert a minimum-working-file to each of its supported versions and try to open with IxMilia
             var exceptions = new List<Exception>();
-            var versions = new[] { DxfAcadVersion.R9, DxfAcadVersion.R10, DxfAcadVersion.R12, DxfAcadVersion.R13, DxfAcadVersion.R14, DxfAcadVersion.R2000, DxfAcadVersion.R2004, DxfAcadVersion.R2007, DxfAcadVersion.R2010, DxfAcadVersion.R2013 };
+            var versions = new[]
+            {
+                DxfAcadVersion.R9,
+                DxfAcadVersion.R10,
+                DxfAcadVersion.R12,
+                DxfAcadVersion.R13,
+                DxfAcadVersion.R14,
+                DxfAcadVersion.R2000,
+                DxfAcadVersion.R2004,
+                DxfAcadVersion.R2007,
+                DxfAcadVersion.R2010,
+                DxfAcadVersion.R2013,
+                DxfAcadVersion.R2018,
+            };
             foreach (var desiredVersion in versions)
             {
                 using (var input = new ManageTemporaryDirectory())
@@ -83,7 +96,7 @@ EOF
                     var outputDir = output.DirectoryPath;
                     var barePath = Path.Combine(inputDir, "bare.dxf");
                     File.WriteAllText(barePath, MinimumFileText);
-                    AssertTeighaConvert(inputDir, outputDir, desiredVersion);
+                    AssertODAConvert(inputDir, outputDir, desiredVersion);
 
                     var convertedFilePath = Directory.EnumerateFiles(outputDir, "*.dxf").Single();
                     using (var fs = new FileStream(convertedFilePath, FileMode.Open))
@@ -103,14 +116,14 @@ EOF
 
             if (exceptions.Count > 0)
             {
-                throw new AggregateException("Error reading Teigha-produced files", exceptions);
+                throw new AggregateException("Error reading ODA-produced files", exceptions);
             }
         }
 
-        [TeighaConverterExistsFact]
-        public void TeighaReadIxMiliaNewFileCompatTest()
+        [ODAConverterExistsFact]
+        public void ODAReadIxMiliaNewFileCompatTest()
         {
-            TestTeighaReadIxMiliaGeneratedFile(() =>
+            TestODAReadIxMiliaGeneratedFile(() =>
             {
                 var file = new DxfFile();
                 file.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(10, 10, 0)));
@@ -118,20 +131,20 @@ EOF
             });
         }
 
-        [TeighaConverterExistsFact]
-        public void TeighaReadIxMiliaNormalizedFileCompatTest()
+        [ODAConverterExistsFact]
+        public void ODAReadIxMiliaNormalizedFileCompatTest()
         {
-            TestTeighaReadIxMiliaGeneratedFile(() =>
+            TestODAReadIxMiliaGeneratedFile(() =>
             {
                 var file = Parse(MinimumFileText);
                 return file;
             });
         }
 
-        [TeighaConverterExistsFact]
-        public void TeighaReadAllEntitiesTest()
+        [ODAConverterExistsFact]
+        public void ODAReadAllEntitiesTest()
         {
-            // create a file with all entities and ensure Teigha can read it
+            // create a file with all entities and ensure ODA can read it
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2013;
             var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
@@ -158,14 +171,14 @@ EOF
                     file.Save(fs);
                 }
 
-                AssertTeighaConvert(input.DirectoryPath, output.DirectoryPath, DxfAcadVersion.R2013);
+                AssertODAConvert(input.DirectoryPath, output.DirectoryPath, DxfAcadVersion.R2013);
             }
         }
 
-        [TeighaConverterExistsFact]
-        public void TeighaReadAllObjectsTest()
+        [ODAConverterExistsFact]
+        public void ODAReadAllObjectsTest()
         {
-            // create a file with all objects and ensure Teigha can read it
+            // create a file with all objects and ensure ODA can read it
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2013;
             var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
@@ -189,7 +202,7 @@ EOF
                     file.Save(fs);
                 }
 
-                AssertTeighaConvert(input.DirectoryPath, output.DirectoryPath, DxfAcadVersion.R2013);
+                AssertODAConvert(input.DirectoryPath, output.DirectoryPath, DxfAcadVersion.R2013);
             }
         }
 
@@ -402,9 +415,9 @@ EOF
             }
         }
 
-        private void TestTeighaReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)
+        private void TestODAReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)
         {
-            // save a DXF file in all the formats that IxMilia.Dxf supports and try to get Teigha to read all of them
+            // save a DXF file in all the formats that IxMilia.Dxf supports and try to get ODA to read all of them
             using (var input = new ManageTemporaryDirectory())
             {
                 var inputDir = input.DirectoryPath;
@@ -423,7 +436,8 @@ EOF
                     DxfAcadVersion.R2004,
                     DxfAcadVersion.R2007,
                     DxfAcadVersion.R2010,
-                    DxfAcadVersion.R2013
+                    DxfAcadVersion.R2013,
+                    DxfAcadVersion.R2018,
                 };
                 foreach (var version in allIxMiliaVersions)
                 {
@@ -435,11 +449,11 @@ EOF
                     }
                 }
 
-                // invoke the Teigha converter
+                // invoke the ODA converter
                 using (var output = new ManageTemporaryDirectory())
                 {
                     var outputDir = output.DirectoryPath;
-                    AssertTeighaConvert(inputDir, outputDir, DxfAcadVersion.R2010);
+                    AssertODAConvert(inputDir, outputDir, DxfAcadVersion.R2010);
                 }
             }
         }
@@ -460,58 +474,61 @@ EOF
             // TODO: kill all instances of senddmp.exe and fail if present
         }
 
-        private void AssertTeighaConvert(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
+        private void AssertODAConvert(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
         {
-            WaitForProcess(TeighaConverterExistsFactAttribute.GetPathToFileConverter(), GenerateTeighaArguments(inputDirectory, outputDirectory, desiredVersion));
+            WaitForProcess(ODAConverterExistsFactAttribute.GetPathToFileConverter(), GenerateODAArguments(inputDirectory, outputDirectory, desiredVersion));
             var errors = Directory.EnumerateFiles(outputDirectory, "*.err").Select(path => path + ":" + Environment.NewLine + File.ReadAllText(path)).ToList();
             // TODO: gather the files that couldn't be converted
             if (errors.Count > 0)
             {
-                throw new Exception("Teigha error converting files: " + string.Join("", errors));
+                throw new Exception("ODA error converting files: " + string.Join("", errors));
             }
         }
 
-        private string GenerateTeighaArguments(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
+        private string GenerateODAArguments(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
         {
-            string teighaVersion;
+            string odaVersion;
             switch (desiredVersion)
             {
                 case DxfAcadVersion.R9:
-                    teighaVersion = "ACAD9";
+                    odaVersion = "ACAD9";
                     break;
                 case DxfAcadVersion.R10:
-                    teighaVersion = "ACAD10";
+                    odaVersion = "ACAD10";
                     break;
                 case DxfAcadVersion.R12:
-                    teighaVersion = "ACAD12";
+                    odaVersion = "ACAD12";
                     break;
                 case DxfAcadVersion.R13:
-                    teighaVersion = "ACAD13";
+                    odaVersion = "ACAD13";
                     break;
                 case DxfAcadVersion.R14:
-                    teighaVersion = "ACAD14";
+                    odaVersion = "ACAD14";
                     break;
                 case DxfAcadVersion.R2000:
-                    teighaVersion = "ACAD2000";
+                    odaVersion = "ACAD2000";
                     break;
                 case DxfAcadVersion.R2004:
-                    teighaVersion = "ACAD2004";
+                    odaVersion = "ACAD2004";
                     break;
                 case DxfAcadVersion.R2007:
-                    teighaVersion = "ACAD2007";
+                    odaVersion = "ACAD2007";
                     break;
                 case DxfAcadVersion.R2010:
-                    teighaVersion = "ACAD2010";
+                    odaVersion = "ACAD2010";
                     break;
                 case DxfAcadVersion.R2013:
-                    teighaVersion = "ACAD2013";
+                    odaVersion = "ACAD2013";
+                    break;
+                case DxfAcadVersion.R2018:
+                    odaVersion = "ACAD2018";
                     break;
                 default:
-                    throw new InvalidOperationException("Unsupported Teigha version " + desiredVersion);
+                    throw new InvalidOperationException("Unsupported ODA version " + desiredVersion);
             }
 
             //                                                                              recurse audit
-            return $@"""{inputDirectory}"" ""{outputDirectory}"" ""{teighaVersion}"" ""DXF"" ""0"" ""1""";
+            return $@"""{inputDirectory}"" ""{outputDirectory}"" ""{odaVersion}"" ""DXF"" ""0"" ""1""";
         }
     }
 }

@@ -63,12 +63,12 @@ using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Create))
 ### Reading Files
 
 This library should be able to open any valid DXF file, including files produced by AutoCAD or anything using the
-Teigha libraries from the [Open Design Alliance](https://opendesign.com), including Microsoft Visio which uses older
+ODA libraries from the [Open Design Alliance](https://opendesign.com), including Microsoft Visio which uses older
 Open Design libraries.
 
-### Open Design Alliance (Teigha)
+### Open Design Alliance (ODA)
 
-The Teigha libraries should be able to open anything produced by this library.
+The ODA libraries should be able to open anything produced by this library.
 
 ### AutoCAD
 

@@ -185,7 +185,7 @@ AcDbEntity
         public void RightVectorFromNegativeNormalTest()
         {
             // gleaned from https://github.com/ixmilia/dxf/issues/105
-            // A 90 degree arc from 270-360 degrees with a negative Z normal is displayed by both AutoCAD and Teigha in Q3.
+            // A 90 degree arc from 270-360 degrees with a negative Z normal is displayed by both AutoCAD and ODA in Q3.
             var right = DxfVector.RightVectorFromNormal(new DxfVector(0.0, 0.0, -1.0));
             var expected = -DxfVector.XAxis;
             Assert.Equal(expected, right);

@@ -51,7 +51,7 @@
     <Variable Name="DIMSCALE" Code="40" Type="double" Property="DimensioningScaleFactor" DefaultValue="1.0" Comment="Overall dimensioning scale factor." />
     <Variable Name="DIMASZ" Code="40" Type="double" Property="DimensioningArrowSize" DefaultValue="0.18" Comment="Dimensioning arrow size." />
     <Variable Name="DIMEXO" Code="40" Type="double" Property="DimensionExtensionLineOffset" DefaultValue="0.0625" Comment="Extension line offset." />
-    <!-- The spec says that DIMFAC should exist, but the Teigha libraries don't like it. -->
+    <!-- The spec says that DIMFAC should exist, but the ODA libraries don't like it. -->
     <Variable Name="DIMDLI" Code="40" Type="double" Property="DimensionLineIncrement" DefaultValue="0.38" Comment="Dimension line increment." />
     <Variable Name="DIMRND" Code="40" Type="double" Property="DimensionDistanceRoundingValue" DefaultValue="0.0" Comment="Rounding value for dimension distances." />
     <Variable Name="DIMDLE" Code="40" Type="double" Property="DimensionLineExtension" DefaultValue="0.0" Comment="Dimension line extension." />

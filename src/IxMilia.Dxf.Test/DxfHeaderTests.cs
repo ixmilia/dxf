@@ -11,8 +11,6 @@ namespace IxMilia.Dxf.Test
 {
     public class DxfHeaderTests : AbstractDxfTests
     {
-        #region Read tests
-
         [Fact]
         public void SpecificHeaderValuesTest()
         {
@@ -341,10 +339,6 @@ $ACADMAINTVER
 ");
             Assert.Equal(42, file.Header.MaintenenceVersion);
         }
-
-        #endregion
-
-        #region Write tests
 
         [Fact]
         public void WriteDefaultHeaderValuesTest()
@@ -2023,10 +2017,6 @@ $SHADOWPLANELOCATION";
             AssertArrayEqual(expectedOrder, actualOrder);
         }
 
-        #endregion
-
-        #region Other tests
-
         [Fact]
         public void TimersTest()
         {
@@ -2396,8 +2386,5 @@ $MENU
 .
 ".Trim()), content);
         }
-
-        #endregion
-
     }
 }

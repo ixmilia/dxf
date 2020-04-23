@@ -11,8 +11,6 @@ namespace IxMilia.Dxf.Test
 {
     public class DxfEntityTests : AbstractDxfTests
     {
-        #region Private helpers
-
         private static DxfEntity Entity(string entityType, string data)
         {
             var file = Section("ENTITIES", string.Format(@"
@@ -77,8 +75,6 @@ ill-placed comment
             file.Entities.Add(entity);
             VerifyFileDoesNotContain(file, unwantedText, sectionType: DxfSectionType.Entities);
         }
-
-        #endregion
 
         [Fact]
         public void ReadEntityExtensionDataTest()
@@ -190,8 +186,6 @@ AcDbEntity
             var expected = -DxfVector.XAxis;
             Assert.Equal(expected, right);
         }
-
-        #region Read default value tests
 
         [Fact]
         public void ReadDefaultLineTest()
@@ -351,10 +345,6 @@ AcDbEntity
             Assert.Equal(0.0, solid.Thickness);
             Assert.Equal(DxfVector.ZAxis, solid.ExtrusionDirection);
         }
-
-        #endregion
-
-        #region Read specific value tests
 
         [Fact]
         public void ReadDimensionTest()
@@ -1022,10 +1012,6 @@ EOF
             Assert.Equal(1.0, spline.ControlPoints[1].Weight);
         }
 
-        #endregion
-
-        #region Write default value tests
-
         [Fact]
         public void WriteDefaultLineTest()
         {
@@ -1254,10 +1240,6 @@ AcDbTrace
 0.0
 ");
         }
-
-        #endregion
-
-        #region Write specific value tests
 
         [Fact]
         public void WriteLineTest()
@@ -1706,10 +1688,6 @@ MTEXT
 ", version: DxfAcadVersion.R13);
         }
 
-        #endregion
-
-        #region Block tests
-
         [Fact]
         public void ReadBlockTest()
         {
@@ -1787,10 +1765,6 @@ EOF");
             Assert.Equal(41.0, ((DxfArc)second.Entities[1]).Radius);
         }
 
-        #endregion
-
-        #region Version-specific entity writer tests
-
         [Fact]
         public void WriteVersionSpecificEntities()
         {
@@ -1828,8 +1802,5 @@ EOF");
             file.Header.Version = DxfAcadVersion.R13;
             VerifyFileDoesNotContain(file, annotationOffsetText);
         }
-
-        #endregion
-
     }
 }

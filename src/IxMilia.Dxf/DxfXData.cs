@@ -40,7 +40,7 @@ namespace IxMilia.Dxf
 
         internal void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
-            if (version >= DxfAcadVersion.R2000)
+            if (version >= DxfAcadVersion.R14)
             {
                 pairs.Add(new DxfCodePair((int)DxfXDataType.ApplicationName, ApplicationName));
                 foreach (var item in Items)

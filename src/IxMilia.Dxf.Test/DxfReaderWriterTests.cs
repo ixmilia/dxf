@@ -1002,6 +1002,88 @@ group name
         }
 
         [Fact]
+        public void WriteVersionSpecificBlockRecordTest_R14()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            var blockRecord = new DxfBlockRecord()
+            {
+                Name = "<name>",
+                XData = new DxfXData("ACAD",
+                    new DxfXDataItem[]
+                    {
+                        new DxfXDataString("DesignCenter Data"),
+                        new DxfXDataControlGroup(
+                            new []
+                            {
+                                new DxfXDataInteger(0),
+                                new DxfXDataInteger(1),
+                                new DxfXDataInteger(2)
+                            })
+                    })
+            };
+            file.BlockRecords.Add(blockRecord);
+            VerifyFileContains(file, @"
+  0
+TABLE
+  2
+BLOCK_RECORD
+  5
+#
+100
+AcDbSymbolTable
+ 70
+3
+  0
+BLOCK_RECORD
+  5
+#
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+*MODEL_SPACE
+  0
+BLOCK_RECORD
+  5
+#
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+*PAPER_SPACE
+  0
+BLOCK_RECORD
+  5
+#
+100
+AcDbSymbolTableRecord
+100
+AcDbBlockTableRecord
+  2
+<name>
+1001
+ACAD
+1000
+DesignCenter Data
+1002
+{
+1070
+0
+1070
+1
+1070
+2
+1002
+}
+  0
+ENDTAB
+");
+        }
+
+        [Fact]
         public void WriteVersionSpecificBlockRecordTest_R2000()
         {
             var file = new DxfFile();
@@ -1067,7 +1149,7 @@ AcDbBlockTableRecord
   0
 BLOCK_RECORD
   5
-19
+#
 330
 #
 100

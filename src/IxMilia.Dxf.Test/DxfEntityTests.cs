@@ -1347,6 +1347,56 @@ AcDbAlignedDimension
         }
 
         [Fact]
+        public void WriteDimensionWithTrailingXDataTest()
+        {
+            var dim = new DxfAlignedDimension();
+            dim.XData = new DxfXData("ACAD",
+                new DxfXDataItem[]
+                {
+                    new DxfXDataString("DSTYLE"),
+                    new DxfXDataControlGroup(
+                        new DxfXDataItem[]
+                        {
+                            new DxfXDataInteger(271),
+                            new DxfXDataInteger(9),
+                        })
+                });
+            EnsureFileContainsEntity(dim, @"
+1001
+ACAD
+1000
+DSTYLE
+1002
+{
+1070
+   271
+1070
+     9
+1002
+}
+  0
+ENDSEC
+", DxfAcadVersion.R14);
+            // the trailing 0/ENDSEC ensures the XData is the last thing written
+        }
+
+        [Fact]
+        public void ReadDimensionWithXDataTest()
+        {
+            var dimension = (DxfAlignedDimension)Entity("DIMENSION", @"
+100
+AcDbAlignedDimension
+1001
+ACAD
+1000
+some xdata string
+");
+            var xdata = dimension.XData;
+            Assert.Equal("ACAD", xdata.ApplicationName);
+            Assert.Equal("some xdata string", ((DxfXDataString)xdata.Items.Single()).Value);
+        }
+
+        [Fact]
         public void WriteVertexWithIdentifierTest()
         {
             // non-zero identifiers are written

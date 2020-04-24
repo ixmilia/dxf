@@ -57,6 +57,7 @@ namespace IxMilia.Dxf.Generator
 
                 if (HasXData(item))
                 {
+                    AppendLine();
                     AppendLine("if (XData != null)");
                     AppendLine("{");
                     AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
@@ -86,6 +87,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("    : base(other)");
                     AppendLine("{");
                     IncreaseIndent();
+                    AppendLine("((IDxfHasXDataHidden)this).XDataHidden = ((IDxfHasXDataHidden)other).XDataHidden;");
                     foreach (var property in GetPropertiesAndPointers(item))
                     {
                         var name = Name(property);

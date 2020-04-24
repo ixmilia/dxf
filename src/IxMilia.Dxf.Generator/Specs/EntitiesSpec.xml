@@ -361,7 +361,7 @@
 
     -->
     <!-- the class from which all dimensions inherit -->
-    <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected" HasXData="true">
+    <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected">
         <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion){0}" WriteConverter="(short){0}" MinVersion="R2010" />
         <Property Name="BlockName" Code="2" Type="string" DefaultValue="null" DisableWritingDefault="true" />
         <Property Name="DefinitionPoint1" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
@@ -378,7 +378,7 @@
         <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="STANDARD" MinVersion="R12" />
     </Entity>
     <!-- aligned -->
-    <Entity Name="DxfAlignedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Aligned">
+    <Entity Name="DxfAlignedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Aligned">
         <!--<Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />-->
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
@@ -392,7 +392,7 @@
         </Extents>
     </Entity>
     <!-- linear and rotated -->
-    <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="RotatedHorizontalOrVertical">
+    <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="RotatedHorizontalOrVertical">
         <Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
@@ -418,7 +418,7 @@
         </Extents>
     </Entity>
     <!-- radial -->
-    <Entity Name="DxfRadialDimension" EntityType="Dimension" SubclassMarker="AcDbRadialDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Radius">
+    <Entity Name="DxfRadialDimension" EntityType="Dimension" SubclassMarker="AcDbRadialDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Radius">
         <Property Name="DefinitionPoint2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
         <Property Name="LeaderLength" Code="40" Type="double" DefaultValue="0.0" />
         <Extents>
@@ -430,7 +430,7 @@
         </Extents>
     </Entity>
     <!-- diametric -->
-    <Entity Name="DxfDiameterDimension" EntityType="Dimension" SubclassMarker="AcDbDiametricDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Diameter">
+    <Entity Name="DxfDiameterDimension" EntityType="Dimension" SubclassMarker="AcDbDiametricDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Diameter">
         <Property Name="DefinitionPoint2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
         <Property Name="LeaderLength" Code="40" Type="double" DefaultValue="0.0" />
         <Extents>
@@ -442,7 +442,7 @@
         </Extents>
     </Entity>
     <!-- angular, 3 point -->
-    <Entity Name="DxfAngularThreePointDimension" EntityType="Dimension" SubclassMarker="AcDb3PointAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="AngularThreePoint">
+    <Entity Name="DxfAngularThreePointDimension" EntityType="Dimension" SubclassMarker="AcDb3PointAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="AngularThreePoint">
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Property Name="DefinitionPoint4" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
@@ -459,7 +459,7 @@
         </Extents>
     </Entity>
     <!-- ordinate -->
-    <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate" MinVersion="R11">
+    <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Ordinate" MinVersion="R11">
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Extents>

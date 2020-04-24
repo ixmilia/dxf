@@ -415,6 +415,86 @@ EOF
             }
         }
 
+        [AutoCadExistsFact]
+        public void AutoCadCanReadSpecificEntitiesTest()
+        {
+            RoundTripDimensionWithXData(RoundTripFileThroughAutoCad);
+        }
+
+        [ODAConverterExistsFact]
+        public void ODACanReadSpecificEntitiesTest()
+        {
+            RoundTripDimensionWithXData(RoundTripFileThroughODA);
+        }
+
+        private void RoundTripDimensionWithXData(Func<DxfFile, DxfFile> roundTripper)
+        {
+            var dim = new DxfAlignedDimension();
+            dim.XData = new DxfXData("ACAD",
+                new DxfXDataItem[]
+                {
+                    new DxfXDataString("DSTYLE"),
+                    new DxfXDataControlGroup(
+                        new DxfXDataItem[]
+                        {
+                            new DxfXDataInteger(271),
+                            new DxfXDataInteger(9),
+                        })
+                });
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Entities.Add(dim);
+
+            // perform round trip
+            var result = roundTripper(file);
+
+            // verify
+            var roundTrippedDim = (DxfAlignedDimension)result.Entities.Single();
+            var xdata = roundTrippedDim.XData;
+            Assert.Equal("ACAD", xdata.ApplicationName);
+            Assert.Equal(2, xdata.Items.Count);
+            Assert.Equal("DSTYLE", ((DxfXDataString)xdata.Items[0]).Value);
+            var group = (DxfXDataControlGroup)xdata.Items[1];
+            Assert.Single(group.Items.OfType<DxfXDataInteger>().Where(i => i.Value == 271));
+        }
+
+        private DxfFile RoundTripFileThroughAutoCad(DxfFile file)
+        {
+            using (var temp = new ManageTemporaryDirectory())
+            {
+                var inputFile = Path.Combine(temp.DirectoryPath, "input.dxf");
+                var outputFile = Path.Combine(temp.DirectoryPath, "output.dxf");
+                var scriptFile = Path.Combine(temp.DirectoryPath, "script.scr");
+                file.Save(inputFile);
+
+                var lines = new List<string>
+                {
+                    "FILEDIA 0",
+                    $"DXFIN \"{inputFile}\"",
+                    $"DXFOUT \"{outputFile}\" 16",
+                    "FILEDIA 1",
+                    "QUIT Y"
+                };
+                File.WriteAllLines(scriptFile, lines);
+                ExecuteAutoCadScript(scriptFile);
+
+                var result = DxfFile.Load(outputFile);
+                return result;
+            }
+        }
+
+        private DxfFile RoundTripFileThroughODA(DxfFile file)
+        {
+            using (var input = new ManageTemporaryDirectory())
+            using (var output = new ManageTemporaryDirectory())
+            {
+                file.Save(Path.Combine(input.DirectoryPath, "drawing.dxf"));
+                AssertODAConvert(input.DirectoryPath, output.DirectoryPath, file.Header.Version);
+                var result = DxfFile.Load(Path.Combine(output.DirectoryPath, "drawing.dxf"));
+                return result;
+            }
+        }
+
         private void TestODAReadIxMiliaGeneratedFile(Func<DxfFile> fileGenerator)
         {
             // save a DXF file in all the formats that IxMilia.Dxf supports and try to get ODA to read all of them

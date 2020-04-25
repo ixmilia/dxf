@@ -80,75 +80,63 @@ namespace IxMilia.Dxf
         internal void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             var code = (int)Type;
-            switch (Type)
+            switch (this)
             {
-                case DxfXDataType.String:
-                    pairs.Add(new DxfCodePair(code, ((DxfXDataString)this).Value));
+                case DxfXDataString s:
+                    pairs.Add(new DxfCodePair(code, s.Value));
                     break;
-                case DxfXDataType.ControlString:
+                case DxfXDataControlGroup c:
                     pairs.Add(new DxfCodePair(code, "{"));
-                    foreach (var subItem in ((DxfXDataControlGroup)this).Items)
+                    foreach (var subItem in c.Items)
                     {
                         subItem.AddValuePairs(pairs, version, outputHandles);
                     }
 
                     pairs.Add(new DxfCodePair(code, "}"));
                     break;
-                case DxfXDataType.Layer:
-                    pairs.Add(new DxfCodePair(code, ((DxfXDataLayerName)this).Value));
+                case DxfXDataLayerName l:
+                    pairs.Add(new DxfCodePair(code, l.Value));
                     break;
-                case DxfXDataType.BinaryData:
-                    pairs.Add(new DxfCodePair(code, DxfCommonConverters.HexBytes(((DxfXDataBinaryData)this).Value)));
+                case DxfXDataBinaryData b:
+                    pairs.Add(new DxfCodePair(code, DxfCommonConverters.HexBytes(b.Value)));
                     break;
-                case DxfXDataType.Handle:
-                    pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(((DxfXDataHandle)this).Value)));
+                case DxfXDataHandle h:
+                    pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(h.Value)));
                     break;
-                case DxfXDataType.RealTriple:
-                    {
-                        var point = ((DxfXData3Reals)this).Value;
-                        pairs.Add(new DxfCodePair(code, point.X));
-                        pairs.Add(new DxfCodePair(code + 10, point.Y));
-                        pairs.Add(new DxfCodePair(code + 20, point.Z));
-                        break;
-                    }
-                case DxfXDataType.WorldSpacePosition:
-                    {
-                        var point = ((DxfXDataWorldSpacePosition)this).Value;
-                        pairs.Add(new DxfCodePair(code, point.X));
-                        pairs.Add(new DxfCodePair(code + 10, point.Y));
-                        pairs.Add(new DxfCodePair(code + 20, point.Z));
-                        break;
-                    }
-                case DxfXDataType.WorldSpaceDisplacement:
-                    {
-                        var point = ((DxfXDataWorldSpaceDisplacement)this).Value;
-                        pairs.Add(new DxfCodePair(code, point.X));
-                        pairs.Add(new DxfCodePair(code + 10, point.Y));
-                        pairs.Add(new DxfCodePair(code + 20, point.Z));
-                        break;
-                    }
-                case DxfXDataType.WorldDirection:
-                    {
-                        var point = ((DxfXDataWorldDirection)this).Value;
-                        pairs.Add(new DxfCodePair(code, point.X));
-                        pairs.Add(new DxfCodePair(code + 10, point.Y));
-                        pairs.Add(new DxfCodePair(code + 20, point.Z));
-                        break;
-                    }
-                case DxfXDataType.Real:
-                    pairs.Add(new DxfCodePair(code, ((DxfXDataReal)this).Value));
+                case DxfXData3Reals r:
+                    pairs.Add(new DxfCodePair(code, r.Value.X));
+                    pairs.Add(new DxfCodePair(code + 10, r.Value.Y));
+                    pairs.Add(new DxfCodePair(code + 20, r.Value.Z));
                     break;
-                case DxfXDataType.Distance:
-                    pairs.Add(new DxfCodePair(code, ((DxfXDataDistance)this).Value));
+                case DxfXDataWorldSpacePosition w:
+                    pairs.Add(new DxfCodePair(code, w.Value.X));
+                    pairs.Add(new DxfCodePair(code + 10, w.Value.Y));
+                    pairs.Add(new DxfCodePair(code + 20, w.Value.Z));
                     break;
-                case DxfXDataType.ScaleFactor:
-                    pairs.Add(new DxfCodePair(code, ((DxfXDataScaleFactor)this).Value));
+                case DxfXDataWorldSpaceDisplacement w:
+                    pairs.Add(new DxfCodePair(code, w.Value.X));
+                    pairs.Add(new DxfCodePair(code + 10, w.Value.Y));
+                    pairs.Add(new DxfCodePair(code + 20, w.Value.Z));
                     break;
-                case DxfXDataType.Integer:
-                    pairs.Add(new DxfCodePair(code, ((DxfXDataInteger)this).Value));
+                case DxfXDataWorldDirection w:
+                    pairs.Add(new DxfCodePair(code, w.Value.X));
+                    pairs.Add(new DxfCodePair(code + 10, w.Value.Y));
+                    pairs.Add(new DxfCodePair(code + 20, w.Value.Z));
                     break;
-                case DxfXDataType.Long:
-                    pairs.Add(new DxfCodePair(code, ((DxfXDataLong)this).Value));
+                case DxfXDataReal r:
+                    pairs.Add(new DxfCodePair(code, r.Value));
+                    break;
+                case DxfXDataDistance d:
+                    pairs.Add(new DxfCodePair(code, d.Value));
+                    break;
+                case DxfXDataScaleFactor s:
+                    pairs.Add(new DxfCodePair(code, s.Value));
+                    break;
+                case DxfXDataInteger i:
+                    pairs.Add(new DxfCodePair(code, i.Value));
+                    break;
+                case DxfXDataLong l:
+                    pairs.Add(new DxfCodePair(code, l.Value));
                     break;
                 default:
                     throw new InvalidOperationException("Unexpected XDATA item " + Type);

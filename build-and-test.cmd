@@ -11,6 +11,8 @@ if /i "%1" == "-c" goto set_configuration
 if /i "%1" == "--configuration" goto set_configuration
 if /i "%1" == "-notest" goto set_notest
 if /i "%1" == "--notest" goto set_notest
+if /i "%1" == "-oldsdk" goto set_oldsdk
+if /i "%1" == "--oldsdk" goto set_oldsdk
 
 echo Unsupported argument: %1
 goto error
@@ -23,6 +25,11 @@ goto parseargs
 
 :set_notest
 set runtests=false
+shift
+goto parseargs
+
+:set_oldsdk
+set BuildWithOldSdk=true
 shift
 goto parseargs
 

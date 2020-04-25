@@ -839,12 +839,12 @@ ENDTAB
             var xdata = blockRecord.XData;
             Assert.Equal("ACAD", xdata.ApplicationName);
 
-            var namedGroup = (DxfXDataNamedGroup)xdata.Items.Single();
-            Assert.Equal("DesignCenter Data", namedGroup.Name);
-            Assert.Equal(3, namedGroup.Items.Count);
-            Assert.Equal(0, ((DxfXDataInteger)namedGroup.Items[0]).Value);
-            Assert.Equal(1, ((DxfXDataInteger)namedGroup.Items[1]).Value);
-            Assert.Equal(2, ((DxfXDataInteger)namedGroup.Items[2]).Value);
+            var namedList = (DxfXDataNamedList)xdata.Items.Single();
+            Assert.Equal("DesignCenter Data", namedList.Name);
+            Assert.Equal(3, namedList.Items.Count);
+            Assert.Equal(0, ((DxfXDataInteger)namedList.Items[0]).Value);
+            Assert.Equal(1, ((DxfXDataInteger)namedList.Items[1]).Value);
+            Assert.Equal(2, ((DxfXDataInteger)namedList.Items[2]).Value);
 
             AssertArrayEqual(new byte[]
             {
@@ -917,14 +917,14 @@ ENDTAB
             var xdata = blockRecord.XData;
             Assert.Equal("ACAD", xdata.ApplicationName);
 
-            var namedGroup = (DxfXDataNamedGroup)xdata.Items.Single();
-            Assert.Equal("DesignCenter Data", namedGroup.Name);
+            var namedList = (DxfXDataNamedList)xdata.Items.Single();
+            Assert.Equal("DesignCenter Data", namedList.Name);
 
-            Assert.Equal(4, namedGroup.Items.Count);
-            Assert.Equal(0, ((DxfXDataInteger)namedGroup.Items[0]).Value);
-            Assert.Equal(1, ((DxfXDataInteger)namedGroup.Items[1]).Value);
-            Assert.Equal(2, ((DxfXDataInteger)namedGroup.Items[2]).Value);
-            Assert.Equal(new DxfPoint(3.1, 4.2, 5.3), ((DxfXData3Reals)namedGroup.Items[3]).Value);
+            Assert.Equal(4, namedList.Items.Count);
+            Assert.Equal(0, ((DxfXDataInteger)namedList.Items[0]).Value);
+            Assert.Equal(1, ((DxfXDataInteger)namedList.Items[1]).Value);
+            Assert.Equal(2, ((DxfXDataInteger)namedList.Items[2]).Value);
+            Assert.Equal(new DxfPoint(3.1, 4.2, 5.3), ((DxfXData3Reals)namedList.Items[3]).Value);
             AssertArrayEqual(new byte[]
             {
                 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
@@ -969,10 +969,10 @@ group name
 ");
             var line = (DxfLine)file.Entities.Single();
             var xdata = ((IDxfHasXDataHidden)line).XDataHidden;
-            var controlGroup = (DxfXDataControlGroup)xdata.Items.Single();
-            Assert.Equal(2, controlGroup.Items.Count);
-            Assert.Equal(new DxfPoint(1, 2, 3), ((DxfXDataWorldSpacePosition)controlGroup.Items.First()).Value);
-            Assert.Equal(new DxfPoint(11, 22, 33), ((DxfXDataWorldSpacePosition)controlGroup.Items.Last()).Value);
+            var itemList = (DxfXDataItemList)xdata.Items.Single();
+            Assert.Equal(2, itemList.Items.Count);
+            Assert.Equal(new DxfPoint(1, 2, 3), ((DxfXDataWorldSpacePosition)itemList.Items.First()).Value);
+            Assert.Equal(new DxfPoint(11, 22, 33), ((DxfXDataWorldSpacePosition)itemList.Items.Last()).Value);
         }
 
         [Fact]
@@ -987,7 +987,7 @@ group name
                     new DxfXDataItem[]
                     {
                         new DxfXDataString("DesignCenter Data"),
-                        new DxfXDataControlGroup(
+                        new DxfXDataItemList(
                             new []
                             {
                                 new DxfXDataInteger(0),
@@ -1070,7 +1070,7 @@ ENDTAB
                     new DxfXDataItem[]
                     {
                         new DxfXDataString("DesignCenter Data"),
-                        new DxfXDataControlGroup(
+                        new DxfXDataItemList(
                             new []
                             {
                                 new DxfXDataInteger(0),
@@ -1523,11 +1523,11 @@ EOF
 
             Assert.Equal("leading string", ((DxfXDataString)dim.XData.Items[0]).Value);
 
-            var namedGroup = (DxfXDataNamedGroup)dim.XData.Items[1];
-            Assert.Equal("DSTYLE", namedGroup.Name);
-            Assert.Equal(2, namedGroup.Items.Count);
-            Assert.Equal(54, ((DxfXDataInteger)namedGroup.Items[0]).Value);
-            Assert.Equal("some string", ((DxfXDataString)namedGroup.Items[1]).Value);
+            var namedList = (DxfXDataNamedList)dim.XData.Items[1];
+            Assert.Equal("DSTYLE", namedList.Name);
+            Assert.Equal(2, namedList.Items.Count);
+            Assert.Equal(54, ((DxfXDataInteger)namedList.Items[0]).Value);
+            Assert.Equal("some string", ((DxfXDataString)namedList.Items[1]).Value);
 
             Assert.Equal(42, ((DxfXDataInteger)dim.XData.Items[2]).Value);
         }
@@ -1539,7 +1539,7 @@ EOF
             dim.XData = new DxfXData("ACAD",
                 new[]
                 {
-                    new DxfXDataNamedGroup("DSTYLE",
+                    new DxfXDataNamedList("DSTYLE",
                         new[]
                         {
                             new DxfXDataInteger(271),

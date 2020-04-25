@@ -66,11 +66,11 @@ namespace IxMilia.Dxf
                 var item = DxfXDataItem.FromBuffer(buffer);
                 if (item != null)
                 {
-                    if (last is DxfXDataString xdataString && item is DxfXDataControlGroup group)
+                    if (last is DxfXDataString xdataString && item is DxfXDataItemList list)
                     {
                         // re-build last and current item as named group
                         items.RemoveAt(items.Count - 1);
-                        item = new DxfXDataNamedGroup(xdataString.Value, group.Items);
+                        item = new DxfXDataNamedList(xdataString.Value, list.Items);
                     }
 
                     items.Add(item);
@@ -94,12 +94,12 @@ namespace IxMilia.Dxf
                 case DxfXDataString s:
                     pairs.Add(new DxfCodePair(code, s.Value));
                     break;
-                case DxfXDataControlGroup c:
-                    AddControlGroupValuePairs(c.Items, pairs, version, outputHandles);
+                case DxfXDataItemList l:
+                    AddListValuePairs(l.Items, pairs, version, outputHandles);
                     break;
-                case DxfXDataNamedGroup n:
+                case DxfXDataNamedList n:
                     pairs.Add(new DxfCodePair(code, n.Name));
-                    AddControlGroupValuePairs(n.Items, pairs, version, outputHandles);
+                    AddListValuePairs(n.Items, pairs, version, outputHandles);
                     break;
                 case DxfXDataLayerName l:
                     pairs.Add(new DxfCodePair(code, l.Value));
@@ -150,7 +150,7 @@ namespace IxMilia.Dxf
             }
         }
 
-        private static void AddControlGroupValuePairs(IEnumerable<DxfXDataItem> items, List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        private static void AddListValuePairs(IEnumerable<DxfXDataItem> items, List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             pairs.Add(new DxfCodePair((int)DxfXDataType.ControlString, "{"));
             foreach (var subItem in items)
@@ -170,7 +170,7 @@ namespace IxMilia.Dxf
                 case DxfXDataType.String:
                     return new DxfXDataString(pair.StringValue);
                 case DxfXDataType.ControlString:
-                    return DxfXDataControlGroup.ControlGroupFromBuffer(buffer);
+                    return DxfXDataItemList.ListFromBuffer(buffer);
                 case DxfXDataType.Layer:
                     return new DxfXDataLayerName(pair.StringValue);
                 case DxfXDataType.BinaryData:
@@ -237,23 +237,23 @@ namespace IxMilia.Dxf
         }
     }
 
-    public class DxfXDataControlGroup : DxfXDataItem
+    public class DxfXDataItemList : DxfXDataItem
     {
         public override DxfXDataType Type { get { return DxfXDataType.ControlString; } }
 
         public IList<DxfXDataItem> Items { get; private set; }
 
-        public DxfXDataControlGroup()
+        public DxfXDataItemList()
         {
             Items = new ListNonNull<DxfXDataItem>();
         }
 
-        public DxfXDataControlGroup(IEnumerable<DxfXDataItem> items)
+        public DxfXDataItemList(IEnumerable<DxfXDataItem> items)
         {
             Items = items.ToList();
         }
 
-        internal static DxfXDataControlGroup ControlGroupFromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfXDataItemList ListFromBuffer(DxfCodePairBufferReader buffer)
         {
             Debug.Assert(buffer.ItemsRemain);
             DxfCodePair pair;
@@ -275,11 +275,11 @@ namespace IxMilia.Dxf
                 }
             }
 
-            return new DxfXDataControlGroup(items);
+            return new DxfXDataItemList(items);
         }
     }
 
-    public class DxfXDataNamedGroup : DxfXDataItem
+    public class DxfXDataNamedList : DxfXDataItem
     {
         public override DxfXDataType Type { get { return DxfXDataType.String; } }
 
@@ -287,7 +287,7 @@ namespace IxMilia.Dxf
 
         public IList<DxfXDataItem> Items { get; private set; }
 
-        public DxfXDataNamedGroup(string name, IEnumerable<DxfXDataItem> items = null)
+        public DxfXDataNamedList(string name, IEnumerable<DxfXDataItem> items = null)
         {
             Name = name;
             Items = new ListNonNull<DxfXDataItem>();

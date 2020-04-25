@@ -1354,7 +1354,7 @@ AcDbAlignedDimension
                 new DxfXDataItem[]
                 {
                     new DxfXDataString("DSTYLE"),
-                    new DxfXDataControlGroup(
+                    new DxfXDataItemList(
                         new DxfXDataItem[]
                         {
                             new DxfXDataInteger(271),

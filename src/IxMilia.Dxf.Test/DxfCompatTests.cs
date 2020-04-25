@@ -434,7 +434,7 @@ EOF
                 new DxfXDataItem[]
                 {
                     new DxfXDataString("DSTYLE"),
-                    new DxfXDataControlGroup(
+                    new DxfXDataItemList(
                         new DxfXDataItem[]
                         {
                             new DxfXDataInteger(271),
@@ -453,9 +453,9 @@ EOF
             var xdata = roundTrippedDim.XData;
             Assert.Equal("ACAD", xdata.ApplicationName);
 
-            var namedGroup = (DxfXDataNamedGroup)xdata.Items.Single();
-            Assert.Equal("DSTYLE", namedGroup.Name);
-            Assert.Single(namedGroup.Items.OfType<DxfXDataInteger>().Where(i => i.Value == 271));
+            var namedList = (DxfXDataNamedList)xdata.Items.Single();
+            Assert.Equal("DSTYLE", namedList.Name);
+            Assert.Single(namedList.Items.OfType<DxfXDataInteger>().Where(i => i.Value == 271));
         }
 
         private DxfFile RoundTripFileThroughAutoCad(DxfFile file)

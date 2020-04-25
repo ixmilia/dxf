@@ -21,9 +21,20 @@ jobs:
         $shellExt = if ($IsWindows) { "cmd" } else { "sh" }
         & ./build-and-test.$shellExt --configuration ${{ matrix.configuration }}
 
+  build-old-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '2.1.513'
+      - run: ./build-and-test.sh --notest
+        env:
+          BuildWithOldSdk: true
+
   nuget-publish:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [build]
+    needs: [build, build-old-sdk]
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1

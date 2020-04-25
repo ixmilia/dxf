@@ -452,10 +452,10 @@ EOF
             var roundTrippedDim = (DxfAlignedDimension)result.Entities.Single();
             var xdata = roundTrippedDim.XData;
             Assert.Equal("ACAD", xdata.ApplicationName);
-            Assert.Equal(2, xdata.Items.Count);
-            Assert.Equal("DSTYLE", ((DxfXDataString)xdata.Items[0]).Value);
-            var group = (DxfXDataControlGroup)xdata.Items[1];
-            Assert.Single(group.Items.OfType<DxfXDataInteger>().Where(i => i.Value == 271));
+
+            var namedGroup = (DxfXDataNamedGroup)xdata.Items.Single();
+            Assert.Equal("DSTYLE", namedGroup.Name);
+            Assert.Single(namedGroup.Items.OfType<DxfXDataInteger>().Where(i => i.Value == 271));
         }
 
         private DxfFile RoundTripFileThroughAutoCad(DxfFile file)

@@ -1381,6 +1381,35 @@ ENDSEC
         }
 
         [Fact]
+        public void WriteDimensionWithStyleDifferenceXData()
+        {
+            var file = new DxfFile();
+            var standardDimStyle = file.DimensionStyles.Single(ds => ds.Name == "STANDARD");
+            var customDimStyle = new DxfDimStyle()
+            {
+                DimensioningSuffix = "some suffix"
+            };
+            var dim = new DxfAlignedDimension();
+            dim.XData = DxfDimStyle.GenerateStyleDifferenceAsXData(standardDimStyle, customDimStyle);
+            EnsureFileContainsEntity(dim, @"
+1001
+ACAD
+1000
+DSTYLE
+1002
+{
+1070
+   3
+1000
+some suffix
+1002
+}
+  0
+ENDSEC
+", DxfAcadVersion.R14);
+        }
+
+        [Fact]
         public void ReadDimensionWithXDataTest()
         {
             var dimension = (DxfAlignedDimension)Entity("DIMENSION", @"

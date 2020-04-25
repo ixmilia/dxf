@@ -397,6 +397,37 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("}"); // end method
                 }
 
+                //
+                // DxfDimStyle.GenerateStyleDifferenceAsXData
+                //
+                if (Name(tableItem) == "DxfDimStyle")
+                {
+                    AppendLine();
+                    AppendLine("/// <summary>Generates <see cref=\"DxfXData\"/> of the difference between the styles.  Result may be <see langword=\"null\"/>.</summary>");
+                    AppendLine("public static DxfXData GenerateStyleDifferenceAsXData(DxfDimStyle primaryStyle, DxfDimStyle modifiedStyle)");
+                    AppendLine("{");
+                    IncreaseIndent();
+
+                    AppendLine("var namedList = new DxfXDataNamedList(\"DSTYLE\");");
+                    AppendLine();
+
+                    foreach (var property in properties)
+                    {
+                        AppendLine($"if (primaryStyle.{Name(property)} != modifiedStyle.{Name(property)})");
+                        AppendLine("{");
+                        AppendLine($"    namedList.Items.Add(new DxfXDataInteger({Code(property)}));");
+                        AppendLine($"    namedList.Items.Add({XDataValueFromProperty(property, "modifiedStyle")});");
+                        AppendLine("}");
+                        AppendLine();
+                    }
+
+                    AppendLine("return namedList.Items.Count == 0");
+                    AppendLine("    ? null");
+                    AppendLine("    : new DxfXData(\"ACAD\", new[] { namedList });");
+                    DecreaseIndent();
+                    AppendLine("}");
+                }
+
                 DecreaseIndent();
                 AppendLine("}"); // end class
                 DecreaseIndent();
@@ -404,6 +435,47 @@ namespace IxMilia.Dxf.Generator
                 FinishFile();
                 WriteFile(Path.Combine(_outputDir, $"{Name(tableItem)}Generated.cs"));
             }
+        }
+
+        private string XDataValueFromProperty(XElement property, string itemName)
+        {
+            var ctor = XDataConstructorFromCode(Code(property));
+            var writeConverter = WriteConverter(property);
+            var convertedValue = string.Format(writeConverter, $"{itemName}.{Name(property)}");
+            return $"new {ctor}({convertedValue})";
+        }
+
+        private static string XDataConstructorFromCode(int code)
+        {
+            var expectedType = DxfCodePair.ExpectedType(code);
+
+            if (expectedType == typeof(string))
+            {
+                return "DxfXDataString";
+            }
+
+            if (expectedType == typeof(double))
+            {
+                return "DxfXDataReal";
+            }
+
+            if (expectedType == typeof(short))
+            {
+                return "DxfXDataInteger";
+            }
+
+            if (expectedType == typeof(int) ||
+                expectedType == typeof(long))
+            {
+                return "DxfXDataLong";
+            }
+
+            if (expectedType == typeof(bool))
+            {
+                return "DxfXDataInteger";
+            }
+
+            throw new NotSupportedException($"Unable to generate XData from code {code}");
         }
     }
 }

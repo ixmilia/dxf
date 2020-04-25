@@ -1881,5 +1881,89 @@ EOF");
             file.Header.Version = DxfAcadVersion.R13;
             VerifyFileDoesNotContain(file, annotationOffsetText);
         }
+
+        [Fact]
+        public void ReadOle2FrameTest()
+        {
+            var ole = (DxfOle2Frame)Entity("OLE2FRAME", @"
+ 70
+     2
+  3
+Picture (Device Independent Bitmap)
+ 10
+1.0
+ 20
+2.0
+ 30
+0.0
+ 11
+3.0
+ 21
+4.0
+ 31
+0.0
+ 71
+     3
+ 72
+     0
+ 90
+        5
+310
+123456789A
+  1
+OLE
+");
+            Assert.Equal(2, ole.VersionNumber);
+            Assert.Equal("Picture (Device Independent Bitmap)", ole.Description);
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), ole.UpperLeftCorner);
+            Assert.Equal(new DxfPoint(3.0, 4.0, 0.0), ole.LowerRightCorner);
+            Assert.Equal(DxfOleObjectType.Static, ole.ObjectType);
+            Assert.Equal(DxfTileModeDescriptor.InTiledViewport, ole.TileMode);
+            var expected = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x9A };
+            Assert.Equal(expected, ole.Data);
+        }
+
+        [Fact]
+        public void WriteOle2FrameTest()
+        {
+            var ole = new DxfOle2Frame()
+            {
+                VersionNumber = 2,
+                Description = "Picture (Device Independent Bitmap)",
+                UpperLeftCorner = new DxfPoint(1.0, 2.0, 0.0),
+                LowerRightCorner = new DxfPoint(3.0, 4.0, 0.0),
+                ObjectType = DxfOleObjectType.Static,
+                TileMode = DxfTileModeDescriptor.InTiledViewport,
+                Data = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x9A },
+            };
+            EnsureFileContainsEntity(ole, @"
+ 70
+     2
+  3
+Picture (Device Independent Bitmap)
+ 10
+1.0
+ 20
+2.0
+ 30
+0.0
+ 11
+3.0
+ 21
+4.0
+ 31
+0.0
+ 71
+     3
+ 72
+     0
+ 90
+        5
+310
+123456789A
+  1
+OLE
+", DxfAcadVersion.R14);
+        }
     }
 }

@@ -89,7 +89,7 @@ namespace IxMilia.Dxf
             return result;
         }
 
-        public static string HexBytes(byte[] bytes)
+        public static string HexBytes(IEnumerable<byte> bytes)
         {
             var sb = new StringBuilder();
             if (bytes != null)

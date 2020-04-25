@@ -880,13 +880,13 @@
     -->
     <Entity Name="DxfOleFrame" EntityType="OleFrame" SubclassMarker="AcDbOleFrame" TypeString="OLEFRAME" MinVersion="R13">
         <Property Name="VersionNumber" Code="70" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" />
-        <Property Name="BinaryDataLength" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="BinaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" />
+        <Property Name="_binaryDataLength" Code="90" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_binaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbOleFrame&quot;" />
             <WriteProperty Property="VersionNumber" />
-            <WriteProperty Property="BinaryDataLength" />
-            <Foreach Property="BinaryDataStrings">
+            <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
+            <Foreach Property="BinaryHelpers.StringsFromByteArray(Data)">
                 <WriteSpecificValue Code="310" Value="item" />
             </Foreach>
             <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />
@@ -904,8 +904,8 @@
         <Property Name="LowerRightCorner" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="ObjectType" Code="71" Type="DxfOleObjectType" DefaultValue="DxfOleObjectType.Static" ReadConverter="(DxfOleObjectType){0}" WriteConverter="(short){0}" />
         <Property Name="TileMode" Code="72" Type="DxfTileModeDescriptor" DefaultValue="DxfTileModeDescriptor.InTiledViewport" ReadConverter="(DxfTileModeDescriptor){0}" WriteConverter="(short){0}" />
-        <Property Name="BinaryDataLength" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="BinaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" />
+        <Property Name="_binaryDataLength" Code="90" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_binaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbOle2Frame&quot;" />
             <WriteProperty Property="VersionNumber" />
@@ -914,8 +914,8 @@
             <WriteProperty Property="LowerRightCorner" />
             <WriteProperty Property="ObjectType" />
             <WriteProperty Property="TileMode" />
-            <WriteProperty Property="BinaryDataLength" />
-            <Foreach Property="BinaryDataStrings">
+            <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
+            <Foreach Property="BinaryHelpers.StringsFromByteArray(Data)">
                 <WriteSpecificValue Code="310" Value="item" />
             </Foreach>
             <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />

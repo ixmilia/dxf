@@ -67,5 +67,21 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(271, ((DxfXDataInteger)list.Items[2]).Value);
             Assert.Equal(modified.DimensionUnitToleranceDecimalPlaces, ((DxfXDataInteger)list.Items[3]).Value);
         }
+
+        [Fact]
+        public void DimStyleDiffernceAfterClone()
+        {
+            var primary = new DxfDimStyle();
+            var secondary = primary.Clone();
+            secondary.DimensionUnitToleranceDecimalPlaces = 5;
+
+            var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, secondary);
+            var list = (DxfXDataNamedList)xdata.Items.Single();
+
+            Assert.Equal(2, list.Items.Count);
+
+            Assert.Equal(271, ((DxfXDataInteger)list.Items[0]).Value);
+            Assert.Equal(5, ((DxfXDataInteger)list.Items[1]).Value);
+        }
     }
 }

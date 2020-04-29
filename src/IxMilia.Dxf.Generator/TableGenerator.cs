@@ -398,6 +398,17 @@ namespace IxMilia.Dxf.Generator
                 }
 
                 //
+                // Clone
+                //
+                AppendLine();
+                AppendLine($"public {Name(tableItem)} Clone()");
+                AppendLine("{");
+                IncreaseIndent();
+                AppendLine($"return ({Name(tableItem)})this.MemberwiseClone();");
+                DecreaseIndent();
+                AppendLine("}");
+
+                //
                 // DxfDimStyle.GenerateStyleDifferenceAsXData
                 //
                 if (Name(tableItem) == "DxfDimStyle")

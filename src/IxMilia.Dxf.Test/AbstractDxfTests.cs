@@ -132,6 +132,23 @@ EOF
             return item;
         }
 
+        protected static void AssertEquivalent<T>(T expected, T actual)
+        {
+            foreach (var field in typeof(T).GetFields())
+            {
+                var expectedField = field.GetValue(expected);
+                var actualField = field.GetValue(actual);
+                Assert.Equal(expectedField, actualField);
+            }
+
+            foreach (var property in typeof(T).GetProperties())
+            {
+                var expectedProperty = property.GetValue(expected);
+                var actualProperty = property.GetValue(actual);
+                Assert.Equal(expectedProperty, actualProperty);
+            }
+        }
+
         private static void AssertRegexContains(string expected, string actual)
         {
             var regex = CreateMatcherRegex(expected);

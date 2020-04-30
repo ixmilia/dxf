@@ -311,10 +311,13 @@ namespace IxMilia.Dxf.Generator
                 }
 
                 //
-                // FromBuffer
+                // Reader
                 //
                 if (GenerateReaderFunction(tableItem))
                 {
+                    //
+                    // FromBuffer
+                    //
                     AppendLine();
                     AppendLine($"internal static {Name(tableItem)} FromBuffer(DxfCodePairBufferReader buffer)");
                     AppendLine("{");
@@ -333,17 +336,42 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("switch (pair.Code)");
                     AppendLine("{");
                     IncreaseIndent();
-                    if (HasFlags(tableItem))
-                    {
-                        AppendLine("case 70:");
-                        AppendLine("    item.StandardFlags = (int)pair.ShortValue;");
-                        AppendLine("    break;");
-                    }
-
                     AppendLine("case DxfCodePairGroup.GroupCodeNumber:");
                     AppendLine("    var groupName = DxfCodePairGroup.GetGroupName(pair.StringValue);");
                     AppendLine("    item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));");
                     AppendLine("    break;");
+                    AppendLine("case (int)DxfXDataType.ApplicationName:");
+                    AppendLine("    item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);");
+                    AppendLine("    break;");
+                    AppendLine("default:");
+                    AppendLine("    item.ApplyCodePair(pair);");
+                    AppendLine("    break;");
+                    DecreaseIndent();
+                    AppendLine("}"); // end switch
+                    DecreaseIndent();
+                    AppendLine("}"); // end while
+                    AppendLine();
+                    AppendLine("return item;");
+                    DecreaseIndent();
+                    AppendLine("}");// end method
+
+                    //
+                    // ApplyCodePair
+                    //
+                    AppendLine();
+                    AppendLine("private void ApplyCodePair(DxfCodePair pair)");
+                    AppendLine("{");
+                    IncreaseIndent();
+
+                    AppendLine("switch (pair.Code)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    if (HasFlags(tableItem))
+                    {
+                        AppendLine("case 70:");
+                        AppendLine("    StandardFlags = (int)pair.ShortValue;");
+                        AppendLine("    break;");
+                    }
 
                     foreach (var property in properties)
                     {
@@ -356,7 +384,7 @@ namespace IxMilia.Dxf.Generator
                                 var codeType = DxfCodePair.ExpectedType(codeOverrides[i]);
                                 var codeTypeValue = TypeToString(codeType);
                                 AppendLine($"case {codeOverrides[i]}:");
-                                AppendLine($"    item.{Name(property)} = item.{Name(property)}.WithUpdated{prop}(pair.{codeTypeValue});");
+                                AppendLine($"    {Name(property)} = {Name(property)}.WithUpdated{prop}(pair.{codeTypeValue});");
                                 AppendLine("    break;");
                             }
                         }
@@ -369,30 +397,23 @@ namespace IxMilia.Dxf.Generator
                             AppendLine($"case {Code(property)}:");
                             if (AllowMultiples(property))
                             {
-                                AppendLine($"    item.{Name(property)}.Add({string.Format(readConverter, $"pair.{codeTypeValue}")});");
+                                AppendLine($"    {Name(property)}.Add({string.Format(readConverter, $"pair.{codeTypeValue}")});");
                             }
                             else
                             {
-                                AppendLine($"    item.{Name(property)} = {string.Format(readConverter, $"pair.{codeTypeValue}")};");
+                                AppendLine($"    {Name(property)} = {string.Format(readConverter, $"pair.{codeTypeValue}")};");
                             }
 
                             AppendLine("    break;");
                         }
                     }
 
-                    AppendLine("case (int)DxfXDataType.ApplicationName:");
-                    AppendLine("    item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);");
-                    AppendLine("    break;");
                     AppendLine("default:");
-                    AppendLine("    item.TrySetPair(pair);");
+                    AppendLine("    TrySetPair(pair);");
                     AppendLine("    break;");
 
                     DecreaseIndent();
                     AppendLine("}"); // end switch
-                    DecreaseIndent();
-                    AppendLine("}"); // end while
-                    AppendLine();
-                    AppendLine("return item;");
                     DecreaseIndent();
                     AppendLine("}"); // end method
                 }
@@ -419,7 +440,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("{");
                     IncreaseIndent();
 
-                    AppendLine("var namedList = new DxfXDataNamedList(\"DSTYLE\");");
+                    AppendLine("var namedList = new DxfXDataNamedList(XDataStyleName);");
                     AppendLine();
 
                     foreach (var property in properties)

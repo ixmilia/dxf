@@ -92,7 +92,7 @@
     </Table>
     <Table Type="Layer" TypeStringVariable="LayerText">
         <TableItem Name="DxfLayer" ClassName="AcDbLayerTableRecord">
-            <Property Name="Color" Code="62" Type="DxfColor" DefaultValue="DxfColor.FromIndex(7)" ReadConverter="item.ReadColorValue({0})" WriteConverter="GetWritableColorValue({0})" />
+            <Property Name="Color" Code="62" Type="DxfColor" DefaultValue="DxfColor.FromIndex(7)" ReadConverter="ReadColorValue({0})" WriteConverter="GetWritableColorValue({0})" />
             <Property Name="LineTypeName" Code="6" Type="string" DefaultValue="CONTINUOUS" WriteConverter="GetWritableLineTypeName({0})" />
             <Property Name="IsLayerPlotted" Code="290" Type="bool" DefaultValue="true" MinVersion="R2000" />
             <Property Name="LineWeight" Code="370" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" />

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class MiscTests
+    public class MiscTests : AbstractDxfTests
     {
         [Fact]
         public void NoDimStyleDifferenceGeneratesNullXData()
@@ -82,6 +82,24 @@ namespace IxMilia.Dxf.Test
 
             Assert.Equal(271, ((DxfXDataInteger)list.Items[0]).Value);
             Assert.Equal(5, ((DxfXDataInteger)list.Items[1]).Value);
+        }
+
+        [Fact]
+        public void DimStyleFromCustomXData()
+        {
+            var primary = new DxfDimStyle();
+            var secondary = new DxfDimStyle()
+            {
+                DimensionUnitToleranceDecimalPlaces = 5
+            };
+
+            // sanity check that the values are different
+            Assert.NotEqual(primary.DimensionUnitToleranceDecimalPlaces, secondary.DimensionUnitToleranceDecimalPlaces);
+
+            // rebuild dim style from primary with xdata difference; result should equal secondary
+            var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, secondary);
+            Assert.True(primary.TryGetStyleFromXDataDifference(xdata, out var reBuiltStyle));
+            AssertEquivalent(secondary, reBuiltStyle);
         }
     }
 }

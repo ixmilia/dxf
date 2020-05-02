@@ -146,6 +146,21 @@ namespace IxMilia.Dxf.Generator
                         }
 
                         var getset = $"{{ get; {SetterAccessibility(property)}set; }}";
+
+                        var comment = Comment(property);
+                        var headerVar = ExpandCommentOrNull(HeaderVariable(property), "Corresponds to header variable {0}.");
+                        var minVersion = ExpandCommentOrNull(MinVersion(property), "Minimum drawing version {0}.");
+                        var maxVersion = ExpandCommentOrNull(MaxVersion(property), "Maximum drawing version {0}.");
+                        var commentParts = new[] { comment, headerVar, minVersion, maxVersion }.Where(x => x != null).ToList();
+
+                        AppendLine();
+                        if (commentParts.Count > 0)
+                        {
+                            AppendLine("/// <summary>");
+                            AppendLine("/// " + string.Join("  ", commentParts));
+                            AppendLine("/// </summary>");
+                        }
+
                         AppendLine($"{Accessibility(property)} {propertyType} {name} {getset}");
                     }
                 }

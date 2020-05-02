@@ -511,6 +511,16 @@ namespace IxMilia.Dxf.Generator
             return entity.Attribute("EntityType").Value;
         }
 
+        public string ExpandCommentOrNull(string baseComment, string template)
+        {
+            if (baseComment == null)
+            {
+                return null;
+            }
+
+            return string.Format(template, baseComment);
+        }
+
         public bool GenerateReaderFunction(XElement entity)
         {
             return bool.Parse(AttributeOrDefault(entity, "GenerateReaderFunction", "true"));
@@ -666,6 +676,11 @@ namespace IxMilia.Dxf.Generator
         public bool HasXData(XElement xml)
         {
             return bool.Parse(AttributeOrDefault(xml, "HasXData", "false"));
+        }
+
+        public string HeaderVariable(XElement xml)
+        {
+            return AttributeOrDefault(xml, "HeaderVariable");
         }
 
         public string Identifier(string value)

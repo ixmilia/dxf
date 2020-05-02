@@ -19,75 +19,75 @@
     </Table>
     <Table Type="DimStyle" TypeStringVariable="DimStyleText" TableClassName="AcDbDimStyleTable">
         <TableItem Name="DxfDimStyle" ClassName="AcDbDimStyleTableRecord">
-            <Property Name="DimensioningSuffix" Code="3" Type="string" DefaultValue="null" />
-            <Property Name="AlternateDimensioningSuffix" Code="4" Type="string" DefaultValue="null" />
-            <Property Name="ArrowBlockName" Code="5" Type="string" DefaultValue="null" MaxVersion="R14" />
-            <Property Name="FirstArrowBlockName" Code="6" Type="string" DefaultValue="null" MaxVersion="R14" />
-            <Property Name="SecondArrowBlockName" Code="7" Type="string" DefaultValue="null" MaxVersion="R14" />
-            <Property Name="DimensioningScaleFactor" Code="40" Type="double" DefaultValue="1.0" />
-            <Property Name="DimensioningArrowSize" Code="41" Type="double" DefaultValue="0.18" />
-            <Property Name="DimensionExtensionLineOffset" Code="42" Type="double" DefaultValue="0.0625" />
-            <Property Name="DimensionLineIncrement" Code="43" Type="double" DefaultValue="0.38" />
-            <Property Name="DimensionExtensionLineExtension" Code="44" Type="double" DefaultValue="0.18" />
-            <Property Name="DimensionDistanceRoundingValue" Code="45" Type="double" DefaultValue="0.0" />
-            <Property Name="DimensionLineExtension" Code="46" Type="double" DefaultValue="0.0" />
-            <Property Name="DimensionPlusTolerance" Code="47" Type="double" DefaultValue="0.0" />
-            <Property Name="DimensionMinusTolerance" Code="48" Type="double" DefaultValue="0.0" />
-            <Property Name="GenerateDimensionTolerances" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="GenerateDimensionLimits" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="DimensionTextInsideHorizontal" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="DimensionTextOutsideHorizontal" Code="74" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="SuppressFirstDimensionExtensionLine" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="SuppressSecondDimensionExtensionLine" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="TextAboveDimensionLine" Code="77" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="DimensionUnitZeroSuppression" Code="78" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" />
-            <Property Name="DimensionAngleZeroSuppression" Code="79" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R2000" />
-            <Property Name="DimensioningTextHeight" Code="140" Type="double" DefaultValue="0.18" />
-            <Property Name="CenterMarkSize" Code="141" Type="double" DefaultValue="0.09" />
-            <Property Name="DimensioningTickSize" Code="142" Type="double" DefaultValue="0.0" />
-            <Property Name="AlternateDimensioningScaleFactor" Code="143" Type="double" DefaultValue="25.4" />
-            <Property Name="DimensionLinearMeasurementScaleFactor" Code="144" Type="double" DefaultValue="1.0" />
-            <Property Name="DimensionVerticalTextPosition" Code="145" Type="double" DefaultValue="0.0" />
-            <Property Name="DimensionToleranceDisplaceScaleFactor" Code="146" Type="double" DefaultValue="1.0" />
-            <Property Name="DimensionLineGap" Code="147" Type="double" DefaultValue="0.09" />
-            <Property Name="AlternateDimensioningUnitRounding" Code="148" Type="double" DefaultValue="0.0" MinVersion="R2000" />
-            <Property Name="UseAlternateDimensioning" Code="170" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="AlternateDimensioningDecimalPlaces" Code="171" Type="short" DefaultValue="2" />
-            <Property Name="ForceDimensionLineExtensionsOutsideIfTextExists" Code="172" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="UseSeparateArrowBlocksForDimensions" Code="173" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="ForceDimensionTextInsideExtensions" Code="174" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="SuppressOutsideExtensionDimensionLines" Code="175" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-            <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" />
-            <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" />
-            <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" />
-            <Property Name="AngularDimensionPrecision" Code="179" Type="short" DefaultValue="0" MinVersion="R2000" />
-            <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" MinVersion="R13" />
-            <Property Name="DimensionToleranceDecimalPlaces" Code="272" Type="short" DefaultValue="0" MinVersion="R13" />
-            <Property Name="AlternateDimensioningUnits" Code="273" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="AlternateDimensioningToleranceDecimalPlaces" Code="274" Type="short" DefaultValue="0" MinVersion="R13" />
-            <Property Name="DimensioningAngleFormat" Code="275" Type="DxfAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="DimensionFractionFormat" Code="276" Type="DxfDimensionFractionFormat" DefaultValue="DxfDimensionFractionFormat.HorizontalStacking" ReadConverter="(DxfDimensionFractionFormat){0}" WriteConverter="(short){0}" MinVersion="R2000" />
-            <Property Name="DimensionNonAngularUnits" Code="277" Type="DxfNonAngularUnits" DefaultValue="DxfNonAngularUnits.Scientific" ReadConverter="(DxfNonAngularUnits){0}" WriteConverter="(short){0}" MinVersion="R2000" />
-            <Property Name="DimensionDecimalSeparatorChar" Code="278" Type="char" DefaultValue="'.'" ReadConverter="(char){0}" WriteConverter="(short){0}" MinVersion="R2000" />
-            <Property Name="DimensionTextMovementRule" Code="279" Type="DxfDimensionTextMovementRule" DefaultValue="DxfDimensionTextMovementRule.MoveLineWithText" ReadConverter="(DxfDimensionTextMovementRule){0}" WriteConverter="(short){0}" MinVersion="R2000" />
-            <Property Name="DimensionTextJustification" Code="280" Type="DxfDimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="SuppressFirstDimensionExtensionLine" Code="281" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R13" />
-            <Property Name="SuppressSecondDimensionExtensionLine" Code="282" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R13" />
-            <Property Name="DimensionToleranceVerticalJustification" Code="283" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="DimensionToleranceZeroSuppression" Code="284" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="AlternateDimensioningZeroSupression" Code="285" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="AlternateDimensioningToleranceZeroSupression" Code="286" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="DimensionTextAndArrowPlacement" Code="287" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit){0}" WriteConverter="(short){0}" MinVersion="R13" />
-            <Property Name="DimensionCursorControlsTextPosition" Code="288" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R13" />
-            <Property Name="DimensionTextAndArrowPlacement" Code="289" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit){0}" WriteConverter="(short){0}" MinVersion="R2000" />
-            <Property Name="DimensionTextStyle" Code="340" Type="string" DefaultValue="null" MinVersion="R13" />
-            <Property Name="DimensionLeaderBlockName" Code="341" Type="string" DefaultValue="null" MinVersion="R2000" />
-            <Property Name="ArrowBlockName" Code="342" Type="string" DefaultValue="null" MinVersion="R2000" />
-            <Property Name="FirstArrowBlockName" Code="343" Type="string" DefaultValue="null" MinVersion="R2000" />
-            <Property Name="SecondArrowBlockName" Code="344" Type="string" DefaultValue="null" MinVersion="R2000" />
-            <Property Name="DimensionLineWeight" Code="371" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" />
-            <Property Name="DimensionExtensionLineWeight" Code="372" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" />
+            <Property Name="DimensioningSuffix" Code="3" Type="string" DefaultValue="null" HeaderVariable="DIMPOST" />
+            <Property Name="AlternateDimensioningSuffix" Code="4" Type="string" DefaultValue="null" HeaderVariable="DIMAPOST" />
+            <Property Name="ArrowBlockName" Code="5" Type="string" DefaultValue="null" MaxVersion="R14" HeaderVariable="DIMBLK" Comment="Obsolete." />
+            <Property Name="FirstArrowBlockName" Code="6" Type="string" DefaultValue="null" MaxVersion="R14" HeaderVariable="DIMBLK1" Comment="Obsolete." />
+            <Property Name="SecondArrowBlockName" Code="7" Type="string" DefaultValue="null" MaxVersion="R14" HeaderVariable="DIMBLK2" Comment="Obsolete." />
+            <Property Name="DimensioningScaleFactor" Code="40" Type="double" DefaultValue="1.0" HeaderVariable="DIMSCALE" />
+            <Property Name="DimensioningArrowSize" Code="41" Type="double" DefaultValue="0.18" HeaderVariable="DIMASZ" />
+            <Property Name="DimensionExtensionLineOffset" Code="42" Type="double" DefaultValue="0.0625" HeaderVariable="DIMEXO" />
+            <Property Name="DimensionLineIncrement" Code="43" Type="double" DefaultValue="0.38" HeaderVariable="DIMDLI" />
+            <Property Name="DimensionExtensionLineExtension" Code="44" Type="double" DefaultValue="0.18" HeaderVariable="DIMEXE" />
+            <Property Name="DimensionDistanceRoundingValue" Code="45" Type="double" DefaultValue="0.0" HeaderVariable="DIMRND" />
+            <Property Name="DimensionLineExtension" Code="46" Type="double" DefaultValue="0.0" HeaderVariable="DIMDLE" />
+            <Property Name="DimensionPlusTolerance" Code="47" Type="double" DefaultValue="0.0" HeaderVariable="DIMTP" />
+            <Property Name="DimensionMinusTolerance" Code="48" Type="double" DefaultValue="0.0" HeaderVariable="DIMTM" />
+            <Property Name="GenerateDimensionTolerances" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMTOL" />
+            <Property Name="GenerateDimensionLimits" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMLIM" />
+            <Property Name="DimensionTextInsideHorizontal" Code="73" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMTIH" />
+            <Property Name="DimensionTextOutsideHorizontal" Code="74" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMTOH" />
+            <Property Name="SuppressFirstDimensionExtensionLine" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMSE1" />
+            <Property Name="SuppressSecondDimensionExtensionLine" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMSE2" />
+            <Property Name="TextAboveDimensionLine" Code="77" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMTAD" />
+            <Property Name="DimensionUnitZeroSuppression" Code="78" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" HeaderVariable="DIMZIN" />
+            <Property Name="DimensionAngleZeroSuppression" Code="79" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R2000" HeaderVariable="DIMAZIN" />
+            <Property Name="DimensioningTextHeight" Code="140" Type="double" DefaultValue="0.18" HeaderVariable="DIMTXT" />
+            <Property Name="CenterMarkSize" Code="141" Type="double" DefaultValue="0.09" HeaderVariable="DIMCEN" />
+            <Property Name="DimensioningTickSize" Code="142" Type="double" DefaultValue="0.0" HeaderVariable="DIMTSZ" />
+            <Property Name="AlternateDimensioningScaleFactor" Code="143" Type="double" DefaultValue="25.4" HeaderVariable="DIMALTF" />
+            <Property Name="DimensionLinearMeasurementScaleFactor" Code="144" Type="double" DefaultValue="1.0" HeaderVariable="DIMLFAC" />
+            <Property Name="DimensionVerticalTextPosition" Code="145" Type="double" DefaultValue="0.0" HeaderVariable="DIMTVP" />
+            <Property Name="DimensionToleranceDisplaceScaleFactor" Code="146" Type="double" DefaultValue="1.0" HeaderVariable="DIMTFAC" />
+            <Property Name="DimensionLineGap" Code="147" Type="double" DefaultValue="0.09" HeaderVariable="DIMGAP" />
+            <Property Name="AlternateDimensioningUnitRounding" Code="148" Type="double" DefaultValue="0.0" MinVersion="R2000" HeaderVariable="DIMALTRND" />
+            <Property Name="UseAlternateDimensioning" Code="170" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMALT" />
+            <Property Name="AlternateDimensioningDecimalPlaces" Code="171" Type="short" DefaultValue="2" HeaderVariable="DIMALTD" />
+            <Property Name="ForceDimensionLineExtensionsOutsideIfTextExists" Code="172" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMTOFL" />
+            <Property Name="UseSeparateArrowBlocksForDimensions" Code="173" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMSAH" />
+            <Property Name="ForceDimensionTextInsideExtensions" Code="174" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMTIX" />
+            <Property Name="SuppressOutsideExtensionDimensionLines" Code="175" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMSOXD" />
+            <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRD" />
+            <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRE" />
+            <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRT" />
+            <Property Name="AngularDimensionPrecision" Code="179" Type="short" DefaultValue="0" MinVersion="R2000" HeaderVariable="DIMADEC" />
+            <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMUNIT" Comment="Obsolete.  Use &lt;see cref=&quot;DimensionNonAngularUnits&quot;/&gt; and &lt;see cref=&quot;DimensionFractionFormat&quot;/&gt; instead." />
+            <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" MinVersion="R13" HeaderVariable="DIMDEC" />
+            <Property Name="DimensionToleranceDecimalPlaces" Code="272" Type="short" DefaultValue="0" MinVersion="R13" HeaderVariable="DIMTDEC" />
+            <Property Name="AlternateDimensioningUnits" Code="273" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMALTU" />
+            <Property Name="AlternateDimensioningToleranceDecimalPlaces" Code="274" Type="short" DefaultValue="0" MinVersion="R13" HeaderVariable="DIMALTTD" />
+            <Property Name="DimensioningAngleFormat" Code="275" Type="DxfAngleFormat" DefaultValue="DxfAngleFormat.DecimalDegrees" ReadConverter="(DxfAngleFormat){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMAUNIT" />
+            <Property Name="DimensionFractionFormat" Code="276" Type="DxfDimensionFractionFormat" DefaultValue="DxfDimensionFractionFormat.HorizontalStacking" ReadConverter="(DxfDimensionFractionFormat){0}" WriteConverter="(short){0}" MinVersion="R2000" HeaderVariable="DIMFRAC" />
+            <Property Name="DimensionNonAngularUnits" Code="277" Type="DxfNonAngularUnits" DefaultValue="DxfNonAngularUnits.Scientific" ReadConverter="(DxfNonAngularUnits){0}" WriteConverter="(short){0}" MinVersion="R2000" HeaderVariable="DIMLUNIT" />
+            <Property Name="DimensionDecimalSeparatorChar" Code="278" Type="char" DefaultValue="'.'" ReadConverter="(char){0}" WriteConverter="(short){0}" MinVersion="R2000" HeaderVariable="DIMDSEP" />
+            <Property Name="DimensionTextMovementRule" Code="279" Type="DxfDimensionTextMovementRule" DefaultValue="DxfDimensionTextMovementRule.MoveLineWithText" ReadConverter="(DxfDimensionTextMovementRule){0}" WriteConverter="(short){0}" MinVersion="R2000" HeaderVariable="DIMTMOVE" />
+            <Property Name="DimensionTextJustification" Code="280" Type="DxfDimensionTextJustification" DefaultValue="DxfDimensionTextJustification.AboveLineCenter" ReadConverter="(DxfDimensionTextJustification){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMJUST" />
+            <Property Name="SuppressFirstDimensionExtensionLine" Code="281" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R13" HeaderVariable="DIMSD1" />
+            <Property Name="SuppressSecondDimensionExtensionLine" Code="282" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R13" HeaderVariable="DIMSD2" />
+            <Property Name="DimensionToleranceVerticalJustification" Code="283" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMTOLJ" />
+            <Property Name="DimensionToleranceZeroSuppression" Code="284" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMTZIN" />
+            <Property Name="AlternateDimensioningZeroSupression" Code="285" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMALTZ" />
+            <Property Name="AlternateDimensioningToleranceZeroSupression" Code="286" Type="DxfUnitZeroSuppression" DefaultValue="DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches" ReadConverter="(DxfUnitZeroSuppression){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMALTTZ" />
+            <Property Name="DimensionTextAndArrowPlacement" Code="287" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMFIT" Comment="Obsolete.  Use &lt;see cref=&quot;DimensionTextAndArrowPlacement&quot;/&gt; and &lt;see cref=&quot;DimensionTextMovementRule&quot;/&gt; instead." />
+            <Property Name="DimensionCursorControlsTextPosition" Code="288" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R13" HeaderVariable="DIMUPT" />
+            <Property Name="DimensionTextAndArrowPlacement" Code="289" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit){0}" WriteConverter="(short){0}" MinVersion="R2000" HeaderVariable="DIMATFIT" />
+            <Property Name="DimensionTextStyle" Code="340" Type="string" DefaultValue="null" MinVersion="R13" HeaderVariable="DIMTXSTY" />
+            <Property Name="DimensionLeaderBlockName" Code="341" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMLDRBLK" />
+            <Property Name="ArrowBlockName" Code="342" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMBLK" />
+            <Property Name="FirstArrowBlockName" Code="343" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMBLK1" />
+            <Property Name="SecondArrowBlockName" Code="344" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMBLK2" />
+            <Property Name="DimensionLineWeight" Code="371" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" HeaderVariable="DIMLWD" />
+            <Property Name="DimensionExtensionLineWeight" Code="372" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" HeaderVariable="DIMLWE" />
         </TableItem>
     </Table>
     <Table Type="Layer" TypeStringVariable="LayerText">

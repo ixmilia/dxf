@@ -57,7 +57,22 @@ namespace IxMilia.Dxf
         SuppressZeroFeetAndZeroInches = 0,
         IncludeZeroFeetAndZeroInches = 1,
         IncludeZeroFeetAndSuppressZeroInches = 2,
-        IncludeZeroInchesAndSuppressZeroFeet = 3
+        IncludeZeroInchesAndSuppressZeroFeet = 3,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressLeadingZerosInDecimalDimensions = 4,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressTrailingZerosInDecimalDimensions = 8,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressBothLeadingAndTrailingZerosInDecimalDimensions = 12
     }
 
     public enum DxfAngleFormat

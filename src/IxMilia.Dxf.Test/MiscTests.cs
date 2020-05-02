@@ -101,5 +101,24 @@ namespace IxMilia.Dxf.Test
             Assert.True(primary.TryGetStyleFromXDataDifference(xdata, out var reBuiltStyle));
             AssertEquivalent(secondary, reBuiltStyle);
         }
+
+        [Fact]
+        public void DimStyleGetVariable()
+        {
+            var style = new DxfDimStyle()
+            {
+                DimensionUnitToleranceDecimalPlaces = 5
+            };
+            Assert.Equal((short)5, style.GetVariable("DIMDEC"));
+        }
+
+        [Fact]
+        public void DimStyleSetVariable()
+        {
+            var style = new DxfDimStyle();
+            Assert.NotEqual(5, style.DimensionUnitToleranceDecimalPlaces);
+            style.SetVariable("DIMDEC", (short)5);
+            Assert.Equal(5, style.DimensionUnitToleranceDecimalPlaces);
+        }
     }
 }

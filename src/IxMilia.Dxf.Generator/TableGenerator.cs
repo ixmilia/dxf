@@ -444,11 +444,64 @@ namespace IxMilia.Dxf.Generator
                 DecreaseIndent();
                 AppendLine("}");
 
-                //
-                // DxfDimStyle.GenerateStyleDifferenceAsXData
-                //
                 if (Name(tableItem) == "DxfDimStyle")
                 {
+                    //
+                    // DxfDimStyle.SetVariable
+                    //
+                    AppendLine();
+                    AppendLine("public void SetVariable(string name, object value)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    AppendLine("switch (name?.ToUpper())");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    var setProperties = new HashSet<string>();
+                    foreach (var property in properties)
+                    {
+                        if (setProperties.Add(HeaderVariable(property)))
+                        {
+                            AppendLine($"case \"{HeaderVariable(property)}\":");
+                            AppendLine($"    {Name(property)} = ({Type(property)})value;");
+                            AppendLine("    break;");
+                        }
+                    }
+
+                    DecreaseIndent();
+                    AppendLine("}"); // end switch
+                    DecreaseIndent();
+                    AppendLine("}"); // end method
+
+                    //
+                    // DxfDimStyle.GetVariable
+                    //
+                    AppendLine();
+                    AppendLine("public object GetVariable(string name)");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    AppendLine("switch (name?.ToUpper())");
+                    AppendLine("{");
+                    IncreaseIndent();
+                    var getProperties = new HashSet<string>();
+                    foreach (var property in properties)
+                    {
+                        if (getProperties.Add(HeaderVariable(property)))
+                        {
+                            AppendLine($"case \"{HeaderVariable(property)}\":");
+                            AppendLine($"    return {Name(property)};");
+                        }
+                    }
+
+                    AppendLine("default:");
+                    AppendLine("    return null;");
+                    DecreaseIndent();
+                    AppendLine("}"); // end switch
+                    DecreaseIndent();
+                    AppendLine("}"); // end method
+
+                    //
+                    // DxfDimStyle.GenerateStyleDifferenceAsXData
+                    //
                     AppendLine();
                     AppendLine("/// <summary>Generates <see cref=\"DxfXData\"/> of the difference between the styles.  Result may be <see langword=\"null\"/>.</summary>");
                     AppendLine("public static DxfXData GenerateStyleDifferenceAsXData(DxfDimStyle primaryStyle, DxfDimStyle modifiedStyle)");

@@ -1347,6 +1347,62 @@ AcDbAlignedDimension
         }
 
         [Fact]
+        public void ReadAngularTwoLineDimensionTest()
+        {
+            var dim = (DxfAngularTwoLineDimension)Entity("DIMENSION", @"
+100
+AcDbDimension
+ 10
+1.0
+ 20
+2.0
+ 30
+3.0
+ 11
+4.0
+ 21
+5.0
+ 31
+6.0
+ 70
+    130
+100
+AcDb2LineAngularDimension
+ 13
+7.0
+ 23
+8.0
+ 33
+9.0
+ 14
+10.0
+ 24
+11.0
+ 34
+12.0
+ 15
+13.0
+ 25
+14.0
+ 35
+15.0
+ 16
+16.0
+ 26
+17.0
+ 36
+18.0
+");
+            Assert.True(dim.IsAtUserDefinedLocation);
+            Assert.Equal(new DxfPoint(1.0, 2.0, 3.0), dim.SecondExtensionLineP1);
+            Assert.Equal(new DxfPoint(4.0, 5.0, 6.0), dim.TextMidPoint);
+            Assert.Equal(new DxfPoint(7.0, 8.0, 9.0), dim.FirstExtensionLineP1);
+            Assert.Equal(new DxfPoint(10.0, 11.0, 12.0), dim.FirstExtensionLineP2);
+            Assert.Equal(new DxfPoint(13.0, 14.0, 15.0), dim.SecondExtensionLineP2);
+            Assert.Equal(new DxfPoint(16.0, 17.0, 18.0), dim.DimensionLineArcLocation);
+        }
+
+        [Fact]
         public void WriteDimensionWithTrailingXDataTest()
         {
             var dim = new DxfAlignedDimension();

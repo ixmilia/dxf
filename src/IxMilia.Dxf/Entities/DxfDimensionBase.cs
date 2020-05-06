@@ -10,6 +10,16 @@ namespace IxMilia.Dxf.Entities
 
         public bool IsAtUserDefinedLocation { get; set; } = false;
 
+        protected override void CopyManualValues(DxfEntity other)
+        {
+            if (other is DxfDimensionBase otherDim)
+            {
+                IsBlockReferenceReferencedByThisBlockOnly = otherDim.IsBlockReferenceReferencedByThisBlockOnly;
+                IsOrdinateXType = otherDim.IsOrdinateXType;
+                IsAtUserDefinedLocation = otherDim.IsAtUserDefinedLocation;
+            }
+        }
+
         private DxfDimensionType HandleDimensionType(short value)
         {
             // reader

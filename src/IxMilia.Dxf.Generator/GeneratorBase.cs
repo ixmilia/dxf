@@ -69,7 +69,7 @@ namespace IxMilia.Dxf.Generator
             }
         }
 
-        public void AppendCopyConstructor(XElement item, string baseClass)
+        public void AppendCopyConstructor(XElement item)
         {
             var copyConstructorAccessibility = CopyConstructor(item);
             if (copyConstructorAccessibility != null)
@@ -87,6 +87,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("    : base(other)");
                     AppendLine("{");
                     IncreaseIndent();
+                    AppendLine("CopyManualValues(other);");
                     AppendLine("((IDxfHasXDataHidden)this).XDataHidden = ((IDxfHasXDataHidden)other).XDataHidden;");
                     foreach (var property in GetPropertiesAndPointers(item))
                     {

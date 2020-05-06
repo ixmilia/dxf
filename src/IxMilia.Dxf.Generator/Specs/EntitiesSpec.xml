@@ -471,6 +471,23 @@
             <Value>DefinitionPoint3</Value>
         </Extents>
     </Entity>
+    <!-- angular, 2 line -->
+    <Entity Name="DxfAngularTwoLineDimension" EntityType="Dimension" SubclassMarker="AcDb2LineAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Angular">
+        <Property Name="FirstExtensionLineP1" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
+        <Property Name="FirstExtensionLineP2" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
+        <Property Name="SecondExtensionLineP2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
+        <Property Name="DimensionLineArcLocation" Code="16" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="16,26,36" />
+        <Extents>
+            <!-- from DxfDimensionBase -->
+            <Value>TextMidPoint</Value>
+            <!-- from this entity -->
+            <Value>FirstExtensionLineP1</Value>
+            <Value>FirstExtensionLineP2</Value>
+            <Value>SecondExtensionLineP1</Value>
+            <Value>SecondExtensionLineP2</Value>
+            <Value>DimensionLineArcLocation</Value>
+        </Extents>
+    </Entity>
     <!--
 
     ELLIPSE

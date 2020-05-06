@@ -228,6 +228,10 @@ namespace IxMilia.Dxf.Entities
         {
         }
 
+        protected virtual void CopyManualValues(DxfEntity other)
+        {
+        }
+
         protected virtual DxfEntity PostParse()
         {
             return this;

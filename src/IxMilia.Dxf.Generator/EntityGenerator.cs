@@ -327,7 +327,7 @@ namespace IxMilia.Dxf.Generator
             AppendXData(entity);
             AppendDefaultConstructor(entity);
             AppendParameterizedConstructors(entity);
-            AppendCopyConstructor(entity, "DxfEntity");
+            AppendCopyConstructor(entity);
             AppendInitializeMethod(entity, BaseClass(entity, "") == "DxfDimensionBase" ? $"this.DimensionType = DxfDimensionType.{Tag(entity)};" : null);
             AppendAddValuePairsMethod(entity);
             AppendTrySetPairMethod(entity);

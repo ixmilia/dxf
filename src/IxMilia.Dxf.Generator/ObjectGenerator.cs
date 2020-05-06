@@ -278,7 +278,7 @@ namespace IxMilia.Dxf.Generator
             AppendXData(obj);
             AppendDefaultConstructor(obj);
             AppendParameterizedConstructors(obj);
-            AppendCopyConstructor(obj, "DxfObject");
+            AppendCopyConstructor(obj);
             AppendInitializeMethod(obj);
             AppendAddValuePairsMethod(obj);
 

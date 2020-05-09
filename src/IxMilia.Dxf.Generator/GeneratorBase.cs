@@ -834,6 +834,12 @@ namespace IxMilia.Dxf.Generator
             }
         }
 
+        public IEnumerable<string> WriteCustomCode(XElement spec)
+        {
+            var code = AttributeOrDefault(spec, "Code");
+            return new[] { code };
+        }
+
         public IEnumerable<string> WriteProperty(XElement spec, XElement entity)
         {
             var property = GetPropertiesAndPointers(entity).Single(p => Name(p) == spec.Attribute("Property").Value);
@@ -894,6 +900,8 @@ namespace IxMilia.Dxf.Generator
             }
         }
 
+        private int _foreachLevel = 0;
+
         public IEnumerable<string> WriteValue(XElement spec, XElement entity)
         {
             switch (spec.Name.LocalName)
@@ -914,9 +922,12 @@ namespace IxMilia.Dxf.Generator
                         lines.Add("{");
                     }
 
-                    lines.Add($"{indent}foreach (var item in {property})");
+                    var itemSuffix = _foreachLevel == 0 ? "" : _foreachLevel.ToString();
+                    lines.Add($"{indent}foreach (var item{itemSuffix} in {property})");
                     lines.Add($"{indent}{{");
+                    _foreachLevel++;
                     lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => $"{indent}    {l}"));
+                    _foreachLevel--;
                     lines.Add($"{indent}}}");
                     if (condition != null)
                     {
@@ -927,6 +938,8 @@ namespace IxMilia.Dxf.Generator
                     return lines;
                 case "WriteExtensionData":
                     return new[] { "AddExtensionValuePairs(pairs, version, outputHandles);" };
+                case "WriteCustomCode":
+                    return WriteCustomCode(spec);
                 default:
                     throw new NotSupportedException();
             }

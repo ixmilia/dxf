@@ -54,6 +54,32 @@ namespace IxMilia.Dxf.Entities
         Outline = 2
     }
 
+    public enum DxfGradientColorMode
+    {
+        TwoColorGradient = 0,
+        SingleColorGradient = 1
+    }
+
+    public enum DxfHatchPatternFillMode
+    {
+        PatternFill = 0,
+        SolidFill = 1
+    }
+
+    public enum DxfHatchPatternType
+    {
+        UserDefined = 0,
+        Predefined = 1,
+        Custom = 2
+    }
+
+    public enum DxfHatchStyle
+    {
+        OddParity = 0,
+        OutermostAreaOnly = 1,
+        EntireArea = 2
+    }
+
     public enum DxfImageClippingBoundaryType
     {
         Rectangular = 1,
@@ -292,6 +318,16 @@ namespace IxMilia.Dxf.Entities
             }
 
             return PostParse();
+        }
+
+        protected static bool BoolLong(long l)
+        {
+            return DxfCommonConverters.BoolLong(l);
+        }
+
+        protected static long BoolLong(bool b)
+        {
+            return DxfCommonConverters.BoolLong(b);
         }
 
         protected static bool BoolShort(short s)

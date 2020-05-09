@@ -121,12 +121,21 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="WriteCustomCode">
+        <xs:complexType>
+            <xs:attribute name="Code" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="Foreach">
         <xs:complexType>
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element ref="WriteProperty" />
                     <xs:element ref="WriteSpecificValue" />
+                    <xs:element ref="Foreach" />
+                    <xs:element ref="WriteExtensionData" />
+                    <xs:element ref="WriteCustomCode" />
                 </xs:choice>
             </xs:sequence>
             <xs:attribute name="Property" type="xs:string" use="required" />
@@ -145,6 +154,7 @@
                     <xs:element ref="WriteSpecificValue" />
                     <xs:element ref="Foreach" />
                     <xs:element ref="WriteExtensionData" />
+                    <xs:element ref="WriteCustomCode" />
                 </xs:choice>
             </xs:sequence>
         </xs:complexType>

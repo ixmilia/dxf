@@ -336,6 +336,7 @@ EOF
             var unsupportedTypes = new[]
             {
                 // unsupported because I need to write more information with them
+                typeof(DxfHatch), // need to fill in the data
                 typeof(DxfInsert), // need a block to insert
                 typeof(DxfLeader), // needs vertices
                 typeof(DxfMLine), // need to set MLINESTYLE and MLINESTYLE dictionary

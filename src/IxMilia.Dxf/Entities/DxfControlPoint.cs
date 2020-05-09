@@ -12,5 +12,10 @@ namespace IxMilia.Dxf.Entities
             Point = point;
             Weight = weight;
         }
+
+        public DxfControlPoint(DxfPoint point)
+            : this(point, 1.0)
+        {
+        }
     }
 }

@@ -21,6 +21,16 @@ namespace IxMilia.Dxf
             return result;
         }
 
+        public static bool BoolLong(long l)
+        {
+            return l != 0;
+        }
+
+        public static long BoolLong(bool b)
+        {
+            return b ? 1 : 0;
+        }
+
         public static bool BoolShort(short s)
         {
             return s != 0;

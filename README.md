@@ -117,7 +117,6 @@ save the file as either R12 or the newest version possible (e.g., R2013 or R2010
 ## Status
 
 Support for DXF files is complete from versions R10 through R2014 _EXCEPT_ for the following entities:
-- HATCH
 - MESH
 - MLEADER
 - SURFACE

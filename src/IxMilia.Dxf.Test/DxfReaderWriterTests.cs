@@ -1452,11 +1452,11 @@ POINT
 999
 ================================================================================
 999
-                       unsupported entity (HATCH) between two supported entities
+      unsupported entity (NOT_A_SUPPORTED_ENTITY) between two supported entities
 999
 ================================================================================
   0
-HATCH
+NOT_A_SUPPORTED_ENTITY
   0
 POINT
  10

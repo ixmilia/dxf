@@ -2021,5 +2021,576 @@ Picture (Device Independent Bitmap)
 OLE
 ", DxfAcadVersion.R14);
         }
+
+        [Fact]
+        public void ReadHatchPatternDefinitionTest()
+        {
+            var hatch = (DxfHatch)Entity("HATCH", @"
+ 77
+     1
+ 78
+     2
+ 53
+1.0
+ 43
+2.0
+ 44
+3.0
+ 45
+4.0
+ 46
+5.0
+ 79
+     2
+ 49
+6.0
+ 49
+7.0
+ 53
+8.0
+ 43
+9.0
+ 44
+10.0
+ 45
+11.0
+ 46
+12.0
+ 79
+     2
+ 49
+13.0
+ 49
+14.0
+ 47
+99.0
+");
+            Assert.True(hatch.IsPatternDoubled); // specified before pattern definition lines
+            Assert.Equal(99.0, hatch.PixelSize); // specified after pattern definition lines
+
+            Assert.Equal(2, hatch.PatternDefinitionLines.Count);
+            var line1 = hatch.PatternDefinitionLines[0];
+            Assert.Equal(1.0, line1.Angle);
+            Assert.Equal(2.0, line1.BasePoint.X);
+            Assert.Equal(3.0, line1.BasePoint.Y);
+            Assert.Equal(4.0, line1.Offset.X);
+            Assert.Equal(5.0, line1.Offset.Y);
+            AssertArrayEqual(new [] { 6.0, 7.0 }, line1.DashLengths.ToArray());
+
+            var line2 = hatch.PatternDefinitionLines[1];
+            Assert.Equal(8.0, line2.Angle);
+            Assert.Equal(9.0, line2.BasePoint.X);
+            Assert.Equal(10.0, line2.BasePoint.Y);
+            Assert.Equal(11.0, line2.Offset.X);
+            Assert.Equal(12.0, line2.Offset.Y);
+            AssertArrayEqual(new [] { 13.0, 14.0 }, line2.DashLengths.ToArray());
+        }
+
+        [Fact]
+        public void WriteHatchPatternDefinitionTest()
+        {
+            var hatch = new DxfHatch();
+            hatch.IsPatternDoubled = true; // written before pattern definition lines
+            hatch.PixelSize = 99.0; // written after pattern definition lines
+
+            var line1 = new DxfHatch.PatternDefinitionLine();
+            line1.Angle = 1.0;
+            line1.BasePoint = new DxfPoint(2.0, 3.0, 0.0);
+            line1.Offset = new DxfVector(4.0, 5.0, 0.0);
+            line1.DashLengths.Add(6.0);
+            line1.DashLengths.Add(7.0);
+
+            var line2 = new DxfHatch.PatternDefinitionLine();
+            line2.Angle = 8.0;
+            line2.BasePoint = new DxfPoint(9.0, 10.0, 0.0);
+            line2.Offset = new DxfVector(11.0, 12.0, 0.0);
+            line2.DashLengths.Add(13.0);
+            line2.DashLengths.Add(14.0);
+
+            hatch.PatternDefinitionLines.Add(line1);
+            hatch.PatternDefinitionLines.Add(line2);
+            EnsureFileContainsEntity(hatch, @"
+ 77
+     1
+ 78
+     2
+ 53
+1.0
+ 43
+2.0
+ 44
+3.0
+ 45
+4.0
+ 46
+5.0
+ 79
+     2
+ 49
+6.0
+ 49
+7.0
+ 53
+8.0
+ 43
+9.0
+ 44
+10.0
+ 45
+11.0
+ 46
+12.0
+ 79
+     2
+ 49
+13.0
+ 49
+14.0
+ 47
+99.0
+", DxfAcadVersion.R14);
+        }
+
+        [Fact]
+        public void ReadHatchSeedPointsTest()
+        {
+            var hatch = (DxfHatch)Entity("HATCH", @"
+ 47
+99.0
+ 98
+        2
+ 10
+1.0
+ 20
+2.0
+ 10
+3.0
+ 20
+4.0
+450
+        1
+");
+            Assert.Equal(99.0, hatch.PixelSize); // specified before seed points
+            Assert.True(hatch.IsGradient); // specified after seed points
+
+            Assert.Equal(2, hatch.SeedPoints.Count);
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), hatch.SeedPoints[0]);
+            Assert.Equal(new DxfPoint(3.0, 4.0, 0.0), hatch.SeedPoints[1]);
+        }
+
+        [Fact]
+        public void WriteHatchSeedPointsTest()
+        {
+            var hatch = new DxfHatch();
+            hatch.PixelSize = 99.0; // written before seed points
+            hatch.IsGradient = true; // written after seed points
+            hatch.SeedPoints.Add(new DxfPoint(1.0, 2.0, 0.0));
+            hatch.SeedPoints.Add(new DxfPoint(3.0, 4.0, 0.0));
+            EnsureFileContainsEntity(hatch, @"
+ 47
+99.0
+ 98
+        2
+ 10
+1.0
+ 20
+2.0
+ 10
+3.0
+ 20
+4.0
+450
+        1
+", DxfAcadVersion.R2004);
+        }
+
+        [Fact]
+        public void ReadHatchBoundaryPathDataTest()
+        {
+            var hatch = (DxfHatch)Entity("HATCH", @"
+ 10
+97.0
+ 20
+98.0
+ 30
+99.0
+ 71
+     1
+999
+======================================== boundary path count
+ 91
+        2
+999
+============================ start of polyline boundary path
+ 92
+        2
+ 72
+     1
+ 73
+     1
+ 93
+        2
+ 10
+1.0
+ 20
+2.0
+ 10
+3.0
+ 20
+4.0
+ 42
+5.0
+999
+==================================== source boundary objects
+ 97
+        2
+330
+ABC
+330
+DEF
+999
+============================== start of second boundary path
+ 92
+        8
+ 93
+        4
+999
+================================================ linear edge
+ 72
+     1
+ 10
+1.0
+ 20
+2.0
+ 11
+3.0
+ 21
+4.0
+999
+========================================== circular arc edge
+ 72
+     2
+ 10
+1.0
+ 20
+2.0
+ 40
+3.0
+ 50
+4.0
+ 51
+5.0
+ 73
+     1
+999
+========================================== elliptic arc edge
+ 72
+     3
+ 10
+1.0
+ 20
+2.0
+ 11
+3.0
+ 21
+4.0
+ 40
+5.0
+ 50
+6.0
+ 51
+7.0
+ 73
+     1
+999
+================================================ spline edge
+ 72
+     4
+ 94
+        2
+ 73
+     1
+ 74
+     1
+ 95
+        2
+ 96
+        2
+ 40
+1.0
+ 40
+2.0
+ 10
+3.0
+ 20
+4.0
+ 10
+5.0
+ 20
+6.0
+ 42
+7.0
+ 42
+8.0
+ 97
+        2
+ 11
+9.0
+ 21
+10.0
+ 11
+11.0
+ 21
+12.0
+ 12
+13.0
+ 22
+14.0
+ 13
+15.0
+ 23
+16.0
+ 97
+0
+999
+======================== back to HATCH (HatchStyle property)
+ 75
+     2
+");
+            Assert.Equal(new DxfPoint(97.0, 98.0, 99.0), hatch.ElevationPoint); // specified before boundary paths, shares codes with edge data
+            Assert.True(hatch.IsAssociative); // specified before boundary paths
+            Assert.Equal(DxfHatchStyle.EntireArea, hatch.HatchStyle); // specified after boundary paths
+
+            Assert.Equal(2, hatch.BoundaryPaths.Count);
+            var polyPath = (DxfHatch.PolylineBoundaryPath)hatch.BoundaryPaths[0];
+            Assert.True(polyPath.IsClosed);
+            Assert.Equal(2, polyPath.Vertices.Count);
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), polyPath.Vertices[0].Location);
+            Assert.Equal(0.0, polyPath.Vertices[0].Bulge);
+            Assert.Equal(new DxfPoint(3.0, 4.0, 0.0), polyPath.Vertices[1].Location);
+            Assert.Equal(5.0, polyPath.Vertices[1].Bulge);
+            AssertArrayEqual(new uint[] { 0xABC, 0xDEF }, polyPath.BoundaryHandles.ToArray());
+
+            var nonPolyPath = (DxfHatch.NonPolylineBoundaryPath)hatch.BoundaryPaths[1];
+            Assert.Equal(DxfHatch.BoundaryPathType.Textbox, nonPolyPath.PathType);
+            Assert.Equal(4, nonPolyPath.Edges.Count);
+
+            var linearEdge = (DxfHatch.LineBoundaryPathEdge)nonPolyPath.Edges[0];
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), linearEdge.StartPoint);
+            Assert.Equal(new DxfPoint(3.0, 4.0, 0.0), linearEdge.EndPoint);
+
+            var circularArcEdge = (DxfHatch.CircularArcBoundaryPathEdge)nonPolyPath.Edges[1];
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), circularArcEdge.Center);
+            Assert.Equal(3.0, circularArcEdge.Radius);
+            Assert.Equal(4.0, circularArcEdge.StartAngle);
+            Assert.Equal(5.0, circularArcEdge.EndAngle);
+            Assert.True(circularArcEdge.IsCounterClockwise);
+
+            var ellipticArcEdge = (DxfHatch.EllipticArcBoundaryPathEdge)nonPolyPath.Edges[2];
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), ellipticArcEdge.Center);
+            Assert.Equal(new DxfVector(3.0, 4.0, 0.0), ellipticArcEdge.MajorAxis);
+            Assert.Equal(5.0, ellipticArcEdge.MinorAxisRatio);
+            Assert.Equal(6.0, ellipticArcEdge.StartAngle);
+            Assert.Equal(7.0, ellipticArcEdge.EndAngle);
+            Assert.True(ellipticArcEdge.IsCounterClockwise);
+
+            var splineEdge = (DxfHatch.SplineBoundaryPathEdge)nonPolyPath.Edges[3];
+            Assert.Equal(2, splineEdge.Degree);
+            Assert.True(splineEdge.IsRational);
+            Assert.True(splineEdge.IsPeriodic);
+            AssertArrayEqual(new[] { 1.0, 2.0 }, splineEdge.Knots.ToArray());
+            AssertArrayEqual(new[]
+                {
+                    new DxfControlPoint(new DxfPoint(3.0, 4.0, 0.0), 7.0),
+                    new DxfControlPoint(new DxfPoint(5.0, 6.0, 0.0), 8.0)
+                },
+                splineEdge.ControlPoints.ToArray());
+            AssertArrayEqual(new[]
+                {
+                    new DxfPoint(9.0, 10.0, 0.0),
+                    new DxfPoint(11.0, 12.0, 0.0)
+                },
+                splineEdge.FitPoints.ToArray());
+            Assert.Equal(new DxfVector(13.0, 14.0, 0.0), splineEdge.StartTangent);
+            Assert.Equal(new DxfVector(15.0, 16.0, 0.0), splineEdge.EndTangent);
+        }
+
+        [Fact]
+        public void WriteHatchBoundaryPathDataTest()
+        {
+            var hatch = new DxfHatch();
+            hatch.IsAssociative = true; // written before boundary paths
+            hatch.HatchStyle = DxfHatchStyle.EntireArea; // written after boundary paths
+
+            var polyPath = new DxfHatch.PolylineBoundaryPath();
+            polyPath.IsClosed = true;
+            polyPath.Vertices.Add(new DxfVertex(new DxfPoint(1.0, 2.0, 0.0)));
+            polyPath.Vertices.Add(new DxfVertex(new DxfPoint(3.0, 4.0, 0.0)) { Bulge = 5.0 });
+            polyPath.BoundaryHandles.Add(0xABC);
+            polyPath.BoundaryHandles.Add(0xDEF);
+            hatch.BoundaryPaths.Add(polyPath);
+
+            var nonPolyPath = new DxfHatch.NonPolylineBoundaryPath(DxfHatch.BoundaryPathType.Textbox);
+            var linearEdge = new DxfHatch.LineBoundaryPathEdge();
+            linearEdge.StartPoint = new DxfPoint(1.0, 2.0, 0.0);
+            linearEdge.EndPoint = new DxfPoint(3.0, 4.0, 0.0);
+            nonPolyPath.Edges.Add(linearEdge);
+            var circularArcEdge = new DxfHatch.CircularArcBoundaryPathEdge();
+            circularArcEdge.Center = new DxfPoint(1.0, 2.0, 0.0);
+            circularArcEdge.Radius = 3.0;
+            circularArcEdge.StartAngle = 4.0;
+            circularArcEdge.EndAngle = 5.0;
+            circularArcEdge.IsCounterClockwise = true;
+            nonPolyPath.Edges.Add(circularArcEdge);
+            var ellipticArcEdge = new DxfHatch.EllipticArcBoundaryPathEdge();
+            ellipticArcEdge.Center = new DxfPoint(1.0, 2.0, 0.0);
+            ellipticArcEdge.MajorAxis = new DxfVector(3.0, 4.0, 0.0);
+            ellipticArcEdge.MinorAxisRatio = 5.0;
+            ellipticArcEdge.StartAngle = 6.0;
+            ellipticArcEdge.EndAngle = 7.0;
+            ellipticArcEdge.IsCounterClockwise = true;
+            nonPolyPath.Edges.Add(ellipticArcEdge);
+            var splineEdge = new DxfHatch.SplineBoundaryPathEdge();
+            splineEdge.Degree = 2;
+            splineEdge.IsRational = true;
+            splineEdge.IsPeriodic = true;
+            splineEdge.Knots.Add(1.0);
+            splineEdge.Knots.Add(2.0);
+            splineEdge.ControlPoints.Add(new DxfControlPoint(new DxfPoint(3.0, 4.0, 0.0), 7.0));
+            splineEdge.ControlPoints.Add(new DxfControlPoint(new DxfPoint(5.0, 6.0, 0.0), 8.0));
+            splineEdge.FitPoints.Add(new DxfPoint(9.0, 10.0, 0.0));
+            splineEdge.FitPoints.Add(new DxfPoint(11.0, 12.0, 0.0));
+            splineEdge.StartTangent = new DxfVector(13.0, 14.0, 0.0);
+            splineEdge.EndTangent = new DxfVector(15.0, 16.0, 0.0);
+            nonPolyPath.Edges.Add(splineEdge);
+            hatch.BoundaryPaths.Add(nonPolyPath);
+
+            EnsureFileContainsEntity(hatch, @"
+ 71
+     1
+ 91
+        2
+ 92
+        2
+ 72
+     1
+ 73
+     1
+ 93
+        2
+ 10
+1.0
+ 20
+2.0
+ 10
+3.0
+ 20
+4.0
+ 42
+5.0
+ 97
+        2
+330
+ABC
+330
+DEF
+ 92
+        8
+ 93
+        4
+ 72
+     1
+ 10
+1.0
+ 20
+2.0
+ 11
+3.0
+ 21
+4.0
+ 72
+     2
+ 10
+1.0
+ 20
+2.0
+ 40
+3.0
+ 50
+4.0
+ 51
+5.0
+ 73
+     1
+ 72
+     3
+ 10
+1.0
+ 20
+2.0
+ 11
+3.0
+ 21
+4.0
+ 40
+5.0
+ 50
+6.0
+ 51
+7.0
+ 73
+     1
+ 72
+     4
+ 94
+        2
+ 73
+     1
+ 74
+     1
+ 95
+        2
+ 96
+        2
+ 40
+1.0
+ 40
+2.0
+ 10
+3.0
+ 20
+4.0
+ 10
+5.0
+ 20
+6.0
+ 42
+7.0
+ 42
+8.0
+ 97
+        2
+ 11
+9.0
+ 21
+10.0
+ 11
+11.0
+ 21
+12.0
+ 12
+13.0
+ 22
+14.0
+ 13
+15.0
+ 23
+16.0
+ 97
+0
+ 75
+     2
+", DxfAcadVersion.R14);
+        }
     }
 }

@@ -519,7 +519,80 @@
     HATCH
 
     -->
-    <!-- TODO MinVersion="R14" -->
+    <Entity Name="DxfHatch" EntityType="Hatch" SubclassMarker="AcDbHatch" TypeString="HATCH" GenerateReaderFunction="false" MinVersion="R14">
+        <Property Name="ElevationPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
+        <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
+        <Property Name="PatternName" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="FillMode" Code="70" Type="DxfHatchPatternFillMode" DefaultValue="DxfHatchPatternFillMode.PatternFill" ReadConverter="(DxfHatchPatternFillMode){0}" WriteConverter="(short){0}" />
+        <Property Name="FillColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" MinVersion="R2004" />
+        <Property Name="IsAssociative" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
+        <Property Name="_boundaryPathCount" Code="91" Type="int" DefaultValue="0" />
+        <Property Name="BoundaryPaths" Code="92" Type="BoundaryPathBase" DefaultValue="" AllowMultiples="true" />
+        <Property Name="HatchStyle" Code="75" Type="DxfHatchStyle" DefaultValue="DxfHatchStyle.OddParity" ReadConverter="(DxfHatchStyle){0}" WriteConverter="(short){0}" />
+        <Property Name="PatternType" Code="76" Type="DxfHatchPatternType" DefaultValue="DxfHatchPatternType.UserDefined" ReadConverter="(DxfHatchPatternType){0}" WriteConverter="(short){0}" />
+        <Property Name="PatternAngle" Code="52" Type="double" DefaultValue="0.0" WriteCondition="FillMode == DxfHatchPatternFillMode.PatternFill" />
+        <Property Name="PatternScale" Code="41" Type="double" DefaultValue="1.0" WriteCondition="FillMode == DxfHatchPatternFillMode.PatternFill" />
+        <Property Name="IsPatternDoubled" Code="77" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" WriteCondition="FillMode == DxfHatchPatternFillMode.PatternFill" />
+        <Property Name="_patternDefinitionLineCount" Code="78" Type="int" DefaultValue="0" WriteConverter="(short){0}" />
+        <Property Name="PatternDefinitionLines" Code="53" Type="PatternDefinitionLine" DefaultValue="" AllowMultiples="true" />
+        <Property Name="PixelSize" Code="47" Type="double" DefaultValue="1.0" />
+        <Property Name="_seedPointCount" Code="98" Type="int" Accessibility="private" DefaultValue="0" />
+        <Property Name="SeedPoints" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" AllowMultiples="true" CodeOverrides="10,20" />
+        <Property Name="IsGradient" Code="450" Type="bool" DefaultValue="false" ReadConverter="BoolLong({0})" WriteConverter="BoolLong({0})" MinVersion="R2004" />
+        <Property Name="_zero" Code="451" Type="long" DefaultValue="0" Accessibility="private" MinVersion="R2004" Comment="Reserved for future use." />
+        <Property Name="GradientColorMode" Code="452" Type="DxfGradientColorMode" DefaultValue="DxfGradientColorMode.TwoColorGradient" ReadConverter="(DxfGradientColorMode){0}" WriteConverter="(long){0}" MinVersion="R2004" Comment="Only used by dialog code." />
+        <Property Name="NumberOfColors" Code="453" Type="long" DefaultValue="0" MinVersion="R2004" Comment="Unknown usage." />
+        <Property Name="GradientRotationAngle" Code="460" Type="double" DefaultValue="0.0" MinVersion="R2004" Comment="Rotation angle for gradients in radians." />
+        <Property Name="GradientDefinitionShift" Code="461" Type="double" DefaultValue="0.0" MinVersion="R2004" Comment="Unknown usage." />
+        <Property Name="ColorTint" Code="462" Type="double" DefaultValue="0.0" MinVersion="R2004" Comment="Range is [0.0, 1.0]." />
+        <Property Name="_reserved" Code="463" Type="double" DefaultValue="0.0" Accessibility="private" MinVersion="R2004" Comment="Reserved for future use." />
+        <Property Name="StringValue" Code="470" Type="string" DefaultValue="LINEAR" MinVersion="R2004" Comment="Unknown usage." />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbHatch&quot;" />
+            <WriteProperty Property="ElevationPoint" />
+            <WriteProperty Property="ExtrusionDirection" />
+            <WriteProperty Property="PatternName" />
+            <WriteProperty Property="FillMode" />
+            <WriteProperty Property="FillColor" />
+            <WriteProperty Property="IsAssociative" />
+            <WriteSpecificValue Code="91" Value="BoundaryPaths.Count" />
+            <Foreach Property="BoundaryPaths">
+                <WriteCustomCode Code="item.AddValuePairs(pairs, version, outputHandles);" />
+            </Foreach>
+            <WriteProperty Property="HatchStyle" />
+            <WriteProperty Property="PatternType" />
+            <WriteProperty Property="PatternAngle" />
+            <WriteProperty Property="PatternScale" />
+            <WriteProperty Property="IsPatternDoubled" />
+            <WriteSpecificValue Code="78" Value="(short)PatternDefinitionLines.Count" />
+            <Foreach Property="PatternDefinitionLines">
+                <WriteSpecificValue Code="53" Value="item.Angle" />
+                <WriteSpecificValue Code="43" Value="item.BasePoint.X" />
+                <WriteSpecificValue Code="44" Value="item.BasePoint.Y" />
+                <WriteSpecificValue Code="45" Value="item.Offset.X" />
+                <WriteSpecificValue Code="46" Value="item.Offset.Y" />
+                <WriteSpecificValue Code="79" Value="(short)item.DashLengths.Count" />
+                <Foreach Property="item.DashLengths">
+                    <WriteSpecificValue Code="49" Value="item1" />
+                </Foreach>
+            </Foreach>
+            <WriteProperty Property="PixelSize" />
+            <WriteSpecificValue Code="98" Value="SeedPoints.Count" />
+            <Foreach Property="SeedPoints">
+                <WriteSpecificValue Code="10" Value="item.X" />
+                <WriteSpecificValue Code="20" Value="item.Y" />
+            </Foreach>
+            <WriteProperty Property="IsGradient" />
+            <WriteProperty Property="_zero" />
+            <WriteProperty Property="GradientColorMode" />
+            <WriteProperty Property="NumberOfColors" />
+            <WriteProperty Property="GradientRotationAngle" />
+            <WriteProperty Property="GradientDefinitionShift" />
+            <WriteProperty Property="ColorTint" />
+            <WriteProperty Property="_reserved" />
+            <WriteProperty Property="StringValue" />
+        </WriteOrder>
+    </Entity>
     <!--
 
     HELIX

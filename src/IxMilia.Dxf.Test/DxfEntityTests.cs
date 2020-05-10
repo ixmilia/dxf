@@ -41,9 +41,9 @@ namespace IxMilia.Dxf.Test
 
         private static DxfEntity EmptyEntity(string entityType)
         {
-            var file = Section("ENTITIES", string.Format(@"
-  0
-{0}", entityType));
+            var file = Section("ENTITIES",
+                (0, entityType)
+            );
             var entity = file.Entities.Single();
             Assert.Equal("0", entity.Layer);
             Assert.Equal("BYLAYER", entity.LineTypeName);
@@ -54,20 +54,25 @@ namespace IxMilia.Dxf.Test
             return entity;
         }
 
-        private static void EnsureFileContainsEntity(DxfEntity entity, string text, DxfAcadVersion version = DxfAcadVersion.R12)
+        private static void EnsureFileContainsEntity(DxfEntity entity, params (int code, object value)[] codePairs)
         {
-            var file = new DxfFile();
-            file.Header.Version = version;
-            file.Entities.Add(entity);
-            VerifyFileContains(file, text, sectionType: DxfSectionType.Entities);
+            EnsureFileContainsEntity(entity, DxfAcadVersion.R12, codePairs);
         }
 
-        private static void EnsureFileDoesNotContainWithEntity(DxfEntity entity, string unwantedText, DxfAcadVersion version = DxfAcadVersion.R12)
+        private static void EnsureFileContainsEntity(DxfEntity entity, DxfAcadVersion version, params (int code, object value)[] codePairs)
         {
             var file = new DxfFile();
             file.Header.Version = version;
             file.Entities.Add(entity);
-            VerifyFileDoesNotContain(file, unwantedText, sectionType: DxfSectionType.Entities);
+            VerifyFileContains(file, DxfSectionType.Entities, codePairs);
+        }
+
+        private static void EnsureFileDoesNotContainWithEntity(DxfEntity entity, DxfAcadVersion version, params (int code, object value)[] codePairs)
+        {
+            var file = new DxfFile();
+            file.Header.Version = version;
+            file.Entities.Add(entity);
+            VerifyFileDoesNotContain(file, DxfSectionType.Entities, codePairs);
         }
 
         [Fact]
@@ -95,54 +100,36 @@ namespace IxMilia.Dxf.Test
                 new DxfCodePair(1, "foo"),
                 new DxfCodePair(2, "bar")
             }));
-            EnsureFileContainsEntity(line, @"
-  0
-LINE
-  5
-#
-102
-{APP_NAME
-  1
-foo
-  2
-bar
-102
-}
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 11
-0.0
- 21
-0.0
- 31
-0.0
-", DxfAcadVersion.R14);
+            EnsureFileContainsEntity(line,
+                DxfAcadVersion.R14,
+                (0, "LINE"),
+                (5, "#"),
+                (102, "{APP_NAME"),
+                (1, "foo"),
+                (2, "bar"),
+                (102, "}"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbLine"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (11, 0.0),
+                (21, 0.0),
+                (31, 0.0)
+            );
         }
 
         [Fact]
         public void WriteEntityWithNullLayerTest()
         {
             var line = new DxfLine() { Layer = "" };
-            EnsureFileContainsEntity(line, @"
-  0
-LINE
-  5
-#
-100
-AcDbEntity
-  8
-0
-");
+            EnsureFileContainsEntity(line,
+                (0, "LINE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0")
+            );
         }
 
         [Fact]
@@ -836,230 +823,138 @@ AcDbEntity
         [Fact]
         public void WriteDefaultLineTest()
         {
-            EnsureFileContainsEntity(new DxfLine(), @"
-  0
-LINE
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDbLine
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 11
-0.0
- 21
-0.0
- 31
-0.0
-  0
-");
+            EnsureFileContainsEntity(new DxfLine(),
+                (0, "LINE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbLine"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (11, 0.0),
+                (21, 0.0),
+                (31, 0.0)
+            );
         }
 
         [Fact]
         public void WriteDefaultCircleTest()
         {
-            EnsureFileContainsEntity(new DxfCircle(), @"
-  0
-CIRCLE
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDbCircle
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 40
-0.0
-  0
-");
+            EnsureFileContainsEntity(new DxfCircle(),
+                (0, "CIRCLE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbCircle"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (40, 0.0)
+            );
         }
 
         [Fact]
         public void WriteDefaultArcTest()
         {
-            EnsureFileContainsEntity(new DxfArc(), @"
-  0
-ARC
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDbCircle
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 40
-0.0
-100
-AcDbArc
- 50
-0.0
- 51
-360.0
-  0
-");
+            EnsureFileContainsEntity(new DxfArc(),
+                (0, "ARC"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbCircle"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (40, 0.0),
+                (100, "AcDbArc"),
+                (50, 0.0),
+                (51, 360.0)
+            );
         }
 
         [Fact]
         public void WriteDefaultEllipseTest()
         {
-            EnsureFileContainsEntity(new DxfEllipse(), @"
-  0
-ELLIPSE
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDbEllipse
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 11
-1.0
- 21
-0.0
- 31
-0.0
- 40
-1.0
- 41
-0.0
- 42
-6.28318530717959
-  0
-", DxfAcadVersion.R13);
+            EnsureFileContainsEntity(new DxfEllipse(),
+                DxfAcadVersion.R13,
+                (0, "ELLIPSE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbEllipse"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (11, 1.0),
+                (21, 0.0),
+                (31, 0.0),
+                (40, 1.0),
+                (41, 0.0),
+                (42, Math.PI * 2.0)
+            );
         }
 
         [Fact]
         public void WriteDefaultTextTest()
         {
-            EnsureFileContainsEntity(new DxfText(), @"
-  0
-TEXT
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDbText
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 40
-1.0
-  1
-
-100
-AcDbText
-  0
-");
+            EnsureFileContainsEntity(new DxfText(),
+                (0, "TEXT"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbText"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (40, 1.0),
+                (1, ""),
+                (100, "AcDbText")
+            );
         }
 
         [Fact]
         public void WriteDefaultPolylineTest()
         {
-            EnsureFileContainsEntity(new DxfPolyline(), @"
-  0
-POLYLINE
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDb2dPolyline
- 66
-1
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  0
-SEQEND
-  5
-#
-100
-AcDbEntity
-  8
-0
-  0
-");
+            EnsureFileContainsEntity(new DxfPolyline(),
+                (0, "POLYLINE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDb2dPolyline"),
+                (66, 1),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (0, "SEQEND"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0")
+            );
         }
 
         [Fact]
         public void WriteDefaultSolidTest()
         {
-            EnsureFileContainsEntity(new DxfSolid(), @"
-  0
-SOLID
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDbTrace
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 11
-0.0
- 21
-0.0
- 31
-0.0
- 12
-0.0
- 22
-0.0
- 32
-0.0
- 13
-0.0
- 23
-0.0
- 33
-0.0
-");
+            EnsureFileContainsEntity(new DxfSolid(),
+                (0, "SOLID"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbTrace"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (11, 0.0),
+                (21, 0.0),
+                (31, 0.0),
+                (12, 0.0),
+                (22, 0.0),
+                (32, 0.0),
+                (13, 0.0),
+                (23, 0.0),
+                (33, 0.0)
+            );
         }
 
         [Fact]
@@ -1071,100 +966,62 @@ AcDbTrace
                     Layer = "bar",
                     Thickness = 7,
                     ExtrusionDirection = new DxfVector(8, 9, 10)
-                }, @"
-  0
-LINE
-  5
-#
-100
-AcDbEntity
-  8
-bar
- 62
-7
-100
-AcDbLine
- 39
-7.0
- 10
-1.0
- 20
-2.0
- 30
-3.0
- 11
-4.0
- 21
-5.0
- 31
-6.0
-210
-8.0
-220
-9.0
-230
-10.0
-  0
-");
+                },
+                (0, "LINE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "bar"),
+                (62, 7),
+                (100, "AcDbLine"),
+                (39, 7.0),
+                (10, 1.0),
+                (20, 2.0),
+                (30, 3.0),
+                (11, 4.0),
+                (21, 5.0),
+                (31, 6.0),
+                (210, 8.0),
+                (220, 9.0),
+                (230, 10.0)
+            );
         }
 
         [Fact]
         public void WriteDimensionTest()
         {
-            EnsureFileContainsEntity(new DxfAlignedDimension()
-            {
-                Color = DxfColor.FromIndex(7),
-                DefinitionPoint1 = new DxfPoint(330.25, 1310.0, 330.25),
-                DefinitionPoint2 = new DxfPoint(330.25, 1282.0, 0.0),
-                DefinitionPoint3 = new DxfPoint(319.75, 1282.0, 0.0),
-                Layer = "bar",
-                Text = "text"
-            }, @"
-  0
-DIMENSION
-  5
-#
-100
-AcDbEntity
-  8
-bar
- 62
-7
-100
-AcDbDimension
- 10
-330.25
- 20
-1310.0
- 30
-330.25
- 11
-0.0
- 21
-0.0
- 31
-0.0
- 70
-1
-  1
-text
-  3
-STANDARD
-100
-AcDbAlignedDimension
- 13
-330.25
- 23
-1282.0
- 33
-0.0
- 14
-319.75
- 24
-1282.0
- 34
-0.0
-");
+            EnsureFileContainsEntity(
+                new DxfAlignedDimension()
+                {
+                    Color = DxfColor.FromIndex(7),
+                    DefinitionPoint1 = new DxfPoint(330.25, 1310.0, 330.25),
+                    DefinitionPoint2 = new DxfPoint(330.25, 1282.0, 0.0),
+                    DefinitionPoint3 = new DxfPoint(319.75, 1282.0, 0.0),
+                    Layer = "bar",
+                    Text = "text"
+                },
+                (0, "DIMENSION"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "bar"),
+                (62, 7),
+                (100, "AcDbDimension"),
+                (10, 330.25),
+                (20, 1310.0),
+                (30, 330.25),
+                (11, 0.0),
+                (21, 0.0),
+                (31, 0.0),
+                (70, 1),
+                (1, "text"),
+                (3, "STANDARD"),
+                (100, "AcDbAlignedDimension"),
+                (13, 330.25),
+                (23, 1282.0),
+                (33, 0.0),
+                (14, 319.75),
+                (24, 1282.0),
+                (34, 0.0)
+            );
         }
 
         [Fact]
@@ -1217,23 +1074,16 @@ AcDbAlignedDimension
                             new DxfXDataInteger(9),
                         })
                 });
-            EnsureFileContainsEntity(dim, @"
-1001
-ACAD
-1000
-DSTYLE
-1002
-{
-1070
-   271
-1070
-     9
-1002
-}
-  0
-ENDSEC
-", DxfAcadVersion.R14);
-            // the trailing 0/ENDSEC ensures the XData is the last thing written
+            EnsureFileContainsEntity(dim,
+                DxfAcadVersion.R14,
+                (1001, "ACAD"),
+                (1000, "DSTYLE"),
+                (1002, "{"),
+                (1070, 271),
+                (1070, 9),
+                (1002, "}"),
+                (0, "ENDSEC") // the trailing 0/ENDSEC ensures the XData is the last thing written
+            );
         }
 
         [Fact]
@@ -1247,22 +1097,16 @@ ENDSEC
             };
             var dim = new DxfAlignedDimension();
             dim.XData = DxfDimStyle.GenerateStyleDifferenceAsXData(standardDimStyle, customDimStyle);
-            EnsureFileContainsEntity(dim, @"
-1001
-ACAD
-1000
-DSTYLE
-1002
-{
-1070
-   3
-1000
-some suffix
-1002
-}
-  0
-ENDSEC
-", DxfAcadVersion.R14);
+            EnsureFileContainsEntity(dim,
+                DxfAcadVersion.R14,
+                (1001, "ACAD"),
+                (1000, "DSTYLE"),
+                (1002, "{"),
+                (1070, 3),
+                (1000, "some suffix"),
+                (1002, "}"),
+                (0, "ENDSEC") // the trailing 0/ENDSEC ensures the XData is the last thing written
+            );
         }
 
         [Fact]
@@ -1311,90 +1155,50 @@ ENDSEC
             poly.Vertices.Add(new DxfVertex());
             poly.Vertices.Add(new DxfVertex());
             file.Entities.Add(poly);
-            VerifyFileContains(file, @"
-  0
-SECTION
-  2
-ENTITIES
-  0
-POLYLINE
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-100
-AcDb2dPolyline
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  0
-VERTEX
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-100
-AcDbVertex
-100
-AcDb2dVertex
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 70
-0
- 50
-0.0
-  0
-VERTEX
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-100
-AcDbVertex
-100
-AcDb2dVertex
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 70
-0
- 50
-0.0
-  0
-SEQEND
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-  0
-ENDSEC
-");
+            VerifyFileContains(file,
+                DxfSectionType.Entities,
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                (0, "POLYLINE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (100, "AcDb2dPolyline"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (0, "VERTEX"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (100, "AcDbVertex"),
+                (100, "AcDb2dVertex"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (70, 0),
+                (50, 0.0),
+                (0, "VERTEX"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (100, "AcDbVertex"),
+                (100, "AcDb2dVertex"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (70, 0),
+                (50, 0.0),
+                (0, "SEQEND"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (0, "ENDSEC")
+            );
         }
 
         [Fact]
@@ -1407,92 +1211,51 @@ ENDSEC
             poly.Vertices.Add(new DxfVertex());
             poly.Is3DPolyline = true;
             file.Entities.Add(poly);
-            VerifyFileContains(file, @"
-  0
-SECTION
-  2
-ENTITIES
-  0
-POLYLINE
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-100
-AcDb3dPolyline
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 70
-8
-  0
-VERTEX
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-100
-AcDbVertex
-100
-AcDb3dPolylineVertex
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 70
-32
- 50
-0.0
-  0
-VERTEX
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-100
-AcDbVertex
-100
-AcDb3dPolylineVertex
- 10
-0.0
- 20
-0.0
- 30
-0.0
- 70
-32
- 50
-0.0
-  0
-SEQEND
-  5
-#
-100
-AcDbEntity
-  8
-0
-370
-0
-  0
-ENDSEC
-");
+            VerifyFileContains(file,
+                DxfSectionType.Entities,
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                (0, "POLYLINE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (100, "AcDb3dPolyline"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (70, 8),
+                (0, "VERTEX"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (100, "AcDbVertex"),
+                (100, "AcDb3dPolylineVertex"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (70, 32),
+                (50, 0.0),
+                (0, "VERTEX"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (100, "AcDbVertex"),
+                (100, "AcDb3dPolylineVertex"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (70, 32),
+                (50, 0.0),
+                (0, "SEQEND"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (370, 0),
+                (0, "ENDSEC")
+            );
         }
 
         [Fact]
@@ -1503,42 +1266,26 @@ ENDSEC
             lwpolyline.Vertices.Add(new DxfLwPolylineVertex() { X = 1.0, Y = 2.5 });
             lwpolyline.Vertices.Add(new DxfLwPolylineVertex() { X = -1.0, Y = 2.5, Bulge = 0.7 });
             lwpolyline.Vertices.Add(new DxfLwPolylineVertex() { X = -2.0, Y = 0.0 });
-            EnsureFileContainsEntity(lwpolyline, @"
-  0
-LWPOLYLINE
-  5
-#
-100
-AcDbEntity
-  8
-0
-100
-AcDbPolyline
- 90
-4
- 70
-0
- 10
-2.0
- 20
-0.0
- 42
-0.7
- 10
-1.0
- 20
-2.5
- 10
--1.0
- 20
-2.5
- 42
-0.7
- 10
--2.0
- 20
-0.0
-", DxfAcadVersion.R14);
+            EnsureFileContainsEntity(lwpolyline,
+                DxfAcadVersion.R14,
+                (0, "LWPOLYLINE"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbPolyline"),
+                (90, 4),
+                (70, 0),
+                (10, 2.0),
+                (20, 0.0),
+                (42, 0.7),
+                (10, 1.0),
+                (20, 2.5),
+                (10, -1.0),
+                (20, 2.5),
+                (42, 0.7),
+                (10, -2.0),
+                (20, 0.0)
+            );
         }
 
         [Fact]
@@ -1546,14 +1293,14 @@ AcDbPolyline
         {
             var att = new DxfAttribute();
             att.MText = new DxfMText() { Text = "mtext-value" };
-            EnsureFileContainsEntity(att, @"
-  0
-ATTRIB
-", DxfAcadVersion.R13);
-            EnsureFileContainsEntity(att, @"
-  0
-MTEXT
-", DxfAcadVersion.R13);
+            EnsureFileContainsEntity(att,
+                DxfAcadVersion.R13,
+                (0, "ATTRIB")
+            );
+            EnsureFileContainsEntity(att,
+                DxfAcadVersion.R13,
+                (0, "MTEXT")
+            );
         }
 
         [Fact]
@@ -1564,28 +1311,22 @@ MTEXT
             spline.ControlPoints.Add(new DxfControlPoint(new DxfPoint(2.1, 2.2, 2.3), 22.0));
 
             // control points
-            EnsureFileContainsEntity(spline, @"
- 10
-1.1
- 20
-1.2
- 30
-1.3
- 10
-2.1
- 20
-2.2
- 30
-2.3
-", version: DxfAcadVersion.R13);
+            EnsureFileContainsEntity(spline,
+                DxfAcadVersion.R13,
+                (10, 1.1),
+                (20, 1.2),
+                (30, 1.3),
+                (10, 2.1),
+                (20, 2.2),
+                (30, 2.3)
+            );
 
             // weights
-            EnsureFileContainsEntity(spline, @"
- 41
-11.0
- 41
-22.0
-", version: DxfAcadVersion.R13);
+            EnsureFileContainsEntity(spline,
+                DxfAcadVersion.R13,
+                (41, 11.0),
+                (41, 22.0)
+            );
         }
 
         [Fact]
@@ -1596,28 +1337,22 @@ MTEXT
             spline.ControlPoints.Add(new DxfControlPoint(new DxfPoint(2.1, 2.2, 2.3), 1.0));
 
             // control points
-            EnsureFileContainsEntity(spline, @"
- 10
-1.1
- 20
-1.2
- 30
-1.3
- 10
-2.1
- 20
-2.2
- 30
-2.3
-", version: DxfAcadVersion.R13);
+            EnsureFileContainsEntity(spline,
+                DxfAcadVersion.R13,
+                (10, 1.1),
+                (20, 1.2),
+                (30, 1.3),
+                (10, 2.1),
+                (20, 2.2),
+                (30, 2.3)
+            );
 
             // weights
-            EnsureFileDoesNotContainWithEntity(spline, @"
- 41
-1.0
- 41
-1.0
-", version: DxfAcadVersion.R13);
+            EnsureFileDoesNotContainWithEntity(spline,
+                DxfAcadVersion.R13,
+                (41, 1.0),
+                (41, 1.0)
+            );
         }
 
         [Fact]
@@ -1683,10 +1418,16 @@ MTEXT
             file.Entities.Add(new DxfProxyEntity());
 
             file.Header.Version = DxfAcadVersion.R14;
-            VerifyFileContains(file, "ACAD_PROXY_ENTITY");
+            VerifyFileContains(file,
+                DxfSectionType.Entities,
+                (0, "ACAD_PROXY_ENTITY")
+            );
 
             file.Header.Version = DxfAcadVersion.R13;
-            VerifyFileDoesNotContain(file, "ACAD_PROXY_ENTITY");
+            VerifyFileDoesNotContain(file,
+                DxfSectionType.Entities,
+                (0, "ACAD_PROXY_ENTITY")
+            );
         }
 
         [Fact]
@@ -1698,20 +1439,21 @@ MTEXT
                 AnnotationOffset = new DxfVector(42.0, 43.0, 44.0),
             });
 
-            // annotation offset is only written for >= R14
-            var annotationOffsetText = @"
-213
-42.0
-223
-43.0
-233
-44.0
-";
+            // only written on >= R14
             file.Header.Version = DxfAcadVersion.R14;
-            VerifyFileContains(file, annotationOffsetText);
-
+            VerifyFileContains(file,
+                DxfSectionType.Entities,
+                (213, 42.0),
+                (223, 43.0),
+                (233, 44.0)
+            );
             file.Header.Version = DxfAcadVersion.R13;
-            VerifyFileDoesNotContain(file, annotationOffsetText);
+            VerifyFileDoesNotContain(file,
+                DxfSectionType.Entities,
+                (213, 42.0),
+                (223, 43.0),
+                (233, 44.0)
+            );
         }
 
         [Fact]
@@ -1755,34 +1497,22 @@ MTEXT
                 TileMode = DxfTileModeDescriptor.InTiledViewport,
                 Data = new byte[] { 0x12, 0x34, 0x56, 0x78, 0x9A },
             };
-            EnsureFileContainsEntity(ole, @"
- 70
-     2
-  3
-Picture (Device Independent Bitmap)
- 10
-1.0
- 20
-2.0
- 30
-0.0
- 11
-3.0
- 21
-4.0
- 31
-0.0
- 71
-     3
- 72
-     0
- 90
-        5
-310
-123456789A
-  1
-OLE
-", DxfAcadVersion.R14);
+            EnsureFileContainsEntity(ole,
+                DxfAcadVersion.R14,
+                (70, 2),
+                (3, "Picture (Device Independent Bitmap)"),
+                (10, 1.0),
+                (20, 2.0),
+                (30, 0.0),
+                (11, 3.0),
+                (21, 4.0),
+                (31, 0.0),
+                (71, 3),
+                (72, 0),
+                (90, 5),
+                (310, "123456789A"),
+                (1, "OLE")
+            );
         }
 
         [Fact]
@@ -1857,46 +1587,32 @@ OLE
 
             hatch.PatternDefinitionLines.Add(line1);
             hatch.PatternDefinitionLines.Add(line2);
-            EnsureFileContainsEntity(hatch, @"
- 77
-     1
- 78
-     2
- 53
-1.0
- 43
-2.0
- 44
-3.0
- 45
-4.0
- 46
-5.0
- 79
-     2
- 49
-6.0
- 49
-7.0
- 53
-8.0
- 43
-9.0
- 44
-10.0
- 45
-11.0
- 46
-12.0
- 79
-     2
- 49
-13.0
- 49
-14.0
- 47
-99.0
-", DxfAcadVersion.R14);
+            EnsureFileContainsEntity(hatch,
+                DxfAcadVersion.R14,
+                (77, 1), // IsPatternDoubled, specified before pattern definition
+                // pattern definition start
+                (78, 2), // line count
+                // line 1 start
+                (53, 1.0), // angle
+                (43, 2.0), // base point
+                (44, 3.0),
+                (45, 4.0), // offset
+                (46, 5.0),
+                (79, 2), // dash lengths
+                (49, 6.0),
+                (49, 7.0),
+                // line 2 start
+                (53, 8.0),
+                (43, 9.0),
+                (44, 10.0),
+                (45, 11.0),
+                (46, 12.0),
+                (79, 2),
+                (49, 13.0),
+                (49, 14.0),
+                // PixelSize, specified  after pattern definition lines
+                (47, 99.0)
+            );
         }
 
         [Fact]
@@ -1927,22 +1643,16 @@ OLE
             hatch.IsGradient = true; // written after seed points
             hatch.SeedPoints.Add(new DxfPoint(1.0, 2.0, 0.0));
             hatch.SeedPoints.Add(new DxfPoint(3.0, 4.0, 0.0));
-            EnsureFileContainsEntity(hatch, @"
- 47
-99.0
- 98
-        2
- 10
-1.0
- 20
-2.0
- 10
-3.0
- 20
-4.0
-450
-        1
-", DxfAcadVersion.R2004);
+            EnsureFileContainsEntity(hatch,
+                DxfAcadVersion.R2004,
+                (47, 99.0), // PixelSize, specified before seed points
+                (98, 2),
+                (10, 1.0), // seed point 1
+                (20, 2.0),
+                (10, 3.0), // seed point 2
+                (20, 4.0),
+                (450, 1) // IsGradient, specified after seed points
+            );
         }
 
         [Fact]
@@ -2130,132 +1840,78 @@ OLE
             nonPolyPath.Edges.Add(splineEdge);
             hatch.BoundaryPaths.Add(nonPolyPath);
 
-            EnsureFileContainsEntity(hatch, @"
- 71
-     1
- 91
-        2
- 92
-        2
- 72
-     1
- 73
-     1
- 93
-        2
- 10
-1.0
- 20
-2.0
- 10
-3.0
- 20
-4.0
- 42
-5.0
- 97
-        2
-330
-ABC
-330
-DEF
- 92
-        8
- 93
-        4
- 72
-     1
- 10
-1.0
- 20
-2.0
- 11
-3.0
- 21
-4.0
- 72
-     2
- 10
-1.0
- 20
-2.0
- 40
-3.0
- 50
-4.0
- 51
-5.0
- 73
-     1
- 72
-     3
- 10
-1.0
- 20
-2.0
- 11
-3.0
- 21
-4.0
- 40
-5.0
- 50
-6.0
- 51
-7.0
- 73
-     1
- 72
-     4
- 94
-        2
- 73
-     1
- 74
-     1
- 95
-        2
- 96
-        2
- 40
-1.0
- 40
-2.0
- 10
-3.0
- 20
-4.0
- 10
-5.0
- 20
-6.0
- 42
-7.0
- 42
-8.0
- 97
-        2
- 11
-9.0
- 21
-10.0
- 11
-11.0
- 21
-12.0
- 12
-13.0
- 22
-14.0
- 13
-15.0
- 23
-16.0
- 97
-0
- 75
-     2
-", DxfAcadVersion.R14);
+            EnsureFileContainsEntity(hatch,
+                DxfAcadVersion.R14,
+                (71, 1), // IsAssociative, specified before boundary paths
+                (91, 2), // boundary path count
+                // first boundary path
+                (92, 2), // polyline boundary type
+                (72, 1), // has bulge
+                (73, 1), // is closed
+                (93, 2), // vertex count
+                (10, 1.0), // vertex 1
+                (20, 2.0),
+                (10, 3.0), // vertex 2 with bulge
+                (20, 4.0),
+                (42, 5.0),
+                (97, 2), // boundary object handles
+                (330, "ABC"),
+                (330, "DEF"),
+                // second boundary path
+                (92, 8), // non polyline text box
+                (93, 4), // edge count
+                // first edge
+                (72, 1), // linear edge
+                (10, 1.0), // start point
+                (20, 2.0),
+                (11, 3.0), // end point
+                (21, 4.0),
+                // second edge
+                (72, 2), // circular edge
+                (10, 1.0), // center
+                (20, 2.0),
+                (40, 3.0), // radius
+                (50, 4.0), // start angle
+                (51, 5.0), // end angle
+                (73, 1), // is counter clockwise
+                // third edge
+                (72, 3), // elliptical edge
+                (10, 1.0), // center
+                (20, 2.0),
+                (11, 3.0), // major axis
+                (21, 4.0),
+                (40, 5.0), // minor axis ratio
+                (50, 6.0), // start angle
+                (51, 7.0), // end angle
+                (73, 1), // is counter clockwise
+                // fourth edge
+                (72, 4), // spline edge
+                (94, 2), // degree
+                (73, 1), // is rational
+                (74, 1), // is periodic
+                (95, 2), // knot count
+                (96, 2), // control point count
+                (40, 1.0), // knot values
+                (40, 2.0),
+                (10, 3.0), // control point 1
+                (20, 4.0),
+                (10, 5.0), // control point 2
+                (20, 6.0),
+                (42, 7.0), // weights
+                (42, 8.0),
+                (97, 2), // fit data count
+                (11, 9.0), // first fit point
+                (21, 10.0),
+                (11, 11.0), // second fit point
+                (21, 12.0),
+                (12, 13.0), // start tangent
+                (22, 14.0),
+                (13, 15.0), // end tangent
+                (23, 16.0),
+                (97, 0), // boundary object handles
+                // HatchStyle, specified after boundary paths
+                (75, 2)
+            );
         }
     }
 }

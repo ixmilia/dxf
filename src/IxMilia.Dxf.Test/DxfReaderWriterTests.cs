@@ -523,10 +523,10 @@ unsupported code (5555) treated as string
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.RawThumbnail = new byte[] { 0x01, 0x23, 0x45 };
-            VerifyFileDoesNotContain(file, @"  0
-SECTION
-  2
-THUMBNAILIMAGE");
+            VerifyFileDoesNotContain(file,
+                (0, "SECTION"),
+                (2, "THUMBNAILIMAGE")
+            );
         }
 
         [Fact]
@@ -535,17 +535,13 @@ THUMBNAILIMAGE");
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.RawThumbnail = new byte[] { 0x01, 0x23, 0x45 };
-            VerifyFileContains(file, @"
-  0
-SECTION
-  2
-THUMBNAILIMAGE
- 90
-3
-310
-012345
-  0
-ENDSEC");
+            VerifyFileContains(file,
+                (0, "SECTION"),
+                (2, "THUMBNAILIMAGE"),
+                (90, 3),
+                (310, "012345"),
+                (0, "ENDSEC")
+            );
         }
 
         [Fact]
@@ -556,16 +552,13 @@ ENDSEC");
             var header = DxfThumbnailImageSection.BITMAPFILEHEADER;
             var bitmap = header.Concat(new byte[] { 0x01, 0x23, 0x45 }).ToArray();
             file.SetThumbnailBitmap(bitmap);
-            VerifyFileContains(file, @"  0
-SECTION
-  2
-THUMBNAILIMAGE
- 90
-3
-310
-012345
-  0
-ENDSEC");
+            VerifyFileContains(file,
+                (0, "SECTION"),
+                (2, "THUMBNAILIMAGE"),
+                (90, 3),
+                (310, "012345"),
+                (0, "ENDSEC")
+            );
         }
 
         [Fact]
@@ -841,64 +834,37 @@ ENDSEC");
                     })
             };
             file.BlockRecords.Add(blockRecord);
-            VerifyFileContains(file, @"
-  0
-TABLE
-  2
-BLOCK_RECORD
-  5
-#
-100
-AcDbSymbolTable
- 70
-3
-  0
-BLOCK_RECORD
-  5
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-*MODEL_SPACE
-  0
-BLOCK_RECORD
-  5
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-*PAPER_SPACE
-  0
-BLOCK_RECORD
-  5
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-<name>
-1001
-ACAD
-1000
-DesignCenter Data
-1002
-{
-1070
-0
-1070
-1
-1070
-2
-1002
-}
-  0
-ENDTAB
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "TABLE"),
+                (2, "BLOCK_RECORD"),
+                (5, "#"),
+                (100, "AcDbSymbolTable"),
+                (70, 3),
+                (0, "BLOCK_RECORD"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "*MODEL_SPACE"),
+                (0, "BLOCK_RECORD"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "*PAPER_SPACE"),
+                (0, "BLOCK_RECORD"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "<name>"),
+                (1001, "ACAD"),
+                (1000, "DesignCenter Data"),
+                (1002, "{"),
+                (1070, 0),
+                (1070, 1),
+                (1070, 2),
+                (1002, "}"),
+                (0, "ENDTAB")
+            );
         }
 
         [Fact]
@@ -929,74 +895,42 @@ ENDTAB
                 }
             };
             file.BlockRecords.Add(blockRecord);
-            VerifyFileContains(file, @"
-  0
-TABLE
-  2
-BLOCK_RECORD
-  5
-#
-100
-AcDbSymbolTable
- 70
-3
-  0
-BLOCK_RECORD
-  5
-#
-330
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-*MODEL_SPACE
-  0
-BLOCK_RECORD
-  5
-#
-330
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-*PAPER_SPACE
-  0
-BLOCK_RECORD
-  5
-#
-330
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-<name>
-340
-43
-310
-010203040506070809010203040506070809
-1001
-ACAD
-1000
-DesignCenter Data
-1002
-{
-1070
-0
-1070
-1
-1070
-2
-1002
-}
-  0
-ENDTAB
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "TABLE"),
+                (2, "BLOCK_RECORD"),
+                (5, "#"),
+                (100, "AcDbSymbolTable"),
+                (70, 3),
+                (0, "BLOCK_RECORD"),
+                (5, "#"),
+                (330, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "*MODEL_SPACE"),
+                (0, "BLOCK_RECORD"),
+                (5, "#"),
+                (330, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "*PAPER_SPACE"),
+                (0, "BLOCK_RECORD"),
+                (5, "#"),
+                (330, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "<name>"),
+                (340, "43"),
+                (310, "010203040506070809010203040506070809"),
+                (1001, "ACAD"),
+                (1000, "DesignCenter Data"),
+                (1002, "{"),
+                (1070, 0),
+                (1070, 1),
+                (1070, 2),
+                (1002, "}"),
+                (0, "ENDTAB")
+            );
         }
 
         [Fact]
@@ -1011,20 +945,15 @@ ENDTAB
                 ApplicationName = "<application name>",
                 ClassVersionNumber = 42
             });
-            VerifyFileContains(file, @"
-  0
-SECTION
-  2
-CLASSES
-  0
-<class dxf name>
-  1
-CPP_CLASS_NAME
-  2
-<application name>
- 90
-42
-");
+            VerifyFileContains(file,
+                DxfSectionType.Classes,
+                (0, "SECTION"),
+                (2, "CLASSES"),
+                (0, "<class dxf name>"),
+                (1, "CPP_CLASS_NAME"),
+                (2, "<application name>"),
+                (90, 42)
+            );
         }
 
         [Fact]
@@ -1039,22 +968,16 @@ CPP_CLASS_NAME
                 ApplicationName = "<application name>",
                 ProxyCapabilities = new DxfProxyCapabilities(42)
             });
-            VerifyFileContains(file, @"
-  0
-SECTION
-  2
-CLASSES
-  0
-CLASS
-  1
-<class dxf name>
-  2
-CPP_CLASS_NAME
-  3
-<application name>
- 90
-42
-");
+            VerifyFileContains(file,
+                DxfSectionType.Classes,
+                (0, "SECTION"),
+                (2, "CLASSES"),
+                (0, "CLASS"),
+                (1, "<class dxf name>"),
+                (2, "CPP_CLASS_NAME"),
+                (3, "<application name>"),
+                (90, 42)
+            );
         }
 
         [Fact]
@@ -1165,54 +1088,33 @@ CPP_CLASS_NAME
             block.BasePoint = new DxfPoint(11, 22, 33);
             block.Entities.Add(new DxfModelPoint(new DxfPoint(111, 222, 333)));
             file.Blocks.Add(block);
-            VerifyFileContains(file, @"
-  0
-BLOCK
-  5
-#
-100
-AcDbEntity
-  8
-<layer>
-100
-AcDbBlockBegin
-  2
-<block name>
- 70
-0
- 10
-11.0
- 20
-22.0
- 30
-33.0
-  3
-<block name>
-  1
-<xref>
-");
-            VerifyFileContains(file, @"
- 10
-111.0
- 20
-222.0
- 30
-333.0
-");
-            VerifyFileContains(file, @"
-  0
-ENDBLK
-  5
-#
-100
-AcDbEntity
-  8
-<layer>
-100
-AcDbBlockEnd
-  0
-ENDSEC
-");
+            VerifyFileContains(file,
+                (0, "BLOCK"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "<layer>"),
+                (100, "AcDbBlockBegin"),
+                (2, "<block name>"),
+                (70, 0),
+                (10, 11.0),
+                (20, 22.0),
+                (30, 33.0),
+                (3, "<block name>"),
+                (1, "<xref>")
+            );
+            VerifyFileContains(file,
+                (10, 111.0),
+                (20, 222.0),
+                (30, 333.0)
+            );
+            VerifyFileContains(file,
+                (0, "ENDBLK"),
+                (5, "#"),
+                (100, "AcDbEntity"),
+                (8, "<layer>"),
+                (100, "AcDbBlockEnd"),
+                (0, "ENDSEC")
+            );
         }
 
         [Fact]
@@ -1297,20 +1199,15 @@ ENDSEC
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.Entities.Add(dim);
-            VerifyFileContains(file, @"
-1001
-ACAD
-1000
-DSTYLE
-1002
-{
-1070
-   271
-1070
-     9
-1002
-}
-");
+            VerifyFileContains(file,
+                DxfSectionType.Entities,
+                (1001, "ACAD"),
+                (1000, "DSTYLE"),
+                (1002, "{"),
+                (1070, 271),
+                (1070, 9),
+                (1002, "}")
+            );
         }
 
         [Fact]
@@ -1422,18 +1319,14 @@ DSTYLE
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.Styles.Add(new DxfStyle());
-            VerifyFileContains(file, @"
-  0
-TABLE
-  2
-STYLE
-  5
-#
-100
-AcDbSymbolTable
- 70
-3
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "TABLE"),
+                (2, "STYLE"),
+                (5, "#"),
+                (100, "AcDbSymbolTable"),
+                (70, 3)
+            );
         }
 
         [Fact]
@@ -1448,24 +1341,18 @@ AcDbSymbolTable
                     new DxfCodePair(360, "BBBB")
                 }));
             file.Styles.Add(new DxfStyle());
-            VerifyFileContains(file, @"
-  0
-TABLE
-  2
-STYLE
-  5
-#
-102
-{ACAD_XDICTIONARY
-360
-AAAA
-360
-BBBB
-102
-}
-100
-AcDbSymbolTable
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "TABLE"),
+                (2, "STYLE"),
+                (5, "#"),
+                (102, "{ACAD_XDICTIONARY"),
+                (360, "AAAA"),
+                (360, "BBBB"),
+                (102, "}"),
+                (100, "AcDbSymbolTable"),
+                (70, 3)
+            );
         }
 
         [Fact]
@@ -1476,20 +1363,16 @@ AcDbSymbolTable
             file.Classes.Add(new DxfClass());
 
             // no CLASSES section in R12
-            VerifyFileDoesNotContain(file, @"
-  0
-SECTION
-  2
-CLASSES
-");
+            VerifyFileDoesNotContain(file,
+                (0, "SECTION"),
+                (2, "CLASSES")
+            );
 
             // no OBJECTS section in R12
-            VerifyFileDoesNotContain(file, @"
-  0
-SECTION
-  2
-OBJECTS
-");
+            VerifyFileDoesNotContain(file,
+                (0, "SECTION"),
+                (2, "OBJECTS")
+            );
         }
 
         [Fact]
@@ -1500,21 +1383,16 @@ OBJECTS
             file.Classes.Add(new DxfClass());
 
             // CLASSES section added in R13
-            VerifyFileContains(file, @"
-  0
-SECTION
-  2
-CLASSES
-");
+            VerifyFileContains(file,
+                (0, "SECTION"),
+                (2, "CLASSES")
+            );
 
             // OBJECTS section added in R13
-            // NYI
-//            VerifyFileContains(file, @"
-//  0
-//SECTION
-//  2
-//OBJECTS
-//");
+            VerifyFileContains(file,
+                (0, "SECTION"),
+                (2, "OBJECTS")
+            );
         }
 
         [Fact]
@@ -1525,12 +1403,10 @@ CLASSES
             file.BlockRecords.Add(new DxfBlockRecord());
 
             // no BLOCK_RECORD in R12
-            VerifyFileDoesNotContain(file, @"
-  0
-TABLE
-  2
-BLOCK_RECORD
-");
+            VerifyFileDoesNotContain(file,
+                (0, "TABLE"),
+                (2, "BLOCK_RECORD")
+            );
         }
 
         [Fact]
@@ -1541,12 +1417,10 @@ BLOCK_RECORD
             file.BlockRecords.Add(new DxfBlockRecord());
 
             // BLOCK_RECORD added in R13
-            VerifyFileContains(file, @"
-  0
-TABLE
-  2
-BLOCK_RECORD
-");
+            VerifyFileContains(file,
+                (0, "TABLE"),
+                (2, "BLOCK_RECORD")
+            );
         }
 
         [Fact]
@@ -1676,20 +1550,15 @@ BLOCK_RECORD
                 DashDotSpaceLength = 3.0,
                 ComplexFlags = 0,
             });
-            VerifyFileContains(file, @"
- 49
-1.0
- 74
-     0
- 49
-2.0
- 74
-     0
- 49
-3.0
- 74
-     0
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (49, 1.0),
+                (74, 0),
+                (49, 2.0),
+                (74, 0),
+                (49, 3.0),
+                (74, 0)
+            );
         }
 
         [Fact]
@@ -1769,37 +1638,27 @@ BLOCK_RECORD
             var layer = file.Layers.Single();
             layer.Color = DxfColor.ByLayer; // code 62, value 256 not valid; normalized to 7
             layer.LineTypeName = null; // code 6, value null or empty not valid; normalized to CONTINUOUS
-            VerifyFileContains(file, @"
-  0
-LAYER
-  5
-#
-100
-AcDbSymbolTableRecord
-  2
-0
- 70
-0
- 62
-7
-  6
-CONTINUOUS
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "LAYER"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, "0"),
+                (70, 0),
+                (62, 7),
+                (6, "CONTINUOUS")
+            );
             layer.Color = DxfColor.ByBlock; // code 62, value 0 not valid; normalized to 7
-            VerifyFileContains(file, @"
-  0
-LAYER
-  5
-#
-100
-AcDbSymbolTableRecord
-  2
-0
- 70
-0
- 62
-7
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "LAYER"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, "0"),
+                (70, 0),
+                (62, 7),
+                (6, "CONTINUOUS")
+            );
         }
 
         [Fact]
@@ -1818,137 +1677,76 @@ AcDbSymbolTableRecord
             viewPort.ViewHeight = double.NegativeInfinity; // code 45; not written < R2007, normalized to 1.0
             viewPort.CircleSides = 0; // code 72; normalized to 1000
             viewPort.UCSIcon = -1; // code 74; normalized to 3
-            VerifyFileContains(file, @"
-  0
-VPORT
-  5
-#
-100
-AcDbSymbolTableRecord
-  2
-<viewPort>
- 70
-0
- 10
-0.0
- 20
-0.0
- 11
-1.0
- 21
-1.0
- 12
-0.0
- 22
-0.0
- 13
-0.0
- 23
-0.0
- 14
-1.0
- 24
-1.0
- 15
-1.0
- 25
-1.0
- 16
-0.0
- 26
-0.0
- 36
-1.0
- 17
-0.0
- 27
-0.0
- 37
-0.0
- 40
-1.0
- 41
-1.0
- 42
-50.0
- 43
-0.0
- 44
-0.0
- 50
-0.0
- 51
-0.0
- 71
-0
- 72
-1000
- 73
-1
- 74
-3
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "VPORT"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, "<viewPort>"),
+                (70, 0),
+                (10, 0.0),
+                (20, 0.0),
+                (11, 1.0),
+                (21, 1.0),
+                (12, 0.0),
+                (22, 0.0),
+                (13, 0.0),
+                (23, 0.0),
+                (14, 1.0),
+                (24, 1.0),
+                (15, 1.0),
+                (25, 1.0),
+                (16, 0.0),
+                (26, 0.0),
+                (36, 1.0),
+                (17, 0.0),
+                (27, 0.0),
+                (37, 0.0),
+                (40, 1.0),
+                (41, 1.0),
+                (42, 50.0),
+                (43, 0.0),
+                (44, 0.0),
+                (50, 0.0),
+                (51, 0.0),
+                (71, 0),
+                (72, 1000),
+                (73, 1),
+                (74, 3)
+            );
             file.Header.Version = DxfAcadVersion.R2007;
-            VerifyFileContains(file, @"
-  0
-VPORT
-  5
-#
-330
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbViewportTableRecord
-  2
-<viewPort>
- 70
-0
- 10
-0.0
- 20
-0.0
- 11
-1.0
- 21
-1.0
- 12
-0.0
- 22
-0.0
- 13
-0.0
- 23
-0.0
- 14
-1.0
- 24
-1.0
- 15
-1.0
- 25
-1.0
- 16
-0.0
- 26
-0.0
- 36
-1.0
- 17
-0.0
- 27
-0.0
- 37
-0.0
- 42
-50.0
- 43
-0.0
- 44
-0.0
- 45
-1.0
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "VPORT"),
+                (5, "#"),
+                (330, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbViewportTableRecord"),
+                (2, "<viewPort>"),
+                (70, 0),
+                (10, 0.0),
+                (20, 0.0),
+                (11, 1.0),
+                (21, 1.0),
+                (12, 0.0),
+                (22, 0.0),
+                (13, 0.0),
+                (23, 0.0),
+                (14, 1.0),
+                (24, 1.0),
+                (15, 1.0),
+                (25, 1.0),
+                (16, 0.0),
+                (26, 0.0),
+                (36, 1.0),
+                (17, 0.0),
+                (27, 0.0),
+                (37, 0.0),
+                (42, 50.0),
+                (43, 0.0),
+                (44, 0.0),
+                (45, 1.0)
+            );
         }
 
         [Fact]
@@ -1963,40 +1761,25 @@ AcDbViewportTableRecord
             view.ViewHeight = -1.0; // code 40
             view.ViewWidth = 0.0; // code 41
             view.LensLength = double.NaN; // code 42
-            VerifyFileContains(file, @"
-  0
-VIEW
-  5
-#
-100
-AcDbSymbolTableRecord
-  2
-<view>
- 70
-0
- 40
-1.0
- 10
-0.0
- 20
-0.0
- 41
-1.0
- 11
-0.0
- 21
-0.0
- 31
-1.0
- 12
-0.0
- 22
-0.0
- 32
-0.0
- 42
-1.0
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "VIEW"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, "<view>"),
+                (70, 0),
+                (40, 1.0),
+                (10, 0.0),
+                (20, 0.0),
+                (41, 1.0),
+                (11, 0.0),
+                (21, 0.0),
+                (31, 1.0),
+                (12, 0.0),
+                (22, 0.0),
+                (32, 0.0),
+                (42, 1.0)
+            );
         }
 
         [Fact]
@@ -2050,24 +1833,17 @@ AcDbSymbolTableRecord
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Layers.Add(new DxfLayer("name", DxfColor.FromIndex(5)) { IsLayerOn = true });
-            VerifyFileContains(file, @"
-  0
-LAYER
-  5
-#
-330
-#
-100
-AcDbSymbolTableRecord
-100
-AcDbLayerTableRecord
-  2
-name
- 70
-0
- 62
-5
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "LAYER"),
+                (5, "#"),
+                (330, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbLayerTableRecord"),
+                (2, "name"),
+                (70, 0),
+                (62, 5)
+            );
         }
 
         [Fact]
@@ -2075,20 +1851,15 @@ name
         {
             var file = new DxfFile();
             file.Layers.Add(new DxfLayer("name", DxfColor.FromIndex(5)) { IsLayerOn = false });
-            VerifyFileContains(file, @"
-  0
-LAYER
-  5
-#
-100
-AcDbSymbolTableRecord
-  2
-name
- 70
-0
- 62
--5
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "LAYER"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, "name"),
+                (70, 0),
+                (62, -5)
+            );
         }
 
         [Fact]
@@ -2155,12 +1926,8 @@ $PROJECTNAME
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2004;
             file.Header.ProjectName = "Repère pièce";
-            VerifyFileContains(file, @"
-  9
-$PROJECTNAME
-  1
-Rep\U+00E8re pi\U+00E8ce
-", DxfSectionType.Header);
+            var contents = ToString(file);
+            Assert.Contains(@"Rep\U+00E8re pi\U+00E8ce", contents);
         }
 
         [Fact]
@@ -2186,12 +1953,8 @@ Repère pièce
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2007;
             file.Header.ProjectName = "Repère pièce";
-            VerifyFileContains(file, @"
-  9
-$PROJECTNAME
-  1
-Repère pièce
-", DxfSectionType.Header);
+            var contents = ToString(file);
+            Assert.Contains("Repère pièce", contents);
         }
 
         [Fact]
@@ -2507,7 +2270,9 @@ EOF".Trim();
             file.Entities.Add(image);
             // image.ImageDefinition is explicitly not added to the Objects collection until the file is saved
             Assert.Empty(file.Objects.OfType<DxfImageDefinition>());
-            VerifyFileContains(file, @"IMAGEDEF");
+            VerifyFileContains(file,
+                (0, "IMAGEDEF")
+            );
             Assert.Equal("imagePath", file.Objects.OfType<DxfImageDefinition>().Single().FilePath);
         }
 

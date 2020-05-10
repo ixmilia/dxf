@@ -361,23 +361,9 @@ namespace IxMilia.Dxf
 
         private void WriteStream(Stream stream, bool asText)
         {
-            var writer = PrepareWriter(stream, asText);
-            SetExtents();
-            WriteSectionsAndClose(writer, Sections);
-        }
-
-        private DxfWriter PrepareWriter(Stream stream, bool asText)
-        {
-            UpdateTimes();
-            Normalize();
-
             var writer = new DxfWriter(stream, asText, Header.Version);
             writer.Open();
-
-            var nextHandle = DxfPointer.AssignHandles(this);
-            Header.NextAvailableHandle = nextHandle;
-
-            return writer;
+            WriteSectionsAndClose(writer, Sections);
         }
 
         private void SetExtents()
@@ -387,15 +373,30 @@ namespace IxMilia.Dxf
             Header.MaximumDrawingExtents = boundingBox.MaximumPoint;
         }
 
-        private void WriteSectionsAndClose(DxfWriter writer, IEnumerable<DxfSection> sections)
+        private void PrepareForWriting()
         {
+            var nextHandle = DxfPointer.AssignHandles(this);
+            Header.NextAvailableHandle = nextHandle;
+            SetExtents();
+            UpdateTimes();
+            Normalize();
+        }
+
+        internal IEnumerable<DxfCodePair> GetCodePairs()
+        {
+            return GetCodePairs(Sections);
+        }
+
+        internal IEnumerable<DxfCodePair> GetCodePairs(IEnumerable<DxfSection> sections)
+        {
+            PrepareForWriting();
             var writtenItems = new HashSet<IDxfItem>();
             var outputHandles = Header.Version >= DxfAcadVersion.R13 || Header.HandlesEnabled; // handles are always enabled on R13+
             foreach (var section in sections)
             {
                 foreach (var pair in section.GetValuePairs(Header.Version, outputHandles, writtenItems))
                 {
-                    writer.WriteCodeValuePair(pair);
+                    yield return pair;
                 }
 
                 if (section is DxfEntitiesSection)
@@ -411,18 +412,16 @@ namespace IxMilia.Dxf
                     }
                 }
             }
-
-            writer.Close();
         }
 
-        /// <summary>
-        /// Internal for testing.
-        /// </summary>
-        internal void WriteSingleSection(Stream stream, DxfSectionType sectionType)
+        private void WriteSectionsAndClose(DxfWriter writer, IEnumerable<DxfSection> sections)
         {
-            var sections = Sections.Where(s => s.Type == sectionType);
-            var writer = PrepareWriter(stream, asText: true);
-            WriteSectionsAndClose(writer, sections);
+            foreach (var pair in GetCodePairs(sections))
+            {
+                writer.WriteCodeValuePair(pair);
+            }
+
+            writer.Close();
         }
 
         internal IEnumerable<IDxfItemInternal> GetFileItems()

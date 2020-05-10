@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Sections;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -97,20 +98,14 @@ namespace IxMilia.Dxf.Test
             }));
             var file = new DxfFile();
             file.Layers.Add(layer);
-            VerifyFileContains(file, @"
-  0
-LAYER
-  5
-#
-102
-{APP_NAME
-  1
-foo
-  2
-bar
-102
-}
-");
+            VerifyFileContains(file,
+                (0, "LAYER"),
+                (5, "#"),
+                (102, "{APP_NAME"),
+                (1, "foo"),
+                (2, "bar"),
+                (102, "}")
+            );
         }
 
         [Fact]
@@ -248,12 +243,10 @@ bar
         [Fact]
         public void WriteDefaultHeaderValuesTest()
         {
-            VerifyFileContains(new DxfFile(), @"
-  9
-$DIMGAP
- 40
-0.0
-");
+            VerifyFileContains(new DxfFile(),
+                DxfSectionType.Header,
+                (9, "$DIMGAP"), (40, 0.09)
+            );
         }
 
         [Fact]
@@ -261,12 +254,10 @@ $DIMGAP
         {
             var file = new DxfFile();
             file.Header.DimensionLineGap = 11.0;
-            VerifyFileContains(file, @"
-  9
-$DIMGAP
- 40
-11.0
-");
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$DIMGAP"), (40, 11.0)
+            );
         }
 
         [Fact]
@@ -274,22 +265,15 @@ $DIMGAP
         {
             var file = new DxfFile();
             file.Layers.Add(new DxfLayer("default"));
-            VerifyFileContains(file, @"
-  0
-LAYER
-  5
-#
-100
-AcDbSymbolTableRecord
-  2
-default
- 70
-0
- 62
-7
-  6
-
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "LAYER"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, "default"),
+                (70, 0),
+                (62, 7)
+            );
         }
 
         [Fact]
@@ -297,84 +281,47 @@ default
         {
             var file = new DxfFile();
             file.ViewPorts.Add(new DxfViewPort());
-            VerifyFileContains(file, @"
-  0
-VPORT
-  5
-3
-100
-AcDbSymbolTableRecord
-  2
-
- 70
-0
- 10
-0.0
- 20
-0.0
- 11
-1.0
- 21
-1.0
- 12
-0.0
- 22
-0.0
- 13
-0.0
- 23
-0.0
- 14
-1.0
- 24
-1.0
- 15
-1.0
- 25
-1.0
- 16
-0.0
- 26
-0.0
- 36
-1.0
- 17
-0.0
- 27
-0.0
- 37
-0.0
- 40
-1.0
- 41
-1.0
- 42
-50.0
- 43
-0.0
- 44
-0.0
- 50
-0.0
- 51
-0.0
- 71
-0
- 72
-1000
- 73
-1
- 74
-3
- 75
-0
- 76
-0
- 77
-0
- 78
-0
-");
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "VPORT"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, ""),
+                (70, 0),
+                (10, 0.0),
+                (20, 0.0),
+                (11, 1.0),
+                (21, 1.0),
+                (12, 0.0),
+                (22, 0.0),
+                (13, 0.0),
+                (23, 0.0),
+                (14, 1.0),
+                (24, 1.0),
+                (15, 1.0),
+                (25, 1.0),
+                (16, 0.0),
+                (26, 0.0),
+                (36, 1.0),
+                (17, 0.0),
+                (27, 0.0),
+                (37, 0.0),
+                (40, 1.0),
+                (41, 1.0),
+                (42, 50.0),
+                (43, 0.0),
+                (44, 0.0),
+                (50, 0.0),
+                (51, 0.0),
+                (71, 0),
+                (72, 1000),
+                (73, 1),
+                (74, 3),
+                (75, 0),
+                (76, 0),
+                (77, 0),
+                (78, 0)
+            );
         }
 
         [Fact]
@@ -405,12 +352,9 @@ AcDbSymbolTableRecord
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Header.IsRestrictedVersion = true;
-            VerifyFileContains(file, @"
-  9
-$ACADVER
-  1
-AC1015S
-");
+            VerifyFileContains(file,
+                (9, "$ACADVER"), (1, "AC1015S")
+            );
         }
 
         [Fact]
@@ -2247,49 +2191,34 @@ $SHADOWPLANELOCATION";
             file.Header.DimensionStyleName = null; // $DIMSTYLE, normalized to STANDARD
             file.Header.FileName = null; // $MENU, normalized to .
 
-            var content = ToString(file);
-            Assert.Contains(FixNewLines(@"
-  9
-$TEXTSIZE
- 40
-0.2
-".Trim()), content);
-            Assert.Contains(FixNewLines(@"
-  9
-$TRACEWID
- 40
-0.05
-".Trim()), content);
-            Assert.Contains(FixNewLines(@"
-  9
-$TEXTSTYLE
-  7
-STANDARD
-".Trim()), content);
-            Assert.Contains(FixNewLines(@"
-  9
-$CLAYER
-  8
-0
-".Trim()), content);
-            Assert.Contains(FixNewLines(@"
-  9
-$CELTYPE
-  6
-BYLAYER
-".Trim()), content);
-            Assert.Contains(FixNewLines(@"
-  9
-$DIMSTYLE
-  2
-STANDARD
-".Trim()), content);
-            Assert.Contains(FixNewLines(@"
-  9
-$MENU
-  1
-.
-".Trim()), content);
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$TEXTSIZE"), (40, 0.2)
+            );
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$TRACEWID"), (40, 0.05)
+            );
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$TEXTSTYLE"), (7, "STANDARD")
+            );
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$CLAYER"), (8, "0")
+            );
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$CELTYPE"), (6, "BYLAYER")
+            );
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$DIMSTYLE"), (2, "STANDARD")
+            );
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$MENU"), (1, ".")
+            );
         }
     }
 }

@@ -72,7 +72,7 @@ namespace IxMilia.Dxf
         public DxfCodePair(int code, string value)
         {
             Debug.Assert(ExpectedType(code) == typeof(string));
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object>(code, value ?? string.Empty);
         }
 
         public DxfCodePair(int code, double value)
@@ -126,6 +126,10 @@ namespace IxMilia.Dxf
                     value = Convert.ToInt64(value);
                 }
             }
+            else if (value?.GetType() == typeof(string) && expectedType != typeof(string))
+            {
+                throw new InvalidOperationException($"Illegal cast to string for code {code}; expected type is {expectedType.Name}");
+            }
 
             data = new KeyValuePair<int, object>(code, value);
         }
@@ -147,7 +151,7 @@ namespace IxMilia.Dxf
 
         public override string ToString()
         {
-            return string.Format("[{0}: {1}]", Code, Value);
+            return $"[{DxfWriter.CodeAsString(Code)}: {Value ?? "<null>"}]";
         }
 
         public static bool IsSectionStart(DxfCodePair pair)

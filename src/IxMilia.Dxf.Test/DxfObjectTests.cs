@@ -6,21 +6,13 @@ using System.Linq;
 using System.Reflection;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Objects;
+using IxMilia.Dxf.Sections;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
     public class DxfObjectTests : AbstractDxfTests
     {
-        private DxfObject GenObject(string typeString, string contents)
-        {
-            return Section("OBJECTS", $@"
-  0
-{typeString}
-{contents.Trim()}
-").Objects.Last();
-        }
-
         private DxfObject GenObject(string typeString, params (int code, object value)[] codePairs)
         {
             var prePairs = new[]
@@ -30,13 +22,13 @@ namespace IxMilia.Dxf.Test
             return Section("OBJECTS", prePairs.Concat(codePairs)).Objects.Last();
         }
 
-        private static void EnsureFileContainsObject(DxfObject obj, string text, DxfAcadVersion version = DxfAcadVersion.R12)
+        private static void EnsureFileContainsObject(DxfObject obj, DxfAcadVersion version, params (int code, object value)[] codePairs)
         {
             var file = new DxfFile();
             file.Clear();
             file.Header.Version = version;
             file.Objects.Add(obj);
-            VerifyFileContains(file, text);
+            VerifyFileContains(file, codePairs);
         }
 
         [Fact]
@@ -52,16 +44,13 @@ namespace IxMilia.Dxf.Test
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(new DxfAcadProxyObject());
-            VerifyFileContains(file, @"
-  0
-ACAD_PROXY_OBJECT
-  5
-#
-100
-AcDbProxyObject
- 90
-499
-");
+            VerifyFileContains(file,
+                DxfSectionType.Objects,
+                (0, "ACAD_PROXY_OBJECT"),
+                (5, "#"),
+                (100, "AcDbProxyObject"),
+                (90, 499)
+            );
         }
 
         [Fact]
@@ -115,42 +104,25 @@ AcDbProxyObject
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2007;
             file.Objects.Add(table);
-            VerifyFileContains(file, @"
-100
-AcDbDataTable
- 70
-0
- 90
-2
- 91
-2
-  1
-table-name
- 92
-10
-  2
-column-of-points
- 10
-1.0
- 20
-2.0
- 30
-3.0
- 10
-4.0
- 20
-5.0
- 30
-6.0
- 92
-3
-  2
-column-of-strings
-  3
-string 1
-  3
-string 2
-");
+            VerifyFileContains(file,
+                (100, "AcDbDataTable"),
+                (70, 0),
+                (90, 2),
+                (91, 2),
+                (1, "table-name"),
+                (92, 10),
+                (2, "column-of-points"),
+                (10, 1.0),
+                (20, 2.0),
+                (30, 3.0),
+                (10, 4.0),
+                (20, 5.0),
+                (30, 6.0),
+                (92, 3),
+                (2, "column-of-strings"),
+                (3, "string 1"),
+                (3, "string 2")
+            );
         }
 
         [Fact]
@@ -320,48 +292,29 @@ string 2
             var dict = new DxfDictionary();
             dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
             dict["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
-            EnsureFileContainsObject(dict, @"
-  0
-DICTIONARY
-  5
-#
-100
-AcDbDictionary
-281
-     0
-  3
-key-1
-350
-#
-  3
-key-2
-350
-#
-  0
-DICTIONARYVAR
-  5
-#
-330
-#
-100
-DictionaryVariables
-280
-     0
-1
-value-1
-  0
-DICTIONARYVAR
-  5
-#
-330
-#
-100
-DictionaryVariables
-280
-     0
-1
-value-2
-", DxfAcadVersion.R2000);
+            EnsureFileContainsObject(dict,
+                DxfAcadVersion.R2000,
+                (0, "DICTIONARY"),
+                (5, "#"),
+                (100, "AcDbDictionary"),
+                (281, 0),
+                (3, "key-1"),
+                (350, "#"),
+                (3, "key-2"),
+                (350, "#"),
+                (0, "DICTIONARYVAR"),
+                (5, "#"),
+                (330, "#"),
+                (100, "DictionaryVariables"),
+                (280, 0),
+                (1, "value-1"),
+                (0, "DICTIONARYVAR"),
+                (5, "#"),
+                (330, "#"),
+                (100, "DictionaryVariables"),
+                (280, 0),
+                (1, "value-2")
+            );
         }
 
         [Fact]
@@ -372,46 +325,28 @@ value-2
             var dict2 = new DxfDictionary();
             dict1["key-1"] = dict2;
             dict2["key-2"] = new DxfDictionaryVariable() { Value = "value-2" };
-            EnsureFileContainsObject(dict1, @"
-  0
-DICTIONARY
-  5
-#
-100
-AcDbDictionary
-281
-     0
-  3
-key-1
-350
-#
-  0
-DICTIONARY
-  5
-#
-330
-#
-100
-AcDbDictionary
-281
-     0
-  3
-key-2
-350
-#
-  0
-DICTIONARYVAR
-  5
-#
-330
-#
-100
-DictionaryVariables
-280
-     0
-1
-value-2
-", DxfAcadVersion.R2000);
+            EnsureFileContainsObject(dict1,
+                DxfAcadVersion.R2000,
+                (0, "DICTIONARY"),
+                (5, "#"),
+                (100, "AcDbDictionary"),
+                (281, 0),
+                (3, "key-1"),
+                (350, "#"),
+                (0, "DICTIONARY"),
+                (5, "#"),
+                (330, "#"),
+                (100, "AcDbDictionary"),
+                (281, 0),
+                (3, "key-2"),
+                (350, "#"),
+                (0, "DICTIONARYVAR"),
+                (5, "#"),
+                (330, "#"),
+                (100, "DictionaryVariables"),
+                (280, 0),
+                (1, "value-2")
+            );
         }
 
         [Fact]
@@ -421,48 +356,29 @@ value-2
             var dict = new DxfDictionaryWithDefault();
             dict.DefaultObject = new DxfDictionaryVariable() { Value = "default-value" };
             dict["key-1"] = new DxfDictionaryVariable() { Value = "value-1" };
-            EnsureFileContainsObject(dict, @"
-  0
-ACDBDICTIONARYWDFLT
-  5
-#
-100
-AcDbDictionary
-281
-0
-  3
-key-1
-350
-#
-100
-AcDbDictionaryWithDefault
-340
-#
-  0
-DICTIONARYVAR
-  5
-#
-330
-#
-100
-DictionaryVariables
-280
-0
-  1
-default-value
-  0
-DICTIONARYVAR
-  5
-#
-330
-#
-100
-DictionaryVariables
-280
-0
-  1
-value-1
-", DxfAcadVersion.R2000);
+            EnsureFileContainsObject(dict,
+                DxfAcadVersion.R2000,
+                (0, "ACDBDICTIONARYWDFLT"),
+                (5, "#"),
+                (100, "AcDbDictionary"),
+                (281, 0),
+                (3, "key-1"),
+                (350, "#"),
+                (100, "AcDbDictionaryWithDefault"),
+                (340, "#"),
+                (0, "DICTIONARYVAR"),
+                (5, "#"),
+                (330, "#"),
+                (100, "DictionaryVariables"),
+                (280, 0),
+                (1, "default-value"),
+                (0, "DICTIONARYVAR"),
+                (5, "#"),
+                (330, "#"),
+                (100, "DictionaryVariables"),
+                (280, 0),
+                (1, "value-1")
+            );
         }
 
         [Fact]
@@ -597,36 +513,24 @@ value-1
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(layout);
-            using (var ms = new MemoryStream())
-            {
-                file.Save(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                using (var reader = new StreamReader(ms))
-                {
-                    var contents = reader.ReadToEnd();
+            var pairs = file.GetCodePairs();
 
-                    // verify the plot settings were written
-                    var plotSettingsOffset = contents.IndexOf(FixNewLines(@"
-100
-AcDbPlotSettings
-  1
-page-setup-name
-".Trim()));
-                    Assert.True(plotSettingsOffset > 0);
+            // verify the plot settings were written
+            var plotSettingsOffset = IndexOf(pairs,
+                (100, "AcDbPlotSettings"),
+                (1, "page-setup-name")
+            );
+            Assert.True(plotSettingsOffset > 0);
 
-                    // verify the layout settings were written
-                    var layoutOffset = contents.IndexOf(FixNewLines(@"
-100
-AcDbLayout
-  1
-layout-name
-".Trim()));
-                    Assert.True(layoutOffset > 0);
+            // verify the layout settings were written
+            var layoutOffset = IndexOf(pairs,
+                (100, "AcDbLayout"),
+                (1, "layout-name")
+            );
+            Assert.True(layoutOffset > 0);
 
-                    // verify that the layout settings were written after the plot settings
-                    Assert.True(layoutOffset > plotSettingsOffset);
-                }
-            }
+            // verify that the layout settings were written after the plot settings
+            Assert.True(layoutOffset > plotSettingsOffset);
         }
 
         [Fact]
@@ -747,22 +651,15 @@ layout-name
             lightList.Version = 42;
             lightList.Lights.Add((DxfLight)file.Entities.Single());
             file.Objects.Add(lightList);
-            VerifyFileContains(file, @"
-  0
-LIGHTLIST
-  5
-#
-100
-AcDbLightList
- 90
-42
- 90
-1
-  5
-#
-  1
-light-name
-");
+            VerifyFileContains(file,
+                (0, "LIGHTLIST"),
+                (5, "#"),
+                (100, "AcDbLightList"),
+                (90, 42),
+                (90, 1),
+                (5, "#"),
+                (1, "light-name")
+            );
         }
 
         [Fact]
@@ -887,36 +784,21 @@ light-name
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.Objects.Add(mlineStyle);
-            VerifyFileContains(file, @"
-100
-AcDbMlineStyle
-  2
-<name>
- 70
-0
-  3
-<description>
- 62
-1
- 51
-99.9
- 52
-100.0
- 71
-2
- 49
-3.0
- 62
-3
-  6
-tres
- 49
-4.0
- 62
-4
-  6
-quatro
-");
+            VerifyFileContains(file,
+                (2, "<name>"),
+                (70, 0),
+                (3, "<description>"),
+                (62, 1),
+                (51, 99.9),
+                (52, 100.0),
+                (71, 2),
+                (49, 3.0),
+                (62, 3),
+                (6, "tres"),
+                (49, 4.0),
+                (62, 4),
+                (6, "quatro")
+            );
         }
 
         [Fact]
@@ -1009,104 +891,56 @@ quatro
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2007;
             file.Objects.Add(settings);
-            VerifyFileContains(file, @"
-100
-AcDbSectionSettings
- 90
-42
- 91
-1
-  1
-SectionTypeSettings
- 90
-43
- 91
-1
- 92
-2
-330
-100
-330
-101
-331
-FF
-  1
-file-name
- 93
-2
-  2
-SectionGeometrySettings
- 90
-1001
- 91
-0
- 92
-0
- 63
-0
-  8
-
-  6
-
- 40
-1.0
-  1
-
-370
-0
- 70
-0
- 71
-0
- 72
-0
-  2
-
- 41
-0.0
- 42
-1.0
- 43
-0.0
-  3
-SectionGeometrySettingsEnd
- 90
-1002
- 91
-0
- 92
-0
- 63
-0
-  8
-
-  6
-
- 40
-1.0
-  1
-
-370
-0
- 70
-0
- 71
-0
- 72
-0
-  2
-
- 41
-0.0
- 42
-1.0
- 43
-0.0
-  3
-SectionGeometrySettingsEnd
-  3
-SectionTypeSettingsEnd
-");
+            VerifyFileContains(file,
+                (100, "AcDbSectionSettings"),
+                (90, 42),
+                (91, 1),
+                (1, "SectionTypeSettings"),
+                (90, 43),
+                (91, 1),
+                (92, 2),
+                (330, "100"),
+                (330, "101"),
+                (331, "FF"),
+                (1, "file-name"),
+                (93, 2),
+                (2, "SectionGeometrySettings"),
+                (90, 1001),
+                (91, 0),
+                (92, 0),
+                (63, 0),
+                (8, ""),
+                (6, ""),
+                (40, 1.0),
+                (1, ""),
+                (370, 0),
+                (70, 0),
+                (71, 0),
+                (72, 0),
+                (2, ""),
+                (41, 0.0),
+                (42, 1.0),
+                (43, 0.0),
+                (3, "SectionGeometrySettingsEnd"),
+                (90, 1002),
+                (91, 0),
+                (92, 0),
+                (63, 0),
+                (8, ""),
+                (6, ""),
+                (40, 1.0),
+                (1, ""),
+                (370, 0),
+                (70, 0),
+                (71, 0),
+                (72, 0),
+                (2, ""),
+                (41, 0.0),
+                (42, 1.0),
+                (43, 0.0),
+                (3, "SectionGeometrySettingsEnd"),
+                (3, "SectionTypeSettingsEnd")
+            );
         }
 
         [Fact]
@@ -1151,30 +985,17 @@ SectionTypeSettingsEnd
             sortents.Entities.Add(file.Entities.First());
             sortents.SortItems.Add(file.Entities.Skip(1).First());
             file.Objects.Add(sortents);
-            VerifyFileContains(file, @"
-  0
-POINT
-  5
-#
-");
-            VerifyFileContains(file, @"
-  0
-POINT
-  5
-#
-");
-            VerifyFileContains(file, @"
-  0
-SORTENTSTABLE
-  5
-#
-100
-AcDbSortentsTable
-331
-#
-  5
-#
-");
+            VerifyFileContains(file,
+                (0, "POINT"),
+                (5, "#")
+            );
+            VerifyFileContains(file,
+                (0, "SORTENTSTABLE"),
+                (5, "#"),
+                (100, "AcDbSortentsTable"),
+                (331, "#"),
+                (5, "#")
+            );
         }
 
         [Fact]
@@ -1218,56 +1039,32 @@ AcDbSortentsTable
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2013;
             file.Objects.Add(sun);
-            VerifyFileContains(file, @"
-  0
-SUNSTUDY
-  5
-#
-100
-AcDbSunStudy
- 90
-0
-  1
-
-  2
-
- 70
-0
-  3
-
-290
-0
-  4
-
-291
-0
- 91
-0
-292
-0
- 73
-3
-290
-42
-290
-43
-290
-44
- 74
-0
- 75
-0
- 76
-0
- 77
-0
- 40
-0.0
-293
-0
-294
-0
-");
+            VerifyFileContains(file,
+                (0, "SUNSTUDY"),
+                (5, "#"),
+                (100, "AcDbSunStudy"),
+                (90, 0),
+                (1, ""),
+                (2, ""),
+                (70, 0),
+                (3, ""),
+                (290, false),
+                (4, ""),
+                (291, false),
+                (91, 0),
+                (292, false),
+                (73, 3),
+                (290, 42),
+                (290, 43),
+                (290, 44),
+                (74, 0),
+                (75, 0),
+                (76, 0),
+                (77, 0),
+                (40, 0.0),
+                (293, false),
+                (294, false)
+            );
 
             // verify writing as binary doesn't crash
             using (var ms = new MemoryStream())
@@ -1357,128 +1154,70 @@ AcDbSunStudy
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2004;
             file.Objects.Add(table);
-            VerifyFileContains(file, @"
-100
-AcDbTableStyle
-  3
-
- 70
-0
- 71
-0
- 40
-0.06
- 41
-0.06
-280
-0
-281
-0
-  7
-one
-140
-0.0
-170
-0
- 62
-0
- 63
-7
-283
-0
- 90
-0
- 91
-0
-274
-0
-275
-0
-276
-0
-277
-0
-278
-0
-279
-0
-284
-1
-285
-1
-286
-1
-287
-1
-288
-1
-289
-1
- 64
-0
- 65
-0
- 66
-0
- 67
-0
- 68
-0
- 69
-0
-  7
-two
-140
-0.0
-170
-0
- 62
-0
- 63
-7
-283
-0
- 90
-0
- 91
-0
-274
-0
-275
-0
-276
-0
-277
-0
-278
-0
-279
-0
-284
-1
-285
-1
-286
-1
-287
-1
-288
-1
-289
-1
- 64
-0
- 65
-0
- 66
-0
- 67
-0
- 68
-0
- 69
-0
-");
+            VerifyFileContains(file,
+                (0, "TABLESTYLE"),
+                (5, "#"),
+                (100, "AcDbTableStyle"),
+                (3, ""),
+                (70, 0),
+                (71, 0),
+                (40, 0.06),
+                (41, 0.06),
+                (280, 0),
+                (281, 0),
+                (7, "one"),
+                (140, 0.0),
+                (170, 0),
+                (62, 0),
+                (63, 7),
+                (283, 0),
+                (90, 0),
+                (91, 0),
+                (274, 0),
+                (275, 0),
+                (276, 0),
+                (277, 0),
+                (278, 0),
+                (279, 0),
+                (284, 1),
+                (285, 1),
+                (286, 1),
+                (287, 1),
+                (288, 1),
+                (289, 1),
+                (64, 0),
+                (65, 0),
+                (66, 0),
+                (67, 0),
+                (68, 0),
+                (69, 0),
+                (7, "two"),
+                (140, 0.0),
+                (170, 0),
+                (62, 0),
+                (63, 7),
+                (283, 0),
+                (90, 0),
+                (91, 0),
+                (274, 0),
+                (275, 0),
+                (276, 0),
+                (277, 0),
+                (278, 0),
+                (279, 0),
+                (284, 1),
+                (285, 1),
+                (286, 1),
+                (287, 1),
+                (288, 1),
+                (289, 1),
+                (64, 0),
+                (65, 0),
+                (66, 0),
+                (67, 0),
+                (68, 0),
+                (69, 0)
+            );
         }
 
         [Fact]

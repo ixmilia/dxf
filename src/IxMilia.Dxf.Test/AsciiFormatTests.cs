@@ -56,6 +56,11 @@ namespace IxMilia.Dxf.Test
             Assert.Equal("   100", DxfWriter.ShortAsString(100));
             Assert.Equal("  1000", DxfWriter.ShortAsString(1000));
             Assert.Equal(" 10000", DxfWriter.ShortAsString(10000));
+            Assert.Equal("    -1", DxfWriter.ShortAsString(-1));
+            Assert.Equal("   -10", DxfWriter.ShortAsString(-10));
+            Assert.Equal("  -100", DxfWriter.ShortAsString(-100));
+            Assert.Equal(" -1000", DxfWriter.ShortAsString(-1000));
+            Assert.Equal("-10000", DxfWriter.ShortAsString(-10000));
         }
 
         [Fact]
@@ -71,6 +76,15 @@ namespace IxMilia.Dxf.Test
             Assert.Equal("  1000000", DxfWriter.IntAsString(1000000));
             Assert.Equal(" 10000000", DxfWriter.IntAsString(10000000));
             Assert.Equal("100000000", DxfWriter.IntAsString(100000000));
+            Assert.Equal("       -1", DxfWriter.IntAsString(-1));
+            Assert.Equal("      -10", DxfWriter.IntAsString(-10));
+            Assert.Equal("     -100", DxfWriter.IntAsString(-100));
+            Assert.Equal("    -1000", DxfWriter.IntAsString(-1000));
+            Assert.Equal("   -10000", DxfWriter.IntAsString(-10000));
+            Assert.Equal("  -100000", DxfWriter.IntAsString(-100000));
+            Assert.Equal(" -1000000", DxfWriter.IntAsString(-1000000));
+            Assert.Equal("-10000000", DxfWriter.IntAsString(-10000000));
+            Assert.Equal("-100000000", DxfWriter.IntAsString(-100000000));
         }
 
         [Fact]
@@ -80,6 +94,7 @@ namespace IxMilia.Dxf.Test
             Assert.Equal("1", DxfWriter.LongAsString(1));
             Assert.Equal("10", DxfWriter.LongAsString(10));
             Assert.Equal("100", DxfWriter.LongAsString(100));
+            Assert.Equal("-1", DxfWriter.LongAsString(-1));
         }
 
         [Fact]

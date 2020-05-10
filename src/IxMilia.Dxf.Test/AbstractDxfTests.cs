@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using IxMilia.Dxf.Sections;
 using Xunit;
 
@@ -83,49 +82,103 @@ EOF
             }
         }
 
-        internal static string ToString(DxfFile file, DxfSectionType sectionType)
+        internal static bool AreCodePairsEquivalent(DxfCodePair a, DxfCodePair b)
         {
-            using (var stream = new MemoryStream())
+            if (a.Code == b.Code &&
+                DxfCodePair.ExpectedType(a.Code) == typeof(string) &&
+                (a.StringValue == "#" || b.StringValue == "#"))
             {
-                file.WriteSingleSection(stream, sectionType);
-                stream.Flush();
-                stream.Seek(0, SeekOrigin.Begin);
-                using (var reader = new StreamReader(stream))
+                // fake handle placeholder
+                return true;
+            }
+
+            return a == b;
+        }
+
+        internal static int IndexOf(IEnumerable<DxfCodePair> superset, params (int code, object value)[] subset)
+        {
+            return IndexOf(superset.ToList(), subset.Select(cp => new DxfCodePair(cp.code, cp.value)).ToList());
+        }
+
+        internal static int IndexOf(List<DxfCodePair> superset, List<DxfCodePair> subset)
+        {
+            var upperBound = superset.Count - subset.Count;
+            for (int supersetIndex = 0; supersetIndex <= upperBound; supersetIndex++)
+            {
+                bool isMatch = true;
+                for (int subsetIndex = 0; subsetIndex < subset.Count && isMatch; subsetIndex++)
                 {
-                    return reader.ReadToEnd();
+                    var expected = subset[subsetIndex];
+                    var actual = superset[supersetIndex + subsetIndex];
+                    isMatch &= AreCodePairsEquivalent(expected, actual);
                 }
+
+                if (isMatch)
+                {
+                    // found it
+                    return supersetIndex;
+                }
+            }
+
+            return -1;
+        }
+
+        internal static void VerifyFileContains(DxfFile file, params (int code, object value)[] codePairs)
+        {
+            var expectedPairs = codePairs.Select(cp => new DxfCodePair(cp.code, cp.value)).ToList();
+            var actualPairs = file.GetCodePairs().ToList();
+            var index = IndexOf(actualPairs, expectedPairs);
+            if (index < 0)
+            {
+                var expectedString = string.Join("\n", expectedPairs);
+                var actualString = string.Join("\n", actualPairs);
+
+                throw new Exception($"Unable to find expected pairs\n{expectedString}\n\nin\n\n{actualString}.");
             }
         }
 
-        internal static void VerifyFileContents(DxfFile file, string expected, DxfSectionType? sectionType, Action<string, string> predicate)
+        internal static void VerifyFileContains(DxfFile file, DxfSectionType sectionType, params (int code, object value)[] codePairs)
         {
-            var actual = sectionType.HasValue
-                ? ToString(file, sectionType.GetValueOrDefault())
-                : ToString(file);
-            predicate(
-                RemoveLeadingAndTrailingWhitespaceFromLines(expected),
-                RemoveLeadingAndTrailingWhitespaceFromLines(actual));
+            var expectedPairs = codePairs.Select(cp => new DxfCodePair(cp.code, cp.value)).ToList();
+            var sections = file.Sections.Where(s => s.Type == sectionType);
+            var actualPairs = file.GetCodePairs(sections).ToList();
+            var index = IndexOf(actualPairs, expectedPairs);
+            if (index < 0)
+            {
+                var expectedString = string.Join("\n", expectedPairs);
+                var actualString = string.Join("\n", actualPairs);
+
+                throw new Exception($"Unable to find expected pairs\n{expectedString}\n\nin\n\n{actualString}.");
+            }
         }
 
-        private static string RemoveLeadingAndTrailingWhitespaceFromLines(string s)
+        internal static void VerifyFileDoesNotContain(DxfFile file, params (int code, object value)[] codePairs)
         {
-            var lines = s.Split("\n".ToCharArray()).Select(l => l.Trim());
-            return string.Join("\r\n", lines);
+            var expectedPairs = codePairs.Select(cp => new DxfCodePair(cp.code, cp.value)).ToList();
+            var actualPairs = file.GetCodePairs().ToList();
+            var index = IndexOf(actualPairs, expectedPairs);
+            if (index >= 0)
+            {
+                var expectedString = string.Join("\n", expectedPairs);
+                var actualString = string.Join("\n", actualPairs);
+
+                throw new Exception($"Expected not to find\n{expectedString}\n\nin\n\n{actualString}.\n\nItem was found at index {index}.");
+            }
         }
 
-        protected static string FixNewLines(string s)
+        internal static void VerifyFileDoesNotContain(DxfFile file, DxfSectionType sectionType, params (int code, object value)[] codePairs)
         {
-            return s.Replace("\r", "").Replace("\n", "\r\n");
-        }
+            var expectedPairs = codePairs.Select(cp => new DxfCodePair(cp.code, cp.value)).ToList();
+            var sections = file.Sections.Where(s => s.Type == sectionType);
+            var actualPairs = file.GetCodePairs(sections).ToList();
+            var index = IndexOf(actualPairs, expectedPairs);
+            if (index >= 0)
+            {
+                var expectedString = string.Join("\n", expectedPairs);
+                var actualString = string.Join("\n", actualPairs);
 
-        internal static void VerifyFileContains(DxfFile file, string expected, DxfSectionType? sectionType = null)
-        {
-            VerifyFileContents(file, expected, sectionType, (ex, ac) => AssertRegexContains(ex.Trim(), ac));
-        }
-
-        internal static void VerifyFileDoesNotContain(DxfFile file, string unexpected, DxfSectionType? sectionType = null)
-        {
-            VerifyFileContents(file, unexpected, sectionType, predicate: (ex, ac) => Assert.DoesNotContain(ex.Trim(), ac));
+                throw new Exception($"Expected not to find\n{expectedString}\n\nin\n\n{actualString}.\n\nItem was found at index {index}.");
+            }
         }
 
         protected static void AssertArrayEqual<T>(T[] expected, T[] actual)
@@ -177,55 +230,6 @@ EOF
                 var actualProperty = property.GetValue(actual);
                 Assert.Equal(expectedProperty, actualProperty);
             }
-        }
-
-        private static void AssertRegexContains(string expected, string actual)
-        {
-            var regex = CreateMatcherRegex(expected);
-            if (!regex.IsMatch(actual))
-            {
-                throw new Exception(string.Join(Environment.NewLine, new[]
-                    {
-                        "Unable to find",
-                        expected,
-                        "in",
-                        actual
-                    }));
-            }
-        }
-
-        private static Regex CreateMatcherRegex(string text)
-        {
-            var sb = new StringBuilder();
-            foreach (var c in text)
-            {
-                switch (c)
-                {
-                    case '#':
-                        // the character '#' will match any hex number (item handle)
-                        sb.Append(@"[A-Fa-f0-9]+");
-                        break;
-                    case '.':
-                    case '\\':
-                    case '[':
-                    case ']':
-                    case '(':
-                    case ')':
-                    case '?':
-                    case '*':
-                    case '+':
-                    case '$':
-                    case '^':
-                        // escape special characters
-                        sb.Append("\\" + c);
-                        break;
-                    default:
-                        sb.Append(c);
-                        break;
-                }
-            }
-
-            return new Regex(sb.ToString(), RegexOptions.Multiline);
         }
     }
 }

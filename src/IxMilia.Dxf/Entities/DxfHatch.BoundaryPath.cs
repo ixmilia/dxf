@@ -1,5 +1,6 @@
 // Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Collections;
@@ -8,11 +9,12 @@ namespace IxMilia.Dxf.Entities
 {
     public partial class DxfHatch
     {
+        [Flags]
         public enum BoundaryPathType
         {
             Default = 0,
             External = 1,
-            // Polyline = 2, // handled manually, not exposed
+            Polyline = 2,
             Derived = 4,
             Textbox = 8,
             Outermost = 16,
@@ -50,7 +52,7 @@ namespace IxMilia.Dxf.Entities
 
             internal static BoundaryPathBase CreateFromType(BoundaryPathType type)
             {
-                if ((int)type == 2)
+                if ((type & BoundaryPathType.Polyline) == BoundaryPathType.Polyline)
                 {
                     // special polyline case
                     return new PolylineBoundaryPath();

@@ -2221,9 +2221,9 @@ OLE
  91
         2
 999
-============================ start of polyline boundary path
+=================== start of external polyline boundary path
  92
-        2
+        3
  72
      1
  73

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -25,6 +26,13 @@ namespace IxMilia.Dxf.Test
             }
         }
 
+        protected static DxfFile Parse(params (int code, object value)[] codePairs)
+        {
+            var testBuffer = new TestCodePairBufferReader(codePairs);
+            var file = DxfFile.LoadFromReader(testBuffer);
+            return file;
+        }
+
         protected static DxfFile Section(string sectionName, string data)
         {
             return Parse(string.Format(@"
@@ -37,6 +45,28 @@ ENDSEC
 0
 EOF
 ", sectionName, string.IsNullOrWhiteSpace(data) ? null : "\r\n" + data.Trim()));
+        }
+
+        protected static DxfFile Section(string sectionName, params (int code, object value)[] codePairs)
+        {
+            return Section(sectionName, (IEnumerable<(int code, object value)>)codePairs);
+        }
+
+        protected static DxfFile Section(string sectionName, IEnumerable<(int code, object value)> codePairs)
+        {
+            var preCodePairs = new[]
+            {
+                (0, (object)"SECTION"),
+                (2, sectionName),
+            };
+            var postCodePairs = new[]
+            {
+                (0, (object)"ENDSEC"),
+                (0, "EOF"),
+            };
+            var testBuffer = new TestCodePairBufferReader(preCodePairs.Concat(codePairs).Concat(postCodePairs));
+            var file = DxfFile.LoadFromReader(testBuffer);
+            return file;
         }
 
         internal static string ToString(DxfFile file)

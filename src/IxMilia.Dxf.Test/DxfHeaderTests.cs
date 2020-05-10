@@ -14,48 +14,18 @@ namespace IxMilia.Dxf.Test
         [Fact]
         public void SpecificHeaderValuesTest()
         {
-            var file = Section("HEADER", @"
-  9
-$ACADMAINTVER
- 70
-16
-  9
-$ACADVER
-  1
-AC1012
-  9
-$ANGBASE
- 50
-5.5E1
-  9
-$ANGDIR
- 70
-1
-  9
-$ATTMODE
- 70
-1
-  9
-$AUNITS
- 70
-3
-  9
-$AUPREC
- 70
-7
-  9
-$CLAYER
-  8
-<current layer>
-  9
-$LUNITS
- 70
-6
-  9
-$LUPREC
- 70
-7
-");
+            var file = Section("HEADER",
+                (9, "$ACADMAINTVER"), (70, 16),
+                (9, "$ACADVER"), (1, "AC1012"),
+                (9, "$ANGBASE"), (50, 55.0),
+                (9, "$ANGDIR"), (70, 1),
+                (9, "$ATTMODE"), (70, 1),
+                (9, "$AUNITS"), (70, 3),
+                (9, "$AUPREC"), (70, 7),
+                (9, "$CLAYER"), (8, "<current layer>"),
+                (9, "$LUNITS"), (70, 6),
+                (9, "$LUPREC"), (70, 7)
+            );
             Assert.Equal(16, file.Header.MaintenenceVersion);
             Assert.Equal(DxfAcadVersion.R13, file.Header.Version);
             Assert.Equal(55.0, file.Header.AngleZeroDirection);
@@ -74,53 +44,34 @@ $LUPREC
             // from Autodesk spec: 2451544.91568287 = December 31, 1999, 9:58:35 pm.
 
             // verify reading
-            var file = Section("HEADER", @"
-  9
-$TDCREATE
- 40
-2451544.91568287
-");
-            Assert.Equal(new DateTime(1999, 12, 31, 21, 58, 35), file.Header.CreationDate);
+            Assert.True(DxfTextReader.TryParseDoubleValue("2451544.91568287", out var dateAsDouble));
+            var date = DxfCommonConverters.DateDouble(dateAsDouble);
+            Assert.Equal(new DateTime(1999, 12, 31, 21, 58, 35), date);
 
-            VerifyFileContains(file, @"
-  9
-$TDCREATE
- 40
-2451544.91568287
-");
+            // verify writing
+            dateAsDouble = DxfCommonConverters.DateDouble(date);
+            var dateAsString = DxfWriter.DoubleAsString(dateAsDouble);
+            Assert.Equal("2451544.91568287", dateAsString);
         }
 
         [Fact]
         public void ReadLayerTableTest()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-LAYER
-  0
-LAYER
-  2
-a
- 62
-12
-  0
-LAYER
-102
-{APP_NAME
-  1
-foo
-  2
-bar
-102
-}
-  2
-b
- 62
-13
-  0
-ENDTAB
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "LAYER"),
+                (0, "LAYER"),
+                (2, "a"),
+                (62, 12),
+                (0, "LAYER"),
+                (102, "{APP_NAME"),
+                (1, "foo"),
+                (2, "bar"),
+                (102, "}"),
+                (2, "b"),
+                (62, 13),
+                (0, "ENDTAB")
+            );
             var layers = file.Layers;
             Assert.Equal(2, layers.Count);
             Assert.Equal("a", layers[0].Name);
@@ -165,70 +116,39 @@ bar
         [Fact]
         public void ViewPortTableTest()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-VPORT
-  0
-VPORT
-  0
-VPORT
-  2
-vport-2
- 10
-1.100000E+001
- 20
-2.200000E+001
- 11
-3.300000E+001
- 21
-4.400000E+001
- 12
-5.500000E+001
- 22
-6.600000E+001
- 13
-7.700000E+001
- 23
-8.800000E+001
- 14
-9.900000E+001
- 24
-1.200000E+001
- 15
-1.300000E+001
- 25
-1.400000E+001
- 16
-1.500000E+001
- 26
-1.600000E+001
- 36
-1.700000E+001
- 17
-1.800000E+001
- 27
-1.900000E+001
- 37
-2.000000E+001
- 40
-2.100000E+001
- 41
-2.200000E+001
- 42
-2.300000E+001
- 43
-2.400000E+001
- 44
-2.500000E+001
- 50
-2.600000E+001
- 51
-2.700000E+001
-  0
-ENDTAB
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "VPORT"),
+                    (0, "VPORT"), // empty vport
+                    (0, "VPORT"), // vport with values
+                    (2, "vport-2"), // name
+                    (10, 11.0), // lower left
+                    (20, 22.0),
+                    (11, 33.0), // upper right
+                    (21, 44.0),
+                    (12, 55.0), // view center
+                    (22, 66.0),
+                    (13, 77.0), // snap base
+                    (23, 88.0),
+                    (14, 99.0), // snap spacing
+                    (24, 12.0),
+                    (15, 13.0), // grid spacing
+                    (25, 14.0),
+                    (16, 15.0), // view direction
+                    (26, 16.0),
+                    (36, 17.0),
+                    (17, 18.0), // target view point
+                    (27, 19.0),
+                    (37, 20.0),
+                    (40, 21.0), // view height
+                    (41, 22.0), // view port aspect ratio
+                    (42, 23.0), // lens length
+                    (43, 24.0), // front clipping plane
+                    (44, 25.0), // back clipping plane
+                    (50, 26.0), // snap rotation angle
+                    (51, 27.0), // view twist angle
+                (0, "ENDTAB")
+            );
             var viewPorts = file.ViewPorts;
             Assert.Equal(2, viewPorts.Count);
 
@@ -292,12 +212,9 @@ ENDTAB
         [Fact]
         public void ReadAlternateVersionTest()
         {
-            var file = Section("HEADER", @"
-  9
-$ACADVER
-  1
-15.0S
-");
+            var file = Section("HEADER",
+                (9, "$ACADVER"), (1, "15.0S")
+            );
             Assert.Equal(DxfAcadVersion.R2000, file.Header.Version);
             Assert.True(file.Header.IsRestrictedVersion);
         }
@@ -305,16 +222,10 @@ $ACADVER
         [Fact]
         public void ReadEmptyFingerPrintGuidTest()
         {
-            var file = Section("HEADER", @"
-  9
-$FINGERPRINTGUID
-2
-
-  9
-$ACADVER
-  1
-AC1012
-");
+            var file = Section("HEADER",
+                (9, "$FINGERPRINTGUID"), (2, ""),
+                (9, "$ACADVER"), (1, "AC1012")
+            );
             Assert.Equal(Guid.Empty, file.Header.FingerprintGuid);
         }
 
@@ -322,21 +233,15 @@ AC1012
         public void ReadAlternateMaintenenceVersionTest()
         {
             // traditional short value
-            var file = Section("HEADER", @"
-  9
-$ACADMAINTVER
- 70
-42
-");
+            var file = Section("HEADER",
+                (9, "$ACADMAINTVER"), (70, 42)
+            );
             Assert.Equal(42, file.Header.MaintenenceVersion);
 
             // alternate long value
-            file = Section("HEADER", @"
-  9
-$ACADMAINTVER
- 90
-42
-");
+            file = Section("HEADER",
+                (9, "$ACADMAINTVER"), (90, 42)
+            );
             Assert.Equal(42, file.Header.MaintenenceVersion);
         }
 

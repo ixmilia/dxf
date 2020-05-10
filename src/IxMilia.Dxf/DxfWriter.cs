@@ -72,7 +72,7 @@ namespace IxMilia.Dxf
         {
             if (textWriter != null)
             {
-                WriteLine(code.ToString(CultureInfo.InvariantCulture).PadLeft(3));
+                WriteLine(CodeAsString(code));
             }
             else if (binWriter != null)
             {
@@ -95,6 +95,11 @@ namespace IxMilia.Dxf
             {
                 throw new InvalidOperationException("No writer available");
             }
+        }
+
+        internal static string CodeAsString(int code)
+        {
+            return code.ToString(CultureInfo.InvariantCulture).PadLeft(3);
         }
 
         private void WriteValue(int code, object value)
@@ -186,34 +191,54 @@ namespace IxMilia.Dxf
             }
         }
 
+        internal static string DoubleAsString(double value)
+        {
+            return value.ToString("0.0##############", CultureInfo.InvariantCulture);
+        }
+
         private void WriteDouble(double value)
         {
             if (textWriter != null)
-                WriteLine(value.ToString("0.0##############", CultureInfo.InvariantCulture));
+                WriteLine(DoubleAsString(value));
             else if (binWriter != null)
                 binWriter.Write(value);
+        }
+
+        internal static string ShortAsString(short value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture).PadLeft(6);
         }
 
         private void WriteShort(short value)
         {
             if (textWriter != null)
-                WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(6));
+                WriteLine(ShortAsString(value));
             else if (binWriter != null)
                 binWriter.Write(value);
+        }
+
+        internal static string IntAsString(int value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture).PadLeft(9);
         }
 
         private void WriteInt(int value)
         {
             if (textWriter != null)
-                WriteLine(value.ToString(CultureInfo.InvariantCulture).PadLeft(9));
+                WriteLine(IntAsString(value));
             else if (binWriter != null)
                 binWriter.Write(value);
+        }
+
+        internal static string LongAsString(long value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
         }
 
         private void WriteLong(long value)
         {
             if (textWriter != null)
-                WriteLine(value.ToString(CultureInfo.InvariantCulture));
+                WriteLine(LongAsString(value));
             else if (binWriter != null)
                 binWriter.Write(value);
         }
@@ -248,7 +273,7 @@ namespace IxMilia.Dxf
             return result;
         }
 
-        private static string TransformControlCharacters(string str)
+        internal static string TransformControlCharacters(string str)
         {
             var sb = new StringBuilder();
             foreach (var c in str)

@@ -508,55 +508,12 @@ unsupported code (5555) treated as string
         }
 
         [Fact]
-        public void ReadDoubleAsIntegralTest()
-        {
-            // Some files encountered in the wild have double-like values for the integral types.  Ensure that those still parse
-            // and are within the valid ranges.
-
-            // short
-            var file = Section("HEADER", @"
-  9
-$ACADMAINTVER
- 70
-2.0
-");
-            Assert.Equal(2, file.Header.MaintenenceVersion);
-
-            // int
-            file = Section("ENTITIES", @"
-  0
-ARCALIGNEDTEXT
- 90
-15e10
-");
-            Assert.Equal(int.MaxValue, ((DxfArcAlignedText)file.Entities.Single()).ColorIndex);
-
-            // long
-            file = Section("HEADER", @"
-  9
-$REQUIREDVERSIONS
-160
--15e20
-");
-            Assert.Equal(long.MinValue, file.Header.RequiredVersions);
-
-            // bool
-            file = Section("HEADER", @"
-  9
-$LWDISPLAY
-290
-15e10
-");
-            Assert.True(file.Header.DisplayLinewieghtInModelAndLayoutTab);
-        }
-
-        [Fact]
         public void ReadThumbnailTest()
         {
-            var file = Section("THUMBNAILIMAGE", @" 90
-3
-310
-012345");
+            var file = Section("THUMBNAILIMAGE",
+                (90, 3),
+                (310, "012345")
+            );
             AssertArrayEqual(file.RawThumbnail, new byte[] { 0x01, 0x23, 0x45 });
         }
 
@@ -614,10 +571,10 @@ ENDSEC");
         [Fact]
         public void ReadThumbnailTest_GetThumbnailBitmap()
         {
-            var file = Section("THUMBNAILIMAGE", @" 90
-3
-310
-012345");
+            var file = Section("THUMBNAILIMAGE",
+                (90, 3),
+                (310, "012345")
+            );
             var expected = new byte[]
             {
                 (byte)'B', (byte)'M', // magic number
@@ -635,46 +592,27 @@ ENDSEC");
         public void AssignOwnerHandlesInXDataTest()
         {
             // read a layout with its owner handle also specified in the XDATA
-            var file = Parse(@"
-  0
-SECTION
-  2
-HEADER
-  9
-$ACADVER
-  1
-AC1027
-  0
-ENDSEC
-  0
-SECTION
-  2
-OBJECTS
-  0
-DICTIONARY
-  5
-BBBBBBBB
-  3
-some-layout
-350
-CCCCCCCC
-  0
-LAYOUT
-  5
-CCCCCCCC
-330
-BBBBBBBB
-102
-{ACAD_REACTORS
-330
-BBBBBBBB
-102
-}
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "HEADER"),
+                (9, "$ACADVER"),
+                (1, "AC1027"),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "OBJECTS"),
+                (0, "DICTIONARY"),
+                (5, "BBBBBBBB"),
+                (3, "some-layout"),
+                (350, "CCCCCCCC"),
+                (0, "LAYOUT"),
+                (5, "CCCCCCCC"),
+                (330, "BBBBBBBB"),
+                (102, "{ACAD_REACTORS"),
+                (330, "BBBBBBBB"),
+                (102, "}"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             // sanity check to verify that it was read correctly
             var dict = file.Objects.OfType<DxfDictionary>().Single();
             var layout = (DxfLayout)dict["some-layout"];
@@ -702,34 +640,21 @@ EOF
         [Fact]
         public void ReadVersionSpecificClassTest_R13()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-HEADER
-  9
-$ACADVER
-  1
-AC1012
-  0
-ENDSEC
-  0
-SECTION
-  2
-CLASSES
-  0
-<class dxf name>
-  1
-CPP_CLASS_NAME
-  2
-<application name>
- 90
-42
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "HEADER"),
+                (9, "$ACADVER"),
+                (1, "AC1012"),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "CLASSES"),
+                (0, "<class dxf name>"),
+                (1, "CPP_CLASS_NAME"),
+                (2, "<application name>"),
+                (90, 42),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             Assert.Equal(1, file.Classes.Count);
 
             var cls = file.Classes.Single();
@@ -742,36 +667,22 @@ EOF
         [Fact]
         public void ReadVersionSpecificClassTest_R14()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-HEADER
-  9
-$ACADVER
-  1
-AC1014
-  0
-ENDSEC
-  0
-SECTION
-  2
-CLASSES
-  0
-CLASS
-  1
-<class dxf name>
-  2
-CPP_CLASS_NAME
-  3
-<application name>
- 90
-42
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "HEADER"),
+                (9, "$ACADVER"),
+                (1, "AC1014"),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "CLASSES"),
+                (0, "CLASS"),
+                (1, "<class dxf name>"),
+                (2, "CPP_CLASS_NAME"),
+                (3, "<application name>"),
+                (90, 42),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             Assert.Equal(1, file.Classes.Count);
 
             var cls = file.Classes.Single();
@@ -784,54 +695,31 @@ EOF
         [Fact]
         public void ReadVersionSpecificBlockRecordTest_R2000()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-BLOCK_RECORD
-  5
-2
-330
-0
-100
-AcDbSymbolTable
- 70
-0
-  0
-BLOCK_RECORD
-  5
-A
-330
-0
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-<name>
-340
-A1
-310
-010203040506070809
-310
-010203040506070809
-1001
-ACAD
-1000
-DesignCenter Data
-1002
-{
-1070
-0
-1070
-1
-1070
-2
-1002
-}
-  0
-ENDTAB
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "BLOCK_RECORD"),
+                (5, "2"),
+                (330, "0"),
+                (100, "AcDbSymbolTable"),
+                (70, 0),
+                (0, "BLOCK_RECORD"),
+                (5, "A"),
+                (330, "0"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "<name>"),
+                (340, "A1"),
+                (310, "010203040506070809"),
+                (310, "010203040506070809"),
+                (1001, "ACAD"),
+                (1000, "DesignCenter Data"),
+                (1002, "{"),
+                (1070, 0),
+                (1070, 1),
+                (1070, 2),
+                (1002, "}"),
+                (0, "ENDTAB")
+            );
             var blockRecord = file.BlockRecords.Single();
             Assert.Equal("<name>", blockRecord.Name);
             Assert.Equal(0xA1u, blockRecord.LayoutHandle);
@@ -856,60 +744,34 @@ ENDTAB
         [Fact]
         public void ReadRealTriple()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-BLOCK_RECORD
-  5
-2
-330
-0
-100
-AcDbSymbolTable
- 70
-0
-  0
-BLOCK_RECORD
-  5
-A
-330
-0
-100
-AcDbSymbolTableRecord
-100
-AcDbBlockTableRecord
-  2
-<name>
-340
-A1
-310
-010203040506070809
-310
-010203040506070809
-1001
-ACAD
-1000
-DesignCenter Data
-1002
-{
-1070
-0
-1070
-1
-1070
-2
-1010
-3.1
-1020
-4.2
-1030
-5.3
-1002
-}
-  0
-ENDTAB
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "BLOCK_RECORD"),
+                (5, "2"),
+                (330, "0"),
+                (100, "AcDbSymbolTable"),
+                (70, 0),
+                (0, "BLOCK_RECORD"),
+                (5, "A"),
+                (330, "0"),
+                (100, "AcDbSymbolTableRecord"),
+                (100, "AcDbBlockTableRecord"),
+                (2, "<name>"),
+                (340, "A1"),
+                (310, "010203040506070809"),
+                (310, "010203040506070809"),
+                (1001, "ACAD"),
+                (1000, "DesignCenter Data"),
+                (1002, "{"),
+                (1070, 0),
+                (1070, 1),
+                (1070, 2),
+                (1010, 3.1),
+                (1020, 4.2),
+                (1030, 5.3),
+                (1002, "}"),
+                (0, "ENDTAB")
+            );
             var blockRecord = file.BlockRecords.Single();
             Assert.Equal("<name>", blockRecord.Name);
             Assert.Equal(0xA1u, blockRecord.LayoutHandle);
@@ -935,38 +797,20 @@ ENDTAB
         [Fact]
         public void ReadXDataUnexpectedValueTest()
         {
-            var file = Section("ENTITIES", @"
-  0
-LINE
-1001
-group name
-1002
-{
-999
-------------------------------- valid world point
-1011
-1
-1021
-2
-1031
-3
-999
------- point missing X value; invalid and skipped
-1021
-222
-1031
-333
-999
-------------------------------- valid world point
-1011
-11
-1021
-22
-1031
-33
-1002
-}
-");
+            var file = Section("ENTITIES",
+                (0, "LINE"),
+                (1001, "group name"),
+                (1002, "{"),
+                (1011, 1.0), // valid world point
+                (1021, 2.0),
+                (1031, 3.0),
+                (1021, 222.0), // point missing x value; invalid and skipped
+                (1031, 333.0),
+                (1011, 11.0), // valid world point
+                (1021, 22.0),
+                (1031, 33.0),
+                (1002, "}")
+            );
             var line = (DxfLine)file.Entities.Single();
             var xdata = ((IDxfHasXDataHidden)line).XDataHidden;
             var itemList = (DxfXDataItemList)xdata.Items.Single();
@@ -1216,68 +1060,38 @@ CPP_CLASS_NAME
         [Fact]
         public void ReadVersionSpecificBlockTest_R13()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-HEADER
-  9
-$ACADVER
-  1
-AC1012
-  0
-ENDSEC
-  0
-SECTION
-  2
-BLOCKS
-  0
-BLOCK
-  5
-42
-100
-AcDbEntity
-  8
-<layer>
-100
-AcDbBlockBegin
-  2
-<block name>
- 70
-0
- 10
-11
- 20
-22
- 30
-33
-  3
-<block name>
-  1
-<xref path>
-  0
-POINT
- 10
-1.1
- 20
-2.2
- 30
-3.3
-  0
-ENDBLK
-  5
-42
-100
-AcDbEntity
-  8
-<layer>
-100
-AcDbBlockEnd
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "HEADER"),
+                (9, "$ACADVER"),
+                (1, "AC1012"),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "BLOCKS"),
+                (0, "BLOCK"),
+                (5, "42"),
+                (100, "AcDbEntity"),
+                (8, "<layer>"),
+                (100, "AcDbBlockBegin"),
+                (2, "<block name>"),
+                (70, 0),
+                (10, 11.0),
+                (20, 22.0),
+                (30, 33.0),
+                (3, "<block name>"),
+                (1, "<xref path>"),
+                (0, "POINT"),
+                (10, 1.1),
+                (20, 2.2),
+                (30, 3.3),
+                (0, "ENDBLK"),
+                (5, "42"),
+                (100, "AcDbEntity"),
+                (8, "<layer>"),
+                (100, "AcDbBlockEnd"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
@@ -1295,64 +1109,36 @@ EOF
         [Fact]
         public void ReadVersionSpecificBlockTest_R14()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-HEADER
-  9
-$ACADVER
-  1
-AC1014
-  0
-ENDSEC
-  0
-SECTION
-  2
-BLOCKS
-  0
-BLOCK
-  5
-42
-100
-AcDbEntity
-  8
-<layer>
-100
-AcDbBlockBegin
-  2
-<block name>
- 70
-0
- 10
-11
- 20
-22
- 30
-33
-  3
-<block name>
-  1
-<xref>
-  0
-POINT
- 10
-1.1
- 20
-2.2
- 30
-3.3
-  0
-ENDBLK
-  5
-42
-100
-AcDbBlockEnd
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "HEADER"),
+                (9, "$ACADVER"),
+                (1, "AC1014"),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "BLOCKS"),
+                (0, "BLOCK"),
+                (5, "42"),
+                (100, "AcDbEntity"),
+                (8, "<layer>"),
+                (100, "AcDbBlockBegin"),
+                (2, "<block name>"),
+                (70, 0),
+                (10, 11.0),
+                (20, 22.0),
+                (30, 33.0),
+                (3, "<block name>"),
+                (1, "<xref>"),
+                (0, "POINT"),
+                (10, 1.1),
+                (20, 2.2),
+                (30, 3.3),
+                (0, "ENDBLK"),
+                (5, "42"),
+                (100, "AcDbBlockEnd"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
@@ -1432,50 +1218,26 @@ ENDSEC
         [Fact]
         public void ReadBlockWithUnsupportedEntityTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-BLOCKS
-  0
-BLOCK
-100
-AcDbBlockBegin
-  0
-POINT
- 10
-1.1
- 20
-2.2
- 30
-3.3
-999
-================================================================================
-999
-      unsupported entity (NOT_A_SUPPORTED_ENTITY) between two supported entities
-999
-================================================================================
-  0
-NOT_A_SUPPORTED_ENTITY
-  0
-POINT
- 10
-4.4
- 20
-5.5
- 30
-6.6
-  0
-ENDBLK
-  5
-42
-100
-AcDbBlockEnd
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "BLOCKS"),
+                (0, "BLOCK"),
+                (100, "AcDbBlockBegin"),
+                (0, "POINT"),
+                (10, 1.1),
+                (20, 2.2),
+                (30, 3.3),
+                (0, "NOT_A_SUPPORTED_ENTITY"), // unsupported entity between two supported entities
+                (0, "POINT"),
+                (10, 4.4),
+                (20, 5.5),
+                (30, 6.6),
+                (0, "ENDBLK"),
+                (5, "42"),
+                (100, "AcDbBlockEnd"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var block = file.Blocks.Single();
             Assert.Equal(2, block.Entities.Count);
             var p1 = (DxfModelPoint)block.Entities.First();
@@ -1487,36 +1249,22 @@ EOF
         [Fact]
         public void ReadXDataNamedGroupTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-ENTITIES
-  0
-DIMENSION
-100
-AcDbAlignedDimension
-1001
-ACAD
-1000
-leading string
-1000
-DSTYLE
-1002
-{
-1070
-    54
-1000
-some string
-1002
-}
-1070
-    42
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                (0, "DIMENSION"),
+                (100, "AcDbAlignedDimension"),
+                (1001, "ACAD"),
+                (1000, "leading string"),
+                (1000, "DSTYLE"),
+                (1002, "{"),
+                (1070, 54),
+                (1000, "some string"),
+                (1002, "}"),
+                (1070, 42),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var dim = (DxfAlignedDimension)file.Entities.Single();
             Assert.Equal("ACAD", dim.XData.ApplicationName);
             Assert.Equal(3, dim.XData.Items.Count);
@@ -1568,58 +1316,33 @@ DSTYLE
         [Fact]
         public void ReadBlockWithPolylineTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-BLOCKS
-  0
-BLOCK
-100
-AcDbBlockBegin
-  0
-POLYLINE
-  0
-VERTEX
- 10
-1.1
- 20
-2.2
- 30
-3.3
-  0
-VERTEX
- 10
-4.4
- 20
-5.5
- 30
-6.6
-  0
-VERTEX
- 10
-7.7
- 20
-8.8
- 30
-9.9
-  0
-VERTEX
- 10
-10.0
- 20
-11.1
- 30
-12.2
-  0
-SEQEND
-  0
-ENDBLK
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "BLOCKS"),
+                (0, "BLOCK"),
+                (100, "AcDbBlockBegin"),
+                (0, "POLYLINE"),
+                (0, "VERTEX"),
+                (10, 1.1),
+                (20, 2.2),
+                (30, 3.3),
+                (0, "VERTEX"),
+                (10, 4.4),
+                (20, 5.5),
+                (30, 6.6),
+                (0, "VERTEX"),
+                (10, 7.7),
+                (20, 8.8),
+                (30, 9.9),
+                (0, "VERTEX"),
+                (10, 10.0),
+                (20, 11.1),
+                (30, 12.2),
+                (0, "SEQEND"),
+                (0, "ENDBLK"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var block = file.Blocks.Single();
             var pl = (DxfPolyline)block.Entities.Single();
             Assert.Equal(4, pl.Vertices.Count);
@@ -1632,72 +1355,40 @@ EOF
         [Fact]
         public void ReadTableTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-TABLES
-  0
-TABLE
-  2
-STYLE
-  5
-1C
-102
-{ACAD_XDICTIONARY
-360
-AAAA
-360
-BBBB
-102
-}
- 70
-3
-1001
-APP_X
-1040
-42.0
-  0
-STYLE
-  5
-3A
-  2
-ENTRY_1
- 70
-64
- 40
-0.4
- 41
-1.0
- 50
-0.0
- 71
-0
- 42
-0.4
-  3
-BUFONTS.TXT
-  0
-STYLE
-  5
-C2
-  2
-ENTRY_2
-  3
-BUFONTS.TXT
-1001
-APP_1
-1070
-45
-1001
-APP_2
-1004
-18A5B3EF2C199A
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "TABLES"),
+                (0, "TABLE"),
+                (2, "STYLE"),
+                (5, "1C"),
+                (102, "{ACAD_XDICTIONARY"),
+                (360, "AAAA"),
+                (360, "BBBB"),
+                (102, "}"),
+                (70, 3),
+                (1001, "APP_X"),
+                (1040, 42.0),
+                (0, "STYLE"),
+                (5, "3A"),
+                (2, "ENTRY_1"),
+                (70, 64),
+                (40, 0.4),
+                (41, 1.0),
+                (50, 0.0),
+                (71, 0),
+                (42, 0.4),
+                (3, "BUFONTS.TXT"),
+                (0, "STYLE"),
+                (5, "C2"),
+                (2, "ENTRY_2"),
+                (3, "BUFONTS.TXT"),
+                (1001, "APP_1"),
+                (1070, 45),
+                (1001, "APP_2"),
+                (1004, "18A5B3EF2C199A"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var styleTable = file.TablesSection.StyleTable;
             Assert.Equal(0x1Cu, styleTable.Handle);
             Assert.Equal(2, styleTable.Items.Count);
@@ -1861,72 +1552,30 @@ BLOCK_RECORD
         [Fact]
         public void Code280ShortInsteadOfCode290BoolTest()
         {
-            // the spec says header variables $HIDETEXT, $INTERSECTIONDISPLAY,  and $XCLIPFRAME should be code 290
+            // the spec says header variables $HIDETEXT, $INTERSECTIONDISPLAY, and $XCLIPFRAME should be code 290
             // bools but some R2010 files encountered in the wild have a code 280 short instead
 
             // first test code 290 bool
-            var file = Section("HEADER", @"
-  9
-$ACADVER
-  1
-AC1018
-  9
-$HIDETEXT
-290
-1
-  9
-$INTERSECTIONDISPLAY
-290
-1
-  9
-$XCLIPFRAME
-290
-1
-");
+            var file = Section("HEADER",
+                (9, "$ACADVER"), (1, "AC1018"),
+                (9, "$HIDETEXT"), (290, 1),
+                (9, "$INTERSECTIONDISPLAY"), (290, 1),
+                (9, "$XCLIPFRAME"), (290, 1)
+            );
             Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
             Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
-
-            // now test the code 290 bool with a double-formated value
-            file = Section("HEADER", @"
-  9
-$HIDETEXT
-290
-1.0
-");
-            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
 
             // now test code 280 short
-            file = Section("HEADER", @"
-  9
-$ACADVER
-  1
-AC1018
-  9
-$HIDETEXT
-280
-1
-  9
-$INTERSECTIONDISPLAY
-280
-1
-  9
-$XCLIPFRAME
-280
-1
-");
+            file = Section("HEADER",
+                (9, "$ACADVER"), (1, "AC1018"),
+                (9, "$HIDETEXT"), (280, 1),
+                (9, "$INTERSECTIONDISPLAY"), (280, 1),
+                (9, "$XCLIPFRAME"), (280, 1)
+            );
             Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
             Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
-
-            // now test the code 280 short with a double-formatted value
-            file = Section("HEADER", @"
-  9
-$HIDETEXT
-280
-3.0
-");
-            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
 
             // verify that these variables aren't written twice
             file = new DxfFile();
@@ -1944,162 +1593,53 @@ $HIDETEXT
         }
 
         [Fact]
-        public void ReadStringWithControlCharactersTest()
-        {
-            var file = Section("ENTITIES", @"
-  0
-TEXT
-  1
-a^G^ ^^ b
-");
-            var text = (DxfText)file.Entities.Single();
-            Assert.Equal("a\x7^\x1E b", text.Value);
-        }
-
-        [Fact]
-        public void WriteStringWithControlCharactersTest()
-        {
-            var file = new DxfFile();
-            file.Entities.Add(new DxfText() { Value = "a\x7^\x1E b" });
-            VerifyFileContains(file, @"
-  1
-a^G^ ^^ b
-");
-        }
-
-        [Fact]
-        public void ParseWithInvariantCultureTest()
-        {
-            // from https://github.com/ixmilia/dxf/issues/36
-            var existingCulture = CultureInfo.CurrentCulture;
-            try
-            {
-                CultureInfo.CurrentCulture = new CultureInfo("de-DE");
-                var file = Section("HEADER", @"
-  9
-$TDCREATE
- 40
-2456478.590142998
-");
-                Assert.Equal(new DateTime(2013, 7, 4, 14, 9, 48, 355), file.Header.CreationDate);
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = existingCulture;
-            }
-        }
-
-        [Fact]
-        public void WriteWithInvariantCultureTest()
-        {
-            var existingCulture = CultureInfo.CurrentCulture;
-            try
-            {
-                CultureInfo.CurrentCulture = new CultureInfo("de-DE");
-                var file = new DxfFile();
-                file.Header.CreationDate = new DateTime(2013, 7, 4, 14, 9, 48, 355);
-                VerifyFileContains(file, @"
-$TDCREATE
- 40
-2456478.590143
-");
-            }
-            finally
-            {
-                CultureInfo.CurrentCulture = existingCulture;
-            }
-        }
-
-        [Fact]
         public void EndBlockHandleAndVersionCompatabilityTest()
         {
-            var file = Section("BLOCKS", @"
-  0
-BLOCK
-  5
-20
-330
-1F
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockBegin
-  2
-*Model_Space
- 70
-     0
- 10
-0.0
- 20
-0.0
- 30
-0.0
-  3
-*Model_Space
-  1
-
-  0
-ENDBLK
-  5
-21
-330
-1F
-100
-AcDbEntity
-  8
-0
-100
-AcDbBlockEnd
-");
+            var file = Section("BLOCKS",
+                (0, "BLOCK"),
+                (5, "20"),
+                (330, "1F"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbBlockBegin"),
+                (2, "*Model_Space"),
+                (70, 0),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0),
+                (3, "*Model_Space"),
+                (1, ""),
+                (0, "ENDBLK"),
+                (5, "21"),
+                (330, "1F"),
+                (100, "AcDbEntity"),
+                (8, "0"),
+                (100, "AcDbBlockEnd")
+            );
         }
 
         [Fact]
         public void ReadLineTypeElementsTest()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-LTYPE
-999
-====================================================== line type with 2 elements
-  0
-LTYPE
-  2
-line-type-name
- 73
-     2
- 49
-1.0
- 74
-     0
- 49
-2.0
- 74
-     1
-999
-============================================== pointer to the STYLE object below
-340
-DEADBEEF
-  0
-ENDTAB
-  0
-TABLE
-  2
-STYLE
-999
-=============================================================== the style object
-  0
-STYLE
-  5
-DEADBEEF
-  2
-style-name
-  0
-ENDTAB
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "LTYPE"),
+                (0, "LTYPE"), // line type with 2 elements
+                (2, "line-type-name"),
+                (73, 2),
+                (49, 1.0),
+                (74, 0),
+                (49, 2.0),
+                (74, 1),
+                (340, "DEADBEEF"), // pointer to the style object below
+                (0, "ENDTAB"),
+                (0, "TABLE"),
+                (2, "STYLE"),
+                (0, "STYLE"), // the style object
+                (5, "DEADBEEF"),
+                (2, "style-name"),
+                (0, "ENDTAB")
+            );
             var ltype = file.LineTypes.Where(l => l.Name == "line-type-name").Single();
             Assert.Equal(2, ltype.Elements.Count);
 
@@ -2462,18 +2002,13 @@ AcDbSymbolTableRecord
         [Fact]
         public void ReadZeroLayerColorTest()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-LAYER
-  0
-LAYER
-  2
-name
- 62
-0
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "LAYER"),
+                (0, "LAYER"),
+                (2, "name"),
+                (62, 0)
+            );
             var layer = file.Layers.Single();
             Assert.True(layer.IsLayerOn);
             Assert.Equal((short)0, layer.Color.RawValue);
@@ -2482,18 +2017,13 @@ name
         [Fact]
         public void ReadNormalLayerColorTest()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-LAYER
-  0
-LAYER
-  2
-name
- 62
-5
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "LAYER"),
+                (0, "LAYER"),
+                (2, "name"),
+                (62, 5)
+            );
             var layer = file.Layers.Single();
             Assert.True(layer.IsLayerOn);
             Assert.Equal((short)5, layer.Color.RawValue);
@@ -2502,18 +2032,13 @@ name
         [Fact]
         public void ReadNegativeLayerColorTest()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-LAYER
-  0
-LAYER
-  2
-name
- 62
--5
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "LAYER"),
+                (0, "LAYER"),
+                (2, "name"),
+                (62, -5)
+            );
             var layer = file.Layers.Single();
             Assert.False(layer.IsLayerOn);
             Assert.Equal((short)5, layer.Color.RawValue);
@@ -2733,18 +2258,13 @@ EOF".Trim();
             // ensure we don't enter an infinite loop with an item that owns itself
 
             // reading
-            var file = Section("OBJECTS", @"
-  0
-DICTIONARY
-  5
-FFFF
-330
-FFFF
-  3
-key
-360
-FFFF
-");
+            var file = Section("OBJECTS",
+                (0, "DICTIONARY"),
+                (5, "FFFF"),
+                (330, "FFFF"),
+                (3, "key"),
+                (360, "FFFF")
+            );
             var dict = (DxfDictionary)file.Objects.Single();
             Assert.Equal(dict, dict.Owner);
             Assert.Equal(dict, dict["key"]);
@@ -2785,34 +2305,25 @@ FFFF
         [Fact]
         public void EnsureEntityHasNoDefaultOwner()
         {
-            var file = Section("ENTITIES", @"
-  0
-POINT
- 10
-0
- 20
-0
- 30
-0
-");
+            var file = Section("ENTITIES",
+                (0, "POINT"),
+                (10, 0.0),
+                (20, 0.0),
+                (30, 0.0)
+            );
             Assert.Null(file.Entities.Single().Owner);
         }
 
         [Fact]
         public void EnsureTableItemsHaveOwnersTest()
         {
-            var file = Section("TABLES", @"
-  0
-TABLE
-  2
-LAYER
-  0
-LAYER
-  2
-layer-name
-  0
-ENDTAB
-");
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "LAYER"),
+                (0, "LAYER"),
+                (2, "layer-name"),
+                (0, "ENDTAB")
+            );
             var layer = file.Layers.Single();
             Assert.Equal("layer-name", layer.Name);
             Assert.Equal(file.TablesSection.LayerTable, layer.Owner);
@@ -2821,7 +2332,7 @@ ENDTAB
         [Fact]
         public void EnsureParsedFileHasNoDefaultItems()
         {
-            var file = Parse("0\r\nEOF");
+            var file = Parse((0, "EOF"));
 
             // all of these must be empty
             Assert.Equal(0, file.ApplicationIds.Count);

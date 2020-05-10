@@ -1,5 +1,6 @@
 ﻿// Copyright (c) IxMilia.  All Rights Reserved.  Licensed under the Apache License, Version 2.0.  See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -107,9 +108,25 @@ namespace IxMilia.Dxf
             data = new KeyValuePair<int, object>(code, value);
         }
 
+        /// <summary>
+        /// Internal for specific cases where the type isn't known.
+        /// </summary>
         internal DxfCodePair(int code, object value)
         {
-            // internal for specific cases where the type isn't known
+            // it's annoying to always cast, this is just a convenience helper
+            var expectedType = ExpectedType(code);
+            if (value?.GetType() == typeof(int))
+            {
+                if (expectedType == typeof(short) || expectedType == typeof(bool))
+                {
+                    value = Convert.ToInt16(value);
+                }
+                else if (expectedType == typeof(long))
+                {
+                    value = Convert.ToInt64(value);
+                }
+            }
+
             data = new KeyValuePair<int, object>(code, value);
         }
 

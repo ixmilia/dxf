@@ -14,7 +14,7 @@ namespace IxMilia.Dxf
         {
             this.enumerator = pairs.GetEnumerator();
             this.isIgnorable = isIgnorable;
-            ItemsRemain = enumerator.MoveNext();
+            Advance();
         }
 
         public bool ItemsRemain { get; private set; }

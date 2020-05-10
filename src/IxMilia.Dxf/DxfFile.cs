@@ -256,7 +256,7 @@ namespace IxMilia.Dxf
             }
         }
 
-        private static DxfFile LoadFromReader(IDxfCodePairReader reader)
+        internal static DxfFile LoadFromReader(IDxfCodePairReader reader)
         {
             var file = new DxfFile();
             file.Clear();

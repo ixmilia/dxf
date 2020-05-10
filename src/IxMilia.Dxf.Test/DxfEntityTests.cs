@@ -11,30 +11,24 @@ namespace IxMilia.Dxf.Test
 {
     public class DxfEntityTests : AbstractDxfTests
     {
-        private static DxfEntity Entity(string entityType, string data)
+        private static DxfEntity Entity(string entityType, params (int code, object value)[] codePairs)
         {
-            var file = Section("ENTITIES", string.Format(@"
-999
-ill-placed comment
-  0
-{0}
-  5
-42
-  6
-<line-type-name>
-  8
-<layer>
- 48
-3.14159
- 60
-1
- 62
-1
- 67
-1
-{1}
-", entityType, data.Trim()));
-            var entity = file.Entities.Single();
+            var preCodePairs = new[]
+            {
+                (999, (object)"ill-placed-comment"),
+                (0, entityType),
+                (5, "42"),
+                (6, "<line-type-name>"),
+                (8, "<layer>"),
+                (48, 3.14159),
+                (60, 1),
+                (62, 1),
+                (67, 1),
+            };
+            var testBuffer = new TestCodePairBufferReader(preCodePairs.Concat(codePairs));
+            var bufferReader = new DxfCodePairBufferReader(testBuffer);
+            var entitiesSection = DxfEntitiesSection.EntitiesSectionFromBuffer(bufferReader);
+            var entity = entitiesSection.Entities.Single();
             Assert.Equal(0x42u, ((IDxfItemInternal)entity).Handle);
             Assert.Equal("<line-type-name>", entity.LineTypeName);
             Assert.Equal("<layer>", entity.Layer);
@@ -79,16 +73,12 @@ ill-placed comment
         [Fact]
         public void ReadEntityExtensionDataTest()
         {
-            var line = (DxfLine)Entity("LINE", @"
-102
-{APP_NAME
-360
-AAAA
-360
-BBBB
-102
-}
-");
+            var line = (DxfLine)Entity("LINE",
+                (102, "{APP_NAME"),
+                (360, "AAAA"),
+                (360, "BBBB"),
+                (102, "}")
+            );
             var group = line.ExtensionDataGroups.Single();
             Assert.Equal("APP_NAME", group.GroupName);
             Assert.Equal(2, group.Items.Count);
@@ -349,24 +339,16 @@ AcDbEntity
         [Fact]
         public void ReadDimensionTest()
         {
-            var dimension = (DxfAlignedDimension)Entity("DIMENSION", @"
-  1
-text
- 10
-330.250000
- 20
-1310.000000
- 13
-330.250000
- 23
-1282.000000
- 14
-319.750000
- 24
-1282.000000
- 70
-1
-");
+            var dimension = (DxfAlignedDimension)Entity("DIMENSION",
+                (1, "text"),
+                (10, 330.25),
+                (20, 1310.0),
+                (13, 330.25),
+                (23, 1282.0),
+                (14, 319.75),
+                (24, 1282.0),
+                (70, 1)
+            );
             Assert.Equal(new DxfPoint(330.25, 1310.0, 0.0), dimension.DefinitionPoint1);
             Assert.Equal(new DxfPoint(330.25, 1282, 0.0), dimension.DefinitionPoint2);
             Assert.Equal(new DxfPoint(319.75, 1282, 0.0), dimension.DefinitionPoint3);
@@ -376,28 +358,18 @@ text
         [Fact]
         public void ReadLineTest()
         {
-            var line = (DxfLine)Entity("LINE", @"
- 10
-1.100000E+001
- 20
-2.200000E+001
- 30
-3.300000E+001
- 11
-4.400000E+001
- 21
-5.500000E+001
- 31
-6.600000E+001
- 39
-7.700000E+001
-210
-8.800000E+001
-220
-9.900000E+001
-230
-1.500000E+002
-");
+            var line = (DxfLine)Entity("LINE",
+                (10, 11.0), // p1
+                (20, 22.0),
+                (30, 33.0),
+                (11, 44.0), // p2
+                (21, 55.0),
+                (31, 66.0),
+                (39, 77.0), // thickness
+                (210, 88.0), // extrusion
+                (220, 99.0),
+                (230, 150.0)
+            );
             Assert.Equal(11.0, line.P1.X);
             Assert.Equal(22.0, line.P1.Y);
             Assert.Equal(33.0, line.P1.Z);
@@ -413,24 +385,16 @@ text
         [Fact]
         public void ReadCircleTest()
         {
-            var circle = (DxfCircle)Entity("CIRCLE", @"
- 10
-1.100000E+001
- 20
-2.200000E+001
- 30
-3.300000E+001
- 40
-4.400000E+001
- 39
-3.500000E+001
-210
-5.500000E+001
-220
-6.600000E+001
-230
-7.700000E+001
-");
+            var circle = (DxfCircle)Entity("CIRCLE",
+                (10, 11.0), // center
+                (20, 22.0),
+                (30, 33.0),
+                (40, 44.0), // radius
+                (39, 35.0), // thickness
+                (210, 55.0), // normal
+                (220, 66.0),
+                (230, 77.0)
+            );
             Assert.Equal(11.0, circle.Center.X);
             Assert.Equal(22.0, circle.Center.Y);
             Assert.Equal(33.0, circle.Center.Z);
@@ -444,28 +408,18 @@ text
         [Fact]
         public void ReadArcTest()
         {
-            var arc = (DxfArc)Entity("ARC", @"
- 10
-1.100000E+001
- 20
-2.200000E+001
- 30
-3.300000E+001
- 40
-4.400000E+001
-210
-5.500000E+001
-220
-6.600000E+001
-230
-7.700000E+001
- 50
-8.800000E+001
- 51
-9.900000E+001
- 39
-3.500000E+001
-");
+            var arc = (DxfArc)Entity("ARC",
+                (10, 11.0), // center
+                (20, 22.0),
+                (30, 33.0),
+                (40, 44.0), // radius
+                (210, 55.0), // normal
+                (220, 66.0),
+                (230, 77.0),
+                (50, 88.0), // start angle
+                (51, 99.0), // end angle
+                (39, 35.0) // thickness
+            );
             Assert.Equal(11.0, arc.Center.X);
             Assert.Equal(22.0, arc.Center.Y);
             Assert.Equal(33.0, arc.Center.Z);
@@ -481,32 +435,20 @@ text
         [Fact]
         public void ReadEllipseTest()
         {
-            var el = (DxfEllipse)Entity("ELLIPSE", @"
- 10
-1.100000E+001
- 20
-2.200000E+001
- 30
-3.300000E+001
- 11
-4.400000E+001
- 21
-5.500000E+001
- 31
-6.600000E+001
-210
-7.700000E+001
-220
-8.800000E+001
-230
-9.900000E+001
- 40
-1.200000E+001
- 41
-0.100000E+000
- 42
-0.400000E+000
-");
+            var el = (DxfEllipse)Entity("ELLIPSE",
+                (10, 11.0), // center
+                (20, 22.0),
+                (30, 33.0),
+                (11, 44.0), // major axis
+                (21, 55.0),
+                (31, 66.0),
+                (210, 77.0), // normal
+                (220, 88.0),
+                (230, 99.0),
+                (40, 12.0), // minor axis ratio
+                (41, 0.1), // start parameter
+                (42, 0.4) // end parameter
+            );
             Assert.Equal(11.0, el.Center.X);
             Assert.Equal(22.0, el.Center.Y);
             Assert.Equal(33.0, el.Center.Z);
@@ -524,46 +466,27 @@ text
         [Fact]
         public void ReadTextTest()
         {
-            var text = (DxfText)Entity("TEXT", @"
-  1
-foo bar
-  7
-text style name
- 10
-1.100000E+001
- 20
-2.200000E+001
- 30
-3.300000E+001
- 39
-3.900000E+001
- 40
-4.400000E+001
- 41
-4.100000E+001
- 50
-5.500000E+001
- 51
-5.100000E+001
- 71
-255
- 72
-3
- 73
-1
- 11
-9.100000E+001
- 21
-9.200000E+001
- 31
-9.300000E+001
- 210
-6.600000E+001
- 220
-7.700000E+001
- 230
-8.800000E+001
-");
+            var text = (DxfText)Entity("TEXT",
+                (1, "foo bar"), // value
+                (7, "text style name"),
+                (10, 11.0), // location
+                (20, 22.0),
+                (30, 33.0),
+                (39, 39.0), // thickness
+                (40, 44.0), // text height
+                (41, 41.0), // relative x scale factor
+                (50, 55.0), // rotation
+                (51, 51.0), // oblique angle
+                (71, 255), // flags
+                (72, 3), // horizontal justification
+                (73, 1), // vertical justification
+                (11, 91.0), // second alignment point
+                (21, 92.0),
+                (31, 93.0),
+                (210, 66.0), // normal
+                (220, 77.0),
+                (230, 88.0)
+            );
             Assert.Equal("foo bar", text.Value);
             Assert.Equal("text style name", text.TextStyleName);
             Assert.Equal(11.0, text.Location.X);
@@ -589,32 +512,20 @@ text style name
         [Fact]
         public void ReadVertexTest()
         {
-            var vertex = (DxfVertex)Entity("VERTEX", @"
- 10
-1.100000E+001
- 20
-2.200000E+001
- 30
-3.300000E+001
- 40
-4.000000E+001
- 41
-4.100000E+001
- 42
-4.200000E+001
- 50
-5.000000E+001
- 70
-255
- 71
-71
- 72
-72
- 73
-73
- 74
-74
-");
+            var vertex = (DxfVertex)Entity("VERTEX",
+                (10, 11.0), // location
+                (20, 22.0),
+                (30, 33.0),
+                (40, 40.0), // starting width
+                (41, 41.0), // ending width
+                (42, 42.0), // bulge
+                (50, 50.0), // curve tangent fit direction
+                (70, 255), // flags
+                (71, 71), // vertex indices
+                (72, 72),
+                (73, 73),
+                (74, 74)
+            );
             Assert.Equal(11.0, vertex.Location.X);
             Assert.Equal(22.0, vertex.Location.Y);
             Assert.Equal(33.0, vertex.Location.Z);
@@ -638,61 +549,38 @@ text style name
         [Fact]
         public void ReadSeqendTest()
         {
-            var seqend = (DxfSeqend)Entity("SEQEND", "");
+            var seqend = (DxfSeqend)Entity("SEQEND");
             // nothing to verify
         }
 
         [Fact]
         public void ReadPolylineTest()
         {
-            var poly = (DxfPolyline)Entity("POLYLINE", @"
- 30
-1.100000E+001
- 39
-1.800000E+001
- 40
-4.000000E+001
- 41
-4.100000E+001
- 70
-255
- 71
-71
- 72
-72
- 73
-73
- 74
-74
- 75
-6
-250
-2
-210
-2.200000E+001
-220
-3.300000E+001
-230
-4.400000E+001
-  0
-VERTEX
- 10
-1.200000E+001
- 20
-2.300000E+001
- 30
-3.400000E+001
-  0
-VERTEX
- 10
-4.500000E+001
- 20
-5.600000E+001
- 30
-6.700000E+001
-  0
-SEQEND
-");
+            var poly = (DxfPolyline)Entity("POLYLINE",
+                (30, 11.0), // elevation
+                (39, 18.0), // thickness
+                (40, 40.0), // starting width
+                (41, 41.0), // ending width
+                (70, 255), // flags
+                (71, 71), // mesh m vertex count
+                (72, 72), // mesh n vertex count
+                (73, 73), // smooth surface m density
+                (74, 74), // smooth surface n density
+                (75, 6), // surface type = cubic b spline
+                (250, 2), // polyline type = outline
+                (210, 22.0), // normal
+                (220, 33.0),
+                (230, 44.0),
+                (0, "VERTEX"),
+                (10, 12.0),
+                (20, 23.0),
+                (30, 34.0),
+                (0, "VERTEX"),
+                (10, 45.0),
+                (20, 56.0),
+                (30, 67.0),
+                (0, "SEQEND")
+            );
             Assert.Equal(11.0, poly.Elevation);
             Assert.Equal(18.0, poly.Thickness);
             Assert.Equal(40.0, poly.DefaultStartingWidth);
@@ -728,40 +616,24 @@ SEQEND
         [Fact]
         public void ReadSolidTest()
         {
-            var solid = (DxfSolid)Entity("SOLID", @"
- 10
-1
- 20
-2
- 30
-3
- 11
-4
- 21
-5
- 31
-6
- 12
-7
- 22
-8
- 32
-9
- 13
-10
- 23
-11
- 33
-12
- 39
-13
-210
-14
-220
-15
-230
-16
-");
+            var solid = (DxfSolid)Entity("SOLID",
+                (10, 1.0), // first corner
+                (20, 2.0),
+                (30, 3.0),
+                (11, 4.0), // second corner
+                (21, 5.0),
+                (31, 6.0),
+                (12, 7.0), // third corner
+                (22, 8.0),
+                (32, 9.0),
+                (13, 10.0), // fourth corner
+                (23, 11.0),
+                (33, 12.0),
+                (39, 13.0), // thickness
+                (210, 14.0), // extrusion
+                (220, 15.0),
+                (230, 16.0)
+            );
             Assert.Equal(new DxfPoint(1, 2, 3), solid.FirstCorner);
             Assert.Equal(new DxfPoint(4, 5, 6), solid.SecondCorner);
             Assert.Equal(new DxfPoint(7, 8, 9), solid.ThirdCorner);
@@ -773,32 +645,22 @@ SEQEND
         [Fact]
         public void ReadLwPolylineWithOptionalValuesTest()
         {
-            var lwpolyline = (DxfLwPolyline)Entity("LWPOLYLINE", @"
- 43
-43.0
- 90
-4
- 10
-2.0
- 20
-0.0
- 42
-0.7
- 10
-1.0
- 20
-2.5
- 10
--1.0
- 20
-2.5
- 42
-0.7
- 10
--2.0
- 20
-0.0
-");
+            var lwpolyline = (DxfLwPolyline)Entity("LWPOLYLINE",
+                (43, 43.0), // constant width
+                (90, 4), // vertex count
+                (10, 2.0), // vertex 1
+                (20, 0.0),
+                (42, 0.7), //          bulge
+                (10, 1.0), // vertex 2
+                (20, 2.5),
+                (42, 0.0), //          bulge
+                (10, -1.0), // vertex 3
+                (20, 2.5),
+                (42, 0.7), //          bulge
+                (10, -2.0), // vertex 4
+                (20, 0.0),
+                (42, 0.0) //           bulge
+            );
             Assert.Equal(43.0, lwpolyline.ConstantWidth);
             Assert.Equal(4, lwpolyline.Vertices.Count);
 
@@ -822,12 +684,10 @@ SEQEND
         [Fact]
         public void ReadAttributeTest()
         {
-            var att = (DxfAttribute)Entity("ATTRIB", @"
-  0
-MTEXT
-  1
-mtext-value
-");
+            var att = (DxfAttribute)Entity("ATTRIB",
+                (0, "MTEXT"),
+                (1, "mtext-value")
+            );
             Assert.Equal(att, att.MText.Owner);
             Assert.Equal("mtext-value", att.MText.Text);
         }
@@ -835,12 +695,10 @@ mtext-value
         [Fact]
         public void ReadAttributeDefinitionTest()
         {
-            var attdef = (DxfAttributeDefinition)Entity("ATTDEF", @"
-  0
-MTEXT
-  1
-mtext-value
-");
+            var attdef = (DxfAttributeDefinition)Entity("ATTDEF",
+                (0, "MTEXT"),
+                (1, "mtext-value")
+            );
             Assert.Equal(attdef, attdef.MText.Owner);
             Assert.Equal("mtext-value", attdef.MText.Text);
         }
@@ -848,46 +706,25 @@ mtext-value
         [Fact]
         public void ReadImageWithImageDefinitionAndReactorTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-ENTITIES
-  0
-IMAGE
-999
-==================================== the 340 pair points to the image definition
-340
-FFFF0340
-999
-============================ the 360 pair points to the image definition reactor
-360
-FFFF0360
-  0
-ENDSEC
-  0
-SECTION
-  2
-OBJECTS
-999
-======================================================== from the code 340 above
-  0
-IMAGEDEF
-  5
-FFFF0340
-  1
-image-def-file-path
-999
-======================================================== from the code 360 above
-  0
-IMAGEDEF_REACTOR
-  5
-FFFF0360
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                // entities
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                (0, "IMAGE"),
+                (340, "FFFF0340"), // points to the image definition
+                (360, "FFFF0360"), // points to the image definition reactor
+                (0, "ENDSEC"),
+                // objects
+                (0, "SECTION"),
+                (2, "OBJECTS"),
+                (0, "IMAGEDEF"),
+                (5, "FFFF0340"), // from IMAGE.340 above
+                (1, "image-def-file-path"),
+                (0, "IMAGEDEF_REACTOR"),
+                (5, "FFFF0360"), // from IMAGE.360 above
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var image = (DxfImage)file.Entities.Single();
             Assert.Equal("image-def-file-path", image.ImageDefinition.FilePath);
             Assert.Equal(image, image.ImageDefinitionReactor.Owner);
@@ -910,7 +747,7 @@ EOF
         public void ReadLeaderWithTooFewVerticesTest()
         {
             // a leader with 0 vertices can't be created manually, but it can be read from disk
-            var leader = (DxfLeader)Entity("LEADER", "");
+            var leader = (DxfLeader)Entity("LEADER");
             Assert.Equal(0, leader.Vertices.Count);
             leader.Vertices.Add(DxfPoint.Origin); // this is fine, even though we're still under the minimum
             Assert.Equal(1, leader.Vertices.Count);
@@ -945,7 +782,7 @@ EOF
         public void ReadPolylineWithTooFewVerticesTest()
         {
             // a polyline with 0 vertices can't be created manually, but it can be read from disk
-            var poly = (DxfPolyline)Entity("POLYLINE", "");
+            var poly = (DxfPolyline)Entity("POLYLINE");
             Assert.Equal(0, poly.Vertices.Count);
             poly.Vertices.Add(new DxfVertex()); // this is fine, even though we're still under the minimum
             Assert.Equal(1, poly.Vertices.Count);
@@ -959,26 +796,17 @@ EOF
         [Fact]
         public void ReadSplineWithWeightsTest()
         {
-            var spline = (DxfSpline)Entity("SPLINE", @"
- 73
-2
- 41
-11.0
- 41
-22.0
- 10
-1.1
- 20
-1.2
- 30
-1.3
- 10
-2.1
- 20
-2.2
- 30
-2.3
-");
+            var spline = (DxfSpline)Entity("SPLINE",
+                (73, 2), // point count
+                (41, 11.0), // weights
+                (41, 22.0),
+                (10, 1.1), // point 1
+                (20, 1.2),
+                (30, 1.3),
+                (10, 2.1), // point 2
+                (20, 2.2),
+                (30, 2.3)
+            );
             Assert.Equal(2, spline.ControlPoints.Count);
             Assert.Equal(new DxfPoint(1.1, 1.2, 1.3), spline.ControlPoints[0].Point);
             Assert.Equal(11.0, spline.ControlPoints[0].Weight);
@@ -989,22 +817,15 @@ EOF
         [Fact]
         public void ReadSplineWithoutWeightsTest()
         {
-            var spline = (DxfSpline)Entity("SPLINE", @"
- 73
-2
- 10
-1.1
- 20
-1.2
- 30
-1.3
- 10
-2.1
- 20
-2.2
- 30
-2.3
-");
+            var spline = (DxfSpline)Entity("SPLINE",
+                (73, 2), // point count
+                (10, 1.1), // point 1
+                (20, 1.2),
+                (30, 1.3),
+                (10, 2.1), // point 2
+                (20, 2.2),
+                (30, 2.3)
+            );
             Assert.Equal(2, spline.ControlPoints.Count);
             Assert.Equal(new DxfPoint(1.1, 1.2, 1.3), spline.ControlPoints[0].Point);
             Assert.Equal(1.0, spline.ControlPoints[0].Weight);
@@ -1349,50 +1170,29 @@ AcDbAlignedDimension
         [Fact]
         public void ReadAngularTwoLineDimensionTest()
         {
-            var dim = (DxfAngularTwoLineDimension)Entity("DIMENSION", @"
-100
-AcDbDimension
- 10
-1.0
- 20
-2.0
- 30
-3.0
- 11
-4.0
- 21
-5.0
- 31
-6.0
- 70
-    130
-100
-AcDb2LineAngularDimension
- 13
-7.0
- 23
-8.0
- 33
-9.0
- 14
-10.0
- 24
-11.0
- 34
-12.0
- 15
-13.0
- 25
-14.0
- 35
-15.0
- 16
-16.0
- 26
-17.0
- 36
-18.0
-");
+            var dim = (DxfAngularTwoLineDimension)Entity("DIMENSION",
+                (100, "AcDbDimension"),
+                (10, 1.0), // second extension line p1
+                (20, 2.0),
+                (30, 3.0),
+                (11, 4.0), // text mid point
+                (21, 5.0),
+                (31, 6.0),
+                (70, 130), // angular + is at user defined
+                (100, "AcDb2LineAngularDimension"),
+                (13, 7.0), // first extension line p1
+                (23, 8.0),
+                (33, 9.0),
+                (14, 10.0), // first extension line p2
+                (24, 11.0),
+                (34, 12.0),
+                (15, 13.0), // second extension line p2
+                (25, 14.0),
+                (35, 15.0),
+                (16, 16.0), // dimension line arc location
+                (26, 17.0),
+                (36, 18.0)
+            );
             Assert.True(dim.IsAtUserDefinedLocation);
             Assert.Equal(new DxfPoint(1.0, 2.0, 3.0), dim.SecondExtensionLineP1);
             Assert.Equal(new DxfPoint(4.0, 5.0, 6.0), dim.TextMidPoint);
@@ -1468,14 +1268,11 @@ ENDSEC
         [Fact]
         public void ReadDimensionWithXDataTest()
         {
-            var dimension = (DxfAlignedDimension)Entity("DIMENSION", @"
-100
-AcDbAlignedDimension
-1001
-ACAD
-1000
-some xdata string
-");
+            var dimension = (DxfAlignedDimension)Entity("DIMENSION",
+                (100, "AcDbAlignedDimension"),
+                (1001, "ACAD"),
+                (1000, "some xdata string")
+            );
             var xdata = dimension.XData;
             Assert.Equal("ACAD", xdata.ApplicationName);
             Assert.Equal("some xdata string", ((DxfXDataString)xdata.Items.Single()).Value);
@@ -1826,55 +1623,34 @@ MTEXT
         [Fact]
         public void ReadBlockTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-BLOCKS
-  0
-BLOCK
-  2
-block 1
- 10
-1
- 20
-2
- 30
-3
-  0
-LINE
- 10
-10
- 20
-20
- 30
-30
- 11
-11
- 21
-21
- 31
-31
-  0
-ENDBLK
-  0
-BLOCK
-  2
-block 2
-  0
-CIRCLE
- 40
-40
-  0
-ARC
- 40
-41
-  0
-ENDBLK
-  0
-ENDSEC
-  0
-EOF");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "BLOCKS"),
+                    //
+                    (0, "BLOCK"),
+                    (2, "block 1"),
+                    (10, 1.0),
+                    (20, 2.0),
+                    (30, 3.0),
+                        (0, "LINE"),
+                        (10, 10.0),
+                        (20, 20.0),
+                        (30, 30.0),
+                        (11, 11.0),
+                        (21, 21.0),
+                        (31, 31.0),
+                    (0, "ENDBLK"),
+                    //
+                    (0, "BLOCK"),
+                    (2, "block 2"),
+                        (0, "CIRCLE"),
+                        (40, 40.0),
+                        (0, "ARC"),
+                        (40, 41.0),
+                    (0, "ENDBLK"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
 
             // 2 blocks
             Assert.Equal(2, file.Blocks.Count);
@@ -1941,34 +1717,21 @@ EOF");
         [Fact]
         public void ReadOle2FrameTest()
         {
-            var ole = (DxfOle2Frame)Entity("OLE2FRAME", @"
- 70
-     2
-  3
-Picture (Device Independent Bitmap)
- 10
-1.0
- 20
-2.0
- 30
-0.0
- 11
-3.0
- 21
-4.0
- 31
-0.0
- 71
-     3
- 72
-     0
- 90
-        5
-310
-123456789A
-  1
-OLE
-");
+            var ole = (DxfOle2Frame)Entity("OLE2FRAME",
+                (70, 2),
+                (3, "Picture (Device Independent Bitmap)"),
+                (10, 1.0),
+                (20, 2.0),
+                (30, 0.0),
+                (11, 3.0),
+                (21, 4.0),
+                (31, 0.0),
+                (71, 3),
+                (72, 0),
+                (90, 5),
+                (310, "123456789A"),
+                (1, "OLE")
+            );
             Assert.Equal(2, ole.VersionNumber);
             Assert.Equal("Picture (Device Independent Bitmap)", ole.Description);
             Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), ole.UpperLeftCorner);
@@ -2025,46 +1788,31 @@ OLE
         [Fact]
         public void ReadHatchPatternDefinitionTest()
         {
-            var hatch = (DxfHatch)Entity("HATCH", @"
- 77
-     1
- 78
-     2
- 53
-1.0
- 43
-2.0
- 44
-3.0
- 45
-4.0
- 46
-5.0
- 79
-     2
- 49
-6.0
- 49
-7.0
- 53
-8.0
- 43
-9.0
- 44
-10.0
- 45
-11.0
- 46
-12.0
- 79
-     2
- 49
-13.0
- 49
-14.0
- 47
-99.0
-");
+            var hatch = (DxfHatch)Entity("HATCH",
+                (77, 1), // IsPatternDoubled, specified before pattern definition
+                // pattern definition start
+                (78, 2), // line count
+                // line 1 start
+                (53, 1.0), // angle
+                (43, 2.0), // base point
+                (44, 3.0),
+                (45, 4.0), // offset
+                (46, 5.0),
+                (79, 2), // dash lengths
+                (49, 6.0),
+                (49, 7.0),
+                // line 2 start
+                (53, 8.0),
+                (43, 9.0),
+                (44, 10.0),
+                (45, 11.0),
+                (46, 12.0),
+                (79, 2),
+                (49, 13.0),
+                (49, 14.0),
+                // PixelSize, specified  after pattern definition lines
+                (47, 99.0)
+            );
             Assert.True(hatch.IsPatternDoubled); // specified before pattern definition lines
             Assert.Equal(99.0, hatch.PixelSize); // specified after pattern definition lines
 
@@ -2154,22 +1902,15 @@ OLE
         [Fact]
         public void ReadHatchSeedPointsTest()
         {
-            var hatch = (DxfHatch)Entity("HATCH", @"
- 47
-99.0
- 98
-        2
- 10
-1.0
- 20
-2.0
- 10
-3.0
- 20
-4.0
-450
-        1
-");
+            var hatch = (DxfHatch)Entity("HATCH",
+                (47, 99.0), // PixelSize, specified before seed points
+                (98, 2),
+                (10, 1.0), // seed point 1
+                (20, 2.0),
+                (10, 3.0), // seed point 2
+                (20, 4.0),
+                (450, 1) // IsGradient, specified after seed points
+            );
             Assert.Equal(99.0, hatch.PixelSize); // specified before seed points
             Assert.True(hatch.IsGradient); // specified after seed points
 
@@ -2207,156 +1948,80 @@ OLE
         [Fact]
         public void ReadHatchBoundaryPathDataTest()
         {
-            var hatch = (DxfHatch)Entity("HATCH", @"
- 10
-97.0
- 20
-98.0
- 30
-99.0
- 71
-     1
-999
-======================================== boundary path count
- 91
-        2
-999
-=================== start of external polyline boundary path
- 92
-        3
- 72
-     1
- 73
-     1
- 93
-        2
- 10
-1.0
- 20
-2.0
- 10
-3.0
- 20
-4.0
- 42
-5.0
-999
-==================================== source boundary objects
- 97
-        2
-330
-ABC
-330
-DEF
-999
-============================== start of second boundary path
- 92
-        8
- 93
-        4
-999
-================================================ linear edge
- 72
-     1
- 10
-1.0
- 20
-2.0
- 11
-3.0
- 21
-4.0
-999
-========================================== circular arc edge
- 72
-     2
- 10
-1.0
- 20
-2.0
- 40
-3.0
- 50
-4.0
- 51
-5.0
- 73
-     1
-999
-========================================== elliptic arc edge
- 72
-     3
- 10
-1.0
- 20
-2.0
- 11
-3.0
- 21
-4.0
- 40
-5.0
- 50
-6.0
- 51
-7.0
- 73
-     1
-999
-================================================ spline edge
- 72
-     4
- 94
-        2
- 73
-     1
- 74
-     1
- 95
-        2
- 96
-        2
- 40
-1.0
- 40
-2.0
- 10
-3.0
- 20
-4.0
- 10
-5.0
- 20
-6.0
- 42
-7.0
- 42
-8.0
- 97
-        2
- 11
-9.0
- 21
-10.0
- 11
-11.0
- 21
-12.0
- 12
-13.0
- 22
-14.0
- 13
-15.0
- 23
-16.0
- 97
-0
-999
-======================== back to HATCH (HatchStyle property)
- 75
-     2
-");
+            var hatch = (DxfHatch)Entity("HATCH",
+                (10, 97.0), // ElevationPoint, specified before boundary paths, shares codes with edge data
+                (20, 98.0),
+                (30, 99.0),
+                (71, 1), // IsAssociative, specified before boundary paths
+                (91, 2), // boundary path count
+                // first boundary path
+                (92, 3), // external polyline boundary type
+                (72, 1), // has bulge
+                (73, 1), // is closed
+                (93, 2), // vertex count
+                (10, 1.0), // vertex 1
+                (20, 2.0),
+                (10, 3.0), // vertex 2 with bulge
+                (20, 4.0),
+                (42, 5.0),
+                (97, 2), // boundary object handles
+                (330, "ABC"),
+                (330, "DEF"),
+                // second boundary path
+                (92, 8), // non polyline text box
+                (93, 4), // edge count
+                // first edge
+                (72, 1), // linear edge
+                (10, 1.0), // start point
+                (20, 2.0),
+                (11, 3.0), // end point
+                (21, 4.0),
+                // second edge
+                (72, 2), // circular edge
+                (10, 1.0), // center
+                (20, 2.0),
+                (40, 3.0), // radius
+                (50, 4.0), // start angle
+                (51, 5.0), // end angle
+                (73, 1), // is counter clockwise
+                // third edge
+                (72, 3), // elliptical edge
+                (10, 1.0), // center
+                (20, 2.0),
+                (11, 3.0), // major axis
+                (21, 4.0),
+                (40, 5.0), // minor axis ratio
+                (50, 6.0), // start angle
+                (51, 7.0), // end angle
+                (73, 1), // is counter clockwise
+                // fourth edge
+                (72, 4), // spline edge
+                (94, 2), // degree
+                (73, 1), // is rational
+                (74, 1), // is periodic
+                (95, 2), // knot count
+                (96, 2), // control point count
+                (40, 1.0), // knot values
+                (40, 2.0),
+                (10, 3.0), // control point 1
+                (20, 4.0),
+                (10, 5.0), // control point 2
+                (20, 6.0),
+                (42, 7.0), // weights
+                (42, 8.0),
+                (97, 2), // fit data count
+                (11, 9.0), // first fit point
+                (21, 10.0),
+                (11, 11.0), // second fit point
+                (21, 12.0),
+                (12, 13.0), // start tangent
+                (22, 14.0),
+                (13, 15.0), // end tangent
+                (23, 16.0),
+                (97, 0), // boundary object handles
+                // HatchStyle, specified after boundary paths
+                (75, 2)
+            );
             Assert.Equal(new DxfPoint(97.0, 98.0, 99.0), hatch.ElevationPoint); // specified before boundary paths, shares codes with edge data
             Assert.True(hatch.IsAssociative); // specified before boundary paths
             Assert.Equal(DxfHatchStyle.EntireArea, hatch.HatchStyle); // specified after boundary paths

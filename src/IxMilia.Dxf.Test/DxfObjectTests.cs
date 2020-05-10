@@ -21,6 +21,15 @@ namespace IxMilia.Dxf.Test
 ").Objects.Last();
         }
 
+        private DxfObject GenObject(string typeString, params (int code, object value)[] codePairs)
+        {
+            var prePairs = new[]
+            {
+                (0, (object)typeString)
+            };
+            return Section("OBJECTS", prePairs.Concat(codePairs)).Objects.Last();
+        }
+
         private static void EnsureFileContainsObject(DxfObject obj, string text, DxfAcadVersion version = DxfAcadVersion.R12)
         {
             var file = new DxfFile();
@@ -33,7 +42,7 @@ namespace IxMilia.Dxf.Test
         [Fact]
         public void ReadSimpleObjectTest()
         {
-            var proxyObject = GenObject("ACAD_PROXY_OBJECT", "");
+            var proxyObject = GenObject("ACAD_PROXY_OBJECT");
             Assert.IsType<DxfAcadProxyObject>(proxyObject);
         }
 
@@ -58,44 +67,26 @@ AcDbProxyObject
         [Fact]
         public void ReadDataTableTest()
         {
-            var table = (DxfDataTable)GenObject("DATATABLE", @"
-330
-0
-100
-AcDbDataTable
- 70
-2
- 90
-2
- 91
-2
-  1
-table-name
- 92
-10
-  2
-column-of-points
- 10
-1
- 20
-2
- 30
-3
- 10
-4
- 20
-5
- 30
-6
- 92
-3
-  2
-column-of-strings
-  3
-string 1
-  3
-string 2
-");
+            var table = (DxfDataTable)GenObject("DATATABLE",
+                (330, "0"),
+                (100, "AcDbDataTable"),
+                (70, 2),
+                (90, 2),
+                (91, 2),
+                (1, "table-name"),
+                (92, 10),
+                (2, "column-of-points"),
+                (10, 1.0),
+                (20, 2.0),
+                (30, 3.0),
+                (10, 4.0),
+                (20, 5.0),
+                (30, 6.0),
+                (92, 3),
+                (2, "column-of-strings"),
+                (3, "string 1"),
+                (3, "string 2")
+            );
             Assert.Equal(2, table.ColumnCount);
             Assert.Equal(2, table.RowCount);
             Assert.Equal("table-name", table.Name);
@@ -166,34 +157,21 @@ string 2
         public void ReadDictionaryTest1()
         {
             // dictionary with simple DICTIONARYVAR values
-            var file = Section("OBJECTS", @"
-  0
-DICTIONARY
-  3
-key-1
-360
-111
-  3
-key-2
-360
-222
-  0
-DICTIONARYVAR
-  5
-111
-280
-     0
-1
-value-1
-  0
-DICTIONARYVAR
-  5
-222
-280
-     0
-1
-value-2
-");
+            var file = Section("OBJECTS",
+                (0, "DICTIONARY"),
+                (3, "key-1"),
+                (360, "111"), // pointer to value-1 below
+                (3, "key-2"),
+                (360, "222"), // pointer to value-2 below
+                (0, "DICTIONARYVAR"),
+                (5, "111"),
+                (280, 0),
+                (1, "value-1"),
+                (0, "DICTIONARYVAR"),
+                (5, "222"),
+                (280, 0),
+                (1, "value-2")
+            );
             var dict = file.Objects.OfType<DxfDictionary>().Single();
             Assert.Equal(dict, dict["key-1"].Owner);
             Assert.Equal(dict, dict["key-2"].Owner);
@@ -205,30 +183,19 @@ value-2
         public void ReadDictionaryTest2()
         {
             // dictionary with sub-dictionary with DICTIONARYVAR value
-            var file = Section("OBJECTS", @"
-  0
-DICTIONARY
-  3
-key-1
-360
-1000
-  0
-DICTIONARY
-  5
-1000
-  3
-key-2
-360
-2000
-  0
-DICTIONARYVAR
-  5
-2000
-280
-     0
-1
-value-2
-");
+            var file = Section("OBJECTS",
+                (0, "DICTIONARY"),
+                (3, "key-1"),
+                (360, "1000"), // pointer to dictionary below
+                (0, "DICTIONARY"),
+                (5, "1000"),
+                (3, "key-2"),
+                (360, "2000"), // pointer to value-2 below
+                (0, "DICTIONARYVAR"),
+                (5, "2000"),
+                (280, 0),
+                (1, "value-2")
+            );
             var dict1 = file.Objects.OfType<DxfDictionary>().First();
             var dict2 = (DxfDictionary)dict1["key-1"];
             Assert.Equal(dict1, dict2.Owner);
@@ -240,46 +207,27 @@ value-2
         public void ReadDictionaryTest3()
         {
             // dictionary with default with simple DICTIONARYVAR values
-            var file = Section("OBJECTS", @"
-  0
-DICTIONARYVAR
-  5
-1
-280
-0
-1
-default-value
-  0
-ACDBDICTIONARYWDFLT
-  5
-2
-340
-  1
-  3
-key-1
-350
-111
-  3
-key-2
-360
-222
-  0
-DICTIONARYVAR
-  5
-111
-280
-     0
-1
-value-1
-  0
-DICTIONARYVAR
-  5
-222
-280
-     0
-1
-value-2
-");
+            var file = Section("OBJECTS",
+                (0, "DICTIONARYVAR"),
+                (5, "1"),
+                (280, 0),
+                (1, "default-value"),
+                (0, "ACDBDICTIONARYWDFLT"),
+                (5, "2"),
+                (340, "1"),
+                (3, "key-1"),
+                (350, "111"),
+                (3, "key-2"),
+                (360, "222"),
+                (0, "DICTIONARYVAR"),
+                (5, "111"),
+                (280, 0),
+                (1, "value-1"),
+                (0, "DICTIONARYVAR"),
+                (5, "222"),
+                (280, 0),
+                (1, "value-2")
+            );
             var dict = file.Objects.OfType<DxfDictionaryWithDefault>().Single();
             Assert.Equal(dict, dict["key-1"].Owner);
             Assert.Equal(dict, dict["key-2"].Owner);
@@ -292,40 +240,24 @@ value-2
         public void ReadDictionaryTest4()
         {
             // dictionary with default with sub-dictionary with DICTIONARYVAR value
-            var file = Section("OBJECTS", @"
-  0
-DICTIONARYVAR
-  5
-1
-280
-0
-1
-default-value
-  0
-ACDBDICTIONARYWDFLT
-340
-  1
-  3
-key-1
-350
-111
-  0
-DICTIONARY
-  5
-111
-  3
-key-2
-360
-1000
-  0
-DICTIONARYVAR
-  5
-1000
-280
-     0
-1
-value-2
-");
+            var file = Section("OBJECTS",
+                (0, "DICTIONARYVAR"),
+                (5, "1"),
+                (280, 0),
+                (1, "default-value"),
+                (0, "ACDBDICTIONARYWDFLT"),
+                (340, "1"),
+                (3, "key-1"),
+                (350, "111"),
+                (0, "DICTIONARY"),
+                (5, "111"),
+                (3, "key-2"),
+                (360, "1000"),
+                (0, "DICTIONARYVAR"),
+                (5, "1000"),
+                (280, 0),
+                (1, "value-2")
+            );
             var dict1 = file.Objects.OfType<DxfDictionaryWithDefault>().Single();
             var dict2 = (DxfDictionary)dict1["key-1"];
             Assert.Equal(dict1, dict2.Owner);
@@ -337,24 +269,16 @@ value-2
         public void ReadDictionaryTest5()
         {
             // dictionary with MLINESTYLE value
-            var file = Section("OBJECTS", @"
-  0
-DICTIONARY
-  5
-42
-  3
-Standard
-350
-43
-  0
-MLINESTYLE
-  5
-43
-330
-42
-  2
-Standard
-");
+            var file = Section("OBJECTS",
+                (0, "DICTIONARY"),
+                (5, "42"),
+                (3, "Standard"),
+                (350, "43"),
+                (0, "MLINESTYLE"),
+                (5, "43"),
+                (330, "42"),
+                (2, "Standard")
+            );
             var dict = (DxfDictionary)file.Objects.First();
             var mlineStyle = (DxfMLineStyle)dict["Standard"];
             Assert.Equal("Standard", mlineStyle.StyleName);
@@ -375,22 +299,15 @@ Standard
         [Fact]
         public void DictionaryWithUnsupportedObjectTest()
         {
-            var file = Section("OBJECTS", @"
-  0
-DICTIONARY
-  5
-42
-  3
-key
-350
-43
-  0
-UNSUPPORTED_OBJECT
-  5
-43
-330
-42
-");
+            var file = Section("OBJECTS",
+                (0, "DICTIONARY"),
+                (5, "42"),
+                (3, "key"),
+                (350, "43"),
+                (0, "UNSUPPORTED_OBJECT"),
+                (5, "43"),
+                (330, "42")
+            );
             var dict = (DxfDictionary)file.Objects.Single();
             Assert.Equal(1, dict.Keys.Count);
             Assert.Null(dict["key"]);
@@ -623,36 +540,22 @@ value-1
         [Fact]
         public void ReadDimensionAssociativityTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-ENTITIES
-  0
-DIMENSION
-  5
-1
-  1
-dimension-text
- 70
-     1
-  0
-ENDSEC
-  0
-SECTION
-  2
-OBJECTS
-  0
-DIMASSOC
-330
-1
-  1
-class-name
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                    (0, "DIMENSION"),
+                    (5, "1"),
+                    (1, "dimension-text"),
+                    (70, 1),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "OBJECTS"),
+                    (0, "DIMASSOC"),
+                    (330, "1"),
+                    (1, "class-name"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var dimassoc = (Objects.DxfDimensionAssociativity)file.Objects.Last();
             Assert.Equal("class-name", dimassoc.ClassName);
             var dim = (DxfAlignedDimension)dimassoc.Dimension;
@@ -663,14 +566,11 @@ EOF
         [Fact]
         public void ReadLayoutTest()
         {
-            var layout = (DxfLayout)GenObject("LAYOUT", @"
-  1
-page-setup-name
-100
-AcDbLayout
-  1
-layout-name
-");
+            var layout = (DxfLayout)GenObject("LAYOUT",
+                (1, "page-setup-name"),
+                (100, "AcDbLayout"),
+                (1, "layout-name")
+            );
             Assert.Equal("page-setup-name", layout.PageSetupName);
             Assert.Equal("layout-name", layout.LayoutName);
         }
@@ -678,16 +578,12 @@ layout-name
         [Fact]
         public void ReadLayoutWithEmptyNameTest()
         {
-            var layout = (DxfLayout)GenObject("LAYOUT", @"
-  1
-page-setup-name
-100
-AcDbLayout
-  1
-
-999
-comment line to ensure the value for the `1` code is an empty string
-");
+            var layout = (DxfLayout)GenObject("LAYOUT",
+                (1, "page-setup-name"),
+                (100, "AcDbLayout"),
+                (1, ""),
+                (999, "comment line to ensure the value for the `1` code is an empty string")
+            );
             Assert.Equal("page-setup-name", layout.PageSetupName);
             Assert.Equal("", layout.LayoutName);
         }
@@ -795,14 +691,10 @@ layout-name
         public void EmptyPlotSettingsNameFromAFile()
         {
             // force a plot settings object with an empty string as a name
-            var file = Section("OBJECTS", @"
-  0
-PLOTSETTINGS
-  6
-
-999
-this comment required so the previous pair has an empty string
-");
+            var file = Section("OBJECTS",
+                (0, "PLOTSETTINGS"),
+                (6, "")
+            );
             var plotSettings = (DxfPlotSettings)file.Objects.Single();
             Assert.Equal("", plotSettings.PlotViewName);
 
@@ -820,40 +712,24 @@ this comment required so the previous pair has an empty string
         [Fact]
         public void ReadLightListTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-ENTITIES
-  0
-LIGHT
-  5
-42
-  1
-light-name
-  0
-ENDSEC
-  0
-SECTION
-  2
-OBJECTS
-  0
-LIGHTLIST
-  5
-DEADBEEF
- 90
-43
- 90
-1
-  5
-42
-  1
-can-be-anything
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                    (0, "LIGHT"),
+                    (5, "42"),
+                    (1, "light-name"),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "OBJECTS"),
+                    (0, "LIGHTLIST"),
+                    (5, "DEADBEEF"),
+                    (90, 43),
+                    (90, 1),
+                    (5, "42"),
+                    (1, "can-be-anything"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var lightList = (DxfLightList)file.Objects.Last();
             Assert.Equal(0xDEADBEEF, ((IDxfItemInternal)lightList).Handle);
             Assert.Equal(43, lightList.Version);
@@ -892,76 +768,42 @@ light-name
         [Fact]
         public void ReadMaterialTest()
         {
-            var material = (DxfMaterial)GenObject("MATERIAL", @"
- 75
-1
- 43
-1
- 43
-2
- 43
-3
- 43
-4
- 43
-5
- 43
-6
- 43
-7
- 43
-8
- 43
-9
- 43
-10
- 43
-11
- 43
-12
- 43
-13
- 43
-14
- 43
-15
- 43
-16
- 75
-2
- 43
-10
- 43
-20
- 43
-30
- 43
-40
- 43
-50
- 43
-60
- 43
-70
- 43
-80
- 43
-90
- 43
-100
- 43
-110
- 43
-120
- 43
-130
- 43
-140
- 43
-150
- 43
-160
-");
+            var material = (DxfMaterial)GenObject("MATERIAL",
+                (75, 1),
+                (43, 1.0),
+                (43, 2.0),
+                (43, 3.0),
+                (43, 4.0),
+                (43, 5.0),
+                (43, 6.0),
+                (43, 7.0),
+                (43, 8.0),
+                (43, 9.0),
+                (43, 10.0),
+                (43, 11.0),
+                (43, 12.0),
+                (43, 13.0),
+                (43, 14.0),
+                (43, 15.0),
+                (43, 16.0),
+                (75, 2),
+                (43, 10.0),
+                (43, 20.0),
+                (43, 30.0),
+                (43, 40.0),
+                (43, 50.0),
+                (43, 60.0),
+                (43, 70.0),
+                (43, 80.0),
+                (43, 90.0),
+                (43, 100.0),
+                (43, 110.0),
+                (43, 120.0),
+                (43, 130.0),
+                (43, 140.0),
+                (43, 150.0),
+                (43, 160.0)
+            );
             Assert.Equal(DxfMapAutoTransformMethod.NoAutoTransform, material.DiffuseMapAutoTransformMethod);
             Assert.Equal(1.0, material.DiffuseMapTransformMatrix.M11);
             Assert.Equal(2.0, material.DiffuseMapTransformMatrix.M12);
@@ -1002,30 +844,19 @@ light-name
         [Fact]
         public void ReadMLineStyleTest()
         {
-            var mlineStyle = (DxfMLineStyle)GenObject("MLINESTYLE", @"
-  2
-<name>
-  3
-<description>
- 62
-1
- 51
-99.0
- 52
-100.0
- 71
-2
- 49
-3.0
- 62
-3
- 49
-4.0
- 62
-4
-  6
-quatro
-");
+            var mlineStyle = (DxfMLineStyle)GenObject("MLINESTYLE",
+                (2, "<name>"),
+                (3, "<description>"),
+                (62, 1),
+                (51, 99.0),
+                (52, 100.0),
+                (71, 2),
+                (49, 3.0),
+                (62, 3),
+                (49, 4.0),
+                (62, 4),
+                (6, "quatro")
+            );
             Assert.Equal("<name>", mlineStyle.StyleName);
             Assert.Equal("<description>", mlineStyle.Description);
             Assert.Equal(1, mlineStyle.FillColor.RawValue);
@@ -1091,106 +922,57 @@ quatro
         [Fact]
         public void ReadSectionSettingsTest()
         {
-            var settings = (DxfSectionSettings)GenObject("SECTIONSETTINGS", @"
-  5
-#
-100
-AcDbSectionSettings
- 90
-42
- 91
-1
-  1
-SectionTypeSettings
- 90
-43
- 91
-1
- 92
-2
-330
-100
-330
-101
-331
-FF
-  1
-file-name
- 93
-2
-  2
-SectionGeometrySettings
- 90
-1001
- 91
-0
- 92
-0
- 63
-0
-  8
-
-  6
-
- 40
-1.0
-  1
-
-370
-0
- 70
-0
- 71
-0
- 72
-0
-  2
-
- 41
-0.0
- 42
-1.0
- 43
-0.0
-  3
-SectionGeometrySettingsEnd
- 90
-1002
- 91
-0
- 92
-0
- 63
-0
-  8
-
-  6
-
- 40
-1.0
-  1
-
-370
-0
- 70
-0
- 71
-0
- 72
-0
-  2
-
- 41
-0.0
- 42
-1.0
- 43
-0.0
-  3
-SectionGeometrySettingsEnd
-  3
-SectionTypeSettingsEnd
-");
+            var settings = (DxfSectionSettings)GenObject("SECTIONSETTINGS",
+                (5, "ABC"),
+                (100, "AcDbSectionSettings"),
+                (90, 42),
+                (91, 1),
+                (1, "SectionTypeSettings"),
+                (90, 43),
+                (91, 1),
+                (92, 2),
+                (330, "100"),
+                (330, "101"),
+                (331, "FF"),
+                (1, "file-name"),
+                (93, 2),
+                (2, "SectionGeometrySettings"),
+                (90, 1001),
+                (91, 0),
+                (92, 0),
+                (63, 0),
+                (8, ""),
+                (6, ""),
+                (40, 1.0),
+                (1, ""),
+                (370, 0),
+                (70, 0),
+                (71, 0),
+                (72, 0),
+                (2, ""),
+                (41, 0.0),
+                (42, 1.0),
+                (43, 0.0),
+                (3, "SectionGeometrySettingsEnd"),
+                (90, 1002),
+                (91, 0),
+                (92, 0),
+                (63, 0),
+                (8, ""),
+                (6, ""),
+                (40, 1.0),
+                (1, ""),
+                (370, 0),
+                (70, 0),
+                (71, 0),
+                (72, 0),
+                (2, ""),
+                (41, 0.0),
+                (42, 1.0),
+                (43, 0.0),
+                (3, "SectionGeometrySettingsEnd"),
+                (3, "SectionTypeSettingsEnd")
+            );
             Assert.Equal(42, settings.SectionType);
             var typeSettings = settings.SectionTypeSettings.Single();
             Assert.Equal(43, typeSettings.SectionType);
@@ -1330,48 +1112,28 @@ SectionTypeSettingsEnd
         [Fact]
         public void ReadSortentsTableTest()
         {
-            var file = Parse(@"
-  0
-SECTION
-  2
-ENTITIES
-  0
-POINT
-  5
-42
- 10
-1.0
- 20
-2.0
- 30
-3.0
-  0
-POINT
-  5
-43
- 10
-4.0
- 20
-5.0
- 30
-6.0
-  0
-ENDSEC
-  0
-SECTION
-  2
-OBJECTS
-  0
-SORTENTSTABLE
-331
-42
-  5
-43
-  0
-ENDSEC
-  0
-EOF
-");
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                (0, "POINT"),
+                (5, "42"),
+                (10, 1.0),
+                (20, 2.0),
+                (30, 3.0),
+                (0, "POINT"),
+                (5, "43"),
+                (10, 4.0),
+                (20, 5.0),
+                (30, 6.0),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "OBJECTS"),
+                (0, "SORTENTSTABLE"),
+                (331, "42"),
+                (5, "43"),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
             var sortents = (DxfSortentsTable)file.Objects.Last();
             Assert.Equal(new DxfPoint(1, 2, 3), ((DxfModelPoint)sortents.Entities.Single()).Location);
             Assert.Equal(new DxfPoint(4, 5, 6), ((DxfModelPoint)sortents.SortItems.Single()).Location);
@@ -1419,18 +1181,13 @@ AcDbSortentsTable
         public void ReadSunStudyTest()
         {
             // with subset
-            var sun = (DxfSunStudy)GenObject("SUNSTUDY", @"
-290
-1
- 73
-3
-290
-42
-290
-43
-290
-44
-");
+            var sun = (DxfSunStudy)GenObject("SUNSTUDY",
+                (290, 1),
+                (73, 3),
+                (290, 42),
+                (290, 43),
+                (290, 44)
+            );
             Assert.True(sun.UseSubset);
             Assert.Equal(3, sun.Hours.Count);
             Assert.Equal(42, sun.Hours[0]);
@@ -1438,16 +1195,12 @@ AcDbSortentsTable
             Assert.Equal(44, sun.Hours[2]);
 
             // without subset
-            sun = (DxfSunStudy)GenObject("SUNSTUDY", @"
- 73
-3
-290
-42
-290
-43
-290
-44
-");
+            sun = (DxfSunStudy)GenObject("SUNSTUDY",
+                (73, 3),
+                (290, 42),
+                (290, 43),
+                (290, 44)
+            );
             Assert.False(sun.UseSubset);
             Assert.Equal(3, sun.Hours.Count);
             Assert.Equal(42, sun.Hours[0]);
@@ -1526,132 +1279,70 @@ AcDbSunStudy
         [Fact]
         public void ReadTableStyleTest()
         {
-            var table = (DxfTableStyle)GenObject("TABLESTYLE", @"
-  5
-#
-100
-AcDbTableStyle
-280
-0
-  3
-
- 70
-0
- 71
-0
- 40
-0.06
- 41
-0.06
-280
-0
-281
-0
-  7
-one
-140
-0.0
-170
-0
- 62
-0
- 63
-7
-283
-0
- 90
-0
- 91
-0
-274
-0
-275
-0
-276
-0
-277
-0
-278
-0
-279
-0
-284
-1
-285
-1
-286
-1
-287
-1
-288
-1
-289
-1
- 64
-0
- 65
-0
- 66
-0
- 67
-0
- 68
-0
- 69
-0
-  7
-two
-140
-0.0
-170
-0
- 62
-0
- 63
-7
-283
-0
- 90
-0
- 91
-0
-274
-0
-275
-0
-276
-0
-277
-0
-278
-0
-279
-0
-284
-1
-285
-1
-286
-1
-287
-1
-288
-1
-289
-1
- 64
-0
- 65
-0
- 66
-0
- 67
-0
- 68
-0
- 69
-0
-");
+            var table = (DxfTableStyle)GenObject("TABLESTYLE",
+                (5, "123"),
+                (100, "AcDbTableStyle"),
+                (280, 0),
+                (3, ""),
+                (70, 0),
+                (71, 0),
+                (40, 0.06),
+                (41, 0.06),
+                (280, 0),
+                (281, 0),
+                (7, "one"),
+                (140, 0.0),
+                (170, 0),
+                (62, 0),
+                (63, 7),
+                (283, 0),
+                (90, 0),
+                (91, 0),
+                (274, 0),
+                (275, 0),
+                (276, 0),
+                (277, 0),
+                (278, 0),
+                (279, 0),
+                (284, 1),
+                (285, 1),
+                (286, 1),
+                (287, 1),
+                (288, 1),
+                (289, 1),
+                (64, 0),
+                (65, 0),
+                (66, 0),
+                (67, 0),
+                (68, 0),
+                (69, 0),
+                (7, "two"),
+                (140, 0.0),
+                (170, 0),
+                (62, 0),
+                (63, 7),
+                (283, 0),
+                (90, 0),
+                (91, 0),
+                (274, 0),
+                (275, 0),
+                (276, 0),
+                (277, 0),
+                (278, 0),
+                (279, 0),
+                (284, 1),
+                (285, 1),
+                (286, 1),
+                (287, 1),
+                (288, 1),
+                (289, 1),
+                (64, 0),
+                (65, 0),
+                (66, 0),
+                (67, 0),
+                (68, 0),
+                (69, 0)
+            );
             Assert.Equal(2, table.CellStyles.Count);
             Assert.Equal("one", table.CellStyles[0].Name);
             Assert.Equal("two", table.CellStyles[1].Name);
@@ -1794,76 +1485,47 @@ two
         public void ReadObjectWithUnterminatedXData()
         {
             // dictionary value with XDATA
-            var file = Section("OBJECTS", @"
-  0
-ACDBPLACEHOLDER
-1001
-IxMilia.Dxf
-  0
-ACDBPLACEHOLDER
-1001
-IxMilia.Dxf
-");
+            var file = Section("OBJECTS",
+                (0, "ACDBPLACEHOLDER"),
+                (1001, "IxMilia.Dxf"),
+                (0, "ACDBPLACEHOLDER"),
+                (1001, "IxMilia.Dxf")
+            );
             Assert.Equal(2, file.Objects.Count);
             Assert.IsType<DxfPlaceHolder>(file.Objects[0]);
             Assert.IsType<DxfPlaceHolder>(file.Objects[1]);
         }
 
-       [Fact]
+        [Fact]
         public void ReadXRecordWithMultipleXDataTest1()
         {
-            var xrecord = (DxfXRecordObject)GenObject("XRECORD", @"
-102
-{ACAD_REACTORS_1
-330
-111
-102
-}
-102
-{ACAD_REACTORS_2
-330
-222
-102
-}
-102
-{ACAD_REACTORS_3
-330
-333
-102
-}
-100
-AcDbXrecord
-280
-     1
-102
-VTR_0.000_0.000_1.000_1.000_VISUALSTYLE
-340
-195
-102
-VTR_0.000_0.000_1.000_1.000_GRIDDISPLAY
- 70
-     3
-102
-VTR_0.000_0.000_1.000_1.000_GRIDMAJOR
- 70
-     5
-102
-VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING
-280
-     1
-102
-VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTINGTYPE
- 70
-     1
-102
-VTR_0.000_0.000_1.000_1.000_BRIGHTNESS
-141
-0.0
-102
-VTR_0.000_0.000_1.000_1.000_CONTRAST
-142
-0.0
-");
+            var xrecord = (DxfXRecordObject)GenObject("XRECORD",
+                (102, "{ACAD_REACTORS_1"),
+                (330, "111"),
+                (102, "}"),
+                (102, "{ACAD_REACTORS_2"),
+                (330, "222"),
+                (102, "}"),
+                (102, "{ACAD_REACTORS_3"),
+                (330, "333"),
+                (102, "}"),
+                (100, "AcDbXrecord"),
+                (280, 1),
+                (102, "VTR_0.000_0.000_1.000_1.000_VISUALSTYLE"),
+                (340, "195"),
+                (102, "VTR_0.000_0.000_1.000_1.000_GRIDDISPLAY"),
+                (70, 3),
+                (102, "VTR_0.000_0.000_1.000_1.000_GRIDMAJOR"),
+                (70, 5),
+                (102, "VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING"),
+                (280, 1),
+                (102, "VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTINGTYPE"),
+                (70, 1),
+                (102, "VTR_0.000_0.000_1.000_1.000_BRIGHTNESS"),
+                (141, 0.0),
+                (102, "VTR_0.000_0.000_1.000_1.000_CONTRAST"),
+                (142, 0.0)
+            );
             Assert.Equal(3, xrecord.ExtensionDataGroups.Count);
             Assert.Equal("ACAD_REACTORS_1", xrecord.ExtensionDataGroups[0].GroupName);
             Assert.Equal("ACAD_REACTORS_2", xrecord.ExtensionDataGroups[1].GroupName);
@@ -1878,38 +1540,23 @@ VTR_0.000_0.000_1.000_1.000_CONTRAST
         public void ReadXRecordWithMultipleXDataTest2()
         {
             // reads an XRECORD object that hasn't specified it's 280 code pair for duplicate record handling
-            var xrecord = (DxfXRecordObject)GenObject("XRECORD", @"
-100
-AcDbXrecord
-102
-VTR_0.000_0.000_1.000_1.000_VISUALSTYLE
-340
-195
-102
-VTR_0.000_0.000_1.000_1.000_GRIDDISPLAY
- 70
-     3
-102
-VTR_0.000_0.000_1.000_1.000_GRIDMAJOR
- 70
-     5
-102
-VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING
-280
-     1
-102
-VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTINGTYPE
- 70
-     1
-102
-VTR_0.000_0.000_1.000_1.000_BRIGHTNESS
-141
-0.0
-102
-VTR_0.000_0.000_1.000_1.000_CONTRAST
-142
-0.0
-");
+            var xrecord = (DxfXRecordObject)GenObject("XRECORD",
+                (100, "AcDbXrecord"),
+                (102, "VTR_0.000_0.000_1.000_1.000_VISUALSTYLE"),
+                (340, "195"),
+                (102, "VTR_0.000_0.000_1.000_1.000_GRIDDISPLAY"),
+                (70, 3),
+                (102, "VTR_0.000_0.000_1.000_1.000_GRIDMAJOR"),
+                (70, 5),
+                (102, "VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING"),
+                (280, 1),
+                (102, "VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTINGTYPE"),
+                (70, 1),
+                (102, "VTR_0.000_0.000_1.000_1.000_BRIGHTNESS"),
+                (141, 0.0),
+                (102, "VTR_0.000_0.000_1.000_1.000_CONTRAST"),
+                (142, 0.0)
+            );
             Assert.Equal(0, xrecord.ExtensionDataGroups.Count);
             Assert.Equal(14, xrecord.DataPairs.Count);
             Assert.Equal(102, xrecord.DataPairs[6].Code);
@@ -1931,33 +1578,20 @@ VTR_0.000_0.000_1.000_1.000_CONTRAST
                     if (ctor != null)
                     {
                         var ent = (DxfEntity)ctor.Invoke(new object[0]);
-                        var fileContents = $@"
-  0
-SECTION
-  2
-ENTITIES
-  0
-{ent.EntityTypeString}
-  5
-AAAA
-  0
-ENDSEC
-  0
-SECTION
-  2
-OBJECTS
-  0
-DICTIONARY
-  3
-the-entity
-350
-AAAA
-  0
-ENDSEC
-  0
-EOF
-";
-                        var file = Parse(fileContents);
+                        var file = Parse(
+                            (0, "SECTION"),
+                            (2, "ENTITIES"),
+                            (0, ent.EntityTypeString),
+                            (5, "AAAA"),
+                            (0, "ENDSEC"),
+                            (0, "SECTION"),
+                            (2, "OBJECTS"),
+                            (0, "DICTIONARY"),
+                            (3, "the-entity"),
+                            (350, "AAAA"),
+                            (0, "ENDSEC"),
+                            (0, "EOF")
+                        );
                         var dict = (DxfDictionary)file.Objects.Single();
                         var parsedEntity = dict["the-entity"] as DxfEntity;
                         Assert.Equal(type, parsedEntity.GetType());

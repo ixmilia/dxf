@@ -49,16 +49,7 @@ namespace IxMilia.Dxf
             get { return RawValue >= 1 && RawValue <= 255; }
         }
 
-        public byte Index
-        {
-            get
-            {
-                if (IsIndex)
-                    return (byte)RawValue;
-                else
-                    throw new NotSupportedException("Color does not have an index.");
-            }
-        }
+        public byte Index => (byte)RawValue;
 
         private DxfColor()
             : this(0)

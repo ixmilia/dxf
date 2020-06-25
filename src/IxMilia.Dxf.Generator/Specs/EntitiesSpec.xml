@@ -690,7 +690,7 @@
     LEADER
 
     -->
-    <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" HasXData="true" DefaultConstructor="Internal">
+    <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" HasXData="true" DefaultConstructor="Internal" GenerateReaderFunction="false">
         <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
         <Property Name="UseArrowheads" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Property Name="PathType" Code="72" Type="DxfLeaderPathType" DefaultValue="DxfLeaderPathType.StraightLineSegments" ReadConverter="(DxfLeaderPathType){0}" WriteConverter="(short){0}" />
@@ -699,10 +699,7 @@
         <Property Name="UseHookline" Code="75" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Property Name="TextAnnotationHeight" Code="40" Type="double" DefaultValue="1.0" />
         <Property Name="TextAnnotationWidth" Code="41" Type="double" DefaultValue="1.0" />
-        <Property Name="VertexCount" Code="76" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" />
-        <Property Name="_verticesX" Code="10" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
-        <Property Name="_verticesY" Code="20" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
-        <Property Name="_verticesZ" Code="30" Type="double" DefaultValue="" Accessibility="private" AllowMultiples="true" />
+        <Property Name="_vertexCount" Code="76" Type="int" DefaultValue="0" Accessibility="private" ReadConverter="(int){0}" WriteConverter="(short){0}" />
         <Property Name="OverrideColor" Code="77" Type="DxfColor" DefaultValue="DxfColor.ByBlock" DisableWritingDefault="true" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" />
         <Property Name="AssociatedAnnotationReference" Code="340" Type="string" DefaultValue="null" />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />

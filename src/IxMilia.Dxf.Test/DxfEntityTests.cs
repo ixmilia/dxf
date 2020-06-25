@@ -744,6 +744,35 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadLeaderWithIncompleteVerticesTest()
+        {
+            var leader = (DxfLeader)Entity("LEADER",
+                (76, 100), // not really 100 vertices
+                (20, 99.0), // specifies a point before one has been started; discarded
+                (10, 1.0), // only specifies X
+                (10, 2.0), // only specifies XY
+                (20, 3.0),
+                (10, 4.0), // only specifies XZ
+                (30, 5.0),
+                (10, 6.0), // specifies XYZ
+                (20, 7.0),
+                (30, 8.0),
+                (10, 9.0), // re-specifies Z; overwritten
+                (20, 10.0),
+                (30, 11.0),
+                (30, 12.0)
+            );
+            AssertArrayEqual(new[]
+            {
+                new DxfPoint(1.0, 0.0, 0.0),
+                new DxfPoint(2.0, 3.0, 0.0),
+                new DxfPoint(4.0, 0.0, 5.0),
+                new DxfPoint(6.0, 7.0, 8.0),
+                new DxfPoint(9.0, 10.0, 12.0),
+            }, leader.Vertices.ToArray());
+        }
+
+        [Fact]
         public void EnforceMinimumVertexCountOnPolylineTest()
         {
             // need at least 2 vertices

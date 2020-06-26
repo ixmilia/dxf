@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 0.7.4 (26 June 2020)
+
+- Relicense as MIT.
+- Basic support for `HATCH` entities.
+- Improve `DIMENSION` support.
+- Allow reading incomplete `LEADER` points.
+
 ## 0.7.3 (13 February 2020)
 
 - Fix bug in writing spline weights.

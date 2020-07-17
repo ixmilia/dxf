@@ -570,48 +570,6 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
-        public void NullPlotSettingsName()
-        {
-            // artificially create a plot settings object without a plot view name
-            var file = new DxfFile();
-            file.Clear();
-            var plotSettings = new DxfPlotSettings();
-
-            // ensure it doesn't end up as a view
-            file.Objects.Add(plotSettings);
-            Assert.Equal(0, file.Views.Count);
-            file.Normalize();
-            Assert.Equal(0, file.Views.Count);
-
-            // ensure that it ends up as a view when it has a valid name
-            plotSettings.PlotViewName = "plot view name";
-            file.Normalize();
-            Assert.Equal(plotSettings.PlotViewName, file.Views.Single().Name);
-        }
-
-        [Fact]
-        public void EmptyPlotSettingsNameFromAFile()
-        {
-            // force a plot settings object with an empty string as a name
-            var file = Section("OBJECTS",
-                (0, "PLOTSETTINGS"),
-                (6, "")
-            );
-            var plotSettings = (DxfPlotSettings)file.Objects.Single();
-            Assert.Equal("", plotSettings.PlotViewName);
-
-            // ensure it doesn't end up as a view
-            Assert.Equal(0, file.Views.Count);
-            file.Normalize();
-            Assert.Equal(0, file.Views.Count);
-
-            // ensure that it ends up as a view when it has a valid name
-            plotSettings.PlotViewName = "plot view name";
-            file.Normalize();
-            Assert.Equal(plotSettings.PlotViewName, file.Views.Single().Name);
-        }
-
-        [Fact]
         public void ReadLightListTest()
         {
             var file = Parse(

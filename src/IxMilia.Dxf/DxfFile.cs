@@ -489,9 +489,6 @@ namespace IxMilia.Dxf
             AddMissingStyles(existingStyles, Entities.OfType<DxfText>().Select(t => t.TextStyleName));
             AddMissingStyles(existingStyles, Objects.OfType<DxfMLineStyle>().Select(m => m.StyleName));
 
-            var existingViews = GetExistingNames(Views.Cast<DxfSymbolTableFlags>());
-            AddMissingViews(existingViews, Objects.OfType<DxfPlotSettings>().Select(p => p.PlotViewName));
-
             var existingUcs = GetExistingNames(UserCoordinateSystems.Cast<DxfSymbolTableFlags>());
             AddMissingUcs(existingUcs, new[] {
                 Header.UCSDefinitionName,

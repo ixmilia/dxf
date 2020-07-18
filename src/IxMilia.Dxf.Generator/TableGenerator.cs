@@ -111,7 +111,7 @@ namespace IxMilia.Dxf.Generator
             {
                 var tableItem = table.Element(XName.Get("TableItem", _xmlns));
                 var properties = tableItem.Elements(XName.Get("Property", _xmlns));
-                CreateNewFile("IxMilia.Dxf", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
+                CreateNewFile("IxMilia.Dxf", "System", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
 
                 IncreaseIndent();
                 AppendLine($"public partial class {Name(tableItem)} : DxfSymbolTableFlags");
@@ -167,10 +167,21 @@ namespace IxMilia.Dxf.Generator
                 AppendLine("public DxfXData XData { get; set; }");
 
                 //
-                // Constructor
+                // Constructors
                 //
                 AppendLine();
-                AppendLine($"public {Name(tableItem)}()");
+                AppendLine($"public {Name(tableItem)}(string name)");
+                AppendLine("    : this()");
+                AppendLine("{");
+                AppendLine("    if (string.IsNullOrEmpty(name))");
+                AppendLine("    {");
+                AppendLine("        throw new ArgumentException(nameof(name), $\"Parameter '{nameof(name)}' must have a value.\");");
+                AppendLine("    }");
+                AppendLine();
+                AppendLine("    Name = name;");
+                AppendLine("}");
+                AppendLine();
+                AppendLine($"internal {Name(tableItem)}()");
                 AppendLine("    : base()");
                 AppendLine("{");
                 IncreaseIndent();

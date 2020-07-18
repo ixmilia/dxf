@@ -514,32 +514,32 @@ namespace IxMilia.Dxf
 
         private void AddMissingDimensionStyles(HashSet<string> existingDimensionStyles, IEnumerable<string> dimensionStylesToAdd)
         {
-            AddMissingTableItems<DxfDimStyle>(existingDimensionStyles, dimensionStylesToAdd, ds => DimensionStyles.Add(ds));
+            AddMissingTableItems<DxfDimStyle>(existingDimensionStyles, dimensionStylesToAdd, name => new DxfDimStyle(name), ds => DimensionStyles.Add(ds));
         }
 
         private void AddMissingLayers(HashSet<string> existingLayers, IEnumerable<string> layersToAdd)
         {
-            AddMissingTableItems<DxfLayer>(existingLayers, layersToAdd, l => Layers.Add(l));
+            AddMissingTableItems<DxfLayer>(existingLayers, layersToAdd, name => new DxfLayer(name), l => Layers.Add(l));
         }
 
         private void AddMissingLineTypes(HashSet<string> existingLineTypes, IEnumerable<string> lineTypesToAdd)
         {
-            AddMissingTableItems<DxfLineType>(existingLineTypes, lineTypesToAdd, lt => LineTypes.Add(lt));
+            AddMissingTableItems<DxfLineType>(existingLineTypes, lineTypesToAdd, name => new DxfLineType(name), lt => LineTypes.Add(lt));
         }
 
         private void AddMissingStyles(HashSet<string> existingStyles, IEnumerable<string> stylesToAdd)
         {
-            AddMissingTableItems<DxfStyle>(existingStyles, stylesToAdd, s => Styles.Add(s));
+            AddMissingTableItems<DxfStyle>(existingStyles, stylesToAdd, name => new DxfStyle(name), s => Styles.Add(s));
         }
 
         private void AddMissingViews(HashSet<string> existingViews, IEnumerable<string> viewsToAdd)
         {
-            AddMissingTableItems<DxfView>(existingViews, viewsToAdd, v => Views.Add(v));
+            AddMissingTableItems<DxfView>(existingViews, viewsToAdd, name => new DxfView(name), v => Views.Add(v));
         }
 
         private void AddMissingUcs(HashSet<string> existingUcs, IEnumerable<string> ucsToAdd)
         {
-            AddMissingTableItems<DxfUcs>(existingUcs, ucsToAdd, u => UserCoordinateSystems.Add(u));
+            AddMissingTableItems<DxfUcs>(existingUcs, ucsToAdd, name => new DxfUcs(name), u => UserCoordinateSystems.Add(u));
         }
 
         private static void AddMissingItems(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Action<string> addItem)
@@ -554,10 +554,10 @@ namespace IxMilia.Dxf
             }
         }
 
-        private static void AddMissingTableItems<T>(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Action<T> addItem)
-            where T: DxfSymbolTableFlags, new()
+        private static void AddMissingTableItems<T>(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Func<string, T> createItem, Action<T> addItem)
+            where T: DxfSymbolTableFlags
         {
-            AddMissingItems(existingItems, itemsToAdd, name => addItem(new T() { Name = name }));
+            AddMissingItems(existingItems, itemsToAdd, name => addItem(createItem(name)));
         }
     }
 }

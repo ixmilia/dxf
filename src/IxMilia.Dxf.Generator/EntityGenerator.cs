@@ -322,7 +322,6 @@ namespace IxMilia.Dxf.Generator
             AppendPointers(entity);
             AppendProperties(entity);
             AppendFlags(entity);
-            AppendXData(entity);
             AppendDefaultConstructor(entity);
             AppendParameterizedConstructors(entity);
             AppendCopyConstructor(entity);

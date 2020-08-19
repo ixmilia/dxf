@@ -51,14 +51,11 @@ namespace IxMilia.Dxf.Generator
                     }
                 }
 
-                if (HasXData(item))
-                {
-                    AppendLine();
-                    AppendLine("if (XData != null)");
-                    AppendLine("{");
-                    AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
-                    AppendLine("}");
-                }
+                AppendLine();
+                AppendLine("if (XData != null)");
+                AppendLine("{");
+                AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
+                AppendLine("}");
 
                 DecreaseIndent();
                 AppendLine("}");
@@ -84,7 +81,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("{");
                     IncreaseIndent();
                     AppendLine("CopyManualValues(other);");
-                    AppendLine("((IDxfHasXDataHidden)this).XDataHidden = ((IDxfHasXDataHidden)other).XDataHidden;");
+                    AppendLine("this.XData = other.XData;");
                     foreach (var property in GetPropertiesAndPointers(item))
                     {
                         var name = Name(property);
@@ -417,15 +414,6 @@ namespace IxMilia.Dxf.Generator
             }
         }
 
-        public void AppendXData(XElement item)
-        {
-            if (HasXData(item))
-            {
-                AppendLine();
-                AppendLine("public DxfXData XData { get { return ((IDxfHasXDataHidden)this).XDataHidden; } set { ((IDxfHasXDataHidden)this).XDataHidden = value; } }");
-            }
-        }
-
         public string AttributeOrDefault(XElement xml, string attributeName, string defaultValue = null)
         {
             var att = xml?.Attribute(attributeName);
@@ -668,11 +656,6 @@ namespace IxMilia.Dxf.Generator
         public bool HasFlags(XElement xml)
         {
             return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true"));
-        }
-
-        public bool HasXData(XElement xml)
-        {
-            return bool.Parse(AttributeOrDefault(xml, "HasXData", "false"));
         }
 
         public string HeaderVariable(XElement xml)

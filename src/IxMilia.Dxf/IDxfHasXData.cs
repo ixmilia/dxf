@@ -5,17 +5,13 @@ namespace IxMilia.Dxf
     public interface IDxfHasXData
     {
         IList<DxfCodePairGroup> ExtensionDataGroups { get; }
-    }
-
-    internal interface IDxfHasXDataHidden
-    {
-        DxfXData XDataHidden { get; set; }
+        DxfXData XData { get; set; }
     }
 
     internal static class DxfXDataHelper
     {
         public static bool TrySetExtensionData<THasXData>(this THasXData hasXData, DxfCodePair pair, DxfCodePairBufferReader buffer)
-            where THasXData : IDxfHasXData, IDxfHasXDataHidden
+            where THasXData : IDxfHasXData
         {
             if (pair.Code == DxfCodePairGroup.GroupCodeNumber && pair.StringValue.StartsWith("{"))
             {
@@ -27,7 +23,7 @@ namespace IxMilia.Dxf
             else if (pair.Code == (int)DxfXDataType.ApplicationName)
             {
                 buffer.Advance();
-                hasXData.XDataHidden = DxfXData.FromBuffer(buffer, pair.StringValue);
+                hasXData.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
                 return true;
             }
 

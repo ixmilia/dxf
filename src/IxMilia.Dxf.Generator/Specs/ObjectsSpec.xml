@@ -136,7 +136,7 @@
     FIELD
 
     -->
-    <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="ACAD_FIELD" HasXData="false" MinVersion="R2004">
+    <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="ACAD_FIELD" MinVersion="R2004">
         <Property Name="EvaluatorId" Code="1" Type="string" DefaultValue="null" />
         <Property Name="FieldCodeString" Code="2" Type="string" DefaultValue="null" />
         <Property Name="FieldCodeStringOverflow" Code="3" Type="string" DefaultValue="null" />
@@ -282,7 +282,7 @@
     IDBUFFER
 
     -->
-    <Object Name="DxfIdBuffer" ObjectType="IdBuffer" SubclassMarker="AcDbIdBuffer" TypeString="IDBUFFER" HasXData="false" MinVersion="R14">
+    <Object Name="DxfIdBuffer" ObjectType="IdBuffer" SubclassMarker="AcDbIdBuffer" TypeString="IDBUFFER" MinVersion="R14">
         <Pointer Name="Entities" Code="330" Type="DxfEntity" AllowMultiples="true" />
     </Object>
     <!--

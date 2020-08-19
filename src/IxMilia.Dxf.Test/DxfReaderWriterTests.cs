@@ -786,7 +786,7 @@ unsupported code (5555) treated as string
         }
 
         [Fact]
-        public void ReadXDataUnexpectedValueTest()
+        public void ReadXDataFromCommonEntityTest()
         {
             var file = Section("ENTITIES",
                 (0, "LINE"),
@@ -803,8 +803,7 @@ unsupported code (5555) treated as string
                 (1002, "}")
             );
             var line = (DxfLine)file.Entities.Single();
-            var xdata = ((IDxfHasXDataHidden)line).XDataHidden;
-            var itemList = (DxfXDataItemList)xdata.Items.Single();
+            var itemList = (DxfXDataItemList)line.XData.Items.Single();
             Assert.Equal(2, itemList.Items.Count);
             Assert.Equal(new DxfPoint(1, 2, 3), ((DxfXDataWorldSpacePosition)itemList.Items.First()).Value);
             Assert.Equal(new DxfPoint(11, 22, 33), ((DxfXDataWorldSpacePosition)itemList.Items.Last()).Value);

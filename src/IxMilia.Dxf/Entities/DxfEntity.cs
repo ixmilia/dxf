@@ -218,13 +218,13 @@ namespace IxMilia.Dxf.Entities
         ConstantMultilineAttributeDefinition = 4
     }
 
-    public abstract partial class DxfEntity : IDxfHasXData, IDxfHasXDataHidden
+    public abstract partial class DxfEntity : IDxfHasXData
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
 
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
-        DxfXData IDxfHasXDataHidden.XDataHidden { get; set; }
+        public DxfXData XData { get; set; }
 
         public abstract DxfEntityType EntityType { get; }
 

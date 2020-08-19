@@ -97,13 +97,13 @@ namespace IxMilia.Dxf.Objects
         Lanczos = 4
     }
 
-    public abstract partial class DxfObject : IDxfItem, IDxfHasXData, IDxfHasXDataHidden
+    public abstract partial class DxfObject : IDxfItem, IDxfHasXData
     {
         protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
 
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
-        DxfXData IDxfHasXDataHidden.XDataHidden { get; set; }
+        public DxfXData XData { get; set; }
 
         public abstract DxfObjectType ObjectType { get; }
 

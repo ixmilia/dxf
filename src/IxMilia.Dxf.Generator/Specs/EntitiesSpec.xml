@@ -377,7 +377,7 @@
         <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="STANDARD" MinVersion="R12" />
     </Entity>
     <!-- aligned -->
-    <Entity Name="DxfAlignedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Aligned">
+    <Entity Name="DxfAlignedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Aligned">
         <!--<Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />-->
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
@@ -391,7 +391,7 @@
         </Extents>
     </Entity>
     <!-- linear and rotated -->
-    <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="RotatedHorizontalOrVertical">
+    <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="RotatedHorizontalOrVertical">
         <Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
@@ -417,7 +417,7 @@
         </Extents>
     </Entity>
     <!-- radial -->
-    <Entity Name="DxfRadialDimension" EntityType="Dimension" SubclassMarker="AcDbRadialDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Radius">
+    <Entity Name="DxfRadialDimension" EntityType="Dimension" SubclassMarker="AcDbRadialDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Radius">
         <Property Name="DefinitionPoint2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
         <Property Name="LeaderLength" Code="40" Type="double" DefaultValue="0.0" />
         <Extents>
@@ -429,7 +429,7 @@
         </Extents>
     </Entity>
     <!-- diametric -->
-    <Entity Name="DxfDiameterDimension" EntityType="Dimension" SubclassMarker="AcDbDiametricDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Diameter">
+    <Entity Name="DxfDiameterDimension" EntityType="Dimension" SubclassMarker="AcDbDiametricDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Diameter">
         <Property Name="DefinitionPoint2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
         <Property Name="LeaderLength" Code="40" Type="double" DefaultValue="0.0" />
         <Extents>
@@ -441,7 +441,7 @@
         </Extents>
     </Entity>
     <!-- angular, 3 point -->
-    <Entity Name="DxfAngularThreePointDimension" EntityType="Dimension" SubclassMarker="AcDb3PointAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="AngularThreePoint">
+    <Entity Name="DxfAngularThreePointDimension" EntityType="Dimension" SubclassMarker="AcDb3PointAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="AngularThreePoint">
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Property Name="DefinitionPoint4" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
@@ -458,7 +458,7 @@
         </Extents>
     </Entity>
     <!-- ordinate -->
-    <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Ordinate" MinVersion="R11">
+    <Entity Name="DxfOrdinateDimension" EntityType="Dimension" SubclassMarker="AcDbOrdinateDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Ordinate" MinVersion="R11">
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Extents>
@@ -471,7 +471,7 @@
         </Extents>
     </Entity>
     <!-- angular, 2 line -->
-    <Entity Name="DxfAngularTwoLineDimension" EntityType="Dimension" SubclassMarker="AcDb2LineAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" HasXData="true" Tag="Angular">
+    <Entity Name="DxfAngularTwoLineDimension" EntityType="Dimension" SubclassMarker="AcDb2LineAngularDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Angular">
         <Property Name="FirstExtensionLineP1" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="FirstExtensionLineP2" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Property Name="SecondExtensionLineP2" Code="15" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="15,25,35" />
@@ -690,7 +690,7 @@
     LEADER
 
     -->
-    <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" HasXData="true" DefaultConstructor="Internal" GenerateReaderFunction="false">
+    <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" DefaultConstructor="Internal" GenerateReaderFunction="false">
         <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
         <Property Name="UseArrowheads" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Property Name="PathType" Code="72" Type="DxfLeaderPathType" DefaultValue="DxfLeaderPathType.StraightLineSegments" ReadConverter="(DxfLeaderPathType){0}" WriteConverter="(short){0}" />
@@ -893,7 +893,7 @@
     MTEXT
 
     -->
-    <Entity Name="DxfMText" EntityType="MText" SubclassMarker="AcDbMText" TypeString="MTEXT" HasXData="true" GenerateReaderFunction="false" MinVersion="R13">
+    <Entity Name="DxfMText" EntityType="MText" SubclassMarker="AcDbMText" TypeString="MTEXT" GenerateReaderFunction="false" MinVersion="R13">
         <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="InitialTextHeight" Code="40" Type="double" DefaultValue="1.0" />
         <Property Name="ReferenceRectangleWidth" Code="41" Type="double" DefaultValue="1.0" />
@@ -1029,7 +1029,7 @@
     POLYLINE
 
     -->
-    <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE" HasXData="true" DefaultConstructor="Internal" GenerateWriterFunction="false">
+    <Entity Name="DxfPolyline" EntityType="Polyline" SubclassMarker="AcDb2dPolyline" TypeString="POLYLINE" DefaultConstructor="Internal" GenerateWriterFunction="false">
         <Property Name="ContainsVertices" Code="66" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MaxVersion="R13" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R12" />
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />

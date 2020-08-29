@@ -6,7 +6,7 @@ using IxMilia.Dxf.Sections;
 
 namespace IxMilia.Dxf.Blocks
 {
-    public partial class DxfBlock : IDxfItemInternal
+    public partial class DxfBlock : IDxfItemInternal, IDxfHasXData
     {
         internal const string BlockText = "BLOCK";
         internal const string EndBlockText = "ENDBLK";
@@ -48,7 +48,7 @@ namespace IxMilia.Dxf.Blocks
         public string XrefName { get; set; }
         public IList<DxfEntity> Entities { get; }
         public string Description { get; set; }
-        public DxfXData XData { get; set; }
+        public IDictionary<string, DxfXDataApplicationItemCollection> XData { get; } = new DictionaryWithPredicate<string, DxfXDataApplicationItemCollection>((_key, value) => value != null);
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
         private DxfEndBlock EndBlock
         {
@@ -265,7 +265,7 @@ namespace IxMilia.Dxf.Blocks
                                 block.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                                 break;
                             case (int)DxfXDataType.ApplicationName:
-                                block.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                                DxfXData.PopulateFromBuffer(buffer, block.XData, pair.StringValue);
                                 break;
                         }
                     }

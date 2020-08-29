@@ -131,10 +131,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
-            if (XData != null)
-            {
-                XData.AddValuePairs(pairs, version, outputHandles);
-            }
+            DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
         }
 
         protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

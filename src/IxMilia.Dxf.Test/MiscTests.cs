@@ -23,9 +23,8 @@ namespace IxMilia.Dxf.Test
                 DimensionUnitToleranceDecimalPlaces = (short)(primary.DimensionUnitToleranceDecimalPlaces + 1)
             };
 
-            var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
-            var list = (DxfXDataNamedList)xdata.Items.Single();
-            Assert.Equal("DSTYLE", list.Name);
+            var items = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
+            Assert.Equal("DSTYLE", ((DxfXDataString)items.First()).Value);
         }
 
         [Fact]
@@ -37,10 +36,13 @@ namespace IxMilia.Dxf.Test
                 DimensionUnitToleranceDecimalPlaces = (short)(primary.DimensionUnitToleranceDecimalPlaces + 1)
             };
 
-            var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
-            var list = (DxfXDataNamedList)xdata.Items.Single();
-            Assert.Equal(2, list.Items.Count);
+            var diffItems = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
+            Assert.Equal(2, diffItems.Count);
 
+            Assert.Equal("DSTYLE", ((DxfXDataString)diffItems[0]).Value);
+
+            var list = (DxfXDataItemList)diffItems[1];
+            Assert.Equal(2, list.Items.Count);
             Assert.Equal(271, ((DxfXDataInteger)list.Items[0]).Value);
             Assert.Equal(modified.DimensionUnitToleranceDecimalPlaces, ((DxfXDataInteger)list.Items[1]).Value);
         }
@@ -55,8 +57,12 @@ namespace IxMilia.Dxf.Test
                 DimensionUnitToleranceDecimalPlaces = (short)(primary.DimensionUnitToleranceDecimalPlaces + 1)
             };
 
-            var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
-            var list = (DxfXDataNamedList)xdata.Items.Single();
+            var diffItems = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
+            Assert.Equal(2, diffItems.Count);
+
+            Assert.Equal("DSTYLE", ((DxfXDataString)diffItems[0]).Value);
+
+            var list = (DxfXDataItemList)diffItems[1];
             Assert.Equal(4, list.Items.Count);
 
             Assert.Equal(3, ((DxfXDataInteger)list.Items[0]).Value);
@@ -73,11 +79,14 @@ namespace IxMilia.Dxf.Test
             var secondary = primary.Clone();
             secondary.DimensionUnitToleranceDecimalPlaces = 5;
 
-            var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, secondary);
-            var list = (DxfXDataNamedList)xdata.Items.Single();
+            var diffItems = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, secondary);
 
+            Assert.Equal(2, diffItems.Count);
+
+            Assert.Equal("DSTYLE", ((DxfXDataString)diffItems[0]).Value);
+
+            var list = (DxfXDataItemList)diffItems[1];
             Assert.Equal(2, list.Items.Count);
-
             Assert.Equal(271, ((DxfXDataInteger)list.Items[0]).Value);
             Assert.Equal(5, ((DxfXDataInteger)list.Items[1]).Value);
         }

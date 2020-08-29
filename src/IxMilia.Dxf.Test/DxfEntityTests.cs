@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
@@ -1090,9 +1090,8 @@ namespace IxMilia.Dxf.Test
         public void WriteDimensionWithTrailingXDataTest()
         {
             var dim = new DxfAlignedDimension();
-            dim.XData = new DxfXData("ACAD",
-                new DxfXDataItem[]
-                {
+            dim.XData.Add("ACAD",
+                new DxfXDataApplicationItemCollection(
                     new DxfXDataString("DSTYLE"),
                     new DxfXDataItemList(
                         new DxfXDataItem[]
@@ -1100,7 +1099,7 @@ namespace IxMilia.Dxf.Test
                             new DxfXDataInteger(271),
                             new DxfXDataInteger(9),
                         })
-                });
+                ));
             EnsureFileContainsEntity(dim,
                 DxfAcadVersion.R14,
                 (1001, "ACAD"),
@@ -1123,7 +1122,7 @@ namespace IxMilia.Dxf.Test
                 DimensioningSuffix = "some suffix"
             };
             var dim = new DxfAlignedDimension();
-            dim.XData = DxfDimStyle.GenerateStyleDifferenceAsXData(standardDimStyle, customDimStyle);
+            dim.XData["ACAD"] = DxfDimStyle.GenerateStyleDifferenceAsXData(standardDimStyle, customDimStyle);
             EnsureFileContainsEntity(dim,
                 DxfAcadVersion.R14,
                 (1001, "ACAD"),
@@ -1144,9 +1143,9 @@ namespace IxMilia.Dxf.Test
                 (1001, "ACAD"),
                 (1000, "some xdata string")
             );
-            var xdata = dimension.XData;
-            Assert.Equal("ACAD", xdata.ApplicationName);
-            Assert.Equal("some xdata string", ((DxfXDataString)xdata.Items.Single()).Value);
+            var xdataPair = dimension.XData.Single();
+            Assert.Equal("ACAD", xdataPair.Key);
+            Assert.Equal("some xdata string", ((DxfXDataString)xdataPair.Value.Single()).Value);
         }
 
         [Fact]

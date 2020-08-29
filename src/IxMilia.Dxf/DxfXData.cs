@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -25,58 +26,122 @@ namespace IxMilia.Dxf
         Long = 1071
     }
 
-    public class DxfXData
+    internal static class DxfXData
     {
-        public string ApplicationName { get; set; }
-        public List<DxfXDataItem> Items { get; }
-
-        public DxfXData(string applicationName, IEnumerable<DxfXDataItem> items)
-        {
-            ApplicationName = applicationName;
-            Items = items.ToList();
-        }
-
-        internal void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        internal static void AddValuePairs(IDictionary<string, DxfXDataApplicationItemCollection> xdata, List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
         {
             if (version >= DxfAcadVersion.R14)
             {
-                pairs.Add(new DxfCodePair((int)DxfXDataType.ApplicationName, ApplicationName));
-                foreach (var item in Items)
+                foreach (var applicationGroup in xdata)
                 {
-                    item.AddValuePairs(pairs, version, outputHandles);
+                    pairs.Add(new DxfCodePair(1001, applicationGroup.Key));
+                    foreach (var item in applicationGroup.Value)
+                    {
+                        item.AddValuePairs(pairs, version, outputHandles);
+                    }
                 }
             }
         }
 
-        internal static DxfXData FromBuffer(DxfCodePairBufferReader buffer, string applicationName)
+        internal static void PopulateFromBuffer(DxfCodePairBufferReader buffer, IDictionary<string, DxfXDataApplicationItemCollection> xdata, string applicationName)
         {
-            DxfXDataItem last = null;
-            var items = new List<DxfXDataItem>();
+            xdata[applicationName] = new DxfXDataApplicationItemCollection();
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();
                 if (pair.Code == (int)DxfXDataType.ApplicationName || pair.Code < 1000)
                 {
-                    // new xdata or non-xdata
-                    break;
+                    return;
                 }
 
                 var item = DxfXDataItem.FromBuffer(buffer);
                 if (item != null)
                 {
-                    if (last is DxfXDataString xdataString && item is DxfXDataItemList list)
-                    {
-                        // re-build last and current item as named group
-                        items.RemoveAt(items.Count - 1);
-                        item = new DxfXDataNamedList(xdataString.Value, list.Items);
-                    }
-
-                    items.Add(item);
-                    last = item;
+                    xdata[applicationName].Add(item);
                 }
             }
+        }
 
-            return new DxfXData(applicationName, items);
+        internal static void CopyItemsTo(this IDictionary<string, DxfXDataApplicationItemCollection> source, IDictionary<string, DxfXDataApplicationItemCollection> destination)
+        {
+            foreach (var item in source)
+            {
+                destination[item.Key] = item.Value;
+            }
+        }
+    }
+
+    public class DxfXDataApplicationItemCollection : IList<DxfXDataItem>
+    {
+        private IList<DxfXDataItem> _items = new ListNonNull<DxfXDataItem>();
+
+        public DxfXDataApplicationItemCollection(IEnumerable<DxfXDataItem> items)
+        {
+            foreach (var item in items)
+            {
+                Add(item);
+            }
+        }
+
+        public DxfXDataApplicationItemCollection(params DxfXDataItem[] items)
+            : this((IEnumerable<DxfXDataItem>)items)
+        {
+        }
+
+        public DxfXDataItem this[int index] { get => _items[index]; set => _items[index] = value; }
+
+        public int Count => _items.Count;
+
+        public bool IsReadOnly => _items.IsReadOnly;
+
+        public void Add(DxfXDataItem item)
+        {
+            _items.Add(item);
+        }
+
+        public void Clear()
+        {
+            _items.Clear();
+        }
+
+        public bool Contains(DxfXDataItem item)
+        {
+            return _items.Contains(item);
+        }
+
+        public void CopyTo(DxfXDataItem[] array, int arrayIndex)
+        {
+            _items.CopyTo(array, arrayIndex);
+        }
+
+        public IEnumerator<DxfXDataItem> GetEnumerator()
+        {
+            return _items.GetEnumerator();
+        }
+
+        public int IndexOf(DxfXDataItem item)
+        {
+            return _items.IndexOf(item);
+        }
+
+        public void Insert(int index, DxfXDataItem item)
+        {
+            _items.Insert(index, item);
+        }
+
+        public bool Remove(DxfXDataItem item)
+        {
+            return _items.Remove(item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            _items.RemoveAt(index);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)_items).GetEnumerator();
         }
     }
 
@@ -94,10 +159,6 @@ namespace IxMilia.Dxf
                     break;
                 case DxfXDataItemList l:
                     AddListValuePairs(l.Items, pairs, version, outputHandles);
-                    break;
-                case DxfXDataNamedList n:
-                    pairs.Add(new DxfCodePair(code, n.Name));
-                    AddListValuePairs(n.Items, pairs, version, outputHandles);
                     break;
                 case DxfXDataLayerName l:
                     pairs.Add(new DxfCodePair(code, l.Value));
@@ -251,6 +312,11 @@ namespace IxMilia.Dxf
             Items = items.ToList();
         }
 
+        public DxfXDataItemList(params DxfXDataItem[] items)
+            : this((IEnumerable<DxfXDataItem>)items)
+        {
+        }
+
         internal static DxfXDataItemList ListFromBuffer(DxfCodePairBufferReader buffer)
         {
             Debug.Assert(buffer.ItemsRemain);
@@ -259,7 +325,6 @@ namespace IxMilia.Dxf
             while (buffer.ItemsRemain)
             {
                 pair = buffer.Peek();
-                Debug.Assert(pair.Code >= 1000, "Unexpected non-XDATA code pair");
                 if (pair.Code == (int)DxfXDataType.ControlString && pair.StringValue == "}")
                 {
                     buffer.Advance();
@@ -274,28 +339,6 @@ namespace IxMilia.Dxf
             }
 
             return new DxfXDataItemList(items);
-        }
-    }
-
-    public class DxfXDataNamedList : DxfXDataItem
-    {
-        public override DxfXDataType Type { get { return DxfXDataType.String; } }
-
-        public string Name { get; set; }
-
-        public IList<DxfXDataItem> Items { get; private set; }
-
-        public DxfXDataNamedList(string name, IEnumerable<DxfXDataItem> items = null)
-        {
-            Name = name;
-            Items = new ListNonNull<DxfXDataItem>();
-            if (items != null)
-            {
-                foreach (var item in items)
-                {
-                    Items.Add(item);
-                }
-            }
         }
     }
 

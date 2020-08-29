@@ -103,7 +103,7 @@ namespace IxMilia.Dxf.Objects
 
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
-        public DxfXData XData { get; set; }
+        public IDictionary<string, DxfXDataApplicationItemCollection> XData { get; } = new DictionaryWithPredicate<string, DxfXDataApplicationItemCollection>((_key, value) => value != null);
 
         public abstract DxfObjectType ObjectType { get; }
 

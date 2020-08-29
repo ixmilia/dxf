@@ -33,10 +33,7 @@ namespace IxMilia.Dxf
                 element.AddValuePairs(pairs);
             }
 
-            if (XData != null)
-            {
-                XData.AddValuePairs(pairs, version, outputHandles);
-            }
+            DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
         }
 
         internal static DxfLineType FromBuffer(DxfCodePairBufferReader buffer)
@@ -134,7 +131,7 @@ namespace IxMilia.Dxf
                         }
                         break;
                     case (int)DxfXDataType.ApplicationName:
-                        item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                        DxfXData.PopulateFromBuffer(buffer, item.XData, pair.StringValue);
                         break;
                     default:
                         item.TrySetPair(pair);

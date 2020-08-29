@@ -72,10 +72,7 @@ namespace IxMilia.Dxf.Blocks
                     list.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(((IDxfItemInternal)this).Handle)));
                 }
 
-                if (Parent.XData != null)
-                {
-                    Parent.XData.AddValuePairs(list, version, outputHandles);
-                }
+                DxfXData.AddValuePairs(Parent.XData, list, version, outputHandles);
 
                 if (version >= DxfAcadVersion.R14)
                 {

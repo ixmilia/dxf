@@ -5,7 +5,7 @@ namespace IxMilia.Dxf
     public interface IDxfHasXData
     {
         IList<DxfCodePairGroup> ExtensionDataGroups { get; }
-        DxfXData XData { get; set; }
+        IDictionary<string, DxfXDataApplicationItemCollection> XData { get; }
     }
 
     internal static class DxfXDataHelper
@@ -20,10 +20,10 @@ namespace IxMilia.Dxf
                 hasXData.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));
                 return true;
             }
-            else if (pair.Code == (int)DxfXDataType.ApplicationName)
+            else if (pair.Code >= 1000)
             {
                 buffer.Advance();
-                hasXData.XData = DxfXData.FromBuffer(buffer, pair.StringValue);
+                DxfXData.PopulateFromBuffer(buffer, hasXData.XData, pair.StringValue);
                 return true;
             }
 

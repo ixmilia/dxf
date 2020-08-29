@@ -52,10 +52,7 @@ namespace IxMilia.Dxf.Generator
                 }
 
                 AppendLine();
-                AppendLine("if (XData != null)");
-                AppendLine("{");
-                AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
-                AppendLine("}");
+                AppendLine("DxfXData.AddValuePairs(XData, pairs, version, outputHandles);");
 
                 DecreaseIndent();
                 AppendLine("}");
@@ -81,7 +78,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("{");
                     IncreaseIndent();
                     AppendLine("CopyManualValues(other);");
-                    AppendLine("this.XData = other.XData;");
+                    AppendLine("other.XData.CopyItemsTo(this.XData);");
                     foreach (var property in GetPropertiesAndPointers(item))
                     {
                         var name = Name(property);

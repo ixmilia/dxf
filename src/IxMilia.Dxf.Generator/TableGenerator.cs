@@ -164,7 +164,7 @@ namespace IxMilia.Dxf.Generator
                 }
 
                 AppendLine();
-                AppendLine("public DxfXData XData { get; set; }");
+                AppendLine("public IDictionary<string, DxfXDataApplicationItemCollection> XData { get; } = new DictionaryWithPredicate<string, DxfXDataApplicationItemCollection>((_key, value) => value != null);");
 
                 //
                 // Constructors
@@ -325,10 +325,7 @@ namespace IxMilia.Dxf.Generator
                         }
                     }
 
-                    AppendLine("if (XData != null)");
-                    AppendLine("{");
-                    AppendLine("    XData.AddValuePairs(pairs, version, outputHandles);");
-                    AppendLine("}");
+                    AppendLine("DxfXData.AddValuePairs(XData, pairs, version, outputHandles);");
 
                     DecreaseIndent();
                     AppendLine("}"); // end method
@@ -365,7 +362,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("    item.ExtensionDataGroups.Add(DxfCodePairGroup.FromBuffer(buffer, groupName));");
                     AppendLine("    break;");
                     AppendLine("case (int)DxfXDataType.ApplicationName:");
-                    AppendLine("    item.XData = DxfXData.FromBuffer(buffer, pair.StringValue);");
+                    AppendLine("    DxfXData.PopulateFromBuffer(buffer, item.XData, pair.StringValue);");
                     AppendLine("    break;");
                     AppendLine("default:");
                     AppendLine("    item.ApplyCodePair(pair);");
@@ -512,27 +509,27 @@ namespace IxMilia.Dxf.Generator
                     // DxfDimStyle.GenerateStyleDifferenceAsXData
                     //
                     AppendLine();
-                    AppendLine("/// <summary>Generates <see cref=\"DxfXData\"/> of the difference between the styles.  Result may be <see langword=\"null\"/>.</summary>");
-                    AppendLine("public static DxfXData GenerateStyleDifferenceAsXData(DxfDimStyle primaryStyle, DxfDimStyle modifiedStyle)");
+                    AppendLine("/// <summary>Generates <see cref=\"DxfXDataApplicationItemCollection\"/> of the difference between the styles.  Result may be <see langword=\"null\"/>.</summary>");
+                    AppendLine("public static DxfXDataApplicationItemCollection GenerateStyleDifferenceAsXData(DxfDimStyle primaryStyle, DxfDimStyle modifiedStyle)");
                     AppendLine("{");
                     IncreaseIndent();
 
-                    AppendLine("var namedList = new DxfXDataNamedList(XDataStyleName);");
+                    AppendLine("var itemList = new DxfXDataItemList();");
                     AppendLine();
 
                     foreach (var property in properties)
                     {
                         AppendLine($"if (primaryStyle.{Name(property)} != modifiedStyle.{Name(property)})");
                         AppendLine("{");
-                        AppendLine($"    namedList.Items.Add(new DxfXDataInteger({Code(property)}));");
-                        AppendLine($"    namedList.Items.Add({XDataValueFromProperty(property, "modifiedStyle")});");
+                        AppendLine($"    itemList.Items.Add(new DxfXDataInteger({Code(property)}));");
+                        AppendLine($"    itemList.Items.Add({XDataValueFromProperty(property, "modifiedStyle")});");
                         AppendLine("}");
                         AppendLine();
                     }
 
-                    AppendLine("return namedList.Items.Count == 0");
-                    AppendLine("    ? null");
-                    AppendLine("    : new DxfXData(\"ACAD\", new[] { namedList });");
+                    AppendLine("return itemList.Items.Count > 0");
+                    AppendLine("    ? new DxfXDataApplicationItemCollection(new DxfXDataString(XDataStyleName), itemList)");
+                    AppendLine("    : null;");
                     DecreaseIndent();
                     AppendLine("}");
                 }

@@ -429,9 +429,8 @@ EOF
         private void RoundTripDimensionWithXData(Func<DxfFile, DxfFile> roundTripper)
         {
             var dim = new DxfAlignedDimension();
-            dim.XData = new DxfXData("ACAD",
-                new DxfXDataItem[]
-                {
+            dim.XData.Add("ACAD",
+                new DxfXDataApplicationItemCollection(
                     new DxfXDataString("DSTYLE"),
                     new DxfXDataItemList(
                         new DxfXDataItem[]
@@ -439,7 +438,7 @@ EOF
                             new DxfXDataInteger(271),
                             new DxfXDataInteger(9),
                         })
-                });
+                ));
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R14;
             file.Entities.Add(dim);
@@ -449,12 +448,13 @@ EOF
 
             // verify
             var roundTrippedDim = (DxfAlignedDimension)result.Entities.Single();
-            var xdata = roundTrippedDim.XData;
-            Assert.Equal("ACAD", xdata.ApplicationName);
+            var xdataPair = roundTrippedDim.XData.Single();
+            Assert.Equal("ACAD", xdataPair.Key);
 
-            var namedList = (DxfXDataNamedList)xdata.Items.Single();
-            Assert.Equal("DSTYLE", namedList.Name);
-            Assert.Single(namedList.Items.OfType<DxfXDataInteger>().Where(i => i.Value == 271));
+            var styleItems = xdataPair.Value;
+            Assert.Equal("DSTYLE", ((DxfXDataString)styleItems.First()).Value);
+            var dataItems = (DxfXDataItemList)styleItems.Last();
+            Assert.Single(dataItems.Items.OfType<DxfXDataInteger>().Where(i => i.Value == 271));
         }
 
         private DxfFile RoundTripFileThroughAutoCad(DxfFile file)

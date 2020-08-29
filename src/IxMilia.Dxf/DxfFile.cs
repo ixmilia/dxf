@@ -499,7 +499,12 @@ namespace IxMilia.Dxf
                 Header.PaperspaceOrthoUCSReference,
             });
 
-            // don't need to do anything special for AppIds, BlockRecords, or ViewPorts
+            var existingAppIds = GetExistingNames(ApplicationIds.Cast<DxfSymbolTableFlags>());
+            AddMissingAppIds(existingAppIds, Entities.SelectMany(e => e.XData.Keys));
+            AddMissingAppIds(existingAppIds, Objects.SelectMany(o => o.XData.Keys));
+            AddMissingAppIds(existingAppIds, Blocks.SelectMany(b => b.XData.Keys));
+
+            // don't need to do anything special for BlockRecords or ViewPorts
         }
 
         private static HashSet<string> GenerateHashSet(IEnumerable<string> items)
@@ -540,6 +545,11 @@ namespace IxMilia.Dxf
         private void AddMissingUcs(HashSet<string> existingUcs, IEnumerable<string> ucsToAdd)
         {
             AddMissingTableItems<DxfUcs>(existingUcs, ucsToAdd, name => new DxfUcs(name), u => UserCoordinateSystems.Add(u));
+        }
+
+        private void AddMissingAppIds(HashSet<string> existingAppIds, IEnumerable<string> appIdsToAdd)
+        {
+            AddMissingTableItems<DxfAppId>(existingAppIds, appIdsToAdd, name => new DxfAppId(name), a => ApplicationIds.Add(a));
         }
 
         private static void AddMissingItems(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Action<string> addItem)

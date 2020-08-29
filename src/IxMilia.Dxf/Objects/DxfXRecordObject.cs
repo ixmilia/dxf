@@ -8,12 +8,17 @@ namespace IxMilia.Dxf.Objects
     {
         public IList<DxfCodePair> DataPairs { get; } = new ListNonNull<DxfCodePair>();
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)
         {
-            base.AddValuePairs(pairs, version, outputHandles);
+            base.AddValuePairs(pairs, version, outputHandles, writeXData: false);
             pairs.Add(new DxfCodePair(100, "AcDbXrecord"));
             pairs.Add(new DxfCodePair(280, (short)(this.DuplicateRecordHandling)));
             pairs.AddRange(DataPairs);
+
+            if (writeXData)
+            {
+                DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
+            }
         }
 
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)

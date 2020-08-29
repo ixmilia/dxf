@@ -4,9 +4,9 @@ namespace IxMilia.Dxf.Entities
 {
     public partial class DxfVertex
     {
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)
         {
-            base.AddValuePairs(pairs, version, outputHandles);
+            base.AddValuePairs(pairs, version, outputHandles, writeXData: false);
             var subclassMarker = Is3DPolylineVertex || Is3DPolygonMesh ? "AcDb3dPolylineVertex" : "AcDb2dVertex";
             pairs.Add(new DxfCodePair(100, "AcDbVertex"));
             pairs.Add(new DxfCodePair(100, subclassMarker));
@@ -56,6 +56,11 @@ namespace IxMilia.Dxf.Entities
             if (version >= DxfAcadVersion.R2010 && Identifier != 0)
             {
                 pairs.Add(new DxfCodePair(91, Identifier));
+            }
+
+            if (writeXData)
+            {
+                DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
             }
         }
     }

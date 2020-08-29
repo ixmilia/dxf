@@ -49,9 +49,9 @@ namespace IxMilia.Dxf.Objects
             ColumnCount = columns;
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)
         {
-            base.AddValuePairs(pairs, version, outputHandles);
+            base.AddValuePairs(pairs, version, outputHandles, writeXData: false);
             pairs.Add(new DxfCodePair(100, "AcDbDataTable"));
             pairs.Add(new DxfCodePair(70, (this.Field)));
             pairs.Add(new DxfCodePair(90, (this.ColumnCount)));
@@ -67,6 +67,11 @@ namespace IxMilia.Dxf.Objects
                 {
                     pairs.AddRange(GeneratePairsFromCode(columnCode, Values[row, col]));
                 }
+            }
+
+            if (writeXData)
+            {
+                DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
             }
         }
 

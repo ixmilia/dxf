@@ -66,9 +66,9 @@ namespace IxMilia.Dxf.Objects
             return PostParse();
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)
         {
-            base.AddValuePairs(pairs, version, outputHandles);
+            base.AddValuePairs(pairs, version, outputHandles, writeXData: false);
             pairs.Add(new DxfCodePair(100, "AcDbLightList"));
             pairs.Add(new DxfCodePair(90, (this.Version)));
             pairs.Add(new DxfCodePair(90, Lights.Count));
@@ -78,6 +78,10 @@ namespace IxMilia.Dxf.Objects
                 pairs.Add(new DxfCodePair(1, ((DxfLight)item.Item).Name));
             }
 
+            if (writeXData)
+            {
+                DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
+            }
         }
     }
 }

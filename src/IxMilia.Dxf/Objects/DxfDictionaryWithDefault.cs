@@ -19,9 +19,9 @@ namespace IxMilia.Dxf.Objects
             set { DefaultObjectPointer.Item = value; }
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)
         {
-            base.AddValuePairs(pairs, version, outputHandles);
+            base.AddValuePairs(pairs, version, outputHandles, writeXData: false);
             pairs.Add(new DxfCodePair(100, "AcDbDictionary"));
 
             if (version >= DxfAcadVersion.R2000)
@@ -43,6 +43,11 @@ namespace IxMilia.Dxf.Objects
                 {
                     pairs.Add(new DxfCodePair(340, UIntHandle(DefaultObjectPointer.Handle)));
                 }
+            }
+
+            if (writeXData)
+            {
+                DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
             }
         }
 

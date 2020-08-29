@@ -35,10 +35,10 @@ namespace IxMilia.Dxf.Generator
             if (GenerateWriterFunction(item))
             {
                 AppendLine();
-                AppendLine("protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)");
+                AppendLine("protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)");
                 AppendLine("{");
                 IncreaseIndent();
-                AppendLine("base.AddValuePairs(pairs, version, outputHandles);");
+                AppendLine("base.AddValuePairs(pairs, version, outputHandles, writeXData: false);");
                 foreach (var line in GetWriteCommands(item))
                 {
                     if (string.IsNullOrWhiteSpace(line))
@@ -51,8 +51,10 @@ namespace IxMilia.Dxf.Generator
                     }
                 }
 
-                AppendLine();
-                AppendLine("DxfXData.AddValuePairs(XData, pairs, version, outputHandles);");
+                AppendLine("if (writeXData)");
+                AppendLine("{");
+                AppendLine("    DxfXData.AddValuePairs(XData, pairs, version, outputHandles);");
+                AppendLine("}");
 
                 DecreaseIndent();
                 AppendLine("}");

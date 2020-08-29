@@ -223,15 +223,20 @@ namespace IxMilia.Dxf.Objects
     {
         public IList<DxfSectionTypeSettings> SectionTypeSettings { get; } = new ListNonNull<DxfSectionTypeSettings>();
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)
         {
-            base.AddValuePairs(pairs, version, outputHandles);
+            base.AddValuePairs(pairs, version, outputHandles, writeXData: false);
             pairs.Add(new DxfCodePair(100, "AcDbSectionSettings"));
             pairs.Add(new DxfCodePair(90, this.SectionType));
             pairs.Add(new DxfCodePair(91, SectionTypeSettings.Count));
             foreach (var settings in SectionTypeSettings)
             {
                 settings.AddCodePairs(pairs);
+            }
+
+            if (writeXData)
+            {
+                DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
             }
         }
 

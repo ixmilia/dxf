@@ -132,7 +132,7 @@ namespace IxMilia.Dxf.Generator
             // AddValuePairs
             //
             AppendLine();
-            AppendLine("protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)");
+            AppendLine("protected virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)");
             AppendLine("{");
             AppendLine("    pairs.Add(new DxfCodePair(0, ObjectTypeString));");
             foreach (var line in GetWriteCommands(baseObject))

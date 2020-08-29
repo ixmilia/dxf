@@ -273,7 +273,7 @@ namespace IxMilia.Dxf.Entities
             var pairs = new List<DxfCodePair>();
             if (version >= MinVersion && version <= MaxVersion)
             {
-                AddValuePairs(pairs, version, outputHandles);
+                AddValuePairs(pairs, version, outputHandles, writeXData: true);
                 AddTrailingCodePairs(pairs, version, outputHandles);
             }
 

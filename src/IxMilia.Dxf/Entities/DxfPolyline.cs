@@ -62,9 +62,9 @@ namespace IxMilia.Dxf.Entities
             set { _seqendPointer.Item = value; }
         }
 
-        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
+        protected override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles, bool writeXData)
         {
-            base.AddValuePairs(pairs, version, outputHandles);
+            base.AddValuePairs(pairs, version, outputHandles, writeXData: false);
             var subclassMarker = Is3DPolyline || Is3DPolygonMesh ? "AcDb3dPolyline" : "AcDb2dPolyline";
             pairs.Add(new DxfCodePair(100, subclassMarker));
             if (version <= DxfAcadVersion.R13)
@@ -131,7 +131,10 @@ namespace IxMilia.Dxf.Entities
                 pairs.Add(new DxfCodePair(230, Normal.Z));
             }
 
-            DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
+            if (writeXData)
+            {
+                DxfXData.AddValuePairs(XData, pairs, version, outputHandles);
+            }
         }
 
         protected override void AddTrailingCodePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

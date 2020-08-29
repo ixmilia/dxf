@@ -1100,6 +1100,13 @@ namespace IxMilia.Dxf.Test
                             new DxfXDataInteger(9),
                         })
                 ));
+            // xdata shouldn't be in the generic AcDbDimension section...
+            EnsureFileDoesNotContainWithEntity(dim,
+                DxfAcadVersion.R14,
+                (1002, "}"),
+                (100, "AcDbAlignedDimension")
+            );
+            // ...but _should_ be in the type-specific one at the end of the entity
             EnsureFileContainsEntity(dim,
                 DxfAcadVersion.R14,
                 (1001, "ACAD"),
@@ -1131,6 +1138,42 @@ namespace IxMilia.Dxf.Test
                 (1070, 3),
                 (1000, "some suffix"),
                 (1002, "}"),
+                (0, "ENDSEC") // the trailing 0/ENDSEC ensures the XData is the last thing written
+            );
+        }
+
+        [Fact]
+        public void SuperClassXDataIsWrittenTest()
+        {
+            // DxfCircle is a super class of DxfArc; ensure its XData is written after the entity
+            var circle = new DxfCircle();
+            circle.XData["appname"] = new DxfXDataApplicationItemCollection(new DxfXDataReal(1.0));
+            EnsureFileContainsEntity(circle,
+                DxfAcadVersion.R14,
+                (1001, "appname"),
+                (1040, 1.0),
+                (0, "ENDSEC") // the trailing 0/ENDSEC ensures the XData is the last thing written
+            );
+        }
+
+        [Fact]
+        public void SubClassXDataIsOnlyWrittenOnceTest()
+        {
+            // DxfArc is a sub class of DxfCircle; ensure it's XData is only written once at the very end of the entity
+            var arc = new DxfArc();
+            arc.XData["appname"] = new DxfXDataApplicationItemCollection(new DxfXDataReal(1.0));
+            // xdata shouldn't be in the AcDbCircle section...
+            EnsureFileDoesNotContainWithEntity(arc,
+                DxfAcadVersion.R14,
+                (1001, "appname"),
+                (1040, 1.0),
+                (100, "AcDbArc")
+            );
+            // ...but _should_ be at the very end of AcDbArc
+            EnsureFileContainsEntity(arc,
+                DxfAcadVersion.R14,
+                (1001, "appname"),
+                (1040, 1.0),
                 (0, "ENDSEC") // the trailing 0/ENDSEC ensures the XData is the last thing written
             );
         }

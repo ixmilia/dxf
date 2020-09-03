@@ -5,9 +5,7 @@
     <Copyright>Copyright 2020</Copyright>
     <AssemblyTitle>IxMilia.Dxf</AssemblyTitle>
     <Authors>IxMilia</Authors>
-    <TargetFrameworks>netstandard1.0;netstandard1.3;netstandard2.0</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' != 'Unix' and '$(PortableOnly)' != 'true'">$(TargetFrameworks);net35;net45</TargetFrameworks>
-    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35'">$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
+    <TargetFrameworks>netstandard1.0;netstandard1.3;netstandard2.0;net35;net45</TargetFrameworks>
     <AssemblyName>IxMilia.Dxf</AssemblyName>
     <PackageId>IxMilia.Dxf</PackageId>
     <PackageTags>AutoCAD;CAD;DXB;DXF</PackageTags>
@@ -27,6 +25,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net45" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
   </ItemGroup>
 

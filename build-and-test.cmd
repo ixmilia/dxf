@@ -13,8 +13,6 @@ if /i "%1" == "-notest" goto set_notest
 if /i "%1" == "--notest" goto set_notest
 if /i "%1" == "-oldsdk" goto set_oldsdk
 if /i "%1" == "--oldsdk" goto set_oldsdk
-if /i "%1" == "-portable" goto set_portable
-if /i "%1" == "--portable" goto set_portable
 
 echo Unsupported argument: %1
 goto error
@@ -32,11 +30,6 @@ goto parseargs
 
 :set_oldsdk
 set BuildWithOldSdk=true
-shift
-goto parseargs
-
-:set_portable
-set PortableOnly=true
 shift
 goto parseargs
 

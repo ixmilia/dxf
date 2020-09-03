@@ -17,9 +17,6 @@ while [ $# -gt 0 ]; do
     --oldsdk)
       BuildWithOldSdk=true
       ;;
-    --portable)
-      # noop
-      ;;
     *)
       echo "Invalid argument: $1"
       exit 1

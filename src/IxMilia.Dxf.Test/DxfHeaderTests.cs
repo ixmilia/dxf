@@ -239,6 +239,29 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void WriteAppropriateMaintenenceVersionTest()
+        {
+            var file = new DxfFile();
+            file.Header.MaintenenceVersion = 42;
+
+            // < R2018 writes code 70
+            file.Header.Version = DxfAcadVersion.R2013;
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$ACADMAINTVER"),
+                (70, 42)
+            );
+
+            // >= R2018 writes code 90
+            file.Header.Version = DxfAcadVersion.R2018;
+            VerifyFileContains(file,
+                DxfSectionType.Header,
+                (9, "$ACADMAINTVER"),
+                (90, 42)
+            );
+        }
+
+        [Fact]
         public void WriteDefaultHeaderValuesTest()
         {
             VerifyFileContains(new DxfFile(),

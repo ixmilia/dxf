@@ -85,5 +85,11 @@ namespace IxMilia.Dxf
                 max = new DxfPoint(max.X, max.Y, point.Z);
             }
         }
+
+        public static DxfBoundingBox FromEnumerable(IEnumerable<DxfBoundingBox> boundingBoxes)
+        {
+            var result = boundingBoxes.Aggregate((a, b) => a.Combine(b));
+            return result;
+        }
     }
 }

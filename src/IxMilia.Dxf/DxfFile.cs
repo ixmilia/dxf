@@ -171,7 +171,7 @@ namespace IxMilia.Dxf
             var boundingBoxes = Entities.Select(e => e.GetBoundingBox()).Where(b => b != null).Select(b => b.GetValueOrDefault()).ToList();
             return boundingBoxes.Count == 0
                 ? default(DxfBoundingBox)
-                : boundingBoxes.Skip(1).Aggregate(boundingBoxes[0], (box1, box2) => box1.Combine(box2));
+                : DxfBoundingBox.FromEnumerable(boundingBoxes);
         }
 
 #if HAS_FILESYSTEM_ACCESS

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Entities
@@ -45,8 +46,26 @@ namespace IxMilia.Dxf.Entities
 
         protected override IEnumerable<DxfPoint> GetExtentsPoints()
         {
-            // TODO: this requires access to the entities contained by the block being inserted
-            return null;
+            if (GetEntities != null)
+            {
+                var boundingBoxes = GetEntities().Select(e => e.GetBoundingBox()).Where(bb => bb.HasValue).Select(bb => bb.GetValueOrDefault()).ToList();
+                if (boundingBoxes.Count == 0)
+                {
+                    yield break;
+                }
+
+                var boundingBox = DxfBoundingBox.FromEnumerable(boundingBoxes);
+                var minX = boundingBox.MinimumPoint.X * XScaleFactor + Location.X;
+                var minY = boundingBox.MinimumPoint.Y * YScaleFactor + Location.Y;
+                var minZ = boundingBox.MinimumPoint.Z * ZScaleFactor + Location.Z;
+                var maxX = boundingBox.MaximumPoint.X * XScaleFactor + Location.X;
+                var maxY = boundingBox.MaximumPoint.Y * YScaleFactor + Location.Y;
+                var maxZ = boundingBox.MaximumPoint.Z * ZScaleFactor + Location.Z;
+                var minP = new DxfPoint(minX, minY, minZ);
+                var maxp = new DxfPoint(maxX, maxY, maxZ);
+                yield return minP;
+                yield return maxp;
+            }
         }
     }
 }

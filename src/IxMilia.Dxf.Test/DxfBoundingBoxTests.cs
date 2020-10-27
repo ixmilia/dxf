@@ -1,4 +1,5 @@
-﻿using IxMilia.Dxf.Entities;
+﻿using IxMilia.Dxf.Blocks;
+using IxMilia.Dxf.Entities;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -43,6 +44,30 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(expectedMin, bb.MinimumPoint);
             Assert.Equal(expectedMax, bb.MaximumPoint);
             Assert.Equal(expectedSize, bb.Size);
+        }
+
+        [Fact]
+        public void InsertBoundingBox()
+        {
+            var line = new DxfLine(new DxfPoint(1.0, 1.0, 0.0), new DxfPoint(2.0, 3.0, 0.0));
+            var offset = new DxfVector(2.0, 2.0, 0.0);
+
+            var block = new DxfBlock();
+            block.Name = "some-block";
+            block.Entities.Add(line);
+
+            var insert = new DxfInsert();
+            insert.Name = "some-block";
+            insert.Location = offset;
+            insert.XScaleFactor = 2.0;
+
+            var file = new DxfFile();
+            file.Blocks.Add(block);
+            file.Entities.Add(insert);
+
+            var boundingBox = file.GetBoundingBox();
+            Assert.Equal(new DxfPoint(4.0, 3.0, 0.0), boundingBox.MinimumPoint);
+            Assert.Equal(new DxfPoint(6.0, 5.0, 0.0), boundingBox.MaximumPoint);
         }
     }
 }

@@ -12,9 +12,17 @@ namespace IxMilia.Dxf.Sections
 
         public List<DxfObject> AdditionalObjects { get; }
 
-        public DxfEntitiesSection()
+        public DxfEntitiesSection(DxfFile parentFile)
         {
-            Entities = new ListNonNull<DxfEntity>();
+            Entities = new ListWithPredicates<DxfEntity>(item =>
+            {
+                if (item is DxfInsert insert && insert.Name != null)
+                {
+                    insert.GetEntities = () => parentFile.EntitiesFromBlock(insert.Name);
+                }
+
+                return item != null;
+            }, 0);
             AdditionalObjects = new List<DxfObject>();
         }
 
@@ -45,7 +53,7 @@ namespace IxMilia.Dxf.Sections
             Entities.Clear();
         }
 
-        internal static DxfEntitiesSection EntitiesSectionFromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfEntitiesSection EntitiesSectionFromBuffer(DxfCodePairBufferReader buffer, DxfFile parentFile)
         {
             var entities = new List<DxfEntity>();
             entities.Clear();
@@ -71,7 +79,7 @@ namespace IxMilia.Dxf.Sections
                 }
             }
 
-            var section = new DxfEntitiesSection();
+            var section = new DxfEntitiesSection(parentFile);
             var collected = GatherEntities(entities);
             foreach (var entity in collected)
             {

@@ -1,4 +1,6 @@
 using System.Linq;
+using IxMilia.Dxf.Blocks;
+using IxMilia.Dxf.Entities;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -126,6 +128,49 @@ namespace IxMilia.Dxf.Test
             Assert.NotEqual(5, style.DimensionUnitToleranceDecimalPlaces);
             style.SetVariable("DIMDEC", (short)5);
             Assert.Equal(5, style.DimensionUnitToleranceDecimalPlaces);
+        }
+
+        [Fact]
+        public void GetInsertEntitiesWhenAddedToFile()
+        {
+            var line = new DxfLine(new DxfPoint(0.0, 0.0, 0.0), new DxfPoint(1.0, 1.0, 0.0));
+
+            var block = new DxfBlock();
+            block.Name = "some-block";
+            block.Entities.Add(line);
+
+            var insert = new DxfInsert();
+            insert.Name = "some-block";
+
+            var file = new DxfFile();
+            file.Blocks.Add(block);
+
+            // no entities because it's not yet part of the file
+            Assert.Null(insert.Entities);
+
+            file.Entities.Add(insert);
+
+            // and now that it's in the file the entities can be found
+            var foundEntity = insert.Entities.Single();
+            Assert.Same(line, foundEntity);
+        }
+
+        [Fact]
+        public void InsertWithNonMatchingNameReturnsNoEntities()
+        {
+            // similar to the above test except that the entity is added to the block _after_ the name binding
+            var block = new DxfBlock();
+            block.Name = "some-block";
+
+            var insert = new DxfInsert();
+            insert.Name = "some-other-block";
+
+            var file = new DxfFile();
+            file.Blocks.Add(block);
+            file.Entities.Add(insert);
+
+            // no entities because the block names differ
+            Assert.Null(insert.Entities);
         }
     }
 }

@@ -25,7 +25,8 @@ namespace IxMilia.Dxf.Test
             };
             var testBuffer = new TestCodePairBufferReader(preCodePairs.Concat(codePairs));
             var bufferReader = new DxfCodePairBufferReader(testBuffer);
-            var entitiesSection = DxfEntitiesSection.EntitiesSectionFromBuffer(bufferReader);
+            var unusedFile = new DxfFile();
+            var entitiesSection = DxfEntitiesSection.EntitiesSectionFromBuffer(bufferReader, unusedFile);
             var entity = entitiesSection.Entities.Single();
             Assert.Equal(0x42u, ((IDxfItemInternal)entity).Handle);
             Assert.Equal("<line-type-name>", entity.LineTypeName);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
 
@@ -7,6 +8,9 @@ namespace IxMilia.Dxf.Entities
     {
         private DxfPointerList<DxfAttribute> _attributes = new DxfPointerList<DxfAttribute>();
         private DxfPointer _seqendPointer = new DxfPointer(new DxfSeqend());
+        internal Func<IEnumerable<DxfEntity>> GetEntities { get; set; }
+
+        public IEnumerable<DxfEntity> Entities => GetEntities?.Invoke();
 
         public IList<DxfAttribute> Attributes { get { return _attributes; } }
 

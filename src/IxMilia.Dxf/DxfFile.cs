@@ -160,7 +160,7 @@ namespace IxMilia.Dxf
             this.ClassSection = new DxfClassesSection();
             this.TablesSection = new DxfTablesSection();
             this.BlocksSection = new DxfBlocksSection();
-            this.EntitiesSection = new DxfEntitiesSection();
+            this.EntitiesSection = new DxfEntitiesSection(this);
             this.ObjectsSection = new DxfObjectsSection();
             this.ThumbnailImageSection = null; // not always present
             this.Normalize();
@@ -266,7 +266,7 @@ namespace IxMilia.Dxf
                 if (DxfCodePair.IsSectionStart(pair))
                 {
                     buffer.Advance(); // swallow (0, SECTION) pair
-                    var section = DxfSection.FromBuffer(buffer, version);
+                    var section = DxfSection.FromBuffer(buffer, file, version);
                     if (section != null)
                     {
                         switch (section.Type)
@@ -318,6 +318,12 @@ namespace IxMilia.Dxf
             DxfPointer.BindPointers(file);
 
             return file;
+        }
+
+        internal IEnumerable<DxfEntity> EntitiesFromBlock(string blockName)
+        {
+            var block = Blocks.FirstOrDefault(b => b.Name == blockName);
+            return block?.Entities;
         }
 
 #if HAS_FILESYSTEM_ACCESS

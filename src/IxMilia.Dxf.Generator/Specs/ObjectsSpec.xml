@@ -21,7 +21,7 @@
         <Property Name="ProxyObjectClassId" Code="90" Type="int" DefaultValue="499" />
         <Property Name="ApplicationObjectClassId" Code="91" Type="int" DefaultValue="500" />
         <Property Name="SizeInBits" Code="93" Type="int" DefaultValue="0" />
-        <Property Name="BinaryObjectData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" />
+        <Property Name="BinaryObjectData" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" />
         <Property Name="_objectIdsA" Code="330" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_objectIdsB" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_objectIdsC" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
@@ -161,7 +161,7 @@
         <Property Name="_doubleValue" Code="140" Type="double" DefaultValue="0.0" Accessibility="private" />
         <Property Name="_idValue" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle({0})" WriteConverter="UIntHandle({0})" Accessibility="private" />
         <Property Name="_binaryDataBufferSize" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
-        <Property Name="_binaryData" Code="310" Type="string" DefaultValue="null" Accessibility="private" />
+        <Property Name="_binaryData" Code="310" Type="byte[]" DefaultValue="null" Accessibility="private" />
 
         <Property Name="_formatStringCode301" Code="301" Type="string" DefaultValue="null" Accessibility="private" />
         <Property Name="_formatStringOverflow" Code="9" Type="string" DefaultValue="null" Accessibility="private" />
@@ -1192,11 +1192,11 @@
 
     -->
     <Object Name="DxfVbaProject" ObjectType="VbaProject" SubclassMarker="AcDbVbaProject" TypeString="VBA_PROJECT" MinVersion="R2000">
-        <Property Name="_hexData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_hexData" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbVbaProject&quot;" />
             <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
-            <Foreach Property="GetHexStrings()">
+            <Foreach Property="BinaryHelpers.ChunkBytes(Data)">
                 <WriteSpecificValue Code="310" Value="item" />
             </Foreach>
         </WriteOrder>

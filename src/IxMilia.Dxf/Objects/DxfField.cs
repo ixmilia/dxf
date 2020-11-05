@@ -46,9 +46,9 @@ namespace IxMilia.Dxf.Objects
                     _idValue = (uint)value;
                     _valueTypeCode = 330;
                 }
-                else if (value.GetType() == typeof(string))
+                else if (value.GetType() == typeof(byte[]))
                 {
-                    _binaryData = (string)value;
+                    _binaryData = (byte[])value;
                     _valueTypeCode = 310;
                 }
                 else

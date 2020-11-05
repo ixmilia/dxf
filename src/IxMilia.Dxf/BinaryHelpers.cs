@@ -5,17 +5,36 @@ namespace IxMilia.Dxf
 {
     internal static class BinaryHelpers
     {
-        public static byte[] ByteArrayFromStrings(IEnumerable<string> lines)
+        public static byte[] CombineBytes(IEnumerable<byte[]> data)
         {
-            return DxfCommonConverters.HexBytes(string.Join(string.Empty, lines.ToArray()));
+            var result = new List<byte>();
+            foreach (var d in data)
+            {
+                result.AddRange(d);
+            }
+
+            return result.ToArray();
         }
 
-        public static IEnumerable<string> StringsFromByteArray(byte[] bytes)
+        public static IEnumerable<byte[]> ChunkBytes(byte[] data, int chunkSize)
         {
-            // write lines in 128-byte chunks (expands to 256 hex bytes)
-            var hex = DxfCommonConverters.HexBytes(bytes);
-            var lines = DxfCommonConverters.SplitIntoLines(hex, 256);
-            return lines;
+            if (data == null)
+            {
+                yield break;
+            }
+
+            var pos = 0;
+            while (pos < data.Length)
+            {
+                var slice = data.Skip(pos).Take(chunkSize).ToArray();
+                pos += slice.Length;
+                yield return slice;
+            }
+        }
+
+        public static IEnumerable<byte[]> ChunkBytes(byte[] data)
+        {
+            return ChunkBytes(data, 128);
         }
     }
 }

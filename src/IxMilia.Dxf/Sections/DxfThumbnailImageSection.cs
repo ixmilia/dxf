@@ -14,14 +14,13 @@ namespace IxMilia.Dxf.Sections
 
         protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
-            var list = new List<DxfCodePair>();
-            list.Add(new DxfCodePair(90, RawData.Length));
+            yield return new DxfCodePair(90, RawData.Length);
 
             // write lines in 128-byte chunks (expands to 256 hex bytes)
-            var hex = DxfCommonConverters.HexBytes(RawData);
-            var lines = DxfCommonConverters.SplitIntoLines(hex, 256);
-            list.AddRange(lines.Select(l => new DxfCodePair(310, l)));
-            return list;
+            foreach (var chunk in BinaryHelpers.ChunkBytes(RawData))
+            {
+                yield return new DxfCodePair(310, chunk);
+            }
         }
 
         public byte[] RawData { get; set; }
@@ -89,7 +88,7 @@ namespace IxMilia.Dxf.Sections
                 }
 
                 var length = lengthPair.IntegerValue;
-                var lines = new List<string>();
+                var rawData = new List<byte>();
                 while (buffer.ItemsRemain)
                 {
                     var pair = buffer.Peek();
@@ -101,12 +100,12 @@ namespace IxMilia.Dxf.Sections
                     }
 
                     Debug.Assert(pair.Code == 310);
-                    lines.Add(pair.StringValue);
+                    rawData.AddRange(pair.BinaryValue);
                 }
 
                 var section = new DxfThumbnailImageSection();
                 section.Clear();
-                section.RawData = DxfCommonConverters.HexBytes(string.Join(string.Empty, lines.ToArray()));
+                section.RawData = rawData.ToArray();
                 return section;
             }
 

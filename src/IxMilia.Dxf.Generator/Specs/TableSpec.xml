@@ -13,7 +13,7 @@
             <Property Name="Explodability" Code="280" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R2007" />
             <Property Name="Scalability" Code="281" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R2007" />
 
-            <Property Name="_bitmapPreviewData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
+            <Property Name="_bitmapPreviewData" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
         </TableItem>
     </Table>
     <Table Type="DimStyle" TypeStringVariable="DimStyleText" TableClassName="AcDbDimStyleTable">

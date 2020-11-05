@@ -782,6 +782,7 @@ namespace IxMilia.Dxf.Generator
             else if (type == typeof(int)) expected = "Integer";
             else if (type == typeof(long)) expected = "Long";
             else if (type == typeof(bool)) expected = "Bool";
+            else if (type == typeof(byte[])) expected = "Binary";
             else throw new Exception("Unsupported code pair type");
             // TODO: handle
 

@@ -16,7 +16,7 @@
         <Property Name="LineTypeScale" Code="48" Type="double" DefaultValue="1.0" DisableWritingDefault="true" MinVersion="R13" />
         <Property Name="IsVisible" Code="60" Type="bool" DefaultValue="true" ReadConverter="!BoolShort({0})" WriteConverter="BoolShort(!{0})" DisableWritingDefault="true" MinVersion="R13" />
         <Property Name="ImageByteCount" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2000" />
-        <Property Name="PreviewImageData" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" MinVersion="R2000" />
+        <Property Name="PreviewImageData" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" MinVersion="R2000" />
         <Property Name="Color24Bit" Code="420" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2004" />
         <Property Name="ColorName" Code="430" Type="string" DefaultValue="null" MinVersion="R2004" />
         <Property Name="Transparency" Code="440" Type="int" DefaultValue="0" MinVersion="R2004" />
@@ -96,9 +96,9 @@
         <Property Name="ProxyEntityClassId" Code="90" Type="int" DefaultValue="498" />
         <Property Name="ApplicationEntityClassId" Code="91" Type="int" DefaultValue="500" />
         <Property Name="GraphicsDataSize" Code="92" Type="int" DefaultValue="0" />
-        <Property Name="GraphicsDataString" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" />
+        <Property Name="GraphicsDataString" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" />
         <Property Name="EntityDataSize" Code="93" Type="int" DefaultValue="0" />
-        <Property Name="EntityDataString" Code="310" Type="string" DefaultValue="null" AllowMultiples="true" />
+        <Property Name="EntityDataString" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" />
         <Property Name="ObjectID1" Code="330" Type="string" DefaultValue="null" AllowMultiples="true" />
         <Property Name="ObjectID2" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" />
         <Property Name="ObjectID3" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" />
@@ -967,12 +967,12 @@
     <Entity Name="DxfOleFrame" EntityType="OleFrame" SubclassMarker="AcDbOleFrame" TypeString="OLEFRAME" MinVersion="R13">
         <Property Name="VersionNumber" Code="70" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" />
         <Property Name="_binaryDataLength" Code="90" Type="int" DefaultValue="0" Accessibility="private" />
-        <Property Name="_binaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_binaryDataStrings" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbOleFrame&quot;" />
             <WriteProperty Property="VersionNumber" />
             <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
-            <Foreach Property="BinaryHelpers.StringsFromByteArray(Data)">
+            <Foreach Property="BinaryHelpers.ChunkBytes(Data)">
                 <WriteSpecificValue Code="310" Value="item" />
             </Foreach>
             <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />
@@ -991,7 +991,7 @@
         <Property Name="ObjectType" Code="71" Type="DxfOleObjectType" DefaultValue="DxfOleObjectType.Static" ReadConverter="(DxfOleObjectType){0}" WriteConverter="(short){0}" />
         <Property Name="TileMode" Code="72" Type="DxfTileModeDescriptor" DefaultValue="DxfTileModeDescriptor.InTiledViewport" ReadConverter="(DxfTileModeDescriptor){0}" WriteConverter="(short){0}" />
         <Property Name="_binaryDataLength" Code="90" Type="int" DefaultValue="0" Accessibility="private" />
-        <Property Name="_binaryDataStrings" Code="310" Type="string" DefaultValue="" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_binaryDataStrings" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbOle2Frame&quot;" />
             <WriteProperty Property="VersionNumber" />
@@ -1001,7 +1001,7 @@
             <WriteProperty Property="ObjectType" />
             <WriteProperty Property="TileMode" />
             <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
-            <Foreach Property="BinaryHelpers.StringsFromByteArray(Data)">
+            <Foreach Property="BinaryHelpers.ChunkBytes(Data)">
                 <WriteSpecificValue Code="310" Value="item" />
             </Foreach>
             <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />

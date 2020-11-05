@@ -53,7 +53,7 @@ namespace IxMilia.Dxf
             return _stream.ReadLine(_encoding, out var _);
         }
 
-        private DxfCodePair GetCodePair()
+        public DxfCodePair GetCodePair()
         {
             if (_lineEnumerator.MoveNext())
             {
@@ -123,6 +123,11 @@ namespace IxMilia.Dxf
                             {
                                 throw new DxfReadException($"Unsupported value '{valueLine}' for code '{code}'", _lineNumber);
                             }
+                        }
+                        else if (expectedType == typeof(byte[]))
+                        {
+                            var data = DxfCommonConverters.HexBytes(valueLine);
+                            pair = new DxfCodePair(code, data);
                         }
                         else
                         {

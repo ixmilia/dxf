@@ -243,7 +243,12 @@ namespace IxMilia.Dxf
                 IDxfCodePairReader dxfReader;
                 if (firstLine == BinarySentinel)
                 {
-                    dxfReader = new DxfBinaryReader(binaryReader, readBytes);
+                    // swallow next two bytes
+                    var sub = binaryReader.ReadByte();
+                    Debug.Assert(sub == 0x1A);
+                    var nul = binaryReader.ReadByte();
+                    Debug.Assert(nul == 0x00);
+                    dxfReader = new DxfBinaryReader(binaryReader, readBytes + 2);
                 }
                 else
                 {
@@ -366,7 +371,7 @@ namespace IxMilia.Dxf
         private void WriteStream(Stream stream, bool asText)
         {
             var writer = new DxfWriter(stream, asText, Header.Version);
-            writer.Open();
+            writer.Initialize();
             WriteSectionsAndClose(writer, Sections);
         }
 

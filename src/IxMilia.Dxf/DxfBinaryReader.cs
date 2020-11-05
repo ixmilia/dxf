@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -16,15 +15,15 @@ namespace IxMilia.Dxf
         {
             _reader = reader;
             _totalBytesRead = readBytes;
+        }
 
-            // swallow next two characters
-            var sub = reader.ReadByte();
-            _totalBytesRead++;
-            Debug.Assert(sub == 0x1A);
-
-            var nul = reader.ReadByte();
-            _totalBytesRead++;
-            Debug.Assert(nul == 0x00);
+        /// <summary>
+        /// Test-only constructor.
+        /// </summary>
+        internal DxfBinaryReader(BinaryReader reader, bool isPostR13File)
+            : this(reader, 0)
+        {
+            _isPostR13File = isPostR13File;
         }
 
         public IEnumerable<DxfCodePair> GetCodePairs()
@@ -42,7 +41,7 @@ namespace IxMilia.Dxf
             // noop
         }
 
-        private DxfCodePair GetCodePair()
+        internal DxfCodePair GetCodePair()
         {
             var codeOffset = _totalBytesRead + _miniBufferStart;
             int code;
@@ -127,6 +126,20 @@ namespace IxMilia.Dxf
                         ? new DxfCodePair(code, value)
                         : new DxfCodePair(code, value != 0);
                 }
+            }
+            else if (expectedType == typeof(byte[]))
+            {
+                if (!TryReadByte(out var length))
+                {
+                    return null;
+                }
+
+                if (!TryReadBytes(length, out var data))
+                {
+                    return null;
+                }
+
+                pair = new DxfCodePair(code, data);
             }
             else
             {
@@ -216,6 +229,22 @@ namespace IxMilia.Dxf
             }
 
             return false;
+        }
+
+        private bool TryReadBytes(int count, out byte[] result)
+        {
+            result = new byte[count];
+            for (int i = 0; i < count; i++)
+            {
+                if (!TryReadByte(out var value))
+                {
+                    return false;
+                }
+
+                result[i] = value;
+            }
+
+            return true;
         }
 
         private short CreateShort(byte b1, byte b2)

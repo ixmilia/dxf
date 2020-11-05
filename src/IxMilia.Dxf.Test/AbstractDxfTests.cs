@@ -80,6 +80,64 @@ EOF
             }
         }
 
+        internal static DxfTextReader TextReaderFromLines(Encoding defaultTextEncoding, params string[] lines)
+        {
+            var ms = new MemoryStream();
+            var writer = new StreamWriter(ms);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                writer.WriteLine(lines[i]);
+            }
+
+            writer.Flush();
+            ms.Seek(0, SeekOrigin.Begin);
+            var firstLine = lines[0];
+            return new DxfTextReader(ms, defaultTextEncoding, firstLine);
+        }
+
+        internal static DxfTextReader TextReaderFromLines(params string[] lines)
+        {
+            return TextReaderFromLines(Encoding.UTF8, lines);
+        }
+
+        internal static byte[] WriteToBinaryWriter(params (int code, object value)[] pairs)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var writer = new DxfWriter(ms, asText: false, version: DxfAcadVersion.R2004);
+                writer.CreateInternalWriters();
+                foreach (var pair in pairs)
+                {
+                    var properPair = new DxfCodePair(pair.code, pair.value);
+                    writer.WriteCodeValuePair(properPair);
+                }
+
+                ms.Seek(0, SeekOrigin.Begin);
+                return ms.ToArray();
+            }
+        }
+
+        internal static string WriteToTextWriter(params (int code, object value)[] pairs)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var writer = new DxfWriter(ms, asText: true, version: DxfAcadVersion.R2004);
+                writer.CreateInternalWriters();
+                foreach (var pair in pairs)
+                {
+                    var properPair = new DxfCodePair(pair.code, pair.value);
+                    writer.WriteCodeValuePair(properPair);
+                }
+
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                using (var reader = new StreamReader(ms))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
+
         internal static bool AreCodePairsEquivalent(DxfCodePair a, DxfCodePair b)
         {
             if (a.Code == b.Code &&

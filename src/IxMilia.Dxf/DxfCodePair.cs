@@ -67,6 +67,11 @@ namespace IxMilia.Dxf
             }
         }
 
+        public byte[] BinaryValue
+        {
+            get { return (byte[])Value; }
+        }
+
         public DxfCodePair(int code, string value)
         {
             Debug.Assert(ExpectedType(code) == typeof(string));
@@ -106,6 +111,12 @@ namespace IxMilia.Dxf
             data = new KeyValuePair<int, object>(code, value);
         }
 
+        public DxfCodePair(int code, byte[] value)
+        {
+            Debug.Assert(ExpectedType(code) == typeof(byte[]));
+            data = new KeyValuePair<int, object>(code, value);
+        }
+
         /// <summary>
         /// Internal for specific cases where the type isn't known.
         /// </summary>
@@ -136,16 +147,6 @@ namespace IxMilia.Dxf
         {
             return code >= 290 && code <= 299;
         }
-
-        private bool IsHandle
-        {
-            get
-            {
-                return handleRegex.IsMatch(StringValue);
-            }
-        }
-
-        private static Regex handleRegex = new Regex("([a-fA-F0-9]){1,16}");
 
         public override string ToString()
         {
@@ -178,7 +179,31 @@ namespace IxMilia.Dxf
                 return true;
             if (((object)a) == null || ((object)b) == null)
                 return false;
-            return a.Code == b.Code && a.Value.Equals(b.Value);
+            return a.Code == b.Code && ValuesEqual(a.Value, b.Value);
+        }
+
+        private static bool ValuesEqual(object a, object b)
+        {
+            if (a?.GetType() == b?.GetType() && a?.GetType() == typeof(byte[]))
+            {
+                var aa = (byte[])a;
+                var ba = (byte[])b;
+                if (ReferenceEquals(aa, ba))
+                    return true;
+                if (aa == null || ba == null)
+                    return false;
+                if (aa.Length != ba.Length)
+                    return false;
+                for (int i = 0; i < aa.Length; i++)
+                {
+                    if (aa[i] != ba[i])
+                        return false;
+                }
+
+                return true;
+            }
+
+            return a.Equals(b);
         }
 
         public static bool operator !=(DxfCodePair a, DxfCodePair b)

@@ -1541,7 +1541,7 @@ namespace IxMilia.Dxf.Test
                 (71, 3),
                 (72, 0),
                 (90, 5),
-                (310, "123456789A"),
+                (310, new byte[] { 0x12, 0x34, 0x56, 0x78, 0x9A }),
                 (1, "OLE")
             );
             Assert.Equal(2, ole.VersionNumber);
@@ -1580,7 +1580,7 @@ namespace IxMilia.Dxf.Test
                 (71, 3),
                 (72, 0),
                 (90, 5),
-                (310, "123456789A"),
+                (310, new byte[] { 0x12, 0x34, 0x56, 0x78, 0x9A }),
                 (1, "OLE")
             );
         }

@@ -23,7 +23,10 @@ namespace IxMilia.Dxf
             this.version = version;
         }
 
-        public void Open()
+        /// <summary>
+        /// Test-only shortcut.
+        /// </summary>
+        internal void CreateInternalWriters()
         {
             if (asText)
             {
@@ -33,6 +36,14 @@ namespace IxMilia.Dxf
             else
             {
                 binWriter = new BinaryWriter(fileStream);
+            }
+        }
+
+        public void Initialize()
+        {
+            CreateInternalWriters();
+            if (binWriter != null)
+            {
                 binWriter.Write(GetAsciiBytes(DxfFile.BinarySentinel));
                 binWriter.Write((byte)'\r');
                 binWriter.Write((byte)'\n');
@@ -44,6 +55,14 @@ namespace IxMilia.Dxf
         public void Close()
         {
             WriteCodeValuePair(new DxfCodePair(0, DxfFile.EofText));
+            Flush();
+        }
+
+        /// <summary>
+        /// Test-only helper.
+        /// </summary>
+        internal void Flush()
+        {
             if (textWriter != null)
             {
                 textWriter.Flush();
@@ -120,6 +139,8 @@ namespace IxMilia.Dxf
                 else
                     WriteBool((bool)value);
             }
+            else if (type == typeof(byte[]))
+                WriteBinary((byte[])value);
             else
                 throw new InvalidOperationException("No writer available");
         }
@@ -251,6 +272,17 @@ namespace IxMilia.Dxf
             else
             {
                 WriteShort(value ? (short)1 : (short)0);
+            }
+        }
+
+        private void WriteBinary(byte[] value)
+        {
+            if (textWriter != null)
+                WriteLine(DxfCommonConverters.HexBytes(value));
+            else if (binWriter != null)
+            {
+                binWriter.Write((byte)value.Length);
+                binWriter.Write(value);
             }
         }
 

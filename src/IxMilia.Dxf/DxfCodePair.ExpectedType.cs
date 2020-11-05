@@ -49,7 +49,7 @@ namespace IxMilia.Dxf
             else if (between(300, 309))
                 expected = typeof(string);
             else if (between(310, 319))
-                expected = typeof(string);
+                expected = typeof(byte[]);
             else if (between(320, 329))
                 expected = typeof(string);
             else if (between(330, 369))

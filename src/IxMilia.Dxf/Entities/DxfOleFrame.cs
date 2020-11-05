@@ -6,7 +6,7 @@ namespace IxMilia.Dxf.Entities
 
         protected override DxfEntity PostParse()
         {
-            Data = BinaryHelpers.ByteArrayFromStrings(_binaryDataStrings);
+            Data = BinaryHelpers.CombineBytes(_binaryDataStrings);
             _binaryDataStrings.Clear();
             return this;
         }

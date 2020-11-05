@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -77,6 +76,95 @@ namespace IxMilia.Dxf.Test
                 var file = DxfFile.Load(ms);
                 Assert.True(file.Header.DisplayLinewieghtInModelAndLayoutTab);
             }
+        }
+
+        [Fact]
+        public void ReadStringInBinary()
+        {
+            var buffer = new byte[]
+            {
+                0x01, 0x00, // code 1, string
+                (byte)'A',
+                0x00 // \0
+            };
+            using (var stream = new MemoryStream(buffer))
+            using (var binReader = new BinaryReader(stream))
+            {
+                var reader = new DxfBinaryReader(binReader, isPostR13File: true);
+                var pair = reader.GetCodePair();
+                Assert.Equal(1, pair.Code);
+                Assert.Equal("A", pair.StringValue);
+            }
+        }
+
+        [Fact]
+        public void WriteStringInBinary()
+        {
+            var actual = WriteToBinaryWriter(
+                (1, "A")
+            );
+            var expected = new byte[]
+            {
+                0x01, 0x00, // code 1, string
+                (byte)'A',
+                0x00 // \0
+            };
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ReadBinaryChunkInBinary()
+        {
+            var buffer = new byte[]
+            {
+                0x36, 0x01, // code 310, binary
+                0x02, // length
+                0x01, 0x02 // data
+            };
+            using (var stream = new MemoryStream(buffer))
+            using (var binReader = new BinaryReader(stream))
+            {
+                var reader = new DxfBinaryReader(binReader, isPostR13File: true);
+                var pair = reader.GetCodePair();
+                Assert.Equal(310, pair.Code);
+                Assert.Equal(new byte[] { 0x01, 0x02 }, pair.BinaryValue);
+            }
+        }
+
+        [Fact]
+        public void WriteBinaryChunkInBinary()
+        {
+            var actual = WriteToBinaryWriter(
+                (310, new byte[] { 0x01, 0x02 })
+            );
+            var expected = new byte[]
+            {
+                0x36, 0x01, // code 310, binary
+                0x02, // length
+                0x01, 0x02 // data
+            };
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ReadBinaryChunkInText()
+        {
+            var reader = TextReaderFromLines(
+                "310",
+                "0102");
+            var pair = reader.GetCodePair();
+            Assert.Equal(310, pair.Code);
+            Assert.Equal(new byte[] { 0x01, 0x02 }, pair.BinaryValue);
+        }
+
+        [Fact]
+        public void WriteBinaryChunkInText()
+        {
+            var actual = WriteToTextWriter(
+                (310, new byte[] { 0x01, 0x02 })
+            );
+            var expected = "310\r\n0102\r\n";
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -510,7 +598,7 @@ unsupported code (5555) treated as string
         {
             var file = Section("THUMBNAILIMAGE",
                 (90, 3),
-                (310, "012345")
+                (310, new byte[] { 0x01, 0x23, 0x45 })
             );
             AssertArrayEqual(file.RawThumbnail, new byte[] { 0x01, 0x23, 0x45 });
         }
@@ -537,7 +625,7 @@ unsupported code (5555) treated as string
                 (0, "SECTION"),
                 (2, "THUMBNAILIMAGE"),
                 (90, 3),
-                (310, "012345"),
+                (310, new byte[] { 0x01, 0x23, 0x45 }),
                 (0, "ENDSEC")
             );
         }
@@ -554,7 +642,7 @@ unsupported code (5555) treated as string
                 (0, "SECTION"),
                 (2, "THUMBNAILIMAGE"),
                 (90, 3),
-                (310, "012345"),
+                (310, new byte[] { 0x01, 0x23, 0x45 }),
                 (0, "ENDSEC")
             );
         }
@@ -564,7 +652,7 @@ unsupported code (5555) treated as string
         {
             var file = Section("THUMBNAILIMAGE",
                 (90, 3),
-                (310, "012345")
+                (310, new byte[] { 0x01, 0x23, 0x45 })
             );
             var expected = new byte[]
             {
@@ -700,8 +788,8 @@ unsupported code (5555) treated as string
                 (100, "AcDbBlockTableRecord"),
                 (2, "<name>"),
                 (340, "A1"),
-                (310, "010203040506070809"),
-                (310, "010203040506070809"),
+                (310, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }),
+                (310, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }),
                 (1001, "ACAD"),
                 (1000, "DesignCenter Data"),
                 (1002, "{"),
@@ -752,8 +840,8 @@ unsupported code (5555) treated as string
                 (100, "AcDbBlockTableRecord"),
                 (2, "<name>"),
                 (340, "A1"),
-                (310, "010203040506070809"),
-                (310, "010203040506070809"),
+                (310, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }),
+                (310, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }),
                 (1001, "ACAD"),
                 (1000, "DesignCenter Data"),
                 (1002, "{"),
@@ -983,7 +1071,7 @@ unsupported code (5555) treated as string
                 (100, "AcDbBlockTableRecord"),
                 (2, "<name>"),
                 (340, "43"),
-                (310, "010203040506070809010203040506070809"),
+                (310, new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09 }),
                 (1001, "ACAD"),
                 (1000, "DesignCenter Data"),
                 (1002, "{"),

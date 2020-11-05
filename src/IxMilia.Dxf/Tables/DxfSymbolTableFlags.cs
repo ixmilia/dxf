@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Tables;
 
@@ -143,18 +142,16 @@ namespace IxMilia.Dxf
         internal override void BeforeWrite()
         {
             _bitmapPreviewData.Clear();
-            var str = DxfCommonConverters.HexBytes(BitmapData);
-            foreach (var line in DxfCommonConverters.SplitIntoLines(str))
+            foreach (var chunk in BinaryHelpers.ChunkBytes(BitmapData))
             {
-                _bitmapPreviewData.Add(line);
+                _bitmapPreviewData.Add(chunk);
             }
         }
 
         internal override void AfterRead()
         {
-            var hex = string.Join(string.Empty, _bitmapPreviewData.ToArray());
+            BitmapData = BinaryHelpers.CombineBytes(_bitmapPreviewData);
             _bitmapPreviewData.Clear(); // don't keep this around
-            BitmapData = DxfCommonConverters.HexBytes(hex);
         }
     }
 

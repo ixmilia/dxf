@@ -537,10 +537,10 @@
         <Property Name="PixelSize" Code="47" Type="double" DefaultValue="1.0" />
         <Property Name="_seedPointCount" Code="98" Type="int" Accessibility="private" DefaultValue="0" />
         <Property Name="SeedPoints" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" AllowMultiples="true" CodeOverrides="10,20" />
-        <Property Name="IsGradient" Code="450" Type="bool" DefaultValue="false" ReadConverter="BoolLong({0})" WriteConverter="BoolLong({0})" MinVersion="R2004" />
-        <Property Name="_zero" Code="451" Type="long" DefaultValue="0" Accessibility="private" MinVersion="R2004" Comment="Reserved for future use." />
-        <Property Name="GradientColorMode" Code="452" Type="DxfGradientColorMode" DefaultValue="DxfGradientColorMode.TwoColorGradient" ReadConverter="(DxfGradientColorMode){0}" WriteConverter="(long){0}" MinVersion="R2004" Comment="Only used by dialog code." />
-        <Property Name="NumberOfColors" Code="453" Type="long" DefaultValue="0" MinVersion="R2004" Comment="Unknown usage." />
+        <Property Name="IsGradient" Code="450" Type="bool" DefaultValue="false" ReadConverter="BoolInt({0})" WriteConverter="BoolInt({0})" MinVersion="R2004" />
+        <Property Name="_zero" Code="451" Type="int" DefaultValue="0" Accessibility="private" MinVersion="R2004" Comment="Reserved for future use." />
+        <Property Name="GradientColorMode" Code="452" Type="DxfGradientColorMode" DefaultValue="DxfGradientColorMode.TwoColorGradient" ReadConverter="(DxfGradientColorMode){0}" WriteConverter="(int){0}" MinVersion="R2004" Comment="Only used by dialog code." />
+        <Property Name="NumberOfColors" Code="453" Type="int" DefaultValue="0" MinVersion="R2004" Comment="Unknown usage." />
         <Property Name="GradientRotationAngle" Code="460" Type="double" DefaultValue="0.0" MinVersion="R2004" Comment="Rotation angle for gradients in radians." />
         <Property Name="GradientDefinitionShift" Code="461" Type="double" DefaultValue="0.0" MinVersion="R2004" Comment="Unknown usage." />
         <Property Name="ColorTint" Code="462" Type="double" DefaultValue="0.0" MinVersion="R2004" Comment="Range is [0.0, 1.0]." />

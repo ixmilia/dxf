@@ -132,16 +132,16 @@ namespace IxMilia.Dxf.Entities
                     this.ExtrusionDirection = this.ExtrusionDirection.WithUpdatedZ(pair.DoubleValue);
                     break;
                 case 450:
-                    this.IsGradient = BoolLong(pair.LongValue);
+                    this.IsGradient = BoolInt(pair.IntegerValue);
                     break;
                 case 451:
-                    this._zero = pair.LongValue;
+                    this._zero = pair.IntegerValue;
                     break;
                 case 452:
                     this.GradientColorMode = (DxfGradientColorMode)pair.LongValue;
                     break;
                 case 453:
-                    this.NumberOfColors = pair.LongValue;
+                    this.NumberOfColors = pair.IntegerValue;
                     break;
                 case 460:
                     this.GradientRotationAngle = pair.DoubleValue;

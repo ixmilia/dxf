@@ -71,7 +71,7 @@ namespace IxMilia.Dxf
             else if (between(440, 449))
                 expected = typeof(int);
             else if (between(450, 459))
-                expected = typeof(long);
+                expected = typeof(int);
             else if (between(460, 469))
                 expected = typeof(double);
             else if (between(470, 479))

@@ -318,14 +318,14 @@ namespace IxMilia.Dxf.Entities
             return PostParse();
         }
 
-        protected static bool BoolLong(long l)
+        protected static bool BoolInt(int i)
         {
-            return DxfCommonConverters.BoolLong(l);
+            return DxfCommonConverters.BoolInt(i);
         }
 
-        protected static long BoolLong(bool b)
+        protected static int BoolInt(bool b)
         {
-            return DxfCommonConverters.BoolLong(b);
+            return DxfCommonConverters.BoolInt(b);
         }
 
         protected static bool BoolShort(short s)

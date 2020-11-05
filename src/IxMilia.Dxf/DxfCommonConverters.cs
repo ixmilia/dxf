@@ -19,12 +19,12 @@ namespace IxMilia.Dxf
             return result;
         }
 
-        public static bool BoolLong(long l)
+        public static bool BoolInt(int i)
         {
-            return l != 0;
+            return i != 0;
         }
 
-        public static long BoolLong(bool b)
+        public static int BoolInt(bool b)
         {
             return b ? 1 : 0;
         }

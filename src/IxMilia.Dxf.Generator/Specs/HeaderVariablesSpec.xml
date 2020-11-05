@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Spec xmlns="http://IxMilia.com/Dxf/HeaderVariablesSpec">
+<Spec>
     <Variable Name="ACADVER" Code="1" Type="DxfAcadVersion" Property="Version" DefaultValue="DxfAcadVersion.R12" ReadConverter="VersionConverter({0})" WriteConverter="VersionConverter({0})" Comment="The AutoCAD drawing database version number." />
 
     <!-- The spec says this should be a code 70 short, but other tools exepct and write a code 90 long on R2018+ -->

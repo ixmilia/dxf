@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Tables xmlns="http://IxMilia.com/Dxf/TableSpec">
+<Tables>
     <Table Type="AppId" TypeStringVariable="AppIdText">
         <TableItem Name="DxfAppId" ClassName="AcDbRegAppTableRecord">
         </TableItem>

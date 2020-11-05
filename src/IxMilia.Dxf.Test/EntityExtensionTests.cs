@@ -3,7 +3,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class DxfEntityExtensionTests
+    public class EntityExtensionTests
     {
         [Fact]
         public void ShouldContainStartAndEndAngle()

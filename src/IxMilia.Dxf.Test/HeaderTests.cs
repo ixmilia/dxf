@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class DxfHeaderTests : AbstractDxfTests
+    public class HeaderTests : AbstractDxfTests
     {
         [Fact]
         public void SpecificHeaderValuesTest()
@@ -1851,39 +1852,35 @@ $SHADOWPLANELOCATION";
         [Fact]
         public void DontWriteNullPointersTest()
         {
-            var file = new DxfFile();
+            var header = new DxfHeader();
 
             // ensure they default to 0
-            Assert.Equal(0u, file.Header.CurrentMaterialHandle);
-            Assert.Equal(0u, file.Header.InterferenceObjectVisualStylePointer);
-            Assert.Equal(0u, file.Header.InterferenceViewPortVisualStylePointer);
+            Assert.Equal(0u, header.CurrentMaterialHandle);
+            Assert.Equal(0u, header.InterferenceObjectVisualStylePointer);
+            Assert.Equal(0u, header.InterferenceViewPortVisualStylePointer);
 
-            var output = ToString(file);
-            Assert.DoesNotContain("$CMATERIAL", output);
-            Assert.DoesNotContain("$INTERFEREOBJVS", output);
-            Assert.DoesNotContain("$INTERFEREVPVS", output);
+            var pairs = new List<DxfCodePair>();
+            header.AddValueToList(pairs);
+            Assert.DoesNotContain(pairs, p => p.Code == 9 && p.StringValue == "$CMATERIAL");
+            Assert.DoesNotContain(pairs, p => p.Code == 9 && p.StringValue == "$INTERFEREOBJVS");
+            Assert.DoesNotContain(pairs, p => p.Code == 9 && p.StringValue == "$INTERFEREVPVS");
         }
 
         private static void TestHeaderOrder(string expectedOrderText, DxfAcadVersion version)
         {
-            var file = new DxfFile();
-            file.Header.Version = version;
-            file.Header.CurrentMaterialHandle = 100u;
-            file.Header.InterferenceObjectVisualStylePointer = 101u;
-            file.Header.InterferenceViewPortVisualStylePointer = 102u;
-            var contents = ToString(file);
-            var headerEndSec = contents.IndexOf("ENDSEC");
-            contents = contents.Substring(0, headerEndSec);
+            var header = new DxfHeader();
+            header.Version = version;
+            header.CurrentMaterialHandle = 100u;
+            header.InterferenceObjectVisualStylePointer = 101u;
+            header.InterferenceViewPortVisualStylePointer = 102u;
             var expectedOrder = expectedOrderText
                 .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Where(s => s.StartsWith("$"))
                 .Select(s => s.Trim())
                 .ToArray();
-            var actualOrder = contents
-                .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                .Where(s => s.StartsWith("$"))
-                .Select(s => s.Trim())
-                .ToArray();
+            var pairs = new List<DxfCodePair>();
+            header.AddValueToList(pairs);
+            var actualOrder = pairs.Where(p => p.Code == 9).Select(p => p.StringValue).ToArray();
             AssertArrayEqual(expectedOrder, actualOrder);
         }
 
@@ -1904,340 +1901,336 @@ $SHADOWPLANELOCATION";
         [Fact]
         public void DefaultValuesTest()
         {
-            var file = new DxfFile();
-            Assert.True(file.Header.AlignDirection);
-            Assert.Equal(2, file.Header.AlternateDimensioningDecimalPlaces);
-            Assert.Equal(25.4, file.Header.AlternateDimensioningScaleFactor);
-            Assert.Null(file.Header.AlternateDimensioningSuffix);
-            Assert.Equal(2, file.Header.AlternateDimensioningToleranceDecimalPlaces);
-            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, file.Header.AlternateDimensioningToleranceZeroSupression);
-            Assert.Equal(0, file.Header.AlternateDimensioningUnitRounding);
-            Assert.Equal(DxfUnitFormat.Decimal, file.Header.AlternateDimensioningUnits);
-            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, file.Header.AlternateDimensioningZeroSupression);
-            Assert.Equal(0, file.Header.AngleBetweenYAxisAndNorth);
-            Assert.Equal(DxfAngleDirection.CounterClockwise, file.Header.AngleDirection);
-            Assert.Equal(DxfAngleFormat.DecimalDegrees, file.Header.AngleUnitFormat);
-            Assert.Equal(0, file.Header.AngleUnitPrecision);
-            Assert.Equal(0, file.Header.AngleZeroDirection);
-            Assert.Equal(0, file.Header.AngularDimensionPrecision);
-            Assert.False(file.Header.ApparentIntersectionSnap);
-            Assert.Null(file.Header.ArrowBlockName);
-            Assert.Equal(DxfAttributeVisibility.Normal, file.Header.AttributeVisibility);
-            Assert.False(file.Header.AxisOn);
-            Assert.Equal(new DxfVector(0, 0, 0), file.Header.AxisTickSpacing);
-            Assert.False(file.Header.BlipMode);
-            Assert.Equal(0, file.Header.CameraHeight);
-            Assert.True(file.Header.CanUseInPlaceReferenceEditing);
-            Assert.Equal(0.09, file.Header.CenterMarkSize);
-            Assert.True(file.Header.CenterSnap);
-            Assert.Equal(0, file.Header.ChamferAngle);
-            Assert.Equal(0, file.Header.ChamferLength);
-            Assert.False(file.Header.Close);
-            Assert.Equal(DxfCoordinateDisplay.ContinuousUpdate, file.Header.CoordinateDisplay);
-            Assert.True(file.Header.CreateAssociativeDimensioning);
-            Assert.Equal(DxfColor.ByLayer, file.Header.CurrentEntityColor);
-            Assert.Equal("BYLAYER", file.Header.CurrentEntityLineType);
-            Assert.Equal(1, file.Header.CurrentEntityLineTypeScale);
-            Assert.Equal("0", file.Header.CurrentLayer);
-            Assert.Equal(0u, file.Header.CurrentMaterialHandle);
-            Assert.Equal(DxfJustification.Top, file.Header.CurrentMultilineJustification);
-            Assert.Equal(1, file.Header.CurrentMultilineScale);
-            Assert.Equal("STANDARD", file.Header.CurrentMultilineStyle);
-            Assert.Equal(DxfUnits.Unitless, file.Header.DefaultDrawingUnits);
-            Assert.Equal(0, file.Header.DefaultPolylineWidth);
-            Assert.Equal(0.2, file.Header.DefaultTextHeight);
-            Assert.Equal(DxfUnderlayFrameMode.None, file.Header.DgnUnderlayFrameMode);
-            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, file.Header.DimensionAngleZeroSuppression);
-            Assert.Equal(DxfDimensionArcSymbolDisplayMode.SymbolBeforeText, file.Header.DimensionArcSymbolDisplayMode);
-            Assert.False(file.Header.DimensionCursorControlsTextPosition);
-            Assert.Equal('.', file.Header.DimensionDecimalSeparatorChar);
-            Assert.Equal(0, file.Header.DimensionDistanceRoundingValue);
-            Assert.Equal(DxfColor.ByBlock, file.Header.DimensionExtensionLineColor);
-            Assert.Equal(0.18, file.Header.DimensionExtensionLineExtension);
-            Assert.Equal(0.0625, file.Header.DimensionExtensionLineOffset);
-            Assert.Equal(DxfLineWeight.ByLayer, file.Header.DimensionExtensionLineWeight);
-            Assert.Null(file.Header.DimensionFirstExtensionLineType);
-            Assert.Equal(DxfAngleFormat.DecimalDegrees, file.Header.DimensioningAngleFormat);
-            Assert.Equal(0.18, file.Header.DimensioningArrowSize);
-            Assert.Equal(1, file.Header.DimensioningScaleFactor);
-            Assert.Null(file.Header.DimensioningSuffix);
-            Assert.Equal(0.18, file.Header.DimensioningTextHeight);
-            Assert.Equal(0, file.Header.DimensioningTickSize);
-            Assert.Null(file.Header.DimensionLeaderBlockName);
-            Assert.Equal(1, file.Header.DimensionLinearMeasurementsScaleFactor);
-            Assert.Equal(DxfColor.ByBlock, file.Header.DimensionLineColor);
-            Assert.Equal(0, file.Header.DimensionLineExtension);
-            Assert.Equal(1, file.Header.DimensionLineFixedLength);
-            Assert.False(file.Header.DimensionLineFixedLengthOn);
-            Assert.Equal(0.09, file.Header.DimensionLineGap);
-            Assert.Equal(0.38, file.Header.DimensionLineIncrement);
-            Assert.Null(file.Header.DimensionLineType);
-            Assert.Equal(DxfLineWeight.ByLayer, file.Header.DimensionLineWeight);
-            Assert.Equal(0, file.Header.DimensionMinusTolerance);
-            Assert.Equal(DxfNonAngularUnits.Decimal, file.Header.DimensionNonAngularUnits);
-            Assert.Equal(DxfDimensionAssociativity.NonAssociativeObjects, file.Header.DimensionObjectAssociativity);
-            Assert.Equal(0, file.Header.DimensionPlusTolerance);
-            Assert.Null(file.Header.DimensionSecondExtensionLineType);
-            Assert.Equal("STANDARD", file.Header.DimensionStyleName);
-            Assert.Equal(DxfDimensionFit.TextAndArrowsOutsideLines, file.Header.DimensionTextAndArrowPlacement);
-            Assert.Equal(DxfDimensionTextBackgroundColorMode.None, file.Header.DimensionTextBackgroundColorMode);
-            Assert.Equal(DxfColor.ByBlock, file.Header.DimensionTextColor);
-            Assert.Equal(DxfTextDirection.LeftToRight, file.Header.DimensionTextDirection);
-            Assert.Equal(DxfDimensionFractionFormat.HorizontalStacking, file.Header.DimensionTextHeightScaleFactor);
-            Assert.True(file.Header.DimensionTextInsideHorizontal);
-            Assert.Equal(DxfDimensionTextJustification.AboveLineCenter, file.Header.DimensionTextJustification);
-            Assert.Equal(DxfDimensionTextMovementRule.MoveLineWithText, file.Header.DimensionTextMovementRule);
-            Assert.True(file.Header.DimensionTextOutsideHorizontal);
-            Assert.Equal("STANDARD", file.Header.DimensionTextStyle);
-            Assert.Equal(4, file.Header.DimensionToleranceDecimalPlaces);
-            Assert.Equal(1, file.Header.DimensionToleranceDisplayScaleFactor);
-            Assert.Equal(DxfJustification.Middle, file.Header.DimensionToleranceVerticalJustification);
-            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, file.Header.DimensionToleranceZeroSuppression);
-            Assert.Equal(Math.PI / 4.0, file.Header.DimensionTransverseSegmentAngleInJoggedRadius);
-            Assert.Equal(DxfUnitFormat.Decimal, file.Header.DimensionUnitFormat);
-            Assert.Equal(4, file.Header.DimensionUnitToleranceDecimalPlaces);
-            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, file.Header.DimensionUnitZeroSuppression);
-            Assert.Equal(0, file.Header.DimensionVerticalTextPosition);
-            Assert.False(file.Header.DisplayFractionsInInput);
-            Assert.False(file.Header.DisplayIntersectionPolylines);
-            Assert.False(file.Header.DisplayLinewieghtInModelAndLayoutTab);
-            Assert.False(file.Header.DisplaySilhouetteCurvesInWireframeMode);
-            Assert.False(file.Header.DisplaySplinePolygonControl);
-            Assert.Equal(DxfDragMode.Auto, file.Header.DragMode);
-            Assert.Equal("ANSI_1252", file.Header.DrawingCodePage);
-            Assert.Equal(DxfDrawingUnits.English, file.Header.DrawingUnits);
-            Assert.False(file.Header.DrawOrthoganalLines);
-            Assert.Equal(Dxf3DDwfPrecision.Deviation_0_5, file.Header.Dwf3DPrecision);
-            Assert.Equal(DxfUnderlayFrameMode.DisplayNoPlot, file.Header.DwfUnderlayFrameMode);
-            Assert.Equal(DxfColor.ByBlock, file.Header.DxfDimensionTextBackgroundCustomColor);
-            Assert.Equal(DxfShadeEdgeMode.FacesInEntityColorEdgesInBlack, file.Header.EdgeShading);
-            Assert.Equal(0, file.Header.Elevation);
-            Assert.Equal(DxfEndCapSetting.None, file.Header.EndCapSetting);
-            Assert.True(file.Header.EndPointSnap);
-            Assert.False(file.Header.ExtensionSnap);
-            Assert.True(file.Header.FastZoom);
-            Assert.Equal(".", file.Header.FileName);
-            Assert.Equal(0, file.Header.FilletRadius);
-            Assert.True(file.Header.FillModeOn);
-            Assert.Null(file.Header.FirstArrowBlockName);
-            Assert.Equal(0, file.Header.FirstChamferDistance);
-            Assert.False(file.Header.ForceDimensionLineExtensionsOutsideIfTextIs);
-            Assert.False(file.Header.ForceDimensionTextInsideExtensions);
-            Assert.False(file.Header.GenerateDimensionLimits);
-            Assert.False(file.Header.GenerateDimensionTolerances);
-            Assert.False(file.Header.GridOn);
-            Assert.Equal(new DxfVector(1, 1, 0), file.Header.GridSpacing);
-            Assert.Equal(0, file.Header.HaloGapPercent);
-            Assert.True(file.Header.HandlesEnabled);
-            Assert.False(file.Header.HideTextObjectsWhenProducintHiddenView);
-            Assert.Null(file.Header.HyperlinkBase);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.InsertionBase);
-            Assert.False(file.Header.InsertionSnap);
-            Assert.Equal(1, file.Header.InterferenceObjectColor.Index);
-            Assert.Equal(0u, file.Header.InterferenceObjectVisualStylePointer);
-            Assert.Equal(0u, file.Header.InterferenceViewPortVisualStylePointer);
-            Assert.Equal(DxfColor.ByEntity, file.Header.IntersectionPolylineColor);
-            Assert.True(file.Header.IntersectionSnap);
-            Assert.False(file.Header.IsPolylineContinuousAroundVerticies);
-            Assert.False(file.Header.IsRestrictedVersion);
-            Assert.True(file.Header.IsViewportScaledToFit);
-            Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedNotPlotted, file.Header.IsXRefClippingBoundaryVisible);
-            Assert.Equal(4, file.Header.LastPolySolidHeight);
-            Assert.Equal(0.25, file.Header.LastPolySolidWidth);
-            Assert.Null(file.Header.LastSavedBy);
-            Assert.Equal(37.795, file.Header.Latitude);
-            Assert.Equal(DxfLayerAndSpatialIndexSaveMode.None, file.Header.LayerAndSpatialIndexSaveMode);
-            Assert.Equal(50, file.Header.LensLength);
-            Assert.False(file.Header.LimitCheckingInPaperspace);
-            Assert.Equal(8, file.Header.LineSegmentsPerSplinePatch);
-            Assert.Equal(1, file.Header.LineTypeScale);
-            Assert.Equal(DxfJoinStyle.None, file.Header.LineweightJointSetting);
-            Assert.Equal(DxfLoftedObjectNormalMode.SmoothFit, file.Header.LoftedObjectNormalMode);
-            Assert.Equal(7, file.Header.LoftFlags);
-            Assert.Equal(Math.PI / 2.0, file.Header.LoftOperationFirstDraftAngle);
-            Assert.Equal(0, file.Header.LoftOperationFirstMagnitude);
-            Assert.Equal(Math.PI / 2.0, file.Header.LoftOperationSecondDraftAngle);
-            Assert.Equal(0, file.Header.LoftOperationSecondMagnitude);
-            Assert.Equal(-122.394, file.Header.Longitude);
-            Assert.Equal(0, file.Header.MaintenenceVersion);
-            Assert.Equal(64, file.Header.MaximumActiveViewports);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.MaximumDrawingExtents);
-            Assert.Equal(new DxfPoint(12, 9, 0), file.Header.MaximumDrawingLimits);
-            Assert.Equal(6, file.Header.MeshTabulationsInFirstDirection);
-            Assert.Equal(6, file.Header.MeshTabulationsInSecondDirection);
-            Assert.False(file.Header.MidPointSnap);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.MinimumDrawingExtents);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.MinimumDrawingLimits);
-            Assert.False(file.Header.MirrorText);
-            Assert.False(file.Header.NearestSnap);
-            Assert.Equal(DxfLineWeight.ByBlock, file.Header.NewObjectLineWeight);
-            Assert.Equal(DxfPlotStyle.ByLayer, file.Header.NewObjectPlotStyle);
-            Assert.False(file.Header.NewSolidsContainHistory);
-            Assert.Equal(0u, file.Header.NextAvailableHandle);
-            Assert.False(file.Header.NodeSnap);
-            Assert.True(file.Header.NoTwist);
-            Assert.Equal(37, file.Header.ObjectSnapFlags);
-            Assert.Equal(127, file.Header.ObjectSortingMethodsFlags);
-            Assert.Equal(DxfColor.ByEntity, file.Header.ObscuredLineColor);
-            Assert.Equal(DxfLineTypeStyle.Off, file.Header.ObscuredLineTypeStyle);
-            Assert.False(file.Header.OleStartup);
-            Assert.Equal(DxfOrthographicViewType.None, file.Header.OrthgraphicViewType);
-            Assert.Null(file.Header.OrthoUCSReference);
-            Assert.Equal(0, file.Header.PaperspaceElevation);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceInsertionBase);
-            Assert.Equal(new DxfPoint(-1E+20, -1E+20, -1E+20), file.Header.PaperspaceMaximumDrawingExtents);
-            Assert.Equal(new DxfPoint(12, 9, 0), file.Header.PaperspaceMaximumDrawingLimits);
-            Assert.Equal(new DxfPoint(1E+20, 1E+20, 1E+20), file.Header.PaperspaceMinimumDrawingExtents);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceMinimumDrawingLimits);
-            Assert.Equal(DxfOrthographicViewType.None, file.Header.PaperspaceOrthographicViewType);
-            Assert.Null(file.Header.PaperspaceOrthoUCSReference);
-            Assert.Null(file.Header.PaperspaceUCSDefinitionName);
-            Assert.Null(file.Header.PaperspaceUCSName);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceUCSOrigin);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceUCSOriginBack);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceUCSOriginBottom);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceUCSOriginFront);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceUCSOriginLeft);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceUCSOriginRight);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.PaperspaceUCSOriginTop);
-            Assert.Equal(new DxfVector(1, 0, 0), file.Header.PaperspaceXAxis);
-            Assert.Equal(new DxfVector(0, 1, 0), file.Header.PaperspaceYAxis);
-            Assert.False(file.Header.ParallelSnap);
-            Assert.Equal(6, file.Header.PEditSmoothMDensity);
-            Assert.Equal(6, file.Header.PEditSmoothNDensity);
-            Assert.Equal(DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline, file.Header.PEditSmoothSurfaceType);
-            Assert.Equal(DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline, file.Header.PEditSplineCurveType);
-            Assert.Equal(70, file.Header.PercentAmbientToDiffuse);
-            Assert.False(file.Header.PerpendicularSnap);
-            Assert.Equal(DxfPickStyle.Group, file.Header.PickStyle);
-            Assert.Equal(0, file.Header.PointDisplayMode);
-            Assert.Equal(0, file.Header.PointDisplaySize);
-            Assert.Equal(DxfPolySketchMode.SketchLines, file.Header.PolylineSketchMode);
-            Assert.True(file.Header.PreviousReleaseTileCompatability);
-            Assert.Null(file.Header.ProjectName);
-            Assert.True(file.Header.PromptForAttributeOnInsert);
-            Assert.False(file.Header.QuadrantSnap);
-            Assert.True(file.Header.RecomputeDimensionsWhileDragging);
-            Assert.Equal(0, file.Header.RequiredVersions);
-            Assert.True(file.Header.RetainDeletedObjects);
-            Assert.True(file.Header.RetainXRefDependentVisibilitySettings);
-            Assert.True(file.Header.SaveProxyGraphics);
-            Assert.True(file.Header.ScaleLineTypesInPaperspace);
-            Assert.Null(file.Header.SecondArrowBlockName);
-            Assert.Equal(0, file.Header.SecondChamferDistance);
-            Assert.True(file.Header.SetUCSToWCSInDViewOrVPoint);
-            Assert.Equal(DxfShadowMode.CastsAndReceivesShadows, file.Header.ShadowMode);
-            Assert.Equal(0, file.Header.ShadowPlaneZOffset);
-            Assert.True(file.Header.ShowAttributeEntryDialogs);
-            Assert.True(file.Header.Simplify);
-            Assert.Equal(0.1, file.Header.SketchRecordIncrement);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.SnapBasePoint);
-            Assert.Equal(DxfSnapIsometricPlane.Left, file.Header.SnapIsometricPlane);
-            Assert.False(file.Header.SnapOn);
-            Assert.Equal(0, file.Header.SnapRotationAngle);
-            Assert.Equal(new DxfVector(1, 1, 0), file.Header.SnapSpacing);
-            Assert.Equal(DxfSnapStyle.Standard, file.Header.SnapStyle);
-            Assert.Equal(DxfSolidHistoryMode.DoesNotOverride, file.Header.SolidHistoryMode);
-            Assert.True(file.Header.SortObjectsForMSlide);
-            Assert.True(file.Header.SortObjectsForObjectSelection);
-            Assert.True(file.Header.SortObjectsForObjectSnap);
-            Assert.True(file.Header.SortObjectsForPlotting);
-            Assert.True(file.Header.SortObjectsForPostScriptOutput);
-            Assert.True(file.Header.SortObjectsForRedraw);
-            Assert.True(file.Header.SortObjectsForRegen);
-            Assert.Equal(3020, file.Header.SpacialIndexMaxDepth);
-            Assert.Equal(6, file.Header.StepSizeInWalkOrFlyMode);
-            Assert.Equal(2, file.Header.StepsPerSecondInWalkOrFlyMode);
-            Assert.Null(file.Header.Stylesheet);
-            Assert.False(file.Header.SuppressFirstDimensionExtensionLine);
-            Assert.False(file.Header.SuppressOutsideExtensionDimensionLines);
-            Assert.False(file.Header.SuppressSecondDimensionExtensionLine);
-            Assert.False(file.Header.TangentSnap);
-            Assert.False(file.Header.TextAboveDimensionLine);
-            Assert.Equal("STANDARD", file.Header.TextStyle);
-            Assert.Equal(0, file.Header.Thickness);
-            Assert.Equal(DxfTimeZone.PacificTime_US_Canada_SanFrancisco_Vancouver, file.Header.TimeZone);
-            Assert.Equal(0.05, file.Header.TraceWidth);
-            Assert.Null(file.Header.UCSDefinitionName);
-            Assert.Null(file.Header.UCSName);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.UCSOrigin);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.UCSOriginBack);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.UCSOriginBottom);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.UCSOriginFront);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.UCSOriginLeft);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.UCSOriginRight);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.UCSOriginTop);
-            Assert.Equal(new DxfVector(1, 0, 0), file.Header.UCSXAxis);
-            Assert.Equal(new DxfVector(0, 1, 0), file.Header.UCSYAxis);
-            Assert.Equal(DxfUnitFormat.Decimal, file.Header.UnitFormat);
-            Assert.Equal(4, file.Header.UnitPrecision);
-            Assert.True(file.Header.UseACad2000SymbolTableNaming);
-            Assert.False(file.Header.UseAlternateDimensioning);
-            Assert.False(file.Header.UseCameraDisplay);
-            Assert.True(file.Header.UseLightGlyphDisplay);
-            Assert.False(file.Header.UseLimitsChecking);
-            Assert.False(file.Header.UseQuickTextMode);
-            Assert.True(file.Header.UseRealWorldScale);
-            Assert.True(file.Header.UseRegenMode);
-            Assert.Equal(0, file.Header.UserInt1);
-            Assert.Equal(0, file.Header.UserInt2);
-            Assert.Equal(0, file.Header.UserInt3);
-            Assert.Equal(0, file.Header.UserInt4);
-            Assert.Equal(0, file.Header.UserInt5);
-            Assert.Equal(0, file.Header.UserReal1);
-            Assert.Equal(0, file.Header.UserReal2);
-            Assert.Equal(0, file.Header.UserReal3);
-            Assert.Equal(0, file.Header.UserReal4);
-            Assert.Equal(0, file.Header.UserReal5);
-            Assert.True(file.Header.UserTimerOn);
-            Assert.True(file.Header.UsesColorDependentPlotStyleTables);
-            Assert.False(file.Header.UseSeparateArrowBlocksForDimensions);
-            Assert.True(file.Header.UseTileModeLightSync);
-            Assert.Equal(DxfAcadVersion.R12, file.Header.Version);
-            Assert.Equal(new DxfPoint(0, 0, 0), file.Header.ViewCenter);
-            Assert.Equal(new DxfVector(0, 0, 1), file.Header.ViewDirection);
-            Assert.Equal(1, file.Header.ViewHeight);
-            Assert.Equal(0, file.Header.ViewportViewScaleFactor);
+            var header = new DxfHeader();
+            Assert.True(header.AlignDirection);
+            Assert.Equal(2, header.AlternateDimensioningDecimalPlaces);
+            Assert.Equal(25.4, header.AlternateDimensioningScaleFactor);
+            Assert.Null(header.AlternateDimensioningSuffix);
+            Assert.Equal(2, header.AlternateDimensioningToleranceDecimalPlaces);
+            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, header.AlternateDimensioningToleranceZeroSupression);
+            Assert.Equal(0, header.AlternateDimensioningUnitRounding);
+            Assert.Equal(DxfUnitFormat.Decimal, header.AlternateDimensioningUnits);
+            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, header.AlternateDimensioningZeroSupression);
+            Assert.Equal(0, header.AngleBetweenYAxisAndNorth);
+            Assert.Equal(DxfAngleDirection.CounterClockwise, header.AngleDirection);
+            Assert.Equal(DxfAngleFormat.DecimalDegrees, header.AngleUnitFormat);
+            Assert.Equal(0, header.AngleUnitPrecision);
+            Assert.Equal(0, header.AngleZeroDirection);
+            Assert.Equal(0, header.AngularDimensionPrecision);
+            Assert.False(header.ApparentIntersectionSnap);
+            Assert.Null(header.ArrowBlockName);
+            Assert.Equal(DxfAttributeVisibility.Normal, header.AttributeVisibility);
+            Assert.False(header.AxisOn);
+            Assert.Equal(new DxfVector(0, 0, 0), header.AxisTickSpacing);
+            Assert.False(header.BlipMode);
+            Assert.Equal(0, header.CameraHeight);
+            Assert.True(header.CanUseInPlaceReferenceEditing);
+            Assert.Equal(0.09, header.CenterMarkSize);
+            Assert.True(header.CenterSnap);
+            Assert.Equal(0, header.ChamferAngle);
+            Assert.Equal(0, header.ChamferLength);
+            Assert.False(header.Close);
+            Assert.Equal(DxfCoordinateDisplay.ContinuousUpdate, header.CoordinateDisplay);
+            Assert.True(header.CreateAssociativeDimensioning);
+            Assert.Equal(DxfColor.ByLayer, header.CurrentEntityColor);
+            Assert.Equal("BYLAYER", header.CurrentEntityLineType);
+            Assert.Equal(1, header.CurrentEntityLineTypeScale);
+            Assert.Equal("0", header.CurrentLayer);
+            Assert.Equal(0u, header.CurrentMaterialHandle);
+            Assert.Equal(DxfJustification.Top, header.CurrentMultilineJustification);
+            Assert.Equal(1, header.CurrentMultilineScale);
+            Assert.Equal("STANDARD", header.CurrentMultilineStyle);
+            Assert.Equal(DxfUnits.Unitless, header.DefaultDrawingUnits);
+            Assert.Equal(0, header.DefaultPolylineWidth);
+            Assert.Equal(0.2, header.DefaultTextHeight);
+            Assert.Equal(DxfUnderlayFrameMode.None, header.DgnUnderlayFrameMode);
+            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, header.DimensionAngleZeroSuppression);
+            Assert.Equal(DxfDimensionArcSymbolDisplayMode.SymbolBeforeText, header.DimensionArcSymbolDisplayMode);
+            Assert.False(header.DimensionCursorControlsTextPosition);
+            Assert.Equal('.', header.DimensionDecimalSeparatorChar);
+            Assert.Equal(0, header.DimensionDistanceRoundingValue);
+            Assert.Equal(DxfColor.ByBlock, header.DimensionExtensionLineColor);
+            Assert.Equal(0.18, header.DimensionExtensionLineExtension);
+            Assert.Equal(0.0625, header.DimensionExtensionLineOffset);
+            Assert.Equal(DxfLineWeight.ByLayer, header.DimensionExtensionLineWeight);
+            Assert.Null(header.DimensionFirstExtensionLineType);
+            Assert.Equal(DxfAngleFormat.DecimalDegrees, header.DimensioningAngleFormat);
+            Assert.Equal(0.18, header.DimensioningArrowSize);
+            Assert.Equal(1, header.DimensioningScaleFactor);
+            Assert.Null(header.DimensioningSuffix);
+            Assert.Equal(0.18, header.DimensioningTextHeight);
+            Assert.Equal(0, header.DimensioningTickSize);
+            Assert.Null(header.DimensionLeaderBlockName);
+            Assert.Equal(1, header.DimensionLinearMeasurementsScaleFactor);
+            Assert.Equal(DxfColor.ByBlock, header.DimensionLineColor);
+            Assert.Equal(0, header.DimensionLineExtension);
+            Assert.Equal(1, header.DimensionLineFixedLength);
+            Assert.False(header.DimensionLineFixedLengthOn);
+            Assert.Equal(0.09, header.DimensionLineGap);
+            Assert.Equal(0.38, header.DimensionLineIncrement);
+            Assert.Null(header.DimensionLineType);
+            Assert.Equal(DxfLineWeight.ByLayer, header.DimensionLineWeight);
+            Assert.Equal(0, header.DimensionMinusTolerance);
+            Assert.Equal(DxfNonAngularUnits.Decimal, header.DimensionNonAngularUnits);
+            Assert.Equal(DxfDimensionAssociativity.NonAssociativeObjects, header.DimensionObjectAssociativity);
+            Assert.Equal(0, header.DimensionPlusTolerance);
+            Assert.Null(header.DimensionSecondExtensionLineType);
+            Assert.Equal("STANDARD", header.DimensionStyleName);
+            Assert.Equal(DxfDimensionFit.TextAndArrowsOutsideLines, header.DimensionTextAndArrowPlacement);
+            Assert.Equal(DxfDimensionTextBackgroundColorMode.None, header.DimensionTextBackgroundColorMode);
+            Assert.Equal(DxfColor.ByBlock, header.DimensionTextColor);
+            Assert.Equal(DxfTextDirection.LeftToRight, header.DimensionTextDirection);
+            Assert.Equal(DxfDimensionFractionFormat.HorizontalStacking, header.DimensionTextHeightScaleFactor);
+            Assert.True(header.DimensionTextInsideHorizontal);
+            Assert.Equal(DxfDimensionTextJustification.AboveLineCenter, header.DimensionTextJustification);
+            Assert.Equal(DxfDimensionTextMovementRule.MoveLineWithText, header.DimensionTextMovementRule);
+            Assert.True(header.DimensionTextOutsideHorizontal);
+            Assert.Equal("STANDARD", header.DimensionTextStyle);
+            Assert.Equal(4, header.DimensionToleranceDecimalPlaces);
+            Assert.Equal(1, header.DimensionToleranceDisplayScaleFactor);
+            Assert.Equal(DxfJustification.Middle, header.DimensionToleranceVerticalJustification);
+            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, header.DimensionToleranceZeroSuppression);
+            Assert.Equal(Math.PI / 4.0, header.DimensionTransverseSegmentAngleInJoggedRadius);
+            Assert.Equal(DxfUnitFormat.Decimal, header.DimensionUnitFormat);
+            Assert.Equal(4, header.DimensionUnitToleranceDecimalPlaces);
+            Assert.Equal(DxfUnitZeroSuppression.SuppressZeroFeetAndZeroInches, header.DimensionUnitZeroSuppression);
+            Assert.Equal(0, header.DimensionVerticalTextPosition);
+            Assert.False(header.DisplayFractionsInInput);
+            Assert.False(header.DisplayIntersectionPolylines);
+            Assert.False(header.DisplayLinewieghtInModelAndLayoutTab);
+            Assert.False(header.DisplaySilhouetteCurvesInWireframeMode);
+            Assert.False(header.DisplaySplinePolygonControl);
+            Assert.Equal(DxfDragMode.Auto, header.DragMode);
+            Assert.Equal("ANSI_1252", header.DrawingCodePage);
+            Assert.Equal(DxfDrawingUnits.English, header.DrawingUnits);
+            Assert.False(header.DrawOrthoganalLines);
+            Assert.Equal(Dxf3DDwfPrecision.Deviation_0_5, header.Dwf3DPrecision);
+            Assert.Equal(DxfUnderlayFrameMode.DisplayNoPlot, header.DwfUnderlayFrameMode);
+            Assert.Equal(DxfColor.ByBlock, header.DxfDimensionTextBackgroundCustomColor);
+            Assert.Equal(DxfShadeEdgeMode.FacesInEntityColorEdgesInBlack, header.EdgeShading);
+            Assert.Equal(0, header.Elevation);
+            Assert.Equal(DxfEndCapSetting.None, header.EndCapSetting);
+            Assert.True(header.EndPointSnap);
+            Assert.False(header.ExtensionSnap);
+            Assert.True(header.FastZoom);
+            Assert.Equal(".", header.FileName);
+            Assert.Equal(0, header.FilletRadius);
+            Assert.True(header.FillModeOn);
+            Assert.Null(header.FirstArrowBlockName);
+            Assert.Equal(0, header.FirstChamferDistance);
+            Assert.False(header.ForceDimensionLineExtensionsOutsideIfTextIs);
+            Assert.False(header.ForceDimensionTextInsideExtensions);
+            Assert.False(header.GenerateDimensionLimits);
+            Assert.False(header.GenerateDimensionTolerances);
+            Assert.False(header.GridOn);
+            Assert.Equal(new DxfVector(1, 1, 0), header.GridSpacing);
+            Assert.Equal(0, header.HaloGapPercent);
+            Assert.True(header.HandlesEnabled);
+            Assert.False(header.HideTextObjectsWhenProducintHiddenView);
+            Assert.Null(header.HyperlinkBase);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.InsertionBase);
+            Assert.False(header.InsertionSnap);
+            Assert.Equal(1, header.InterferenceObjectColor.Index);
+            Assert.Equal(0u, header.InterferenceObjectVisualStylePointer);
+            Assert.Equal(0u, header.InterferenceViewPortVisualStylePointer);
+            Assert.Equal(DxfColor.ByEntity, header.IntersectionPolylineColor);
+            Assert.True(header.IntersectionSnap);
+            Assert.False(header.IsPolylineContinuousAroundVerticies);
+            Assert.False(header.IsRestrictedVersion);
+            Assert.True(header.IsViewportScaledToFit);
+            Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedNotPlotted, header.IsXRefClippingBoundaryVisible);
+            Assert.Equal(4, header.LastPolySolidHeight);
+            Assert.Equal(0.25, header.LastPolySolidWidth);
+            Assert.Null(header.LastSavedBy);
+            Assert.Equal(37.795, header.Latitude);
+            Assert.Equal(DxfLayerAndSpatialIndexSaveMode.None, header.LayerAndSpatialIndexSaveMode);
+            Assert.Equal(50, header.LensLength);
+            Assert.False(header.LimitCheckingInPaperspace);
+            Assert.Equal(8, header.LineSegmentsPerSplinePatch);
+            Assert.Equal(1, header.LineTypeScale);
+            Assert.Equal(DxfJoinStyle.None, header.LineweightJointSetting);
+            Assert.Equal(DxfLoftedObjectNormalMode.SmoothFit, header.LoftedObjectNormalMode);
+            Assert.Equal(7, header.LoftFlags);
+            Assert.Equal(Math.PI / 2.0, header.LoftOperationFirstDraftAngle);
+            Assert.Equal(0, header.LoftOperationFirstMagnitude);
+            Assert.Equal(Math.PI / 2.0, header.LoftOperationSecondDraftAngle);
+            Assert.Equal(0, header.LoftOperationSecondMagnitude);
+            Assert.Equal(-122.394, header.Longitude);
+            Assert.Equal(0, header.MaintenenceVersion);
+            Assert.Equal(64, header.MaximumActiveViewports);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.MaximumDrawingExtents);
+            Assert.Equal(new DxfPoint(12, 9, 0), header.MaximumDrawingLimits);
+            Assert.Equal(6, header.MeshTabulationsInFirstDirection);
+            Assert.Equal(6, header.MeshTabulationsInSecondDirection);
+            Assert.False(header.MidPointSnap);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.MinimumDrawingExtents);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.MinimumDrawingLimits);
+            Assert.False(header.MirrorText);
+            Assert.False(header.NearestSnap);
+            Assert.Equal(DxfLineWeight.ByBlock, header.NewObjectLineWeight);
+            Assert.Equal(DxfPlotStyle.ByLayer, header.NewObjectPlotStyle);
+            Assert.False(header.NewSolidsContainHistory);
+            Assert.Equal(0u, header.NextAvailableHandle);
+            Assert.False(header.NodeSnap);
+            Assert.True(header.NoTwist);
+            Assert.Equal(37, header.ObjectSnapFlags);
+            Assert.Equal(127, header.ObjectSortingMethodsFlags);
+            Assert.Equal(DxfColor.ByEntity, header.ObscuredLineColor);
+            Assert.Equal(DxfLineTypeStyle.Off, header.ObscuredLineTypeStyle);
+            Assert.False(header.OleStartup);
+            Assert.Equal(DxfOrthographicViewType.None, header.OrthgraphicViewType);
+            Assert.Null(header.OrthoUCSReference);
+            Assert.Equal(0, header.PaperspaceElevation);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceInsertionBase);
+            Assert.Equal(new DxfPoint(-1E+20, -1E+20, -1E+20), header.PaperspaceMaximumDrawingExtents);
+            Assert.Equal(new DxfPoint(12, 9, 0), header.PaperspaceMaximumDrawingLimits);
+            Assert.Equal(new DxfPoint(1E+20, 1E+20, 1E+20), header.PaperspaceMinimumDrawingExtents);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceMinimumDrawingLimits);
+            Assert.Equal(DxfOrthographicViewType.None, header.PaperspaceOrthographicViewType);
+            Assert.Null(header.PaperspaceOrthoUCSReference);
+            Assert.Null(header.PaperspaceUCSDefinitionName);
+            Assert.Null(header.PaperspaceUCSName);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceUCSOrigin);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceUCSOriginBack);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceUCSOriginBottom);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceUCSOriginFront);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceUCSOriginLeft);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceUCSOriginRight);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceUCSOriginTop);
+            Assert.Equal(new DxfVector(1, 0, 0), header.PaperspaceXAxis);
+            Assert.Equal(new DxfVector(0, 1, 0), header.PaperspaceYAxis);
+            Assert.False(header.ParallelSnap);
+            Assert.Equal(6, header.PEditSmoothMDensity);
+            Assert.Equal(6, header.PEditSmoothNDensity);
+            Assert.Equal(DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline, header.PEditSmoothSurfaceType);
+            Assert.Equal(DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline, header.PEditSplineCurveType);
+            Assert.Equal(70, header.PercentAmbientToDiffuse);
+            Assert.False(header.PerpendicularSnap);
+            Assert.Equal(DxfPickStyle.Group, header.PickStyle);
+            Assert.Equal(0, header.PointDisplayMode);
+            Assert.Equal(0, header.PointDisplaySize);
+            Assert.Equal(DxfPolySketchMode.SketchLines, header.PolylineSketchMode);
+            Assert.True(header.PreviousReleaseTileCompatability);
+            Assert.Null(header.ProjectName);
+            Assert.True(header.PromptForAttributeOnInsert);
+            Assert.False(header.QuadrantSnap);
+            Assert.True(header.RecomputeDimensionsWhileDragging);
+            Assert.Equal(0, header.RequiredVersions);
+            Assert.True(header.RetainDeletedObjects);
+            Assert.True(header.RetainXRefDependentVisibilitySettings);
+            Assert.True(header.SaveProxyGraphics);
+            Assert.True(header.ScaleLineTypesInPaperspace);
+            Assert.Null(header.SecondArrowBlockName);
+            Assert.Equal(0, header.SecondChamferDistance);
+            Assert.True(header.SetUCSToWCSInDViewOrVPoint);
+            Assert.Equal(DxfShadowMode.CastsAndReceivesShadows, header.ShadowMode);
+            Assert.Equal(0, header.ShadowPlaneZOffset);
+            Assert.True(header.ShowAttributeEntryDialogs);
+            Assert.True(header.Simplify);
+            Assert.Equal(0.1, header.SketchRecordIncrement);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.SnapBasePoint);
+            Assert.Equal(DxfSnapIsometricPlane.Left, header.SnapIsometricPlane);
+            Assert.False(header.SnapOn);
+            Assert.Equal(0, header.SnapRotationAngle);
+            Assert.Equal(new DxfVector(1, 1, 0), header.SnapSpacing);
+            Assert.Equal(DxfSnapStyle.Standard, header.SnapStyle);
+            Assert.Equal(DxfSolidHistoryMode.DoesNotOverride, header.SolidHistoryMode);
+            Assert.True(header.SortObjectsForMSlide);
+            Assert.True(header.SortObjectsForObjectSelection);
+            Assert.True(header.SortObjectsForObjectSnap);
+            Assert.True(header.SortObjectsForPlotting);
+            Assert.True(header.SortObjectsForPostScriptOutput);
+            Assert.True(header.SortObjectsForRedraw);
+            Assert.True(header.SortObjectsForRegen);
+            Assert.Equal(3020, header.SpacialIndexMaxDepth);
+            Assert.Equal(6, header.StepSizeInWalkOrFlyMode);
+            Assert.Equal(2, header.StepsPerSecondInWalkOrFlyMode);
+            Assert.Null(header.Stylesheet);
+            Assert.False(header.SuppressFirstDimensionExtensionLine);
+            Assert.False(header.SuppressOutsideExtensionDimensionLines);
+            Assert.False(header.SuppressSecondDimensionExtensionLine);
+            Assert.False(header.TangentSnap);
+            Assert.False(header.TextAboveDimensionLine);
+            Assert.Equal("STANDARD", header.TextStyle);
+            Assert.Equal(0, header.Thickness);
+            Assert.Equal(DxfTimeZone.PacificTime_US_Canada_SanFrancisco_Vancouver, header.TimeZone);
+            Assert.Equal(0.05, header.TraceWidth);
+            Assert.Null(header.UCSDefinitionName);
+            Assert.Null(header.UCSName);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.UCSOrigin);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.UCSOriginBack);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.UCSOriginBottom);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.UCSOriginFront);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.UCSOriginLeft);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.UCSOriginRight);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.UCSOriginTop);
+            Assert.Equal(new DxfVector(1, 0, 0), header.UCSXAxis);
+            Assert.Equal(new DxfVector(0, 1, 0), header.UCSYAxis);
+            Assert.Equal(DxfUnitFormat.Decimal, header.UnitFormat);
+            Assert.Equal(4, header.UnitPrecision);
+            Assert.True(header.UseACad2000SymbolTableNaming);
+            Assert.False(header.UseAlternateDimensioning);
+            Assert.False(header.UseCameraDisplay);
+            Assert.True(header.UseLightGlyphDisplay);
+            Assert.False(header.UseLimitsChecking);
+            Assert.False(header.UseQuickTextMode);
+            Assert.True(header.UseRealWorldScale);
+            Assert.True(header.UseRegenMode);
+            Assert.Equal(0, header.UserInt1);
+            Assert.Equal(0, header.UserInt2);
+            Assert.Equal(0, header.UserInt3);
+            Assert.Equal(0, header.UserInt4);
+            Assert.Equal(0, header.UserInt5);
+            Assert.Equal(0, header.UserReal1);
+            Assert.Equal(0, header.UserReal2);
+            Assert.Equal(0, header.UserReal3);
+            Assert.Equal(0, header.UserReal4);
+            Assert.Equal(0, header.UserReal5);
+            Assert.True(header.UserTimerOn);
+            Assert.True(header.UsesColorDependentPlotStyleTables);
+            Assert.False(header.UseSeparateArrowBlocksForDimensions);
+            Assert.True(header.UseTileModeLightSync);
+            Assert.Equal(DxfAcadVersion.R12, header.Version);
+            Assert.Equal(new DxfPoint(0, 0, 0), header.ViewCenter);
+            Assert.Equal(new DxfVector(0, 0, 1), header.ViewDirection);
+            Assert.Equal(1, header.ViewHeight);
+            Assert.Equal(0, header.ViewportViewScaleFactor);
         }
 
         [Fact]
         public void WriteHeaderWithInvalidValuesTest()
         {
-            var file = new DxfFile();
-            file.Header.DefaultTextHeight = -1.0; // $TEXTSIZE, normalized to 0.2
-            file.Header.TraceWidth = 0.0; // $TRACEWID, normalized to 0.05
-            file.Header.TextStyle = string.Empty; // $TEXTSTYLE, normalized to STANDARD
-            file.Header.CurrentLayer = null; // $CLAYER, normalized to 0
-            file.Header.CurrentEntityLineType = null; // $CELTYPE, normalized to BYLAYER
-            file.Header.DimensionStyleName = null; // $DIMSTYLE, normalized to STANDARD
-            file.Header.FileName = null; // $MENU, normalized to .
+            var header = new DxfHeader();
+            header.DefaultTextHeight = -1.0; // $TEXTSIZE, normalized to 0.2
+            header.TraceWidth = 0.0; // $TRACEWID, normalized to 0.05
+            header.TextStyle = string.Empty; // $TEXTSTYLE, normalized to STANDARD
+            header.CurrentLayer = null; // $CLAYER, normalized to 0
+            header.CurrentEntityLineType = null; // $CELTYPE, normalized to BYLAYER
+            header.DimensionStyleName = null; // $DIMSTYLE, normalized to STANDARD
+            header.FileName = null; // $MENU, normalized to .
 
-            VerifyFileContains(file,
-                DxfSectionType.Header,
+            var pairs = new List<DxfCodePair>();
+            header.AddValueToList(pairs);
+
+            AssertContains(pairs,
                 (9, "$TEXTSIZE"), (40, 0.2)
             );
-            VerifyFileContains(file,
-                DxfSectionType.Header,
+            AssertContains(pairs,
                 (9, "$TRACEWID"), (40, 0.05)
             );
-            VerifyFileContains(file,
-                DxfSectionType.Header,
+            AssertContains(pairs,
                 (9, "$TEXTSTYLE"), (7, "STANDARD")
             );
-            VerifyFileContains(file,
-                DxfSectionType.Header,
+            AssertContains(pairs,
                 (9, "$CLAYER"), (8, "0")
             );
-            VerifyFileContains(file,
-                DxfSectionType.Header,
+            AssertContains(pairs,
                 (9, "$CELTYPE"), (6, "BYLAYER")
             );
-            VerifyFileContains(file,
-                DxfSectionType.Header,
+            AssertContains(pairs,
                 (9, "$DIMSTYLE"), (2, "STANDARD")
             );
-            VerifyFileContains(file,
-                DxfSectionType.Header,
+            AssertContains(pairs,
                 (9, "$MENU"), (1, ".")
             );
         }

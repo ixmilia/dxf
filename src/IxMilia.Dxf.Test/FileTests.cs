@@ -3,7 +3,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class DxfFileTests : AbstractDxfTests
+    public class FileTests : AbstractDxfTests
     {
         [Fact]
         public void EmptyFileBoundingBoxTest()

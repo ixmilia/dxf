@@ -10,7 +10,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class DxfCompatTests : AbstractDxfTests
+    public class CompatTests : AbstractDxfTests
     {
         private static readonly string MinimumFileText = @"
   0
@@ -148,7 +148,7 @@ EOF
             var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
-                if (DxfReaderWriterTests.IsEntityOrDerived(type))
+                if (ReaderWriterTests.IsEntityOrDerived(type))
                 {
                     var ctor = type.GetConstructor(Type.EmptyTypes);
                     if (ctor != null)
@@ -180,7 +180,7 @@ EOF
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2013;
             var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
-            foreach (var type in assembly.GetTypes().Where(DxfReaderWriterTests.IsObjectOrDerived))
+            foreach (var type in assembly.GetTypes().Where(ReaderWriterTests.IsObjectOrDerived))
             {
                 var ctor = type.GetConstructor(Type.EmptyTypes);
                 if (ctor != null)
@@ -364,7 +364,7 @@ EOF
             var assembly = typeof(DxfFile).GetTypeInfo().Assembly;
             foreach (var type in assembly.GetTypes())
             {
-                if (DxfReaderWriterTests.IsEntityOrDerived(type) && type.GetTypeInfo().BaseType != typeof(DxfDimensionBase) && !unsupportedTypes.Contains(type))
+                if (ReaderWriterTests.IsEntityOrDerived(type) && type.GetTypeInfo().BaseType != typeof(DxfDimensionBase) && !unsupportedTypes.Contains(type))
                 {
                     var ctor = type.GetConstructor(Type.EmptyTypes);
                     if (ctor != null)
@@ -606,7 +606,7 @@ EOF
                     throw new InvalidOperationException("Unsupported ODA version " + desiredVersion);
             }
 
-            //                                                                              recurse audit
+            //                                                                          recurse audit
             return $@"""{inputDirectory}"" ""{outputDirectory}"" ""{odaVersion}"" ""DXF"" ""0"" ""1""";
         }
     }

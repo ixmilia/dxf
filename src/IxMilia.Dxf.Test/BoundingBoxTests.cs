@@ -4,7 +4,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class DxfBoundingBoxTests
+    public class BoundingBoxTests
     {
         [Fact]
         public void ArcBoundingBox()

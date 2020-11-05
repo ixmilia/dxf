@@ -7,9 +7,14 @@ namespace IxMilia.Dxf.Test
     {
         public List<DxfCodePair> Pairs { get; }
 
-        public TestCodePairBufferReader(IEnumerable<(int code, object value)> codePairs)
+        public TestCodePairBufferReader(IEnumerable<(int code, object value)> pairs)
+            : this(pairs.Select(cp => new DxfCodePair(cp.code, cp.value)))
         {
-            Pairs = codePairs.Select(cp => new DxfCodePair(cp.code, cp.value)).ToList();
+        }
+
+        public TestCodePairBufferReader(IEnumerable<DxfCodePair> pairs)
+        {
+            Pairs = pairs.ToList();
         }
 
         public IEnumerable<DxfCodePair> GetCodePairs() => Pairs;

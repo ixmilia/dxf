@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +10,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class DxfObjectTests : AbstractDxfTests
+    public class ObjectTests : AbstractDxfTests
     {
         private DxfObject GenObject(string typeString, params (int code, object value)[] codePairs)
         {
@@ -384,10 +385,11 @@ namespace IxMilia.Dxf.Test
         {
             var dict = new DxfDictionary();
             dict["key"] = null;
-            var file = new DxfFile();
-            file.Header.Version = DxfAcadVersion.R2000;
-            file.Objects.Add(dict);
-            var _text = ToString(file);
+
+            var objectsSection = new DxfObjectsSection();
+            objectsSection.Objects.Add(dict);
+
+            var _pairs = objectsSection.GetValuePairs(DxfAcadVersion.R2000, outputHandles: true, new HashSet<IDxfItem>());
         }
 
         [Fact]
@@ -402,10 +404,9 @@ namespace IxMilia.Dxf.Test
             file.Clear();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(dict);
-            var text = ToString(file);
 
-            var parsedFile = Parse(text);
-            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionary>().Single(d => d.Keys.Count == 2);
+            var roundTrippedFile = RoundTrip(file);
+            var roundTrippedDict = roundTrippedFile.Objects.OfType<DxfDictionary>().Single(d => d.Keys.Count == 2);
             Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
             Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict["key-2"]).Value);
         }
@@ -423,10 +424,9 @@ namespace IxMilia.Dxf.Test
             file.Clear();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(dict1);
-            var text = ToString(file);
 
-            var parsedFile = Parse(text);
-            var roundTrippedDict1 = parsedFile.Objects.OfType<DxfDictionary>().First(d => d.ContainsKey("key-1"));
+            var roundTrippedFile = RoundTrip(file);
+            var roundTrippedDict1 = roundTrippedFile.Objects.OfType<DxfDictionary>().First(d => d.ContainsKey("key-1"));
             var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"];
             Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]).Value);
         }
@@ -443,10 +443,9 @@ namespace IxMilia.Dxf.Test
             file.Clear();
             file.Header.Version = DxfAcadVersion.R2000;
             file.Objects.Add(dict);
-            var text = ToString(file);
 
-            var parsedFile = Parse(text);
-            var roundTrippedDict = parsedFile.Objects.OfType<DxfDictionaryWithDefault>().Single();
+            var roundTrippedFile = RoundTrip(file);
+            var roundTrippedDict = roundTrippedFile.Objects.OfType<DxfDictionaryWithDefault>().Single();
             Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
             Assert.Equal("default-value", ((DxfDictionaryVariable)roundTrippedDict.DefaultObject).Value);
         }

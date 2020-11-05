@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IxMilia.Dxf
 {
-    internal class DxfReader
+    internal static class DxfReader
     {
         internal const string UnicodeMarker = @"\U+";
         internal const int UnicodeValueLength = 4;

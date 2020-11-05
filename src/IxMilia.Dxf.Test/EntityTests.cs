@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
@@ -7,7 +6,7 @@ using Xunit;
 
 namespace IxMilia.Dxf.Test
 {
-    public class DxfEntityTests : AbstractDxfTests
+    public class EntityTests : AbstractDxfTests
     {
         private static DxfEntity Entity(string entityType, params (int code, object value)[] codePairs)
         {

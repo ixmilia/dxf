@@ -157,7 +157,11 @@ namespace IxMilia.Dxf
             }
         }
 
-        private void WriteStringWithEncoding(string value)
+        /// <summary>
+        /// Internal to make testing easier.
+        /// </summary>
+        /// <param name="value"></param>
+        internal void WriteStringWithEncoding(string value)
         {
             if (version <= DxfAcadVersion.R2004)
             {

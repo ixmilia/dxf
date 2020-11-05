@@ -66,18 +66,11 @@ EOF
             return file;
         }
 
-        internal static string ToString(DxfFile file)
+        internal static DxfFile RoundTrip(DxfFile file)
         {
-            using (var stream = new MemoryStream())
-            {
-                file.Save(stream);
-                stream.Flush();
-                stream.Seek(0, SeekOrigin.Begin);
-                using (var reader = new StreamReader(stream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+            var pairs = file.GetCodePairs();
+            var roundTrippedFile = DxfFile.LoadFromReader(new TestCodePairBufferReader(pairs));
+            return roundTrippedFile;
         }
 
         internal static DxfTextReader TextReaderFromLines(Encoding defaultTextEncoding, params string[] lines)
@@ -285,6 +278,18 @@ EOF
                 var expectedProperty = property.GetValue(expected);
                 var actualProperty = property.GetValue(actual);
                 Assert.Equal(expectedProperty, actualProperty);
+            }
+        }
+
+        protected static void AssertContains(IEnumerable<DxfCodePair> actualPairs, params (int code, object value)[] expectedPairs)
+        {
+            var index = IndexOf(actualPairs, expectedPairs);
+            if (index < 0)
+            {
+                var expectedString = string.Join("\n", expectedPairs);
+                var actualString = string.Join("\n", actualPairs);
+
+                throw new Exception($"Unable to find expected pairs\n{expectedString}\n\nin\n\n{actualString}.");
             }
         }
     }

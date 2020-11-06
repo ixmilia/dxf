@@ -389,7 +389,7 @@ namespace IxMilia.Dxf.Test
             var objectsSection = new DxfObjectsSection();
             objectsSection.Objects.Add(dict);
 
-            var _pairs = objectsSection.GetValuePairs(DxfAcadVersion.R2000, outputHandles: true, new HashSet<IDxfItem>());
+            var _pairs = objectsSection.GetValuePairs(DxfAcadVersion.R2000, outputHandles: true, writtenItems: new HashSet<IDxfItem>());
         }
 
         [Fact]

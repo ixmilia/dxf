@@ -15,8 +15,8 @@
         <Property Name="LineweightEnumValue" Code="370" Type="short" DefaultValue="0" MinVersion="R2000" />
         <Property Name="LineTypeScale" Code="48" Type="double" DefaultValue="1.0" DisableWritingDefault="true" MinVersion="R13" />
         <Property Name="IsVisible" Code="60" Type="bool" DefaultValue="true" ReadConverter="!BoolShort({0})" WriteConverter="BoolShort(!{0})" DisableWritingDefault="true" MinVersion="R13" />
-        <Property Name="ImageByteCount" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2000" />
-        <Property Name="PreviewImageData" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" MinVersion="R2000" />
+        <Property Name="_imageByteCount" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" Accessibility="private" MinVersion="R2000" />
+        <Property Name="_previewImageDataBytes" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
         <Property Name="Color24Bit" Code="420" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2004" />
         <Property Name="ColorName" Code="430" Type="string" DefaultValue="null" MinVersion="R2004" />
         <Property Name="Transparency" Code="440" Type="int" DefaultValue="0" MinVersion="R2004" />
@@ -36,8 +36,7 @@
             <WriteProperty Property="LineweightEnumValue" />
             <WriteProperty Property="LineTypeScale" />
             <WriteProperty Property="IsVisible" />
-            <WriteProperty Property="ImageByteCount" />
-            <WriteProperty Property="PreviewImageData" />
+            <WriteBinaryData Value="PreviewImageData" CountCode="92" ChunkCode="310" MinVersion="R2000" />
             <WriteProperty Property="Color24Bit" />
             <WriteProperty Property="ColorName" />
             <WriteProperty Property="Transparency" />
@@ -95,10 +94,10 @@
     <Entity Name="DxfProxyEntity" EntityType="ProxyEntity" SubclassMarker="AcDbProxyEntity" TypeString="ACAD_PROXY_ENTITY" MinVersion="R14">
         <Property Name="ProxyEntityClassId" Code="90" Type="int" DefaultValue="498" />
         <Property Name="ApplicationEntityClassId" Code="91" Type="int" DefaultValue="500" />
-        <Property Name="GraphicsDataSize" Code="92" Type="int" DefaultValue="0" />
-        <Property Name="GraphicsDataString" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" />
-        <Property Name="EntityDataSize" Code="93" Type="int" DefaultValue="0" />
-        <Property Name="EntityDataString" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" />
+        <Property Name="_graphicsDataSize" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_graphicsDataBytes" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
+        <Property Name="_entityDataSize" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
+        <Property Name="_entityDataBytes" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="ObjectID1" Code="330" Type="string" DefaultValue="null" AllowMultiples="true" />
         <Property Name="ObjectID2" Code="340" Type="string" DefaultValue="null" AllowMultiples="true" />
         <Property Name="ObjectID3" Code="350" Type="string" DefaultValue="null" AllowMultiples="true" />
@@ -106,6 +105,20 @@
         <Property Name="Terminator" Code="94" Type="int" DefaultValue="0" />
         <Property Name="_objectDrawingFormat" Code="95" Type="uint" DefaultValue="0" ReadConverter="(uint){0}" WriteConverter="(int){0}" Accessibility="private" MinVersion="R2000" />
         <Property Name="OriginalDataFormatIsDxf" Code="70" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R2000" />
+        <WriteOrder>
+            <WriteSpecificValue Code="100" Value="&quot;AcDbProxyEntity&quot;" />
+            <WriteProperty Property="ProxyEntityClassId" />
+            <WriteProperty Property="ApplicationEntityClassId" />
+            <WriteBinaryData Value="GraphicsData" CountCode="92" ChunkCode="310" />
+            <WriteBinaryData Value="EntityData" CountCode="93" ChunkCode="310" />
+            <WriteProperty Property="ObjectID1" />
+            <WriteProperty Property="ObjectID2" />
+            <WriteProperty Property="ObjectID3" />
+            <WriteProperty Property="ObjectID4" />
+            <WriteProperty Property="Terminator" />
+            <WriteProperty Property="_objectDrawingFormat" />
+            <WriteProperty Property="OriginalDataFormatIsDxf" />
+        </WriteOrder>
     </Entity>
     <!--
 
@@ -971,10 +984,7 @@
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbOleFrame&quot;" />
             <WriteProperty Property="VersionNumber" />
-            <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
-            <Foreach Property="BinaryHelpers.ChunkBytes(Data)">
-                <WriteSpecificValue Code="310" Value="item" />
-            </Foreach>
+            <WriteBinaryData Value="Data" CountCode="90" ChunkCode="310" />
             <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />
         </WriteOrder>
     </Entity>
@@ -1000,10 +1010,7 @@
             <WriteProperty Property="LowerRightCorner" />
             <WriteProperty Property="ObjectType" />
             <WriteProperty Property="TileMode" />
-            <WriteSpecificValue Code="90" Value="Data?.Length ?? 0" />
-            <Foreach Property="BinaryHelpers.ChunkBytes(Data)">
-                <WriteSpecificValue Code="310" Value="item" />
-            </Foreach>
+            <WriteBinaryData Value="Data" CountCode="90" ChunkCode="310" />
             <WriteSpecificValue Code="1" Value="&quot;OLE&quot;" />
         </WriteOrder>
     </Entity>

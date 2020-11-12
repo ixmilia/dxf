@@ -890,35 +890,68 @@ namespace IxMilia.Dxf.Generator
                 case "WriteProperty":
                     return WriteProperty(spec, entity);
                 case "Foreach":
-                    var property = spec.Attribute("Property").Value;
-                    var condition = spec.Attribute("Condition")?.Value;
-                    var lines = new List<string>();
-                    var indent = "";
-                    if (condition != null)
                     {
-                        indent = "    ";
-                        lines.Add($"if ({condition})");
-                        lines.Add("{");
-                    }
+                        var property = spec.Attribute("Property").Value;
+                        var condition = spec.Attribute("Condition")?.Value;
 
-                    var itemSuffix = _foreachLevel == 0 ? "" : _foreachLevel.ToString();
-                    lines.Add($"{indent}foreach (var item{itemSuffix} in {property})");
-                    lines.Add($"{indent}{{");
-                    _foreachLevel++;
-                    lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => $"{indent}    {l}"));
-                    _foreachLevel--;
-                    lines.Add($"{indent}}}");
-                    if (condition != null)
-                    {
-                        lines.Add("}");
-                    }
+                        var lines = new List<string>();
+                        var indent = "";
+                        if (condition != null)
+                        {
+                            indent = "    ";
+                            lines.Add($"if ({condition})");
+                            lines.Add("{");
+                        }
 
-                    lines.Add(Environment.NewLine);
-                    return lines;
+                        var itemSuffix = _foreachLevel == 0 ? "" : _foreachLevel.ToString();
+                        lines.Add($"{indent}foreach (var item{itemSuffix} in {property})");
+                        lines.Add($"{indent}{{");
+                        _foreachLevel++;
+                        lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => $"{indent}    {l}"));
+                        _foreachLevel--;
+                        lines.Add($"{indent}}}");
+                        if (condition != null)
+                        {
+                            lines.Add("}");
+                        }
+
+                        lines.Add(Environment.NewLine);
+                        return lines;
+                    }
                 case "WriteExtensionData":
                     return new[] { "AddExtensionValuePairs(pairs, version, outputHandles);" };
                 case "WriteCustomCode":
                     return WriteCustomCode(spec);
+                case "WriteBinaryData":
+                    {
+                        var value = spec.Attribute("Value").Value;
+                        var countCode = spec.Attribute("CountCode").Value;
+                        var chunkCode = spec.Attribute("ChunkCode").Value;
+                        var predicates = new List<string>();
+                        predicates.Add($"({value}?.Length ?? 0) > 0");
+                        if (MinVersion(spec) != null)
+                        {
+                            predicates.Add($"version >= DxfAcadVersion.{MinVersion(spec)}");
+                        }
+
+                        if (MaxVersion(spec) != null)
+                        {
+                            predicates.Add($"version <= DxfAcadVersion.{MaxVersion(spec)}");
+                        }
+
+                        var lines = new List<string>();
+                        lines.Add($"if ({string.Join(" && ", predicates)})");
+                        lines.Add("{");
+                        lines.Add($"    pairs.Add(new DxfCodePair({countCode}, {value}.Length));");
+                        lines.Add($"    foreach (var chunk in BinaryHelpers.ChunkBytes({value}))");
+                        lines.Add("    {");
+                        lines.Add($"        pairs.Add(new DxfCodePair({chunkCode}, chunk));");
+                        lines.Add("    }");
+                        lines.Add("}");
+                        lines.Add(Environment.NewLine);
+
+                        return lines;
+                    }
                 default:
                     throw new NotSupportedException();
             }

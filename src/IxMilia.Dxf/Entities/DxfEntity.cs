@@ -238,6 +238,8 @@ namespace IxMilia.Dxf.Entities
             get { return DxfAcadVersion.Max; }
         }
 
+        public byte[] PreviewImageData { get; set; }
+
         protected DxfEntity()
         {
             Initialize();
@@ -254,6 +256,12 @@ namespace IxMilia.Dxf.Entities
 
         protected virtual void CopyManualValues(DxfEntity other)
         {
+        }
+
+        protected void PostParseBaseEntity()
+        {
+            PreviewImageData = BinaryHelpers.CombineBytes(_previewImageDataBytes);
+            _previewImageDataBytes.Clear();
         }
 
         protected virtual DxfEntity PostParse()

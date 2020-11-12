@@ -277,6 +277,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine("    if (entity != null)");
             AppendLine("    {");
             AppendLine("        entity = entity.PopulateFromBuffer(buffer);");
+            AppendLine("        entity.PostParseBaseEntity();");
             AppendLine("    }");
             AppendLine();
             AppendLine("    return entity;");

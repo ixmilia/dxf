@@ -4,6 +4,8 @@ namespace IxMilia.Dxf.Objects
 {
     public partial class DxfField
     {
+        private byte[] BinaryData { get; set; }
+
         public string FormatString { get; set; }
 
         public object Value
@@ -19,7 +21,7 @@ namespace IxMilia.Dxf.Objects
                     case 330:
                         return _idValue;
                     case 310:
-                        return _binaryData;
+                        return BinaryData;
                     default:
                         return null;
                 }
@@ -48,7 +50,7 @@ namespace IxMilia.Dxf.Objects
                 }
                 else if (value.GetType() == typeof(byte[]))
                 {
-                    _binaryData = (byte[])value;
+                    BinaryData = (byte[])value;
                     _valueTypeCode = 310;
                 }
                 else
@@ -69,6 +71,9 @@ namespace IxMilia.Dxf.Objects
             // rebuild format string
             FormatString = _formatStringCode4 ?? (_formatStringCode301 + _formatStringOverflow);
             _formatStringOverflow = null;
+
+            BinaryData = BinaryHelpers.CombineBytes(_binaryData);
+            _binaryData.Clear();
 
             return this;
         }

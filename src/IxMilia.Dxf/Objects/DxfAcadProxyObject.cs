@@ -5,6 +5,8 @@ namespace IxMilia.Dxf.Objects
 {
     public partial class DxfAcadProxyObject
     {
+        public byte[] ObjectData { get; set; }
+
         public IList<string> ObjectIds { get; } = new ListNonNull<string>();
 
         public uint DrawingVersion
@@ -45,6 +47,9 @@ namespace IxMilia.Dxf.Objects
             _objectIdsB.Clear();
             _objectIdsC.Clear();
             _objectIdsD.Clear();
+
+            ObjectData = BinaryHelpers.CombineBytes(_binaryObjectBytes);
+            _binaryObjectBytes.Clear();
 
             return this;
         }

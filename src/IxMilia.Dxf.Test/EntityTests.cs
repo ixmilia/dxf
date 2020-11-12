@@ -74,6 +74,61 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadEntityPreviewImageDataTest()
+        {
+            var e = Entity("LINE",
+                (310, new byte[] { 0x12, 0x34 }),
+                (310, new byte[] { 0x56, 0x78 })
+            );
+            Assert.Equal(new byte[] { 0x12, 0x34, 0x56, 0x78 }, e.PreviewImageData);
+        }
+
+        [Fact]
+        public void ReadEntityPreviewImageDataFromEntityThatReturnsNewEntityOnPostParseTest()
+        {
+            var e = Entity("DIMENSION",
+                (100, "AcDbAlignedDimension"),
+                (310, new byte[] { 0x12, 0x34 }),
+                (310, new byte[] { 0x56, 0x78 })
+            );
+            Assert.Equal(new byte[] { 0x12, 0x34, 0x56, 0x78 }, e.PreviewImageData);
+        }
+
+        [Fact]
+        public void EmptyPreviewImageDataDoesntGetWrittenTest()
+        {
+            var e = new DxfLine();
+            e.PreviewImageData = null;
+            EnsureFileDoesNotContainWithEntity(e, DxfAcadVersion.R2000,
+                (92, 0)
+            );
+        }
+
+        [Fact]
+        public void PreviewImageDataDoesntGetWrittenWhenPresentButOnR14OrLessTest()
+        {
+            var e = new DxfLine();
+            e.PreviewImageData = new byte[] { 0x12, 0x34, 0x56, 0x78 };
+            EnsureFileDoesNotContainWithEntity(e, DxfAcadVersion.R14,
+                (92, 4)
+            );
+            EnsureFileDoesNotContainWithEntity(e, DxfAcadVersion.R14,
+                (310, new byte[] { 0x12, 0x34, 0x56, 0x78 })
+            );
+        }
+
+        [Fact]
+        public void PreviewImageDataGetsWrittenWhenPresentTest()
+        {
+            var e = new DxfLine();
+            e.PreviewImageData = new byte[] { 0x12, 0x34, 0x56, 0x78 };
+            EnsureFileContainsEntity(e, DxfAcadVersion.R2000,
+                (92, 4),
+                (310, new byte[] { 0x12, 0x34, 0x56, 0x78 })
+            );
+        }
+
+        [Fact]
         public void ReadEntityExtensionDataTest()
         {
             var line = (DxfLine)Entity("LINE",

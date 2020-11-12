@@ -181,7 +181,7 @@ namespace IxMilia.Dxf
 
         private string GetWritableLineTypeName(string lineTypeName)
         {
-            return Compat.IsNullOrWhiteSpace(lineTypeName) ? "CONTINUOUS" : lineTypeName;
+            return string.IsNullOrWhiteSpace(lineTypeName) ? "CONTINUOUS" : lineTypeName;
         }
     }
 }

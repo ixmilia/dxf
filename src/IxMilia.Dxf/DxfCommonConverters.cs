@@ -46,7 +46,12 @@ namespace IxMilia.Dxf
 
         public static Guid GuidString(string s)
         {
-            return Compat.GuidString(s);
+            if (Guid.TryParse(s, out var result))
+            {
+                return result;
+            }
+
+            return Guid.Empty;
         }
 
         public static uint UIntHandle(string s)
@@ -172,7 +177,7 @@ namespace IxMilia.Dxf
 
         public static string DefaultIfNullOrEmpty(string value, string defaultValue)
         {
-            return Compat.IsNullOrWhiteSpace(value) ? defaultValue : value;
+            return string.IsNullOrWhiteSpace(value) ? defaultValue : value;
         }
     }
 }

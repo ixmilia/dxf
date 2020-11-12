@@ -14,9 +14,6 @@ while [ $# -gt 0 ]; do
     --notest)
       RUNTESTS=false
       ;;
-    --oldsdk)
-      BuildWithOldSdk=true
-      ;;
     *)
       echo "Invalid argument: $1"
       exit 1

@@ -1,7 +1,7 @@
 ﻿IxMilia.Dxf
 ===========
 
-A portable .NET library for reading and writing DXF and DXB files.  Clone and
+A .NET library for reading and writing DXF and DXB files.  Clone and
 build locally or directly consume the
 [NuGet package](http://www.nuget.org/packages/IxMilia.Dxf/).
 
@@ -15,14 +15,7 @@ using IxMilia.Dxf;
 using IxMilia.Dxf.Entities;
 // ...
 
-DxfFile dxfFile;
-using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Open))
-{
-    dxfFile = DxfFile.Load(fs);
-}
-
-// if on >= .NETFrameworkv3.5 or >= NETStandard1.3 you can use:
-// DxfFile dxfFile = DxfFile.Load(@"C:\Path\To\File.dxf");
+DxfFile dxfFile = DxfFile.Load(@"C:\Path\To\File.dxf");
 
 foreach (DxfEntity entity in dxfFile.Entities)
 {
@@ -49,13 +42,7 @@ DxfFile dxfFile = new DxfFile();
 dxfFile.Entities.Add(new DxfLine(new DxfPoint(0, 0, 0), new DxfPoint(50, 50, 0)));
 // ...
 
-using (FileStream fs = new FileStream(@"C:\Path\To\File.dxf", FileMode.Create))
-{
-    dxfFile.Save(fs);
-}
-
-// if on >= .NETFrameworkv3.5 or >= NETStandard1.3 you can use:
-// dxfFile.Save(@"C:\Path\To\File.dxf");
+dxfFile.Save(@"C:\Path\To\File.dxf");
 ```
 
 ## Compatibility

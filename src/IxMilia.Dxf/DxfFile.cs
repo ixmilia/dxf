@@ -174,7 +174,6 @@ namespace IxMilia.Dxf
                 : DxfBoundingBox.FromEnumerable(boundingBoxes);
         }
 
-#if HAS_FILESYSTEM_ACCESS
         public static DxfFile Load(string path)
         {
             return Load(path, defaultEncoding: Encoding.ASCII);
@@ -187,7 +186,6 @@ namespace IxMilia.Dxf
                 return Load(stream, defaultEncoding);
             }
         }
-#endif
 
         public static DxfFile Load(Stream stream)
         {
@@ -331,7 +329,6 @@ namespace IxMilia.Dxf
             return block?.Entities;
         }
 
-#if HAS_FILESYSTEM_ACCESS
         public void Save(string path, bool asText = true)
         {
             using (var stream = new FileStream(path, FileMode.Create))
@@ -339,7 +336,6 @@ namespace IxMilia.Dxf
                 Save(stream, asText: asText);
             }
         }
-#endif
 
         public void Save(Stream stream, bool asText = true)
         {

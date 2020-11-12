@@ -10,9 +10,4 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(VisualStudioVersion.StartsWith('15.')) or '$(BuildWithOldSdk)' == 'true'">
-    <BuildingOnNetSdk2>true</BuildingOnNetSdk2>
-    <TargetFrameworkOverride>netcoreapp2.1</TargetFrameworkOverride>
-  </PropertyGroup>
-
 </Project>

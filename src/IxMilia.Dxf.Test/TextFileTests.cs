@@ -61,8 +61,7 @@ Repère pièce
         [Fact]
         public void ReadFileWithExplicitNullEncodingTest()
         {
-            // netstandard1.0 doesn't have `Encoding.ASCII` so `DxfFile` defaults it to null.  This test is to ensure
-            // the null-handling behavior never changes.
+            // ensure that a `null` text encoding doesn't break file reading
             using (var ms = new MemoryStream())
             using (var writer = new StreamWriter(ms, Encoding.ASCII))
             {

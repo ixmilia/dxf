@@ -147,9 +147,8 @@ namespace IxMilia.Dxf
 
         private void WriteString(string value)
         {
-            value = TransformControlCharacters(value ?? string.Empty);
             if (textWriter != null)
-                WriteStringWithEncoding(value);
+                WriteStringWithEncoding(TransformControlCharacters(value ?? string.Empty));
             else if (binWriter != null)
             {
                 binWriter.Write(GetAsciiBytes(value));

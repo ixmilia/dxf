@@ -101,7 +101,7 @@ namespace IxMilia.Dxf
                     sb.Append((char)b);
                 }
 
-                pair = new DxfCodePair(code, DxfReader.TransformControlCharacters(sb.ToString()));
+                pair = new DxfCodePair(code, sb.ToString());
             }
             else if (expectedType == typeof(bool))
             {

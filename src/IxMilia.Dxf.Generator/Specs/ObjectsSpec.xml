@@ -937,6 +937,7 @@
         <Property Name="RenderPresetDescription" Code="1" Type="string" DefaultValue="null" />
         <Property Name="DisplayIndex" Code="90" Type="int" DefaultValue="0" />
         <Property Name="IsPredefinedRenderPreset" Code="290" Type="bool" DefaultValue="true" />
+        <Property Name="_duplicateSubclassVersion" Code="90" Type="int" DefaultValue="90" Accessibility="private" /><!-- the `SubclassVersion` variable is declared twice -->
         <Property Name="RenderDuration" Code="70" Type="DxfRenderDuration" DefaultValue="DxfRenderDuration.RenderByTime" ReadConverter="(DxfRenderDuration){0}" WriteConverter="(short){0}" />
         <Property Name="RenderLevelCountLimit" Code="90" Type="int" DefaultValue="0" />
         <Property Name="RenderTimeLimit" Code="90" Type="int" DefaultValue="0" />

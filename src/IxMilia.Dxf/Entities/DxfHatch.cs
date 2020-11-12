@@ -138,7 +138,7 @@ namespace IxMilia.Dxf.Entities
                     this._zero = pair.IntegerValue;
                     break;
                 case 452:
-                    this.GradientColorMode = (DxfGradientColorMode)pair.LongValue;
+                    this.GradientColorMode = (DxfGradientColorMode)pair.IntegerValue;
                     break;
                 case 453:
                     this.NumberOfColors = pair.IntegerValue;

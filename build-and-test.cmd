@@ -34,9 +34,9 @@ set LIBRARY_DIR=%thisdir%src\IxMilia.Dxf
 pushd "%GENERATOR_DIR%"
 dotnet restore
 if errorlevel 1 goto error
-dotnet build -c %configuration%
+dotnet build --configuration %configuration%
 if errorlevel 1 goto error
-dotnet run -c %configuration% --no-restore --no-build -- "%LIBRARY_DIR%"
+dotnet run --configuration %configuration% --no-restore --no-build -- "%LIBRARY_DIR%"
 if errorlevel 1 goto error
 popd
 
@@ -44,21 +44,27 @@ popd
 set LIBRARY_PROJECT=%LIBRARY_DIR%\IxMilia.Dxf.csproj
 dotnet restore "%LIBRARY_PROJECT%"
 if errorlevel 1 goto error
-dotnet build "%LIBRARY_PROJECT%" -c %configuration%
+dotnet build "%LIBRARY_PROJECT%" --configuration %configuration%
 if errorlevel 1 goto error
 
 :: build tests
 set TEST_PROJECT=%thisdir%src\IxMilia.Dxf.Test\IxMilia.Dxf.Test.csproj
 dotnet restore "%TEST_PROJECT%"
 if errorlevel 1 goto error
-dotnet build "%TEST_PROJECT%" -c %configuration%
+dotnet build "%TEST_PROJECT%" --configuration %configuration%
 if errorlevel 1 goto error
 
 :: run tests
 if /i "%runtests%" == "true" (
-    dotnet test "%TEST_PROJECT%" -c %configuration% --no-restore --no-build
+    dotnet test "%TEST_PROJECT%" --configuration %configuration% --no-restore --no-build
     if errorlevel 1 goto error
 )
+
+:: create packages
+dotnet pack --no-restore --no-build --configuration %configuration%
+set PACKAGE_COUNT=0
+for %%a in ("%thisdir%artifacts\packages\%configuration%\*.nupkg") do set /a PACKAGE_COUNT+=1
+if not "%PACKAGE_COUNT%" == "1" echo Expected a single NuGet package but found %PACKAGE_COUNT% at '%thisdir%artifacts\packages\%configuration%' && goto error
 
 goto :eof
 

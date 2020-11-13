@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 0.7.5 (13 November 2020)
+
+- Improve table handling.
+- Enable XData for all entities and objects.
+- Associate `INSERT` entities by block name.
+- Improve handling of binary data.
+
 ## 0.7.4 (26 June 2020)
 
 - Relicense as MIT.

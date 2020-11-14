@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Xunit;
 
-namespace IxMilia.Dxf.Test
+namespace IxMilia.Dxf.Integration.Test
 {
     public class AutoCadExistsFactAttribute : FactAttribute
     {

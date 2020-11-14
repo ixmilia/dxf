@@ -1574,7 +1574,7 @@ namespace IxMilia.Dxf.Test
             }
         }
 
-        internal static bool IsEntityOrDerived(Type type)
+        public static bool IsEntityOrDerived(Type type)
         {
             if (type == typeof(DxfEntity))
             {
@@ -1589,7 +1589,7 @@ namespace IxMilia.Dxf.Test
             return false;
         }
 
-        internal static bool IsObjectOrDerived(Type type)
+        public static bool IsObjectOrDerived(Type type)
         {
             if (type == typeof(DxfObject))
             {

@@ -40,23 +40,15 @@ dotnet run --configuration %configuration% --no-restore --no-build -- "%LIBRARY_
 if errorlevel 1 goto error
 popd
 
-:: build library
-set LIBRARY_PROJECT=%LIBRARY_DIR%\IxMilia.Dxf.csproj
-dotnet restore "%LIBRARY_PROJECT%"
+:: build
+dotnet restore
 if errorlevel 1 goto error
-dotnet build "%LIBRARY_PROJECT%" --configuration %configuration%
-if errorlevel 1 goto error
-
-:: build tests
-set TEST_PROJECT=%thisdir%src\IxMilia.Dxf.Test\IxMilia.Dxf.Test.csproj
-dotnet restore "%TEST_PROJECT%"
-if errorlevel 1 goto error
-dotnet build "%TEST_PROJECT%" --configuration %configuration%
+dotnet build --configuration %configuration%
 if errorlevel 1 goto error
 
 :: run tests
 if /i "%runtests%" == "true" (
-    dotnet test "%TEST_PROJECT%" --configuration %configuration% --no-restore --no-build
+    dotnet test --configuration %configuration% --no-restore --no-build
     if errorlevel 1 goto error
 )
 

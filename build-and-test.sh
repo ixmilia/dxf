@@ -31,19 +31,13 @@ dotnet build --configuration $CONFIGURATION
 dotnet run --configuration $CONFIGURATION --no-restore --no-build -- "$LIBRARY_DIR"
 cd -
 
-# build library
-LIBRARY_PROJECT=$LIBRARY_DIR/IxMilia.Dxf.csproj
-dotnet restore "$LIBRARY_PROJECT"
-dotnet build "$LIBRARY_PROJECT" --configuration $CONFIGURATION
-
-# build tests
-TEST_PROJECT=$_SCRIPT_DIR/src/IxMilia.Dxf.Test/IxMilia.Dxf.Test.csproj
-dotnet restore "$TEST_PROJECT"
-dotnet build "$TEST_PROJECT" --configuration $CONFIGURATION
+# build
+dotnet restore
+dotnet build --configuration $CONFIGURATION
 
 # run tests
 if [ "$RUNTESTS" = "true" ]; then
-  dotnet test "$TEST_PROJECT" --configuration $CONFIGURATION --no-restore --no-build
+  dotnet test --configuration $CONFIGURATION --no-restore --no-build
 fi
 
 # create packages

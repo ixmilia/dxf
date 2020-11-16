@@ -2,9 +2,9 @@
 <Spec>
     <Variable Name="ACADVER" Code="1" Type="DxfAcadVersion" Property="Version" DefaultValue="DxfAcadVersion.R12" ReadConverter="VersionConverter({0})" WriteConverter="VersionConverter({0})" Comment="The AutoCAD drawing database version number." />
 
-    <!-- The spec says this should be a code 70 short, but other tools exepct and write a code 90 long on R2018+ -->
-    <Variable Name="ACADMAINTVER" Code="70" Type="int" Property="MaintenenceVersion" DefaultValue="0" WriteConverter="(short){0}" MinVersion="R14" MaxVersion="R2013" Comment="Maintenance version number (should be ignored)." />
-    <Variable Name="ACADMAINTVER" Code="90" Type="int" Property="MaintenenceVersion" DefaultValue="0" MinVersion="R2018" Comment="Maintenance version number (should be ignored)." />
+    <!-- The spec says this should be a code 70 short, but other tools expect and write a code 90 long on R2018+ -->
+    <Variable Name="ACADMAINTVER" Code="70" Type="int" Property="MaintenanceVersion" DefaultValue="0" WriteConverter="(short){0}" MinVersion="R14" MaxVersion="R2013" Comment="Maintenance version number (should be ignored)." />
+    <Variable Name="ACADMAINTVER" Code="90" Type="int" Property="MaintenanceVersion" DefaultValue="0" MinVersion="R2018" Comment="Maintenance version number (should be ignored)." />
 
     <Variable Name="DWGCODEPAGE" Code="3" Type="string" Property="DrawingCodePage" DefaultValue="ANSI_1252" MinVersion="R13" Comment="Drawing code page; set to the system code page when a new drawing is created, but not otherwise maintained by AutoCAD." />
     <Variable Name="LASTSAVEDBY" Code="1" Type="string" Property="LastSavedBy" DefaultValue="null" MinVersion="R2004" Comment="Name of the last user to modify the file." />
@@ -181,7 +181,7 @@
     <Variable Name="UCSXDIR" Code="-3" Type="DxfVector" Property="UCSXAxis" DefaultValue="DxfVector.XAxis" Comment="Direction of the current UCS X axis (in WCS)." />
     <Variable Name="UCSYDIR" Code="-3" Type="DxfVector" Property="UCSYAxis" DefaultValue="DxfVector.YAxis" Comment="Direction of the current UCS Y axis (in WCS)." />
     <Variable Name="UCSORTHOREF" Code="2" Type="string" Property="OrthoUCSReference" DefaultValue="null" MinVersion="R2000" Comment="If model space UCS is orthographic (UCSORTHOVIEW not equal to 0), this is the name of the UCS that the orthographic UCS is relative to. If blank, UCS is relative to WORLD." />
-    <Variable Name="UCSORTHOVIEW" Code="70" Type="DxfOrthographicViewType" Property="OrthgraphicViewType" DefaultValue="DxfOrthographicViewType.None" ReadConverter="(DxfOrthographicViewType){0}" WriteConverter="(short){0}" MinVersion="R2000" Comment="Orthographic view type of model space UCS." />
+    <Variable Name="UCSORTHOVIEW" Code="70" Type="DxfOrthographicViewType" Property="OrthographicViewType" DefaultValue="DxfOrthographicViewType.None" ReadConverter="(DxfOrthographicViewType){0}" WriteConverter="(short){0}" MinVersion="R2000" Comment="Orthographic view type of model space UCS." />
     <Variable Name="UCSORGTOP" Code="-3" Type="DxfPoint" Property="UCSOriginTop" DefaultValue="DxfPoint.Origin" MinVersion="R2000" Comment="Point which becomes the new UCS origin after changing model space UCS to TOP when UCSBASE is set to WORLD." />
     <Variable Name="UCSORGBOTTOM" Code="-3" Type="DxfPoint" Property="UCSOriginBottom" DefaultValue="DxfPoint.Origin" MinVersion="R2000" Comment="Point which becomes the new UCS origin after changing model space UCS to BOTTOM when UCSBASE is set to WORLD." />
     <Variable Name="UCSORGLEFT" Code="-3" Type="DxfPoint" Property="UCSOriginLeft" DefaultValue="DxfPoint.Origin" MinVersion="R2000" Comment="Point which becomes the new UCS origin after changing model space UCS to LEFT when UCSBASE is set to WORLD." />
@@ -214,7 +214,7 @@
     <Variable Name="WORLDVIEW" Code="70" Type="bool" Property="SetUCSToWCSInDViewOrVPoint" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" Comment="Set UCS to WCS during DVIEW/VPOINT." />
     <Variable Name="SHADEDGE" Code="70" Type="DxfShadeEdgeMode" Property="EdgeShading" DefaultValue="DxfShadeEdgeMode.FacesInEntityColorEdgesInBlack" ReadConverter="(DxfShadeEdgeMode){0}" WriteConverter="(short){0}" MinVersion="R11" Comment="Controls shading of faces." />
     <Variable Name="SHADEDIF" Code="70" Type="short" Property="PercentAmbientToDiffuse" DefaultValue="70" MinVersion="R11" Comment="Percent ambient/diffuse light; range 1-100." />
-    <Variable Name="TILEMODE" Code="70" Type="bool" Property="PreviousReleaseTileCompatability" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R11" Comment="Use previous release compatibility mode." />
+    <Variable Name="TILEMODE" Code="70" Type="bool" Property="PreviousReleaseTileCompatibility" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R11" Comment="Use previous release compatibility mode." />
     <Variable Name="MAXACTVP" Code="70" Type="short" Property="MaximumActiveViewports" DefaultValue="64" MinVersion="R11" Comment="Sets the maximum number of viewports to be regenerated." />
     <Variable Name="PINSBASE" Code="-3" Type="DxfPoint" Property="PaperspaceInsertionBase" DefaultValue="DxfPoint.Origin" MinVersion="R14" Comment="Paper space insertion base point." />
     <Variable Name="PLIMCHECK" Code="70" Type="bool" Property="LimitCheckingInPaperspace" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R11" Comment="Limits checking in paper space." />
@@ -224,7 +224,7 @@
     <Variable Name="PLIMMAX" Code="-2" Type="DxfPoint" Property="PaperspaceMaximumDrawingLimits" DefaultValue="new DxfPoint(12.0, 9.0, 0.0)" MinVersion="R11" Comment="Maximum X and Y limits in paper space." />
     <Variable Name="UNITMODE" Code="70" Type="bool" Property="DisplayFractionsInInput" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R11" Comment="Display fractions, feet-and-inches, and surveyor's angles in input format." />
     <Variable Name="VISRETAIN" Code="70" Type="bool" Property="RetainXRefDependentVisibilitySettings" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R12" Comment="Retain xref-dependent visibility settings." />
-    <Variable Name="PLINEGEN" Code="70" Type="bool" Property="IsPolylineContinuousAroundVerticies" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R11" Comment="Governs the generation of line type patterns around the vertices of a 2D polyline." />
+    <Variable Name="PLINEGEN" Code="70" Type="bool" Property="IsPolylineContinuousAroundVertices" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R11" Comment="Governs the generation of line type patterns around the vertices of a 2D polyline." />
     <Variable Name="PSLTSCALE" Code="70" Type="bool" Property="ScaleLineTypesInPaperspace" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R11" Comment="Controls paper space line type scaling." />
     <Variable Name="TREEDEPTH" Code="70" Type="short" Property="SpacialIndexMaxDepth" DefaultValue="3020" MinVersion="R14" Comment="Specifies the maximum depth of the spatial index." />
     <Variable Name="PICKSTYLE" Code="70" Type="DxfPickStyle" Property="PickStyle" DefaultValue="DxfPickStyle.Group" ReadConverter="(DxfPickStyle){0}" WriteConverter="(short){0}" MinVersion="R13" MaxVersion="R14" Comment="Controls the group selection and associative hatch selection." />
@@ -240,7 +240,7 @@
     <Variable Name="CELWEIGHT" Code="370" Type="DxfLineWeight" Property="NewObjectLineWeight" DefaultValue="DxfLineWeight.ByBlock" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" Comment="Lineweight of new objects." />
     <Variable Name="ENDCAPS" Code="280" Type="DxfEndCapSetting" Property="EndCapSetting" DefaultValue="DxfEndCapSetting.None" ReadConverter="(DxfEndCapSetting){0}" WriteConverter="(short){0}" MinVersion="R2000" Comment="Lineweight endcaps setting for new objects." />
     <Variable Name="JOINSTYLE" Code="280" Type="DxfJoinStyle" Property="LineweightJointSetting" DefaultValue="DxfJoinStyle.None" ReadConverter="(DxfJoinStyle){0}" WriteConverter="(short){0}" MinVersion="R2000" Comment="Lineweight join setting for new objects." />
-    <Variable Name="LWDISPLAY" Code="290" Type="bool" Property="DisplayLinewieghtInModelAndLayoutTab" DefaultValue="false" MinVersion="R2000" Comment="Controls the display of lineweights on the Model or Layout tab." />
+    <Variable Name="LWDISPLAY" Code="290" Type="bool" Property="DisplayLineweightInModelAndLayoutTab" DefaultValue="false" MinVersion="R2000" Comment="Controls the display of lineweights on the Model or Layout tab." />
     <Variable Name="INSUNITS" Code="70" Type="DxfUnits" Property="DefaultDrawingUnits" DefaultValue="DxfUnits.Unitless" ReadConverter="(DxfUnits){0}" WriteConverter="(short){0}" MinVersion="R2000" Comment="Default drawing units for AutoCAD DesignCenter blocks." />
     <Variable Name="HYPERLINKBASE" Code="1" Type="string" Property="HyperlinkBase" DefaultValue="null" MinVersion="R2000" Comment="Path for all relative hyperlinks in the drawing.  If null, the drawing path is used." />
     <Variable Name="STYLESHEET" Code="1" Type="string" Property="Stylesheet" DefaultValue="null" MinVersion="R2000" Comment="Path to the stylesheet for the drawing." />
@@ -265,8 +265,8 @@
     <Variable Name="INDEXCTL" Code="280" Type="DxfLayerAndSpatialIndexSaveMode" Property="LayerAndSpatialIndexSaveMode" DefaultValue="DxfLayerAndSpatialIndexSaveMode.None" ReadConverter="(DxfLayerAndSpatialIndexSaveMode){0}" WriteConverter="(short){0}" MinVersion="R2004" Comment="Controls whether layer and spatial indexes are created and saved in drawing files." />
 
     <!-- the spec says this should be a code 290 bool, but most files encountered in the wild have a code 280 short instead -->
-    <Variable Name="HIDETEXT" Code="280" Type="bool" Property="HideTextObjectsWhenProducintHiddenView" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R2004" Comment="Ignore text objects." />
-    <Variable Name="HIDETEXT" Code="290" Type="bool" Property="HideTextObjectsWhenProducintHiddenView" DefaultValue="false" MinVersion="R2004" SuppressWriting="true" Comment="Ignore text objects." />
+    <Variable Name="HIDETEXT" Code="280" Type="bool" Property="HideTextObjectsWhenProducingHiddenView" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R2004" Comment="Ignore text objects." />
+    <Variable Name="HIDETEXT" Code="290" Type="bool" Property="HideTextObjectsWhenProducingHiddenView" DefaultValue="false" MinVersion="R2004" SuppressWriting="true" Comment="Ignore text objects." />
 
     <!-- R2004-R2007 this is a 290 bool, but R2010+ this is a 280 short -->
     <Variable Name="XCLIPFRAME" Code="290" Type="DxfXrefClippingBoundaryVisibility" Property="IsXRefClippingBoundaryVisible" DefaultValue="DxfXrefClippingBoundaryVisibility.DisplayedNotPlotted" ReadConverter="EnumBool&lt;DxfXrefClippingBoundaryVisibility&gt;({0})" WriteConverter="EnumBool&lt;DxfXrefClippingBoundaryVisibility&gt;({0})" MinVersion="R2004" MaxVersion="R2007" Comment="Controls the visibility of xref clipping boundaries." />

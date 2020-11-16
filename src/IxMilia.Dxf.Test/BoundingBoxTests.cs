@@ -25,7 +25,7 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
-        public void PolyLineVertexBulgeIsRespected()
+        public void UnclosedPolyLineVertexBulgeIsRespected()
         {
             // Data from https://github.com/ixmilia/dxf/issues/102
             var vertices = new[]
@@ -37,7 +37,29 @@ namespace IxMilia.Dxf.Test
             };
             var poly = new DxfPolyline(vertices) {IsClosed = false};
             var expectedMin = new DxfPoint(-2.0, -0.5, 0);
-            var expectedMax = new DxfPoint(+0.5, +0.5, 0);
+            var expectedMax = new DxfPoint(0, +0.5, 0);
+            var expectedSize = new DxfVector(2.0, 1.0, 0);
+
+            var bb = poly.GetBoundingBox().Value;
+            Assert.Equal(expectedMin, bb.MinimumPoint);
+            Assert.Equal(expectedMax, bb.MaximumPoint);
+            Assert.Equal(expectedSize, bb.Size);
+        }
+
+        [Fact]
+        public void ClosedPolyLineVertexBulgeIsRespected()
+        {
+            // Data from https://github.com/ixmilia/dxf/issues/102
+            var vertices = new[]
+            {
+                new DxfVertex(new DxfPoint(0, +0.5, 0)),
+                new DxfVertex(new DxfPoint(-1.5, +0.5, 0)) {Bulge = 1},
+                new DxfVertex(new DxfPoint(-1.5, -0.5, 0)),
+                new DxfVertex(new DxfPoint(0, -0.5, 0)) {Bulge = 1}
+            };
+            var poly = new DxfPolyline(vertices) {IsClosed = true};
+            var expectedMin = new DxfPoint(-2.0, -0.5, 0);
+            var expectedMax = new DxfPoint(0.5, +0.5, 0);
             var expectedSize = new DxfVector(2.5, 1.0, 0);
 
             var bb = poly.GetBoundingBox().Value;

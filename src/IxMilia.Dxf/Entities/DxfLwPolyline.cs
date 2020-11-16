@@ -103,20 +103,60 @@ namespace IxMilia.Dxf.Entities
             return PostParse();
         }
 
+        private IEnumerable<DxfPoint> ProcessVertexPair(DxfLwPolylineVertex vertex1, DxfLwPolylineVertex vertex2)
+        {
+            if (Math.Abs(vertex1.Bulge) <= 1e-10)
+            {
+                yield return new DxfPoint(vertex1.X, vertex1.Y, 0);
+            }
+            else
+            {
+                // the segment between `vertex.Location` and `next.Location` is an arc
+                if (TryGetArcBoundingBox(vertex1, vertex2, out var bbox))
+                {
+                    yield return bbox.MinimumPoint;
+                    yield return bbox.MaximumPoint;
+                }
+                else
+                {
+                    // fallback if points are too close / bulge is tiny
+                    yield return new DxfPoint(vertex1.X, vertex1.Y, 0);
+                }
+            }
+        }
+
         protected override IEnumerable<DxfPoint> GetExtentsPoints()
         {
-            DxfPoint? lastLocation = null;
-            foreach (var vertex in Vertices)
-            {
-                var current = new DxfPoint(vertex.X, vertex.Y, 0.0);
-                yield return current;
-                if (vertex.Bulge != 0.0 && lastLocation != null)
-                {
-                    // TODO: the segment between `lastLocation` and `current` is an arc
-                }
+            int n = Vertices.Count;
 
-                lastLocation = current;
+            for (var i = 0; i < n - 1; i++)
+            {
+                foreach (var point in ProcessVertexPair(Vertices[i], Vertices[i + 1])) yield return point;
             }
+
+            if (IsClosed)
+            {
+                foreach (var point in ProcessVertexPair(Vertices[n - 1], Vertices[0])) yield return point;
+            }
+        }
+
+        private static bool TryGetArcBoundingBox(DxfLwPolylineVertex v1, DxfLwPolylineVertex v2, out DxfBoundingBox bbox)
+        {
+            if (!DxfArc.TryCreateFromVertices(v1, v2, out var arc))
+            {
+                bbox = default(DxfBoundingBox);
+                return false;
+            }
+
+            var boundingBox = arc.GetBoundingBox();
+            if (!boundingBox.HasValue)
+            {
+                bbox = default(DxfBoundingBox);
+                return false;
+            }
+
+            bbox = boundingBox.Value;
+            return true;
         }
     }
 }

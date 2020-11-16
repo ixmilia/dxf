@@ -152,32 +152,40 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        private IEnumerable<DxfPoint> ProcessVertexPair(DxfVertex vertex1, DxfVertex vertex2)
         {
-            yield return Location;
-            int n = Vertices.Count;
-            for (int i = 0; i < n; i++)
+            if (Math.Abs(vertex1.Bulge) <= 1e-10)
             {
-                var vertex = Vertices[i];
-                if (Math.Abs(vertex.Bulge) <= 1e-10)
+                yield return vertex1.Location;
+            }
+            else
+            {
+                // the segment between `vertex.Location` and `next.Location` is an arc
+                if (TryGetArcBoundingBox(vertex1, vertex2, out var bbox))
                 {
-                    yield return vertex.Location;
+                    yield return bbox.MinimumPoint;
+                    yield return bbox.MaximumPoint;
                 }
                 else
                 {
-                    // the segment between `vertex.Location` and `next.Location` is an arc
-                    var next = Vertices[(i + 1) % n];
-                    if (TryGetArcBoundingBox(vertex, next, out var bbox))
-                    {
-                        yield return bbox.MinimumPoint;
-                        yield return bbox.MaximumPoint;
-                    }
-                    else
-                    {
-                        // fallback if points are too close / bulge is tiny
-                        yield return vertex.Location;
-                    }
+                    // fallback if points are too close / bulge is tiny
+                    yield return vertex1.Location;
                 }
+            }
+        }
+
+        protected override IEnumerable<DxfPoint> GetExtentsPoints()
+        {
+            int n = Vertices.Count;
+
+            for (var i = 0; i < n - 1; i++)
+            {
+                foreach (var point in ProcessVertexPair(Vertices[i], Vertices[i + 1])) yield return point;
+            }
+
+            if (IsClosed)
+            {
+                foreach (var point in ProcessVertexPair(Vertices[n - 1], Vertices[0])) yield return point;
             }
         }
 

@@ -25,7 +25,8 @@ namespace IxMilia.Dxf.ReferenceCollector
 
         public void Run()
         {
-            var urlsToProcess = new List<Uri>() { _startPageUrl };
+            var urlsToProcess = new Queue<Uri>();
+            urlsToProcess.Enqueue(_startPageUrl);
             var seenUrls = new HashSet<Uri>();
             var styleSheets = new List<Uri>();
             var body = new XElement("body");
@@ -44,12 +45,11 @@ namespace IxMilia.Dxf.ReferenceCollector
             }
         }
 
-        private void ProcessUrls(List<Uri> urlsToProcess, HashSet<Uri> seenUrls, List<Uri> styleSheets, XElement body)
+        private void ProcessUrls(Queue<Uri> urlsToProcess, HashSet<Uri> seenUrls, List<Uri> styleSheets, XElement body)
         {
             while (urlsToProcess.Count > 0)
             {
-                var pageUrl = urlsToProcess[0];
-                urlsToProcess.RemoveAt(0);
+                var pageUrl = urlsToProcess.Dequeue();
                 seenUrls.Add(pageUrl);
                 Console.WriteLine($"Processing {pageUrl}");
                 var content = _client.DownloadString(pageUrl); // TODO: handle exceptions
@@ -72,7 +72,7 @@ namespace IxMilia.Dxf.ReferenceCollector
                                 // add url to backlog
                                 if (!seenUrls.Contains(hrefUrl) && hrefUrl.OriginalString.StartsWith(_virtualRoot.OriginalString))
                                 {
-                                    urlsToProcess.Add(hrefUrl);
+                                    urlsToProcess.Enqueue(hrefUrl);
                                 }
                             }
                             break;

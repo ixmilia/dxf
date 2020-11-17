@@ -62,9 +62,9 @@ namespace IxMilia.Dxf.Entities
                 var maxY = boundingBox.MaximumPoint.Y * YScaleFactor + Location.Y;
                 var maxZ = boundingBox.MaximumPoint.Z * ZScaleFactor + Location.Z;
                 var minP = new DxfPoint(minX, minY, minZ);
-                var maxp = new DxfPoint(maxX, maxY, maxZ);
+                var maxP = new DxfPoint(maxX, maxY, maxZ);
                 yield return minP;
-                yield return maxp;
+                yield return maxP;
             }
         }
     }

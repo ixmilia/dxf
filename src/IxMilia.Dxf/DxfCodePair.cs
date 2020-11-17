@@ -190,8 +190,6 @@ namespace IxMilia.Dxf
                 var ba = (byte[])b;
                 if (ReferenceEquals(aa, ba))
                     return true;
-                if (aa == null || ba == null)
-                    return false;
                 if (aa.Length != ba.Length)
                     return false;
                 for (int i = 0; i < aa.Length; i++)

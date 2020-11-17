@@ -809,7 +809,7 @@ namespace IxMilia.Dxf.Test
                 (9, "$INTERSECTIONDISPLAY"), (290, 1),
                 (9, "$XCLIPFRAME"), (290, 1)
             );
-            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
+            Assert.True(file.Header.HideTextObjectsWhenProducingHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
             Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
 
@@ -820,7 +820,7 @@ namespace IxMilia.Dxf.Test
                 (9, "$INTERSECTIONDISPLAY"), (280, 1),
                 (9, "$XCLIPFRAME"), (280, 1)
             );
-            Assert.True(file.Header.HideTextObjectsWhenProducintHiddenView);
+            Assert.True(file.Header.HideTextObjectsWhenProducingHiddenView);
             Assert.True(file.Header.DisplayIntersectionPolylines);
             Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedAndPlotted, file.Header.IsXRefClippingBoundaryVisible);
 

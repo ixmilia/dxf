@@ -26,7 +26,7 @@ namespace IxMilia.Dxf.Test
                 (9, "$LUNITS"), (70, 6),
                 (9, "$LUPREC"), (70, 7)
             );
-            Assert.Equal(16, file.Header.MaintenenceVersion);
+            Assert.Equal(16, file.Header.MaintenanceVersion);
             Assert.Equal(DxfAcadVersion.R13, file.Header.Version);
             Assert.Equal(55.0, file.Header.AngleZeroDirection);
             Assert.Equal(DxfAngleDirection.Clockwise, file.Header.AngleDirection);
@@ -230,20 +230,20 @@ namespace IxMilia.Dxf.Test
             var file = Section("HEADER",
                 (9, "$ACADMAINTVER"), (70, 42)
             );
-            Assert.Equal(42, file.Header.MaintenenceVersion);
+            Assert.Equal(42, file.Header.MaintenanceVersion);
 
             // alternate long value
             file = Section("HEADER",
                 (9, "$ACADMAINTVER"), (90, 42)
             );
-            Assert.Equal(42, file.Header.MaintenenceVersion);
+            Assert.Equal(42, file.Header.MaintenanceVersion);
         }
 
         [Fact]
         public void WriteAppropriateMaintenenceVersionTest()
         {
             var file = new DxfFile();
-            file.Header.MaintenenceVersion = 42;
+            file.Header.MaintenanceVersion = 42;
 
             // < R2018 writes code 70
             file.Header.Version = DxfAcadVersion.R2013;
@@ -1997,7 +1997,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(0, header.DimensionVerticalTextPosition);
             Assert.False(header.DisplayFractionsInInput);
             Assert.False(header.DisplayIntersectionPolylines);
-            Assert.False(header.DisplayLinewieghtInModelAndLayoutTab);
+            Assert.False(header.DisplayLineweightInModelAndLayoutTab);
             Assert.False(header.DisplaySilhouetteCurvesInWireframeMode);
             Assert.False(header.DisplaySplinePolygonControl);
             Assert.Equal(DxfDragMode.Auto, header.DragMode);
@@ -2026,7 +2026,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(new DxfVector(1, 1, 0), header.GridSpacing);
             Assert.Equal(0, header.HaloGapPercent);
             Assert.True(header.HandlesEnabled);
-            Assert.False(header.HideTextObjectsWhenProducintHiddenView);
+            Assert.False(header.HideTextObjectsWhenProducingHiddenView);
             Assert.Null(header.HyperlinkBase);
             Assert.Equal(new DxfPoint(0, 0, 0), header.InsertionBase);
             Assert.False(header.InsertionSnap);
@@ -2035,7 +2035,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(0u, header.InterferenceViewPortVisualStylePointer);
             Assert.Equal(DxfColor.ByEntity, header.IntersectionPolylineColor);
             Assert.True(header.IntersectionSnap);
-            Assert.False(header.IsPolylineContinuousAroundVerticies);
+            Assert.False(header.IsPolylineContinuousAroundVertices);
             Assert.False(header.IsRestrictedVersion);
             Assert.True(header.IsViewportScaledToFit);
             Assert.Equal(DxfXrefClippingBoundaryVisibility.DisplayedNotPlotted, header.IsXRefClippingBoundaryVisible);
@@ -2056,7 +2056,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(Math.PI / 2.0, header.LoftOperationSecondDraftAngle);
             Assert.Equal(0, header.LoftOperationSecondMagnitude);
             Assert.Equal(-122.394, header.Longitude);
-            Assert.Equal(0, header.MaintenenceVersion);
+            Assert.Equal(0, header.MaintenanceVersion);
             Assert.Equal(64, header.MaximumActiveViewports);
             Assert.Equal(new DxfPoint(0, 0, 0), header.MaximumDrawingExtents);
             Assert.Equal(new DxfPoint(12, 9, 0), header.MaximumDrawingLimits);
@@ -2078,7 +2078,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(DxfColor.ByEntity, header.ObscuredLineColor);
             Assert.Equal(DxfLineTypeStyle.Off, header.ObscuredLineTypeStyle);
             Assert.False(header.OleStartup);
-            Assert.Equal(DxfOrthographicViewType.None, header.OrthgraphicViewType);
+            Assert.Equal(DxfOrthographicViewType.None, header.OrthographicViewType);
             Assert.Null(header.OrthoUCSReference);
             Assert.Equal(0, header.PaperspaceElevation);
             Assert.Equal(new DxfPoint(0, 0, 0), header.PaperspaceInsertionBase);
@@ -2110,7 +2110,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(0, header.PointDisplayMode);
             Assert.Equal(0, header.PointDisplaySize);
             Assert.Equal(DxfPolySketchMode.SketchLines, header.PolylineSketchMode);
-            Assert.True(header.PreviousReleaseTileCompatability);
+            Assert.True(header.PreviousReleaseTileCompatibility);
             Assert.Null(header.ProjectName);
             Assert.True(header.PromptForAttributeOnInsert);
             Assert.False(header.QuadrantSnap);

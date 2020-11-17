@@ -377,7 +377,7 @@ namespace IxMilia.Dxf.Generator
                             IncreaseIndent();
                             for (int i = 0; i < propertyGroup.Count(); i++)
                             {
-                                var property = propertyGroup.Skip(i).First();
+                                var property = propertyGroup.ElementAt(i);
                                 var readConverter = ReadConverter(property);
                                 var value = string.Format(readConverter, $"pair.{TypeToString(DxfCodePair.ExpectedType(code))}");
                                 AppendLine($"case {i}:");

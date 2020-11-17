@@ -355,8 +355,8 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(0, poly.SmoothSurfaceNDensity);
             Assert.Equal(DxfPolylineCurvedAndSmoothSurfaceType.None, poly.SurfaceType);
             Assert.False(poly.IsClosed);
-            Assert.False(poly.CurveFitVerticiesAdded);
-            Assert.False(poly.SplineFitVerticiesAdded);
+            Assert.False(poly.CurveFitVerticesAdded);
+            Assert.False(poly.SplineFitVerticesAdded);
             Assert.False(poly.Is3DPolyline);
             Assert.False(poly.Is3DPolygonMesh);
             Assert.False(poly.IsPolygonMeshClosedInNDirection);
@@ -632,8 +632,8 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(DxfPolylineType.Outline, poly.CLO_PolylineType);
             Assert.Equal(DxfPolylineCurvedAndSmoothSurfaceType.CubicBSpline, poly.SurfaceType);
             Assert.True(poly.IsClosed);
-            Assert.True(poly.CurveFitVerticiesAdded);
-            Assert.True(poly.SplineFitVerticiesAdded);
+            Assert.True(poly.CurveFitVerticesAdded);
+            Assert.True(poly.SplineFitVerticesAdded);
             Assert.True(poly.Is3DPolyline);
             Assert.True(poly.Is3DPolygonMesh);
             Assert.True(poly.IsPolygonMeshClosedInNDirection);

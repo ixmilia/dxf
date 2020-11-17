@@ -612,7 +612,7 @@
     -->
     <Entity Name="DxfHelix" EntityType="Helix" SubclassMarker="AcDbHelix" TypeString="HELIX" MinVersion="R2007">
         <Property Name="MajorReleaseNumber" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="MaintainenceReleaseNumber" Code="91" Type="int" DefaultValue="0" />
+        <Property Name="MaintenanceReleaseNumber" Code="91" Type="int" DefaultValue="0" />
         <Property Name="AxisBasePoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="StartPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="AxisVector" Code="12" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="12,22,32" />
@@ -758,7 +758,7 @@
         <Property Name="Intensity" Code="40" Type="double" DefaultValue="1.0" />
         <Property Name="Position" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="TargetLocation" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
-        <Property Name="AttentuationType" Code="72" Type="DxfLightAttenuationType" DefaultValue="DxfLightAttenuationType.None" ReadConverter="(DxfLightAttenuationType){0}" WriteConverter="(short){0}" />
+        <Property Name="AttenuationType" Code="72" Type="DxfLightAttenuationType" DefaultValue="DxfLightAttenuationType.None" ReadConverter="(DxfLightAttenuationType){0}" WriteConverter="(short){0}" />
         <Property Name="UseAttenuationLimits" Code="292" Type="bool" DefaultValue="true" />
         <Property Name="AttenuationStartLimit" Code="41" Type="double" DefaultValue="0.0" />
         <Property Name="AttenuationEndLimit" Code="42" Type="double" DefaultValue="1.0" />
@@ -1042,8 +1042,8 @@
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" DisableWritingDefault="true">
             <Flag Name="IsClosed" Mask="1" />
-            <Flag Name="CurveFitVerticiesAdded" Mask="2" />
-            <Flag Name="SplineFitVerticiesAdded" Mask="4" />
+            <Flag Name="CurveFitVerticesAdded" Mask="2" />
+            <Flag Name="SplineFitVerticesAdded" Mask="4" />
             <Flag Name="Is3DPolyline" Mask="8" />
             <Flag Name="Is3DPolygonMesh" Mask="16" />
             <Flag Name="IsPolygonMeshClosedInNDirection" Mask="32" />

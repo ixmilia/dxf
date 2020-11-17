@@ -67,7 +67,7 @@ namespace IxMilia.Dxf.Test
                 ms.Write(bytes.ToArray(), 0, bytes.Count);
                 ms.Seek(0, SeekOrigin.Begin);
                 var file = DxfFile.Load(ms);
-                Assert.True(file.Header.DisplayLinewieghtInModelAndLayoutTab);
+                Assert.True(file.Header.DisplayLineweightInModelAndLayoutTab);
             }
         }
 

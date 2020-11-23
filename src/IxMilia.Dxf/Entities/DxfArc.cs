@@ -33,8 +33,8 @@ namespace IxMilia.Dxf.Entities
             int bulgeSign = Math.Sign(bulge);
 
             // 2D only solution (z=0)
-            var normalX = -deltaNormX * bulgeSign;
-            var normalY = +deltaNormY * bulgeSign;
+            var normalX = -deltaNormY * bulgeSign;
+            var normalY = +deltaNormX * bulgeSign;
 
             var centerX = (x1 + x2) * 0.5 + normalX * Math.Cos(alpha * 0.5) * radius;
             var centerY = (y1 + y2) * 0.5 + normalY * Math.Cos(alpha * 0.5) * radius;

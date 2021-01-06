@@ -77,13 +77,77 @@ namespace IxMilia.Dxf.Test
             var expected = new byte[]
             {
                 (byte)'B', (byte)'M', // magic number
-                0x03, 0x00, 0x00, 0x00, // file length excluding header
+                0x11, 0x00, 0x00, 0x00, // file length including header
                 0x00, 0x00, // reserved
                 0x00, 0x00, // reserved
-                0x36, 0x04, 0x00, 0x00, // bit offset; always 1078
+                0x36, 0x04, 0x00, 0x00, // bit offset; 1078 because it couldn't be calculated
                 0x01, 0x23, 0x45 // body
             };
             var bitmap = file.GetThumbnailBitmap();
+            AssertArrayEqual(expected, bitmap);
+        }
+
+        [Fact]
+        public void ReadThumbnailWithCalculatedImageOffsetNoPaletteTest()
+        {
+            var file = Section("THUMBNAILIMAGE",
+                (90, 3),
+                (310, new byte[]
+                {
+                    0x28, 0x00, 0x00, 0x00, // BITMAPINFOHEADER length; 40
+                    0x00, 0x00, 0x00, 0x00, // width (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // height (not important for test)
+                    0x00, 0x00, // color planes (not important for test)
+                    0x00, 0x00, // bits per pixel (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // compression (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // image size (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // horizontal resolution (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // vertical resolution (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // color palette count; 0
+                    0x00, 0x00, 0x00, 0x00, // important colors (not important for test)
+                })
+            );
+            var expected = new byte[]
+            {
+                (byte)'B', (byte)'M', // magic number
+                0x36, 0x00, 0x00, 0x00, // file length including header
+                0x00, 0x00, // reserved
+                0x00, 0x00, // reserved
+                0x36, 0x00, 0x00, 0x00, // image data offset, calculated as 54 (14 byte file header + 40 byte BITMAPINFOHEADER)
+            };
+            var bitmap = file.GetThumbnailBitmap().Take(14).ToArray();
+            AssertArrayEqual(expected, bitmap);
+        }
+
+        [Fact]
+        public void ReadThumbnailWithCalculatedImageOffset256ColorPaletteTest()
+        {
+            var file = Section("THUMBNAILIMAGE",
+                (90, 3),
+                (310, new byte[]
+                {
+                    0x28, 0x00, 0x00, 0x00, // BITMAPINFOHEADER length; 40
+                    0x00, 0x00, 0x00, 0x00, // width (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // height (not important for test)
+                    0x00, 0x00, // color planes (not important for test)
+                    0x00, 0x00, // bits per pixel (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // compression (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // image size (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // horizontal resolution (not important for test)
+                    0x00, 0x00, 0x00, 0x00, // vertical resolution (not important for test)
+                    0xFF, 0x00, 0x00, 0x00, // color palette count; 256
+                    0x00, 0x00, 0x00, 0x00, // important colors (not important for test)
+                })
+            );
+            var expected = new byte[]
+            {
+                (byte)'B', (byte)'M', // magic number
+                0x36, 0x00, 0x00, 0x00, // file length including header
+                0x00, 0x00, // reserved
+                0x00, 0x00, // reserved
+                0x32, 0x04, 0x00, 0x00, // image data offset, calculated as 1074 (14 byte file header + 40 byte BITMAPINFOHEADER + 256*8)
+            };
+            var bitmap = file.GetThumbnailBitmap().Take(14).ToArray();
             AssertArrayEqual(expected, bitmap);
         }
 

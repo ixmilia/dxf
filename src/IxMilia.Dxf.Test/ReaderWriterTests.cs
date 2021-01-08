@@ -135,7 +135,7 @@ namespace IxMilia.Dxf.Test
                     0x00, 0x00, 0x00, 0x00, // image size (not important for test)
                     0x00, 0x00, 0x00, 0x00, // horizontal resolution (not important for test)
                     0x00, 0x00, 0x00, 0x00, // vertical resolution (not important for test)
-                    0xFF, 0x00, 0x00, 0x00, // color palette count; 256
+                    0x00, 0x01, 0x00, 0x00, // color palette count; 256
                     0x00, 0x00, 0x00, 0x00, // important colors (not important for test)
                 })
             );
@@ -145,7 +145,7 @@ namespace IxMilia.Dxf.Test
                 0x36, 0x00, 0x00, 0x00, // file length including header
                 0x00, 0x00, // reserved
                 0x00, 0x00, // reserved
-                0x32, 0x04, 0x00, 0x00, // image data offset, calculated as 1074 (14 byte file header + 40 byte BITMAPINFOHEADER + 256*8)
+                0x36, 0x04, 0x00, 0x00, // image data offset, calculated as 1078 (14 byte file header + 40 byte BITMAPINFOHEADER + 256*8)
             };
             var bitmap = file.GetThumbnailBitmap().Take(14).ToArray();
             AssertArrayEqual(expected, bitmap);

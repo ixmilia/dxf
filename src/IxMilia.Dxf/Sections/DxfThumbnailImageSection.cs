@@ -75,7 +75,7 @@ namespace IxMilia.Dxf.Sections
                     0x00, 0x00, 0x00, 0x00, // file length (calculated later)
                     0x00, 0x00, // reserved
                     0x00, 0x00, // reserved
-                    0x36, 0x04, 0x00, 0x00 // bit offset; assumed to be 1078 which means BITMAPINFOHEADER + 256 element palette
+                    0x36, 0x04, 0x00, 0x00 // bit offset; assumed to be 1078 which means BITMAPFILEHEADER.Length + BITMAPINFOHEADER.Length + 256 element palette * 4
                 };
             }
         }

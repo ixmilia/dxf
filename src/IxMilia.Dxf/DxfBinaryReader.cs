@@ -36,7 +36,7 @@ namespace IxMilia.Dxf
             }
         }
 
-        public void SetUtf8Reader()
+        public void SetReaderEncoding(Encoding _encoding)
         {
             // noop
         }

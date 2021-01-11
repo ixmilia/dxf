@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace IxMilia.Dxf
 {
@@ -452,10 +453,19 @@ namespace IxMilia.Dxf.Sections
                 else
                 {
                     section.Header.SetHeaderVariable(keyName, pair);
-                    if (string.Compare(keyName, "$ACADVER", StringComparison.OrdinalIgnoreCase) == 0 && section.Header.Version >= DxfAcadVersion.R2007)
+                    if (string.Compare(keyName, "$DWGCODEPAGE", StringComparison.OrdinalIgnoreCase) == 0 && section.Header.Version <= DxfAcadVersion.R2004)
+                    {
+                        // R2004 and before should honor the specified code page
+                        if (DxfEncodingHelper.TryParseEncoding(pair.StringValue, out var codePage))
+                        {
+                            var encoding = Encoding.GetEncoding(codePage);
+                            buffer.SetReaderEncoding(encoding);
+                        }
+                    }
+                    else if (string.Compare(keyName, "$ACADVER", StringComparison.OrdinalIgnoreCase) == 0 && section.Header.Version >= DxfAcadVersion.R2007)
                     {
                         // R2007 and up should switch to a UTF8 reader
-                        buffer.SetUtf8Reader();
+                        buffer.SetReaderEncoding(Encoding.UTF8);
                     }
                 }
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace IxMilia.Dxf
 {
@@ -47,9 +48,9 @@ namespace IxMilia.Dxf
             this.reader = reader;
         }
 
-        public void SetUtf8Reader()
+        public void SetReaderEncoding(Encoding encoding)
         {
-            reader.SetUtf8Reader();
+            reader.SetReaderEncoding(encoding);
         }
     }
 }

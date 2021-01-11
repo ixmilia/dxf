@@ -30,9 +30,9 @@ namespace IxMilia.Dxf
             }
         }
 
-        public void SetUtf8Reader()
+        public void SetReaderEncoding(Encoding encoding)
         {
-            _encoding = Encoding.UTF8;
+            _encoding = encoding;
         }
 
         private IEnumerable<string> GetLines(string firstLine)

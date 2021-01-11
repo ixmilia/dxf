@@ -238,6 +238,8 @@ namespace IxMilia.Dxf
             }
             else
             {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
                 IDxfCodePairReader dxfReader;
                 if (firstLine == BinarySentinel)
                 {

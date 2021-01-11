@@ -78,7 +78,6 @@ EOF
         [Fact]
         public void ReadGB18030EncodingTest()
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var gb18030 = Encoding.GetEncoding("GB18030");
 
             using (var ms = new MemoryStream())
@@ -113,6 +112,62 @@ EOF".Trim();
                 var file = DxfFile.Load(ms, gb18030);
                 Assert.Equal("不", file.Header.ProjectName);
             }
+        }
+
+        [Fact]
+        public void UseCodePageInNonUnicodeFilesTest()
+        {
+            using (var ms = new MemoryStream())
+            using (var writer = new StreamWriter(ms, Encoding.ASCII))
+            {
+                // R2004 means non-Unicode.  Characters are handled via $DWGCODEPAGE
+                var head = @"
+  0
+SECTION
+  2
+HEADER
+  9
+$ACADVER
+  1
+AC1018
+  9
+$DWGCODEPAGE
+  3
+ANSI_1252
+  9
+$PROJECTNAME
+  1".Trim();
+                var tail = @"
+  0
+ENDSEC
+  0
+EOF".Trim();
+                var ansi1252bytes = new byte[]
+                {
+                    0xDF, // German sharp S
+                };
+                writer.WriteLine(head);
+                writer.Flush();
+                ms.Write(ansi1252bytes, 0, ansi1252bytes.Length);
+                writer.WriteLine();
+                writer.WriteLine(tail);
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var file = DxfFile.Load(ms, Encoding.ASCII); // force ASCII encoding that $DWGCODEPAGE will override
+                Assert.Equal("ß", file.Header.ProjectName);
+            }
+        }
+
+        // Using some example values from https://ezdxf.readthedocs.io/en/stable/dxfinternals/fileencoding.html
+        [Theory]
+        [InlineData("ANSI_874", 874)]
+        [InlineData("ANSI_1252", 1252)]
+        [InlineData("ansi_1252", 1252)]
+        public void ParseCodePageTest(string dxfLine, int expectedCodePage)
+        {
+            Assert.True(DxfEncodingHelper.TryParseEncoding(dxfLine, out var actualCodePage));
+            Assert.Equal(expectedCodePage, actualCodePage);
         }
 
         [Theory]

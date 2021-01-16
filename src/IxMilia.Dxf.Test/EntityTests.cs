@@ -2037,5 +2037,20 @@ namespace IxMilia.Dxf.Test
                 (75, 2)
             );
         }
+
+        [Fact]
+        public void ReadHatchBoundaryPathWithSourceBoundaryObjectHandlesTest()
+        {
+            var hatch = (DxfHatch)Entity("HATCH",
+                (91, 1), // boundary path count
+                (92, 1), // external non-polyline boundary type
+                (93, 0), // edge count
+                (97, 1), // boundary object handles
+                (330, "ABC")
+            );
+            var externalPath = (DxfHatch.NonPolylineBoundaryPath)hatch.BoundaryPaths.Single();
+            var boundaryHandle = externalPath.BoundaryHandles.Single();
+            Assert.Equal((uint)0xABC, boundaryHandle);
+        }
     }
 }

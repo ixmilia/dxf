@@ -109,7 +109,19 @@ namespace IxMilia.Dxf.Entities
                         }
                         break;
                     default:
-                        return Edges.Last().TrySetPair(pair);
+                        if (base.TrySetPair(pair))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            if (Edges.Count > 0)
+                            {
+                                return Edges.Last().TrySetPair(pair);
+                            }
+
+                            return false;
+                        }
                 }
 
                 return true;

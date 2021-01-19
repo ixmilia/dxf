@@ -34,4 +34,4 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
     - run: .\build-and-test.cmd -c Release -notest
-    - run: dotnet nuget push .\artifacts\packages\Release\*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --no-symbols
+    - run: dotnet nuget push .\artifacts\packages\Release\*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --no-symbols 1

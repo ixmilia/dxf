@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 0.8.0 (19 January 2021)
+
+- Only build `netstandard2.0` TFM.
+- Add bounding box for `LWPOLYLINE`.
+- Improve thumbnail detection.
+- Honor code page header setting.
+
 ## 0.7.5 (13 November 2020)
 
 - Improve table handling.

@@ -85,14 +85,14 @@ namespace IxMilia.Dxf
             return DxfCommonConverters.GuidString(s);
         }
 
-        private static uint UIntHandle(string s)
+        private static DxfHandle HandleString(string s)
         {
-            return DxfCommonConverters.UIntHandle(s);
+            return DxfCommonConverters.HandleString(s);
         }
 
-        private static string UIntHandle(uint u)
+        private static string HandleString(DxfHandle handle)
         {
-            return DxfCommonConverters.UIntHandle(u);
+            return DxfCommonConverters.HandleString(handle);
         }
 
         private static DateTime DateDouble(double date)

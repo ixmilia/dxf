@@ -27,7 +27,7 @@ namespace IxMilia.Dxf.Objects
                         if (readVersionNumber)
                         {
                             // pointer to a new light
-                            LightsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.UIntHandle(pair.StringValue)));
+                            LightsPointers.Pointers.Add(new DxfPointer(DxfCommonConverters.HandleString(pair.StringValue)));
                         }
                         else
                         {
@@ -74,7 +74,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(90, Lights.Count));
             foreach (var item in LightsPointers.Pointers)
             {
-                pairs.Add(new DxfCodePair(5, UIntHandle(item.Handle)));
+                pairs.Add(new DxfCodePair(5, HandleString(item.Handle)));
                 pairs.Add(new DxfCodePair(1, ((DxfLight)item.Item).Name));
             }
 

@@ -30,7 +30,7 @@ namespace IxMilia.Dxf.Objects
             foreach (var item in _items.OrderBy(kvp => kvp.Key))
             {
                 pairs.Add(new DxfCodePair(3, item.Key));
-                pairs.Add(new DxfCodePair(code, UIntHandle(item.Value.Handle)));
+                pairs.Add(new DxfCodePair(code, HandleString(item.Value.Handle)));
             }
 
             if (writeXData)
@@ -66,7 +66,7 @@ namespace IxMilia.Dxf.Objects
                 case 350:
                 case 360:
                     Debug.Assert(_lastEntryName != null);
-                    var handle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                    var handle = DxfCommonConverters.HandleString(pair.StringValue);
                     _items[_lastEntryName] = new DxfPointer(handle);
                     _lastEntryName = null;
                     break;

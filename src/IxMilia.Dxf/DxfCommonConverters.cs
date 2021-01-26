@@ -54,16 +54,15 @@ namespace IxMilia.Dxf
             return Guid.Empty;
         }
 
-        public static uint UIntHandle(string s)
+        public static DxfHandle HandleString(string s)
         {
-            uint result;
-            uint.TryParse(s, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out result);
+            DxfHandle.TryParse(s, out var result);
             return result;
         }
 
-        public static string UIntHandle(uint u)
+        public static string HandleString(DxfHandle handle)
         {
-            return u.ToString("X", CultureInfo.InvariantCulture);
+            return handle.ToString();
         }
 
         // the Dublin Julian date epoch is December 31, 1899, and defined as the Julian day 2415020

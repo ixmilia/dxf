@@ -346,14 +346,14 @@ namespace IxMilia.Dxf.Entities
             return DxfCommonConverters.BoolShort(b);
         }
 
-        protected static uint UIntHandle(string s)
+        protected static DxfHandle HandleString(string s)
         {
-            return DxfCommonConverters.UIntHandle(s);
+            return DxfCommonConverters.HandleString(s);
         }
 
-        protected static string UIntHandle(uint u)
+        protected static string HandleString(DxfHandle handle)
         {
-            return DxfCommonConverters.UIntHandle(u);
+            return DxfCommonConverters.HandleString(handle);
         }
 
         protected static string DefaultIfNullOrEmpty(string value, string defaultValue)

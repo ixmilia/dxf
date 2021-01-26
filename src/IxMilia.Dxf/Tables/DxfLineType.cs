@@ -91,7 +91,7 @@ namespace IxMilia.Dxf
                         // add to last element
                         if (item.Elements.Count > 0)
                         {
-                            item.Elements.Last().StylePointer.Handle = UIntHandle(pair.StringValue);
+                            item.Elements.Last().StylePointer.Handle = HandleString(pair.StringValue);
                         }
                         break;
                     case 46:

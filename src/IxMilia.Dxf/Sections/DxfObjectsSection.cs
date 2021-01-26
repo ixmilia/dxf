@@ -90,7 +90,7 @@ namespace IxMilia.Dxf.Sections
         {
             var buffer = new DxfBufferReader<DxfObject>(objects, o => o == null);
             var result = new List<DxfObject>();
-            var defaultObjectHandles = new HashSet<uint>();
+            var defaultObjectHandles = new HashSet<DxfHandle>();
             while (buffer.ItemsRemain)
             {
                 var obj = buffer.Peek();
@@ -99,7 +99,7 @@ namespace IxMilia.Dxf.Sections
                 {
                     case DxfObjectType.DictionaryWithDefault:
                         var dict = (DxfDictionaryWithDefault)obj;
-                        if (dict.DefaultObjectPointer.Handle != 0u)
+                        if (dict.DefaultObjectPointer.Handle.Value != 0)
                         {
                             defaultObjectHandles.Add(dict.DefaultObjectPointer.Handle);
                         }

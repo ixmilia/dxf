@@ -60,8 +60,8 @@ namespace IxMilia.Dxf.Generator
             AppendLine("public partial class DxfEntity : IDxfItemInternal");
             AppendLine("{");
             IncreaseIndent();
-            AppendLine("uint IDxfItemInternal.Handle { get; set; }");
-            AppendLine("uint IDxfItemInternal.OwnerHandle { get; set; }");
+            AppendLine("DxfHandle IDxfItemInternal.Handle { get; set; }");
+            AppendLine("DxfHandle IDxfItemInternal.OwnerHandle { get; set; }");
             AppendLine("public IDxfItem Owner { get; private set;}");
             AppendLine();
             AppendLine("void IDxfItemInternal.SetOwner(IDxfItem owner)");
@@ -181,10 +181,10 @@ namespace IxMilia.Dxf.Generator
             AppendLine("    switch (pair.Code)");
             AppendLine("    {");
             AppendLine("        case 5:");
-            AppendLine("            ((IDxfItemInternal)this).Handle = UIntHandle(pair.StringValue);");
+            AppendLine("            ((IDxfItemInternal)this).Handle = HandleString(pair.StringValue);");
             AppendLine("            break;");
             AppendLine("        case 330:");
-            AppendLine("            ((IDxfItemInternal)this).OwnerHandle = UIntHandle(pair.StringValue);");
+            AppendLine("            ((IDxfItemInternal)this).OwnerHandle = HandleString(pair.StringValue);");
             AppendLine("            break;");
             foreach (var propertyGroup in GetPropertiesAndPointers(baseEntity).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
             {

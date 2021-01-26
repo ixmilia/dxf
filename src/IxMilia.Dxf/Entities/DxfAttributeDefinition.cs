@@ -124,7 +124,7 @@ namespace IxMilia.Dxf.Entities
                     else IsLockedInBlock = BoolShort(pair.ShortValue);
                     break;
                 case 340:
-                    SecondaryAttributesPointers.Pointers.Add(new DxfPointer(UIntHandle(pair.StringValue)));
+                    SecondaryAttributesPointers.Pointers.Add(new DxfPointer(HandleString(pair.StringValue)));
                     break;
                 default:
                     return base.TrySetPair(pair);

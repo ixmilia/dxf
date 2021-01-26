@@ -167,7 +167,7 @@ namespace IxMilia.Dxf
                     pairs.Add(new DxfCodePair(code, DxfCommonConverters.HexBytes(b.Value)));
                     break;
                 case DxfXDataHandle h:
-                    pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(h.Value)));
+                    pairs.Add(new DxfCodePair(code, DxfCommonConverters.HandleString(h.Value)));
                     break;
                 case DxfXData3Reals r:
                     pairs.Add(new DxfCodePair(code, r.Value.X));
@@ -235,7 +235,7 @@ namespace IxMilia.Dxf
                 case DxfXDataType.BinaryData:
                     return new DxfXDataBinaryData(DxfCommonConverters.HexBytes(pair.StringValue));
                 case DxfXDataType.Handle:
-                    return new DxfXDataHandle(DxfCommonConverters.UIntHandle(pair.StringValue));
+                    return new DxfXDataHandle(DxfCommonConverters.HandleString(pair.StringValue));
                 case DxfXDataType.RealTriple:
                     return new DxfXData3Reals(ReadPoint(pair, buffer, pair.Code));
                 case DxfXDataType.WorldSpacePosition:
@@ -370,9 +370,9 @@ namespace IxMilia.Dxf
     {
         public override DxfXDataType Type { get { return DxfXDataType.Handle; } }
 
-        public uint Value { get; set; }
+        public DxfHandle Value { get; set; }
 
-        public DxfXDataHandle(uint value)
+        public DxfXDataHandle(DxfHandle value)
         {
             Value = value;
         }

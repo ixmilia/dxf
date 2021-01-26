@@ -27,7 +27,7 @@ namespace IxMilia.Dxf.Test
             var unusedFile = new DxfFile();
             var entitiesSection = DxfEntitiesSection.EntitiesSectionFromBuffer(bufferReader, unusedFile);
             var entity = entitiesSection.Entities.Single();
-            Assert.Equal(0x42u, ((IDxfItemInternal)entity).Handle);
+            Assert.Equal(new DxfHandle(0x42), ((IDxfItemInternal)entity).Handle);
             Assert.Equal("<line-type-name>", entity.LineTypeName);
             Assert.Equal("<layer>", entity.Layer);
             Assert.Equal(3.14159, entity.LineTypeScale);
@@ -1868,7 +1868,7 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(0.0, polyPath.Vertices[0].Bulge);
             Assert.Equal(new DxfPoint(3.0, 4.0, 0.0), polyPath.Vertices[1].Location);
             Assert.Equal(5.0, polyPath.Vertices[1].Bulge);
-            AssertArrayEqual(new uint[] { 0xABC, 0xDEF }, polyPath.BoundaryHandles.ToArray());
+            AssertArrayEqual(new ulong[] { 0xABC, 0xDEF }, polyPath.BoundaryHandles.Select(h => h.Value).ToArray());
 
             var nonPolyPath = (DxfHatch.NonPolylineBoundaryPath)hatch.BoundaryPaths[1];
             Assert.Equal(DxfHatch.BoundaryPathType.Textbox, nonPolyPath.PathType);
@@ -1925,8 +1925,8 @@ namespace IxMilia.Dxf.Test
             polyPath.IsClosed = true;
             polyPath.Vertices.Add(new DxfVertex(new DxfPoint(1.0, 2.0, 0.0)));
             polyPath.Vertices.Add(new DxfVertex(new DxfPoint(3.0, 4.0, 0.0)) { Bulge = 5.0 });
-            polyPath.BoundaryHandles.Add(0xABC);
-            polyPath.BoundaryHandles.Add(0xDEF);
+            polyPath.BoundaryHandles.Add(new DxfHandle(0xABC));
+            polyPath.BoundaryHandles.Add(new DxfHandle(0xDEF));
             hatch.BoundaryPaths.Add(polyPath);
 
             var nonPolyPath = new DxfHatch.NonPolylineBoundaryPath(DxfHatch.BoundaryPathType.Textbox);
@@ -2050,7 +2050,7 @@ namespace IxMilia.Dxf.Test
             );
             var externalPath = (DxfHatch.NonPolylineBoundaryPath)hatch.BoundaryPaths.Single();
             var boundaryHandle = externalPath.BoundaryHandles.Single();
-            Assert.Equal((uint)0xABC, boundaryHandle);
+            Assert.Equal((ulong)0xABC, boundaryHandle.Value);
         }
     }
 }

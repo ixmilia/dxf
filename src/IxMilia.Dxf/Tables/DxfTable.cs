@@ -52,8 +52,8 @@ namespace IxMilia.Dxf.Tables
 
         internal abstract DxfTableType TableType { get; }
         internal virtual string TableClassName { get { return null; } }
-        public uint Handle { get; set; }
-        public uint OwnerHandle { get; set; }
+        public DxfHandle Handle { get; set; }
+        public DxfHandle OwnerHandle { get; set; }
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
 
         public DxfTable()
@@ -73,9 +73,9 @@ namespace IxMilia.Dxf.Tables
             // common pairs
             pairs.Add(new DxfCodePair(0, DxfSection.TableText));
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
-            if (outputHandles && Handle != 0u)
+            if (outputHandles && Handle.Value != 0)
             {
-                pairs.Add(new DxfCodePair(5, DxfCommonConverters.UIntHandle(Handle)));
+                pairs.Add(new DxfCodePair(5, DxfCommonConverters.HandleString(Handle)));
             }
 
             if (version >= DxfAcadVersion.R13)
@@ -85,9 +85,9 @@ namespace IxMilia.Dxf.Tables
                     group.AddValuePairs(pairs, version, outputHandles);
                 }
 
-                if (version >= DxfAcadVersion.R2000 && OwnerHandle != 0u)
+                if (version >= DxfAcadVersion.R2000 && OwnerHandle.Value != 0)
                 {
-                    pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+                    pairs.Add(new DxfCodePair(330, DxfCommonConverters.HandleString(OwnerHandle)));
                 }
 
                 pairs.Add(new DxfCodePair(100, "AcDbSymbolTable"));
@@ -265,13 +265,13 @@ namespace IxMilia.Dxf.Tables
                     switch (common.Code)
                     {
                         case 5:
-                            result.Handle = DxfCommonConverters.UIntHandle(common.StringValue);
+                            result.Handle = DxfCommonConverters.HandleString(common.StringValue);
                             break;
                         case 70:
                             // entry count, read dynamically
                             break;
                         case 330:
-                            result.OwnerHandle = DxfCommonConverters.UIntHandle(common.StringValue);
+                            result.OwnerHandle = DxfCommonConverters.HandleString(common.StringValue);
                             break;
                     }
                 }

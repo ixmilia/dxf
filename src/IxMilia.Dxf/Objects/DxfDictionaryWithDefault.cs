@@ -32,16 +32,16 @@ namespace IxMilia.Dxf.Objects
             foreach (var item in _items.OrderBy(kvp => kvp.Key))
             {
                 pairs.Add(new DxfCodePair(3, item.Key));
-                pairs.Add(new DxfCodePair(350, UIntHandle(item.Value.Handle)));
+                pairs.Add(new DxfCodePair(350, HandleString(item.Value.Handle)));
             }
 
 
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(100, "AcDbDictionaryWithDefault"));
-                if (DefaultObject != null && DefaultObjectPointer.Handle != 0u)
+                if (DefaultObject != null && DefaultObjectPointer.Handle.Value != 0)
                 {
-                    pairs.Add(new DxfCodePair(340, UIntHandle(DefaultObjectPointer.Handle)));
+                    pairs.Add(new DxfCodePair(340, HandleString(DefaultObjectPointer.Handle)));
                 }
             }
 
@@ -78,12 +78,12 @@ namespace IxMilia.Dxf.Objects
                     this.DuplicateRecordHandling = (DxfDictionaryDuplicateRecordHandling)(pair.ShortValue);
                     break;
                 case 340:
-                    this.DefaultObjectPointer.Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                    this.DefaultObjectPointer.Handle = DxfCommonConverters.HandleString(pair.StringValue);
                     break;
                 case 350:
                 case 360:
                     Debug.Assert(_lastEntryName != null);
-                    var handle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                    var handle = DxfCommonConverters.HandleString(pair.StringValue);
                     _items[_lastEntryName] = new DxfPointer(handle);
                     _lastEntryName = null;
                     break;

@@ -23,9 +23,9 @@
         <Pointer Name="PlotStyle" Code="390" Type="IDxfItem" MinVersion="R2007" />
         <Property Name="ShadowMode" Code="284" Type="DxfShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode){0}" WriteConverter="(short){0}" MinVersion="R2007" />
         <WriteOrder>
-            <WriteSpecificValue Code="5" Value="((IDxfItemInternal)this).Handle" WriteCondition="outputHandles" WriteConverter="UIntHandle({0})" />
+            <WriteSpecificValue Code="5" Value="((IDxfItemInternal)this).Handle" WriteCondition="outputHandles" WriteConverter="HandleString({0})" />
             <WriteExtensionData />
-            <WriteSpecificValue Code="330" Value="((IDxfItemInternal)this).OwnerHandle" WriteCondition="outputHandles" DontWriteIfValueIs="0" WriteConverter="UIntHandle({0})" />
+            <WriteSpecificValue Code="330" Value="((IDxfItemInternal)this).OwnerHandle" WriteCondition="outputHandles" DontWriteIfValueIs="default(DxfHandle)" WriteConverter="HandleString({0})" />
             <WriteSpecificValue Code="100" Value="&quot;AcDbEntity&quot;" />
             <WriteProperty Property="IsInPaperSpace" />
             <WriteProperty Property="Layer" />

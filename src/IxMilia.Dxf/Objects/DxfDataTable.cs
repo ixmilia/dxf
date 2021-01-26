@@ -147,7 +147,7 @@ namespace IxMilia.Dxf.Objects
                     if (_readRowCount || _readColumnCount)
                     {
                         // TODO: differentiate between handle types
-                        SetValue(UIntHandle(pair.StringValue));
+                        SetValue(HandleString(pair.StringValue));
                     }
                     else
                     {
@@ -211,7 +211,7 @@ namespace IxMilia.Dxf.Objects
                 // TODO: how to differentiate between 2D and 3D point?
                 return 10;
             }
-            else if (value.GetType() == typeof(uint))
+            else if (value.GetType() == typeof(DxfHandle))
             {
                 // TODO: differentiate between handle types
                 return 331;
@@ -254,7 +254,7 @@ namespace IxMilia.Dxf.Objects
             else if (expectedType == typeof(string) && code >= 330)
             {
                 // TODO: differentiate between handle types
-                return new[] { new DxfCodePair(code, UIntHandle((uint)value)) };
+                return new[] { new DxfCodePair(code, HandleString((DxfHandle)value)) };
             }
             else
             {

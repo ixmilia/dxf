@@ -25,8 +25,8 @@ namespace IxMilia.Dxf
         public int StandardFlags;
         public string Name { get; set; }
         protected abstract DxfTableType TableType { get; }
-        public uint Handle { get; set; }
-        public uint OwnerHandle { get; set; }
+        public DxfHandle Handle { get; set; }
+        public DxfHandle OwnerHandle { get; set; }
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
 
         public DxfSymbolTableFlags()
@@ -40,7 +40,7 @@ namespace IxMilia.Dxf
             if (outputHandles)
             {
                 int code = TableType == DxfTableType.DimStyle ? 105 : 5;
-                pairs.Add(new DxfCodePair(code, DxfCommonConverters.UIntHandle(Handle)));
+                pairs.Add(new DxfCodePair(code, DxfCommonConverters.HandleString(Handle)));
             }
 
             foreach (var group in ExtensionDataGroups)
@@ -50,7 +50,7 @@ namespace IxMilia.Dxf
 
             if (version >= DxfAcadVersion.R2000)
             {
-                pairs.Add(new DxfCodePair(330, DxfCommonConverters.UIntHandle(OwnerHandle)));
+                pairs.Add(new DxfCodePair(330, DxfCommonConverters.HandleString(OwnerHandle)));
             }
 
             pairs.Add(new DxfCodePair(100, "AcDbSymbolTableRecord"));
@@ -64,10 +64,10 @@ namespace IxMilia.Dxf
                     Name = pair.StringValue;
                     break;
                 case 5:
-                    Handle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                    Handle = DxfCommonConverters.HandleString(pair.StringValue);
                     break;
                 case 330:
-                    OwnerHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                    OwnerHandle = DxfCommonConverters.HandleString(pair.StringValue);
                     break;
             }
         }
@@ -114,14 +114,14 @@ namespace IxMilia.Dxf
             return DxfCommonConverters.BoolShort(b);
         }
 
-        protected static uint UIntHandle(string s)
+        protected static DxfHandle HandleString(string s)
         {
-            return DxfCommonConverters.UIntHandle(s);
+            return DxfCommonConverters.HandleString(s);
         }
 
-        protected static string UIntHandle(uint u)
+        protected static string HandleString(DxfHandle handle)
         {
-            return DxfCommonConverters.UIntHandle(u);
+            return DxfCommonConverters.HandleString(handle);
         }
 
         protected static double EnsurePositiveOrDefault(double value, double defaultValue)

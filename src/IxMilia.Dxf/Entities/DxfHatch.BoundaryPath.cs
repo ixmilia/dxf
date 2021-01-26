@@ -20,14 +20,14 @@ namespace IxMilia.Dxf.Entities
 
         public abstract class BoundaryPathBase
         {
-            public List<uint> BoundaryHandles { get; } = new List<uint>();
+            public List<DxfHandle> BoundaryHandles { get; } = new List<DxfHandle>();
 
             internal virtual void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)
             {
                 pairs.Add(new DxfCodePair(97, BoundaryHandles.Count));
                 foreach (var handle in BoundaryHandles)
                 {
-                    pairs.Add(new DxfCodePair(330, UIntHandle(handle)));
+                    pairs.Add(new DxfCodePair(330, HandleString(handle)));
                 }
             }
 
@@ -39,7 +39,7 @@ namespace IxMilia.Dxf.Entities
                         var _boundaryHandleCount = pair.IntegerValue;
                         break;
                     case 330:
-                        BoundaryHandles.Add(UIntHandle(pair.StringValue));
+                        BoundaryHandles.Add(HandleString(pair.StringValue));
                         break;
                     default:
                         return false;

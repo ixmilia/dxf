@@ -177,16 +177,16 @@ namespace IxMilia.Dxf.Objects
                     this.Elevation = (pair.DoubleValue);
                     break;
                 case 331:
-                    this.ViewportPointer.Handle = UIntHandle(pair.StringValue);
+                    this.ViewportPointer.Handle = HandleString(pair.StringValue);
                     break;
                 case 333:
-                    this.ShadePlotObjectPointer.Handle = UIntHandle(pair.StringValue);
+                    this.ShadePlotObjectPointer.Handle = HandleString(pair.StringValue);
                     break;
                 case 345:
-                    this.TableRecordPointer.Handle = UIntHandle(pair.StringValue);
+                    this.TableRecordPointer.Handle = HandleString(pair.StringValue);
                     break;
                 case 346:
-                    this.TableRecordBasePointer.Handle = UIntHandle(pair.StringValue);
+                    this.TableRecordBasePointer.Handle = HandleString(pair.StringValue);
                     break;
                 default:
                     return base.TrySetPair(pair);

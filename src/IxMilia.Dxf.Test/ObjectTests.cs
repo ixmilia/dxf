@@ -59,10 +59,10 @@ namespace IxMilia.Dxf.Test
                 (330, "0"),
                 (100, "AcDbDataTable"),
                 (70, 2),
-                (90, 2),
-                (91, 2),
+                (90, 3), // 3 columns
+                (91, 2), // 2 rows per column
                 (1, "table-name"),
-                (92, 10),
+                (92, 10), // column 1
                 (2, "column-of-points"),
                 (10, 1.0),
                 (20, 2.0),
@@ -70,12 +70,16 @@ namespace IxMilia.Dxf.Test
                 (10, 4.0),
                 (20, 5.0),
                 (30, 6.0),
-                (92, 3),
+                (92, 3), // column 2
                 (2, "column-of-strings"),
                 (3, "string 1"),
-                (3, "string 2")
+                (3, "string 2"),
+                (92, 331), // column 3
+                (2, "column-of-handles"),
+                (331, "ABCD"),
+                (331, "1234")
             );
-            Assert.Equal(2, table.ColumnCount);
+            Assert.Equal(3, table.ColumnCount);
             Assert.Equal(2, table.RowCount);
             Assert.Equal("table-name", table.Name);
 
@@ -86,6 +90,10 @@ namespace IxMilia.Dxf.Test
             Assert.Equal("column-of-strings", table.ColumnNames[1]);
             Assert.Equal("string 1", (string)table[0, 1]);
             Assert.Equal("string 2", (string)table[1, 1]);
+
+            Assert.Equal("column-of-handles", table.ColumnNames[2]);
+            Assert.Equal(new DxfHandle(0xABCD), (DxfHandle)table[0, 2]);
+            Assert.Equal(new DxfHandle(0x1234), (DxfHandle)table[1, 2]);
         }
 
         [Fact]
@@ -590,7 +598,7 @@ namespace IxMilia.Dxf.Test
                 (0, "EOF")
             );
             var lightList = (DxfLightList)file.Objects.Last();
-            Assert.Equal(0xDEADBEEF, ((IDxfItemInternal)lightList).Handle);
+            Assert.Equal(new DxfHandle(0xDEADBEEF), ((IDxfItemInternal)lightList).Handle);
             Assert.Equal(43, lightList.Version);
             Assert.Equal("light-name", lightList.Lights.Single().Name);
         }
@@ -814,12 +822,12 @@ namespace IxMilia.Dxf.Test
             var typeSettings = settings.SectionTypeSettings.Single();
             Assert.Equal(43, typeSettings.SectionType);
             Assert.True(typeSettings.IsGenerationOption);
-            Assert.Equal(0xFFu, typeSettings.DestinationObjectHandle);
+            Assert.Equal(new DxfHandle(0xFF), typeSettings.DestinationObjectHandle);
             Assert.Equal("file-name", typeSettings.DestinationFileName);
 
             Assert.Equal(2, typeSettings.SourceObjectHandles.Count);
-            Assert.Equal(0x100u, typeSettings.SourceObjectHandles[0]);
-            Assert.Equal(0x101u, typeSettings.SourceObjectHandles[1]);
+            Assert.Equal(new DxfHandle(0x100), typeSettings.SourceObjectHandles[0]);
+            Assert.Equal(new DxfHandle(0x101), typeSettings.SourceObjectHandles[1]);
 
             Assert.Equal(2, typeSettings.GeometrySettings.Count);
             Assert.Equal(1001, typeSettings.GeometrySettings[0].SectionType);
@@ -835,11 +843,11 @@ namespace IxMilia.Dxf.Test
             {
                 SectionType = 43,
                 IsGenerationOption = true,
-                DestinationObjectHandle = 0xFFu,
+                DestinationObjectHandle = new DxfHandle(0xFF),
                 DestinationFileName = "file-name",
             };
-            typeSettings.SourceObjectHandles.Add(0x100u);
-            typeSettings.SourceObjectHandles.Add(0x101u);
+            typeSettings.SourceObjectHandles.Add(new DxfHandle(0x100));
+            typeSettings.SourceObjectHandles.Add(new DxfHandle(0x101));
             typeSettings.GeometrySettings.Add(new DxfSectionGeometrySettings() { SectionType = 1001 });
             typeSettings.GeometrySettings.Add(new DxfSectionGeometrySettings() { SectionType = 1002 });
             settings.SectionTypeSettings.Add(typeSettings);

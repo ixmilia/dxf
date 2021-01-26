@@ -236,7 +236,7 @@ namespace IxMilia.Dxf.Test
             );
             var blockRecord = file.BlockRecords.Single();
             Assert.Equal("<name>", blockRecord.Name);
-            Assert.Equal(0xA1u, blockRecord.LayoutHandle);
+            Assert.Equal(new DxfHandle(0xA1), blockRecord.LayoutHandle);
 
             var xdataPair = blockRecord.XData.Single();
             Assert.Equal("ACAD", xdataPair.Key);
@@ -291,7 +291,7 @@ namespace IxMilia.Dxf.Test
             );
             var blockRecord = file.BlockRecords.Single();
             Assert.Equal("<name>", blockRecord.Name);
-            Assert.Equal(0xA1u, blockRecord.LayoutHandle);
+            Assert.Equal(new DxfHandle(0xA1), blockRecord.LayoutHandle);
 
             var xdataPair = blockRecord.XData.Single();
             Assert.Equal("ACAD", xdataPair.Key);
@@ -375,7 +375,7 @@ namespace IxMilia.Dxf.Test
             var blockRecord = new DxfBlockRecord()
             {
                 Name = "<name>",
-                LayoutHandle = 0x43u,
+                LayoutHandle = new DxfHandle(0x43),
                 BitmapData = new byte[]
                 {
                     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
@@ -517,7 +517,7 @@ namespace IxMilia.Dxf.Test
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal(0x42u, ((IDxfItemInternal)block).Handle);
+            Assert.Equal(new DxfHandle(0x42), ((IDxfItemInternal)block).Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal(11, block.BasePoint.X);
             Assert.Equal(22, block.BasePoint.Y);
@@ -724,7 +724,7 @@ namespace IxMilia.Dxf.Test
                 (0, "EOF")
             );
             var styleTable = file.TablesSection.StyleTable;
-            Assert.Equal(0x1Cu, styleTable.Handle);
+            Assert.Equal(new DxfHandle(0x1C), styleTable.Handle);
             Assert.Equal(2, styleTable.Items.Count);
 
             var extendedDataGroup = styleTable.ExtensionDataGroups.Single();
@@ -734,7 +734,7 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(new DxfCodePair(360, "BBBB"), extendedDataGroup.Items[1]);
 
             var style1 = file.Styles.First();
-            Assert.Equal(0x3Au, style1.Handle);
+            Assert.Equal(new DxfHandle(0x3A), style1.Handle);
             Assert.Equal("ENTRY_1", style1.Name);
             Assert.Equal(64, style1.StandardFlags);
             Assert.Equal(0.4, style1.TextHeight);
@@ -745,7 +745,7 @@ namespace IxMilia.Dxf.Test
             Assert.Equal("BUFONTS.TXT", style1.PrimaryFontFileName);
 
             var style2 = file.Styles.Skip(1).Single();
-            Assert.Equal(0xC2u, style2.Handle);
+            Assert.Equal(new DxfHandle(0xC2), style2.Handle);
             Assert.Equal("ENTRY_2", style2.Name);
             Assert.Equal("BUFONTS.TXT", style2.PrimaryFontFileName);
         }
@@ -1057,7 +1057,7 @@ namespace IxMilia.Dxf.Test
             }
 
             // check pointer values
-            Assert.NotEqual(0u, view.OwnerHandle);
+            Assert.NotEqual(default(DxfHandle), view.OwnerHandle);
             Assert.Equal(view.OwnerHandle, file.TablesSection.ViewTable.Handle);
 
             // check object values
@@ -1346,7 +1346,7 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(dict, dict["key"]);
 
             // ensure the pointer changed.  FFFF is unlikely to occur in writing
-            Assert.NotEqual(0xFFFFu, ((IDxfItemInternal)dict).Handle);
+            Assert.NotEqual(new DxfHandle(0xFFFF), ((IDxfItemInternal)dict).Handle);
         }
 
         [Fact]

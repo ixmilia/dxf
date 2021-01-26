@@ -9,8 +9,8 @@ namespace IxMilia.Dxf.Objects
     {
         public int SectionType { get; set; }
         public bool IsGenerationOption { get; set; }
-        public IList<uint> SourceObjectHandles { get; } = new List<uint>();
-        public uint DestinationObjectHandle { get; set; }
+        public IList<DxfHandle> SourceObjectHandles { get; } = new List<DxfHandle>();
+        public DxfHandle DestinationObjectHandle { get; set; }
         public string DestinationFileName { get; set; }
         public IList<DxfSectionGeometrySettings> GeometrySettings { get; } = new ListNonNull<DxfSectionGeometrySettings>();
 
@@ -20,8 +20,8 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(90, SectionType));
             pairs.Add(new DxfCodePair(91, IsGenerationOption ? 1 : 0));
             pairs.Add(new DxfCodePair(92, SourceObjectHandles.Count));
-            pairs.AddRange(SourceObjectHandles.Select(p => new DxfCodePair(330, DxfCommonConverters.UIntHandle(p))));
-            pairs.Add(new DxfCodePair(331, DxfCommonConverters.UIntHandle(DestinationObjectHandle)));
+            pairs.AddRange(SourceObjectHandles.Select(p => new DxfCodePair(330, DxfCommonConverters.HandleString(p))));
+            pairs.Add(new DxfCodePair(331, DxfCommonConverters.HandleString(DestinationObjectHandle)));
             pairs.Add(new DxfCodePair(1, DestinationFileName));
             pairs.Add(new DxfCodePair(93, GeometrySettings.Count));
             pairs.Add(new DxfCodePair(2, "SectionGeometrySettings"));
@@ -84,11 +84,11 @@ namespace IxMilia.Dxf.Objects
                         buffer.Advance();
                         break;
                     case 330:
-                        settings.SourceObjectHandles.Add(DxfCommonConverters.UIntHandle(pair.StringValue));
+                        settings.SourceObjectHandles.Add(DxfCommonConverters.HandleString(pair.StringValue));
                         buffer.Advance();
                         break;
                     case 331:
-                        settings.DestinationObjectHandle = DxfCommonConverters.UIntHandle(pair.StringValue);
+                        settings.DestinationObjectHandle = DxfCommonConverters.HandleString(pair.StringValue);
                         buffer.Advance();
                         break;
                     default:

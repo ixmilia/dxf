@@ -7,9 +7,9 @@
     -->
     <Object Name="DxfObject" ObjectType="" SubclassMarker="" TypeString="">
         <WriteOrder>
-            <WriteSpecificValue Code="5" Value="((IDxfItemInternal)this).Handle" WriteConverter="UIntHandle({0})" />
+            <WriteSpecificValue Code="5" Value="((IDxfItemInternal)this).Handle" WriteConverter="HandleString({0})" />
             <WriteExtensionData />
-            <WriteSpecificValue Code="330" Value="((IDxfItemInternal)this).OwnerHandle" DontWriteIfValueIs="0" WriteConverter="UIntHandle({0})" />
+            <WriteSpecificValue Code="330" Value="((IDxfItemInternal)this).OwnerHandle" DontWriteIfValueIs="default(DxfHandle)" WriteConverter="HandleString({0})" />
         </WriteOrder>
     </Object>
     <!--
@@ -155,7 +155,7 @@
         <!-- internal properties -->
         <Property Name="_longValue" Code="91" Type="int" DefaultValue="0" Accessibility="private" />
         <Property Name="_doubleValue" Code="140" Type="double" DefaultValue="0.0" Accessibility="private" />
-        <Property Name="_idValue" Code="330" Type="uint" DefaultValue="0u" ReadConverter="UIntHandle({0})" WriteConverter="UIntHandle({0})" Accessibility="private" />
+        <Property Name="_idValue" Code="330" Type="DxfHandle" DefaultValue="default(DxfHandle)" ReadConverter="HandleString({0})" WriteConverter="HandleString({0})" Accessibility="private" />
         <Property Name="_binaryDataBufferSize" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
         <Property Name="_binaryData" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
 
@@ -178,8 +178,8 @@
             <WriteProperty Property="EvaluationErrorCode" />
             <WriteSpecificValue Code="97" Value="Objects.Count" />
             <Foreach Property ="ObjectsPointers.Pointers">
-                <WriteSpecificValue Code="330" Value="UIntHandle(item.Handle)" MaxVersion="R2007" />
-                <WriteSpecificValue Code="331" Value="UIntHandle(item.Handle)" MinVersion="R2010" />
+                <WriteSpecificValue Code="330" Value="HandleString(item.Handle)" MaxVersion="R2007" />
+                <WriteSpecificValue Code="331" Value="HandleString(item.Handle)" MinVersion="R2010" />
             </Foreach>
             <WriteSpecificValue Code="93" Value="FieldDataKeys.Count" />
             <WriteProperty Property="FieldDataKeys" />

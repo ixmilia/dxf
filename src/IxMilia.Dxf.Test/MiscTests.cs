@@ -172,5 +172,18 @@ namespace IxMilia.Dxf.Test
             // no entities because the block names differ
             Assert.Null(insert.Entities);
         }
+
+        [Theory]
+        [InlineData(0x01, "1")]
+        [InlineData(0xABCD, "ABCD")]
+        [InlineData(0xABCDABCDABCDABCD, "ABCDABCDABCDABCD")]
+        public void HandleStringConversions(ulong ulongValue, string stringValue)
+        {
+            // parsing
+            Assert.Equal(stringValue, DxfCommonConverters.HandleString(new DxfHandle(ulongValue)));
+
+            // display
+            Assert.Equal(new DxfHandle(ulongValue), DxfCommonConverters.HandleString(stringValue));
+        }
     }
 }

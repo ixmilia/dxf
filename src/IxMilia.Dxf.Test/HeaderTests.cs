@@ -1855,9 +1855,9 @@ $SHADOWPLANELOCATION";
             var header = new DxfHeader();
 
             // ensure they default to 0
-            Assert.Equal(0u, header.CurrentMaterialHandle);
-            Assert.Equal(0u, header.InterferenceObjectVisualStylePointer);
-            Assert.Equal(0u, header.InterferenceViewPortVisualStylePointer);
+            Assert.Equal(default(DxfHandle), header.CurrentMaterialHandle);
+            Assert.Equal(default(DxfHandle), header.InterferenceObjectVisualStylePointer);
+            Assert.Equal(default(DxfHandle), header.InterferenceViewPortVisualStylePointer);
 
             var pairs = new List<DxfCodePair>();
             header.AddValueToList(pairs);
@@ -1870,9 +1870,9 @@ $SHADOWPLANELOCATION";
         {
             var header = new DxfHeader();
             header.Version = version;
-            header.CurrentMaterialHandle = 100u;
-            header.InterferenceObjectVisualStylePointer = 101u;
-            header.InterferenceViewPortVisualStylePointer = 102u;
+            header.CurrentMaterialHandle = new DxfHandle(100);
+            header.InterferenceObjectVisualStylePointer = new DxfHandle(101);
+            header.InterferenceViewPortVisualStylePointer = new DxfHandle(102);
             var expectedOrder = expectedOrderText
                 .Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Where(s => s.StartsWith("$"))
@@ -1936,7 +1936,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal("BYLAYER", header.CurrentEntityLineType);
             Assert.Equal(1, header.CurrentEntityLineTypeScale);
             Assert.Equal("0", header.CurrentLayer);
-            Assert.Equal(0u, header.CurrentMaterialHandle);
+            Assert.Equal(default(DxfHandle), header.CurrentMaterialHandle);
             Assert.Equal(DxfJustification.Top, header.CurrentMultilineJustification);
             Assert.Equal(1, header.CurrentMultilineScale);
             Assert.Equal("STANDARD", header.CurrentMultilineStyle);
@@ -2031,8 +2031,8 @@ $SHADOWPLANELOCATION";
             Assert.Equal(new DxfPoint(0, 0, 0), header.InsertionBase);
             Assert.False(header.InsertionSnap);
             Assert.Equal(1, header.InterferenceObjectColor.Index);
-            Assert.Equal(0u, header.InterferenceObjectVisualStylePointer);
-            Assert.Equal(0u, header.InterferenceViewPortVisualStylePointer);
+            Assert.Equal(default(DxfHandle), header.InterferenceObjectVisualStylePointer);
+            Assert.Equal(default(DxfHandle), header.InterferenceViewPortVisualStylePointer);
             Assert.Equal(DxfColor.ByEntity, header.IntersectionPolylineColor);
             Assert.True(header.IntersectionSnap);
             Assert.False(header.IsPolylineContinuousAroundVertices);
@@ -2070,7 +2070,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(DxfLineWeight.ByBlock, header.NewObjectLineWeight);
             Assert.Equal(DxfPlotStyle.ByLayer, header.NewObjectPlotStyle);
             Assert.False(header.NewSolidsContainHistory);
-            Assert.Equal(0u, header.NextAvailableHandle);
+            Assert.Equal(default(DxfHandle), header.NextAvailableHandle);
             Assert.False(header.NodeSnap);
             Assert.True(header.NoTwist);
             Assert.Equal(37, header.ObjectSnapFlags);

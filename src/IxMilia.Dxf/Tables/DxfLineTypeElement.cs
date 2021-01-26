@@ -73,9 +73,9 @@ namespace IxMilia.Dxf
             {
                 var value = IsEmbeddedElementAString ? 0 : ShapeNumber;
                 pairs.Add(new DxfCodePair(75, (short)value));
-                if (StylePointer.Handle != 0u)
+                if (StylePointer.Handle.Value != 0)
                 {
-                    pairs.Add(new DxfCodePair(340, DxfCommonConverters.UIntHandle(StylePointer.Handle)));
+                    pairs.Add(new DxfCodePair(340, DxfCommonConverters.HandleString(StylePointer.Handle)));
                 }
             }
 
@@ -97,8 +97,8 @@ namespace IxMilia.Dxf
             }
         }
 
-        uint IDxfItemInternal.Handle { get; set; }
-        uint IDxfItemInternal.OwnerHandle { get; set; }
+        DxfHandle IDxfItemInternal.Handle { get; set; }
+        DxfHandle IDxfItemInternal.OwnerHandle { get; set; }
         public IDxfItem Owner { get; private set; }
 
         void IDxfItemInternal.SetOwner(IDxfItem owner)

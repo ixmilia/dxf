@@ -110,16 +110,16 @@ namespace IxMilia.Dxf.Objects
                         this.LabelViewports = (pair.BoolValue);
                         break;
                     case 340:
-                        this.PageSetupWizardPointer.Handle = UIntHandle(pair.StringValue);
+                        this.PageSetupWizardPointer.Handle = HandleString(pair.StringValue);
                         break;
                     case 341:
-                        this.ViewPointer.Handle = UIntHandle(pair.StringValue);
+                        this.ViewPointer.Handle = HandleString(pair.StringValue);
                         break;
                     case 342:
-                        this.VisualStylePointer.Handle = UIntHandle(pair.StringValue);
+                        this.VisualStylePointer.Handle = HandleString(pair.StringValue);
                         break;
                     case 343:
-                        this.TextStylePointer.Handle = UIntHandle(pair.StringValue);
+                        this.TextStylePointer.Handle = HandleString(pair.StringValue);
                         break;
                     default:
                         if (!base.TrySetPair(pair))

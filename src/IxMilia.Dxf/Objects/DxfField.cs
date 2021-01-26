@@ -43,9 +43,9 @@ namespace IxMilia.Dxf.Objects
                     _doubleValue = (double)value;
                     _valueTypeCode = 140;
                 }
-                else if (value.GetType() == typeof(uint))
+                else if (value.GetType() == typeof(DxfHandle))
                 {
-                    _idValue = (uint)value;
+                    _idValue = (DxfHandle)value;
                     _valueTypeCode = 330;
                 }
                 else if (value.GetType() == typeof(byte[]))

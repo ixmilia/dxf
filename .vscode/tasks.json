@@ -1,16 +1,25 @@
 {
-    "version": "0.1.0",
-    "command": "dotnet",
-    "isShellCommand": true,
-    "args": [],
-    "tasks": [
-        {
-            "taskName": "build",
-            "args": [
-                "${workspaceRoot}/src/IxMilia.Dxf.Generator/IxMilia.Dxf.Generator.csproj"
-            ],
-            "isBuildCommand": true,
-            "problemMatcher": "$msCompile"
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "dotnet build",
+      "dependsOn": [
+        "generate"
+      ],
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "generate",
+      "type": "shell",
+      "command": "dotnet run -- ${workspaceFolder}/src/IxMilia.Dxf",
+      "options": {
+        "cwd": "${workspaceFolder}/src/IxMilia.Dxf.Generator"
+      },
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    }
+  ]
 }

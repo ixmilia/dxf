@@ -258,6 +258,10 @@ namespace IxMilia.Dxf.Entities
         {
         }
 
+        protected virtual void AppliedCodePair(DxfCodePair pair)
+        {
+        }
+
         protected void PostParseBaseEntity()
         {
             PreviewImageData = BinaryHelpers.CombineBytes(_previewImageDataBytes);
@@ -274,6 +278,17 @@ namespace IxMilia.Dxf.Entities
         public DxfBoundingBox? GetBoundingBox()
         {
             return DxfBoundingBox.FromPoints(GetExtentsPoints());
+        }
+
+        public bool ApplyCodePair(DxfCodePair pair)
+        {
+            var success = TrySetPair(pair);
+            if (success)
+            {
+                AppliedCodePair(pair);
+            }
+
+            return success;
         }
 
         public IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
@@ -306,7 +321,7 @@ namespace IxMilia.Dxf.Entities
                     break;
                 }
 
-                if (TrySetPair(pair))
+                if (ApplyCodePair(pair))
                 {
                     // pair was successfully applied; consume it
                     buffer.Advance();

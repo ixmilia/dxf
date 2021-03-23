@@ -377,25 +377,6 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
-        public void ReadDimensionTest()
-        {
-            var dimension = (DxfAlignedDimension)Entity("DIMENSION",
-                (1, "text"),
-                (10, 330.25),
-                (20, 1310.0),
-                (13, 330.25),
-                (23, 1282.0),
-                (14, 319.75),
-                (24, 1282.0),
-                (70, 1)
-            );
-            Assert.Equal(new DxfPoint(330.25, 1310.0, 0.0), dimension.DefinitionPoint1);
-            Assert.Equal(new DxfPoint(330.25, 1282, 0.0), dimension.DefinitionPoint2);
-            Assert.Equal(new DxfPoint(319.75, 1282, 0.0), dimension.DefinitionPoint3);
-            Assert.Equal("text", dimension.Text);
-        }
-
-        [Fact]
         public void ReadLineTest()
         {
             var line = (DxfLine)Entity("LINE",
@@ -1069,6 +1050,25 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadDimensionTest()
+        {
+            var dimension = (DxfAlignedDimension)Entity("DIMENSION",
+                (1, "text"),
+                (10, 330.25),
+                (20, 1310.0),
+                (13, 330.25),
+                (23, 1282.0),
+                (14, 319.75),
+                (24, 1282.0),
+                (70, 1)
+            );
+            Assert.Equal(new DxfPoint(330.25, 1310.0, 0.0), dimension.DefinitionPoint1);
+            Assert.Equal(new DxfPoint(330.25, 1282, 0.0), dimension.DefinitionPoint2);
+            Assert.Equal(new DxfPoint(319.75, 1282, 0.0), dimension.DefinitionPoint3);
+            Assert.Equal("text", dimension.Text);
+        }
+
+        [Fact]
         public void WriteDimensionTest()
         {
             EnsureFileContainsEntity(
@@ -1103,6 +1103,60 @@ namespace IxMilia.Dxf.Test
                 (14, 319.75),
                 (24, 1282.0),
                 (34, 0.0)
+            );
+        }
+
+        [Fact]
+        public void ReadAlignedDimensionWithoutBaselineTest()
+        {
+            var dim = (DxfAlignedDimension)Entity("DIMENSION",
+                (100, "AcDbAlignedDimension")
+            );
+            Assert.False(dim.IsBaselineAndContinue);
+            Assert.Equal(new DxfPoint(0.0, 0.0, 0.0), dim.InsertionPoint);
+        }
+
+        [Fact]
+        public void WriteAlignedDimensionWithoutBaselineTest()
+        {
+            EnsureFileDoesNotContainWithEntity(
+                new DxfAlignedDimension()
+                {
+                    InsertionPoint = new DxfPoint(1.0, 2.0, 3.0), // won't be written because IsBaselineAndContinue isn't set
+                },
+                DxfAcadVersion.R14,
+                (12, 1.0),
+                (22, 2.0),
+                (32, 3.0)
+            );
+        }
+
+        [Fact]
+        public void ReadAlignedDimensionWithBaselineTest()
+        {
+            var dim = (DxfAlignedDimension)Entity("DIMENSION",
+                (100, "AcDbAlignedDimension"),
+                (12, 1.0),
+                (22, 2.0),
+                (32, 3.0)
+            );
+            Assert.True(dim.IsBaselineAndContinue);
+            Assert.Equal(new DxfPoint(1.0, 2.0, 3.0), dim.InsertionPoint);
+        }
+
+        [Fact]
+        public void WriteAlignedDimensionWithBaselineTest()
+        {
+            EnsureFileContainsEntity(
+                new DxfAlignedDimension()
+                {
+                    IsBaselineAndContinue = true,
+                    InsertionPoint = new DxfPoint(1.0, 2.0, 3.0),
+                },
+                DxfAcadVersion.R14,
+                (12, 1.0),
+                (22, 2.0),
+                (32, 3.0)
             );
         }
 

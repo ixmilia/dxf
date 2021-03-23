@@ -394,7 +394,7 @@ namespace IxMilia.Dxf.Generator
                 AppendLine("    {");
                 AppendLine("        foreach (var pair in ExcessCodePairs)");
                 AppendLine("        {");
-                AppendLine("            newDimension.TrySetPair(pair);");
+                AppendLine("            newDimension.ApplyCodePair(pair);");
                 AppendLine("        }");
                 AppendLine("    }");
                 AppendLine();

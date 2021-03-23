@@ -391,7 +391,7 @@
     </Entity>
     <!-- aligned -->
     <Entity Name="DxfAlignedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="Aligned">
-        <!--<Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />-->
+        <Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" WriteCondition="IsBaselineAndContinue" />
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Extents>
@@ -405,7 +405,7 @@
     </Entity>
     <!-- linear and rotated -->
     <Entity Name="DxfRotatedDimension" EntityType="Dimension" SubclassMarker="AcDbAlignedDimension" TypeString="" BaseClass="DxfDimensionBase" CopyConstructor="Inherited" Tag="RotatedHorizontalOrVertical">
-        <Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" />
+        <Property Name="InsertionPoint" Code="12" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="12,22,32" WriteCondition="IsBaselineAndContinue" />
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" />

@@ -49,4 +49,30 @@ namespace IxMilia.Dxf.Entities
             return value;
         }
     }
+
+    public partial class DxfAlignedDimension
+    {
+        public bool IsBaselineAndContinue { get; set; }
+
+        protected override void AppliedCodePair(DxfCodePair pair)
+        {
+            if (pair.Code == 12 || pair.Code == 22 || pair.Code == 32)
+            {
+                IsBaselineAndContinue = true;
+            }
+        }
+    }
+
+    public partial class DxfRotatedDimension
+    {
+        public bool IsBaselineAndContinue { get; set; }
+
+        protected override void AppliedCodePair(DxfCodePair pair)
+        {
+            if (pair.Code == 12 || pair.Code == 22 || pair.Code == 32)
+            {
+                IsBaselineAndContinue = true;
+            }
+        }
+    }
 }

@@ -3,35 +3,35 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace IxMilia.Dxf.Generator
 {
-    public class TableGenerator : GeneratorBase
+    [Generator]
+    public class TableGenerator : GeneratorBase, ISourceGenerator
     {
-        private string _outputDir;
         private XElement _xml;
         private string _xmlns;
         private IEnumerable<XElement> _tables;
 
         public const string TableNamespace = "IxMilia.Dxf.Tables";
 
-        public TableGenerator(string outputDir)
+        public void Initialize(GeneratorInitializationContext context)
         {
-            _outputDir = outputDir;
-            Directory.CreateDirectory(_outputDir);
         }
 
-        public void Run()
+        public void Execute(GeneratorExecutionContext context)
         {
-            _xml = XDocument.Load(Path.Combine("Specs", "TableSpec.xml")).Root;
+            var specText = context.AdditionalFiles.Single(f => Path.GetFileName(f.Path) == "TableSpec.xml").GetText().ToString();
+            _xml = XDocument.Parse(specText).Root;
             _xmlns = _xml.Name.NamespaceName;
             _tables = _xml.Elements(XName.Get("Table", _xmlns));
 
-            OutputTables();
-            OutputTableItems();
+            OutputTables(context);
+            OutputTableItems(context);
         }
 
-        private void OutputTables()
+        private void OutputTables(GeneratorExecutionContext context)
         {
             foreach (var table in _tables)
             {
@@ -101,11 +101,11 @@ namespace IxMilia.Dxf.Generator
                 DecreaseIndent();
 
                 FinishFile();
-                WriteFile(Path.Combine(_outputDir, $"{className}Generated.cs"));
+                WriteFile(context, $"{className}Generated.cs");
             }
         }
 
-        private void OutputTableItems()
+        private void OutputTableItems(GeneratorExecutionContext context)
         {
             foreach (var table in _tables)
             {
@@ -539,7 +539,7 @@ namespace IxMilia.Dxf.Generator
                 DecreaseIndent();
 
                 FinishFile();
-                WriteFile(Path.Combine(_outputDir, $"{Name(tableItem)}Generated.cs"));
+                WriteFile(context, $"{Name(tableItem)}Generated.cs");
             }
         }
 

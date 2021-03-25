@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace IxMilia.Dxf.Generator
 {
@@ -1005,9 +1006,9 @@ namespace IxMilia.Dxf.Generator
             AppendLine("}");
         }
 
-        public void WriteFile(string path)
+        public void WriteFile(GeneratorExecutionContext context, string path)
         {
-            File.WriteAllText(path, _sb.ToString());
+            context.AddSource(path, SourceText.From(_sb.ToString(), Encoding.UTF8));
             _sb = null;
         }
     }

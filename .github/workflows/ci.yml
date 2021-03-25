@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  DOTNET_SDK_VERSION: '5.0.100'
+  DOTNET_SDK_VERSION: '5.0.200'
 
 jobs:
 

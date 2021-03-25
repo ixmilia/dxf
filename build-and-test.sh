@@ -22,16 +22,6 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-# run code generator
-GENERATOR_DIR=$_SCRIPT_DIR/src/IxMilia.Dxf.Generator
-LIBRARY_DIR=$_SCRIPT_DIR/src/IxMilia.Dxf
-cd $GENERATOR_DIR
-dotnet restore
-dotnet build --configuration $CONFIGURATION
-dotnet run --configuration $CONFIGURATION --no-restore --no-build -- "$LIBRARY_DIR"
-cd -
-
-# build
 dotnet restore
 dotnet build --configuration $CONFIGURATION
 

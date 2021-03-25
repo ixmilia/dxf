@@ -28,31 +28,14 @@ goto parseargs
 
 :argsdone
 
-:: run code generator
-set GENERATOR_DIR=%thisdir%src\IxMilia.Dxf.Generator
-set LIBRARY_DIR=%thisdir%src\IxMilia.Dxf
-pushd "%GENERATOR_DIR%"
 dotnet restore
 if errorlevel 1 goto error
 dotnet build --configuration %configuration%
 if errorlevel 1 goto error
-dotnet run --configuration %configuration% --no-restore --no-build -- "%LIBRARY_DIR%"
-if errorlevel 1 goto error
-popd
-
-:: build
-dotnet restore
-if errorlevel 1 goto error
-dotnet build --configuration %configuration%
-if errorlevel 1 goto error
-
-:: run tests
 if /i "%runtests%" == "true" (
     dotnet test --configuration %configuration% --no-restore --no-build
     if errorlevel 1 goto error
 )
-
-:: create packages
 dotnet pack --no-restore --no-build --configuration %configuration%
 set PACKAGE_COUNT=0
 for %%a in ("%thisdir%artifacts\packages\%configuration%\*.nupkg") do set /a PACKAGE_COUNT+=1

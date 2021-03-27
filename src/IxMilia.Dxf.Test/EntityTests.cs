@@ -1161,6 +1161,31 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void WriteRotatedDimensionWithZeroExtensionAngleTest()
+        {
+            EnsureFileDoesNotContainWithEntity(
+                new DxfRotatedDimension()
+                {
+                    ExtensionLineAngle = 0.0, // if zero, will not be written
+                },
+                DxfAcadVersion.R14,
+                (52, 0.0)
+            );
+        }
+
+        [Fact]
+        public void WriteRotatedDimensionWithNonZeroExtensionAngleTest()
+        {
+            EnsureFileContainsEntity(
+                new DxfRotatedDimension()
+                {
+                    ExtensionLineAngle = 42.0,
+                },
+                (52, 42.0)
+            );
+        }
+
+        [Fact]
         public void ReadAngularTwoLineDimensionTest()
         {
             var dim = (DxfAngularTwoLineDimension)Entity("DIMENSION",

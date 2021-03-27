@@ -409,7 +409,7 @@
         <Property Name="DefinitionPoint2" Code="13" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="13,23,33" />
         <Property Name="DefinitionPoint3" Code="14" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="14,24,34" />
         <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" />
-        <Property Name="ExtensionLineAngle" Code="52" Type="double" DefaultValue="0.0" />
+        <Property Name="ExtensionLineAngle" Code="52" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbAlignedDimension&quot;" MinVersion="R13" />
             <WriteProperty Property="InsertionPoint" />

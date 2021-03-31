@@ -977,6 +977,24 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void WriteTextWithAlignmentTest()
+        {
+            EnsureFileContainsEntity(new DxfText()
+            {
+                SecondAlignmentPoint = new DxfPoint(111.0, 222.0, 333.0),
+                HorizontalTextJustification = DxfHorizontalTextJustification.Center,
+                VerticalTextJustification = DxfVerticalTextJustification.Middle,
+            },
+                (72, 1),
+                (11, 111.0),
+                (21, 222.0),
+                (31, 333.0),
+                (100, "AcDbText"),
+                (73, 2)
+            );
+        }
+
+        [Fact]
         public void WriteDefaultPolylineTest()
         {
             EnsureFileContainsEntity(new DxfPolyline(),

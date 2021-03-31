@@ -1298,7 +1298,7 @@
             <Flag Name="IsTextUpsideDown" Mask="4" />
         </Property>
         <Property Name="HorizontalTextJustification" Code="72" Type="DxfHorizontalTextJustification" DefaultValue="DxfHorizontalTextJustification.Left" ReadConverter="(DxfHorizontalTextJustification){0}" WriteConverter="(short){0}" DisableWritingDefault="true" />
-        <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" DisableWritingDefault="true" CodeOverrides="11,21,31" />
+        <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" WriteCondition="((int)HorizontalTextJustification != 0) || ((VerticalTextJustification) != 0)" CodeOverrides="11,21,31" />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Property Name="VerticalTextJustification" Code="73" Type="DxfVerticalTextJustification" DefaultValue="DxfVerticalTextJustification.Baseline" ReadConverter="(DxfVerticalTextJustification){0}" WriteConverter="(short){0}" DisableWritingDefault="true" />
         <Constructor>
@@ -1320,8 +1320,8 @@
             <WriteProperty Property="HorizontalTextJustification" />
             <WriteProperty Property="SecondAlignmentPoint" />
             <WriteProperty Property="Normal" />
-            <WriteProperty Property="VerticalTextJustification" />
             <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" />
+            <WriteProperty Property="VerticalTextJustification" />
         </WriteOrder>
         <Extents>
             <Value>Location</Value>

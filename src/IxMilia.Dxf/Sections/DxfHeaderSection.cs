@@ -51,7 +51,83 @@ namespace IxMilia.Dxf
         DistanceAngleFormat = 2
     }
 
+    [Flags]
     public enum DxfUnitZeroSuppression
+    {
+        SuppressZeroFeetAndZeroInches = 0,
+        IncludeZeroFeetAndZeroInches = 1,
+        IncludeZeroFeetSuppressZeroInches = 2,
+        IncludeZeroInchesSuppressZeroFeet = 3,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressLeadingZeros = 4,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressTrailingZeros = 8,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressLeadingAndTrailingZeros = 12,
+    }
+
+    [Flags]
+    public enum DxfToleranceZeroSuppression
+    {
+        SuppressZeroFeetAndZeroInches = 0,
+        IncludeZeroFeetAndZeroInches = 1,
+        IncludeZeroFeetSuppressZeroInches = 2,
+        IncludeZeroInchesSuppressZeroFeet = 3,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressLeadingZeros = 4,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressTrailingZeros = 8,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressLeadingAndTrailingZeros = 12,
+    }
+
+    [Flags]
+    public enum DxfAlternateToleranceZeroSuppression
+    {
+        SuppressZeroFeetAndZeroInches = 0,
+        IncludeZeroFeetAndZeroInches = 1,
+        IncludeZeroFeetSuppressZeroInches = 2,
+        IncludeZeroInchesSuppressZeroFeet = 3,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressLeadingZeros = 4,
+
+        /// <summary>
+        /// Added in R2017.
+        /// </summary>
+        SuppressTrailingZeros = 8,
+    }
+
+    public enum DxfAngularZeroSuppression
+    {
+        DisplayAllLeadingAndTrailingZeros = 0,
+        SuppressLeadingZeros = 1,
+        SuppressTrailingZeros = 2,
+        SuppressLeadingAndTrailingZeros = 3,
+    }
+
+    [Flags]
+    public enum DxfAlternateUnitZeroSuppression
     {
         SuppressZeroFeetAndZeroInches = 0,
         IncludeZeroFeetAndZeroInches = 1,

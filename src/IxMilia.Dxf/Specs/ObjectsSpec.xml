@@ -1046,12 +1046,14 @@
     SPATIAL_INDEX
 
     -->
-    <Object Name="DxfSpatialIndex" ObjectType="SpatialIndex" SubclassMarker="AcDbIndex" TypeString="SPATIAL_INDEX" MinVersion="R2000">
+    <Object Name="DxfSpatialIndex" ObjectType="SpatialIndex" SubclassMarker="AcDbIndex" TypeString="SPATIAL_INDEX" GenerateReaderFunction="false" MinVersion="R2000">
         <Property Name="Timestamp" Code="40" Type="DateTime" DefaultValue="DateTime.Now" ReadConverter="DateDouble({0})" WriteConverter="DateDouble({0})" />
+        <Property Name="Values" Code="40" Type="double" DefaultValue="null" AllowMultiples="true" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbIndex&quot;" />
             <WriteProperty Property="Timestamp" />
             <WriteSpecificValue Code="100" Value="&quot;AcDbSpatialIndex&quot;" />
+            <WriteProperty Property="Values" />
         </WriteOrder>
     </Object>
     <!--

@@ -995,6 +995,39 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadSpatialIndexTest()
+        {
+            var si = (DxfSpatialIndex)GenObject("SPATIAL_INDEX",
+                (100, "AcDbIndex"),
+                (40, 2451544.91568287), // from Autodesk spec: 2451544.91568287 = December 31, 1999, 9:58:35 pm.
+                (100, "AcDbSpatialIndex"),
+                (40, 1.0),
+                (40, 2.0),
+                (40, 3.0)
+            );
+            Assert.Equal(new DateTime(1999, 12, 31, 21, 58, 35), si.Timestamp);
+            AssertArrayEqual(new[] { 1.0, 2.0, 3.0 }, si.Values.ToArray());
+        }
+
+        [Fact]
+        public void WriteSpatialIndexTest()
+        {
+            var si = new DxfSpatialIndex();
+            si.Timestamp = new DateTime(1999, 12, 31, 21, 58, 35);
+            si.Values.Add(1.0);
+            si.Values.Add(2.0);
+            si.Values.Add(3.0);
+            EnsureFileContainsObject(si, DxfAcadVersion.R2000,
+                (100, "AcDbIndex"),
+                (40, 2451544.9156828704), // from Autodesk spec: 2451544.91568287(04) = December 31, 1999, 9:58:35 pm.
+                (100, "AcDbSpatialIndex"),
+                (40, 1.0),
+                (40, 2.0),
+                (40, 3.0)
+            );
+        }
+
+        [Fact]
         public void ReadSunStudyTest()
         {
             // with subset

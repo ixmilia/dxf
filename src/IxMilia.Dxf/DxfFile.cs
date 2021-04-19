@@ -181,7 +181,7 @@ namespace IxMilia.Dxf
 
         public static DxfFile Load(string path, Encoding defaultEncoding)
         {
-            using (var stream = new FileStream(path, FileMode.Open))
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 return Load(stream, defaultEncoding);
             }

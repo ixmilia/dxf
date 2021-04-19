@@ -63,10 +63,12 @@ namespace IxMilia.Dxf.Objects
         protected override DxfObject PostParse()
         {
             // code 90 is shared between `_childFieldCount` and `_valueTypeCode` so they're teased apart here
-            Debug.Assert(_childFieldCount_valueTypeCode.Count == 2);
-            _childFieldCount = _childFieldCount_valueTypeCode[0];
-            _valueTypeCode = _childFieldCount_valueTypeCode[1];
-            _childFieldCount_valueTypeCode.Clear();
+            if (_childFieldCount_valueTypeCode.Count == 2)
+            {
+                _childFieldCount = _childFieldCount_valueTypeCode[0];
+                _valueTypeCode = _childFieldCount_valueTypeCode[1];
+                _childFieldCount_valueTypeCode.Clear();
+            }
 
             // rebuild format string
             FormatString = _formatStringCode4 ?? (_formatStringCode301 + _formatStringOverflow);

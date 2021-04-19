@@ -145,6 +145,43 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadAllEntitiesWithTrailingXDataTest()
+        {
+            foreach (var entityType in GetAllEntityTypes())
+            {
+                if (entityType.BaseType != typeof(DxfDimensionBase))
+                {
+                    // TODO: dimensions need special handling
+                    var obj = Activator.CreateInstance(entityType, nonPublic: true);
+                    if (obj is DxfEntity entity)
+                    {
+                        var file = Section("ENTITIES",
+                            (0, entity.EntityTypeString),
+                            (5, "424241"),
+                            (1001, "ACAD"),
+                            (1000, "sample-xdata"),
+                            (0, "LINE"), // sentinel to ensure we didn't read too far
+                            (5, "424242")
+                        );
+                        Assert.Equal(2, file.Entities.Count);
+
+                        var readEntity = file.Entities.First();
+                        Assert.IsType(entityType, readEntity);
+                        Assert.Equal((ulong)0x424241, ((IDxfItemInternal)readEntity).Handle.Value);
+                        var xdata = readEntity.XData;
+                        var kvp = xdata.Single();
+                        Assert.Equal("ACAD", kvp.Key);
+                        Assert.Equal("sample-xdata", ((DxfXDataString)kvp.Value.Single()).Value);
+
+                        var sentinel = file.Entities.Last();
+                        Assert.IsType<DxfLine>(sentinel);
+                        Assert.Equal((ulong)0x424242, ((IDxfItemInternal)sentinel).Handle.Value);
+                    }
+                }
+            }
+        }
+
+        [Fact]
         public void WriteEntityExtensionDataTest()
         {
             var line = new DxfLine();

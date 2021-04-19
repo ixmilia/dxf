@@ -63,6 +63,11 @@ namespace IxMilia.Dxf.Objects
                     pair = buffer.Peek();
                 }
 
+                if (pair.Code == 0)
+                {
+                    break;
+                }
+
                 if (isReadingPlotSettings)
                 {
                     if (pair.Code == 100 && pair.StringValue == "AcDbLayout")

@@ -21,6 +21,11 @@ namespace IxMilia.Dxf.Objects
                     pair = buffer.Peek();
                 }
 
+                if (pair.Code == 0)
+                {
+                    break;
+                }
+
                 switch (pair.Code)
                 {
                     case 5:

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Sections;
 using Xunit;
 
@@ -290,6 +291,30 @@ EOF
                 var actualString = string.Join("\n", actualPairs);
 
                 throw new Exception($"Unable to find expected pairs\n{expectedString}\n\nin\n\n{actualString}.");
+            }
+        }
+
+        public static IEnumerable<Type> GetAllEntityTypes()
+        {
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                if (ReaderWriterTests.IsEntityOrDerived(type) && !type.IsAbstract && type != typeof(DxfDimensionBase))
+                {
+                    yield return type;
+                }
+            }
+        }
+
+        public static IEnumerable<Type> GetAllObjectTypes()
+        {
+            var assembly = typeof(DxfFile).Assembly;
+            foreach (var type in assembly.GetTypes())
+            {
+                if (ReaderWriterTests.IsObjectOrDerived(type) && !type.IsAbstract)
+                {
+                    yield return type;
+                }
             }
         }
     }

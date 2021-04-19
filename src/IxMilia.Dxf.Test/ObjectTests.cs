@@ -53,6 +53,39 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadAllObjectsWithTrailingXDataTest()
+        {
+            foreach (var objectType in GetAllObjectTypes())
+            {
+                var o = Activator.CreateInstance(objectType, nonPublic: true);
+                if (o is DxfObject obj)
+                {
+                    var file = Section("OBJECTS",
+                        (0, obj.ObjectTypeString),
+                        (5, "424241"),
+                        (1001, "ACAD"),
+                        (1000, "sample-xdata"),
+                        (0, "ACAD_PROXY_OBJECT"), // sentinel to ensure we didn't read too far
+                        (5, "424242")
+                    );
+                    Assert.Equal(2, file.Objects.Count);
+
+                    var readObject = file.Objects.First();
+                    Assert.IsType(objectType, readObject);
+                    Assert.Equal((ulong)0x424241, ((IDxfItemInternal)readObject).Handle.Value);
+                    var xdata = readObject.XData;
+                    var kvp = xdata.Single();
+                    Assert.Equal("ACAD", kvp.Key);
+                    Assert.Equal("sample-xdata", ((DxfXDataString)kvp.Value.Single()).Value);
+
+                    var sentinel = file.Objects.Last();
+                    Assert.IsType<DxfAcadProxyObject>(sentinel);
+                    Assert.Equal((ulong)0x424242, ((IDxfItemInternal)sentinel).Handle.Value);
+                }
+            }
+        }
+
+        [Fact]
         public void ReadDataTableTest()
         {
             var table = (DxfDataTable)GenObject("DATATABLE",

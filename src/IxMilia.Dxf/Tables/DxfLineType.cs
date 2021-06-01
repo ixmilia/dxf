@@ -30,7 +30,7 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair(40, (TotalPatternLength)));
             foreach (var element in Elements)
             {
-                element.AddValuePairs(pairs);
+                element.AddValuePairs(pairs, version);
             }
 
             DxfXData.AddValuePairs(XData, pairs, version, outputHandles);

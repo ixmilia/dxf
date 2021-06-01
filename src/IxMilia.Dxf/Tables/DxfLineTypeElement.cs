@@ -65,17 +65,20 @@ namespace IxMilia.Dxf
 
         internal DxfPointer StylePointer { get; } = new DxfPointer();
 
-        internal void AddValuePairs(List<DxfCodePair> pairs)
+        internal void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version)
         {
             pairs.Add(new DxfCodePair(49, DashDotSpaceLength));
-            pairs.Add(new DxfCodePair(74, (short)ComplexFlags));
-            if (ComplexFlags != 0)
+            if (version >= DxfAcadVersion.R13)
             {
-                var value = IsEmbeddedElementAString ? 0 : ShapeNumber;
-                pairs.Add(new DxfCodePair(75, (short)value));
-                if (StylePointer.Handle.Value != 0)
+                pairs.Add(new DxfCodePair(74, (short)ComplexFlags));
+                if (ComplexFlags != 0)
                 {
-                    pairs.Add(new DxfCodePair(340, DxfCommonConverters.HandleString(StylePointer.Handle)));
+                    var value = IsEmbeddedElementAString ? 0 : ShapeNumber;
+                    pairs.Add(new DxfCodePair(75, (short)value));
+                    if (StylePointer.Handle.Value != 0)
+                    {
+                        pairs.Add(new DxfCodePair(340, DxfCommonConverters.HandleString(StylePointer.Handle)));
+                    }
                 }
             }
 

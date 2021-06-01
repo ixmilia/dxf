@@ -995,6 +995,38 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void LineTypeElementsDontWriteComplexFlagsOnR12Test()
+        {
+            var file = new DxfFile();
+            file.Clear();
+            file.Header.Version = DxfAcadVersion.R12;
+            var ltype = new DxfLineType();
+            file.LineTypes.Add(ltype);
+            ltype.Name = "line-type-name";
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 1.0,
+                ComplexFlags = 0,
+            });
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 2.0,
+                ComplexFlags = 0,
+            });
+            ltype.Elements.Add(new DxfLineTypeElement()
+            {
+                DashDotSpaceLength = 3.0,
+                ComplexFlags = 0,
+            });
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (49, 1.0),
+                (49, 2.0),
+                (49, 3.0)
+            );
+        }
+
+        [Fact]
         public void WriteTablesWithDefaultValuesTest()
         {
             var file = new DxfFile();

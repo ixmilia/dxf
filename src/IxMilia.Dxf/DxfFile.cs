@@ -382,11 +382,11 @@ namespace IxMilia.Dxf
 
         private void PrepareForWriting()
         {
+            Normalize();
             var nextHandle = DxfPointer.AssignHandles(this);
             Header.NextAvailableHandle = nextHandle;
             SetExtents();
             UpdateTimes();
-            Normalize();
         }
 
         internal IEnumerable<DxfCodePair> GetCodePairs()
@@ -433,7 +433,18 @@ namespace IxMilia.Dxf
 
         internal IEnumerable<IDxfItemInternal> GetFileItems()
         {
-            return this.TablesSection.GetTables(Header.Version).Cast<IDxfItemInternal>()
+            return
+                // tables
+                this.TablesSection.GetTables(Header.Version).Cast<IDxfItemInternal>()
+                // table items
+                .Concat(this.ApplicationIds.Cast<IDxfItemInternal>())
+                .Concat(this.BlockRecords.Cast<IDxfItemInternal>())
+                .Concat(this.DimensionStyles.Cast<IDxfItemInternal>())
+                .Concat(this.Layers.Cast<IDxfItemInternal>())
+                .Concat(this.LineTypes.Cast<IDxfItemInternal>())
+                .Concat(this.Styles.Cast<IDxfItemInternal>())
+                .Concat(this.ViewPorts.Cast<IDxfItemInternal>())
+                // everything else
                 .Concat(this.Blocks.Cast<IDxfItemInternal>())
                 .Concat(this.Entities.Cast<IDxfItemInternal>())
                 .Concat(this.Objects.Cast<IDxfItemInternal>())

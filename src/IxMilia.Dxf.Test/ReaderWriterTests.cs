@@ -1557,6 +1557,32 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void DefaultItemsHaveNonNullAndUniqueHandlesAfterClearAndSaveTest()
+        {
+            var file = new DxfFile();
+            file.Clear(); // this removes all default items in the file
+
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms); // this re-adds all default items in the file
+            }
+
+            var defaultItems =
+                file.ApplicationIds.Cast<IDxfItemInternal>()
+                .Concat(file.BlockRecords.Cast<IDxfItemInternal>())
+                .Concat(file.DimensionStyles.Cast<IDxfItemInternal>())
+                .Concat(file.Layers.Cast<IDxfItemInternal>())
+                .Concat(file.LineTypes.Cast<IDxfItemInternal>())
+                .Concat(file.Styles.Cast<IDxfItemInternal>())
+                .Concat(file.ViewPorts.Cast<IDxfItemInternal>())
+                .ToArray();
+            var defaultItemsWithNullHandle = defaultItems.Where(item => item.Handle.Value == 0).ToArray();
+            Assert.Empty(defaultItemsWithNullHandle);
+            var uniqueHandles = defaultItems.Select(item => item.Handle.Value).ToHashSet();
+            Assert.Equal(defaultItems.Length, uniqueHandles.Count);
+        }
+
+        [Fact]
         public void DefaultBlocksTest()
         {
             var file = new DxfFile();

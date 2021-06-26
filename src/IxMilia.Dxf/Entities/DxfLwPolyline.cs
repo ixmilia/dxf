@@ -102,8 +102,45 @@ namespace IxMilia.Dxf.Entities
 
             return PostParse();
         }
+        
+        private DxfEntity VertexPairToEntity(DxfLwPolylineVertex vertex1, DxfLwPolylineVertex vertex2)
+        {
+            if (Math.Abs(vertex1.Bulge) <= 1e-10)
+            {
+                return new DxfLine(new DxfPoint(vertex1.X, vertex1.Y, 0), new DxfPoint(vertex2.X, vertex2.Y, 0));
+            }
 
-        private IEnumerable<DxfPoint> ProcessVertexPair(DxfLwPolylineVertex vertex1, DxfLwPolylineVertex vertex2)
+            // the segment between `vertex.Location` and `next.Location` is an arc
+            if (DxfArc.TryCreateFromVertices(vertex1, vertex2, out var arc))
+            {
+                return arc;
+            }
+            else 
+            {
+                // fallback if points are too close / bulge is tiny
+                return new DxfLine(new DxfPoint(vertex1.X, vertex1.Y, 0), new DxfPoint(vertex2.X, vertex2.Y, 0));
+            }
+        }
+
+        /// <summary>
+        /// Converts DxfLwPolyline into a collection of DxfArc and DxfLine entities
+        /// </summary>
+        public IEnumerable<DxfEntity> AsSimpleEntities()
+        {
+            int n = Vertices.Count;
+
+            for (var i = 0; i < n - 1; i++)
+            {
+                yield return VertexPairToEntity(Vertices[i], Vertices[i + 1]);
+            }
+
+            if (IsClosed)
+            {
+                yield return VertexPairToEntity(Vertices[n - 1], Vertices[0]);
+            }
+        } 
+        
+        private IEnumerable<DxfPoint> VertexPairToBoundingPoints(DxfLwPolylineVertex vertex1, DxfLwPolylineVertex vertex2)
         {
             if (Math.Abs(vertex1.Bulge) <= 1e-10)
             {
@@ -131,12 +168,12 @@ namespace IxMilia.Dxf.Entities
 
             for (var i = 0; i < n - 1; i++)
             {
-                foreach (var point in ProcessVertexPair(Vertices[i], Vertices[i + 1])) yield return point;
+                foreach (var point in VertexPairToBoundingPoints(Vertices[i], Vertices[i + 1])) yield return point;
             }
 
             if (IsClosed)
             {
-                foreach (var point in ProcessVertexPair(Vertices[n - 1], Vertices[0])) yield return point;
+                foreach (var point in VertexPairToBoundingPoints(Vertices[n - 1], Vertices[0])) yield return point;
             }
         }
 

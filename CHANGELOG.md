@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 0.8.1 (13 July 2021)
+
+- Expand object handles to 64 bits.
+- Improve `DIMENSION` entity writing; better interop with AutoCAD.
+- Fix writing `TEXT` alignment.
+- Allow XDATA after every entity and object.
+- Ensure all items have a valid handle after save.
+
 ## 0.8.0 (19 January 2021)
 
 - Only build `netstandard2.0` TFM.

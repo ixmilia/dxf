@@ -325,6 +325,12 @@ namespace IxMilia.Dxf
             while (buffer.ItemsRemain)
             {
                 pair = buffer.Peek();
+                if (pair.Code < 1000)
+                {
+                    // no longer in xdata
+                    break;
+                }
+
                 if (pair.Code == (int)DxfXDataType.ControlString && pair.StringValue == "}")
                 {
                     buffer.Advance();

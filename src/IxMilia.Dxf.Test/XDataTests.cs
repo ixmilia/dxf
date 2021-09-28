@@ -84,6 +84,32 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadXDataListWithIncorrectClosingTagTest()
+        {
+            var file = Section("ENTITIES",
+                (0, "LINE"),
+                (1001, "group name"),
+                (1002, "{"),
+                (1040, 42.0),
+                (1002, "{"), // expected to be '}'; causes an improper empty list
+                (0, "CIRCLE") // ensure this entity isn't swallowed by the improper XDATA tag above
+            );
+            Assert.Equal(2, file.Entities.Count);
+            var line = (DxfLine)file.Entities.First();
+
+            // ensure the next entity wasn't swallowed
+            var _circle = (DxfCircle)file.Entities.Last();
+            var itemCollection = line.XData.Single().Value;
+
+            // LINE XDATA contains 1 list with 2 values; 42.0 and the improper list {} caused by the bad 1002/{ code pair
+            var itemList = (DxfXDataItemList)itemCollection.Single();
+            Assert.Equal(2, itemList.Items.Count);
+            Assert.Equal(42.0, ((DxfXDataReal)itemList.Items[0]).Value);
+            var improperList = (DxfXDataItemList)itemList.Items[1];
+            Assert.Empty(improperList.Items);
+        }
+
+        [Fact]
         public void ReadMultipleXDataFromEntityTest()
         {
             var file = Section("ENTITIES",

@@ -1827,7 +1827,6 @@ namespace IxMilia.Dxf.Test
         {
             var hatch = new DxfHatch();
             hatch.IsPatternDoubled = true; // written before pattern definition lines
-            hatch.PixelSize = 99.0; // written after pattern definition lines
 
             var line1 = new DxfHatch.PatternDefinitionLine();
             line1.Angle = 1.0;
@@ -1867,9 +1866,7 @@ namespace IxMilia.Dxf.Test
                 (46, 12.0),
                 (79, 2),
                 (49, 13.0),
-                (49, 14.0),
-                // PixelSize, specified  after pattern definition lines
-                (47, 99.0)
+                (49, 14.0)
             );
         }
 
@@ -1897,13 +1894,11 @@ namespace IxMilia.Dxf.Test
         public void WriteHatchSeedPointsTest()
         {
             var hatch = new DxfHatch();
-            hatch.PixelSize = 99.0; // written before seed points
             hatch.IsGradient = true; // written after seed points
             hatch.SeedPoints.Add(new DxfPoint(1.0, 2.0, 0.0));
             hatch.SeedPoints.Add(new DxfPoint(3.0, 4.0, 0.0));
             EnsureFileContainsEntity(hatch,
                 DxfAcadVersion.R2004,
-                (47, 99.0), // PixelSize, specified before seed points
                 (98, 2),
                 (10, 1.0), // seed point 1
                 (20, 2.0),

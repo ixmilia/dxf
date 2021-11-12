@@ -547,7 +547,7 @@
         <Property Name="IsPatternDoubled" Code="77" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" WriteCondition="FillMode == DxfHatchPatternFillMode.PatternFill" />
         <Property Name="_patternDefinitionLineCount" Code="78" Type="int" DefaultValue="0" WriteConverter="(short){0}" />
         <Property Name="PatternDefinitionLines" Code="53" Type="PatternDefinitionLine" DefaultValue="" AllowMultiples="true" />
-        <Property Name="PixelSize" Code="47" Type="double" DefaultValue="1.0" />
+        <Property Name="PixelSize" Code="47" Type="double" DefaultValue="1.0" WriteCondition="IsAssociative" />
         <Property Name="_seedPointCount" Code="98" Type="int" Accessibility="private" DefaultValue="0" />
         <Property Name="SeedPoints" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" AllowMultiples="true" CodeOverrides="10,20" />
         <Property Name="IsGradient" Code="450" Type="bool" DefaultValue="false" ReadConverter="BoolInt({0})" WriteConverter="BoolInt({0})" MinVersion="R2004" />
@@ -565,7 +565,6 @@
             <WriteProperty Property="ExtrusionDirection" />
             <WriteProperty Property="PatternName" />
             <WriteProperty Property="FillMode" />
-            <WriteProperty Property="FillColor" />
             <WriteProperty Property="IsAssociative" />
             <WriteSpecificValue Code="91" Value="BoundaryPaths.Count" />
             <Foreach Property="BoundaryPaths">
@@ -576,7 +575,7 @@
             <WriteProperty Property="PatternAngle" />
             <WriteProperty Property="PatternScale" />
             <WriteProperty Property="IsPatternDoubled" />
-            <WriteSpecificValue Code="78" Value="(short)PatternDefinitionLines.Count" />
+            <WriteSpecificValue Code="78" Value="(short)PatternDefinitionLines.Count" WriteCondition="PatternDefinitionLines.Count != 0" />
             <Foreach Property="PatternDefinitionLines">
                 <WriteSpecificValue Code="53" Value="item.Angle" />
                 <WriteSpecificValue Code="43" Value="item.BasePoint.X" />
@@ -596,12 +595,11 @@
             </Foreach>
             <WriteProperty Property="IsGradient" />
             <WriteProperty Property="_zero" />
-            <WriteProperty Property="GradientColorMode" />
-            <WriteProperty Property="NumberOfColors" />
             <WriteProperty Property="GradientRotationAngle" />
             <WriteProperty Property="GradientDefinitionShift" />
+            <WriteProperty Property="GradientColorMode" />
             <WriteProperty Property="ColorTint" />
-            <WriteProperty Property="_reserved" />
+            <WriteProperty Property="NumberOfColors" />
             <WriteProperty Property="StringValue" />
         </WriteOrder>
     </Entity>

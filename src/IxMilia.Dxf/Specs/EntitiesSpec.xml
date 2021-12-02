@@ -26,7 +26,7 @@
             <WriteSpecificValue Code="5" Value="((IDxfItemInternal)this).Handle" WriteCondition="outputHandles" WriteConverter="HandleString({0})" />
             <WriteExtensionData />
             <WriteSpecificValue Code="330" Value="((IDxfItemInternal)this).OwnerHandle" WriteCondition="outputHandles" DontWriteIfValueIs="default(DxfHandle)" WriteConverter="HandleString({0})" />
-            <WriteSpecificValue Code="100" Value="&quot;AcDbEntity&quot;" />
+            <WriteSpecificValue Code="100" Value="&quot;AcDbEntity&quot;" MinVersion="R13" />
             <WriteProperty Property="IsInPaperSpace" />
             <WriteProperty Property="Layer" />
             <WriteProperty Property="LineTypeName" />
@@ -693,7 +693,7 @@
         <Property Name="RowCount" Code="71" Type="short" DefaultValue="1" DisableWritingDefault="true" />
         <Property Name="ColumnSpacing" Code="44" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="RowSpacing" Code="45" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
-        <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
+        <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" DisableWritingDefault="true" />
         <Extents Custom="true" />
     </Entity>
     <!--

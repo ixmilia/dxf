@@ -633,7 +633,10 @@ namespace IxMilia.Dxf.Generator
                 // default order
                 if (!string.IsNullOrEmpty(SubclassMarker(entity)))
                 {
-                    lines.Add(string.Format("pairs.Add(new DxfCodePair(100, \"{0}\"));", SubclassMarker(entity)));
+                    lines.Add("if (version >= DxfAcadVersion.R13)");
+                    lines.Add("{");
+                    lines.Add(string.Format("    pairs.Add(new DxfCodePair(100, \"{0}\"));", SubclassMarker(entity)));
+                    lines.Add("}");
                 }
 
                 foreach (var property in GetPropertiesAndPointers(entity))

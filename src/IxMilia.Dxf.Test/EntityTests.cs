@@ -215,6 +215,7 @@ namespace IxMilia.Dxf.Test
         {
             var line = new DxfLine() { Layer = "" };
             EnsureFileContainsEntity(line,
+                DxfAcadVersion.R13,
                 (0, "LINE"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -924,6 +925,7 @@ namespace IxMilia.Dxf.Test
         public void WriteDefaultLineTest()
         {
             EnsureFileContainsEntity(new DxfLine(),
+                DxfAcadVersion.R13,
                 (0, "LINE"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -942,6 +944,7 @@ namespace IxMilia.Dxf.Test
         public void WriteDefaultCircleTest()
         {
             EnsureFileContainsEntity(new DxfCircle(),
+                DxfAcadVersion.R13,
                 (0, "CIRCLE"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -958,6 +961,7 @@ namespace IxMilia.Dxf.Test
         public void WriteDefaultArcTest()
         {
             EnsureFileContainsEntity(new DxfArc(),
+                DxfAcadVersion.R13,
                 (0, "ARC"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -999,6 +1003,7 @@ namespace IxMilia.Dxf.Test
         public void WriteDefaultTextTest()
         {
             EnsureFileContainsEntity(new DxfText(),
+                DxfAcadVersion.R13,
                 (0, "TEXT"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -1035,6 +1040,7 @@ namespace IxMilia.Dxf.Test
         public void WriteDefaultPolylineTest()
         {
             EnsureFileContainsEntity(new DxfPolyline(),
+                DxfAcadVersion.R13,
                 (0, "POLYLINE"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -1055,6 +1061,7 @@ namespace IxMilia.Dxf.Test
         public void WriteDefaultSolidTest()
         {
             EnsureFileContainsEntity(new DxfSolid(),
+                DxfAcadVersion.R13,
                 (0, "SOLID"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -1085,6 +1092,7 @@ namespace IxMilia.Dxf.Test
                     Thickness = 7,
                     ExtrusionDirection = new DxfVector(8, 9, 10)
                 },
+                DxfAcadVersion.R13,
                 (0, "LINE"),
                 (5, "#"),
                 (100, "AcDbEntity"),
@@ -1136,6 +1144,7 @@ namespace IxMilia.Dxf.Test
                     Layer = "bar",
                     Text = "text"
                 },
+                DxfAcadVersion.R13,
                 (0, "DIMENSION"),
                 (5, "#"),
                 (100, "AcDbEntity"),

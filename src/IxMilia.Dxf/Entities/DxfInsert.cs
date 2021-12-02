@@ -38,7 +38,7 @@ namespace IxMilia.Dxf.Entities
                 pairs.AddRange(attribute.GetValuePairs(version, outputHandles));
             }
 
-            if (Seqend != null)
+            if (Attributes.Any() && Seqend != null)
             {
                 pairs.AddRange(Seqend.GetValuePairs(version, outputHandles));
             }

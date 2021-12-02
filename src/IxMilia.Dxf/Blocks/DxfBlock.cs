@@ -111,7 +111,7 @@ namespace IxMilia.Dxf.Blocks
         {
             var list = new List<DxfCodePair>();
             list.Add(new DxfCodePair(0, BlockText));
-            if (outputHandles && ((IDxfItemInternal)this).Handle.Value != 0)
+            if (outputHandles && version >= DxfAcadVersion.R13 && ((IDxfItemInternal)this).Handle.Value != 0)
             {
                 list.Add(new DxfCodePair(5, DxfCommonConverters.HandleString(((IDxfItemInternal)this).Handle)));
             }

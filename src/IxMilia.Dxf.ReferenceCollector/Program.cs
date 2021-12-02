@@ -18,7 +18,7 @@ namespace IxMilia.Dxf.ReferenceCollector
             var startPageUrl = linkVirtualRoot + "files/index.htm";
             var resultFile = Path.Combine(Environment.CurrentDirectory, $"dxf-reference-R{dxfVersion}.html");
             var collector = new WebPageCollector(startPageUrl, linkVirtualRoot, resultFile);
-            collector.Run();
+            collector.Run().Wait();
         }
     }
 }

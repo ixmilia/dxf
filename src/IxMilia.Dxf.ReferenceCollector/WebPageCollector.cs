@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -10,32 +11,37 @@ namespace IxMilia.Dxf.ReferenceCollector
 {
     public class WebPageCollector
     {
-        private WebClient _client;
+        private HttpClient _client;
         private Uri _virtualRoot;
         private Uri _startPageUrl;
         private string _resultFile;
 
         public WebPageCollector(string startPageUrl, string virtualRoot, string resultFile)
         {
-            _client = new WebClient();
+            _client = new HttpClient();
             _startPageUrl = new Uri(startPageUrl);
             _virtualRoot = new Uri(virtualRoot);
             _resultFile = resultFile;
         }
 
-        public void Run()
+        public async Task Run()
         {
             var urlsToProcess = new Queue<Uri>();
             urlsToProcess.Enqueue(_startPageUrl);
             var seenUrls = new HashSet<Uri>();
             var styleSheets = new List<Uri>();
             var body = new XElement("body");
-            ProcessUrls(urlsToProcess, seenUrls, styleSheets, body);
+            await ProcessUrls(urlsToProcess, seenUrls, styleSheets, body);
 
             // inline styles
-            var head = new XElement("head",
-                styleSheets.Distinct().Select(s => new XElement("style", _client.DownloadString(s))));
+            var styleSheetContents = new List<string>();
+            foreach (var styleSheelUrl in styleSheets.Distinct())
+            {
+                var styleSheetContent = await _client.GetStringAsync(styleSheelUrl);
+                styleSheetContents.Add(styleSheetContent);
+            }
 
+            var head = new XElement("head", styleSheetContents.Select(s => new XElement("style", s)));
             var html = new XElement("html", head, body);
             var doc = new XDocument(new XDeclaration("1.0", "UTF-8", "yes"), html);
             Console.WriteLine($"Writing result to {_resultFile}");
@@ -45,14 +51,14 @@ namespace IxMilia.Dxf.ReferenceCollector
             }
         }
 
-        private void ProcessUrls(Queue<Uri> urlsToProcess, HashSet<Uri> seenUrls, List<Uri> styleSheets, XElement body)
+        private async Task ProcessUrls(Queue<Uri> urlsToProcess, HashSet<Uri> seenUrls, List<Uri> styleSheets, XElement body)
         {
             while (urlsToProcess.Count > 0)
             {
                 var pageUrl = urlsToProcess.Dequeue();
                 seenUrls.Add(pageUrl);
                 Console.WriteLine($"Processing {pageUrl}");
-                var content = _client.DownloadString(pageUrl); // TODO: handle exceptions
+                var content = await _client.GetStringAsync(pageUrl); // TODO: handle exceptions
                 var xml = XDocument.Parse(content);
 
                 foreach (var element in xml.Descendants())
@@ -90,7 +96,7 @@ namespace IxMilia.Dxf.ReferenceCollector
                                     // remove leading dot
                                     imageExtension = imageExtension.Substring(1);
                                 }
-                                var imageBytes = _client.DownloadData(imageUrl);
+                                var imageBytes = await _client.GetByteArrayAsync(imageUrl);
                                 src.Value = $"data:image/{imageExtension};base64,{Convert.ToBase64String(imageBytes)}";
                             }
                             break;

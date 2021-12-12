@@ -1,0 +1,9 @@
+#!csharp
+
+#r "../artifacts/bin/IxMilia.Dxf/Debug/netstandard2.0/IxMilia.Dxf.dll"
+
+#!csharp
+
+using IxMilia.Dxf;
+
+var file = DxfFile.Load(@"path/to/file.dxf");

@@ -11,6 +11,7 @@ namespace IxMilia.Dxf.Test
             EnsureDoubleParse(11.0, "1.100000E+001");
             EnsureDoubleParse(55.0, "5.5e1");
             EnsureDoubleParse(2.0, "2");
+            EnsureDoubleParse(1.0e20, "1.000000000000000E 20");
 
             // some files encountered in the wild have double-like values for the integral types
             EnsureShortParse(2, "2.0");

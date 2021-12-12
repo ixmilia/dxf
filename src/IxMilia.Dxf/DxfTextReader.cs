@@ -172,7 +172,7 @@ namespace IxMilia.Dxf
 
         internal static bool TryParseDoubleValue(string s, out double result)
         {
-            return double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out result);
+            return double.TryParse(s.Replace(" ", ""), NumberStyles.Float, CultureInfo.InvariantCulture, out result);
         }
 
         internal static bool TryParseIntValue(string s, out int result)

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 0.8.2 (10 January 2022)
+
+- Improve XDATA reading.
+- Improve `HATCH` writing.
+- Improve compatibility with R12 when writing `BLOCK` and `INSERT` entities.
+
 ## 0.8.1 (13 July 2021)
 
 - Expand object handles to 64 bits.

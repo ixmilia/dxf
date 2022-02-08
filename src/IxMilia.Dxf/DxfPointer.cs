@@ -76,14 +76,28 @@ namespace IxMilia.Dxf
                 SetChildOwners(item, visitedChildren);
 
                 // set explicit owners
-                foreach (var child in item.GetPointers())
+                BindItemPointers(item, handleMap, visitedItems, visitedChildren);
+                foreach (var child in item.GetChildItems())
                 {
-                    if (handleMap.ContainsKey(child.Handle))
+                    if (child == null)
                     {
-                        child.Item = handleMap[child.Handle];
-                        BindPointers((IDxfItemInternal)child.Item, handleMap, visitedItems, visitedChildren);
-                        SetOwner((IDxfItemInternal)child.Item, item, isWriting: false);
+                        continue;
                     }
+
+                    BindItemPointers(child, handleMap, visitedItems, visitedChildren);
+                }
+            }
+        }
+
+        private static void BindItemPointers(IDxfItemInternal item, Dictionary<DxfHandle, IDxfItemInternal> handleMap, HashSet<IDxfItemInternal> visitedItems, HashSet<IDxfItemInternal> visitedChildren)
+        {
+            foreach (var child in item.GetPointers())
+            {
+                if (handleMap.ContainsKey(child.Handle))
+                {
+                    child.Item = handleMap[child.Handle];
+                    BindPointers((IDxfItemInternal)child.Item, handleMap, visitedItems, visitedChildren);
+                    SetOwner((IDxfItemInternal)child.Item, item, isWriting: false);
                 }
             }
         }

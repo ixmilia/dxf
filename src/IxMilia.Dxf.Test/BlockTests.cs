@@ -55,5 +55,34 @@ namespace IxMilia.Dxf.Test
                 (0, "ENDSEC") // ensures nothing else was written
             );
         }
+
+        [Fact]
+        public void PointerResolutionInAnImageInABlockWhenReading()
+        {
+            var drawing = Parse(
+                // blocks
+                (0, "SECTION"),
+                (2, "BLOCKS"),
+                (0, "BLOCK"),
+                (0, "IMAGE"),
+                (340, "FFFF0340"), // points to the IMAGEDEF below
+                (360, "FFFF0360"), // points to the IMAGEDEF_REACTOR below
+                (0, "ENDSEC"),
+                // objects
+                (0, "SECTION"),
+                (2, "OBJECTS"),
+                (0, "IMAGEDEF"),
+                (5, "FFFF0340"), // from IMAGE.340 above
+                (1, "image-def-file-path"),
+                (0, "IMAGEDEF_REACTOR"),
+                (5, "FFFF0360"), // from IMAGE.360 above
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
+            var block = drawing.Blocks.Single();
+            var imageEntity = (DxfImage)block.Entities.Single();
+            var imageDef = imageEntity.ImageDefinition;
+            Assert.Equal("image-def-file-path", imageDef.FilePath);
+        }
     }
 }

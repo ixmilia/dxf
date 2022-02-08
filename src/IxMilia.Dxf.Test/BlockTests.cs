@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Objects;
 using Xunit;
 
 namespace IxMilia.Dxf.Test
@@ -83,6 +84,25 @@ namespace IxMilia.Dxf.Test
             var imageEntity = (DxfImage)block.Entities.Single();
             var imageDef = imageEntity.ImageDefinition;
             Assert.Equal("image-def-file-path", imageDef.FilePath);
+        }
+
+        [Fact]
+        public void PointerAssignmentInAnImageInABlockWhenWriting()
+        {
+            var file = new DxfFile();
+            var block = new DxfBlock();
+            block.Name = "my-block";
+            var image = new DxfImage();
+            image.ImageDefinition = new DxfImageDefinition();
+            image.ImageDefinition.FilePath = "image-def-file-path";
+            block.Entities.Add(image);
+            file.Blocks.Add(block);
+
+            // don't care about the code pairs, but this forces handles to be assigned to pointers
+            var _actualCodePairs = file.GetCodePairs().ToList();
+
+            Assert.NotEqual(0u, ((IDxfItemInternal)block).Handle.Value);
+            Assert.NotEqual(0u, ((IDxfItemInternal)image.ImageDefinition).Handle.Value);
         }
     }
 }

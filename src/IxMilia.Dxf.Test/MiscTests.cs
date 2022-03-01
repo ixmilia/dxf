@@ -185,5 +185,35 @@ namespace IxMilia.Dxf.Test
             // display
             Assert.Equal(new DxfHandle(ulongValue), DxfCommonConverters.HandleString(stringValue));
         }
+
+        [Fact]
+        public void BreakLwPolylineIntoSimpleEntitiesPreservesCommonEntityProperties()
+        {
+            var poly = new DxfLwPolyline(new[]
+            {
+                new DxfLwPolylineVertex() { X = 0.0, Y = 0.0 },
+                new DxfLwPolylineVertex() { X = 1.0, Y = 1.0 },
+            })
+            {
+                Layer = "some-layer"
+            };
+            var simple = poly.AsSimpleEntities().First();
+            Assert.Equal(poly.Layer, simple.Layer);
+        }
+
+        [Fact]
+        public void BreakPolylineIntoSimpleEntitiesPreservesCommonEntityProperties()
+        {
+            var poly = new DxfPolyline(new[]
+            {
+                new DxfVertex(new DxfPoint(0.0, 0.0, 0.0)),
+                new DxfVertex(new DxfPoint(1.0, 1.0, 0.0)),
+            })
+            {
+                Layer = "some-layer"
+            };
+            var simple = poly.AsSimpleEntities().First();
+            Assert.Equal(poly.Layer, simple.Layer);
+        }
     }
 }

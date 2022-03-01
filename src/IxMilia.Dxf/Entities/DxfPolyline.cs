@@ -180,12 +180,16 @@ namespace IxMilia.Dxf.Entities
 
             for (var i = 0; i < n - 1; i++)
             {
-                yield return VertexPairToEntity(Vertices[i], Vertices[i + 1]);
+                var result = VertexPairToEntity(Vertices[i], Vertices[i + 1]);
+                result.CopyCommonPropertiesFrom(this);
+                yield return result;
             }
 
             if (IsClosed)
             {
-                yield return VertexPairToEntity(Vertices[n - 1], Vertices[0]);
+                var result = VertexPairToEntity(Vertices[n - 1], Vertices[0]);
+                result.CopyCommonPropertiesFrom(this);
+                yield return result;
             }
         } 
 

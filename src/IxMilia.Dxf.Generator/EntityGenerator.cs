@@ -113,6 +113,14 @@ namespace IxMilia.Dxf.Generator
             AppendLine("protected DxfEntity(DxfEntity other)");
             AppendLine("    : this()");
             AppendLine("{");
+            AppendLine("    CopyCommonPropertiesFrom(other);");
+            AppendLine("}");
+
+            //
+            // Copy common properties
+            //
+            AppendLine("internal void CopyCommonPropertiesFrom(DxfEntity other)");
+            AppendLine("{");
             AppendLine("    ((IDxfItemInternal)this).Handle = ((IDxfItemInternal)other).Handle;");
             AppendLine("    ((IDxfItemInternal)this).OwnerHandle = ((IDxfItemInternal)other).OwnerHandle;");
             AppendLine("    ((IDxfItemInternal)this).SetOwner(((IDxfItemInternal)other).Owner);");

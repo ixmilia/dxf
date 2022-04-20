@@ -27,5 +27,25 @@ namespace Examples
 
             file.SaveExample();
         }
+
+        [Fact]
+        public void AddRadiusDimensionForACircle()
+        {
+            // this test has only been verified against LibreCAD 2.1.3
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R12;
+
+            // add a circle at (0,0) with radius 1
+            var circle = new DxfCircle(new DxfPoint(0.0, 0.0, 0.0), 1.0);
+            file.Entities.Add(circle);
+
+            // add a radius dimension that corresponds to the circle
+            var dim = new DxfRadialDimension();
+            dim.DefinitionPoint1 = circle.Center;
+            dim.DefinitionPoint2 = circle.Center + new DxfVector(circle.Radius, 0.0, 0.0);
+            file.Entities.Add(dim);
+
+            file.SaveExample();
+        }
     }
 }

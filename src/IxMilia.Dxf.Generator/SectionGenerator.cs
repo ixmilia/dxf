@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.CodeAnalysis;
 
 namespace IxMilia.Dxf.Generator
 {
-    [Generator]
-    public class SectionGenerator : GeneratorBase, ISourceGenerator
+    public class SectionGenerator : GeneratorBase
     {
         private XElement _xml;
         private string _xmlns;
@@ -16,21 +14,21 @@ namespace IxMilia.Dxf.Generator
 
         public const string SectionNamespace = "IxMilia.Dxf";
 
-        public void Initialize(GeneratorInitializationContext context)
+        public SectionGenerator(string outputDir)
+            : base(outputDir)
         {
         }
 
-        public void Execute(GeneratorExecutionContext context)
+        public void Run()
         {
-            var specText = context.AdditionalFiles.Single(f => Path.GetFileName(f.Path) == "HeaderVariablesSpec.xml").GetText().ToString();
-            _xml = XDocument.Parse(specText).Root;
+            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Specs", "HeaderVariablesSpec.xml")).Root;
             _xmlns = _xml.Name.NamespaceName;
             _variables = _xml.Elements(XName.Get("Variable", _xmlns));
 
-            OutputHeader(context);
+            OutputHeader();
         }
 
-        private void OutputHeader(GeneratorExecutionContext context)
+        private void OutputHeader()
         {
             CreateNewFile(SectionNamespace, "System", "System.Collections.Generic", "System.Diagnostics", "IxMilia.Dxf.Entities");
 
@@ -372,7 +370,7 @@ namespace IxMilia.Dxf.Generator
             DecreaseIndent();
 
             FinishFile();
-            WriteFile(context, "DxfHeaderGenerated.cs");
+            WriteFile("DxfHeaderGenerated.cs");
         }
     }
 }

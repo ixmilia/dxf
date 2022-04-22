@@ -22,6 +22,8 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+"$_SCRIPT_DIR/generate-code.sh"
+
 dotnet restore
 dotnet build --configuration $CONFIGURATION
 

@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 namespace IxMilia.Dxf.Generator
 {
     public abstract class GeneratorBase
     {
+        private string _outputDir;
         private StringBuilder _sb;
         private int _indentionLevel;
+
+        protected GeneratorBase(string outputDir)
+        {
+            _outputDir = outputDir;
+        }
 
         public string Accessibility(XElement property)
         {
@@ -270,7 +275,7 @@ namespace IxMilia.Dxf.Generator
                         typeString = string.Format("DxfPointerList<{0}>", type);
                         suffix += "s";
                     }
-                    
+
                     AppendLine($"internal {typeString} {Name(pointer)}{suffix} {{ get; }} = {defaultValue};");
                 }
             }
@@ -1009,9 +1014,10 @@ namespace IxMilia.Dxf.Generator
             AppendLine("}");
         }
 
-        public void WriteFile(GeneratorExecutionContext context, string path)
+        public void WriteFile(string path)
         {
-            context.AddSource(path, SourceText.From(_sb.ToString(), Encoding.UTF8));
+            var fullPath = Path.Combine(_outputDir, path);
+            File.WriteAllText(fullPath, _sb.ToString());
             _sb = null;
         }
     }

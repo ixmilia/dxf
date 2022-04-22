@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.CodeAnalysis;
 
 namespace IxMilia.Dxf.Generator
 {
-    [Generator]
-    public class TableGenerator : GeneratorBase, ISourceGenerator
+    public class TableGenerator : GeneratorBase
     {
         private XElement _xml;
         private string _xmlns;
@@ -16,22 +14,22 @@ namespace IxMilia.Dxf.Generator
 
         public const string TableNamespace = "IxMilia.Dxf.Tables";
 
-        public void Initialize(GeneratorInitializationContext context)
+        public TableGenerator(string outputDir)
+            : base(outputDir)
         {
         }
 
-        public void Execute(GeneratorExecutionContext context)
+        public void Run()
         {
-            var specText = context.AdditionalFiles.Single(f => Path.GetFileName(f.Path) == "TableSpec.xml").GetText().ToString();
-            _xml = XDocument.Parse(specText).Root;
+            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Specs", "TableSpec.xml")).Root;
             _xmlns = _xml.Name.NamespaceName;
             _tables = _xml.Elements(XName.Get("Table", _xmlns));
 
-            OutputTables(context);
-            OutputTableItems(context);
+            OutputTables();
+            OutputTableItems();
         }
 
-        private void OutputTables(GeneratorExecutionContext context)
+        private void OutputTables()
         {
             foreach (var table in _tables)
             {
@@ -101,11 +99,11 @@ namespace IxMilia.Dxf.Generator
                 DecreaseIndent();
 
                 FinishFile();
-                WriteFile(context, $"{className}Generated.cs");
+                WriteFile($"{className}Generated.cs");
             }
         }
 
-        private void OutputTableItems(GeneratorExecutionContext context)
+        private void OutputTableItems()
         {
             foreach (var table in _tables)
             {
@@ -539,7 +537,7 @@ namespace IxMilia.Dxf.Generator
                 DecreaseIndent();
 
                 FinishFile();
-                WriteFile(context, $"{Name(tableItem)}Generated.cs");
+                WriteFile($"{Name(tableItem)}Generated.cs");
             }
         }
 

@@ -28,6 +28,8 @@ goto parseargs
 
 :argsdone
 
+call "%thisdir%generate-code.cmd"
+
 dotnet restore
 if errorlevel 1 goto error
 dotnet build --configuration %configuration%

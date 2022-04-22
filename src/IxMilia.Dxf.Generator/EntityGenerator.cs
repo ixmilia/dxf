@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.CodeAnalysis;
 
 namespace IxMilia.Dxf.Generator
 {
-    [Generator]
-    public class EntityGenerator : GeneratorBase, ISourceGenerator
+    public class EntityGenerator : GeneratorBase
     {
         private XElement _xml;
         private string _xmlns;
@@ -16,23 +14,23 @@ namespace IxMilia.Dxf.Generator
 
         public const string EntityNamespace = "IxMilia.Dxf.Entities";
 
-        public void Initialize(GeneratorInitializationContext context)
+        public EntityGenerator(string outputDir)
+            : base(outputDir)
         {
         }
 
-        public void Execute(GeneratorExecutionContext context)
+        public void Run()
         {
-            var specText = context.AdditionalFiles.Single(f => Path.GetFileName(f.Path) == "EntitiesSpec.xml").GetText().ToString();
-            _xml = XDocument.Parse(specText).Root;
+            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Specs", "EntitiesSpec.xml")).Root;
             _xmlns = _xml.Name.NamespaceName;
             _entities = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => x.Attribute("Name").Value != "DxfEntity");
 
-            OutputDxfEntityType(context);
-            OutputDxfEntity(context);
-            OutputDxfEntities(context);
+            OutputDxfEntityType();
+            OutputDxfEntity();
+            OutputDxfEntities();
         }
 
-        private void OutputDxfEntityType(GeneratorExecutionContext context)
+        private void OutputDxfEntityType()
         {
             CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
             IncreaseIndent();
@@ -46,10 +44,10 @@ namespace IxMilia.Dxf.Generator
             AppendLine("}");
             DecreaseIndent();
             FinishFile();
-            WriteFile(context, "DxfEntityTypeGenerated.cs");
+            WriteFile("DxfEntityTypeGenerated.cs");
         }
 
-        private void OutputDxfEntity(GeneratorExecutionContext context)
+        private void OutputDxfEntity()
         {
             var baseEntity = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => Name(x) == "DxfEntity").Single();
             CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
@@ -295,10 +293,10 @@ namespace IxMilia.Dxf.Generator
             AppendLine("}"); // end class
             DecreaseIndent();
             FinishFile();
-            WriteFile(context, "DxfEntityGenerated.cs");
+            WriteFile("DxfEntityGenerated.cs");
         }
 
-        private void OutputDxfEntities(GeneratorExecutionContext context)
+        private void OutputDxfEntities()
         {
             foreach (var entity in _entities)
             {
@@ -308,7 +306,7 @@ namespace IxMilia.Dxf.Generator
                 OutputSingleDxfEntity(entity);
                 DecreaseIndent();
                 FinishFile();
-                WriteFile(context, className + "Generated.cs");
+                WriteFile(className + "Generated.cs");
             }
         }
 

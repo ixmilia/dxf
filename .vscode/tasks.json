@@ -5,20 +5,29 @@
       "label": "build",
       "type": "shell",
       "command": "dotnet build",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "dependsOn": [
         "generate"
       ],
-      "group": "build",
       "problemMatcher": "$msCompile"
     },
     {
       "label": "generate",
       "type": "shell",
-      "command": "dotnet run -- ${workspaceFolder}/src/IxMilia.Dxf",
+      "command": "pwsh ./generate-code.ps1",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "label": "build-generator",
+      "type": "shell",
+      "command": "dotnet build",
       "options": {
         "cwd": "${workspaceFolder}/src/IxMilia.Dxf.Generator"
       },
-      "group": "build",
       "problemMatcher": "$msCompile"
     }
   ]

@@ -2,12 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Attach",
+      "name": "Launch generator",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/artifacts/bin/IxMilia.Dxf.Test/Debug/net5.0/IxMilia.Dxf.Test.dll",
-      "args": [],
+      "preLaunchTask": "build-generator",
+      "program": "${workspaceFolder}/artifacts/bin/IxMilia.Dxf.Generator/Debug/net6.0/IxMilia.Dxf.Generator.dll",
+      "args": [
+        "${workspaceFolder}/src/IxMilia.Dxf/Generated"
+      ],
       "cwd": "${workspaceFolder}",
       "console": "internalConsole"
     }

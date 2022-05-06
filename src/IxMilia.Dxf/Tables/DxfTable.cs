@@ -104,6 +104,7 @@ namespace IxMilia.Dxf.Tables
             {
                 if (writtenItems.Add(item))
                 {
+                    item.BeforeWrite();
                     item.AddCommonValuePairs(pairs, version, outputHandles);
                     item.AddValuePairs(pairs, version, outputHandles);
                 }

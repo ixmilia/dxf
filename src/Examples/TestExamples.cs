@@ -47,5 +47,26 @@ namespace Examples
 
             file.SaveExample();
         }
+
+        [Fact]
+        public void AddACustomLineType()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R12;
+
+            // create a custom line type and add it to the file
+            // this line type will have a dash of length 0.5 followed by a gap of length 0.25
+            var dashed = new DxfLineType("dashed");
+            dashed.Elements.Add(new DxfLineTypeElement() { DashDotSpaceLength = 0.5 });
+            dashed.Elements.Add(new DxfLineTypeElement() { DashDotSpaceLength = 0.25 });
+            file.LineTypes.Add(dashed);
+
+            // now add a line using this line type
+            var line = new DxfLine(new DxfPoint(0.0, 0.0, 0.0), new DxfPoint(10.0, 10.0, 0.0));
+            line.LineTypeName = dashed.Name;
+            file.Entities.Add(line);
+
+            file.SaveExample();
+        }
     }
 }

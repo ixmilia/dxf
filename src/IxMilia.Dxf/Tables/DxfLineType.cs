@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,20 @@ namespace IxMilia.Dxf
         IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
         {
             return Elements.Select(e => (IDxfItemInternal)e);
+        }
+
+        internal override void BeforeWrite()
+        {
+            for (int i = 0; i < Elements.Count; i++)
+            {
+                Elements[i].DashDotSpaceLength = Math.Abs(Elements[i].DashDotSpaceLength);
+                if (i % 2 == 1)
+                {
+                    Elements[i].DashDotSpaceLength *= -1.0;
+                }
+            }
+
+            TotalPatternLength = Elements.Sum(e => Math.Abs(e.DashDotSpaceLength));
         }
 
         internal override void AddValuePairs(List<DxfCodePair> pairs, DxfAcadVersion version, bool outputHandles)

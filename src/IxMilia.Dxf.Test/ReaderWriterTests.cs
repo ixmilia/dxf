@@ -987,7 +987,7 @@ namespace IxMilia.Dxf.Test
                 DxfSectionType.Tables,
                 (49, 1.0),
                 (74, 0),
-                (49, 2.0),
+                (49, -2.0),
                 (74, 0),
                 (49, 3.0),
                 (74, 0)
@@ -1021,7 +1021,7 @@ namespace IxMilia.Dxf.Test
             VerifyFileContains(file,
                 DxfSectionType.Tables,
                 (49, 1.0),
-                (49, 2.0),
+                (49, -2.0),
                 (49, 3.0)
             );
         }

@@ -921,11 +921,11 @@
         <Property Name="LineSpacingStyle" Code="73" Type="DxfMTextLineSpacingStyle" DefaultValue="DxfMTextLineSpacingStyle.AtLeast" ReadConverter="(DxfMTextLineSpacingStyle){0}" WriteConverter="(short){0}" />
         <Property Name="LineSpacingFactor" Code="44" Type="double" DefaultValue="1.0" />
         <Property Name="BackgroundFillSetting" Code="90" Type="DxfBackgroundFillSetting" DefaultValue="DxfBackgroundFillSetting.Off" ReadConverter="(DxfBackgroundFillSetting){0}" WriteConverter="(int){0}" />
-        <Property Name="BackgroundColorRGB" Code="420" Type="int" DefaultValue="0" />
-        <Property Name="BackgroundColorName" Code="430" Type="string" DefaultValue="null" />
+        <Property Name="BackgroundColorRGB" Code="420" Type="int" DefaultValue="0" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
+        <Property Name="BackgroundColorName" Code="430" Type="string" DefaultValue="null" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
         <Property Name="FillBoxScale" Code="45" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
-        <Property Name="BackgroundFillColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" />
-        <Property Name="BackgroundFillColorTransparency" Code="441" Type="int" DefaultValue="0" />
+        <Property Name="BackgroundFillColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
+        <Property Name="BackgroundFillColorTransparency" Code="441" Type="int" DefaultValue="0" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
         <Property Name="ColumnType" Code="75" Type="short" DefaultValue="0" />
         <Property Name="ColumnCount" Code="76" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" />
         <Property Name="IsColumnFlowReversed" Code="78" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />

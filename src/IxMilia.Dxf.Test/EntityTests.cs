@@ -1390,6 +1390,39 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void WriteMTextTest()
+        {
+            var mtext = new DxfMText()
+            {
+                InsertionPoint = new DxfPoint(1.0, 2.0, 3.0),
+                InitialTextHeight = 1.0,
+                Text = "this is mtext",
+            };
+            EnsureFileContainsEntity(mtext,
+                DxfAcadVersion.R14,
+                (10, 1.0), // insertion point
+                (20, 2.0),
+                (30, 3.0),
+                (40, 1.0), // initial text height
+                (41, 1.0), // reference rectangle width
+                (71, 1), // attachment point
+                (72, 1), // drawing direction
+                (1, "this is mtext"), // text
+                (11, 1.0), // x axis
+                (21, 0.0),
+                (31, 0.0),
+                (42, 1.0), // horizontal width
+                (43, 1.0), // vertical height
+                (50, 0.0), // rotation angle
+                (73, 1), // line spacing style
+                (44, 1.0), // line spacing factor
+                (90, 0), // background fill setting
+                // note, no 420, 430, 63, 441
+                (75, 0) // column type
+            );
+        }
+
+        [Fact]
         public void WriteVertexWithIdentifierTest()
         {
             // non-zero identifiers are written

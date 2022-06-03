@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 0.8.3 (3 June 2022)
+
+- Improved handle resolution inside `BLOCK` objects.
+- Improve `POLYLINE`/`LWPOLYLINE` entity splitting.
+- Fix writing `MTEXT` entities for R14.
+
 ## 0.8.2 (10 January 2022)
 
 - Improve XDATA reading.

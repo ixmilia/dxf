@@ -2223,5 +2223,18 @@ namespace IxMilia.Dxf.Test
             var boundaryHandle = externalPath.BoundaryHandles.Single();
             Assert.Equal((ulong)0xABC, boundaryHandle.Value);
         }
+
+        [Fact]
+        public void ReadHatchWithNoBoundaryNoPattern()
+        {
+            var hatch = (DxfHatch)Entity("HATCH",
+                (91, 0), // boundary path count
+                (78, 0), // pattern definition count
+                (47, 42.0) // pixel size (sentinel)
+            );
+            Assert.Empty(hatch.BoundaryPaths);
+            Assert.Empty(hatch.PatternDefinitionLines);
+            Assert.Equal(42.0, hatch.PixelSize);
+        }
     }
 }

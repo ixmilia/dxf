@@ -27,7 +27,7 @@ namespace IxMilia.Dxf.Entities
                         return true;
                     }
 
-                    if (BoundaryPaths.Last().TrySetPair(pair))
+                    if (BoundaryPaths.LastOrDefault()?.TrySetPair(pair) == true)
                     {
                         return true;
                     }
@@ -43,7 +43,7 @@ namespace IxMilia.Dxf.Entities
                         PatternDefinitionLines.Add(new PatternDefinitionLine());
                     }
 
-                    if (PatternDefinitionLines.Last().TrySetPair(pair))
+                    if (PatternDefinitionLines.LastOrDefault()?.TrySetPair(pair) == true)
                     {
                         return true;
                     }

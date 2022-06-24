@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Linq;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Entities;
@@ -214,6 +215,27 @@ namespace IxMilia.Dxf.Test
             };
             var simple = poly.AsSimpleEntities().First();
             Assert.Equal(poly.Layer, simple.Layer);
+        }
+
+        [Theory]
+        [InlineData("en-US")]
+        [InlineData("de-DE")]
+        public void PointAndVectorStringValuesAreConsistentAcrossCultures(string culture)
+        {
+            var existingCulture = CultureInfo.CurrentCulture;
+            try
+            {
+                var point = new DxfPoint(1.5, 2.5, 3.5);
+                var vector = new DxfVector(4.5, 5.5, 6.5);
+
+                CultureInfo.CurrentCulture = new CultureInfo(culture);
+                Assert.Equal("(1.5,2.5,3.5)", point.ToString());
+                Assert.Equal("(4.5,5.5,6.5)", vector.ToString());
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = existingCulture;
+            }
         }
     }
 }

@@ -134,7 +134,7 @@ namespace IxMilia.Dxf
 
         public override string ToString()
         {
-            return string.Format("({0},{1},{2})", X, Y, Z);
+            return $"({DxfWriter.DoubleAsString(X)},{DxfWriter.DoubleAsString(Y)},{DxfWriter.DoubleAsString(Z)})";
         }
 
         public static DxfVector RightVectorFromNormal(DxfVector normal)

@@ -66,7 +66,7 @@ namespace IxMilia.Dxf.Objects
                     else if (pair.Code == 5 || pair.Code == 105)
                     {
                         // these codes aren't allowed here
-                        ExcessCodePairs.Add(pair);
+                        InternalExcessCodePairs.Add(pair);
                     }
                     else
                     {

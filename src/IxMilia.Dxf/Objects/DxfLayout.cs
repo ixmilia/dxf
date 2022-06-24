@@ -78,7 +78,7 @@ namespace IxMilia.Dxf.Objects
                     {
                         if (!base.TrySetPair(pair))
                         {
-                            ExcessCodePairs.Add(pair);
+                            InternalExcessCodePairs.Add(pair);
                         }
                     }
                 }
@@ -86,7 +86,7 @@ namespace IxMilia.Dxf.Objects
                 {
                     if (!TrySetPair(pair))
                     {
-                        ExcessCodePairs.Add(pair);
+                        InternalExcessCodePairs.Add(pair);
                     }
                 }
 

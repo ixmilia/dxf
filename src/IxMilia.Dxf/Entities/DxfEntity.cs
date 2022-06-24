@@ -220,7 +220,9 @@ namespace IxMilia.Dxf.Entities
 
     public abstract partial class DxfEntity : IDxfHasXData
     {
-        protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
+        internal List<DxfCodePair> InternalExcessCodePairs { get; } = new List<DxfCodePair>();
+
+        public IReadOnlyList<DxfCodePair> ExcessCodePairs => InternalExcessCodePairs;
 
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
@@ -333,7 +335,7 @@ namespace IxMilia.Dxf.Entities
                 else
                 {
                     // track it for later use and consume it
-                    ExcessCodePairs.Add(pair);
+                    InternalExcessCodePairs.Add(pair);
                     buffer.Advance();
                 }
             }

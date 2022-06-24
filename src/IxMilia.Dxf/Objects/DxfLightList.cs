@@ -39,7 +39,7 @@ namespace IxMilia.Dxf.Objects
                             // might still be the handle
                             if (!base.TrySetPair(pair))
                             {
-                                ExcessCodePairs.Add(pair);
+                                InternalExcessCodePairs.Add(pair);
                             }
                         }
                         break;
@@ -60,7 +60,7 @@ namespace IxMilia.Dxf.Objects
                     default:
                         if (!base.TrySetPair(pair))
                         {
-                            ExcessCodePairs.Add(pair);
+                            InternalExcessCodePairs.Add(pair);
                         }
                         break;
                 }

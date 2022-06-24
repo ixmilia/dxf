@@ -123,7 +123,7 @@ namespace IxMilia.Dxf.Objects
                     default:
                         if (!TrySetPair(pair))
                         {
-                            ExcessCodePairs.Add(pair);
+                            InternalExcessCodePairs.Add(pair);
                         }
                         break;
                 }

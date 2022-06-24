@@ -99,7 +99,9 @@ namespace IxMilia.Dxf.Objects
 
     public abstract partial class DxfObject : IDxfItem, IDxfHasXData
     {
-        protected List<DxfCodePair> ExcessCodePairs = new List<DxfCodePair>();
+        internal List<DxfCodePair> InternalExcessCodePairs = new List<DxfCodePair>();
+
+        public IReadOnlyList<DxfCodePair> ExcessCodePairs => InternalExcessCodePairs;
 
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; } = new ListNonNull<DxfCodePairGroup>();
 
@@ -173,7 +175,7 @@ namespace IxMilia.Dxf.Objects
 
                 if (!TrySetPair(pair))
                 {
-                    ExcessCodePairs.Add(pair);
+                    InternalExcessCodePairs.Add(pair);
                 }
 
                 buffer.Advance();

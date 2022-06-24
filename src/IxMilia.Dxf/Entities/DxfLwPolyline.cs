@@ -92,7 +92,7 @@ namespace IxMilia.Dxf.Entities
                     default:
                         if (!base.TrySetPair(pair))
                         {
-                            ExcessCodePairs.Add(pair);
+                            InternalExcessCodePairs.Add(pair);
                         }
                         break;
                 }

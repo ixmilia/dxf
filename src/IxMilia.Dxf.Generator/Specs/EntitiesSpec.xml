@@ -908,6 +908,7 @@
         <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="InitialTextHeight" Code="40" Type="double" DefaultValue="1.0" />
         <Property Name="ReferenceRectangleWidth" Code="41" Type="double" DefaultValue="1.0" />
+        <Property Name="DefinedHeight" Code="46" Type="double" DefaultValue="0.0" />
         <Property Name="AttachmentPoint" Code="71" Type="DxfAttachmentPoint" DefaultValue="DxfAttachmentPoint.TopLeft" ReadConverter="(DxfAttachmentPoint){0}" WriteConverter="(short){0}" />
         <Property Name="DrawingDirection" Code="72" Type="DxfDrawingDirection" DefaultValue="DxfDrawingDirection.LeftToRight" ReadConverter="(DxfDrawingDirection){0}" WriteConverter="(short){0}" />
         <Property Name="ExtendedText" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
@@ -938,6 +939,7 @@
             <WriteProperty Property="InsertionPoint" />
             <WriteProperty Property="InitialTextHeight" />
             <WriteProperty Property="ReferenceRectangleWidth" />
+            <WriteProperty Property="DefinedHeight" />
             <WriteProperty Property="AttachmentPoint" />
             <WriteProperty Property="DrawingDirection" />
             <WriteProperty Property="ExtendedText" />

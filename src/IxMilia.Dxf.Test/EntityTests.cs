@@ -1397,6 +1397,7 @@ namespace IxMilia.Dxf.Test
                 InsertionPoint = new DxfPoint(1.0, 2.0, 3.0),
                 InitialTextHeight = 1.0,
                 Text = "this is mtext",
+                DefinedHeight = 1.25,
             };
             EnsureFileContainsEntity(mtext,
                 DxfAcadVersion.R14,
@@ -1405,6 +1406,7 @@ namespace IxMilia.Dxf.Test
                 (30, 3.0),
                 (40, 1.0), // initial text height
                 (41, 1.0), // reference rectangle width
+                (46, 1.25), // defined height
                 (71, 1), // attachment point
                 (72, 1), // drawing direction
                 (1, "this is mtext"), // text

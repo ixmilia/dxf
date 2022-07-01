@@ -745,6 +745,7 @@ namespace IxMilia.Dxf.Test
         {
             var att = (DxfAttribute)Entity("ATTRIB",
                 (0, "MTEXT"),
+                (100, "AcDbMText"),
                 (1, "mtext-value")
             );
             Assert.Equal(att, att.MText.Owner);
@@ -756,6 +757,7 @@ namespace IxMilia.Dxf.Test
         {
             var attdef = (DxfAttributeDefinition)Entity("ATTDEF",
                 (0, "MTEXT"),
+                (100, "AcDbMText"),
                 (1, "mtext-value")
             );
             Assert.Equal(attdef, attdef.MText.Owner);
@@ -1390,6 +1392,24 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadMTextTest()
+        {
+            var mtext = (DxfMText)Entity("MTEXT",
+                (100, "AcDbMText"),
+                (10, 1.0), // insertion point
+                (20, 2.0),
+                (30, 3.0),
+                (40, 1.0), // initial text height
+                (46, 1.25), // defined height
+                (1, "this is mtext") // text
+            );
+            Assert.Equal(new DxfPoint(1.0, 2.0, 3.0), mtext.InsertionPoint);
+            Assert.Equal(1.0, mtext.InitialTextHeight);
+            Assert.Equal("this is mtext", mtext.Text);
+            Assert.Equal(1.25, mtext.DefinedHeight);
+        }
+
+        [Fact]
         public void WriteMTextTest()
         {
             var mtext = new DxfMText()
@@ -1401,6 +1421,7 @@ namespace IxMilia.Dxf.Test
             };
             EnsureFileContainsEntity(mtext,
                 DxfAcadVersion.R14,
+                (100, "AcDbMText"),
                 (10, 1.0), // insertion point
                 (20, 2.0),
                 (30, 3.0),

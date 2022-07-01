@@ -2,11 +2,24 @@ namespace IxMilia.Dxf.Entities
 {
     public partial class DxfMText
     {
+        private bool _readSubclassMarker = false;
         private bool _readingColumnData = false;
         private bool _readColumnCount = false;
 
         internal override bool TrySetPair(DxfCodePair pair)
         {
+            if (pair.Code == 100 &&
+                pair.StringValue == "AcDbMText")
+            {
+                _readSubclassMarker = true;
+                return true;
+            }
+
+            if (!_readSubclassMarker)
+            {
+                return base.TrySetPair(pair);
+            }
+
             switch (pair.Code)
             {
                 case 1:
@@ -53,6 +66,9 @@ namespace IxMilia.Dxf.Entities
                     break;
                 case 45:
                     this.FillBoxScale = (pair.DoubleValue);
+                    break;
+                case 46:
+                    this.DefinedHeight = (pair.DoubleValue);
                     break;
                 case 48:
                     this.ColumnWidth = (pair.DoubleValue);

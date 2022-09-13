@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Blocks;
 using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf.Sections
 {
@@ -10,9 +11,12 @@ namespace IxMilia.Dxf.Sections
     {
         public IList<DxfBlock> Blocks { get; }
 
+        public List<DxfObject> AdditionalObjects { get; }
+
         public DxfBlocksSection()
         {
             Blocks = new ListNonNull<DxfBlock>();
+            AdditionalObjects = new List<DxfObject>();
             Normalize();
         }
 
@@ -34,6 +38,7 @@ namespace IxMilia.Dxf.Sections
 
         protected internal override IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
+            AdditionalObjects.Clear();
             foreach (var block in Blocks.Where(b => b != null))
             {
                 if (writtenItems.Add(block))
@@ -41,6 +46,11 @@ namespace IxMilia.Dxf.Sections
                     foreach (var pair in block.GetValuePairs(version, outputHandles))
                     {
                         yield return pair;
+                    }
+
+                    foreach (var entity in block.Entities)
+                    {
+                        entity.AddObjectsToOutput(AdditionalObjects);
                     }
                 }
             }

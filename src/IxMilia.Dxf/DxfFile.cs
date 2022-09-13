@@ -418,6 +418,19 @@ namespace IxMilia.Dxf
                         }
                     }
                 }
+
+                if (section is DxfBlocksSection)
+                {
+                    var blocksSection = (DxfBlocksSection)section;
+                    var addedObjects = new HashSet<DxfObject>(Objects);
+                    foreach (var additionalObject in blocksSection.AdditionalObjects)
+                    {
+                        if (additionalObject != null && addedObjects.Add(additionalObject))
+                        {
+                            Objects.Add(additionalObject);
+                        }
+                    }
+                }
             }
         }
 
@@ -585,7 +598,7 @@ namespace IxMilia.Dxf
         }
 
         private static void AddMissingTableItems<T>(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Func<string, T> createItem, Action<T> addItem)
-            where T: DxfSymbolTableFlags
+            where T : DxfSymbolTableFlags
         {
             AddMissingItems(existingItems, itemsToAdd, name => addItem(createItem(name)));
         }

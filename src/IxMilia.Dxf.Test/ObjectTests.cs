@@ -27,7 +27,7 @@ namespace IxMilia.Dxf.Test
             file.Clear();
             file.Header.Version = version;
             file.Objects.Add(obj);
-            VerifyFileContains(file, codePairs);
+            VerifyFileContains(file, DxfSectionType.Objects, codePairs);
         }
 
         [Fact]
@@ -732,6 +732,178 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(140.0, material.NormalMapTransformMatrix.M42);
             Assert.Equal(150.0, material.NormalMapTransformMatrix.M43);
             Assert.Equal(160.0, material.NormalMapTransformMatrix.M44);
+        }
+
+        [Fact]
+        public void ReadMentalRayRenderSettingsTest()
+        {
+            var mentalRay = (DxfMentalRayRenderSettings)GenObject("MENTALRAYRENDERSETTINGS",
+                (100, "AcDbRenderSettings"),
+                (90, 2),
+                (1, ""),
+                (290, 1),
+                (290, 1),
+                (290, 1),
+                (290, 1),
+                (1, ""),
+                (1, ""),
+                (90, 0),
+                (100, "AcDbMentalRayRenderSettings"),
+                (90, 2),
+                (90, 0),
+                (90, 1),
+                (70, 2),
+                (40, 1.0),
+                (40, 1.0),
+                (40, 0.5),
+                (40, 0.5),
+                (40, 0.5),
+                (40, 0.5),
+                (70, 0),
+                (290, 0),
+                (290, 1),
+                (90, 5),
+                (90, 5),
+                (90, 5),
+                (290, 0),
+                (90, 500),
+                (290, 0),
+                (40, 1.0),
+                (90, 10000),
+                (90, 5),
+                (90, 5),
+                (90, 5),
+                (290, 0),
+                (90, 200),
+                (290, 0),
+                (290, 0),
+                (290, 0),
+                (40, 1.0),
+                (40, 1.0),
+                (40, 1500.0),
+                (70, 0),
+                (70, 0),
+                (40, 10.0),
+                (70, 0),
+                (70, 0),
+                (290, 0),
+                (1, ""),
+                (90, 32),
+                (70, 0),
+                (90, 1048),
+                (290, 1), // these last two values aren't in the spec, but can appear in the file
+                (40, 42.0));
+            Assert.True(mentalRay._unknown_code_290);
+            Assert.Equal(42.0, mentalRay._unknown_code_40);
+        }
+
+        [Fact]
+        public void ReadRenderSettingsVersion1Test()
+        {
+            var mentalRay = (DxfMentalRayRenderSettings)GenObject("MENTALRAYRENDERSETTINGS",
+                (100, "AcDbRenderSettings"),
+                (90, 1), // render settings version 1
+                (1, "render preset name"),
+                (290, 1), // render materials flag
+                (90, 2), // texture sampling quality
+                (290, 1), // render back faces flag
+                (290, 0), // render shadows flag
+                (1, "preview image file name"),
+                (100, "AcDbMentalRayRenderSettings"));
+            var renderSettings = mentalRay.RenderSettings;
+            Assert.Equal(1, renderSettings.Version);
+            Assert.Equal("render preset name", renderSettings.PresetName);
+            Assert.True(renderSettings.RenderMaterials);
+            Assert.Equal(2, renderSettings.TextureSamplingQuality);
+            Assert.True(renderSettings.RenderBackFaces);
+            Assert.False(renderSettings.RenderShadows);
+            Assert.Equal("preview image file name", renderSettings.PreviewImageFileName);
+            Assert.Null(renderSettings.PresetDescription);
+            Assert.Equal(0, renderSettings.DisplayIndex);
+            Assert.False(renderSettings.IsPredefined);
+        }
+
+        [Fact]
+        public void WriteRenderSettingsVersion1Test()
+        {
+            var mentalRay = new DxfMentalRayRenderSettings();
+            mentalRay.RenderSettings.Version = 1;
+            mentalRay.RenderSettings.PresetName = "render preset name";
+            mentalRay.RenderSettings.RenderMaterials = true;
+            mentalRay.RenderSettings.TextureSamplingQuality = 2;
+            mentalRay.RenderSettings.RenderBackFaces = true;
+            mentalRay.RenderSettings.RenderShadows = false;
+            mentalRay.RenderSettings.PreviewImageFileName = "preview image file name";
+            EnsureFileContainsObject(mentalRay,
+                DxfAcadVersion.R2010,
+                (100, "AcDbRenderSettings"),
+                (90, 1), // render settings version 1
+                (1, "render preset name"),
+                (290, 1), // render materials flag
+                (90, 2), // texture sampling quality
+                (290, 1), // render back faces flag
+                (290, 0), // render shadows flag
+                (1, "preview image file name"),
+                (100, "AcDbMentalRayRenderSettings"));
+        }
+
+        [Fact]
+        public void ReadRenderSettingsVersion2Test()
+        {
+            var mentalRay = (DxfMentalRayRenderSettings)GenObject("MENTALRAYRENDERSETTINGS",
+                (100, "AcDbRenderSettings"),
+                (90, 2), // render settings version 2
+                (1, "render preset name"),
+                (290, 1), // render materials flag
+                (290, 0), // texture sampling flag
+                (290, 1), // render back faces flag
+                (290, 0), // render shadows flag
+                (1, "preview image file name"),
+                (1, "render preset description"),
+                (90, 2), // display index
+                (290, 1), // is predefined
+                (100, "AcDbMentalRayRenderSettings"));
+            var renderSettings = mentalRay.RenderSettings;
+            Assert.Equal(2, renderSettings.Version);
+            Assert.Equal("render preset name", renderSettings.PresetName);
+            Assert.True(renderSettings.RenderMaterials);
+            Assert.Equal(0, renderSettings.TextureSamplingQuality);
+            Assert.True(renderSettings.RenderBackFaces);
+            Assert.False(renderSettings.RenderShadows);
+            Assert.Equal("preview image file name", renderSettings.PreviewImageFileName);
+            Assert.Equal("render preset description", renderSettings.PresetDescription);
+            Assert.Equal(2, renderSettings.DisplayIndex);
+            Assert.True(renderSettings.IsPredefined);
+        }
+
+        [Fact]
+        public void WriteRenderSettingsVersion2Test()
+        {
+            var mentalRay = new DxfMentalRayRenderSettings();
+            mentalRay.RenderSettings.Version = 2;
+            mentalRay.RenderSettings.PresetName = "render preset name";
+            mentalRay.RenderSettings.RenderMaterials = true;
+            mentalRay.RenderSettings.TextureSamplingQuality = 2;
+            mentalRay.RenderSettings.RenderBackFaces = true;
+            mentalRay.RenderSettings.RenderShadows = false;
+            mentalRay.RenderSettings.PreviewImageFileName = "preview image file name";
+            mentalRay.RenderSettings.PresetDescription = "render preset description";
+            mentalRay.RenderSettings.DisplayIndex = 2;
+            mentalRay.RenderSettings.IsPredefined = true;
+            EnsureFileContainsObject(mentalRay,
+                DxfAcadVersion.R2010,
+                (100, "AcDbRenderSettings"),
+                (90, 2), // render settings version 2
+                (1, "render preset name"),
+                (290, 1), // render materials flag
+                (290, 1), // texture sampling flag
+                (290, 1), // render back faces flag
+                (290, 0), // render shadows flag
+                (1, "preview image file name"),
+                (1, "render preset description"),
+                (90, 2), // display index
+                (290, 1), // is predefined
+                (100, "AcDbMentalRayRenderSettings"));
         }
 
         [Fact]

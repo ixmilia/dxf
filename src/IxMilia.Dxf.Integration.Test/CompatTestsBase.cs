@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using IxMilia.Dxf.Entities;
 using IxMilia.Dxf.Test;
 using Xunit;
@@ -97,12 +98,37 @@ EOF
 
         protected void WaitForProcess(string fileName, string arguments)
         {
-            var psi = new ProcessStartInfo();
-            psi.FileName = fileName;
-            psi.Arguments = arguments;
-            var proc = Process.Start(psi);
-            proc.WaitForExit();
-            Assert.Equal(0, proc.ExitCode);
+            var proc = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = fileName,
+                    Arguments = arguments,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    StandardOutputEncoding = Encoding.Unicode,
+                    StandardErrorEncoding = Encoding.Unicode,
+                    UseShellExecute = false,
+                },
+            };
+            var stdout = new StringBuilder();
+            var stderr = new StringBuilder();
+            proc.OutputDataReceived += (_, args) => stdout.AppendLine(args.Data);
+            proc.ErrorDataReceived += (_, args) => stderr.AppendLine(args.Data);
+            proc.Start();
+            proc.BeginOutputReadLine();
+            proc.BeginErrorReadLine();
+            var exited = proc.WaitForExit((int)TimeSpan.FromSeconds(30).TotalMilliseconds);
+            proc.CancelOutputRead();
+            proc.CancelErrorRead();
+            if (!exited)
+            {
+                proc.Kill();
+            }
+
+            var message = $"STDOUT:\n{stdout}\nSTDERR:\n{stderr}";
+            Assert.True(exited && proc.ExitCode == 0, message);
         }
     }
 }

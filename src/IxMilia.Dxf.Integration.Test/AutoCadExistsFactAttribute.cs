@@ -6,7 +6,7 @@ namespace IxMilia.Dxf.Integration.Test
 {
     public class AutoCadExistsFactAttribute : FactAttribute
     {
-        private const string _converterExe = "acad.exe";
+        private const string _converterExe = "accoreconsole.exe";
         private static bool _pathResolved = false;
         private static string _converterPath = null;
 

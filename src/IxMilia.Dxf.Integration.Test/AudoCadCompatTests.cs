@@ -24,21 +24,18 @@ namespace IxMilia.Dxf.Integration.Test
                 File.WriteAllText(barePath, MinimumFileText);
 
                 var scriptLines = new List<string>();
-                scriptLines.Add("FILEDIA 0");
-                scriptLines.Add($"DXFIN \"{barePath}\"");
                 foreach (var version in new[] { "R12", "2000", "2004", "2007", "2010", "2013" })
                 {
                     var fullPath = Path.Combine(tempDir, $"result-{version}.dxf");
                     scriptLines.Add($"DXFOUT \"{fullPath}\" V {version} 16");
                 }
 
-                scriptLines.Add("FILEDIA 1");
                 scriptLines.Add("QUIT Y");
                 scriptLines.Add("");
                 var scriptPath = Path.Combine(tempDir, "script.scr");
                 File.WriteAllLines(scriptPath, scriptLines);
 
-                ExecuteAutoCadScript(scriptPath);
+                ExecuteAutoCadScriptOnDrawing(scriptPath, barePath);
 
                 foreach (var resultPath in Directory.EnumerateFiles(tempDir, "result-*.dxf"))
                 {
@@ -95,40 +92,21 @@ namespace IxMilia.Dxf.Integration.Test
                     file.Header.Version = version;
                     text.Value = version.ToString();
                     var outputPath = Path.Combine(tempDir, fileName);
-                    using (var fs = new FileStream(outputPath, FileMode.Create))
+                    file.Save(outputPath);
+
+                    // open thefile in AutoCAD and try to write it back out
+                    var scriptLines = new List<string>()
                     {
-                        file.Save(fs);
-                    }
-                }
+                        $"DXFOUT \"{Path.Combine(tempDir, $"result.{version}.dxf")}\" V R12 16",
+                        "QUIT Y"
+                    };
+                    var scriptPath = Path.Combine(tempDir, $"script.{version}.scr");
+                    File.WriteAllLines(scriptPath, scriptLines);
 
-                // open each file in AutoCAD and try to write it back out
-                var lines = new List<string>();
-                lines.Add("FILEDIA 0");
-                foreach (var version in versions)
-                {
-                    lines.Add("ERASE ALL ");
-                    lines.Add($"DXFIN \"{Path.Combine(tempDir, $"file.{version}.dxf")}\"");
-                    lines.Add($"DXFOUT \"{Path.Combine(tempDir, $"result.{version}.dxf")}\" V R12 16");
-                }
+                    ExecuteAutoCadScriptOnDrawing(scriptPath, outputPath);
 
-                lines.Add("FILEDIA 1");
-                lines.Add("QUIT Y");
-
-                // create and execute the script
-                var scriptPath = Path.Combine(tempDir, "script.scr");
-                File.WriteAllLines(scriptPath, lines);
-
-                ExecuteAutoCadScript(scriptPath);
-
-                // check each resultant file for the correct version and text
-                foreach (var version in versions)
-                {
-                    DxfFile dxf;
-                    using (var fs = new FileStream(Path.Combine(tempDir, $"result.{version}.dxf"), FileMode.Open))
-                    {
-                        dxf = DxfFile.Load(fs);
-                    }
-
+                    // check the resultant file for the correct version set
+                    var dxf = DxfFile.Load(Path.Combine(tempDir, $"result.{version}.dxf"));
                     Assert.Equal(version.ToString(), ((DxfText)dxf.Entities.Single()).Value);
                 }
             }
@@ -201,13 +179,10 @@ namespace IxMilia.Dxf.Integration.Test
                 var outputFilePath = Path.Combine(directory.DirectoryPath, "result.dxf");
                 File.WriteAllLines(scriptFilePath, new[]
                 {
-                    "FILEDIA 0",
-                    $"DXFIN \"{sampleFilePath}\"",
                     $"DXFOUT \"{outputFilePath}\" 16",
-                    "FILEDIA 1",
                     "QUIT Y"
                 });
-                ExecuteAutoCadScript(scriptFilePath);
+                ExecuteAutoCadScriptOnDrawing(scriptFilePath, sampleFilePath);
 
                 // read file back in and confirm DxfText value
                 DxfFile resultFile;
@@ -238,23 +213,19 @@ namespace IxMilia.Dxf.Integration.Test
 
                 var lines = new List<string>
                 {
-                    "FILEDIA 0",
-                    $"DXFIN \"{inputFile}\"",
                     $"DXFOUT \"{outputFile}\" 16",
-                    "FILEDIA 1",
-                    "QUIT Y"
                 };
                 File.WriteAllLines(scriptFile, lines);
-                ExecuteAutoCadScript(scriptFile);
+                WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad(), $"/i \"{inputFile}\" /s \"{scriptFile}\"");
 
                 var result = DxfFile.Load(outputFile);
                 return result;
             }
         }
 
-        private void ExecuteAutoCadScript(string pathToScript)
+        private void ExecuteAutoCadScriptOnDrawing(string pathToScript, string pathToInputDrawing)
         {
-            WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad(), $"/b \"{pathToScript}\"");
+            WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad(), $"/i \"{pathToInputDrawing}\" /s \"{pathToScript}\"");
             // TODO: kill all instances of senddmp.exe and fail if present
         }
     }

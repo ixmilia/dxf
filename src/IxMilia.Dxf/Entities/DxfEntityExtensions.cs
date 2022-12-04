@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace IxMilia.Dxf.Entities
 {
@@ -79,6 +80,12 @@ namespace IxMilia.Dxf.Entities
             var minor = ellipse.Normal.Cross(ellipse.MajorAxis);
             var minorUnit = minor / minor.Length;
             return minorUnit * ellipse.MajorAxis.Length * ellipse.MinorAxisRatio;
+        }
+
+        public static bool AppearsClosed(this DxfSpline spline)
+        {
+            return spline.IsClosed ||
+                (spline.ControlPoints.Any() && spline.ControlPoints.First().Point == spline.ControlPoints.Last().Point);
         }
     }
 }

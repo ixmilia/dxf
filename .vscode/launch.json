@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build-generator",
-      "program": "${workspaceFolder}/artifacts/bin/IxMilia.Dxf.Generator/Debug/net6.0/IxMilia.Dxf.Generator.dll",
+      "program": "${workspaceFolder}/artifacts/bin/IxMilia.Dxf.Generator/Debug/net7.0/IxMilia.Dxf.Generator.dll",
       "args": [
         "${workspaceFolder}/src/IxMilia.Dxf/Generated"
       ],

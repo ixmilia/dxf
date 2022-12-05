@@ -46,6 +46,8 @@ namespace IxMilia.Dxf.Test
             // verify reading
             Assert.True(DxfTextReader.TryParseDoubleValue("2451544.91568287", out var dateAsDouble));
             var date = DxfCommonConverters.DateDouble(dateAsDouble);
+            // DateTime got much more accurate in .NET 7, so we're artificially rounding this for the test
+            date = RoundToNearestSecond(date);
             Assert.Equal(new DateTime(1999, 12, 31, 21, 58, 35), date);
 
             // verify writing

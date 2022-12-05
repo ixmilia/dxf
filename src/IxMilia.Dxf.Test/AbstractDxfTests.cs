@@ -12,6 +12,12 @@ namespace IxMilia.Dxf.Test
 {
     public abstract class AbstractDxfTests
     {
+        protected DateTime RoundToNearestSecond(DateTime dateTime)
+        {
+            var seconds = dateTime.Second + ((dateTime.Millisecond + 500.0) / 1000.0);
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, (int)seconds, dateTime.Kind);
+        }
+
         protected static DxfFile Parse(string data)
         {
             using (var ms = new MemoryStream())

@@ -1177,7 +1177,9 @@ namespace IxMilia.Dxf.Test
                 (40, 2.0),
                 (40, 3.0)
             );
-            Assert.Equal(new DateTime(1999, 12, 31, 21, 58, 35), si.Timestamp);
+            // DateTime got much more accurate in .NET 7, so we're artificially rounding this for the test
+            var date = RoundToNearestSecond(si.Timestamp);
+            Assert.Equal(new DateTime(1999, 12, 31, 21, 58, 35), date);
             AssertArrayEqual(new[] { 1.0, 2.0, 3.0 }, si.Values.ToArray());
         }
 

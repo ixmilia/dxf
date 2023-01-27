@@ -954,7 +954,7 @@
         <Property Name="ClipBoundaryNormal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
         <Property Name="ClipBoundaryOrigin" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="IsClipBoundaryEnabled" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-        <Property Name="IsFrontClippingPlane" Code="72" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
+        <Property Name="IsFrontClippingPlane" Code="72" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Property Name="FrontClippingPlaneDistance" Code="40" Type="double" DefaultValue="0" WriteCondition="IsFrontClippingPlane" />
         <Property Name="IsBackClippingPlane" Code="73" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Property Name="BackClippingPlaneDistance" Code="41" Type="double" DefaultValue="0" WriteCondition="IsBackClippingPlane" />

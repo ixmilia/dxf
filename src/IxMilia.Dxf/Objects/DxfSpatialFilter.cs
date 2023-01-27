@@ -54,7 +54,7 @@ namespace IxMilia.Dxf.Objects
                         ClipBoundaryOrigin = ClipBoundaryOrigin.WithUpdatedZ(pair.DoubleValue);
                         break;
                     case 40:
-                        if (!hasReadFrontClippingPlane)
+                        if (!hasReadFrontClippingPlane && IsFrontClippingPlane)
                         {
                             FrontClippingPlaneDistance = pair.DoubleValue;
                             hasReadFrontClippingPlane = true;

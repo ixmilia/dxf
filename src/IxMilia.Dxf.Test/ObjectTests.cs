@@ -1167,6 +1167,119 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadSpatialFilterWithFrontClippingPlane()
+        {
+            var sf = (DxfSpatialFilter)GenObject("SPATIAL_FILTER",
+                (70, 2), // rectangular clip boundary
+                (10, 1.0), // clipping point 1
+                (20, 2.0),
+                (10, 3.0),
+                (20, 4.0), // clipping point 2
+                (210, 11.0), // clipping boundary normal
+                (220, 22.0),
+                (230, 33.0),
+                (11, 10.0), // origin
+                (21, 20.0),
+                (31, 30.0),
+                (71, 1), // clip boundary enabled
+                (72, 1), // includes front clipping plane
+                (40, -54.0), // front clipping plane distance
+                (73, 1), // includes back clipping plane
+                (41, -55.0), // back clipping plane distance
+                (40, 1.0), // inverse transformation matrix
+                (40, 2.0),
+                (40, 3.0),
+                (40, 4.0),
+                (40, 5.0),
+                (40, 6.0),
+                (40, 7.0),
+                (40, 8.0),
+                (40, 9.0),
+                (40, 10.0),
+                (40, 11.0),
+                (40, 12.0),
+                (40, 13.0), // transformation matrix
+                (40, 14.0),
+                (40, 15.0),
+                (40, 16.0),
+                (40, 17.0),
+                (40, 18.0),
+                (40, 19.0),
+                (40, 20.0),
+                (40, 21.0),
+                (40, 22.0),
+                (40, 23.0),
+                (40, 24.0));
+            Assert.Equal(2, sf.ClipBoundaryDefinitionPoints.Count);
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), sf.ClipBoundaryDefinitionPoints[0]);
+            Assert.Equal(new DxfPoint(3.0, 4.0, 0.0), sf.ClipBoundaryDefinitionPoints[1]);
+            Assert.Equal(new DxfVector(11.0, 22.0, 33.0), sf.ClipBoundaryNormal);
+            Assert.Equal(new DxfPoint(10.0, 20.0, 30.0), sf.ClipBoundaryOrigin);
+            Assert.True(sf.IsClipBoundaryEnabled);
+            Assert.True(sf.IsFrontClippingPlane);
+            Assert.Equal(-54.0, sf.FrontClippingPlaneDistance);
+            Assert.True(sf.IsBackClippingPlane);
+            Assert.Equal(-55.0, sf.BackClippingPlaneDistance);
+            Assert.Equal(new[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 }, sf.InverseTransformationMatrix.Get4x3ValuesRowMajor());
+            Assert.Equal(new[] { 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0 }, sf.TransformationMatrix.Get4x3ValuesRowMajor());
+        }
+
+        [Fact]
+        public void ReadSpatialFilterWithoutFrontClippingPlane()
+        {
+            var sf = (DxfSpatialFilter)GenObject("SPATIAL_FILTER",
+                (70, 2), // rectangular clip boundary
+                (10, 1.0), // clipping point 1
+                (20, 2.0),
+                (10, 3.0),
+                (20, 4.0), // clipping point 2
+                (210, 11.0), // clipping boundary normal
+                (220, 22.0),
+                (230, 33.0),
+                (11, 10.0), // origin
+                (21, 20.0),
+                (31, 30.0),
+                (71, 1), // clip boundary enabled
+                (73, 1), // includes back clipping plane
+                (41, -55.0), // back clipping plane distance
+                (40, 1.0), // inverse transformation matrix
+                (40, 2.0),
+                (40, 3.0),
+                (40, 4.0),
+                (40, 5.0),
+                (40, 6.0),
+                (40, 7.0),
+                (40, 8.0),
+                (40, 9.0),
+                (40, 10.0),
+                (40, 11.0),
+                (40, 12.0),
+                (40, 13.0), // transformation matrix
+                (40, 14.0),
+                (40, 15.0),
+                (40, 16.0),
+                (40, 17.0),
+                (40, 18.0),
+                (40, 19.0),
+                (40, 20.0),
+                (40, 21.0),
+                (40, 22.0),
+                (40, 23.0),
+                (40, 24.0));
+            Assert.Equal(2, sf.ClipBoundaryDefinitionPoints.Count);
+            Assert.Equal(new DxfPoint(1.0, 2.0, 0.0), sf.ClipBoundaryDefinitionPoints[0]);
+            Assert.Equal(new DxfPoint(3.0, 4.0, 0.0), sf.ClipBoundaryDefinitionPoints[1]);
+            Assert.Equal(new DxfVector(11.0, 22.0, 33.0), sf.ClipBoundaryNormal);
+            Assert.Equal(new DxfPoint(10.0, 20.0, 30.0), sf.ClipBoundaryOrigin);
+            Assert.True(sf.IsClipBoundaryEnabled);
+            Assert.False(sf.IsFrontClippingPlane);
+            Assert.True(sf.IsBackClippingPlane);
+            Assert.Equal(-55.0, sf.BackClippingPlaneDistance);
+            Assert.Equal(new[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 }, sf.InverseTransformationMatrix.Get4x3ValuesRowMajor());
+            Assert.Equal(new[] { 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0 }, sf.TransformationMatrix.Get4x3ValuesRowMajor());
+        }
+
+        [Fact]
         public void ReadSpatialIndexTest()
         {
             var si = (DxfSpatialIndex)GenObject("SPATIAL_INDEX",

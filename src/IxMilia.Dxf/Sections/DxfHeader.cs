@@ -147,15 +147,5 @@ namespace IxMilia.Dxf
                     return point;
             }
         }
-
-        private static bool EnumBool<TEnum>(TEnum value) where TEnum : struct, IComparable
-        {
-            return ((TEnum)Enum.GetValues(typeof(TEnum)).GetValue(0)).CompareTo(value) != 0;
-        }
-
-        private static TEnum EnumBool<TEnum>(bool value) where TEnum : struct
-        {
-            return (TEnum)Enum.GetValues(typeof(TEnum)).GetValue(value ? 1 : 0);
-        }
     }
 }

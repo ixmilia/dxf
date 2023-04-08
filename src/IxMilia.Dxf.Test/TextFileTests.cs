@@ -313,9 +313,14 @@ unsupported code (5555) treated as string
             }
         }
 
-        [Fact]
-        public void SkipBomTest()
+        [Theory]
+        [InlineData(null)] // no encoding specified
+        [InlineData(65001)] // explicit UTF-8
+        public void SkipBomTest(int? codePage)
         {
+            var encoding = codePage.HasValue
+                ? Encoding.GetEncodings().Single(e => e.CodePage == codePage.Value).GetEncoding()
+                : null;
             // UTF-8 representation of byte order mark
             var bom = new byte[]
             {
@@ -330,7 +335,7 @@ unsupported code (5555) treated as string
                 writer.Write("0\r\nEOF");
                 writer.Flush();
                 stream.Seek(0, SeekOrigin.Begin);
-                var file = DxfFile.Load(stream);
+                var file = DxfFile.Load(stream, encoding);
                 Assert.Equal(0, file.Layers.Count);
             }
         }

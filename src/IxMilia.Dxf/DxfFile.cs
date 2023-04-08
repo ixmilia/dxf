@@ -222,7 +222,17 @@ namespace IxMilia.Dxf
             }
 
             // trim UTF-8 BOM
-            if (line.Length >= 3 && line[0] == 0xEF && line[1] == 0xBB && line[2] == 0xBF)
+            if (encoding?.CodePage == 65001 &&
+                line.Length >= 2 &&
+                line[0] == 0xFEFF)
+            {
+                line = line.Substring(1);
+            }
+            else if (encoding is null &&
+                line.Length >= 3 &&
+                line[0] == 0xEF &&
+                line[1] == 0xBB &&
+                line[2] == 0xBF)
             {
                 line = line.Substring(3);
             }

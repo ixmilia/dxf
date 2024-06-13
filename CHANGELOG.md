@@ -1,6 +1,15 @@
 Changelog
 =========
 
+## 0.8.4 (13 June 2024)
+
+- Improve handling of empty boundaries in `HATCH` entities.
+- Add support for `DefinedHeight` (code 46) to `MTEXT` entities.
+- Support more varieties of `MENTALRAYRENDERSETTINGS` object.
+- Include additional entities in `BLOCK` objects.
+- Fix handling of front clipping plane in `SPATIAL_FILTER` objects.
+- Improve BOM detection and handling for text files.
+
 ## 0.8.3 (3 June 2022)
 
 - Improved handle resolution inside `BLOCK` objects.

@@ -11,8 +11,8 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         configuration: [Debug, Release]
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-dotnet@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-dotnet@v4
     - name: Build and test
       shell: pwsh
       run: |
@@ -24,7 +24,7 @@ jobs:
     needs: [build]
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-dotnet@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-dotnet@v4
     - run: .\build-and-test.cmd -c Release -notest
     - run: dotnet nuget push .\artifacts\packages\Release\*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --no-symbols

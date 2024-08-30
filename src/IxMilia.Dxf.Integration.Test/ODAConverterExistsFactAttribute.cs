@@ -37,15 +37,18 @@ namespace IxMilia.Dxf.Integration.Test
                 foreach (var environmentVariable in environmentVariables)
                 {
                     var programFiles = Environment.GetEnvironmentVariable(environmentVariable);
-                    var oda = Path.Combine(programFiles, "ODA");
-                    if (Directory.Exists(oda))
+                    if (programFiles is not null)
                     {
-                        foreach (var candidateDir in Directory.EnumerateDirectories(oda, "ODA*"))
+                        var oda = Path.Combine(programFiles, "ODA");
+                        if (Directory.Exists(oda))
                         {
-                            var candidatePath = Path.Combine(candidateDir, _converterExe);
-                            if (File.Exists(candidatePath))
+                            foreach (var candidateDir in Directory.EnumerateDirectories(oda, "ODA*"))
                             {
-                                _converterPath = candidatePath;
+                                var candidatePath = Path.Combine(candidateDir, _converterExe);
+                                if (File.Exists(candidatePath))
+                                {
+                                    _converterPath = candidatePath;
+                                }
                             }
                         }
                     }

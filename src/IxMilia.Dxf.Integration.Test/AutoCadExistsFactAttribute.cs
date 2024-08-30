@@ -30,21 +30,24 @@ namespace IxMilia.Dxf.Integration.Test
                 _pathResolved = true;
                 var programFiles = Environment.GetEnvironmentVariable("ProgramFiles(x86)") ??
                     Environment.GetEnvironmentVariable("ProgramFiles");
-                if (programFiles.EndsWith(" (x86)"))
+                if (programFiles?.EndsWith(" (x86)") == true)
                 {
                     // hack when running in VS
                     programFiles = programFiles.Substring(0, programFiles.Length - 6);
                 }
 
-                var autodesk = Path.Combine(programFiles, "Autodesk");
-                if (Directory.Exists(autodesk))
+                if (programFiles is not null)
                 {
-                    foreach (var candidateDir in Directory.EnumerateDirectories(autodesk, "AutoCAD*"))
+                    var autodesk = Path.Combine(programFiles, "Autodesk");
+                    if (Directory.Exists(autodesk))
                     {
-                        var candidatePath = Path.Combine(candidateDir, _converterExe);
-                        if (File.Exists(candidatePath))
+                        foreach (var candidateDir in Directory.EnumerateDirectories(autodesk, "AutoCAD*"))
                         {
-                            _converterPath = candidatePath;
+                            var candidatePath = Path.Combine(candidateDir, _converterExe);
+                            if (File.Exists(candidatePath))
+                            {
+                                _converterPath = candidatePath;
+                            }
                         }
                     }
                 }

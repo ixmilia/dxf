@@ -809,9 +809,9 @@ namespace IxMilia.Dxf.Test
         {
             // a leader with 0 vertices can't be created manually, but it can be read from disk
             var leader = (DxfLeader)Entity("LEADER");
-            Assert.Equal(0, leader.Vertices.Count);
+            Assert.Empty(leader.Vertices);
             leader.Vertices.Add(DxfPoint.Origin); // this is fine, even though we're still under the minimum
-            Assert.Equal(1, leader.Vertices.Count);
+            Assert.Single(leader.Vertices);
             leader.Vertices.Add(DxfPoint.Origin); // now we're up to 2
             Assert.Equal(2, leader.Vertices.Count);
             leader.Vertices.Add(DxfPoint.Origin); // now we're up to 3
@@ -873,9 +873,9 @@ namespace IxMilia.Dxf.Test
         {
             // a polyline with 0 vertices can't be created manually, but it can be read from disk
             var poly = (DxfPolyline)Entity("POLYLINE");
-            Assert.Equal(0, poly.Vertices.Count);
+            Assert.Empty(poly.Vertices);
             poly.Vertices.Add(new DxfVertex()); // this is fine, even though we're still under the minimum
-            Assert.Equal(1, poly.Vertices.Count);
+            Assert.Single(poly.Vertices);
             poly.Vertices.Add(new DxfVertex()); // now we're up to 2
             Assert.Equal(2, poly.Vertices.Count);
             poly.Vertices.Add(new DxfVertex()); // now we're up to 3
@@ -1717,7 +1717,7 @@ namespace IxMilia.Dxf.Test
             var first = file.Blocks[0];
             Assert.Equal("block 1", first.Name);
             Assert.Equal(new DxfPoint(1, 2, 3), first.BasePoint);
-            Assert.Equal(1, first.Entities.Count);
+            Assert.Single(first.Entities);
             var entity = first.Entities.First();
             Assert.Equal(DxfEntityType.Line, entity.EntityType);
             var line = (DxfLine)entity;

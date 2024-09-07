@@ -336,7 +336,7 @@ unsupported code (5555) treated as string
                 writer.Flush();
                 stream.Seek(0, SeekOrigin.Begin);
                 var file = DxfFile.Load(stream, encoding);
-                Assert.Equal(0, file.Layers.Count);
+                Assert.Empty(file.Layers);
             }
         }
 

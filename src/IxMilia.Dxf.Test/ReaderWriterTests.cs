@@ -169,7 +169,7 @@ namespace IxMilia.Dxf.Test
                 (0, "ENDSEC"),
                 (0, "EOF")
             );
-            Assert.Equal(1, file.Classes.Count);
+            Assert.Single(file.Classes);
 
             var cls = file.Classes.Single();
             Assert.Equal("<class dxf name>", cls.ClassDxfRecordName);
@@ -197,7 +197,7 @@ namespace IxMilia.Dxf.Test
                 (0, "ENDSEC"),
                 (0, "EOF")
             );
-            Assert.Equal(1, file.Classes.Count);
+            Assert.Single(file.Classes);
 
             var cls = file.Classes.Single();
             Assert.Equal("<class dxf name>", cls.ClassDxfRecordName);
@@ -1432,19 +1432,19 @@ namespace IxMilia.Dxf.Test
             var file = Parse((0, "EOF"));
 
             // all of these must be empty
-            Assert.Equal(0, file.ApplicationIds.Count);
-            Assert.Equal(0, file.BlockRecords.Count);
-            Assert.Equal(0, file.Blocks.Count);
-            Assert.Equal(0, file.Classes.Count);
-            Assert.Equal(0, file.DimensionStyles.Count);
-            Assert.Equal(0, file.Entities.Count);
-            Assert.Equal(0, file.Layers.Count);
-            Assert.Equal(0, file.LineTypes.Count);
+            Assert.Empty(file.ApplicationIds);
+            Assert.Empty(file.BlockRecords);
+            Assert.Empty(file.Blocks);
+            Assert.Empty(file.Classes);
+            Assert.Empty(file.DimensionStyles);
+            Assert.Empty(file.Entities);
+            Assert.Empty(file.Layers);
+            Assert.Empty(file.LineTypes);
             Assert.Null(file.RawThumbnail);
 
             // there is always a default dictionary
             Assert.Single(file.NamedObjectDictionary);
-            Assert.Equal(1, file.Objects.Count);
+            Assert.Single(file.Objects);
             Assert.True(ReferenceEquals(file.NamedObjectDictionary, file.Objects.Single()));
             Assert.Equal("ACAD_GROUP", file.NamedObjectDictionary.Single().Key);
         }
@@ -1617,7 +1617,7 @@ namespace IxMilia.Dxf.Test
             file.Layers.Single(l => l.Name == "some-layer");
 
             // ensure the `null` item wasn't added
-            Assert.Empty(file.Layers.Where(l => l.Name == null));
+            Assert.DoesNotContain(file.Layers, l => l.Name == null);
         }
 
         [Fact]

@@ -321,7 +321,7 @@ namespace IxMilia.Dxf.Test
                 (330, "42")
             );
             var dict = (DxfDictionary)file.Objects.Single();
-            Assert.Equal(1, dict.Keys.Count);
+            Assert.Single(dict.Keys);
             Assert.Null(dict["key"]);
         }
 
@@ -1612,7 +1612,7 @@ namespace IxMilia.Dxf.Test
                 (102, "VTR_0.000_0.000_1.000_1.000_CONTRAST"),
                 (142, 0.0)
             );
-            Assert.Equal(0, xrecord.ExtensionDataGroups.Count);
+            Assert.Empty(xrecord.ExtensionDataGroups);
             Assert.Equal(14, xrecord.DataPairs.Count);
             Assert.Equal(102, xrecord.DataPairs[6].Code);
             Assert.Equal("VTR_0.000_0.000_1.000_1.000_DEFAULTLIGHTING", xrecord.DataPairs[6].StringValue);

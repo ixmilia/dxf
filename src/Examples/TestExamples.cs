@@ -68,5 +68,24 @@ namespace Examples
 
             file.SaveExample();
         }
+
+        [Fact]
+        public void SpecifyFontForTextEntity()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+
+            // add a text style with a specific font
+            var textStyle = new DxfStyle("MY_TEXT_STYLE"); // this name is what will assign the font to TEXT entities
+            textStyle.PrimaryFontFileName = "Times New Roman";
+            file.Styles.Add(textStyle);
+
+            // add a text entity with the appropriate style name
+            var text = new DxfText(new DxfPoint(10, 10, 0), 2.0, "This is text.");
+            text.TextStyleName = textStyle.Name; // either assign the name from the text style, or you can maually specify "MY_TEXT_STYLE" from above
+            file.Entities.Add(text);
+
+            file.SaveExample();
+        }
     }
 }

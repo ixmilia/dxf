@@ -103,7 +103,7 @@ namespace IxMilia.Dxf.ReferenceCollector
                         case "link":
                             if (element.Attribute("rel")?.Value == "stylesheet")
                             {
-                                var cssUrl = MakeAbsoluteUrl(pageUrl, element.Attribute("href").Value);
+                                var cssUrl = MakeAbsoluteUrl(pageUrl, element.Attribute("href")!.Value);
                                 styleSheets.Add(cssUrl);
                             }
                             break;
@@ -111,7 +111,7 @@ namespace IxMilia.Dxf.ReferenceCollector
                 }
 
                 // emit the body of the page
-                var div = new XElement("div", new XAttribute("id", GetAnchorName(pageUrl)), xml.Root.Element("body").Elements());
+                var div = new XElement("div", new XAttribute("id", GetAnchorName(pageUrl)), xml.Root!.Element("body")!.Elements());
                 body.Add(div);
             }
         }

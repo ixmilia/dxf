@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -508,7 +510,7 @@ namespace IxMilia.Dxf.Sections
         internal static DxfHeaderSection HeaderSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             var section = new DxfHeaderSection();
-            string keyName = null;
+            string? keyName = null;
             Func<short, bool> shortToBool = value => value != 0;
 
             while (buffer.ItemsRemain)

@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -28,7 +30,7 @@ namespace IxMilia.Dxf.Sections
 
         public override string ToString()
         {
-            return Type.ToSectionName();
+            return Type.ToSectionName() ?? string.Empty;
         }
 
         protected internal abstract IEnumerable<DxfCodePair> GetSpecificPairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems);
@@ -37,13 +39,13 @@ namespace IxMilia.Dxf.Sections
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles, HashSet<IDxfItem> writtenItems)
         {
             yield return new DxfCodePair(0, SectionText);
-            yield return new DxfCodePair(2, this.Type.ToSectionName());
+            yield return new DxfCodePair(2, this.Type.ToSectionName() ?? string.Empty);
             foreach (var pair in GetSpecificPairs(version, outputHandles, writtenItems).ToList())
                 yield return pair;
             yield return new DxfCodePair(0, EndSectionText);
         }
 
-        internal static DxfSection FromBuffer(DxfCodePairBufferReader buffer, DxfFile parentFile, DxfAcadVersion version)
+        internal static DxfSection? FromBuffer(DxfCodePairBufferReader buffer, DxfFile parentFile, DxfAcadVersion version)
         {
             Debug.Assert(buffer.ItemsRemain);
             var sectionType = buffer.Peek();
@@ -53,7 +55,7 @@ namespace IxMilia.Dxf.Sections
                 throw new DxfReadException($"Expected code 2, got {sectionType.Code}", sectionType);
             }
 
-            DxfSection section;
+            DxfSection? section;
             switch (sectionType.StringValue)
             {
                 case BlocksSectionText:

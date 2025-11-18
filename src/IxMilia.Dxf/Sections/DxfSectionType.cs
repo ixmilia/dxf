@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 
 namespace IxMilia.Dxf.Sections
@@ -16,9 +18,9 @@ namespace IxMilia.Dxf.Sections
 
     internal static class DxfSectionTypeHelper
     {
-        public static string ToSectionName(this DxfSectionType section)
+        public static string? ToSectionName(this DxfSectionType section)
         {
-            string name = null;
+            string? name = null;
             switch (section)
             {
                 case DxfSectionType.None:
@@ -45,6 +47,7 @@ namespace IxMilia.Dxf.Sections
                     name = DxfSection.ThumbnailImageSectionText;
                     break;
             }
+
             return name;
         }
 

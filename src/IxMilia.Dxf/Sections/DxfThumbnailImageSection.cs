@@ -1,7 +1,8 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace IxMilia.Dxf.Sections
 {
@@ -23,7 +24,7 @@ namespace IxMilia.Dxf.Sections
             }
         }
 
-        public byte[] RawData { get; set; }
+        public byte[] RawData { get; set; } = Array.Empty<byte>();
 
         public byte[] GetThumbnailBitmap()
         {
@@ -87,7 +88,7 @@ namespace IxMilia.Dxf.Sections
         {
         }
 
-        internal static DxfThumbnailImageSection ThumbnailImageSectionFromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfThumbnailImageSection? ThumbnailImageSectionFromBuffer(DxfCodePairBufferReader buffer)
         {
             if (buffer.ItemsRemain)
             {

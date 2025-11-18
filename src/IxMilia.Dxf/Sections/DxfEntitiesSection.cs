@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Linq;
 using IxMilia.Dxf.Collections;
@@ -169,7 +171,7 @@ namespace IxMilia.Dxf.Sections
             return result;
         }
 
-        private static DxfAttribute GetNextAttribute(DxfBufferReader<DxfEntity> buffer)
+        private static DxfAttribute? GetNextAttribute(DxfBufferReader<DxfEntity> buffer)
         {
             if (buffer.ItemsRemain)
             {

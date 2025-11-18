@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -6,7 +8,7 @@ namespace IxMilia.Dxf.Extensions
 {
     internal static class StreamExtensions
     {
-        public static string ReadLine(this Stream stream, Encoding encoding, out int bytesRead)
+        public static string? ReadLine(this Stream stream, Encoding encoding, out int bytesRead)
         {
             // read line char-by-char
             bytesRead = 0;

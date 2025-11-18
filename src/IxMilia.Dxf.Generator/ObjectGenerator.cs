@@ -17,14 +17,13 @@ namespace IxMilia.Dxf.Generator
         public ObjectGenerator(string outputDir)
             : base(outputDir)
         {
+            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location)!, "Specs", "ObjectsSpec.xml")).Root!;
+            _xmlns = _xml.Name.NamespaceName;
+            _objects = _xml.Elements(XName.Get("Object", _xmlns)).Where(x => x.Attribute("Name")?.Value != "DxfObject");
         }
 
         public void Run()
         {
-            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Specs", "ObjectsSpec.xml")).Root;
-            _xmlns = _xml.Name.NamespaceName;
-            _objects = _xml.Elements(XName.Get("Object", _xmlns)).Where(x => x.Attribute("Name").Value != "DxfObject");
-
             OutputDxfObjectType();
             OutputDxfObject();
             OutputDxfObjects();

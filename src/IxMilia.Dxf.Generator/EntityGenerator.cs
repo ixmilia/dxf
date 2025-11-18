@@ -17,14 +17,13 @@ namespace IxMilia.Dxf.Generator
         public EntityGenerator(string outputDir)
             : base(outputDir)
         {
+            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location)!, "Specs", "EntitiesSpec.xml")).Root!;
+            _xmlns = _xml.Name.NamespaceName;
+            _entities = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => x.Attribute("Name")?.Value != "DxfEntity");
         }
 
         public void Run()
         {
-            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Specs", "EntitiesSpec.xml")).Root;
-            _xmlns = _xml.Name.NamespaceName;
-            _entities = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => x.Attribute("Name").Value != "DxfEntity");
-
             OutputDxfEntityType();
             OutputDxfEntity();
             OutputDxfEntities();
@@ -339,7 +338,7 @@ namespace IxMilia.Dxf.Generator
             //
             // Extents
             //
-            var extentsElement = entity.Element(XName.Get("Extents", entity.Name.NamespaceName));
+            var extentsElement = entity.Element(XName.Get("Extents", entity.Name.NamespaceName))!;
             if (AttributeOrDefault(extentsElement, "Custom", "false") != "true")
             {
                 var extents = extentsElement?.Elements(XName.Get("Value", entity.Name.NamespaceName));

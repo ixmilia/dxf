@@ -17,14 +17,13 @@ namespace IxMilia.Dxf.Generator
         public SectionGenerator(string outputDir)
             : base(outputDir)
         {
+            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location)!, "Specs", "HeaderVariablesSpec.xml")).Root!;
+            _xmlns = _xml.Name.NamespaceName;
+            _variables = _xml.Elements(XName.Get("Variable", _xmlns));
         }
 
         public void Run()
         {
-            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Specs", "HeaderVariablesSpec.xml")).Root;
-            _xmlns = _xml.Name.NamespaceName;
-            _variables = _xml.Elements(XName.Get("Variable", _xmlns));
-
             OutputHeader();
         }
 

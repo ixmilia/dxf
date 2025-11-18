@@ -11,11 +11,13 @@ namespace IxMilia.Dxf.Generator
     {
         private string _outputDir;
         private StringBuilder _sb;
+        private bool _writingFile;
         private int _indentionLevel;
 
         protected GeneratorBase(string outputDir)
         {
             _outputDir = outputDir;
+            _sb = new StringBuilder();
         }
 
         public string Accessibility(XElement property)
@@ -149,7 +151,7 @@ namespace IxMilia.Dxf.Generator
             }
         }
 
-        public void AppendInitializeMethod(XElement item, string customInitializeLine = null)
+        public void AppendInitializeMethod(XElement item, string? customInitializeLine = null)
         {
             AppendLine();
             AppendLine("protected override void Initialize()");
@@ -419,13 +421,13 @@ namespace IxMilia.Dxf.Generator
             }
         }
 
-        public string AttributeOrDefault(XElement xml, string attributeName, string defaultValue = null)
+        public string? AttributeOrDefault(XElement xml, string attributeName, string? defaultValue = null)
         {
             var att = xml?.Attribute(attributeName);
             return att == null ? defaultValue : att.Value;
         }
 
-        public string BaseClass(XElement entity, string defaultValue)
+        public string? BaseClass(XElement entity, string defaultValue)
         {
             var att = entity.Attribute("BaseClass");
             return att == null ? defaultValue : att.Value;
@@ -438,15 +440,15 @@ namespace IxMilia.Dxf.Generator
 
         public string ClassName(XElement xml)
         {
-            return AttributeOrDefault(xml, "ClassName");
+            return AttributeOrDefault(xml, "ClassName")!;
         }
 
         public int Code(XElement property)
         {
-            return int.Parse(property.Attribute("Code").Value);
+            return int.Parse(property.Attribute("Code")!.Value);
         }
 
-        public int[] CodeOverrides(XElement xml)
+        public int[]? CodeOverrides(XElement xml)
         {
             var text = AttributeOrDefault(xml, "CodeOverrides");
             if (text == null)
@@ -459,16 +461,16 @@ namespace IxMilia.Dxf.Generator
 
         public string Comment(XElement xml)
         {
-            return AttributeOrDefault(xml, "Comment");
+            return AttributeOrDefault(xml, "Comment")!;
         }
 
-        public string CopyConstructor(XElement entity)
+        public string? CopyConstructor(XElement entity)
         {
             var att = entity.Attribute("CopyConstructor");
             return att == null || att.Value == "None" ? null : CamlCase(att.Value);
         }
 
-        public string DefaultConstructor(XElement entity)
+        public string? DefaultConstructor(XElement entity)
         {
             var att = entity.Attribute("DefaultConstructor");
             if (att == null)
@@ -481,8 +483,8 @@ namespace IxMilia.Dxf.Generator
 
         public string DefaultValue(XElement property)
         {
-            var value = property.Attribute("DefaultValue").Value;
-            if (property.Attribute("Type").Value == "string" && value != "null")
+            var value = property.Attribute("DefaultValue")!.Value;
+            if (property.Attribute("Type")?.Value == "string" && value != "null")
             {
                 value = string.Format("\"{0}\"", value);
             }
@@ -498,10 +500,10 @@ namespace IxMilia.Dxf.Generator
 
         public string EntityType(XElement entity)
         {
-            return entity.Attribute("EntityType").Value;
+            return entity.Attribute("EntityType")!.Value;
         }
 
-        public string ExpandCommentOrNull(string baseComment, string template)
+        public string? ExpandCommentOrNull(string? baseComment, string template)
         {
             if (baseComment == null)
             {
@@ -513,15 +515,15 @@ namespace IxMilia.Dxf.Generator
 
         public bool GenerateReaderFunction(XElement entity)
         {
-            return bool.Parse(AttributeOrDefault(entity, "GenerateReaderFunction", "true"));
+            return bool.Parse(AttributeOrDefault(entity, "GenerateReaderFunction", "true")!);
         }
 
         public bool GenerateWriterFunction(XElement entity)
         {
-            return bool.Parse(AttributeOrDefault(entity, "GenerateWriterFunction", "true"));
+            return bool.Parse(AttributeOrDefault(entity, "GenerateWriterFunction", "true")!);
         }
 
-        public int[] GetCodeOverrides(XElement property)
+        public int[]? GetCodeOverrides(XElement property)
         {
             var codesAtt = property.Attribute("CodeOverrides");
             return codesAtt == null ? null : codesAtt.Value.Split(',').Select(c => int.Parse(c)).ToArray();
@@ -663,10 +665,10 @@ namespace IxMilia.Dxf.Generator
 
         public bool HasFlags(XElement xml)
         {
-            return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true"));
+            return bool.Parse(AttributeOrDefault(xml, "HasFlags", "true")!);
         }
 
-        public string HeaderVariable(XElement xml)
+        public string? HeaderVariable(XElement xml)
         {
             return AttributeOrDefault(xml, "HeaderVariable");
         }
@@ -683,16 +685,16 @@ namespace IxMilia.Dxf.Generator
 
         public int Mask(XElement flag)
         {
-            return int.Parse(flag.Attribute("Mask").Value);
+            return int.Parse(flag.Attribute("Mask")!.Value);
         }
 
-        public string MaxVersion(XElement property)
+        public string? MaxVersion(XElement property)
         {
             var att = property.Attribute("MaxVersion");
             return att == null ? null : att.Value;
         }
 
-        public string MinVersion(XElement property)
+        public string? MinVersion(XElement property)
         {
             var att = property.Attribute("MinVersion");
             return att == null ? null : att.Value;
@@ -700,17 +702,17 @@ namespace IxMilia.Dxf.Generator
 
         public string Name(XElement property)
         {
-            return property.Attribute("Name").Value;
+            return property.Attribute("Name")!.Value;
         }
 
         public string ObjectType(XElement obj)
         {
-            return obj.Attribute("ObjectType").Value;
+            return obj.Attribute("ObjectType")!.Value;
         }
 
         public string Property(XElement flag)
         {
-            return flag.Attribute("Property").Value;
+            return flag.Attribute("Property")!.Value;
         }
 
         public bool ProtectedSet(XElement property)
@@ -744,9 +746,9 @@ namespace IxMilia.Dxf.Generator
             return ProtectedSet(property) ? "protected " : "";
         }
 
-        public string SubclassMarker(XElement entity)
+        public string? SubclassMarker(XElement entity)
         {
-            var value = entity.Attribute("SubclassMarker").Value;
+            var value = entity.Attribute("SubclassMarker")!.Value;
             return value == "null" ? null : value;
         }
 
@@ -756,12 +758,12 @@ namespace IxMilia.Dxf.Generator
             return att != null && bool.Parse(att.Value);
         }
 
-        public string TableClassName(XElement table)
+        public string? TableClassName(XElement table)
         {
             return AttributeOrDefault(table, "TableClassName");
         }
 
-        public string Tag(XElement entity)
+        public string? Tag(XElement entity)
         {
             var att = entity.Attribute("Tag");
             return att == null ? null : att.Value;
@@ -769,17 +771,17 @@ namespace IxMilia.Dxf.Generator
 
         public string Type(XElement property)
         {
-            return property.Attribute("Type").Value;
+            return property.Attribute("Type")!.Value;
         }
 
         public string TypeString(XElement entity)
         {
-            return entity.Attribute("TypeString").Value;
+            return entity.Attribute("TypeString")!.Value;
         }
 
         public string TypeStringVariable(XElement entity)
         {
-            return entity.Attribute("TypeStringVariable").Value;
+            return entity.Attribute("TypeStringVariable")!.Value;
         }
 
         public string TypeToString(Type type)
@@ -798,7 +800,7 @@ namespace IxMilia.Dxf.Generator
             return expected + "Value";
         }
 
-        public string WriteCondition(XElement property)
+        public string? WriteCondition(XElement property)
         {
             var att = property.Attribute("WriteCondition");
             return att == null ? null : att.Value;
@@ -825,20 +827,20 @@ namespace IxMilia.Dxf.Generator
         public IEnumerable<string> WriteCustomCode(XElement spec)
         {
             var code = AttributeOrDefault(spec, "Code");
-            return new[] { code };
+            return code is null ? Array.Empty<string>() : new[] { code };
         }
 
         public IEnumerable<string> WriteProperty(XElement spec, XElement entity)
         {
-            var property = GetPropertiesAndPointers(entity).Single(p => Name(p) == spec.Attribute("Property").Value);
+            var property = GetPropertiesAndPointers(entity).Single(p => Name(p) == spec.Attribute("Property")!.Value);
             return GetPropertyWriteLines(property);
         }
 
         public IEnumerable<string> WriteSpecificValue(XElement spec)
         {
-            var code = spec.Attribute("Code").Value;
+            var code = spec.Attribute("Code")!.Value;
             var writeConverter = WriteConverter(spec);
-            var value = string.Format(writeConverter, spec.Attribute("Value").Value);
+            var value = string.Format(writeConverter, spec.Attribute("Value")!.Value);
 
             var line = string.Format("pairs.Add(new DxfCodePair({0}, {1}));", code, value);
             var minVersion = MinVersion(spec);
@@ -867,7 +869,7 @@ namespace IxMilia.Dxf.Generator
 
             if (defaultValue != null)
             {
-                predicate.Add(string.Format("{0} != {1}", spec.Attribute("Value").Value, defaultValue.Value));
+                predicate.Add(string.Format("{0} != {1}", spec.Attribute("Value")!.Value, defaultValue.Value));
             }
 
             if (condition != null)
@@ -900,7 +902,7 @@ namespace IxMilia.Dxf.Generator
                     return WriteProperty(spec, entity);
                 case "Foreach":
                     {
-                        var property = spec.Attribute("Property").Value;
+                        var property = spec.Attribute("Property")!.Value;
                         var condition = spec.Attribute("Condition")?.Value;
 
                         var lines = new List<string>();
@@ -933,9 +935,9 @@ namespace IxMilia.Dxf.Generator
                     return WriteCustomCode(spec);
                 case "WriteBinaryData":
                     {
-                        var value = spec.Attribute("Value").Value;
-                        var countCode = spec.Attribute("CountCode").Value;
-                        var chunkCode = spec.Attribute("ChunkCode").Value;
+                        var value = spec.Attribute("Value")!.Value;
+                        var countCode = spec.Attribute("CountCode")!.Value;
+                        var chunkCode = spec.Attribute("ChunkCode")!.Value;
                         var predicates = new List<string>();
                         predicates.Add($"({value}?.Length ?? 0) > 0");
                         if (MinVersion(spec) != null)
@@ -968,12 +970,13 @@ namespace IxMilia.Dxf.Generator
 
         public void CreateNewFile(string ns, params string[] usings)
         {
-            if (_sb != null)
+            if (_writingFile)
             {
                 throw new Exception($"File is still being written.  Please call `{nameof(FinishFile)}`() first.");
             }
 
             _sb = new StringBuilder();
+            _writingFile = true;
             _indentionLevel = 0;
             AppendLine("// The contents of this file are automatically generated by a tool, and should not be directly modified.");
             AppendLine();
@@ -1018,7 +1021,8 @@ namespace IxMilia.Dxf.Generator
         {
             var fullPath = Path.Combine(_outputDir, path);
             File.WriteAllText(fullPath, _sb.ToString());
-            _sb = null;
+            _sb = new StringBuilder();
+            _writingFile = false;
         }
     }
 }

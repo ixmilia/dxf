@@ -17,14 +17,13 @@ namespace IxMilia.Dxf.Generator
         public TableGenerator(string outputDir)
             : base(outputDir)
         {
+            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location)!, "Specs", "TableSpec.xml")).Root!;
+            _xmlns = _xml.Name.NamespaceName;
+            _tables = _xml.Elements(XName.Get("Table", _xmlns));
         }
 
         public void Run()
         {
-            _xml = XDocument.Load(Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "Specs", "TableSpec.xml")).Root;
-            _xmlns = _xml.Name.NamespaceName;
-            _tables = _xml.Elements(XName.Get("Table", _xmlns));
-
             OutputTables();
             OutputTableItems();
         }
@@ -33,7 +32,7 @@ namespace IxMilia.Dxf.Generator
         {
             foreach (var table in _tables)
             {
-                var tableItem = Name(table.Element(XName.Get("TableItem", _xmlns)));
+                var tableItem = Name(table.Element(XName.Get("TableItem", _xmlns))!);
                 var className = "Dxf" + Type(table) + "Table";
                 CreateNewFile(TableNamespace, "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections");
 
@@ -107,7 +106,7 @@ namespace IxMilia.Dxf.Generator
         {
             foreach (var table in _tables)
             {
-                var tableItem = table.Element(XName.Get("TableItem", _xmlns));
+                var tableItem = table.Element(XName.Get("TableItem", _xmlns))!;
                 var properties = tableItem.Elements(XName.Get("Property", _xmlns));
                 CreateNewFile("IxMilia.Dxf", "System", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
 
@@ -224,7 +223,7 @@ namespace IxMilia.Dxf.Generator
                         var minVersion = MinVersion(property);
                         var maxVersion = MaxVersion(property);
                         var hasPredicate = disableWritingDefault || writeCondition != null || minVersion != null || maxVersion != null;
-                        string predicate = null;
+                        string? predicate = null;
                         if (hasPredicate)
                         {
                             var parts = new List<string>();
@@ -463,7 +462,8 @@ namespace IxMilia.Dxf.Generator
                     var setProperties = new HashSet<string>();
                     foreach (var property in properties)
                     {
-                        if (setProperties.Add(HeaderVariable(property)))
+                        var hv = HeaderVariable(property);
+                        if (hv is not null && setProperties.Add(hv))
                         {
                             AppendLine($"case \"{HeaderVariable(property)}\":");
                             AppendLine($"    {Name(property)} = ({Type(property)})value;");
@@ -489,7 +489,8 @@ namespace IxMilia.Dxf.Generator
                     var getProperties = new HashSet<string>();
                     foreach (var property in properties)
                     {
-                        if (getProperties.Add(HeaderVariable(property)))
+                        var hv = HeaderVariable(property);
+                        if (hv is not null && getProperties.Add(hv))
                         {
                             AppendLine($"case \"{HeaderVariable(property)}\":");
                             AppendLine($"    return {Name(property)};");

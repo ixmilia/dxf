@@ -10,4 +10,8 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)src\NullableAttribute.cs" />
+  </ItemGroup>
+
 </Project>

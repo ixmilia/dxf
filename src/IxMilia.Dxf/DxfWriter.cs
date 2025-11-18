@@ -1,5 +1,8 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -9,9 +12,9 @@ namespace IxMilia.Dxf
 {
     internal class DxfWriter
     {
-        private StreamWriter textWriter = null;
-        private BinaryWriter binWriter = null;
-        private Stream fileStream = null;
+        private StreamWriter? textWriter = null;
+        private BinaryWriter? binWriter = null;
+        private Stream fileStream;
 
         private bool asText = true;
         private DxfAcadVersion version;
@@ -119,28 +122,28 @@ namespace IxMilia.Dxf
             return code.ToString(CultureInfo.InvariantCulture).PadLeft(3);
         }
 
-        private void WriteValue(int code, object value)
+        private void WriteValue(int code, object? value)
         {
             var type = DxfCodePair.ExpectedType(code);
             if (type == typeof(string))
-                WriteString((string)value);
+                WriteString(value as string ?? string.Empty);
             else if (type == typeof(double))
-                WriteDouble((double)value);
+                WriteDouble((double)value!);
             else if (type == typeof(short))
-                WriteShort((short)value);
+                WriteShort((short)value!);
             else if (type == typeof(int))
-                WriteInt((int)value);
+                WriteInt((int)value!);
             else if (type == typeof(long))
-                WriteLong((long)value);
+                WriteLong((long)value!);
             else if (type == typeof(bool))
             {
-                if (DxfCodePair.IsPotentialShortAsBool(code) && value.GetType() == typeof(short))
+                if (DxfCodePair.IsPotentialShortAsBool(code) && value?.GetType() == typeof(short))
                     WriteShort((short)value);
                 else
-                    WriteBool((bool)value);
+                    WriteBool((bool)value!);
             }
             else if (type == typeof(byte[]))
-                WriteBinary((byte[])value);
+                WriteBinary((byte[])value!);
             else
                 throw new InvalidOperationException("No writer available");
         }
@@ -291,8 +294,8 @@ namespace IxMilia.Dxf
 
         private void WriteLine(string value)
         {
-            textWriter.Write(value);
-            textWriter.Write("\r\n");
+            textWriter!.Write(value);
+            textWriter!.Write("\r\n");
         }
 
         private static byte[] GetAsciiBytes(string value)

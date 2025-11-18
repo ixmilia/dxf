@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,7 +25,7 @@ namespace IxMilia.Dxf
 
         public IEnumerable<DxfCodePair> GetCodePairs()
         {
-            DxfCodePair pair;
+            DxfCodePair? pair;
             while ((pair = GetCodePair()) != null)
             {
                 yield return pair;
@@ -53,7 +55,7 @@ namespace IxMilia.Dxf
             return _stream.ReadLine(_encoding, out var _);
         }
 
-        public DxfCodePair GetCodePair()
+        public DxfCodePair? GetCodePair()
         {
             if (_lineEnumerator.MoveNext())
             {
@@ -69,7 +71,7 @@ namespace IxMilia.Dxf
                 {
                     if (_lineEnumerator.MoveNext())
                     {
-                        DxfCodePair pair = null;
+                        DxfCodePair? pair = null;
                         var valueLine = _lineEnumerator.Current;
                         var expectedType = DxfCodePair.ExpectedType(code);
                         if (expectedType == typeof(short))

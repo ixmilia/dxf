@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,11 +21,6 @@ namespace IxMilia.Dxf
         public IList<IDxfCodePairOrGroup> Items { get; }
 
         public bool IsCodePair { get { return false; } }
-
-        public DxfCodePairGroup()
-            : this(null, null)
-        {
-        }
 
         public DxfCodePairGroup(string groupName, IEnumerable<IDxfCodePairOrGroup> items)
         {

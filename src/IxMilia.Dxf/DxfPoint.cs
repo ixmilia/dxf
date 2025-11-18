@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 
 namespace IxMilia.Dxf
@@ -51,7 +53,7 @@ namespace IxMilia.Dxf
             return new DxfPoint(p.X / scalar, p.Y / scalar, p.Z / scalar);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DxfPoint && this == (DxfPoint)obj;
         }

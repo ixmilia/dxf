@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +41,7 @@ namespace IxMilia.Dxf
                 AssignCommonValues(entity);
                 entities.Add(entity);
             };
-            Func<DxfVertex> getLastVertex = () => entities.LastOrDefault() as DxfVertex;
+            Func<DxfVertex?> getLastVertex = () => entities.LastOrDefault() as DxfVertex;
             while (stillReading)
             {
                 var itemType = (DxbItemType)reader.ReadByte();

@@ -5,7 +5,8 @@
     <Copyright>Copyright 2020</Copyright>
     <AssemblyTitle>IxMilia.Dxf</AssemblyTitle>
     <Authors>IxMilia</Authors>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <LangVersion>10.0</LangVersion>
     <AssemblyName>IxMilia.Dxf</AssemblyName>
     <PackageId>IxMilia.Dxf</PackageId>
     <PackageTags>AutoCAD;CAD;DXB;DXF</PackageTags>
@@ -19,6 +20,10 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <NoWarn>$(NoWarn);nullable</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,7 +30,7 @@ namespace IxMilia.Dxf
 
         public IEnumerable<DxfCodePair> GetCodePairs()
         {
-            DxfCodePair pair;
+            DxfCodePair? pair;
             while ((pair = GetCodePair()) != null)
             {
                 _returnedCodePairs = true;
@@ -41,7 +43,7 @@ namespace IxMilia.Dxf
             // noop
         }
 
-        internal DxfCodePair GetCodePair()
+        internal DxfCodePair? GetCodePair()
         {
             var codeOffset = _totalBytesRead + _miniBufferStart;
             int code;

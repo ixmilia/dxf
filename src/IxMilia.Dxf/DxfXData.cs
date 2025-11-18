@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -220,7 +222,7 @@ namespace IxMilia.Dxf
             pairs.Add(new DxfCodePair((int)DxfXDataType.ControlString, "}"));
         }
 
-        internal static DxfXDataItem FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfXDataItem? FromBuffer(DxfCodePairBufferReader buffer)
         {
             var pair = buffer.Peek();
             buffer.Advance();

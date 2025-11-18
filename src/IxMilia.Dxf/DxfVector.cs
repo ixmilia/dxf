@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 
 namespace IxMilia.Dxf
@@ -86,7 +88,7 @@ namespace IxMilia.Dxf
             return !(p1 == p2);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DxfVector && this == (DxfVector)obj;
         }

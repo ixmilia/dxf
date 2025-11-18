@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿#nullable enable
+
+using System.Text.RegularExpressions;
 
 namespace IxMilia.Dxf
 {

@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace IxMilia.Dxf
 {
     public enum DxfLineWeightType : short
@@ -65,14 +67,14 @@ namespace IxMilia.Dxf
             Value = value;
         }
 
-        public static bool operator ==(DxfLineWeight a, DxfLineWeight b)
+        public static bool operator ==(DxfLineWeight? a, DxfLineWeight? b)
         {
             if (ReferenceEquals(a, b))
             {
                 return true;
             }
 
-            if ((object)a == null || (object)b == null)
+            if (a is null || b is null)
             {
                 return false;
             }
@@ -80,12 +82,12 @@ namespace IxMilia.Dxf
             return a.Value == b.Value;
         }
 
-        public static bool operator !=(DxfLineWeight a, DxfLineWeight b)
+        public static bool operator !=(DxfLineWeight? a, DxfLineWeight? b)
         {
             return !(a == b);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is DxfLineWeight)
             {

@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace IxMilia.Dxf
     internal class DxfPointer
     {
         public DxfHandle Handle { get; set; }
-        public IDxfItem Item { get; set; }
+        public IDxfItem? Item { get; set; }
 
         public DxfPointer()
             : this(default(DxfHandle), null)
@@ -21,12 +23,12 @@ namespace IxMilia.Dxf
         {
         }
 
-        public DxfPointer(IDxfItem item)
+        public DxfPointer(IDxfItem? item)
             : this(default(DxfHandle), item)
         {
         }
 
-        public DxfPointer(DxfHandle handle, IDxfItem item)
+        public DxfPointer(DxfHandle handle, IDxfItem? item)
         {
             Handle = handle;
             Item = item;
@@ -184,9 +186,9 @@ namespace IxMilia.Dxf
             return nextPointer;
         }
 
-        private static DxfHandle AssignHandles(IDxfItemInternal item, DxfHandle nextHandle, DxfHandle ownerHandle, HashSet<IDxfItemInternal> visitedItems)
+        private static DxfHandle AssignHandles(IDxfItemInternal? item, DxfHandle nextHandle, DxfHandle ownerHandle, HashSet<IDxfItemInternal> visitedItems)
         {
-            if (item == null || !visitedItems.Add(item))
+            if (item is null || !visitedItems.Add(item))
             {
                 return nextHandle;
             }
@@ -201,17 +203,20 @@ namespace IxMilia.Dxf
 
             foreach (var child in item.GetPointers().Where(c => c.Item != null))
             {
-                var childItem = (IDxfItemInternal)child.Item;
+                var childItem = child.Item as IDxfItemInternal;
                 var parentHandle = GetParentHandle(item, childItem);
                 nextHandle = AssignHandles(childItem, nextHandle, parentHandle, visitedItems);
-                child.Handle = childItem.Handle;
-                childItem.OwnerHandle = parentHandle;
+                if (childItem is not null)
+                {
+                    child.Handle = childItem.Handle;
+                    childItem.OwnerHandle = parentHandle;
+                }
             }
 
             return nextHandle;
         }
 
-        private static DxfHandle GetParentHandle(IDxfItemInternal parent, IDxfItemInternal child)
+        private static DxfHandle GetParentHandle(IDxfItemInternal parent, IDxfItemInternal? child)
         {
             if (child is DxfEntity && !(parent is DxfDictionary))
             {

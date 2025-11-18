@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace IxMilia.Dxf
 {
     public enum DxfShadowMode

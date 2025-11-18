@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -85,9 +87,9 @@ namespace IxMilia.Dxf
     {
         internal const string ClassText = "CLASS";
 
-        public string ClassDxfRecordName { get; set; }
-        public string CppClassName { get; set; }
-        public string ApplicationName { get; set; }
+        public string ClassDxfRecordName { get; set; } = string.Empty;
+        public string CppClassName { get; set; } = string.Empty;
+        public string ApplicationName { get; set; } = string.Empty;
         public int ClassVersionNumber { get; set; }
         public DxfProxyCapabilities ProxyCapabilities { get; set; }
         public int InstanceCount { get; set; }

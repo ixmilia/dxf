@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,45 +12,45 @@ namespace IxMilia.Dxf
     {
         public const int CommentCode = 999;
 
-        private KeyValuePair<int, object> data;
+        private KeyValuePair<int, object?> data;
 
         public bool IsCodePair { get { return true; } }
 
         public int Code
         {
             get { return data.Key; }
-            set { data = new KeyValuePair<int, object>(value, data.Value); }
+            set { data = new KeyValuePair<int, object?>(value, data.Value); }
         }
 
-        public object Value
+        public object? Value
         {
             get { return data.Value; }
-            set { data = new KeyValuePair<int, object>(data.Key, value); }
+            set { data = new KeyValuePair<int, object?>(data.Key, value); }
         }
 
         public string StringValue
         {
-            get { return (string)Value; }
+            get { return (string)Value!; }
         }
 
         public double DoubleValue
         {
-            get { return (double)Value; }
+            get { return (double)Value!; }
         }
 
         public short ShortValue
         {
-            get { return (short)Value; }
+            get { return (short)Value!; }
         }
 
         public int IntegerValue
         {
-            get { return (int)Value; }
+            get { return (int)Value!; }
         }
 
         public long LongValue
         {
-            get { return (long)Value; }
+            get { return (long)Value!; }
         }
 
         public bool BoolValue
@@ -69,19 +71,19 @@ namespace IxMilia.Dxf
 
         public byte[] BinaryValue
         {
-            get { return (byte[])Value; }
+            get { return (byte[])Value!; }
         }
 
         public DxfCodePair(int code, string value)
         {
             Debug.Assert(ExpectedType(code) == typeof(string));
-            data = new KeyValuePair<int, object>(code, value ?? string.Empty);
+            data = new KeyValuePair<int, object?>(code, value ?? string.Empty);
         }
 
         public DxfCodePair(int code, double value)
         {
             Debug.Assert(ExpectedType(code) == typeof(double));
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object?>(code, value);
         }
 
         public DxfCodePair(int code, short value)
@@ -90,37 +92,37 @@ namespace IxMilia.Dxf
             // should really be a bool
             if (!IsPotentialShortAsBool(code))
                 Debug.Assert(ExpectedType(code) == typeof(short));
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object?>(code, value);
         }
 
         public DxfCodePair(int code, int value)
         {
             Debug.Assert(ExpectedType(code) == typeof(int));
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object?>(code, value);
         }
 
         public DxfCodePair(int code, long value)
         {
             Debug.Assert(ExpectedType(code) == typeof(long));
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object?>(code, value);
         }
 
         public DxfCodePair(int code, bool value)
         {
             Debug.Assert(ExpectedType(code) == typeof(bool));
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object?>(code, value);
         }
 
         public DxfCodePair(int code, byte[] value)
         {
             Debug.Assert(ExpectedType(code) == typeof(byte[]));
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object?>(code, value);
         }
 
         /// <summary>
         /// Internal for specific cases where the type isn't known.
         /// </summary>
-        internal DxfCodePair(int code, object value)
+        internal DxfCodePair(int code, object? value)
         {
             // it's annoying to always cast, this is just a convenience helper
             var expectedType = ExpectedType(code);
@@ -140,7 +142,7 @@ namespace IxMilia.Dxf
                 throw new InvalidOperationException($"Illegal cast to string for code {code}; expected type is {expectedType.Name}");
             }
 
-            data = new KeyValuePair<int, object>(code, value);
+            data = new KeyValuePair<int, object?>(code, value);
         }
 
         internal static bool IsPotentialShortAsBool(int code)
@@ -173,18 +175,18 @@ namespace IxMilia.Dxf
             return pair.Code == CommentCode;
         }
 
-        public static bool operator ==(DxfCodePair a, DxfCodePair b)
+        public static bool operator ==(DxfCodePair? a, DxfCodePair? b)
         {
             if (ReferenceEquals(a, b))
                 return true;
-            if (((object)a) == null || ((object)b) == null)
+            if (a is null || b is null)
                 return false;
             return a.Code == b.Code && ValuesEqual(a.Value, b.Value);
         }
 
-        private static bool ValuesEqual(object a, object b)
+        private static bool ValuesEqual(object? a, object? b)
         {
-            if (a?.GetType() == b?.GetType() && a?.GetType() == typeof(byte[]))
+            if (a?.GetType() == b?.GetType() && a?.GetType() == typeof(byte[]) && b?.GetType() == typeof(byte[]))
             {
                 var aa = (byte[])a;
                 var ba = (byte[])b;
@@ -201,10 +203,10 @@ namespace IxMilia.Dxf
                 return true;
             }
 
-            return a.Equals(b);
+            return a?.Equals(b) ?? false;
         }
 
-        public static bool operator !=(DxfCodePair a, DxfCodePair b)
+        public static bool operator !=(DxfCodePair? a, DxfCodePair? b)
         {
             return !(a == b);
         }
@@ -220,7 +222,7 @@ namespace IxMilia.Dxf
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is DxfCodePair)
                 return this == (DxfCodePair)obj;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Globalization;
 
 namespace IxMilia.Dxf
@@ -28,7 +30,7 @@ namespace IxMilia.Dxf
             return parseResult;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is DxfHandle handle && Equals(handle);
         }

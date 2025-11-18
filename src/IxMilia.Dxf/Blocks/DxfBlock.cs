@@ -1,4 +1,7 @@
+#nullable enable
+
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using IxMilia.Dxf.Collections;
 using IxMilia.Dxf.Entities;
@@ -17,7 +20,7 @@ namespace IxMilia.Dxf.Blocks
         private int Flags = 0;
 
         DxfHandle IDxfItemInternal.Handle { get; set; }
-        public IDxfItem Owner { get; private set; }
+        public IDxfItem? Owner { get; private set; }
         DxfHandle IDxfItemInternal.OwnerHandle { get; set; }
         void IDxfItemInternal.SetOwner(IDxfItem owner)
         {
@@ -35,6 +38,7 @@ namespace IxMilia.Dxf.Blocks
             }
             foreach (var pointer in ((IDxfItemInternal)this).GetPointers())
             {
+                Debug.Assert(pointer.Item as IDxfItemInternal is not null);
                 yield return (IDxfItemInternal)pointer.Item;
             }
         }
@@ -52,7 +56,12 @@ namespace IxMilia.Dxf.Blocks
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
         private DxfEndBlock EndBlock
         {
-            get { return _endBlockPointer.Item as DxfEndBlock; }
+            get
+            {
+                var endBlock = _endBlockPointer.Item as DxfEndBlock;
+                Debug.Assert(endBlock is not null);
+                return endBlock;
+            }
             set { _endBlockPointer.Item = value; }
         }
 
@@ -98,13 +107,21 @@ namespace IxMilia.Dxf.Blocks
             set { DxfHelpers.SetFlag(value, ref Flags, 64); }
         }
 
-        public DxfBlock()
+        public DxfBlock(string name)
+            : this(name, "0")
         {
-            Layer = "0";
+        }
+
+        public DxfBlock(string name, string layer)
+        {
+            Name = name;
+            Layer = layer;
             BasePoint = DxfPoint.Origin;
             Entities = new ListNonNull<DxfEntity>();
             ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
             EndBlock = new DxfEndBlock(this);
+            XrefName = string.Empty;
+            Description = string.Empty;
         }
 
         internal IEnumerable<DxfCodePair> GetValuePairs(DxfAcadVersion version, bool outputHandles)
@@ -170,14 +187,14 @@ namespace IxMilia.Dxf.Blocks
             return list;
         }
 
-        internal static DxfBlock FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfBlock? FromBuffer(DxfCodePairBufferReader buffer)
         {
             if (!buffer.ItemsRemain)
             {
                 return null;
             }
 
-            var block = new DxfBlock();
+            var block = new DxfBlock(string.Empty);
             var readingBlockStart = true;
             var readingBlockEnd = false;
             var entities = new List<DxfEntity>();

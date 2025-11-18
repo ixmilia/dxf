@@ -15,8 +15,7 @@ namespace IxMilia.Dxf.Test
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R12;
 
-            var block = new DxfBlock();
-            block.Name = "my-block";
+            var block = new DxfBlock("my-block");
             block.Entities.Add(new DxfLine(new DxfPoint(0.0, 0.0, 0.0), new DxfPoint(1.0, 1.0, 0.0)));
             file.Blocks.Add(block);
 
@@ -90,8 +89,7 @@ namespace IxMilia.Dxf.Test
         public void PointerAssignmentInAnImageInABlockWhenWriting()
         {
             var file = new DxfFile();
-            var block = new DxfBlock();
-            block.Name = "my-block";
+            var block = new DxfBlock("my-block");
             var image = new DxfImage();
             image.ImageDefinition = new DxfImageDefinition();
             image.ImageDefinition.FilePath = "image-def-file-path";

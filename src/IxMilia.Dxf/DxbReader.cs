@@ -150,7 +150,7 @@ namespace IxMilia.Dxf
             if (blockBase != null)
             {
                 // entities are all contained in a block
-                var block = new DxfBlock();
+                var block = new DxfBlock(string.Empty);
                 block.BasePoint = blockBase.GetValueOrDefault();
                 foreach (var entity in entities)
                 {

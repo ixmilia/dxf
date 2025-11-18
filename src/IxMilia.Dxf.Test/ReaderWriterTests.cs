@@ -580,9 +580,7 @@ namespace IxMilia.Dxf.Test
         {
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R13;
-            var block = new DxfBlock();
-            block.Name = "<block name>";
-            block.Layer = "<layer>";
+            var block = new DxfBlock("<block name>", "<layer>");
             block.XrefName = "<xref>";
             block.BasePoint = new DxfPoint(11, 22, 33);
             block.Entities.Add(new DxfModelPoint(new DxfPoint(111, 222, 333)));
@@ -1069,8 +1067,8 @@ namespace IxMilia.Dxf.Test
         {
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2000;
-            file.Blocks.Add(new DxfBlock());
-            file.Blocks.Add(SetAllPropertiesToDefault(new DxfBlock()));
+            file.Blocks.Add(new DxfBlock(string.Empty));
+            file.Blocks.Add(SetAllPropertiesToDefault(new DxfBlock(string.Empty)));
             using (var ms = new MemoryStream())
             {
                 file.Save(ms);
@@ -1597,8 +1595,8 @@ namespace IxMilia.Dxf.Test
 
             // ensure they're not duplicated in a different case
             file.Blocks.Clear();
-            file.Blocks.Add(new DxfBlock() { Name = "*Model_Space" });
-            file.Blocks.Add(new DxfBlock() { Name = "*Paper_Space" });
+            file.Blocks.Add(new DxfBlock("*Model_Space"));
+            file.Blocks.Add(new DxfBlock("*Paper_Space"));
             file.Normalize();
             Assert.Equal(2, file.Blocks.Count);
             Assert.Equal("*Model_Space", file.Blocks[0].Name);

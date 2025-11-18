@@ -136,8 +136,7 @@ namespace IxMilia.Dxf.Test
         {
             var line = new DxfLine(new DxfPoint(0.0, 0.0, 0.0), new DxfPoint(1.0, 1.0, 0.0));
 
-            var block = new DxfBlock();
-            block.Name = "some-block";
+            var block = new DxfBlock("some-block");
             block.Entities.Add(line);
 
             var insert = new DxfInsert();
@@ -160,8 +159,7 @@ namespace IxMilia.Dxf.Test
         public void InsertWithNonMatchingNameReturnsNoEntities()
         {
             // similar to the above test except that the entity is added to the block _after_ the name binding
-            var block = new DxfBlock();
-            block.Name = "some-block";
+            var block = new DxfBlock("some-block");
 
             var insert = new DxfInsert();
             insert.Name = "some-other-block";

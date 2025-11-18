@@ -74,8 +74,7 @@ namespace IxMilia.Dxf.Test
             var line = new DxfLine(new DxfPoint(1.0, 1.0, 0.0), new DxfPoint(2.0, 3.0, 0.0));
             var offset = new DxfVector(2.0, 2.0, 0.0);
 
-            var block = new DxfBlock();
-            block.Name = "some-block";
+            var block = new DxfBlock("some-block");
             block.Entities.Add(line);
 
             var insert = new DxfInsert();

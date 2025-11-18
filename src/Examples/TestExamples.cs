@@ -14,8 +14,7 @@ namespace Examples
             file.Header.Version = DxfAcadVersion.R12; // this example has only been tested on R12 drawings
 
             // create a block with a line from (0,0) to (1,1)
-            var block = new DxfBlock();
-            block.Name = "my-block";
+            var block = new DxfBlock("my-block");
             block.Entities.Add(new DxfLine(new DxfPoint(0.0, 0.0, 0.0), new DxfPoint(1.0, 1.0, 0.0)));
             file.Blocks.Add(block);
 

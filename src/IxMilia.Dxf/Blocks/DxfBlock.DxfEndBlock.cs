@@ -1,7 +1,10 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Extensions;
 
 namespace IxMilia.Dxf.Blocks
 {
@@ -25,7 +28,7 @@ namespace IxMilia.Dxf.Blocks
             }
             IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
             {
-                return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+                return ((IDxfItemInternal)this).GetPointers().Select(p => p.Item as IDxfItemInternal).WhereNotNull();
             }
             #endregion
 

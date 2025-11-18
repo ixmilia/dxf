@@ -26,7 +26,7 @@ namespace IxMilia.Dxf.Sections
             {
                 if (!Blocks.Any(b => string.Compare(b.Name, name, StringComparison.OrdinalIgnoreCase) == 0))
                 {
-                    Blocks.Add(new DxfBlock() { Name = name, Layer = "0" });
+                    Blocks.Add(new DxfBlock(name));
                 }
             }
         }

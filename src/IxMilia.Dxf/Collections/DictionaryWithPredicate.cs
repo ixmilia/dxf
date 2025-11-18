@@ -1,10 +1,13 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IxMilia.Dxf.Collections
 {
-    internal class DictionaryWithPredicate<TKey, TValue> : IDictionary<TKey, TValue>
+    internal class DictionaryWithPredicate<TKey, TValue> : IDictionary<TKey, TValue> where TKey : notnull
     {
         private Dictionary<TKey, TValue> _dict = new Dictionary<TKey, TValue>();
 
@@ -93,9 +96,9 @@ namespace IxMilia.Dxf.Collections
             return ((ICollection<KeyValuePair<TKey, TValue>>)_dict).Remove(item);
         }
 
-        public bool TryGetValue(TKey key, out TValue value)
+        public bool TryGetValue(TKey key, [NotNullWhen(returnValue: true)] out TValue? value)
         {
-            return ((IDictionary<TKey, TValue>)_dict).TryGetValue(key, out value);
+            return ((IDictionary<TKey, TValue>)_dict).TryGetValue(key, out value!);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

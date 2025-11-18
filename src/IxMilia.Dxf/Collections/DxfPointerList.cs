@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,7 +7,7 @@ using System.Linq;
 
 namespace IxMilia.Dxf.Collections
 {
-    internal class DxfPointerList<TItem> : IList<TItem> where TItem : IDxfItem
+    internal class DxfPointerList<TItem> : IList<TItem?> where TItem : class, IDxfItem
     {
         private List<DxfPointer> _items = new List<DxfPointer>();
 
@@ -31,9 +33,9 @@ namespace IxMilia.Dxf.Collections
 
         internal IList<DxfPointer> Pointers => _items;
 
-        public TItem this[int index]
+        public TItem? this[int index]
         {
-            get { return (TItem)_items[index].Item; }
+            get { return _items[index].Item as TItem; }
             set { _items[index].Item = value; }
         }
 
@@ -41,7 +43,7 @@ namespace IxMilia.Dxf.Collections
 
         public bool IsReadOnly => false;
 
-        public void Add(TItem item) => _items.Add(new DxfPointer(item));
+        public void Add(TItem? item) => _items.Add(new DxfPointer(item));
 
         public void Clear()
         {
@@ -49,17 +51,17 @@ namespace IxMilia.Dxf.Collections
             ValidateCount();
         }
 
-        public bool Contains(TItem item) => GetItems().Contains(item);
+        public bool Contains(TItem? item) => GetItems().Contains(item);
 
-        public void CopyTo(TItem[] array, int arrayIndex) => GetItems().ToList().CopyTo(array, arrayIndex);
+        public void CopyTo(TItem?[] array, int arrayIndex) => GetItems().ToList().CopyTo(array, arrayIndex);
 
-        public IEnumerator<TItem> GetEnumerator() => GetItems().GetEnumerator();
+        public IEnumerator<TItem?> GetEnumerator() => GetItems().GetEnumerator();
 
-        public int IndexOf(TItem item)
+        public int IndexOf(TItem? item)
         {
             for (int i = 0; i < _items.Count; i++)
             {
-                if (item.Equals(_items[i].Item))
+                if (item?.Equals(_items[i].Item) ?? false)
                 {
                     return i;
                 }
@@ -68,13 +70,13 @@ namespace IxMilia.Dxf.Collections
             return -1;
         }
 
-        public void Insert(int index, TItem item) => _items.Insert(index, new DxfPointer(item));
+        public void Insert(int index, TItem? item) => _items.Insert(index, new DxfPointer(item));
 
-        public bool Remove(TItem item)
+        public bool Remove(TItem? item)
         {
             for (int i = 0; i < _items.Count; i++)
             {
-                if (item.Equals(_items[i].Item))
+                if (item?.Equals(_items[i].Item) ?? false)
                 {
                     _items.RemoveAt(i);
                     ValidateCount();
@@ -93,6 +95,6 @@ namespace IxMilia.Dxf.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private IEnumerable<TItem> GetItems() => _items.Select(i => (TItem)i.Item);
+        private IEnumerable<TItem?> GetItems() => _items.Select(i => (TItem?)i.Item);
     }
 }

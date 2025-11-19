@@ -42,7 +42,7 @@ namespace IxMilia.Dxf
             _lineNumber = 1;
             yield return firstLine;
 
-            string line;
+            string? line;
             while ((line = ReadLine()) != null)
             {
                 _lineNumber++;
@@ -50,7 +50,7 @@ namespace IxMilia.Dxf
             }
         }
 
-        private string ReadLine()
+        private string? ReadLine()
         {
             return _stream.ReadLine(_encoding, out var _);
         }

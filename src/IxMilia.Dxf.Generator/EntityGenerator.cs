@@ -31,7 +31,7 @@ namespace IxMilia.Dxf.Generator
 
         private void OutputDxfEntityType()
         {
-            CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
+            CreateNewFile(EntityNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
             IncreaseIndent();
             AppendLine("public enum DxfEntityType");
             AppendLine("{");
@@ -49,7 +49,7 @@ namespace IxMilia.Dxf.Generator
         private void OutputDxfEntity()
         {
             var baseEntity = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => Name(x) == "DxfEntity").Single();
-            CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
+            CreateNewFile(EntityNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
             IncreaseIndent();
             AppendLine("/// <summary>");
             AppendLine("/// DxfEntity class");
@@ -300,7 +300,7 @@ namespace IxMilia.Dxf.Generator
             foreach (var entity in _entities)
             {
                 var className = Name(entity);
-                CreateNewFile(EntityNamespace, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Objects");
+                CreateNewFile(EntityNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Objects");
                 IncreaseIndent();
                 OutputSingleDxfEntity(entity);
                 DecreaseIndent();

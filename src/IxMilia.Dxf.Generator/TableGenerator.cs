@@ -34,7 +34,7 @@ namespace IxMilia.Dxf.Generator
             {
                 var tableItem = Name(table.Element(XName.Get("TableItem", _xmlns))!);
                 var className = "Dxf" + Type(table) + "Table";
-                CreateNewFile(TableNamespace, "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections");
+                CreateNewFile(TableNamespace, false, "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections");
 
                 IncreaseIndent();
                 AppendLine($"public partial class {className} : DxfTable");
@@ -108,7 +108,7 @@ namespace IxMilia.Dxf.Generator
             {
                 var tableItem = table.Element(XName.Get("TableItem", _xmlns))!;
                 var properties = tableItem.Elements(XName.Get("Property", _xmlns));
-                CreateNewFile("IxMilia.Dxf", "System", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
+                CreateNewFile("IxMilia.Dxf", false, "System", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
 
                 IncreaseIndent();
                 AppendLine($"public partial class {Name(tableItem)} : DxfSymbolTableFlags");

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace IxMilia.Dxf
@@ -530,6 +531,7 @@ namespace IxMilia.Dxf.Sections
                 }
                 else
                 {
+                    Debug.Assert(keyName is not null);
                     section.Header.SetHeaderVariable(keyName, pair);
                     if (string.Compare(keyName, "$DWGCODEPAGE", StringComparison.OrdinalIgnoreCase) == 0 && section.Header.Version <= DxfAcadVersion.R2004)
                     {

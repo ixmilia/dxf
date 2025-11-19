@@ -29,7 +29,7 @@ namespace IxMilia.Dxf.Generator
 
         private void OutputHeader()
         {
-            CreateNewFile(SectionNamespace, "System", "System.Collections.Generic", "System.Diagnostics", "IxMilia.Dxf.Entities");
+            CreateNewFile(SectionNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics", "System.Diagnostics.CodeAnalysis", "IxMilia.Dxf.Entities");
 
             IncreaseIndent();
             AppendLine("public partial class DxfHeader");
@@ -82,9 +82,28 @@ namespace IxMilia.Dxf.Generator
             }
 
             //
+            // .ctor
+            //
+            AppendLine();
+            AppendLine("internal DxfHeader()");
+            AppendLine("{");
+            IncreaseIndent();
+            AppendLine("SetDefaults();");
+            DecreaseIndent();
+            AppendLine("}");
+
+            //
             // SetDefaults
             //
             AppendLine();
+            foreach (var property in _variables)
+            {
+                if (ReportPropertyAsNotNull(property))
+                {
+                    AppendLine($"[MemberNotNull(nameof({Property(property)}))]");
+                }
+            }
+
             AppendLine("public void SetDefaults()");
             AppendLine("{");
             IncreaseIndent();
@@ -97,7 +116,7 @@ namespace IxMilia.Dxf.Generator
                 {
                     seenProperties.Add(propertyName);
                     var defaultValue = DefaultValue(property);
-                    if (Type(property) == "string" && defaultValue != "null" && (!defaultValue.StartsWith("\"") && !defaultValue.EndsWith("\"")))
+                    if (Type(property) == "string" && defaultValue != "null" && defaultValue != "string.Empty" && (!defaultValue.StartsWith("\"") && !defaultValue.EndsWith("\"")))
                     {
                         defaultValue = string.Format("\"{0}\"", defaultValue);
                     }

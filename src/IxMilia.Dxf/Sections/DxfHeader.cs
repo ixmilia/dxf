@@ -7,11 +7,6 @@ namespace IxMilia.Dxf
 {
     public partial class DxfHeader
     {
-        internal DxfHeader()
-        {
-            SetDefaults();
-        }
-
         public bool IsViewportScaledToFit
         {
             get { return ViewportViewScaleFactor == 0.0; }

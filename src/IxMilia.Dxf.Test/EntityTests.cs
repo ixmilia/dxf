@@ -98,7 +98,7 @@ namespace IxMilia.Dxf.Test
         public void EmptyPreviewImageDataDoesntGetWrittenTest()
         {
             var e = new DxfLine();
-            e.PreviewImageData = null;
+            e.PreviewImageData = Array.Empty<byte>();
             EnsureFileDoesNotContainWithEntity(e, DxfAcadVersion.R2000,
                 (92, 0)
             );
@@ -748,6 +748,7 @@ namespace IxMilia.Dxf.Test
                 (100, "AcDbMText"),
                 (1, "mtext-value")
             );
+            Assert.NotNull(att.MText);
             Assert.Equal(att, att.MText.Owner);
             Assert.Equal("mtext-value", att.MText.Text);
         }
@@ -760,6 +761,7 @@ namespace IxMilia.Dxf.Test
                 (100, "AcDbMText"),
                 (1, "mtext-value")
             );
+            Assert.NotNull(attdef.MText);
             Assert.Equal(attdef, attdef.MText.Owner);
             Assert.Equal("mtext-value", attdef.MText.Text);
         }
@@ -787,7 +789,9 @@ namespace IxMilia.Dxf.Test
                 (0, "EOF")
             );
             var image = (DxfImage)file.Entities.Single();
+            Assert.NotNull(image.ImageDefinition);
             Assert.Equal("image-def-file-path", image.ImageDefinition.FilePath);
+            Assert.NotNull(image.ImageDefinitionReactor);
             Assert.Equal(image, image.ImageDefinitionReactor.Owner);
         }
 
@@ -1329,7 +1333,9 @@ namespace IxMilia.Dxf.Test
                 DimensioningSuffix = "some suffix"
             };
             var dim = new DxfAlignedDimension();
-            dim.XData["ACAD"] = DxfDimStyle.GenerateStyleDifferenceAsXData(standardDimStyle, customDimStyle);
+            var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(standardDimStyle, customDimStyle);
+            Assert.NotNull(xdata);
+            dim.XData["ACAD"] = xdata;
             EnsureFileContainsEntity(dim,
                 DxfAcadVersion.R14,
                 (1001, "ACAD"),

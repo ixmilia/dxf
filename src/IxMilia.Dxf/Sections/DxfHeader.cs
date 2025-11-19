@@ -110,7 +110,7 @@ namespace IxMilia.Dxf
             return t.TotalDays;
         }
 
-        private static string DefaultIfNullOrEmpty(string value, string defaultValue)
+        private static string DefaultIfNullOrEmpty(string? value, string defaultValue)
         {
             return DxfCommonConverters.DefaultIfNullOrEmpty(value, defaultValue);
         }

@@ -7,7 +7,7 @@ using IxMilia.Dxf.Extensions;
 namespace IxMilia.Dxf.Objects
 {
     public partial class DxfDictionary :
-        IDictionary<string, IDxfItem>,
+        IDictionary<string, IDxfItem?>,
         IDxfItemInternal
     {
         private IDictionary<string, DxfPointer> _items = new Dictionary<string, DxfPointer>();
@@ -90,9 +90,9 @@ namespace IxMilia.Dxf.Objects
 
         #region IDictionary implementation
 
-        public IDxfItem this[string key]
+        public IDxfItem? this[string key]
         {
-            get { return _items[key].Item ?? throw new KeyNotFoundException(); }
+            get { return _items[key].Item; }
             set { _items[key] = new DxfPointer(value); }
         }
 
@@ -102,32 +102,29 @@ namespace IxMilia.Dxf.Objects
 
         public ICollection<string> Keys => _items.Keys;
 
-        public ICollection<IDxfItem> Values => _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item).WhereNotNull().ToList();
+        public ICollection<IDxfItem?> Values => _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item).ToList();
 
-        public void Add(KeyValuePair<string, IDxfItem> item) => _items.Add(new KeyValuePair<string, DxfPointer>(item.Key, new DxfPointer(item.Value)));
+        public void Add(KeyValuePair<string, IDxfItem?> item) => _items.Add(new KeyValuePair<string, DxfPointer>(item.Key, new DxfPointer(item.Value)));
 
-        public void Add(string key, IDxfItem value) => _items.Add(key, new DxfPointer(value));
+        public void Add(string key, IDxfItem? value) => _items.Add(key, new DxfPointer(value));
 
         public void Clear() => _items.Clear();
 
-        public bool Contains(KeyValuePair<string, IDxfItem> item) => _items.ContainsKey(item.Key) && _items[item.Key].Item == item.Value;
+        public bool Contains(KeyValuePair<string, IDxfItem?> item) => _items.ContainsKey(item.Key) && _items[item.Key].Item == item.Value;
 
         public bool ContainsKey(string key) => _items.ContainsKey(key);
 
-        public void CopyTo(KeyValuePair<string, IDxfItem>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<string, IDxfItem?>[] array, int arrayIndex)
         {
             foreach (var value in _items)
             {
-                if (value.Value.Item is not null)
-                {
-                    array[arrayIndex++] = new KeyValuePair<string, IDxfItem>(value.Key, value.Value.Item);
-                }
+                array[arrayIndex++] = new KeyValuePair<string, IDxfItem?>(value.Key, value.Value.Item);
             }
         }
 
-        public IEnumerator<KeyValuePair<string, IDxfItem>> GetEnumerator() => new Enumerator(_items);
+        public IEnumerator<KeyValuePair<string, IDxfItem?>> GetEnumerator() => new Enumerator(_items);
 
-        public bool Remove(KeyValuePair<string, IDxfItem> item)
+        public bool Remove(KeyValuePair<string, IDxfItem?> item)
         {
             DxfPointer? pointer;
             if (_items.TryGetValue(item.Key, out pointer) && pointer.Item == item.Value)

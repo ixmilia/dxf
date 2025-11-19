@@ -216,7 +216,7 @@ namespace IxMilia.Dxf.Integration.Test
                     $"DXFOUT \"{outputFile}\" 16",
                 };
                 File.WriteAllLines(scriptFile, lines);
-                WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad(), $"/i \"{inputFile}\" /s \"{scriptFile}\"");
+                WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad()!, $"/i \"{inputFile}\" /s \"{scriptFile}\"");
 
                 var result = DxfFile.Load(outputFile);
                 return result;
@@ -225,7 +225,7 @@ namespace IxMilia.Dxf.Integration.Test
 
         private void ExecuteAutoCadScriptOnDrawing(string pathToScript, string pathToInputDrawing)
         {
-            WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad(), $"/i \"{pathToInputDrawing}\" /s \"{pathToScript}\"");
+            WaitForProcess(AutoCadExistsFactAttribute.GetPathToAutoCad()!, $"/i \"{pathToInputDrawing}\" /s \"{pathToScript}\"");
             // TODO: kill all instances of senddmp.exe and fail if present
         }
     }

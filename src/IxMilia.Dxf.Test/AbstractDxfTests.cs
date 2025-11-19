@@ -237,11 +237,12 @@ EOF
             }
         }
 
-        protected static void AssertArrayEqual<T>(T[] expected, T[] actual)
+        protected static void AssertArrayEqual<T>(T[]? expected, T[]? actual)
         {
-            if (expected == null)
+            if (expected is null)
             {
                 Assert.Null(actual);
+                return;
             }
 
             Assert.NotNull(actual);
@@ -257,7 +258,7 @@ EOF
             return type.GetTypeInfo().IsGenericTypeDefinition && type.GenericTypeArguments.Length == 1 && type.Name == "List`1";
         }
 
-        protected static T SetAllPropertiesToDefault<T>(T item)
+        protected static T SetAllPropertiesToDefault<T>(T item) where T : notnull
         {
             foreach (var property in item.GetType().GetTypeInfo().GetProperties().Where(p => p.GetSetMethod() != null && p.GetIndexParameters().Length == 0))
             {

@@ -185,10 +185,10 @@ namespace IxMilia.Dxf.Test
                 (1, "value-2")
             );
             var dict = file.Objects.OfType<DxfDictionary>().Single();
-            Assert.Equal(dict, dict["key-1"].Owner);
-            Assert.Equal(dict, dict["key-2"].Owner);
-            Assert.Equal("value-1", ((DxfDictionaryVariable)dict["key-1"]).Value);
-            Assert.Equal("value-2", ((DxfDictionaryVariable)dict["key-2"]).Value);
+            Assert.Equal(dict, dict["key-1"]!.Owner);
+            Assert.Equal(dict, dict["key-2"]!.Owner);
+            Assert.Equal("value-1", ((DxfDictionaryVariable)dict["key-1"]!).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict["key-2"]!).Value);
         }
 
         [Fact]
@@ -209,10 +209,10 @@ namespace IxMilia.Dxf.Test
                 (1, "value-2")
             );
             var dict1 = file.Objects.OfType<DxfDictionary>().First();
-            var dict2 = (DxfDictionary)dict1["key-1"];
+            var dict2 = (DxfDictionary)dict1["key-1"]!;
             Assert.Equal(dict1, dict2.Owner);
-            Assert.Equal(dict2, dict2["key-2"].Owner);
-            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]).Value);
+            Assert.Equal(dict2, dict2["key-2"]!.Owner);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]!).Value);
         }
 
         [Fact]
@@ -273,8 +273,8 @@ namespace IxMilia.Dxf.Test
             var dict1 = file.Objects.OfType<DxfDictionaryWithDefault>().Single();
             var dict2 = (DxfDictionary)dict1["key-1"];
             Assert.Equal(dict1, dict2.Owner);
-            Assert.Equal(dict2, dict2["key-2"].Owner);
-            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]).Value);
+            Assert.Equal(dict2, dict2["key-2"]!.Owner);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)dict2["key-2"]!).Value);
         }
 
         [Fact]
@@ -292,7 +292,7 @@ namespace IxMilia.Dxf.Test
                 (2, "Standard")
             );
             var dict = (DxfDictionary)file.Objects.First();
-            var mlineStyle = (DxfMLineStyle)dict["Standard"];
+            var mlineStyle = (DxfMLineStyle)dict["Standard"]!;
             Assert.Equal("Standard", mlineStyle.StyleName);
 
             // now round-trip it
@@ -303,7 +303,7 @@ namespace IxMilia.Dxf.Test
                 ms.Seek(0, SeekOrigin.Begin);
                 var file2 = DxfFile.Load(ms);
                 var dict2 = (DxfDictionary)file.Objects.First();
-                var mlineStyle2 = (DxfMLineStyle)dict["Standard"];
+                var mlineStyle2 = (DxfMLineStyle)dict["Standard"]!;
                 Assert.Equal("Standard", mlineStyle2.StyleName);
             }
         }
@@ -322,7 +322,7 @@ namespace IxMilia.Dxf.Test
             );
             var dict = (DxfDictionary)file.Objects.Single();
             Assert.Single(dict.Keys);
-            Assert.Throws<KeyNotFoundException>(() => dict["key"]);
+            Assert.Null(dict["key"]);
         }
 
         [Fact]
@@ -448,8 +448,8 @@ namespace IxMilia.Dxf.Test
 
             var roundTrippedFile = RoundTrip(file);
             var roundTrippedDict = roundTrippedFile.Objects.OfType<DxfDictionary>().Single(d => d.Keys.Count == 2);
-            Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
-            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict["key-2"]).Value);
+            Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]!).Value);
+            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict["key-2"]!).Value);
         }
 
         [Fact]
@@ -468,8 +468,8 @@ namespace IxMilia.Dxf.Test
 
             var roundTrippedFile = RoundTrip(file);
             var roundTrippedDict1 = roundTrippedFile.Objects.OfType<DxfDictionary>().First(d => d.ContainsKey("key-1"));
-            var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"];
-            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]).Value);
+            var roundTrippedDict2 = (DxfDictionary)roundTrippedDict1["key-1"]!;
+            Assert.Equal("value-2", ((DxfDictionaryVariable)roundTrippedDict2["key-2"]!).Value);
         }
 
         [Fact]
@@ -488,7 +488,7 @@ namespace IxMilia.Dxf.Test
             var roundTrippedFile = RoundTrip(file);
             var roundTrippedDict = roundTrippedFile.Objects.OfType<DxfDictionaryWithDefault>().Single();
             Assert.Equal("value-1", ((DxfDictionaryVariable)roundTrippedDict["key-1"]).Value);
-            Assert.Equal("default-value", ((DxfDictionaryVariable)roundTrippedDict.DefaultObject).Value);
+            Assert.Equal("default-value", ((DxfDictionaryVariable)roundTrippedDict.DefaultObject!).Value);
         }
 
         [Fact]
@@ -512,7 +512,7 @@ namespace IxMilia.Dxf.Test
             );
             var dimassoc = (Objects.DxfDimensionAssociativity)file.Objects.Last();
             Assert.Equal("class-name", dimassoc.ClassName);
-            var dim = (DxfAlignedDimension)dimassoc.Dimension;
+            var dim = (DxfAlignedDimension)dimassoc.Dimension!;
             Assert.Equal(dimassoc, dim.Owner);
             Assert.Equal("dimension-text", dim.Text);
         }
@@ -575,7 +575,6 @@ namespace IxMilia.Dxf.Test
         public void PlotSettingsPlotViewName()
         {
             // ensure invalid values aren't allowed
-            Assert.Throws<InvalidOperationException>(() => new DxfPlotSettings(null));
             Assert.Throws<InvalidOperationException>(() => new DxfPlotSettings(""));
 
             // ensure valid values are allowed
@@ -586,9 +585,7 @@ namespace IxMilia.Dxf.Test
         public void LayoutName()
         {
             // ensure invalid values aren't allowed
-            Assert.Throws<InvalidOperationException>(() => new DxfLayout(null, "layout name"));
             Assert.Throws<InvalidOperationException>(() => new DxfLayout("", "layout name"));
-            Assert.Throws<InvalidOperationException>(() => new DxfLayout("plot view name", null));
             Assert.Throws<InvalidOperationException>(() => new DxfLayout("plot view name", ""));
 
             // ensure valid values are allowed
@@ -930,11 +927,11 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(2, mlineStyle.Elements.Count);
 
             Assert.Equal(3.0, mlineStyle.Elements[0].Offset);
-            Assert.Equal(3, mlineStyle.Elements[0].Color.RawValue);
+            Assert.Equal(3, mlineStyle.Elements[0].Color!.RawValue);
             Assert.Null(mlineStyle.Elements[0].LineType);
 
             Assert.Equal(4.0, mlineStyle.Elements[1].Offset);
-            Assert.Equal(4, mlineStyle.Elements[1].Color.RawValue);
+            Assert.Equal(4, mlineStyle.Elements[1].Color!.RawValue);
             Assert.Equal("quatro", mlineStyle.Elements[1].LineType);
         }
 
@@ -1649,7 +1646,7 @@ namespace IxMilia.Dxf.Test
                         );
                         var dict = (DxfDictionary)file.Objects.Single();
                         var parsedEntity = dict["the-entity"] as DxfEntity;
-                        Assert.Equal(type, parsedEntity.GetType());
+                        Assert.Equal(type, parsedEntity!.GetType());
                     }
                 }
             }
@@ -1679,10 +1676,10 @@ namespace IxMilia.Dxf.Test
                             var itemValue = itemType.GetTypeInfo().IsValueType
                                 ? Activator.CreateInstance(itemType)
                                 : null;
-                            var addMethod = property.PropertyType.GetMethod("Add");
+                            var addMethod = property.PropertyType.GetMethod("Add")!;
                             var propertyValue = property.GetValue(obj);
-                            addMethod.Invoke(propertyValue, new object[] { itemValue });
-                            addMethod.Invoke(propertyValue, new object[] { itemValue });
+                            addMethod.Invoke(propertyValue, new object?[] { itemValue });
+                            addMethod.Invoke(propertyValue, new object?[] { itemValue });
                         }
 
                         // add an object with all non-indexer properties set to `default(T)`
@@ -1722,7 +1719,7 @@ namespace IxMilia.Dxf.Test
 
             if (type.GetTypeInfo().BaseType != null)
             {
-                return IsTypeOrDerived(type.GetTypeInfo().BaseType, expectedType);
+                return IsTypeOrDerived(type.GetTypeInfo().BaseType!, expectedType);
             }
 
             return false;

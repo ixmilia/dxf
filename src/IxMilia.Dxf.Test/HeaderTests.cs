@@ -2206,10 +2206,10 @@ $SHADOWPLANELOCATION";
             header.DefaultTextHeight = -1.0; // $TEXTSIZE, normalized to 0.2
             header.TraceWidth = 0.0; // $TRACEWID, normalized to 0.05
             header.TextStyle = string.Empty; // $TEXTSTYLE, normalized to STANDARD
-            header.CurrentLayer = null; // $CLAYER, normalized to 0
-            header.CurrentEntityLineType = null; // $CELTYPE, normalized to BYLAYER
-            header.DimensionStyleName = null; // $DIMSTYLE, normalized to STANDARD
-            header.FileName = null; // $MENU, normalized to .
+            header.CurrentLayer = string.Empty; // $CLAYER, normalized to 0
+            header.CurrentEntityLineType = string.Empty; // $CELTYPE, normalized to BYLAYER
+            header.DimensionStyleName = string.Empty; // $DIMSTYLE, normalized to STANDARD
+            header.FileName = string.Empty; // $MENU, normalized to .
 
             var pairs = new List<DxfCodePair>();
             header.AddValueToList(pairs);

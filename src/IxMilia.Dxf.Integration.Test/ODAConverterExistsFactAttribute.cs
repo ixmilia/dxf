@@ -8,7 +8,7 @@ namespace IxMilia.Dxf.Integration.Test
     {
         private const string _converterExe = "ODAFileConverter.exe";
         private static bool _pathResolved = false;
-        private static string _converterPath = null;
+        private static string? _converterPath = null;
 
         public ODAConverterExistsFactAttribute()
         {
@@ -18,12 +18,12 @@ namespace IxMilia.Dxf.Integration.Test
             }
         }
 
-        public static string GetPathToFileConverter()
+        public static string? GetPathToFileConverter()
         {
             return GetPathToFileConverter(throwOnError: true);
         }
 
-        private static string GetPathToFileConverter(bool throwOnError)
+        private static string? GetPathToFileConverter(bool throwOnError)
         {
             if (!_pathResolved)
             {

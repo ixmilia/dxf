@@ -27,6 +27,7 @@ namespace IxMilia.Dxf.Test
             };
 
             var items = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
+            Assert.NotNull(items);
             Assert.Equal("DSTYLE", ((DxfXDataString)items.First()).Value);
         }
 
@@ -40,6 +41,7 @@ namespace IxMilia.Dxf.Test
             };
 
             var diffItems = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
+            Assert.NotNull(diffItems);
             Assert.Equal(2, diffItems.Count);
 
             Assert.Equal("DSTYLE", ((DxfXDataString)diffItems[0]).Value);
@@ -61,6 +63,7 @@ namespace IxMilia.Dxf.Test
             };
 
             var diffItems = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, modified);
+            Assert.NotNull(diffItems);
             Assert.Equal(2, diffItems.Count);
 
             Assert.Equal("DSTYLE", ((DxfXDataString)diffItems[0]).Value);
@@ -83,7 +86,7 @@ namespace IxMilia.Dxf.Test
             secondary.DimensionUnitToleranceDecimalPlaces = 5;
 
             var diffItems = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, secondary);
-
+            Assert.NotNull(diffItems);
             Assert.Equal(2, diffItems.Count);
 
             Assert.Equal("DSTYLE", ((DxfXDataString)diffItems[0]).Value);
@@ -108,6 +111,7 @@ namespace IxMilia.Dxf.Test
 
             // rebuild dim style from primary with xdata difference; result should equal secondary
             var xdata = DxfDimStyle.GenerateStyleDifferenceAsXData(primary, secondary);
+            Assert.NotNull(xdata);
             Assert.True(primary.TryGetStyleFromXDataDifference(xdata, out var reBuiltStyle));
             AssertEquivalent(secondary, reBuiltStyle);
         }

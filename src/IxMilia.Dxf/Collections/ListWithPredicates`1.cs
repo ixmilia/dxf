@@ -23,15 +23,15 @@ namespace IxMilia.Dxf.Collections
     internal class ListWithPredicates<T> : IList<T>
     {
         private List<T> _items = new List<T>();
-        public Func<T, bool> ItemPredicate { get; }
+        public Func<T, bool>? ItemPredicate { get; }
         public int MinimumCount { get; }
 
-        public ListWithPredicates(Func<T, bool> itemPredicate, int minimumCount, params T[] initialItems)
+        public ListWithPredicates(Func<T, bool>? itemPredicate, int minimumCount, params T[] initialItems)
             : this(itemPredicate, minimumCount, true, initialItems)
         {
         }
 
-        public ListWithPredicates(Func<T, bool> itemPredicate, int minimumCount, bool validateInitialCount, params T[] initialItems)
+        public ListWithPredicates(Func<T, bool>? itemPredicate, int minimumCount, bool validateInitialCount, params T[] initialItems)
         {
             ItemPredicate = itemPredicate;
             MinimumCount = minimumCount;

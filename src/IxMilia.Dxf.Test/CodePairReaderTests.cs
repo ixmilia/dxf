@@ -19,6 +19,7 @@ namespace IxMilia.Dxf.Test
             {
                 var reader = new DxfBinaryReader(binReader, isPostR13File: true);
                 var pair = reader.GetCodePair();
+                Assert.NotNull(pair);
                 Assert.Equal(1, pair.Code);
                 Assert.Equal("A", pair.StringValue);
             }
@@ -38,6 +39,7 @@ namespace IxMilia.Dxf.Test
             {
                 var reader = new DxfBinaryReader(binReader, isPostR13File: true);
                 var pair = reader.GetCodePair();
+                Assert.NotNull(pair);
                 Assert.Equal(310, pair.Code);
                 Assert.Equal(new byte[] { 0x01, 0x02 }, pair.BinaryValue);
             }
@@ -50,6 +52,7 @@ namespace IxMilia.Dxf.Test
                 "310",
                 "0102");
             var pair = reader.GetCodePair();
+            Assert.NotNull(pair);
             Assert.Equal(310, pair.Code);
             Assert.Equal(new byte[] { 0x01, 0x02 }, pair.BinaryValue);
         }

@@ -36,7 +36,7 @@ namespace IxMilia.Dxf.Test
             );
             // sanity check to verify that it was read correctly
             var dict = file.Objects.OfType<DxfDictionary>().Single();
-            var layout = (DxfLayout)dict["some-layout"];
+            var layout = (DxfLayout)dict["some-layout"]!;
             Assert.Equal(new DxfHandle(0xBBBBBBBB), ((IDxfItemInternal)dict).Handle);
             Assert.Equal(new DxfHandle(0xCCCCCCCC), ((IDxfItemInternal)layout).Handle);
 

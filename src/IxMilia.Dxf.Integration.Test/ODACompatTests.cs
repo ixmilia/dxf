@@ -213,7 +213,7 @@ namespace IxMilia.Dxf.Integration.Test
 
         private void AssertODAConvert(string inputDirectory, string outputDirectory, DxfAcadVersion desiredVersion)
         {
-            WaitForProcess(ODAConverterExistsFactAttribute.GetPathToFileConverter(), GenerateODAArguments(inputDirectory, outputDirectory, desiredVersion));
+            WaitForProcess(ODAConverterExistsFactAttribute.GetPathToFileConverter()!, GenerateODAArguments(inputDirectory, outputDirectory, desiredVersion));
             var errors = Directory.EnumerateFiles(outputDirectory, "*.err").Select(path => path + ":" + Environment.NewLine + File.ReadAllText(path)).ToList();
             // TODO: gather the files that couldn't be converted
             if (errors.Count > 0)

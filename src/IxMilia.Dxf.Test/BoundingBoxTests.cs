@@ -14,7 +14,9 @@ namespace IxMilia.Dxf.Test
             var endAngle = 180;
 
             var arc = new DxfArc(DxfPoint.Origin, radius, startAngle, endAngle);
-            var bb = arc.GetBoundingBox().Value;
+            var bbNullable = arc.GetBoundingBox();
+            Assert.NotNull(bbNullable);
+            var bb = bbNullable.Value;
 
             var expectedMin = new DxfPoint(-1, 0, 0);
             var expectedMax = new DxfPoint(0, 1, 0);
@@ -40,7 +42,9 @@ namespace IxMilia.Dxf.Test
             var expectedMax = new DxfPoint(0, +0.5, 0);
             var expectedSize = new DxfVector(2.0, 1.0, 0);
 
-            var bb = poly.GetBoundingBox().Value;
+            var bbNullable = poly.GetBoundingBox();
+            Assert.NotNull(bbNullable);
+            var bb = bbNullable.Value;
             Assert.Equal(expectedMin, bb.MinimumPoint);
             Assert.Equal(expectedMax, bb.MaximumPoint);
             Assert.Equal(expectedSize, bb.Size);
@@ -62,7 +66,9 @@ namespace IxMilia.Dxf.Test
             var expectedMax = new DxfPoint(0.5, +0.5, 0);
             var expectedSize = new DxfVector(2.5, 1.0, 0);
 
-            var bb = poly.GetBoundingBox().Value;
+            var bbNullable = poly.GetBoundingBox();
+            Assert.NotNull(bbNullable);
+            var bb = bbNullable.Value;
             Assert.Equal(expectedMin, bb.MinimumPoint);
             Assert.Equal(expectedMax, bb.MaximumPoint);
             Assert.Equal(expectedSize, bb.Size);

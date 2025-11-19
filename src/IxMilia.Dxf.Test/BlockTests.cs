@@ -82,6 +82,7 @@ namespace IxMilia.Dxf.Test
             var block = drawing.Blocks.Single();
             var imageEntity = (DxfImage)block.Entities.Single();
             var imageDef = imageEntity.ImageDefinition;
+            Assert.NotNull(imageDef);
             Assert.Equal("image-def-file-path", imageDef.FilePath);
         }
 

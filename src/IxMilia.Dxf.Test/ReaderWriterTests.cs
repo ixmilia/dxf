@@ -115,7 +115,7 @@ namespace IxMilia.Dxf.Test
                 0x00, 0x00, // reserved
                 0x36, 0x00, 0x00, 0x00, // image data offset, calculated as 54 (14 byte file header + 40 byte BITMAPINFOHEADER)
             };
-            var bitmap = file.GetThumbnailBitmap().Take(14).ToArray();
+            var bitmap = file.GetThumbnailBitmap()!.Take(14).ToArray();
             AssertArrayEqual(expected, bitmap);
         }
 
@@ -147,7 +147,7 @@ namespace IxMilia.Dxf.Test
                 0x00, 0x00, // reserved
                 0x36, 0x04, 0x00, 0x00, // image data offset, calculated as 1078 (14 byte file header + 40 byte BITMAPINFOHEADER + 256*8)
             };
-            var bitmap = file.GetThumbnailBitmap().Take(14).ToArray();
+            var bitmap = file.GetThumbnailBitmap()!.Take(14).ToArray();
             AssertArrayEqual(expected, bitmap);
         }
 
@@ -954,7 +954,7 @@ namespace IxMilia.Dxf.Test
 
             Assert.Equal(2.0, ltype.Elements[1].DashDotSpaceLength);
             Assert.Equal(1, ltype.Elements[1].ComplexFlags);
-            Assert.Equal("style-name", ltype.Elements[1].Style.Name);
+            Assert.Equal("style-name", ltype.Elements[1].Style!.Name);
         }
 
         [Fact]
@@ -1100,7 +1100,7 @@ namespace IxMilia.Dxf.Test
             var file = new DxfFile();
             var layer = file.Layers.Single();
             layer.Color = DxfColor.ByLayer; // code 62, value 256 not valid; normalized to 7
-            layer.LineTypeName = null; // code 6, value null or empty not valid; normalized to CONTINUOUS
+            layer.LineTypeName = string.Empty; // code 6, empty not valid; normalized to CONTINUOUS
             VerifyFileContains(file,
                 DxfSectionType.Tables,
                 (0, "LAYER"),
@@ -1329,7 +1329,7 @@ namespace IxMilia.Dxf.Test
         public void SetActiveViewPortTest()
         {
             var file = new DxfFile();
-            Assert.NotEqual(42.0, file.ActiveViewPort.ViewHeight);
+            Assert.NotEqual(42.0, file.ActiveViewPort!.ViewHeight);
             var newActive = new DxfViewPort()
             {
                 Name = "*active",
@@ -1394,7 +1394,7 @@ namespace IxMilia.Dxf.Test
             dict = file.Objects.OfType<DxfDictionary>().Single(d => d.ContainsKey("key"));
 
             Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict).OwnerHandle);
-            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict["key"]).OwnerHandle);
+            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict["key"]!).OwnerHandle);
         }
 
         [Fact]
@@ -1441,6 +1441,7 @@ namespace IxMilia.Dxf.Test
             Assert.Null(file.RawThumbnail);
 
             // there is always a default dictionary
+            Assert.NotNull(file.NamedObjectDictionary);
             Assert.Single(file.NamedObjectDictionary);
             Assert.Single(file.Objects);
             Assert.True(ReferenceEquals(file.NamedObjectDictionary, file.Objects.Single()));
@@ -1607,15 +1608,15 @@ namespace IxMilia.Dxf.Test
         public void AddMissingLayersOnNormalizeTest()
         {
             var file = new DxfFile();
-            file.Entities.Add(new DxfLine() { Layer = null });
+            file.Entities.Add(new DxfLine() { Layer = string.Empty });
             file.Entities.Add(new DxfLine() { Layer = "some-layer" });
             file.Normalize();
 
             // ensure we can find the expected layer
             file.Layers.Single(l => l.Name == "some-layer");
 
-            // ensure the `null` item wasn't added
-            Assert.DoesNotContain(file.Layers, l => l.Name == null);
+            // ensure the empty item wasn't added
+            Assert.DoesNotContain(file.Layers, l => l.Name == string.Empty);
         }
 
         [Fact]
@@ -1670,10 +1671,10 @@ namespace IxMilia.Dxf.Test
                             var itemValue = itemType.GetTypeInfo().IsValueType
                                 ? Activator.CreateInstance(itemType)
                                 : null;
-                            var addMethod = property.PropertyType.GetMethod("Add");
+                            var addMethod = property.PropertyType.GetMethod("Add")!;
                             var propertyValue = property.GetValue(entity);
-                            addMethod.Invoke(propertyValue, new object[] { itemValue });
-                            addMethod.Invoke(propertyValue, new object[] { itemValue });
+                            addMethod.Invoke(propertyValue, new object?[] { itemValue });
+                            addMethod.Invoke(propertyValue, new object?[] { itemValue });
                         }
 
                         // add an entity with all non-indexer properties set to `default(T)`
@@ -1703,7 +1704,7 @@ namespace IxMilia.Dxf.Test
 
             if (type.GetTypeInfo().BaseType != null)
             {
-                return IsEntityOrDerived(type.GetTypeInfo().BaseType);
+                return IsEntityOrDerived(type.GetTypeInfo().BaseType!);
             }
 
             return false;
@@ -1718,7 +1719,7 @@ namespace IxMilia.Dxf.Test
 
             if (type.GetTypeInfo().BaseType != null)
             {
-                return IsObjectOrDerived(type.GetTypeInfo().BaseType);
+                return IsObjectOrDerived(type.GetTypeInfo().BaseType!);
             }
 
             return false;

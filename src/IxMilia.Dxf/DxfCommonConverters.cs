@@ -174,7 +174,7 @@ namespace IxMilia.Dxf
             return value <= 0 ? defaultValue : value;
         }
 
-        public static string DefaultIfNullOrEmpty(string value, string defaultValue)
+        public static string DefaultIfNullOrEmpty(string? value, string defaultValue)
         {
             return string.IsNullOrWhiteSpace(value) ? defaultValue : value;
         }

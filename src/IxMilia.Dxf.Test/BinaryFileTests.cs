@@ -131,6 +131,7 @@ namespace IxMilia.Dxf.Test
                 {
                     int readBytes;
                     var firstLine = DxfFile.GetFirstLine(fs, Encoding.ASCII, out readBytes);
+                    Assert.NotNull(firstLine);
                     var dxfReader = DxfFile.GetCodePairReader(firstLine, readBytes, binaryReader, Encoding.ASCII);
                     var codePairs = dxfReader.GetCodePairs().ToList();
 

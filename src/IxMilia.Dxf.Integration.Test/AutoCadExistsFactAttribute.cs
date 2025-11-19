@@ -8,7 +8,7 @@ namespace IxMilia.Dxf.Integration.Test
     {
         private const string _converterExe = "accoreconsole.exe";
         private static bool _pathResolved = false;
-        private static string _converterPath = null;
+        private static string? _converterPath = null;
 
         public AutoCadExistsFactAttribute()
         {
@@ -18,12 +18,12 @@ namespace IxMilia.Dxf.Integration.Test
             }
         }
 
-        public static string GetPathToAutoCad()
+        public static string? GetPathToAutoCad()
         {
             return GetPathToAutoCad(throwOnError: true);
         }
 
-        private static string GetPathToAutoCad(bool throwOnError)
+        private static string? GetPathToAutoCad(bool throwOnError)
         {
             if (!_pathResolved)
             {

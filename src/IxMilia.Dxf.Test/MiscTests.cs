@@ -146,7 +146,7 @@ namespace IxMilia.Dxf.Test
             file.Blocks.Add(block);
 
             // no entities because it's not yet part of the file
-            Assert.Null(insert.Entities);
+            Assert.Empty(insert.Entities);
 
             file.Entities.Add(insert);
 
@@ -169,7 +169,7 @@ namespace IxMilia.Dxf.Test
             file.Entities.Add(insert);
 
             // no entities because the block names differ
-            Assert.Null(insert.Entities);
+            Assert.Empty(insert.Entities);
         }
 
         [Theory]

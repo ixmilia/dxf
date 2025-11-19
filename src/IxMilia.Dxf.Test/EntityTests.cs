@@ -331,7 +331,7 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(1.0, text.Normal.Z);
             Assert.Equal(0.0, text.Rotation);
             Assert.Equal(1.0, text.TextHeight);
-            Assert.Null(text.Value);
+            Assert.Empty(text.Value);
             Assert.Equal("STANDARD", text.TextStyleName);
             Assert.Equal(0.0, text.Thickness);
             Assert.Equal(1.0, text.RelativeXScaleFactor);

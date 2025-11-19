@@ -31,7 +31,7 @@ namespace IxMilia.Dxf.Generator
 
         private void OutputDxfObjectType()
         {
-            CreateNewFile(ObjectNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
+            CreateNewFile(ObjectNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
             IncreaseIndent();
             AppendLine("public enum DxfObjectType");
             AppendLine("{");
@@ -49,7 +49,7 @@ namespace IxMilia.Dxf.Generator
         private void OutputDxfObject()
         {
             var baseObject = _xml.Elements(XName.Get("Object", _xmlns)).Where(x => Name(x) == "DxfObject").Single();
-            CreateNewFile(ObjectNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
+            CreateNewFile(ObjectNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
             IncreaseIndent();
             AppendLine("/// <summary>");
             AppendLine("/// DxfObject class");
@@ -73,7 +73,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine();
             AppendLine("IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()");
             AppendLine("{");
-            AppendLine("    return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);");
+            AppendLine("    return ((IDxfItemInternal)this).GetPointers().Select(p => p.Item as IDxfItemInternal).WhereNotNull();");
             AppendLine("}");
 
             //
@@ -194,12 +194,12 @@ namespace IxMilia.Dxf.Generator
             // FromBuffer
             //
             AppendLine();
-            AppendLine("internal static DxfObject FromBuffer(DxfCodePairBufferReader buffer)");
+            AppendLine("internal static DxfObject? FromBuffer(DxfCodePairBufferReader buffer)");
             AppendLine("{");
             IncreaseIndent();
             AppendLine("var first = buffer.Peek();");
             AppendLine("buffer.Advance();");
-            AppendLine("DxfObject obj;");
+            AppendLine("DxfObject? obj = null;");
             AppendLine("switch (first.StringValue)");
             AppendLine("{");
             IncreaseIndent();
@@ -242,7 +242,7 @@ namespace IxMilia.Dxf.Generator
             foreach (var obj in _objects)
             {
                 var className = Name(obj);
-                CreateNewFile(ObjectNamespace, false, "System", "System.Collections.Generic", "System.Diagnostics", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Entities");
+                CreateNewFile(ObjectNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Entities", "IxMilia.Dxf.Extensions");
                 IncreaseIndent();
                 OutputSingleDxfObject(obj);
                 DecreaseIndent();

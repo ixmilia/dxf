@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+#nullable enable
+
 using System.Diagnostics;
 
 namespace IxMilia.Dxf.Objects
@@ -38,10 +39,15 @@ namespace IxMilia.Dxf.Objects
         public DxfColor Border5Color { get; set; } = DxfColor.ByBlock;
         public DxfColor Border6Color { get; set; } = DxfColor.ByBlock;
 
+        public DxfTableCellStyle(string name)
+        {
+            Name = name;
+        }
+
         internal static DxfTableCellStyle FromBuffer(DxfCodePairBufferReader buffer)
         {
             var seenName = false;
-            var style = new DxfTableCellStyle();
+            var style = new DxfTableCellStyle(string.Empty);
             while (buffer.ItemsRemain)
             {
                 var pair = buffer.Peek();

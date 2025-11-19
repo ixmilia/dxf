@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -7,13 +9,13 @@ namespace IxMilia.Dxf.Objects
     public class DxfRenderSettings
     {
         public int Version { get; set; } = 1;
-        public string PresetName { get; set; }
+        public string? PresetName { get; set; }
         public bool RenderMaterials { get; set; }
         public int TextureSamplingQuality { get; set; }
         public bool RenderBackFaces { get; set; }
         public bool RenderShadows { get; set; }
-        public string PreviewImageFileName { get; set; }
-        public string PresetDescription { get; set; }
+        public string? PreviewImageFileName { get; set; }
+        public string? PresetDescription { get; set; }
         public int DisplayIndex { get; set; }
         public bool IsPredefined { get; set; }
 
@@ -23,6 +25,11 @@ namespace IxMilia.Dxf.Objects
         private int _code_1_index = 0;
         private int _code_90_index = 0;
         private int _code_290_index = 0;
+
+        public DxfRenderSettings()
+        {
+
+        }
 
         internal void AddValuePairs(List<DxfCodePair> pairs)
         {

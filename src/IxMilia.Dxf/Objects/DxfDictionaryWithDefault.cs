@@ -1,7 +1,10 @@
+#nullable enable
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using IxMilia.Dxf.Extensions;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -10,10 +13,10 @@ namespace IxMilia.Dxf.Objects
         IDxfItemInternal
     {
         private IDictionary<string, DxfPointer> _items = new Dictionary<string, DxfPointer>();
-        private string _lastEntryName;
+        private string? _lastEntryName;
         internal readonly DxfPointer DefaultObjectPointer = new DxfPointer();
 
-        public DxfObject DefaultObject
+        public DxfObject? DefaultObject
         {
             get { return DefaultObjectPointer.Item as DxfObject; }
             set { DefaultObjectPointer.Item = value; }
@@ -96,7 +99,7 @@ namespace IxMilia.Dxf.Objects
 
         public IEnumerable<IDxfItem> GetChildren()
         {
-            return _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item);
+            return _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item).WhereNotNull();
         }
 
         IEnumerable<DxfPointer> IDxfItemInternal.GetPointers()
@@ -112,7 +115,20 @@ namespace IxMilia.Dxf.Objects
 
         public IDxfItem this[string key]
         {
-            get { return _items.ContainsKey(key) ? _items[key].Item : DefaultObject; }
+            get
+            {
+                if (_items.TryGetValue(key, out var value) && value.Item is not null)
+                {
+                    return value.Item;
+                }
+
+                if (DefaultObject is null)
+                {
+                    throw new KeyNotFoundException($"The given key '{key}' was not present in the dictionary.");
+                }
+
+                return DefaultObject;
+            }
             set { _items[key] = new DxfPointer(value); }
         }
 
@@ -122,7 +138,7 @@ namespace IxMilia.Dxf.Objects
 
         public ICollection<string> Keys => _items.Keys;
 
-        public ICollection<IDxfItem> Values => _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item).ToList();
+        public ICollection<IDxfItem> Values => _items.OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.Item).WhereNotNull().ToList();
 
         public void Add(KeyValuePair<string, IDxfItem> item) => _items.Add(new KeyValuePair<string, DxfPointer>(item.Key, new DxfPointer(item.Value)));
 
@@ -138,7 +154,10 @@ namespace IxMilia.Dxf.Objects
         {
             foreach (var value in _items)
             {
-                array[arrayIndex++] = new KeyValuePair<string, IDxfItem>(value.Key, value.Value.Item);
+                if (value.Value.Item is not null)
+                {
+                    array[arrayIndex++] = new KeyValuePair<string, IDxfItem>(value.Key, value.Value.Item);
+                }
             }
         }
 
@@ -146,7 +165,7 @@ namespace IxMilia.Dxf.Objects
 
         public bool Remove(KeyValuePair<string, IDxfItem> item)
         {
-            DxfPointer pointer;
+            DxfPointer? pointer;
             if (_items.TryGetValue(item.Key, out pointer) && pointer.Item == item.Value)
             {
                 _items.Remove(item.Key);
@@ -160,13 +179,18 @@ namespace IxMilia.Dxf.Objects
 
         public bool TryGetValue(string key, out IDxfItem value)
         {
-            if (_items.ContainsKey(key))
+            if (_items.TryGetValue(key, out var foundPointer) && foundPointer.Item is not null)
             {
-                value = _items[key].Item;
+                value = foundPointer.Item;
+            }
+            else if (DefaultObject is not null)
+            {
+                value = DefaultObject;
             }
             else
             {
-                value = DefaultObject;
+                value = null!;
+                return false;
             }
 
             return true;
@@ -184,7 +208,7 @@ namespace IxMilia.Dxf.Objects
                 _enumerator = items.GetEnumerator();
             }
 
-            public KeyValuePair<string, IDxfItem> Current => new KeyValuePair<string, IDxfItem>(_enumerator.Current.Key, _enumerator.Current.Value.Item);
+            public KeyValuePair<string, IDxfItem> Current => new KeyValuePair<string, IDxfItem>(_enumerator.Current.Key, _enumerator.Current.Value.Item!);
 
             object IEnumerator.Current => Current;
 

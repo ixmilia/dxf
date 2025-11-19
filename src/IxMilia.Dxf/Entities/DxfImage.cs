@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -31,8 +33,15 @@ namespace IxMilia.Dxf.Entities
 
         internal override void AddObjectsToOutput(List<DxfObject> objects)
         {
-            objects.Add(ImageDefinition);
-            objects.Add(ImageDefinitionReactor);
+            if (ImageDefinition is not null)
+            {
+                objects.Add(ImageDefinition);
+            }
+
+            if (ImageDefinitionReactor is not null)
+            {
+                objects.Add(ImageDefinitionReactor);
+            }
         }
 
         protected override DxfEntity PostParse()

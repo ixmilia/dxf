@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +29,7 @@ namespace IxMilia.Dxf.Entities
             _vertices.ValidateCount();
         }
 
-        internal override DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
+        internal override DxfEntity? PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
             {

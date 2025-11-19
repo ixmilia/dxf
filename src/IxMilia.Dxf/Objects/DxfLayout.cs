@@ -1,4 +1,7 @@
+#nullable enable
+
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -38,7 +41,8 @@ namespace IxMilia.Dxf.Objects
         public DxfLayout(string plotViewName, string layoutName)
             : base(plotViewName)
         {
-            LayoutName = layoutName;
+            _layoutName = layoutName; // makes the null checker happy
+            LayoutName = layoutName; // validates the input
         }
 
         public IDxfItem PaperSpaceObject

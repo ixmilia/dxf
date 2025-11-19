@@ -322,7 +322,7 @@ namespace IxMilia.Dxf.Test
             );
             var dict = (DxfDictionary)file.Objects.Single();
             Assert.Single(dict.Keys);
-            Assert.Null(dict["key"]);
+            Assert.Throws<KeyNotFoundException>(() => dict["key"]);
         }
 
         [Fact]
@@ -1465,8 +1465,8 @@ namespace IxMilia.Dxf.Test
         public void WriteTableStyleTest()
         {
             var table = new DxfTableStyle();
-            table.CellStyles.Add(new DxfTableCellStyle() { Name = "one" });
-            table.CellStyles.Add(new DxfTableCellStyle() { Name = "two" });
+            table.CellStyles.Add(new DxfTableCellStyle("one"));
+            table.CellStyles.Add(new DxfTableCellStyle("two"));
             var file = new DxfFile();
             file.Header.Version = DxfAcadVersion.R2004;
             file.Objects.Add(table);

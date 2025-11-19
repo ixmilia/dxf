@@ -31,7 +31,7 @@ namespace IxMilia.Dxf.Generator
 
         private void OutputDxfEntityType()
         {
-            CreateNewFile(EntityNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
+            CreateNewFile(EntityNamespace, true, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
             IncreaseIndent();
             AppendLine("public enum DxfEntityType");
             AppendLine("{");
@@ -49,7 +49,7 @@ namespace IxMilia.Dxf.Generator
         private void OutputDxfEntity()
         {
             var baseEntity = _xml.Elements(XName.Get("Entity", _xmlns)).Where(x => Name(x) == "DxfEntity").Single();
-            CreateNewFile(EntityNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections");
+            CreateNewFile(EntityNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
             IncreaseIndent();
             AppendLine("/// <summary>");
             AppendLine("/// DxfEntity class");
@@ -120,7 +120,11 @@ namespace IxMilia.Dxf.Generator
             AppendLine("{");
             AppendLine("    ((IDxfItemInternal)this).Handle = ((IDxfItemInternal)other).Handle;");
             AppendLine("    ((IDxfItemInternal)this).OwnerHandle = ((IDxfItemInternal)other).OwnerHandle;");
-            AppendLine("    ((IDxfItemInternal)this).SetOwner(((IDxfItemInternal)other).Owner);");
+            AppendLine("    if (((IDxfItemInternal)other).Owner is not null)");
+            AppendLine("    {");
+            AppendLine("        ((IDxfItemInternal)this).SetOwner(((IDxfItemInternal)other).Owner);");
+            AppendLine("    }");
+            AppendLine();
             foreach (var property in GetPropertiesAndPointers(baseEntity))
             {
                 var name = Name(property);
@@ -142,6 +146,14 @@ namespace IxMilia.Dxf.Generator
             // Initialize
             //
             AppendLine();
+            foreach (var property in GetProperties(baseEntity))
+            {
+                if (ReportPropertyAsNotNull(property))
+                {
+                    AppendLine($"[MemberNotNull(nameof({Name(property)}))]");
+                }
+            }
+
             AppendLine("protected virtual void Initialize()");
             AppendLine("{");
             foreach (var property in GetProperties(baseEntity))
@@ -250,11 +262,11 @@ namespace IxMilia.Dxf.Generator
             // FromBuffer
             //
             AppendLine();
-            AppendLine("internal static DxfEntity FromBuffer(DxfCodePairBufferReader buffer)");
+            AppendLine("internal static DxfEntity? FromBuffer(DxfCodePairBufferReader buffer)");
             AppendLine("{");
             AppendLine("    var first = buffer.Peek();");
             AppendLine("    buffer.Advance();");
-            AppendLine("    DxfEntity entity;");
+            AppendLine("    DxfEntity? entity = null;");
             AppendLine("    switch (first.StringValue)");
             AppendLine("    {");
             foreach (var entity in _entities)
@@ -282,7 +294,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine("    if (entity != null)");
             AppendLine("    {");
             AppendLine("        entity = entity.PopulateFromBuffer(buffer);");
-            AppendLine("        entity.PostParseBaseEntity();");
+            AppendLine("        entity?.PostParseBaseEntity();");
             AppendLine("    }");
             AppendLine();
             AppendLine("    return entity;");
@@ -300,7 +312,7 @@ namespace IxMilia.Dxf.Generator
             foreach (var entity in _entities)
             {
                 var className = Name(entity);
-                CreateNewFile(EntityNamespace, false, "System", "System.Collections.Generic", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Objects");
+                CreateNewFile(EntityNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions", "IxMilia.Dxf.Objects");
                 IncreaseIndent();
                 OutputSingleDxfEntity(entity);
                 DecreaseIndent();
@@ -348,7 +360,7 @@ namespace IxMilia.Dxf.Generator
                 IncreaseIndent();
                 if (extents == null)
                 {
-                    AppendLine("return null;");
+                    AppendLine("yield break;");
                 }
                 else
                 {
@@ -381,9 +393,9 @@ namespace IxMilia.Dxf.Generator
             if (Name(entity) == "DxfDimensionBase")
             {
                 AppendLine();
-                AppendLine("protected override DxfEntity PostParse()");
+                AppendLine("protected override DxfEntity? PostParse()");
                 AppendLine("{");
-                AppendLine("    DxfDimensionBase newDimension = null;");
+                AppendLine("    DxfDimensionBase? newDimension = null;");
                 AppendLine("    switch (DimensionType)");
                 AppendLine("    {");
                 foreach (var ent in _entities.OrderBy(e => EntityType(e)).Where(e => BaseClass(e, "DxfEntity") == "DxfDimensionBase"))

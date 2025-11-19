@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
@@ -242,7 +244,10 @@ namespace IxMilia.Dxf.Entities
 
         public byte[] PreviewImageData { get; set; }
 
+        // the `Initialize()` method guarnatees everything has been set
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         protected DxfEntity()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
             Initialize();
             ExtensionDataGroups = new ListNonNull<DxfCodePairGroup>();
@@ -270,7 +275,7 @@ namespace IxMilia.Dxf.Entities
             _previewImageDataBytes.Clear();
         }
 
-        protected virtual DxfEntity PostParse()
+        protected virtual DxfEntity? PostParse()
         {
             return this;
         }
@@ -313,7 +318,7 @@ namespace IxMilia.Dxf.Entities
             }
         }
 
-        internal virtual DxfEntity PopulateFromBuffer(DxfCodePairBufferReader buffer)
+        internal virtual DxfEntity? PopulateFromBuffer(DxfCodePairBufferReader buffer)
         {
             while (buffer.ItemsRemain)
             {

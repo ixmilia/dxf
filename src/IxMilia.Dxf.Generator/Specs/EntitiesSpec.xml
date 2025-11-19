@@ -18,7 +18,7 @@
         <Property Name="_imageByteCount" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" Accessibility="private" MinVersion="R2000" />
         <Property Name="_previewImageDataBytes" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" MinVersion="R2000" />
         <Property Name="Color24Bit" Code="420" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2004" />
-        <Property Name="ColorName" Code="430" Type="string" DefaultValue="null" MinVersion="R2004" />
+        <Property Name="ColorName" Code="430" Type="string?" DefaultValue="null" MinVersion="R2004" />
         <Property Name="Transparency" Code="440" Type="int" DefaultValue="0" MinVersion="R2004" />
         <Pointer Name="PlotStyle" Code="390" Type="IDxfItem" MinVersion="R2007" />
         <Property Name="ShadowMode" Code="284" Type="DxfShadowMode" DefaultValue="DxfShadowMode.CastsAndReceivesShadows" ReadConverter="(DxfShadowMode){0}" WriteConverter="(short){0}" MinVersion="R2007" />
@@ -149,10 +149,10 @@
 
     -->
     <Entity Name="DxfArcAlignedText" EntityType="ArcAlignedText" SubclassMarker="AcDbArcAlignedText" TypeString="ARCALIGNEDTEXT" MinVersion="R2000" MaxVersion="R2000">
-        <Property Name="Text" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="FontName" Code="2" Type="string" DefaultValue="null" />
-        <Property Name="BigfontName" Code="3" Type="string" DefaultValue="null" />
-        <Property Name="TextStyleName" Code="7" Type="string" DefaultValue="null" />
+        <Property Name="Text" Code="1" Type="string?" DefaultValue="null" />
+        <Property Name="FontName" Code="2" Type="string?" DefaultValue="null" />
+        <Property Name="BigfontName" Code="3" Type="string?" DefaultValue="null" />
+        <Property Name="TextStyleName" Code="7" Type="string?" DefaultValue="null" />
         <Property Name="CenterPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="ArcRadius" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="WidthFactor" Code="41" Type="double" DefaultValue="1.0" />
@@ -186,7 +186,7 @@
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="TextHeight" Code="40" Type="double" DefaultValue="1.0" />
-        <Property Name="Value" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Value" Code="1" Type="string?" DefaultValue="null" />
         <Property Name="Rotation" Code="50" Type="double" DefaultValue="0" DisableWritingDefault="true" />
         <Property Name="RelativeXScaleFactor" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="ObliqueAngle" Code="51" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
@@ -199,8 +199,8 @@
         <Property Name="SecondAlignmentPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion){0}" WriteConverter="(short){0}" MinVersion="R2010" />
-        <Property Name="Prompt" Code="3" Type="string" DefaultValue="null" />
-        <Property Name="TextTag" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="Prompt" Code="3" Type="string?" DefaultValue="null" />
+        <Property Name="TextTag" Code="2" Type="string?" DefaultValue="null" />
         <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}">
             <Flag Name="IsInvisible" Mask="1" />
             <Flag Name="IsConstant" Mask="2" />
@@ -217,7 +217,7 @@
         <Pointer Name="SecondaryAttributes" Code="340" Type="IDxfItem" AllowMultiples="true" MinVersion="R2007" />
         <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
         <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
-        <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
+        <Property Name="XRecordTag" Code="2" Type="string?" DefaultValue="null" MinVersion="R2007" />
         <Pointer Name="MText" Code="-1" Type="DxfMText" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" MinVersion="R13" />
@@ -267,9 +267,9 @@
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="TextHeight" Code="40" Type="double" DefaultValue="1.0" />
-        <Property Name="Value" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Value" Code="1" Type="string?" DefaultValue="null" />
         <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion){0}" WriteConverter="(short){0}" MinVersion="R2010" />
-        <Property Name="AttributeTag" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="AttributeTag" Code="2" Type="string?" DefaultValue="null" />
         <Property Name="Flags" Code="70" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}">
             <Flag Name="IsInvisible" Mask="1" />
             <Flag Name="IsConstant" Mask="2" />
@@ -297,7 +297,7 @@
         <Pointer Name="SecondaryAttributes" Code="340" Type="IDxfItem" AllowMultiples="true" MinVersion="R2007" />
         <Property Name="AlignmentPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" MinVersion="R2007" />
         <Property Name="AnnotationScale" Code="40" Type="double" DefaultValue="1.0" MinVersion="R2007" />
-        <Property Name="XRecordTag" Code="2" Type="string" DefaultValue="null" MinVersion="R2007" />
+        <Property Name="XRecordTag" Code="2" Type="string?" DefaultValue="null" MinVersion="R2007" />
         <Pointer Name="MText" Code="-1" Type="DxfMText" />
         <WriteOrder>
             <WriteSpecificValue Code="100" Value="&quot;AcDbText&quot;" MinVersion="R13" />
@@ -375,7 +375,7 @@
     <!-- the class from which all dimensions inherit -->
     <Entity Name="DxfDimensionBase" EntityType="Dimension" SubclassMarker="AcDbDimension" TypeString="DIMENSION" DefaultConstructor="Internal" CopyConstructor="Protected">
         <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion){0}" WriteConverter="(short){0}" MinVersion="R2010" />
-        <Property Name="BlockName" Code="2" Type="string" DefaultValue="null" DisableWritingDefault="true" />
+        <Property Name="BlockName" Code="2" Type="string?" DefaultValue="null" DisableWritingDefault="true" />
         <Property Name="DefinitionPoint1" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="TextMidPoint" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="DimensionType" Code="70" Type="DxfDimensionType" DefaultValue="DxfDimensionType.Aligned" ReadConverter="HandleDimensionType({0})" WriteConverter="HandleDimensionType({0})" />
@@ -534,7 +534,7 @@
     <Entity Name="DxfHatch" EntityType="Hatch" SubclassMarker="AcDbHatch" TypeString="HATCH" GenerateReaderFunction="false" MinVersion="R14">
         <Property Name="ElevationPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
-        <Property Name="PatternName" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="PatternName" Code="2" Type="string?" DefaultValue="null" />
         <Property Name="FillMode" Code="70" Type="DxfHatchPatternFillMode" DefaultValue="DxfHatchPatternFillMode.PatternFill" ReadConverter="(DxfHatchPatternFillMode){0}" WriteConverter="(short){0}" />
         <Property Name="FillColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" MinVersion="R2004" />
         <Property Name="IsAssociative" Code="71" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
@@ -683,7 +683,7 @@
     -->
     <Entity Name="DxfInsert" EntityType="Insert" SubclassMarker="AcDbBlockReference" TypeString="INSERT">
         <Property Name="HasAttributes" Code="66" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" DisableWritingDefault="true" />
-        <Property Name="Name" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="Name" Code="2" Type="string?" DefaultValue="null" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="XScaleFactor" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="YScaleFactor" Code="42" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
@@ -702,7 +702,7 @@
 
     -->
     <Entity Name="DxfLeader" EntityType="Leader" SubclassMarker="AcDbLeader" TypeString="LEADER" MinVersion="R13" DefaultConstructor="Internal" GenerateReaderFunction="false">
-        <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="string.Empty" />
         <Property Name="UseArrowheads" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Property Name="PathType" Code="72" Type="DxfLeaderPathType" DefaultValue="DxfLeaderPathType.StraightLineSegments" ReadConverter="(DxfLeaderPathType){0}" WriteConverter="(short){0}" />
         <Property Name="AnnotationType" Code="73" Type="DxfLeaderCreationAnnotationType" DefaultValue="DxfLeaderCreationAnnotationType.NoAnnotation" ReadConverter="(DxfLeaderCreationAnnotationType){0}" WriteConverter="(short){0}" />
@@ -712,7 +712,7 @@
         <Property Name="TextAnnotationWidth" Code="41" Type="double" DefaultValue="1.0" />
         <Property Name="_vertexCount" Code="76" Type="int" DefaultValue="0" Accessibility="private" ReadConverter="(int){0}" WriteConverter="(short){0}" />
         <Property Name="OverrideColor" Code="77" Type="DxfColor" DefaultValue="DxfColor.ByBlock" DisableWritingDefault="true" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" />
-        <Property Name="AssociatedAnnotationReference" Code="340" Type="string" DefaultValue="null" />
+        <Property Name="AssociatedAnnotationReference" Code="340" Type="string" DefaultValue="string.Empty" />
         <Property Name="Normal" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="210,220,230" />
         <Property Name="Right" Code="211" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="211,221,231" />
         <Property Name="BlockOffset" Code="212" Type="DxfVector" DefaultValue="DxfVector.Zero" CodeOverrides="212,222,232" />
@@ -749,7 +749,7 @@
     -->
     <Entity Name="DxfLight" EntityType="Light" SubclassMarker="AcDbLight" TypeString="LIGHT" MinVersion="R2007">
         <Property Name="VersionNumber" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Name" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="LightType" Code="70" Type="DxfLightType" DefaultValue="DxfLightType.Distant" ReadConverter="(DxfLightType){0}" WriteConverter="(short){0}" />
         <Property Name="IsActive" Code="290" Type="bool" DefaultValue="true" />
         <Property Name="PlotGlyph" Code="291" Type="bool" DefaultValue="true" />
@@ -833,7 +833,7 @@
 
     -->
     <Entity Name="DxfMLine" EntityType="MLine" SubclassMarker="AcDbMline" TypeString="MLINE" MinVersion="R13">
-        <Property Name="StyleName" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="StyleName" Code="2" Type="string" DefaultValue="string.Empty" />
         <Pointer Name="Style" Code="340" Type="IDxfItem" />
         <Property Name="ScaleFactor" Code="40" Type="double" DefaultValue="1.0" />
         <Property Name="Justification" Code="70" Type="DxfJustification" DefaultValue="DxfJustification.Top" ReadConverter="(DxfJustification){0}" WriteConverter="(short){0}" />
@@ -912,7 +912,7 @@
         <Property Name="AttachmentPoint" Code="71" Type="DxfAttachmentPoint" DefaultValue="DxfAttachmentPoint.TopLeft" ReadConverter="(DxfAttachmentPoint){0}" WriteConverter="(short){0}" />
         <Property Name="DrawingDirection" Code="72" Type="DxfDrawingDirection" DefaultValue="DxfDrawingDirection.LeftToRight" ReadConverter="(DxfDrawingDirection){0}" WriteConverter="(short){0}" />
         <Property Name="ExtendedText" Code="3" Type="string" DefaultValue="null" AllowMultiples="true" />
-        <Property Name="Text" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Text" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="TextStyleName" Code="7" Type="string" DefaultValue="STANDARD" DisableWritingDefault="true" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Property Name="XAxisDirection" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
@@ -923,7 +923,7 @@
         <Property Name="LineSpacingFactor" Code="44" Type="double" DefaultValue="1.0" />
         <Property Name="BackgroundFillSetting" Code="90" Type="DxfBackgroundFillSetting" DefaultValue="DxfBackgroundFillSetting.Off" ReadConverter="(DxfBackgroundFillSetting){0}" WriteConverter="(int){0}" />
         <Property Name="BackgroundColorRGB" Code="420" Type="int" DefaultValue="0" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
-        <Property Name="BackgroundColorName" Code="430" Type="string" DefaultValue="null" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
+        <Property Name="BackgroundColorName" Code="430" Type="string" DefaultValue="string.Empty" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
         <Property Name="FillBoxScale" Code="45" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="BackgroundFillColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
         <Property Name="BackgroundFillColorTransparency" Code="441" Type="int" DefaultValue="0" WriteCondition="BackgroundFillSetting == DxfBackgroundFillSetting.UseBackgroundFillColor" />
@@ -995,7 +995,7 @@
     -->
     <Entity Name="DxfOle2Frame" EntityType="Ole2Frame" SubclassMarker="AcDbOle2Frame" TypeString="OLE2FRAME" MinVersion="R14">
         <Property Name="VersionNumber" Code="70" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" />
-        <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="Description" Code="3" Type="string" DefaultValue="string.Empty" />
         <Property Name="UpperLeftCorner" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="LowerRightCorner" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
         <Property Name="ObjectType" Code="71" Type="DxfOleObjectType" DefaultValue="DxfOleObjectType.Static" ReadConverter="(DxfOleObjectType){0}" WriteConverter="(short){0}" />
@@ -1102,7 +1102,7 @@
             <Flag Name="IsExpression" Mask="1" />
             <Flag Name="IsInlineMTextSequencesEnabled" Mask="2" />
         </Property>
-        <Property Name="Contents" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Contents" Code="1" Type="string" DefaultValue="string.Empty" />
         <Extents>
             <Value>InsertionPoint</Value>
             <!-- assuming a 7x12 monospaced font; this is horrible but it'll have to do for now -->
@@ -1117,13 +1117,13 @@
     <Entity Name="DxfEntitySection" EntityType="Section" SubclassMarker="AcDbSection" TypeString="SECTION" MinVersion="R2007">
         <Property Name="State" Code="90" Type="int" DefaultValue="0" />
         <Property Name="Flags" Code="91" Type="int" DefaultValue="0" />
-        <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Name" Code="1" Type="string?" DefaultValue="null" />
         <Property Name="VerticalDirection" Code="10" Type="DxfVector" DefaultValue="DxfVector.ZAxis" CodeOverrides="10,20,30" />
         <Property Name="TopHeight" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="BottomHeight" Code="41" Type="double" DefaultValue="0.0" />
         <Property Name="IndicatorTransparency" Code="70" Type="short" DefaultValue="0" />
         <Property Name="IndicatorColor" Code="63" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" />
-        <Property Name="IndicatorColorName" Code="411" Type="string" DefaultValue="null" />
+        <Property Name="IndicatorColorName" Code="411" Type="string?" DefaultValue="null" />
         <Property Name="_vertexCount" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
         <Property Name="_vertexX" Code="11" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_vertexY" Code="21" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
@@ -1177,7 +1177,7 @@
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="Size" Code="40" Type="double" DefaultValue="0.0" />
-        <Property Name="Name" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="Name" Code="2" Type="string" DefaultValue="string.Empty" />
         <Property Name="RotationAngle" Code="50" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="RelativeXScaleFactor" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="ObliqueAngle" Code="51" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
@@ -1251,7 +1251,7 @@
             <WriteProperty Property="StartTangent" />
             <WriteProperty Property="EndTangent" />
             <WriteProperty Property="KnotValues" />
-            <Foreach Property="ControlPoints" Condition="ControlPoints.Any(cp =&gt; cp.Weight != 1.0)"><!-- if any weight is not 1.0, write them all -->
+            <Foreach Property="ControlPoints" Condition="ControlPoints!.Any(cp =&gt; cp.Weight != 1.0)"><!-- if any weight is not 1.0, write them all -->
               <WriteSpecificValue Code="41" Value="item.Weight" />
             </Foreach>
             <Foreach Property="ControlPoints">
@@ -1288,7 +1288,7 @@
         <Property Name="Thickness" Code="39" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
         <Property Name="Location" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="TextHeight" Code="40" Type="double" DefaultValue="1.0" />
-        <Property Name="Value" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Value" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="Rotation" Code="50" Type="double" DefaultValue="0" DisableWritingDefault="true" />
         <Property Name="RelativeXScaleFactor" Code="41" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="ObliqueAngle" Code="51" Type="double" DefaultValue="0.0" DisableWritingDefault="true" />
@@ -1335,9 +1335,9 @@
 
     -->
     <Entity Name="DxfTolerance" EntityType="Tolerance" SubclassMarker="AcDbFcf" TypeString="TOLERANCE" MinVersion="R13">
-        <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="DimensionStyleName" Code="3" Type="string" DefaultValue="string.Empty" />
         <Property Name="InsertionPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
-        <Property Name="DisplayText" Code="1" Type="string" DefaultValue="null" MinVersion="R2000" />
+        <Property Name="DisplayText" Code="1" Type="string" DefaultValue="string.Empty" MinVersion="R2000" />
         <Property Name="ExtrusionDirection" Code="210" Type="DxfVector" DefaultValue="DxfVector.ZAxis" DisableWritingDefault="true" CodeOverrides="210,220,230" />
         <Property Name="DirectionVector" Code="11" Type="DxfVector" DefaultValue="DxfVector.XAxis" CodeOverrides="11,21,31" />
         <Extents>

@@ -120,6 +120,9 @@ namespace IxMilia.Dxf.Generator
                 AppendLine($"{defaultConstructorType} {Name(item)}()");
                 AppendLine("    : base()");
                 AppendLine("{");
+                IncreaseIndent();
+                AppendLine("Initialize();");
+                DecreaseIndent();
                 AppendLine("}");
             }
         }
@@ -154,6 +157,14 @@ namespace IxMilia.Dxf.Generator
         public void AppendInitializeMethod(XElement item, string? customInitializeLine = null)
         {
             AppendLine();
+            foreach (var property in GetProperties(item))
+            {
+                if (ReportPropertyAsNotNull(property))
+                {
+                    AppendLine($"[MemberNotNull(nameof({Name(property)}))]");
+                }
+            }
+
             AppendLine("protected override void Initialize()");
             AppendLine("{");
             IncreaseIndent();
@@ -261,7 +272,7 @@ namespace IxMilia.Dxf.Generator
                 AppendLine();
                 AppendLine("IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()");
                 AppendLine("{");
-                AppendLine("    return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);");
+                AppendLine("    return ((IDxfItemInternal)this).GetPointers().Select(p => p.Item as IDxfItemInternal).WhereNotNull();");
                 AppendLine("}");
                 AppendLine();
 
@@ -298,6 +309,7 @@ namespace IxMilia.Dxf.Generator
                     else
                     {
                         getset = $"{{ get {{ return {Name(property)}Pointer.Item as {propertyType}; }} set {{ {Name(property)}Pointer.Item = value; }} }}";
+                        propertyType += "?";
                     }
                 }
 
@@ -609,7 +621,7 @@ namespace IxMilia.Dxf.Generator
                         infixPredicate = string.Format(".Where(p => p.Handle.Value != 0)");
                     }
 
-                    lines.Add(string.Format("{0}pairs.AddRange(this.{1}{2}.Select(p => new DxfCodePair({3}, {4})));", indentPrefix, name, infixPredicate, code, value));
+                    lines.Add(string.Format("{0}pairs.AddRange(this.{1}{2}!.Select(p => new DxfCodePair({3}, {4})));", indentPrefix, name, infixPredicate, code, value));
                 }
                 else
                 {
@@ -741,6 +753,30 @@ namespace IxMilia.Dxf.Generator
 
         public bool ReportPropertyAsNotNull(XElement property)
         {
+            var type = Type(property);
+            if (type.EndsWith("?"))
+            {
+                // already nullable
+                return false;
+            }
+
+            if (AllowMultiples(property))
+            {
+                // will be set to `new List<T>()`
+                return true;
+            }
+            else
+            {
+                switch (type)
+                {
+                    case "byte":
+                    case "double":
+                    case "short":
+                    case "int":
+                        return false;
+                }
+            }
+
             return DefaultValue(property) != "null";
         }
 
@@ -920,7 +956,7 @@ namespace IxMilia.Dxf.Generator
                         }
 
                         var itemSuffix = _foreachLevel == 0 ? "" : _foreachLevel.ToString();
-                        lines.Add($"{indent}foreach (var item{itemSuffix} in {property})");
+                        lines.Add($"{indent}foreach (var item{itemSuffix} in {property}!)");
                         lines.Add($"{indent}{{");
                         _foreachLevel++;
                         lines.AddRange(spec.Elements().SelectMany(e => WriteValue(e, entity)).Select(l => $"{indent}    {l}"));
@@ -958,7 +994,7 @@ namespace IxMilia.Dxf.Generator
                         var lines = new List<string>();
                         lines.Add($"if ({string.Join(" && ", predicates)})");
                         lines.Add("{");
-                        lines.Add($"    pairs.Add(new DxfCodePair({countCode}, {value}.Length));");
+                        lines.Add($"    pairs.Add(new DxfCodePair({countCode}, {value}!.Length));");
                         lines.Add($"    foreach (var chunk in BinaryHelpers.ChunkBytes({value}))");
                         lines.Add("    {");
                         lines.Add($"        pairs.Add(new DxfCodePair({chunkCode}, chunk));");

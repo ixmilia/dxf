@@ -74,7 +74,7 @@ namespace IxMilia.Dxf
             get { return (byte[])Value!; }
         }
 
-        public DxfCodePair(int code, string value)
+        public DxfCodePair(int code, string? value)
         {
             Debug.Assert(ExpectedType(code) == typeof(string));
             data = new KeyValuePair<int, object?>(code, value ?? string.Empty);

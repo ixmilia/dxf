@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -6,7 +8,7 @@ namespace IxMilia.Dxf.Entities
     public partial class DxfAttributeDefinition
     {
         private const string AcDbXrecordText = "AcDbXrecord";
-        private string _lastSubclassMarker;
+        private string _lastSubclassMarker = string.Empty;
         private bool _isVersionSet;
         private int _xrecCode70Count = 0;
 

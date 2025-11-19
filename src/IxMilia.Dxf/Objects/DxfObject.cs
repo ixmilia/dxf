@@ -1,7 +1,8 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
-using IxMilia.Dxf.Entities;
 
 namespace IxMilia.Dxf.Objects
 {
@@ -119,7 +120,10 @@ namespace IxMilia.Dxf.Objects
             get { return DxfAcadVersion.Max; }
         }
 
+        // the `Initialize()` method guarnatees everything has been set
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         protected DxfObject()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
             Initialize();
         }
@@ -219,7 +223,7 @@ namespace IxMilia.Dxf.Objects
             return DxfColor.FromRawValue(value);
         }
 
-        protected static short GetRawValue(DxfColor color)
+        protected static short GetRawValue(DxfColor? color)
         {
             return color?.RawValue ?? 0;
         }

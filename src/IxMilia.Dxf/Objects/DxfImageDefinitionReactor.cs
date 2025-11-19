@@ -1,3 +1,4 @@
+#nullable enable
 
 namespace IxMilia.Dxf.Objects
 {

@@ -4,10 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using IxMilia.Dxf.Extensions;
 
 namespace IxMilia.Dxf.Collections
 {
-    internal class DxfPointerList<TItem> : IList<TItem?> where TItem : class, IDxfItem
+    internal class DxfPointerList<TItem> : IList<TItem> where TItem : class, IDxfItem
     {
         private List<DxfPointer> _items = new List<DxfPointer>();
 
@@ -33,9 +34,9 @@ namespace IxMilia.Dxf.Collections
 
         internal IList<DxfPointer> Pointers => _items;
 
-        public TItem? this[int index]
+        public TItem this[int index]
         {
-            get { return _items[index].Item as TItem; }
+            get { return (TItem)_items[index].Item!; }
             set { _items[index].Item = value; }
         }
 
@@ -53,9 +54,9 @@ namespace IxMilia.Dxf.Collections
 
         public bool Contains(TItem? item) => GetItems().Contains(item);
 
-        public void CopyTo(TItem?[] array, int arrayIndex) => GetItems().ToList().CopyTo(array, arrayIndex);
+        public void CopyTo(TItem[] array, int arrayIndex) => GetItems().ToList().CopyTo(array, arrayIndex);
 
-        public IEnumerator<TItem?> GetEnumerator() => GetItems().GetEnumerator();
+        public IEnumerator<TItem> GetEnumerator() => GetItems().GetEnumerator();
 
         public int IndexOf(TItem? item)
         {
@@ -95,6 +96,6 @@ namespace IxMilia.Dxf.Collections
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private IEnumerable<TItem?> GetItems() => _items.Select(i => (TItem?)i.Item);
+        private IEnumerable<TItem> GetItems() => _items.Select(i => i.Item as TItem).WhereNotNull();
     }
 }

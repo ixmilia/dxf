@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using IxMilia.Dxf.Entities;
 
@@ -80,7 +82,7 @@ namespace IxMilia.Dxf.Objects
             foreach (var item in LightsPointers.Pointers)
             {
                 pairs.Add(new DxfCodePair(5, HandleString(item.Handle)));
-                pairs.Add(new DxfCodePair(1, ((DxfLight)item.Item).Name));
+                pairs.Add(new DxfCodePair(1, ((DxfLight)item.Item!).Name));
             }
 
             if (writeXData)

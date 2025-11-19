@@ -1,3 +1,6 @@
+#nullable enable
+
+using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
 
@@ -5,7 +8,7 @@ namespace IxMilia.Dxf.Objects
 {
     public partial class DxfAcadProxyObject
     {
-        public byte[] ObjectData { get; set; }
+        public byte[] ObjectData { get; set; } = Array.Empty<byte>();
 
         public IList<string> ObjectIds { get; } = new ListNonNull<string>();
 

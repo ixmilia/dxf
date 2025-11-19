@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace IxMilia.Dxf.Objects
 {
     public enum DxfRasterImageUnits

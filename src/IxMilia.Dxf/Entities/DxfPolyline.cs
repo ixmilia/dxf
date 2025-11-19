@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
@@ -56,9 +58,9 @@ namespace IxMilia.Dxf.Entities
 
         public IList<DxfVertex> Vertices { get { return _vertices; } }
 
-        public DxfSeqend Seqend
+        public DxfSeqend? Seqend
         {
-            get { return (DxfSeqend)_seqendPointer.Item; }
+            get { return _seqendPointer.Item as DxfSeqend; }
             set { _seqendPointer.Item = value; }
         }
 

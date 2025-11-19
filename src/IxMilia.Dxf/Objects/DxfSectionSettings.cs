@@ -1,3 +1,5 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace IxMilia.Dxf.Objects
         public bool IsGenerationOption { get; set; }
         public IList<DxfHandle> SourceObjectHandles { get; } = new List<DxfHandle>();
         public DxfHandle DestinationObjectHandle { get; set; }
-        public string DestinationFileName { get; set; }
+        public string? DestinationFileName { get; set; }
         public IList<DxfSectionGeometrySettings> GeometrySettings { get; } = new ListNonNull<DxfSectionGeometrySettings>();
 
         internal void AddCodePairs(List<DxfCodePair> pairs)
@@ -33,7 +35,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(3, "SectionTypeSettingsEnd"));
         }
 
-        internal static DxfSectionTypeSettings FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfSectionTypeSettings? FromBuffer(DxfCodePairBufferReader buffer)
         {
             if (buffer.Peek()?.Code == 0)
             {
@@ -106,15 +108,15 @@ namespace IxMilia.Dxf.Objects
         public int GeometryCount { get; set; }
         public int BitFlags { get; set; }
         public DxfColor Color { get; set; } = DxfColor.ByBlock;
-        public string LayerName { get; set; }
-        public string LineTypeName { get; set; }
+        public string? LayerName { get; set; }
+        public string? LineTypeName { get; set; }
         public double LineTypeScale { get; set; } = 1.0;
-        public string PlotStyleName { get; set; }
+        public string? PlotStyleName { get; set; }
         public short LineWeight { get; set; }
         public short FaceTransparency { get; set; }
         public short EdgeTransparency { get; set; }
         public short HatchPatternType { get; set; }
-        public string HatchPatternName { get; set; }
+        public string? HatchPatternName { get; set; }
         public double HatchAngle { get; set; }
         public double HatchScale { get; set; } = 1.0;
         public double HatchSpacing { get; set; }
@@ -140,7 +142,7 @@ namespace IxMilia.Dxf.Objects
             pairs.Add(new DxfCodePair(3, "SectionGeometrySettingsEnd"));
         }
 
-        internal static DxfSectionGeometrySettings FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfSectionGeometrySettings? FromBuffer(DxfCodePairBufferReader buffer)
         {
             var stillReading = true;
             var settings = new DxfSectionGeometrySettings();

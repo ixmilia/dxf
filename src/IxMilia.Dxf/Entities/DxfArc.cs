@@ -1,10 +1,13 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfArc
     {
-        public static bool TryCreateFromVertices(double x1, double y1, double bulge, double x2, double y2, out DxfArc arc)
+        public static bool TryCreateFromVertices(double x1, double y1, double bulge, double x2, double y2, [NotNullWhen(returnValue: true)] out DxfArc? arc)
         {
             // To the best of my knowledge, 3D Arcs are not defined via z but a normal vector.
             // Thus, simply ignore non-zero z values.
@@ -57,12 +60,12 @@ namespace IxMilia.Dxf.Entities
             return true;
         }
 
-        public static bool TryCreateFromVertices(DxfVertex v1, DxfVertex v2, out DxfArc arc)
+        public static bool TryCreateFromVertices(DxfVertex v1, DxfVertex v2, [NotNullWhen(returnValue: true)] out DxfArc? arc)
         {
             return TryCreateFromVertices(v1.Location.X, v1.Location.Y, v1.Bulge, v2.Location.X, v2.Location.Y, out arc);
         }
         
-        public static bool TryCreateFromVertices(DxfLwPolylineVertex v1, DxfLwPolylineVertex v2, out DxfArc arc)
+        public static bool TryCreateFromVertices(DxfLwPolylineVertex v1, DxfLwPolylineVertex v2, [NotNullWhen(returnValue: true)] out DxfArc? arc)
         {
             return TryCreateFromVertices(v1.X, v1.Y, v1.Bulge, v2.X, v2.Y, out arc);
         }

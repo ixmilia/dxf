@@ -1,10 +1,12 @@
-﻿using System.Diagnostics;
+﻿#nullable enable
+
+using System.Diagnostics;
 
 namespace IxMilia.Dxf.Objects
 {
     public partial class DxfSpatialIndex
     {
-        private string LastSubclassMarker = null;
+        private string LastSubclassMarker = string.Empty;
 
         internal override bool TrySetPair(DxfCodePair pair)
         {
@@ -16,7 +18,7 @@ namespace IxMilia.Dxf.Objects
                 case 40:
                     switch (LastSubclassMarker)
                     {
-                        case null:
+                        case "":
                         case "AcDbIndex":
                             this.Timestamp = DateDouble(pair.DoubleValue);
                             break;

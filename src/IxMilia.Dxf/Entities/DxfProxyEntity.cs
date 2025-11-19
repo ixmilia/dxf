@@ -1,10 +1,14 @@
+#nullable enable
+
+using System;
+
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfProxyEntity
     {
-        public byte[] GraphicsData { get; set; }
+        public byte[] GraphicsData { get; set; } = Array.Empty<byte>();
 
-        public byte[] EntityData { get; set; }
+        public byte[] EntityData { get; set; } = Array.Empty<byte>();
 
         public int ObjectDrawingFormatVersion
         {

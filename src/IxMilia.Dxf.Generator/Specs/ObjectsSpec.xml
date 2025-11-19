@@ -62,7 +62,7 @@
 
     -->
     <Object Name="DxfNavisWorksModelDefinition" ObjectType="NavisWorksModelDefinition" SubclassMarker="AcDbNavisworksModelDef" TypeString="AcDbNavisworksModelDef" MinVersion="R2018">
-        <Property Name="ModelPath" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="ModelPath" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="IsModelLoadedOnDrawingOpen" Code="290" Type="bool" DefaultValue="false" />
         <Property Name="MinimumExtent" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Property Name="MaximumExtent" Code="11" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="11,21,31" />
@@ -77,7 +77,7 @@
         <Property Name="Field" Code="70" Type="short" DefaultValue="0" />
         <Property Name="ColumnCount" Code="90" Type="int" DefaultValue="0" ProtectedSet="true" />
         <Property Name="RowCount" Code="91" Type="int" DefaultValue="0" ProtectedSet="true" />
-        <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Name" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="ColumnNames" Code="2" Type="string" DefaultValue="null" AllowMultiples="true" />
     </Object>
 <!--
@@ -96,7 +96,7 @@
     -->
     <Object Name="DxfDictionaryVariable" ObjectType="DictionaryVariable" SubclassMarker="DictionaryVariables" TypeString="DICTIONARYVAR" Accessibility="internal">
         <Property Name="ObjectSchemaNumber" Code="280" Type="short" DefaultValue="0" />
-        <Property Name="Value" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="Value" Code="1" Type="string" DefaultValue="string.Empty" />
     </Object>
     <!--
 
@@ -118,13 +118,13 @@
         <Pointer Name="MainObject" Code="331" Type="IDxfItem" />
         <Property Name="MainObjectSubentityType" Code="73" Type="DxfSubentityType" DefaultValue="DxfSubentityType.Edge" ReadConverter="(DxfSubentityType){0}" WriteConverter="(short){0}" />
         <Property Name="MainObjectGsMarkerIndex" Code="91" Type="int" DefaultValue="0" />
-        <Property Name="MainObjectXrefHandle" Code="301" Type="string" DefaultValue="null" />
+        <Property Name="MainObjectXrefHandle" Code="301" Type="string" DefaultValue="string.Empty" />
         <Property Name="NearOsnapGeometryParameter" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="OsnapPoint" Code="10" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="10,20,30" />
         <Pointer Name="IntersectionObject" Code="332" Type="IDxfItem" />
         <Property Name="IntersectionSubentityType" Code="74" Type="DxfSubentityType" DefaultValue="DxfSubentityType.Edge" ReadConverter="(DxfSubentityType){0}" WriteConverter="(short){0}" />
         <Property Name="IntersectionObjectGsMarkerIndex" Code="92" Type="int" DefaultValue="0" />
-        <Property Name="IntersectionObjectXrefHandle" Code="302" Type="string" DefaultValue="null" />
+        <Property Name="IntersectionObjectXrefHandle" Code="302" Type="string" DefaultValue="string.Empty" />
         <Property Name="HasLastPointReference" Code="75" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
     </Object>
     <!--
@@ -133,11 +133,11 @@
 
     -->
     <Object Name="DxfField" ObjectType="Field" SubclassMarker="[none]" TypeString="ACAD_FIELD" MinVersion="R2004">
-        <Property Name="EvaluatorId" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="FieldCodeString" Code="2" Type="string" DefaultValue="null" />
-        <Property Name="FieldCodeStringOverflow" Code="3" Type="string" DefaultValue="null" />
-        <Property Name="_formatStringCode4" Code="4" Type="string" DefaultValue="null" Accessibility="private" />
-        <Property Name="EvaluationErrorMessage" Code="300" Type="string" DefaultValue="null" MaxVersion="R2007" />
+        <Property Name="EvaluatorId" Code="1" Type="string" DefaultValue="string.Empty" />
+        <Property Name="FieldCodeString" Code="2" Type="string" DefaultValue="string.Empty" />
+        <Property Name="FieldCodeStringOverflow" Code="3" Type="string" DefaultValue="string.Empty" />
+        <Property Name="_formatStringCode4" Code="4" Type="string?" DefaultValue="null" Accessibility="private" />
+        <Property Name="EvaluationErrorMessage" Code="300" Type="string" DefaultValue="string.Empty" MaxVersion="R2007" />
         <Property Name="_childFieldCount" Code="-90" Type="int" DefaultValue="0" Accessibility="private" />
         <Pointer Name="ChildFields" Code="360" Type="DxfField" AllowMultiples="true" />
         <Property Name="EvaluationOption" Code="91" Type="int" DefaultValue="0" MaxVersion="R2007" />
@@ -159,8 +159,8 @@
         <Property Name="_binaryDataBufferSize" Code="92" Type="int" DefaultValue="0" Accessibility="private" />
         <Property Name="_binaryData" Code="310" Type="byte[]" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
 
-        <Property Name="_formatStringCode301" Code="301" Type="string" DefaultValue="null" Accessibility="private" />
-        <Property Name="_formatStringOverflow" Code="9" Type="string" DefaultValue="null" Accessibility="private" />
+        <Property Name="_formatStringCode301" Code="301" Type="string" DefaultValue="string.Empty" Accessibility="private" />
+        <Property Name="_formatStringOverflow" Code="9" Type="string" DefaultValue="string.Empty" Accessibility="private" />
         <Property Name="_formatStringLength" Code="98" Type="int" DefaultValue="0" Accessibility="private" />
         <Property Name="_childFieldCount_valueTypeCode" Code="90" Type="int" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <WriteOrder>
@@ -212,11 +212,11 @@
         <Property Name="UserSpecifiedScaleFactor" Code="141" Type="double" DefaultValue="1.0" />
         <Property Name="SeaLevelElevation" Code="142" Type="double" DefaultValue="0.0" />
         <Property Name="CoordinateProjectionRadius" Code="143" Type="double" DefaultValue="0.0" />
-        <Property Name="CoordinateSystemDefinition" Code="301" Type="string" DefaultValue="null" />
-        <Property Name="GeoRssTag" Code="302" Type="string" DefaultValue="null" />
-        <Property Name="ObservationFromTag" Code="305" Type="string" DefaultValue="null" />
-        <Property Name="ObservationToTag" Code="306" Type="string" DefaultValue="null" />
-        <Property Name="ObservationCoverageTag" Code="307" Type="string" DefaultValue="null" />
+        <Property Name="CoordinateSystemDefinition" Code="301" Type="string" DefaultValue="string.Empty" />
+        <Property Name="GeoRssTag" Code="302" Type="string" DefaultValue="string.Empty" />
+        <Property Name="ObservationFromTag" Code="305" Type="string" DefaultValue="string.Empty" />
+        <Property Name="ObservationToTag" Code="306" Type="string" DefaultValue="string.Empty" />
+        <Property Name="ObservationCoverageTag" Code="307" Type="string" DefaultValue="string.Empty" />
         <Property Name="_geoMeshPointCount" Code="93" Type="int" DefaultValue="0" Accessibility="private" />
         <Property Name="_sourceMeshXPoints" Code="13" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
         <Property Name="_sourceMeshYPoints" Code="23" Type="double" DefaultValue="null" AllowMultiples="true" Accessibility="private" />
@@ -268,7 +268,7 @@
 
     -->
     <Object Name="DxfGroup" ObjectType="Group" SubclassMarker="AcDbGroup" TypeString="GROUP">
-        <Property Name="Description" Code="300" Type="string" DefaultValue="null" />
+        <Property Name="Description" Code="300" Type="string" DefaultValue="string.Empty" />
         <Property Name="IsNamed" Code="70" Type="bool" DefaultValue="true" ReadConverter="!BoolShort({0})" WriteConverter="BoolShort(!{0})" />
         <Property Name="IsSelectable" Code="71" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Pointer Name="Entities" Code="340" Type="DxfEntity" AllowMultiples="true" />
@@ -288,7 +288,7 @@
     -->
     <Object Name="DxfImageDefinition" ObjectType="ImageDefinition" SubclassMarker="AcDbRasterImageDef" TypeString="IMAGEDEF" MinVersion="R14">
         <Property Name="ClassVersion" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="FilePath" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="FilePath" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="ImageWidth" Code="10" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(double){0}" Comment="Image width in pixels." />
         <Property Name="ImageHeight" Code="20" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(double){0}" Comment="Image height in pixels." />
         <Property Name="PixelWidth" Code="11" Type="double" DefaultValue="1.0" Comment="Default size of one pixel." />
@@ -342,7 +342,7 @@
 
     -->
     <Object Name="DxfLayout" ObjectType="Layout" SubclassMarker="AcDbLayout" TypeString="LAYOUT" BaseClass="DxfPlotSettings" GenerateReaderFunction="false" DefaultConstructor="Internal" MinVersion="R2000">
-        <Property Name="_layoutName" Code="1" Type="string" DefaultValue="null" Accessibility="private" />
+        <Property Name="_layoutName" Code="1" Type="string" DefaultValue="string.Empty" Accessibility="private" />
         <Property Name="LayoutFlags" Code="70" Type="int" DefaultValue="0" WriteConverter="(short){0}">
             <Flag Name="IsPsLtScale" Mask="1" />
             <Flag Name="IsLimCheck" Mask="2" />
@@ -378,8 +378,8 @@
 
     -->
     <Object Name="DxfMaterial" ObjectType="Material" SubclassMarker="AcDbMaterial" TypeString="MATERIAL" GenerateReaderFunction="false" MinVersion="R2004">
-        <Property Name="Name" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="Description" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="Name" Code="1" Type="string" DefaultValue="string.Empty" />
+        <Property Name="Description" Code="2" Type="string" DefaultValue="string.Empty" />
 
         <Property Name="OverrideAmbientColor" Code="70" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
         <Property Name="AmbientColorFactor" Code="40" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
@@ -390,7 +390,7 @@
         <Property Name="DiffuseColorValue" Code="91" Type="int" DefaultValue="0" DisableWritingDefault="true" />
         <Property Name="DiffuseMapBlendFactor" Code="42" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="UseImageFileForDiffuseMap" Code="72" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-        <Property Name="DiffuseMapFileName" Code="3" Type="string" DefaultValue="null" DisableWritingDefault="true" />
+        <Property Name="DiffuseMapFileName" Code="3" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" />
         <Property Name="DiffuseMapProjectionMethod" Code="73" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" DisableWritingDefault="true" ReadConverter="(DxfMapProjectionMethod){0}" WriteConverter="(short){0}" />
         <Property Name="DiffuseMapTilingMethod" Code="74" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" DisableWritingDefault="true" ReadConverter="(DxfMapTilingMethod){0}" WriteConverter="(short){0}" />
         <Property Name="DiffuseMapAutoTransformMethod" Code="75" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" DisableWritingDefault="true" ReadConverter="(DxfMapAutoTransformMethod){0}" WriteConverter="(short){0}" />
@@ -402,7 +402,7 @@
         <Property Name="SpecularColorValue" Code="92" Type="int" DefaultValue="0" DisableWritingDefault="true" />
         <Property Name="SpecularMapBlendFactor" Code="46" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="UseImageFileForSpecularMap" Code="77" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-        <Property Name="SpecularMapFileName" Code="4" Type="string" DefaultValue="null" DisableWritingDefault="true" />
+        <Property Name="SpecularMapFileName" Code="4" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" />
         <Property Name="SpecularMapProjectionMethod" Code="78" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" DisableWritingDefault="true" ReadConverter="(DxfMapProjectionMethod){0}" WriteConverter="(short){0}" />
         <Property Name="SpecularMapTilingMethod" Code="79" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" DisableWritingDefault="true" ReadConverter="(DxfMapTilingMethod){0}" WriteConverter="(short){0}" />
         <Property Name="SpecularMapAutoTransformMethod" Code="170" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" DisableWritingDefault="true" ReadConverter="(DxfMapAutoTransformMethod){0}" WriteConverter="(short){0}" />
@@ -410,7 +410,7 @@
 
         <Property Name="ReflectionMapBlendFactor" Code="48" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="UseImageFileForReflectionMap" Code="171" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-        <Property Name="ReflectionMapFileName" Code="6" Type="string" DefaultValue="null" DisableWritingDefault="true" />
+        <Property Name="ReflectionMapFileName" Code="6" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" />
         <Property Name="ReflectionMapProjectionMethod" Code="172" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" DisableWritingDefault="true" ReadConverter="(DxfMapProjectionMethod){0}" WriteConverter="(short){0}" />
         <Property Name="ReflectionMapTilingMethod" Code="173" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" DisableWritingDefault="true" ReadConverter="(DxfMapTilingMethod){0}" WriteConverter="(short){0}" />
         <Property Name="ReflectionMapAutoTransformMethod" Code="174" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" DisableWritingDefault="true" ReadConverter="(DxfMapAutoTransformMethod){0}" WriteConverter="(short){0}" />
@@ -419,7 +419,7 @@
         <Property Name="OpacityFactor" Code="140" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="OpacityMapBlendFactor" Code="141" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="UseImageFileForOpacityMap" Code="175" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-        <Property Name="OpacityMapFileName" Code="7" Type="string" DefaultValue="null" DisableWritingDefault="true" />
+        <Property Name="OpacityMapFileName" Code="7" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" />
         <Property Name="OpacityMapProjectionMethod" Code="176" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" DisableWritingDefault="true" ReadConverter="(DxfMapProjectionMethod){0}" WriteConverter="(short){0}" />
         <Property Name="OpacityMapTilingMethod" Code="177" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" DisableWritingDefault="true" ReadConverter="(DxfMapTilingMethod){0}" WriteConverter="(short){0}" />
         <Property Name="OpacityMapAutoTransformMethod" Code="178" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" DisableWritingDefault="true" ReadConverter="(DxfMapAutoTransformMethod){0}" WriteConverter="(short){0}" />
@@ -427,7 +427,7 @@
 
         <Property Name="BumpMapBlendFactor" Code="143" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="UseImageFileForBumpMap" Code="179" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-        <Property Name="BumpMapFileName" Code="8" Type="string" DefaultValue="null" DisableWritingDefault="true" />
+        <Property Name="BumpMapFileName" Code="8" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" />
         <Property Name="BumpMapProjectionMethod" Code="270" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" DisableWritingDefault="true" ReadConverter="(DxfMapProjectionMethod){0}" WriteConverter="(short){0}" />
         <Property Name="BumpMapTilingMethod" Code="271" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" DisableWritingDefault="true" ReadConverter="(DxfMapTilingMethod){0}" WriteConverter="(short){0}" />
         <Property Name="BumpMapAutoTransformMethod" Code="272" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" DisableWritingDefault="true" ReadConverter="(DxfMapAutoTransformMethod){0}" WriteConverter="(short){0}" />
@@ -436,7 +436,7 @@
         <Property Name="RefractionIndex" Code="145" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="RefractionMapBlendFactor" Code="146" Type="double" DefaultValue="1.0" DisableWritingDefault="true" />
         <Property Name="UseImageFileForRefractionMap" Code="273" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" />
-        <Property Name="RefractionMapFileName" Code="9" Type="string" DefaultValue="null" DisableWritingDefault="true" />
+        <Property Name="RefractionMapFileName" Code="9" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" />
         <Property Name="RefractionMapProjectionMethod" Code="274" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" DisableWritingDefault="true" ReadConverter="(DxfMapProjectionMethod){0}" WriteConverter="(short){0}" />
         <Property Name="RefractionMapTilingMethod" Code="275" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" DisableWritingDefault="true" ReadConverter="(DxfMapTilingMethod){0}" WriteConverter="(short){0}" />
         <Property Name="RefractionMapAutoTransformMethod" Code="276" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" DisableWritingDefault="true" ReadConverter="(DxfMapAutoTransformMethod){0}" WriteConverter="(short){0}" />
@@ -454,7 +454,7 @@
         <Property Name="NormalMapStrength" Code="465" Type="double" DefaultValue="1.0" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="NormalMapBlendFactor" Code="42" Type="double" DefaultValue="1.0" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="UseImageFileForNormalMap" Code="72" Type="bool" DefaultValue="false" DisableWritingDefault="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R2007" />
-        <Property Name="NormalMapFileName" Code="3" Type="string" DefaultValue="null" DisableWritingDefault="true" MinVersion="R2007" />
+        <Property Name="NormalMapFileName" Code="3" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="NormalMapProjectionMethod" Code="73" Type="DxfMapProjectionMethod" DefaultValue="DxfMapProjectionMethod.Planar" DisableWritingDefault="true" ReadConverter="(DxfMapProjectionMethod){0}" WriteConverter="(short){0}" MinVersion="R2007" />
         <Property Name="NormalMapTilingMethod" Code="74" Type="DxfMapTilingMethod" DefaultValue="DxfMapTilingMethod.Tile" DisableWritingDefault="true" ReadConverter="(DxfMapTilingMethod){0}" WriteConverter="(short){0}" MinVersion="R2007" />
         <Property Name="NormalMapAutoTransformMethod" Code="75" Type="DxfMapAutoTransformMethod" DefaultValue="DxfMapAutoTransformMethod.NoAutoTransform" DisableWritingDefault="true" ReadConverter="(DxfMapAutoTransformMethod){0}" WriteConverter="(short){0}" MinVersion="R2007" />
@@ -463,15 +463,15 @@
         <Property Name="IsAnonymous" Code="293" Type="bool" DefaultValue="false" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="GlobalIlluminationMode" Code="272" Type="short" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="FinalGatherMode" Code="273" Type="short" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2007" />
-        <Property Name="GenProcName" Code="300" Type="string" DefaultValue="null" DisableWritingDefault="true" MinVersion="R2007" />
+        <Property Name="GenProcName" Code="300" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="GenProcBooleanValue" Code="291" Type="bool" DefaultValue="false" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="GenProcIntegerValue" Code="271" Type="short" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="GenProcRealValue" Code="469" Type="double" DefaultValue="0.0" DisableWritingDefault="true" MinVersion="R2007" />
-        <Property Name="GenProcTextValue" Code="301" Type="string" DefaultValue="null" DisableWritingDefault="true" MinVersion="R2007" />
+        <Property Name="GenProcTextValue" Code="301" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="GenProcTableEnd" Code="292" Type="bool" DefaultValue="false" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="GenProcColorIndexValue" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByLayer" DisableWritingDefault="true" WriteConverter="GetRawValue({0})" MinVersion="R2007" />
         <Property Name="GenProcColorRGBValue" Code="420" Type="int" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2007" />
-        <Property Name="GenProcColorName" Code="430" Type="string" DefaultValue="null" DisableWritingDefault="true" MinVersion="R2007" />
+        <Property Name="GenProcColorName" Code="430" Type="string" DefaultValue="string.Empty" DisableWritingDefault="true" MinVersion="R2007" />
 
         <Property Name="MapUTile" Code="270" Type="short" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2007" />
         <Property Name="MapVTile" Code="271" Type="short" DefaultValue="0" DisableWritingDefault="true" MinVersion="R2007" />
@@ -620,10 +620,10 @@
         <Property Name="LandingGap" Code="42" Type="double" DefaultValue="0.0" />
         <Property Name="EnableDogleg" Code="291" Type="bool" DefaultValue="true" />
         <Property Name="DoglegLength" Code="43" Type="double" DefaultValue="0.0" />
-        <Property Name="MLeaderStyleDescription" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="MLeaderStyleDescription" Code="3" Type="string" DefaultValue="string.Empty" />
         <Pointer Name="Arrowhead" Code="341" Type="IDxfItem" />
         <Property Name="ArrowheadSize" Code="44" Type="double" DefaultValue="0.0" />
-        <Property Name="DefaultMTextContents" Code="300" Type="string" DefaultValue="null" />
+        <Property Name="DefaultMTextContents" Code="300" Type="string" DefaultValue="string.Empty" />
         <Pointer Name="MTextStyle" Code="342" Type="IDxfItem" />
         <Property Name="TextLeftAttachmentType" Code="174" Type="short" DefaultValue="0" />
         <Property Name="TextAngleType" Code="175" Type="short" DefaultValue="0" />
@@ -657,7 +657,7 @@
 
     -->
     <Object Name="DxfMLineStyle" ObjectType="MLineStyle" SubclassMarker="AcDbMlineStyle" TypeString="MLINESTYLE" GenerateReaderFunction="false">
-        <Property Name="StyleName" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="StyleName" Code="2" Type="string" DefaultValue="string.Empty" />
         <Property Name="_flags" Code="70" Type="int" DefaultValue="0" WriteConverter="(short){0}" Accessibility="private">
             <Flag Name="FillOn" Mask="1" />
             <Flag Name="DisplayMiters" Mask="2" />
@@ -668,7 +668,7 @@
             <Flag Name="EndInnerArcsCap" Mask="512" />
             <Flag Name="EndRoundCap" Mask="1024" />
         </Property>
-        <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="Description" Code="3" Type="string" DefaultValue="string.Empty" />
         <Property Name="FillColor" Code="62" Type="DxfColor" DefaultValue="DxfColor.ByLayer" ReadConverter="FromRawValue({0})" WriteConverter="GetRawValue({0})" />
         <Property Name="StartAngle" Code="51" Type="double" DefaultValue="90.0" />
         <Property Name="EndAngle" Code="52" Type="double" DefaultValue="90.0" />
@@ -694,7 +694,7 @@
 
     -->
     <Object Name="DxfObjectPointer" ObjectType="ObjectPointer" SubclassMarker="null" TypeString="OBJECT_PTR" MinVersion="R14">
-        <Property Name="AseXData" Code="1001" Type="string" DefaultValue="null" />
+        <Property Name="AseXData" Code="1001" Type="string" DefaultValue="string.Empty" />
         <WriteOrder>
             <WriteProperty Property="AseXData" />
         </WriteOrder>
@@ -705,10 +705,10 @@
 
     -->
     <Object Name="DxfPlotSettings" ObjectType="PlotSettings" SubclassMarker="AcDbPlotSettings" TypeString="PLOTSETTINGS" DefaultConstructor="Internal" MinVersion="R2000">
-        <Property Name="PageSetupName" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="PrinterName" Code="2" Type="string" DefaultValue="null" />
-        <Property Name="PaperSize" Code="4" Type="string" DefaultValue="null" />
-        <Property Name="_plotViewName" Code="6" Type="string" DefaultValue="null" Accessibility="private" />
+        <Property Name="PageSetupName" Code="1" Type="string" DefaultValue="string.Empty" />
+        <Property Name="PrinterName" Code="2" Type="string" DefaultValue="string.Empty" />
+        <Property Name="PaperSize" Code="4" Type="string" DefaultValue="string.Empty" />
+        <Property Name="_plotViewName" Code="6" Type="string" DefaultValue="string.Empty" Accessibility="private" />
         <Property Name="UnprintableLeftMarginSize" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="UnprintableBottomMarginSize" Code="41" Type="double" DefaultValue="0.0" />
         <Property Name="UnprintableRightMarginSize" Code="42" Type="double" DefaultValue="0.0" />
@@ -742,7 +742,7 @@
         <Property Name="PlotPaperUnits" Code="72" Type="DxfPlotPaperUnits" DefaultValue="DxfPlotPaperUnits.Inches" ReadConverter="(DxfPlotPaperUnits){0}" WriteConverter="(short){0}" />
         <Property Name="PlotRotation" Code="73" Type="DxfPlotRotation" DefaultValue="DxfPlotRotation.NoRotation" ReadConverter="(DxfPlotRotation){0}" WriteConverter="(short){0}" />
         <Property Name="PlotType" Code="74" Type="DxfPlotType" DefaultValue="DxfPlotType.DrawingExtents" ReadConverter="(DxfPlotType){0}" WriteConverter="(short){0}" />
-        <Property Name="CurrentStyleSheet" Code="7" Type="string" DefaultValue="null" />
+        <Property Name="CurrentStyleSheet" Code="7" Type="string" DefaultValue="string.Empty" />
         <Property Name="StandardScale" Code="75" Type="DxfStandardScale" DefaultValue="DxfStandardScale.ScaledToFit" ReadConverter="(DxfStandardScale){0}" WriteConverter="(short){0}" />
         <Property Name="ShadePlotMode" Code="76" Type="DxfShadePlotMode" DefaultValue="DxfShadePlotMode.AsDisplayed" ReadConverter="(DxfShadePlotMode){0}" WriteConverter="(short){0}" MinVersion="R2004" />
         <Property Name="ShadePlotResolutionLevel" Code="77" Type="DxfShadePlotResolutionLevel" DefaultValue="DxfShadePlotResolutionLevel.Normal" ReadConverter="(DxfShadePlotResolutionLevel){0}" WriteConverter="(short){0}" MinVersion="R2004" />
@@ -809,7 +809,7 @@
         <Property Name="DiagnosticPhotonMode" Code="70" Type="DxfDiagnosticPhotonMode" DefaultValue="DxfDiagnosticPhotonMode.Density" ReadConverter="(DxfDiagnosticPhotonMode){0}" WriteConverter="(short){0}" />
         <Property Name="DiagnosticBSPMode" Code="70" Type="DxfDiagnosticBSPMode" DefaultValue="DxfDiagnosticBSPMode.Depth" ReadConverter="(DxfDiagnosticBSPMode){0}" WriteConverter="(short){0}" />
         <Property Name="ExportMIStatistics" Code="290" Type="bool" DefaultValue="false" />
-        <Property Name="MIStatisticsFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="MIStatisticsFileName" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="TileSize" Code="90" Type="int" DefaultValue="0" />
         <Property Name="TileOrder" Code="70" Type="DxfTileOrder" DefaultValue="DxfTileOrder.Hilbert" ReadConverter="(DxfTileOrder){0}" WriteConverter="(short){0}" />
         <Property Name="MemoryLimit" Code="90" Type="int" DefaultValue="0" />
@@ -833,7 +833,7 @@
         <Property Name="NearClippingPlaneDistancePercent" Code="40" Type="double" DefaultValue="0.0" />
         <Property Name="FarClippingPlaneDistancePercent" Code="40" Type="double" DefaultValue="1.0" />
         <Property Name="UseEnvironmentImage" Code="290" Type="bool" DefaultValue="false" />
-        <Property Name="EnvironmentImageFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="EnvironmentImageFileName" Code="1" Type="string" DefaultValue="string.Empty" />
     </Object>
     <!--
 
@@ -845,7 +845,7 @@
         <Property Name="RenderProcedure" Code="90" Type="DxfRenderProcedure" DefaultValue="DxfRenderProcedure.View" ReadConverter="(DxfRenderProcedure){0}" WriteConverter="(int){0}" />
         <Property Name="RenderDestination" Code="90" Type="DxfRenderDestination" DefaultValue="DxfRenderDestination.RenderWindow" ReadConverter="(DxfRenderDestination){0}" WriteConverter="(int){0}" />
         <Property Name="SaveToFile" Code="290" Type="bool" DefaultValue="false" />
-        <Property Name="SaveToFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="SaveToFileName" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="ImageWidth" Code="90" Type="int" DefaultValue="0" />
         <Property Name="ImageHeight" Code="90" Type="int" DefaultValue="0" />
         <Property Name="UsePredefinedPresetsFirst" Code="290" Type="bool" DefaultValue="false" />
@@ -859,7 +859,7 @@
     <Object Name="DxfRapidRTRenderEnvironment" ObjectType="RapidRTRenderEnvironment" SubclassMarker="AcDbIBLBackground" TypeString="RAPIDRTRENDERENVIRONMENT" MinVersion="R2018">
         <Property Name="SubclassVersion" Code="90" Type="int" DefaultValue="0" />
         <Property Name="IsEnabled" Code="290" Type="bool" DefaultValue="true" />
-        <Property Name="ImageBasedLightingMapFileName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="ImageBasedLightingMapFileName" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="RotationAngle" Code="40" Type="double" DefaultValue="0.0" Comment="Rotation angle in degrees." />
         <Property Name="IsMapAsBackground" Code="290" Type="bool" DefaultValue="true" />
         <Pointer Name="CustomBackground" Code="340" Type="IDxfItem" />
@@ -871,13 +871,13 @@
     -->
     <Object Name="DxfRapidRenderSettings" ObjectType="RapidRenderSettings" SubclassMarker="AcDbRenderSettings" TypeString="RAPIDRTRENDERSETTINGS" MinVersion="R2018">
         <Property Name="SubclassVersion" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="RenderPresetName" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="RenderPresetName" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="AreMaterialsEnabled" Code="290" Type="bool" DefaultValue="true" />
         <Property Name="IsTextureSamplingEnabled" Code="290" Type="bool" DefaultValue="true" />
         <Property Name="AreBackFacesEnabled" Code="290" Type="bool" DefaultValue="true" />
         <Property Name="AreShadowsEnabled" Code="290" Type="bool" DefaultValue="true" />
-        <Property Name="PreviewImageFileName" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="RenderPresetDescription" Code="1" Type="string" DefaultValue="null" />
+        <Property Name="PreviewImageFileName" Code="1" Type="string" DefaultValue="string.Empty" />
+        <Property Name="RenderPresetDescription" Code="1" Type="string" DefaultValue="string.Empty" />
         <Property Name="DisplayIndex" Code="90" Type="int" DefaultValue="0" />
         <Property Name="IsPredefinedRenderPreset" Code="290" Type="bool" DefaultValue="true" />
         <Property Name="_duplicateSubclassVersion" Code="90" Type="int" DefaultValue="90" Accessibility="private" /><!-- the `SubclassVersion` variable is declared twice -->
@@ -1006,12 +1006,12 @@
     -->
     <Object Name="DxfSunStudy" ObjectType="SunStudy" SubclassMarker="AcDbSunStudy" TypeString="SUNSTUDY" GenerateReaderFunction="false" MinVersion="R2013">
         <Property Name="Version" Code="90" Type="int" DefaultValue="0" />
-        <Property Name="SunSetupName" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="Description" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="SunSetupName" Code="1" Type="string" DefaultValue="string.Empty" />
+        <Property Name="Description" Code="2" Type="string" DefaultValue="string.Empty" />
         <Property Name="OutputType" Code="70" Type="short" DefaultValue="0" />
-        <Property Name="SheetSetName" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="SheetSetName" Code="3" Type="string" DefaultValue="string.Empty" />
         <Property Name="UseSubset" Code="290" Type="bool" DefaultValue="false" />
-        <Property Name="SheetSubsetName" Code="4" Type="string" DefaultValue="null" />
+        <Property Name="SheetSubsetName" Code="4" Type="string" DefaultValue="string.Empty" />
         <Property Name="SelectDatesFromCalendar" Code="291" Type="bool" DefaultValue="false" />
         <Property Name="Dates" Code="90" Type="DateTime" DefaultValue="null" AllowMultiples="true" />
         <Property Name="SelectRangeOfDates" Code="292" Type="bool" DefaultValue="false" />
@@ -1071,7 +1071,7 @@
     -->
     <Object Name="DxfTableStyle" ObjectType="TableStyle" SubclassMarker="AcDbTableStyle" TypeString="TABLESTYLE" GenerateReaderFunction="false" MinVersion="R2004">
         <Property Name="Version" Code="280" Type="DxfVersion" DefaultValue="DxfVersion.R2010" ReadConverter="(DxfVersion){0}" WriteConverter="(short){0}" MinVersion="R2010" />
-        <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
+        <Property Name="Description" Code="3" Type="string" DefaultValue="string.Empty" />
         <Property Name="FlowDirection" Code="70" Type="DxfFlowDirection" DefaultValue="DxfFlowDirection.Down" ReadConverter="(DxfFlowDirection){0}" WriteConverter="(short){0}" />
         <Property Name="Flags" Code="71" Type="int" DefaultValue="0" WriteConverter="(short){0}" />
         <Property Name="HorizontalCellMargin" Code="40" Type="double" DefaultValue="0.06" />
@@ -1125,8 +1125,8 @@
 
     -->
     <Object Name="DxfUnderlayDefinition" ObjectType="UnderlayDefinition" SubclassMarker="AcDbUnderlayDefinition" TypeString="UNDERLAYDEFINITION" MinVersion="R2007">
-        <Property Name="FileName" Code="1" Type="string" DefaultValue="null" />
-        <Property Name="Name" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="FileName" Code="1" Type="string" DefaultValue="string.Empty" />
+        <Property Name="Name" Code="2" Type="string" DefaultValue="string.Empty" />
     </Object>
     <!--
 
@@ -1147,7 +1147,7 @@
 
     -->
     <Object Name="DxfVisualStyle" ObjectType="VisualStyle" SubclassMarker="AcDbVisualStyle" TypeString="VISUALSTYLE" MinVersion="R2007">
-        <Property Name="Description" Code="2" Type="string" DefaultValue="null" />
+        <Property Name="Description" Code="2" Type="string" DefaultValue="string.Empty" />
         <Property Name="Type" Code="70" Type="short" DefaultValue="0" />
         <Property Name="FaceLightingModel" Code="71" Type="DxfFaceLightingModel" DefaultValue="DxfFaceLightingModel.Visible" ReadConverter="(DxfFaceLightingModel){0}" WriteConverter="(short){0}" />
         <Property Name="FaceLightingQuality" Code="72" Type="DxfFaceLightingQuality" DefaultValue="DxfFaceLightingQuality.PerFace" ReadConverter="(DxfFaceLightingQuality){0}" WriteConverter="(short){0}" />

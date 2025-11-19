@@ -39,7 +39,7 @@ namespace IxMilia.Dxf
 
         public static DxfBoundingBox? FromPoints(IEnumerable<DxfPoint> points)
         {
-            if (points == null || !points.Any())
+            if (!points.Any())
             {
                 return null;
             }

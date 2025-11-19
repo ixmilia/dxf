@@ -1,5 +1,6 @@
+#nullable enable
+
 using System.Collections.Generic;
-using System.Diagnostics;
 using IxMilia.Dxf.Collections;
 
 namespace IxMilia.Dxf.Objects
@@ -9,8 +10,8 @@ namespace IxMilia.Dxf.Objects
         public class DxfMLineStyleElement
         {
             public double Offset { get; set; }
-            public DxfColor Color { get; set; }
-            public string LineType { get; set; }
+            public DxfColor? Color { get; set; }
+            public string? LineType { get; set; }
         }
 
         public IList<DxfMLineStyleElement> Elements { get; } = new ListNonNull<DxfMLineStyleElement>();

@@ -1,14 +1,18 @@
+#nullable enable
+
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace IxMilia.Dxf.Objects
 {
     public partial class DxfField
     {
-        private byte[] BinaryData { get; set; }
+        private byte[] BinaryData { get; set; } = Array.Empty<byte>();
 
-        public string FormatString { get; set; }
+        public string FormatString { get; set; } = string.Empty;
 
-        public object Value
+        public object? Value
         {
             get
             {
@@ -30,7 +34,7 @@ namespace IxMilia.Dxf.Objects
             {
                 if (value == null)
                 {
-                    _binaryData = null;
+                    _binaryData = new List<byte[]>();
                     _valueTypeCode = 310;
                 }
                 else if (value.GetType() == typeof(int))
@@ -72,7 +76,7 @@ namespace IxMilia.Dxf.Objects
 
             // rebuild format string
             FormatString = _formatStringCode4 ?? (_formatStringCode301 + _formatStringOverflow);
-            _formatStringOverflow = null;
+            _formatStringOverflow = string.Empty;
 
             BinaryData = BinaryHelpers.CombineBytes(_binaryData);
             _binaryData.Clear();

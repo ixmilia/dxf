@@ -1,5 +1,3 @@
-#nullable enable
-
 using System.Diagnostics;
 
 namespace IxMilia.Dxf.Objects

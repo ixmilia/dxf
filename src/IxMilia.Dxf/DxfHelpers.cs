@@ -1,5 +1,3 @@
-#nullable enable
-
 namespace IxMilia.Dxf
 {
     internal static class DxfHelpers

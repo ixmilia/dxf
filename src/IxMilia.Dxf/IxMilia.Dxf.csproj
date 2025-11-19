@@ -14,7 +14,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1573;1591</NoWarn>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>12</LangVersion>
+    <Nullable>enable</Nullable>
 
     <!-- SourceLink settings -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

@@ -1,5 +1,3 @@
-#nullable enable
-
 namespace IxMilia.Dxf.Objects
 {
     public partial class DxfImageDefinitionReactor

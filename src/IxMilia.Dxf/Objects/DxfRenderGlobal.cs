@@ -1,5 +1,3 @@
-#nullable enable
-
 namespace IxMilia.Dxf.Objects
 {
     public enum DxfRenderProcedure

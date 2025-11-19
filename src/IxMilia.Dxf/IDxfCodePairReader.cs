@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-#nullable enable
-
 using System.Text;
 
 namespace IxMilia.Dxf

@@ -1,5 +1,3 @@
-#nullable enable
-
 namespace IxMilia.Dxf
 {
     internal enum DxbItemType

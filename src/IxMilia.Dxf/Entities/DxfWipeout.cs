@@ -1,5 +1,3 @@
-#nullable enable
-
 namespace IxMilia.Dxf.Entities
 {
     public partial class DxfWipeout

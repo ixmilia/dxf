@@ -149,7 +149,7 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(2, viewPorts.Count);
 
             // defaults
-            Assert.Null(viewPorts[0].Name);
+            Assert.Empty(viewPorts[0].Name);
             Assert.Equal(0.0, viewPorts[0].LowerLeft.X);
             Assert.Equal(0.0, viewPorts[0].LowerLeft.Y);
             Assert.Equal(1.0, viewPorts[0].UpperRight.X);

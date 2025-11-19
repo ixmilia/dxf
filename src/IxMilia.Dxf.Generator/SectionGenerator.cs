@@ -29,7 +29,7 @@ namespace IxMilia.Dxf.Generator
 
         private void OutputHeader()
         {
-            CreateNewFile(SectionNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics", "System.Diagnostics.CodeAnalysis", "IxMilia.Dxf.Entities");
+            CreateNewFile(SectionNamespace, "System", "System.Collections.Generic", "System.Diagnostics", "System.Diagnostics.CodeAnalysis", "IxMilia.Dxf.Entities");
 
             IncreaseIndent();
             AppendLine("public partial class DxfHeader");

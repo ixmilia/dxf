@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +37,7 @@ namespace IxMilia.Dxf.Tables
         public const string ViewText = "VIEW";
         public const string ViewPortText = "VPORT";
 
-        public IDxfItem Owner { get; private set; }
+        public IDxfItem? Owner { get; private set; }
         void IDxfItemInternal.SetOwner(IDxfItem owner)
         {
             Owner = owner;
@@ -51,7 +53,7 @@ namespace IxMilia.Dxf.Tables
         }
 
         internal abstract DxfTableType TableType { get; }
-        internal virtual string TableClassName { get { return null; } }
+        internal virtual string? TableClassName { get { return null; } }
         public DxfHandle Handle { get; set; }
         public DxfHandle OwnerHandle { get; set; }
         public IList<DxfCodePairGroup> ExtensionDataGroups { get; }
@@ -191,7 +193,7 @@ namespace IxMilia.Dxf.Tables
             return name;
         }
 
-        internal static DxfTable FromBuffer(DxfCodePairBufferReader buffer)
+        internal static DxfTable? FromBuffer(DxfCodePairBufferReader buffer)
         {
             var pair = buffer.Peek();
             buffer.Advance();
@@ -222,7 +224,7 @@ namespace IxMilia.Dxf.Tables
                 pair = buffer.Peek();
             }
 
-            DxfTable result;
+            DxfTable? result;
             switch (tableType)
             {
                 case DxfTable.AppIdText:

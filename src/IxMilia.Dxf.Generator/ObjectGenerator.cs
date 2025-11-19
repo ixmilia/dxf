@@ -31,7 +31,7 @@ namespace IxMilia.Dxf.Generator
 
         private void OutputDxfObjectType()
         {
-            CreateNewFile(ObjectNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
+            CreateNewFile(ObjectNamespace, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
             IncreaseIndent();
             AppendLine("public enum DxfObjectType");
             AppendLine("{");
@@ -49,7 +49,7 @@ namespace IxMilia.Dxf.Generator
         private void OutputDxfObject()
         {
             var baseObject = _xml.Elements(XName.Get("Object", _xmlns)).Where(x => Name(x) == "DxfObject").Single();
-            CreateNewFile(ObjectNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
+            CreateNewFile(ObjectNamespace, "System", "System.Collections.Generic", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Extensions");
             IncreaseIndent();
             AppendLine("/// <summary>");
             AppendLine("/// DxfObject class");
@@ -242,7 +242,7 @@ namespace IxMilia.Dxf.Generator
             foreach (var obj in _objects)
             {
                 var className = Name(obj);
-                CreateNewFile(ObjectNamespace, true, "System", "System.Collections.Generic", "System.Diagnostics", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Entities", "IxMilia.Dxf.Extensions");
+                CreateNewFile(ObjectNamespace, "System", "System.Collections.Generic", "System.Diagnostics", "System.Diagnostics.CodeAnalysis", "System.Linq", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Entities", "IxMilia.Dxf.Extensions");
                 IncreaseIndent();
                 OutputSingleDxfObject(obj);
                 DecreaseIndent();

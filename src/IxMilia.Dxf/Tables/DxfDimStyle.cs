@@ -1,6 +1,8 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IxMilia.Dxf
 {
@@ -8,7 +10,7 @@ namespace IxMilia.Dxf
     {
         public const string XDataStyleName = "DSTYLE";
 
-        public bool TryGetStyleFromXDataDifference(DxfXDataApplicationItemCollection xdataItemCollection, out DxfDimStyle style)
+        public bool TryGetStyleFromXDataDifference(DxfXDataApplicationItemCollection xdataItemCollection, [NotNullWhen(returnValue: true)] out DxfDimStyle? style)
         {
             // style data is encoded as
             //   1001 DSTYLE
@@ -16,7 +18,7 @@ namespace IxMilia.Dxf
             //     ... style overrides
             //   1002 }
 
-            style = default(DxfDimStyle);
+            style = null;
             if (xdataItemCollection == null)
             {
                 return false;

@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using IxMilia.Dxf.Collections;
@@ -7,7 +9,7 @@ namespace IxMilia.Dxf
 {
     public abstract class DxfSymbolTableFlags : IDxfItemInternal
     {
-        public IDxfItem Owner { get; private set; }
+        public IDxfItem? Owner { get; private set; }
         void IDxfItemInternal.SetOwner(IDxfItem owner)
         {
             Owner = owner;
@@ -23,7 +25,7 @@ namespace IxMilia.Dxf
         }
 
         public int StandardFlags;
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         protected abstract DxfTableType TableType { get; }
         public DxfHandle Handle { get; set; }
         public DxfHandle OwnerHandle { get; set; }
@@ -137,7 +139,7 @@ namespace IxMilia.Dxf
 
     public partial class DxfBlockRecord
     {
-        public byte[] BitmapData { get; set; }
+        public byte[] BitmapData { get; set; } = Array.Empty<byte>();
 
         internal override void BeforeWrite()
         {

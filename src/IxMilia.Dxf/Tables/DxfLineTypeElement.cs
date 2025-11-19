@@ -1,6 +1,8 @@
+#nullable enable
+
 using System.Collections.Generic;
 using System.Linq;
-using IxMilia.Dxf.Collections;
+using IxMilia.Dxf.Extensions;
 
 namespace IxMilia.Dxf
 {
@@ -19,7 +21,7 @@ namespace IxMilia.Dxf
         public IList<DxfVector> Offsets { get; } = new List<DxfVector>();
         public string TextString { get; set; }
 
-        public DxfStyle Style { get { return StylePointer.Item as DxfStyle; } set { StylePointer.Item = value; } }
+        public DxfStyle? Style { get { return StylePointer.Item as DxfStyle; } set { StylePointer.Item = value; } }
 
         public bool IsRotationAbsolute
         {
@@ -60,7 +62,7 @@ namespace IxMilia.Dxf
             ComplexFlags = 0;
             ShapeNumber = 0;
             RotationAngle = 0.0;
-            TextString = null;
+            TextString = string.Empty;
         }
 
         internal DxfPointer StylePointer { get; } = new DxfPointer();
@@ -102,7 +104,7 @@ namespace IxMilia.Dxf
 
         DxfHandle IDxfItemInternal.Handle { get; set; }
         DxfHandle IDxfItemInternal.OwnerHandle { get; set; }
-        public IDxfItem Owner { get; private set; }
+        public IDxfItem? Owner { get; private set; }
 
         void IDxfItemInternal.SetOwner(IDxfItem owner)
         {
@@ -116,7 +118,7 @@ namespace IxMilia.Dxf
 
         IEnumerable<IDxfItemInternal> IDxfItemInternal.GetChildItems()
         {
-            return ((IDxfItemInternal)this).GetPointers().Select(p => (IDxfItemInternal)p.Item);
+            return ((IDxfItemInternal)this).GetPointers().Select(p => p.Item as IDxfItemInternal).WhereNotNull();
         }
     }
 }

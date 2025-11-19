@@ -1,3 +1,5 @@
+#nullable enable
+
 namespace IxMilia.Dxf.Tables
 {
     public enum DxfTableType

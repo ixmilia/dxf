@@ -103,7 +103,7 @@ namespace IxMilia.Dxf
             return new DxfColor() { RawValue = value };
         }
 
-        public static short GetRawValue(DxfColor color)
+        public static short GetRawValue(DxfColor? color)
         {
             return color?.RawValue ?? 0;
         }

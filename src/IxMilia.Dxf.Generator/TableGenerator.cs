@@ -34,7 +34,7 @@ namespace IxMilia.Dxf.Generator
             {
                 var tableItem = Name(table.Element(XName.Get("TableItem", _xmlns))!);
                 var className = "Dxf" + Type(table) + "Table";
-                CreateNewFile(TableNamespace, false, "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections");
+                CreateNewFile(TableNamespace, "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections");
 
                 IncreaseIndent();
                 AppendLine($"public partial class {className} : DxfTable");
@@ -45,7 +45,7 @@ namespace IxMilia.Dxf.Generator
                 var tableClassName = TableClassName(table);
                 if (tableClassName != null)
                 {
-                    AppendLine($"internal override string TableClassName {{ get {{ return \"{tableClassName}\"; }} }}");
+                    AppendLine($"internal override string? TableClassName {{ get {{ return \"{tableClassName}\"; }} }}");
                 }
 
                 AppendLine();
@@ -108,7 +108,7 @@ namespace IxMilia.Dxf.Generator
             {
                 var tableItem = table.Element(XName.Get("TableItem", _xmlns))!;
                 var properties = tableItem.Elements(XName.Get("Property", _xmlns));
-                CreateNewFile("IxMilia.Dxf", false, "System", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
+                CreateNewFile("IxMilia.Dxf", "System", "System.Linq", "System.Collections.Generic", "IxMilia.Dxf.Collections", "IxMilia.Dxf.Sections", "IxMilia.Dxf.Tables");
 
                 IncreaseIndent();
                 AppendLine($"public partial class {Name(tableItem)} : DxfSymbolTableFlags");
@@ -480,7 +480,7 @@ namespace IxMilia.Dxf.Generator
                     // DxfDimStyle.GetVariable
                     //
                     AppendLine();
-                    AppendLine("public object GetVariable(string name)");
+                    AppendLine("public object? GetVariable(string name)");
                     AppendLine("{");
                     IncreaseIndent();
                     AppendLine("switch (name?.ToUpper())");
@@ -509,7 +509,7 @@ namespace IxMilia.Dxf.Generator
                     //
                     AppendLine();
                     AppendLine("/// <summary>Generates <see cref=\"DxfXDataApplicationItemCollection\"/> of the difference between the styles.  Result may be <see langword=\"null\"/>.</summary>");
-                    AppendLine("public static DxfXDataApplicationItemCollection GenerateStyleDifferenceAsXData(DxfDimStyle primaryStyle, DxfDimStyle modifiedStyle)");
+                    AppendLine("public static DxfXDataApplicationItemCollection? GenerateStyleDifferenceAsXData(DxfDimStyle primaryStyle, DxfDimStyle modifiedStyle)");
                     AppendLine("{");
                     IncreaseIndent();
 

@@ -18,11 +18,11 @@
     </Table>
     <Table Type="DimStyle" TypeStringVariable="DimStyleText" TableClassName="AcDbDimStyleTable">
         <TableItem Name="DxfDimStyle" ClassName="AcDbDimStyleTableRecord">
-            <Property Name="DimensioningSuffix" Code="3" Type="string" DefaultValue="null" HeaderVariable="DIMPOST" />
-            <Property Name="AlternateDimensioningSuffix" Code="4" Type="string" DefaultValue="null" HeaderVariable="DIMAPOST" />
-            <Property Name="ArrowBlockName" Code="5" Type="string" DefaultValue="null" MaxVersion="R14" HeaderVariable="DIMBLK" Comment="Obsolete." />
-            <Property Name="FirstArrowBlockName" Code="6" Type="string" DefaultValue="null" MaxVersion="R14" HeaderVariable="DIMBLK1" Comment="Obsolete." />
-            <Property Name="SecondArrowBlockName" Code="7" Type="string" DefaultValue="null" MaxVersion="R14" HeaderVariable="DIMBLK2" Comment="Obsolete." />
+            <Property Name="DimensioningSuffix" Code="3" Type="string" DefaultValue="string.Empty" HeaderVariable="DIMPOST" />
+            <Property Name="AlternateDimensioningSuffix" Code="4" Type="string" DefaultValue="string.Empty" HeaderVariable="DIMAPOST" />
+            <Property Name="ArrowBlockName" Code="5" Type="string" DefaultValue="string.Empty" MaxVersion="R14" HeaderVariable="DIMBLK" Comment="Obsolete." />
+            <Property Name="FirstArrowBlockName" Code="6" Type="string" DefaultValue="string.Empty" MaxVersion="R14" HeaderVariable="DIMBLK1" Comment="Obsolete." />
+            <Property Name="SecondArrowBlockName" Code="7" Type="string" DefaultValue="string.Empty" MaxVersion="R14" HeaderVariable="DIMBLK2" Comment="Obsolete." />
             <Property Name="DimensioningScaleFactor" Code="40" Type="double" DefaultValue="1.0" HeaderVariable="DIMSCALE" />
             <Property Name="DimensioningArrowSize" Code="41" Type="double" DefaultValue="0.18" HeaderVariable="DIMASZ" />
             <Property Name="DimensionExtensionLineOffset" Code="42" Type="double" DefaultValue="0.0625" HeaderVariable="DIMEXO" />
@@ -56,9 +56,9 @@
             <Property Name="UseSeparateArrowBlocksForDimensions" Code="173" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMSAH" />
             <Property Name="ForceDimensionTextInsideExtensions" Code="174" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMTIX" />
             <Property Name="SuppressOutsideExtensionDimensionLines" Code="175" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" HeaderVariable="DIMSOXD" />
-            <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRD" />
-            <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRE" />
-            <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="null" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRT" />
+            <Property Name="DimensionLineColor" Code="176" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRD" />
+            <Property Name="DimensionExtensionLineColor" Code="177" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRE" />
+            <Property Name="DimensionTextColor" Code="178" Type="DxfColor" DefaultValue="DxfColor.ByBlock" ReadConverter="DxfColor.FromRawValue({0})" WriteConverter="DxfColor.GetRawValue({0})" HeaderVariable="DIMCLRT" />
             <Property Name="AngularDimensionPrecision" Code="179" Type="short" DefaultValue="0" MinVersion="R2000" HeaderVariable="DIMADEC" />
             <Property Name="DimensionUnitFormat" Code="270" Type="DxfUnitFormat" DefaultValue="DxfUnitFormat.Scientific" ReadConverter="(DxfUnitFormat){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMUNIT" Comment="Obsolete.  Use &lt;see cref=&quot;DimensionNonAngularUnits&quot;/&gt; and &lt;see cref=&quot;DimensionFractionFormat&quot;/&gt; instead." />
             <Property Name="DimensionUnitToleranceDecimalPlaces" Code="271" Type="short" DefaultValue="0" MinVersion="R13" HeaderVariable="DIMDEC" />
@@ -80,11 +80,11 @@
             <Property Name="DimensionTextAndArrowPlacement" Code="287" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit){0}" WriteConverter="(short){0}" MinVersion="R13" HeaderVariable="DIMFIT" Comment="Obsolete.  Use &lt;see cref=&quot;DimensionTextAndArrowPlacement&quot;/&gt; and &lt;see cref=&quot;DimensionTextMovementRule&quot;/&gt; instead." />
             <Property Name="DimensionCursorControlsTextPosition" Code="288" Type="bool" DefaultValue="true" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R13" HeaderVariable="DIMUPT" />
             <Property Name="DimensionTextAndArrowPlacement" Code="289" Type="DxfDimensionFit" DefaultValue="DxfDimensionFit.TextAndArrowsOutsideLines" ReadConverter="(DxfDimensionFit){0}" WriteConverter="(short){0}" MinVersion="R2000" HeaderVariable="DIMATFIT" />
-            <Property Name="DimensionTextStyle" Code="340" Type="string" DefaultValue="null" MinVersion="R13" HeaderVariable="DIMTXSTY" />
-            <Property Name="DimensionLeaderBlockName" Code="341" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMLDRBLK" />
-            <Property Name="ArrowBlockName" Code="342" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMBLK" />
-            <Property Name="FirstArrowBlockName" Code="343" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMBLK1" />
-            <Property Name="SecondArrowBlockName" Code="344" Type="string" DefaultValue="null" MinVersion="R2000" HeaderVariable="DIMBLK2" />
+            <Property Name="DimensionTextStyle" Code="340" Type="string" DefaultValue="string.Empty" MinVersion="R13" HeaderVariable="DIMTXSTY" />
+            <Property Name="DimensionLeaderBlockName" Code="341" Type="string" DefaultValue="string.Empty" MinVersion="R2000" HeaderVariable="DIMLDRBLK" />
+            <Property Name="ArrowBlockName" Code="342" Type="string" DefaultValue="string.Empty" MinVersion="R2000" HeaderVariable="DIMBLK" />
+            <Property Name="FirstArrowBlockName" Code="343" Type="string" DefaultValue="string.Empty" MinVersion="R2000" HeaderVariable="DIMBLK1" />
+            <Property Name="SecondArrowBlockName" Code="344" Type="string" DefaultValue="string.Empty" MinVersion="R2000" HeaderVariable="DIMBLK2" />
             <Property Name="DimensionLineWeight" Code="371" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" HeaderVariable="DIMLWD" />
             <Property Name="DimensionExtensionLineWeight" Code="372" Type="DxfLineWeight" DefaultValue="new DxfLineWeight()" ReadConverter="DxfLineWeight.FromRawValue({0})" WriteConverter="DxfLineWeight.GetRawValue({0})" MinVersion="R2000" HeaderVariable="DIMLWE" />
         </TableItem>
@@ -101,7 +101,7 @@
     </Table>
     <Table Type="LType" TypeStringVariable="LTypeText">
         <TableItem Name="DxfLineType" ClassName="AcDbLinetypeTableRecord" GenerateReaderFunction="false" GenerateWriterFunction="false">
-            <Property Name="Description" Code="3" Type="string" DefaultValue="null" />
+            <Property Name="Description" Code="3" Type="string" DefaultValue="string.Empty" />
             <Property Name="AlignmentCode" Code="72" Type="int" DefaultValue="(int)'A'" WriteConverter="(short){0}" />
             <Property Name="_elementCount" Code="73" Type="int" DefaultValue="0" WriteConverter="(short){0}" Accessibility="private" />
             <Property Name="TotalPatternLength" Code="40" Type="double" DefaultValue="0.0" />
@@ -116,7 +116,7 @@
             <Property Name="TextGenerationFlags" Code="71" Type="int" DefaultValue="0" ReadConverter="(int){0}" WriteConverter="(short){0}" />
             <Property Name="LastHeightUsed" Code="42" Type="double" DefaultValue="0.2" />
             <Property Name="PrimaryFontFileName" Code="3" Type="string" DefaultValue="txt" />
-            <Property Name="BigFontFileName" Code="4" Type="string" DefaultValue="null" />
+            <Property Name="BigFontFileName" Code="4" Type="string" DefaultValue="string.Empty" />
             <Property Name="FontFlags" Code="1071" Type="int" DefaultValue="0" MinVersion="R2010" />
         </TableItem>
     </Table>
@@ -186,7 +186,7 @@
             <Property Name="GridOn" Code="76" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MaxVersion="R2004" />
             <Property Name="SnapStyle" Code="77" Type="DxfSnapStyle" DefaultValue="DxfSnapStyle.Standard" ReadConverter="(DxfSnapStyle){0}" WriteConverter="(short){0}" MaxVersion="R2004" />
             <Property Name="SnapIsometricPlane" Code="78" Type="DxfSnapIsometricPlane" DefaultValue="DxfSnapIsometricPlane.Left" ReadConverter="(DxfSnapIsometricPlane){0}" WriteConverter="(short){0}" MaxVersion="R2004" />
-            <Property Name="PlotStyleSheet" Code="1" Type="string" DefaultValue="null" MinVersion="R2007" />
+            <Property Name="PlotStyleSheet" Code="1" Type="string" DefaultValue="string.Empty" MinVersion="R2007" />
             <Property Name="RenderMode" Code="281" Type="DxfViewRenderMode" DefaultValue="DxfViewRenderMode.Classic2D" ReadConverter="(DxfViewRenderMode){0}" WriteConverter="(short){0}" MinVersion="R2000" />
             <Property Name="HasOwnUCS" Code="65" Type="bool" DefaultValue="false" ReadConverter="BoolShort({0})" WriteConverter="BoolShort({0})" MinVersion="R2000" MaxVersion="R2004" />
             <Property Name="UCSOrigin" Code="-3" Type="DxfPoint" DefaultValue="DxfPoint.Origin" CodeOverrides="110,120,130" WriteCondition="HasOwnUCS" MinVersion="R2000" />

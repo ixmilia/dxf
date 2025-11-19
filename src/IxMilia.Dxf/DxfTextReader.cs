@@ -14,9 +14,9 @@ namespace IxMilia.Dxf
         private IEnumerator<string> _lineEnumerator;
         private int _lineNumber;
         private Stream _stream;
-        private Encoding _encoding;
+        private Encoding? _encoding;
 
-        public DxfTextReader(Stream stream, Encoding defaultEncoding, string firstLine)
+        public DxfTextReader(Stream stream, Encoding? defaultEncoding, string firstLine)
         {
             _stream = stream;
             _encoding = defaultEncoding;
@@ -52,7 +52,8 @@ namespace IxMilia.Dxf
 
         private string? ReadLine()
         {
-            return _stream.ReadLine(_encoding, out var _);
+            // a null encoding is actually allowed here
+            return _stream.ReadLine(_encoding!, out var _);
         }
 
         public DxfCodePair? GetCodePair()

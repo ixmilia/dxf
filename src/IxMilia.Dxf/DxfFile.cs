@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +25,7 @@ namespace IxMilia.Dxf
         internal DxfBlocksSection BlocksSection { get; private set; }
         internal DxfEntitiesSection EntitiesSection { get; private set; }
         internal DxfObjectsSection ObjectsSection { get; private set; }
-        internal DxfThumbnailImageSection ThumbnailImageSection { get; private set; }
+        internal DxfThumbnailImageSection? ThumbnailImageSection { get; private set; }
 
         private DateTime _lastOpenOrSave;
 
@@ -55,9 +57,9 @@ namespace IxMilia.Dxf
 
         public IList<DxfStyle> Styles { get { return TablesSection.StyleTable.Items; } }
 
-        public DxfDictionary NamedObjectDictionary { get { return Objects.FirstOrDefault() as DxfDictionary; } }
+        public DxfDictionary? NamedObjectDictionary { get { return Objects.FirstOrDefault() as DxfDictionary; } }
 
-        public DxfViewPort ActiveViewPort
+        public DxfViewPort? ActiveViewPort
         {
             get
             {
@@ -68,6 +70,11 @@ namespace IxMilia.Dxf
             set
             {
                 // replace `*ACTIVE`, ensuring the name is correct
+                if (value is null)
+                {
+                    throw new ArgumentNullException("Active view port cannot be set to null.");
+                }
+
                 if (string.Compare(value.Name, DxfViewPort.ActiveViewPortName, StringComparison.OrdinalIgnoreCase) != 0)
                 {
                     value.Name = DxfViewPort.ActiveViewPortName;
@@ -91,7 +98,7 @@ namespace IxMilia.Dxf
         /// Gets the thumbnail bitmap.
         /// </summary>
         /// <returns>Raw bytes that should serialize to a .BMP file.</returns>
-        public byte[] GetThumbnailBitmap()
+        public byte[]? GetThumbnailBitmap()
         {
             return ThumbnailImageSection == null ? null : ThumbnailImageSection.GetThumbnailBitmap();
         }
@@ -110,7 +117,7 @@ namespace IxMilia.Dxf
         /// <summary>
         /// Raw data of the thumbnail image.  Should be a 256-color bitmap, 180 pixels wide, any height.
         /// </summary>
-        public byte[] RawThumbnail
+        public byte[]? RawThumbnail
         {
             get { return ThumbnailImageSection == null ? null : ThumbnailImageSection.RawData; }
             set
@@ -192,15 +199,20 @@ namespace IxMilia.Dxf
             return Load(stream, defaultEncoding: null);
         }
 
-        public static DxfFile Load(Stream stream, Encoding defaultEncoding)
+        public static DxfFile Load(Stream stream, Encoding? defaultEncoding)
         {
             int readBytes;
+            //defaultEncoding ??= Encoding.ASCII;
             var firstLine = GetFirstLine(stream, defaultEncoding, out readBytes);
             var reader = new BinaryReader(stream);
 
             // check for binary sentinels
             DxfFile file;
-            if (firstLine == DxbReader.BinarySentinel)
+            if (firstLine is null)
+            {
+                file = new DxfFile(); // empty file
+            }
+            else if (firstLine == DxbReader.BinarySentinel)
             {
                 file = new DxbReader().ReadFile(reader);
             }
@@ -213,9 +225,10 @@ namespace IxMilia.Dxf
             return file;
         }
 
-        internal static string GetFirstLine(Stream stream, Encoding encoding, out int readBytes)
+        internal static string? GetFirstLine(Stream stream, Encoding? encoding, out int readBytes)
         {
-            var line = stream.ReadLine(encoding, out readBytes);
+            // a null encoding is actually allowed here
+            var line = stream.ReadLine(encoding!, out readBytes);
             if (line == null)
             {
                 return null;
@@ -240,7 +253,7 @@ namespace IxMilia.Dxf
             return line;
         }
 
-        internal static IDxfCodePairReader GetCodePairReader(string firstLine, int readBytes, BinaryReader binaryReader, Encoding defaultTextEncoding)
+        internal static IDxfCodePairReader GetCodePairReader(string firstLine, int readBytes, BinaryReader binaryReader, Encoding? defaultTextEncoding)
         {
             if (firstLine == DxbReader.BinarySentinel)
             {
@@ -338,7 +351,7 @@ namespace IxMilia.Dxf
         internal IEnumerable<DxfEntity> EntitiesFromBlock(string blockName)
         {
             var block = Blocks.FirstOrDefault(b => b.Name == blockName);
-            return block?.Entities;
+            return block?.Entities ?? [];
         }
 
         public void Save(string path, bool asText = true)
@@ -570,12 +583,12 @@ namespace IxMilia.Dxf
             AddMissingTableItems<DxfLayer>(existingLayers, layersToAdd, name => new DxfLayer(name), l => Layers.Add(l));
         }
 
-        private void AddMissingLineTypes(HashSet<string> existingLineTypes, IEnumerable<string> lineTypesToAdd)
+        private void AddMissingLineTypes(HashSet<string> existingLineTypes, IEnumerable<string?> lineTypesToAdd)
         {
             AddMissingTableItems<DxfLineType>(existingLineTypes, lineTypesToAdd, name => new DxfLineType(name), lt => LineTypes.Add(lt));
         }
 
-        private void AddMissingStyles(HashSet<string> existingStyles, IEnumerable<string> stylesToAdd)
+        private void AddMissingStyles(HashSet<string> existingStyles, IEnumerable<string?> stylesToAdd)
         {
             AddMissingTableItems<DxfStyle>(existingStyles, stylesToAdd, name => new DxfStyle(name), s => Styles.Add(s));
         }
@@ -595,7 +608,7 @@ namespace IxMilia.Dxf
             AddMissingTableItems<DxfAppId>(existingAppIds, appIdsToAdd, name => new DxfAppId(name), a => ApplicationIds.Add(a));
         }
 
-        private static void AddMissingItems(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Action<string> addItem)
+        private static void AddMissingItems(HashSet<string> existingItems, IEnumerable<string?> itemsToAdd, Action<string> addItem)
         {
             foreach (var itemToAdd in itemsToAdd)
             {
@@ -607,7 +620,7 @@ namespace IxMilia.Dxf
             }
         }
 
-        private static void AddMissingTableItems<T>(HashSet<string> existingItems, IEnumerable<string> itemsToAdd, Func<string, T> createItem, Action<T> addItem)
+        private static void AddMissingTableItems<T>(HashSet<string> existingItems, IEnumerable<string?> itemsToAdd, Func<string, T> createItem, Action<T> addItem)
             where T : DxfSymbolTableFlags
         {
             AddMissingItems(existingItems, itemsToAdd, name => addItem(createItem(name)));

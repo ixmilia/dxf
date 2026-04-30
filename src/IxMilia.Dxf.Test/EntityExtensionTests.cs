@@ -58,5 +58,49 @@ namespace IxMilia.Dxf.Test
             var arc = new DxfArc(DxfPoint.Origin, radius, startAngle, endAngle);
             Assert.False(arc.ContainsAngle(angle));
         }
+
+        [Theory]
+        [InlineData(0.0, 5.0, 0.0, 0.0)]
+        [InlineData(3.1415926535897931 / 2, 0.0, 2.5, 0.0)]
+        [InlineData(3.1415926535897931, -5.0, 0.0, 0.0)]
+        [InlineData(3.1415926535897931 * (3.0 / 2.0), 0, -2.5, 0.0)]
+        public void GetPointFromAngle_CardinalRotationReturnsCorrectPoint(double angle, double expectedX, double expectedY, double expectedZ)
+        {
+            var ellipse = new DxfEllipse
+            {
+                Center = new DxfPoint(0, 0, 0),
+                MajorAxis = new DxfVector(5, 0, 0),
+                MinorAxisRatio = 0.5,
+                Normal = new DxfVector(0, 0, 1)
+            };
+
+            var result = ellipse.GetPointFromAngle(angle);
+
+            DXFPointsEqual(new DxfPoint(expectedX, expectedY, expectedZ), result);
+        }
+
+        [Fact]
+        public void GetPointFromAngle_ZAxisIsApplied()
+        {
+            // An ellipse on the XZ plane
+            var ellipse = new DxfEllipse
+            {
+                Center = new DxfPoint(0, 0, 0),
+                MajorAxis = new DxfVector(5, 0, 0),
+                MinorAxisRatio = 0.5,
+                Normal = new DxfVector(0, 1, 0)
+            };
+
+            var result = ellipse.GetPointFromAngle(3.1415926535897931 / 2);
+
+            DXFPointsEqual(new DxfPoint(0, 0, -2.5), result);
+        }
+
+        private static void DXFPointsEqual(DxfPoint expected, DxfPoint actual, double tolerance = 1e-10)
+        {
+            Assert.Equal(expected.X, actual.X, tolerance);
+            Assert.Equal(expected.Y, actual.Y, tolerance);
+            Assert.Equal(expected.Z, actual.Z, tolerance);
+        }
     }
 }

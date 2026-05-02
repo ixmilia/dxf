@@ -55,9 +55,19 @@ namespace IxMilia.Dxf.Entities
         {
             var sin = Math.Sin(angle);
             var cos = Math.Cos(angle);
+            
             var majorAxisLength = ellipse.MajorAxis.Length;
             var minorAxisLength = majorAxisLength * ellipse.MinorAxisRatio;
-            return new DxfPoint(cos * majorAxisLength, sin * minorAxisLength, 0.0) + ellipse.Center;
+
+            var majorAxisUnit = new DxfVector(
+                ellipse.MajorAxis.X / majorAxisLength,
+                ellipse.MajorAxis.Y / majorAxisLength,
+                ellipse.MajorAxis.Z / majorAxisLength
+            );
+            var minorAxisUnit = ellipse.Normal.Cross(majorAxisUnit);
+
+            return (majorAxisUnit * cos * majorAxisLength) + 
+                    (minorAxisUnit * sin * minorAxisLength) + ellipse.Center;
         }
 
         public static bool ContainsAngle(this DxfEllipse ellipse, double angle)

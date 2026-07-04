@@ -22,9 +22,17 @@ jobs:
   nuget-publish:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: [build]
+    permissions:
+      id-token: write
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-dotnet@v4
     - run: .\build-and-test.cmd -c Release -notest
-    - run: dotnet nuget push .\artifacts\packages\Release\*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --no-symbols
+    - name: NuGet login (OIDC → temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }}    
+    - name: NuGet push
+      run: dotnet nuget push .\artifacts\packages\Release\*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json -- no-symbols

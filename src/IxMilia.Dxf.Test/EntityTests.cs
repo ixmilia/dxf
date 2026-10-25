@@ -1398,6 +1398,22 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void WriteInsertXDataBeforeAttributes()
+        {
+            var insert = new DxfInsert();
+            insert.Attributes.Add(new DxfAttribute());
+            insert.XData.Add("IXMILIA", new DxfXDataApplicationItemCollection(new DxfXDataReal(1.1)));
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R2000;
+            file.Entities.Add(insert);
+            VerifyFileContains(file,
+                (1001, "IXMILIA"),
+                (1040, 1.1),
+                (0, "ATTRIB")
+            );
+        }
+
+        [Fact]
         public void ReadMTextTest()
         {
             var mtext = (DxfMText)Entity("MTEXT",

@@ -1246,6 +1246,52 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void ReadLayerSpecificFlagsTest()
+        {
+            var file = Section("TABLES",
+                (0, "TABLE"),
+                (2, "LAYER"),
+                (0, "LAYER"),
+                (70, 0b0111)
+                //      ^^^
+                //      |||+- frozen
+                //      ||+-- frozen by default in new viewports
+                //      |+--- locked
+            );
+            var layer = file.Layers.Single();
+            Assert.True(layer.IsFrozen);
+            Assert.True(layer.IsFrozenByDefaultInNewViewPorts);
+            Assert.True(layer.IsLocked);
+        }
+
+        [Fact]
+        public void WriteLayerSpecificFlagsTest()
+        {
+            var file = new DxfFile();
+            var layer = new DxfLayer()
+            {
+                Name = "name",
+                IsFrozen = true,
+                IsFrozenByDefaultInNewViewPorts = true,
+                IsLocked = true
+            };
+            file.Layers.Clear();
+            file.Layers.Add(layer);
+            VerifyFileContains(file,
+                DxfSectionType.Tables,
+                (0, "LAYER"),
+                (5, "#"),
+                (100, "AcDbSymbolTableRecord"),
+                (2, "name"),
+                (70, 0b0111)
+                //      ^^^
+                //      |||+- frozen
+                //      ||+-- frozen by default in new viewports
+                //      |+--- locked
+            );
+        }
+
+        [Fact]
         public void ReadZeroLayerColorTest()
         {
             var file = Section("TABLES",

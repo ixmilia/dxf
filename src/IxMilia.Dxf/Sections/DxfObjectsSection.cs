@@ -85,42 +85,5 @@ namespace IxMilia.Dxf.Sections
 
             return section;
         }
-
-        private static List<DxfObject> GatherObjects(IEnumerable<DxfObject> objects)
-        {
-            var buffer = new DxfBufferReader<DxfObject>(objects, o => o == null);
-            var result = new List<DxfObject>();
-            var defaultObjectHandles = new HashSet<DxfHandle>();
-            while (buffer.ItemsRemain)
-            {
-                var obj = buffer.Peek();
-                buffer.Advance();
-                switch (obj.ObjectType)
-                {
-                    case DxfObjectType.DictionaryWithDefault:
-                        var dict = (DxfDictionaryWithDefault)obj;
-                        if (dict.DefaultObjectPointer.Handle.Value != 0)
-                        {
-                            defaultObjectHandles.Add(dict.DefaultObjectPointer.Handle);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                result.Add(obj);
-            }
-
-            // trim default objects from the resultant list because they shouldn't be directly accessible
-            for (int i = result.Count - 1; i >= 0; i--)
-            {
-                if (defaultObjectHandles.Contains(((IDxfItemInternal)result[i]).Handle))
-                {
-                    result.RemoveAt(i);
-                }
-            }
-
-            return result;
-        }
     }
 }

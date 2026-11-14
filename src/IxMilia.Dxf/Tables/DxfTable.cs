@@ -36,7 +36,7 @@ namespace IxMilia.Dxf.Tables
         public const string ViewPortText = "VPORT";
 
         public IDxfItem? Owner { get; private set; }
-        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        public void SetOwner(IDxfItem owner)
         {
             Owner = owner;
         }
@@ -73,7 +73,7 @@ namespace IxMilia.Dxf.Tables
             // common pairs
             pairs.Add(new DxfCodePair(0, DxfSection.TableText));
             pairs.Add(new DxfCodePair(2, TableTypeToName(TableType)));
-            if (outputHandles && Handle.Value != 0)
+            if (outputHandles && Handle.HasValue)
             {
                 pairs.Add(new DxfCodePair(5, DxfCommonConverters.HandleString(Handle)));
             }
@@ -85,7 +85,7 @@ namespace IxMilia.Dxf.Tables
                     group.AddValuePairs(pairs, version, outputHandles);
                 }
 
-                if (version >= DxfAcadVersion.R2000 && OwnerHandle.Value != 0)
+                if (version >= DxfAcadVersion.R2000 && OwnerHandle.HasValue)
                 {
                     pairs.Add(new DxfCodePair(330, DxfCommonConverters.HandleString(OwnerHandle)));
                 }

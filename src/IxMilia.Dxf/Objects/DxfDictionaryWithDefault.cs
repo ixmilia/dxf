@@ -40,7 +40,7 @@ namespace IxMilia.Dxf.Objects
             if (version >= DxfAcadVersion.R2000)
             {
                 pairs.Add(new DxfCodePair(100, "AcDbDictionaryWithDefault"));
-                if (DefaultObject != null && DefaultObjectPointer.Handle.Value != 0)
+                if (DefaultObject != null && DefaultObjectPointer.Handle.HasValue)
                 {
                     pairs.Add(new DxfCodePair(340, HandleString(DefaultObjectPointer.Handle)));
                 }

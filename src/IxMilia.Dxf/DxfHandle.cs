@@ -7,6 +7,8 @@ namespace IxMilia.Dxf
     {
         public ulong Value { get; }
 
+        public readonly bool HasValue => Value != 0;
+
         public DxfHandle(ulong value)
         {
             Value = value;

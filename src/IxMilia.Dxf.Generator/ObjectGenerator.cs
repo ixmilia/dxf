@@ -57,11 +57,11 @@ namespace IxMilia.Dxf.Generator
             AppendLine("public partial class DxfObject : IDxfItemInternal");
             AppendLine("{");
             IncreaseIndent();
-            AppendLine("DxfHandle IDxfItemInternal.Handle { get; set; }");
-            AppendLine("DxfHandle IDxfItemInternal.OwnerHandle { get; set; }");
+            AppendLine("public DxfHandle Handle { get; set; }");
+            AppendLine("public DxfHandle OwnerHandle { get; set; }");
             AppendLine("public IDxfItem Owner { get; private set;}");
             AppendLine();
-            AppendLine("void IDxfItemInternal.SetOwner(IDxfItem owner)");
+            AppendLine("public void SetOwner(IDxfItem owner)");
             AppendLine("{");
             AppendLine("    Owner = owner;");
             AppendLine("}");
@@ -157,10 +157,10 @@ namespace IxMilia.Dxf.Generator
             AppendLine("{");
             IncreaseIndent();
             AppendLine("case 5:");
-            AppendLine("    ((IDxfItemInternal)this).Handle = HandleString(pair.StringValue);");
+            AppendLine("    Handle = HandleString(pair.StringValue);");
             AppendLine("    break;");
             AppendLine("case 330:");
-            AppendLine("    ((IDxfItemInternal)this).OwnerHandle = HandleString(pair.StringValue);");
+            AppendLine("    OwnerHandle = HandleString(pair.StringValue);");
             AppendLine("    break;");
             foreach (var propertyGroup in GetProperties(baseObject).Where(p => !ProtectedSet(p)).GroupBy(p => Code(p)).OrderBy(p => p.Key))
             {

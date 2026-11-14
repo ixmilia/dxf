@@ -100,8 +100,8 @@ namespace IxMilia.Dxf.Test
             // don't care about the code pairs, but this forces handles to be assigned to pointers
             var _actualCodePairs = file.GetCodePairs().ToList();
 
-            Assert.NotEqual(0u, ((IDxfItemInternal)block).Handle.Value);
-            Assert.NotEqual(0u, ((IDxfItemInternal)image.ImageDefinition).Handle.Value);
+            Assert.True(block.Handle.HasValue);
+            Assert.True(image.ImageDefinition.Handle.HasValue);
         }
     }
 }

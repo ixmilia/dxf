@@ -5,7 +5,7 @@ namespace IxMilia.Dxf.Objects
         public IDxfItem AssociatedImage
         {
             get { return Owner; }
-            set { ((IDxfItemInternal)this).SetOwner(value); }
+            set { SetOwner(value); }
         }
     }
 }

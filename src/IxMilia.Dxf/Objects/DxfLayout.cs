@@ -46,7 +46,7 @@ namespace IxMilia.Dxf.Objects
         public IDxfItem PaperSpaceObject
         {
             get { return Owner; }
-            set { ((IDxfItemInternal)this).SetOwner(value); }
+            set { SetOwner(value); }
         }
 
         internal override DxfObject PopulateFromBuffer(DxfCodePairBufferReader buffer)

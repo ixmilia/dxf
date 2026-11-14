@@ -18,7 +18,7 @@ namespace IxMilia.Dxf.Objects
         public IDxfItem HostBlock
         {
             get { return Owner; }
-            set { ((IDxfItemInternal)this).SetOwner(value); }
+            set { SetOwner(value); }
         }
 
         protected override DxfObject PostParse()

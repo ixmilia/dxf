@@ -32,7 +32,7 @@ namespace IxMilia.Dxf.Objects
                         }
                         else
                         {
-                            ((IDxfItemInternal)this).Handle = DxfCommonConverters.HandleString(pair.StringValue);
+                            Handle = DxfCommonConverters.HandleString(pair.StringValue);
                             isReadyForSortHandles = true;
                         }
                         break;
@@ -40,7 +40,7 @@ namespace IxMilia.Dxf.Objects
                         isReadyForSortHandles = true;
                         break;
                     case 330:
-                        ((IDxfItemInternal)this).OwnerHandle = DxfCommonConverters.HandleString(pair.StringValue);
+                        OwnerHandle = DxfCommonConverters.HandleString(pair.StringValue);
                         isReadyForSortHandles = true;
                         break;
                     case 331:

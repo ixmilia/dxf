@@ -72,7 +72,7 @@ namespace IxMilia.Dxf.Test
 
                     var readObject = file.Objects.First();
                     Assert.IsType(objectType, readObject);
-                    Assert.Equal((ulong)0x424241, ((IDxfItemInternal)readObject).Handle.Value);
+                    Assert.Equal((ulong)0x424241, readObject.Handle.Value);
                     var xdata = readObject.XData;
                     var kvp = xdata.Single();
                     Assert.Equal("ACAD", kvp.Key);
@@ -80,7 +80,7 @@ namespace IxMilia.Dxf.Test
 
                     var sentinel = file.Objects.Last();
                     Assert.IsType<DxfAcadProxyObject>(sentinel);
-                    Assert.Equal((ulong)0x424242, ((IDxfItemInternal)sentinel).Handle.Value);
+                    Assert.Equal((ulong)0x424242, sentinel.Handle.Value);
                 }
             }
         }
@@ -628,7 +628,7 @@ namespace IxMilia.Dxf.Test
                 (0, "EOF")
             );
             var lightList = (DxfLightList)file.Objects.Last();
-            Assert.Equal(new DxfHandle(0xDEADBEEF), ((IDxfItemInternal)lightList).Handle);
+            Assert.Equal(new DxfHandle(0xDEADBEEF), lightList.Handle);
             Assert.Equal(43, lightList.Version);
             Assert.Equal("light-name", lightList.Lights.Single().Name);
         }

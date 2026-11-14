@@ -517,7 +517,7 @@ namespace IxMilia.Dxf.Test
 
             var block = file.Blocks.Single();
             Assert.Equal("<block name>", block.Name);
-            Assert.Equal(new DxfHandle(0x42), ((IDxfItemInternal)block).Handle);
+            Assert.Equal(new DxfHandle(0x42), block.Handle);
             Assert.Equal("<layer>", block.Layer);
             Assert.Equal(11, block.BasePoint.X);
             Assert.Equal(22, block.BasePoint.Y);
@@ -1420,9 +1420,6 @@ namespace IxMilia.Dxf.Test
             dict = (DxfDictionary)file.Objects.First();
             Assert.Equal(dict, dict.Owner);
             Assert.Equal(dict, dict["key"]);
-
-            // ensure the pointer changed.  FFFF is unlikely to occur in writing
-            Assert.NotEqual(new DxfHandle(0xFFFF), ((IDxfItemInternal)dict).Handle);
         }
 
         [Fact]
@@ -1439,8 +1436,8 @@ namespace IxMilia.Dxf.Test
             file = RoundTrip(file);
             dict = file.Objects.OfType<DxfDictionary>().Single(d => d.ContainsKey("key"));
 
-            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict).OwnerHandle);
-            Assert.Equal(((IDxfItemInternal)dict).Handle, ((IDxfItemInternal)dict["key"]!).OwnerHandle);
+            Assert.Equal(dict.Handle, dict.OwnerHandle);
+            Assert.Equal(dict.Handle, dict["key"]!.OwnerHandle);
         }
 
         [Fact]
@@ -1621,7 +1618,7 @@ namespace IxMilia.Dxf.Test
                 .Concat(file.Styles.Cast<IDxfItemInternal>())
                 .Concat(file.ViewPorts.Cast<IDxfItemInternal>())
                 .ToArray();
-            var defaultItemsWithNullHandle = defaultItems.Where(item => item.Handle.Value == 0).ToArray();
+            var defaultItemsWithNullHandle = defaultItems.Where(item => !item.Handle.HasValue).ToArray();
             Assert.Empty(defaultItemsWithNullHandle);
             var uniqueHandles = defaultItems.Select(item => item.Handle.Value).ToHashSet();
             Assert.Equal(defaultItems.Length, uniqueHandles.Count);
@@ -1739,6 +1736,73 @@ namespace IxMilia.Dxf.Test
                     file.Save(ms);
                 }
             }
+        }
+
+        [Fact]
+        public void HandlesAreAssignedDuringSaveTest()
+        {
+            var file = new DxfFile();
+            var line = new DxfLine();
+            file.Entities.Add(line);
+            Assert.False(line.Handle.HasValue);
+
+            using var ms = new MemoryStream();
+            file.Save(ms);
+
+            Assert.True(line.Handle.HasValue);
+        }
+
+        [Fact]
+        public void HandlesAreMaintainedWhenManuallyAssignedTest()
+        {
+            var lineHandle = new DxfHandle(0x5678);
+            var file = new DxfFile();
+            var line = new DxfLine();
+            line.Handle = lineHandle;
+            file.Entities.Add(line);
+            Assert.Equal(lineHandle, line.Handle);
+
+            using var ms = new MemoryStream();
+            file.Save(ms);
+
+            Assert.Equal(lineHandle, line.Handle);
+        }
+
+        [Fact]
+        public void HandlesAreMaintainedAfterRoundTripTest()
+        {
+            // create with known handles
+            var layer0handle = new DxfHandle(0x1234);
+            var lineHandle = new DxfHandle(0x5678);
+            var file = Parse(
+                (0, "SECTION"),
+                (2, "TABLES"),
+                (0, "TABLE"),
+                (2, "LAYER"),
+                (0, "LAYER"),
+                (5, layer0handle.ToString()),
+                (2, "0"),
+                (0, "ENDTAB"),
+                (0, "ENDSEC"),
+                (0, "SECTION"),
+                (2, "ENTITIES"),
+                (0, "LINE"),
+                (5, lineHandle.ToString()),
+                (0, "ENDSEC"),
+                (0, "EOF")
+            );
+
+            // round trip
+            using var ms = new MemoryStream();
+            file.Save(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            var roundTripFile = DxfFile.Load(ms);
+
+            // verify handles
+            var layer0 = roundTripFile.Layers.Single(l => l.Name == "0");
+            Assert.Equal(layer0handle, layer0.Handle);
+            var line = Assert.IsType<DxfLine>(roundTripFile.Entities.Single());
+            Assert.Equal(lineHandle, line.Handle);
         }
 
         public static bool IsEntityOrDerived(Type type)

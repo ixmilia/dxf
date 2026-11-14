@@ -7,9 +7,9 @@
     -->
     <Object Name="DxfObject" ObjectType="" SubclassMarker="" TypeString="">
         <WriteOrder>
-            <WriteSpecificValue Code="5" Value="((IDxfItemInternal)this).Handle" WriteConverter="HandleString({0})" />
+            <WriteSpecificValue Code="5" Value="Handle" WriteConverter="HandleString({0})" />
             <WriteExtensionData />
-            <WriteSpecificValue Code="330" Value="((IDxfItemInternal)this).OwnerHandle" DontWriteIfValueIs="default(DxfHandle)" WriteConverter="HandleString({0})" />
+            <WriteSpecificValue Code="330" Value="OwnerHandle" DontWriteIfValueIs="default(DxfHandle)" WriteConverter="HandleString({0})" />
         </WriteOrder>
     </Object>
     <!--

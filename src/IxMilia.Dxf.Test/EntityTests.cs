@@ -27,7 +27,7 @@ namespace IxMilia.Dxf.Test
             var unusedFile = new DxfFile();
             var entitiesSection = DxfEntitiesSection.EntitiesSectionFromBuffer(bufferReader, unusedFile);
             var entity = entitiesSection.Entities.Single();
-            Assert.Equal(new DxfHandle(0x42), ((IDxfItemInternal)entity).Handle);
+            Assert.Equal(new DxfHandle(0x42), entity.Handle);
             Assert.Equal("<line-type-name>", entity.LineTypeName);
             Assert.Equal("<layer>", entity.Layer);
             Assert.Equal(3.14159, entity.LineTypeScale);
@@ -167,7 +167,7 @@ namespace IxMilia.Dxf.Test
 
                         var readEntity = file.Entities.First();
                         Assert.IsType(entityType, readEntity);
-                        Assert.Equal((ulong)0x424241, ((IDxfItemInternal)readEntity).Handle.Value);
+                        Assert.Equal((ulong)0x424241, readEntity.Handle.Value);
                         var xdata = readEntity.XData;
                         var kvp = xdata.Single();
                         Assert.Equal("ACAD", kvp.Key);
@@ -175,7 +175,7 @@ namespace IxMilia.Dxf.Test
 
                         var sentinel = file.Entities.Last();
                         Assert.IsType<DxfLine>(sentinel);
-                        Assert.Equal((ulong)0x424242, ((IDxfItemInternal)sentinel).Handle.Value);
+                        Assert.Equal((ulong)0x424242, sentinel.Handle.Value);
                     }
                 }
             }

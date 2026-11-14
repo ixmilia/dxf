@@ -56,7 +56,7 @@ namespace IxMilia.Dxf
         {
             if (item != null && visitedItems.Add(item))
             {
-                if (item.Handle.Value != 0)
+                if (item.Handle.HasValue)
                 {
                     handleMap[item.Handle] = item;
                 }
@@ -162,17 +162,10 @@ namespace IxMilia.Dxf
         public static DxfHandle AssignHandles(DxfFile file)
         {
             var visitedItems = new HashSet<IDxfItemInternal>();
-            foreach (var item in file.GetFileItems())
-            {
-                ClearPointers(item, visitedItems);
-            }
-
-            visitedItems.Clear();
-
-            var nextPointer = new DxfHandle(1);
+            var nextPointer = file.Header.NextAvailableHandle;
             foreach (var item in file.GetFileItems().Where(i => i != null))
             {
-                nextPointer = AssignHandles(item, nextPointer, default(DxfHandle), visitedItems);
+                nextPointer = AssignHandles(item, nextPointer, default, visitedItems);
                 foreach (var child in item.GetChildItems().Where(c => c != null))
                 {
                     var parentHandle = GetParentHandle(item, child);
@@ -191,10 +184,13 @@ namespace IxMilia.Dxf
                 return nextHandle;
             }
 
-            Debug.Assert(item.Handle.Value == 0);
-            item.Handle = new DxfHandle(nextHandle.Value);
-            nextHandle = new DxfHandle(nextHandle.Value + 1);
-            if (item.OwnerHandle.Value == 0 && ownerHandle.Value != 0)
+            if (!item.Handle.HasValue)
+            {
+                item.Handle = new DxfHandle(nextHandle.Value);
+                nextHandle = new DxfHandle(nextHandle.Value + 1);
+            }
+
+            if (!item.OwnerHandle.HasValue && ownerHandle.HasValue)
             {
                 item.OwnerHandle = ownerHandle;
             }
@@ -223,18 +219,6 @@ namespace IxMilia.Dxf
             }
 
             return parent.Handle;
-        }
-
-        private static void ClearPointers(IDxfItemInternal item, HashSet<IDxfItemInternal> visitedItems)
-        {
-            if (item != null && visitedItems.Add(item))
-            {
-                item.Handle = default(DxfHandle);
-                foreach (var child in item.GetChildItems())
-                {
-                    ClearPointers(child, visitedItems);
-                }
-            }
         }
     }
 }

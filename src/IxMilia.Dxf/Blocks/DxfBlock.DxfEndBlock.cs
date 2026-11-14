@@ -11,11 +11,11 @@ namespace IxMilia.Dxf.Blocks
         private class DxfEndBlock : IDxfItemInternal
         {
             #region IDxfItem and IDxfItemInternal
-            DxfHandle IDxfItemInternal.Handle { get; set; }
-            DxfHandle IDxfItemInternal.OwnerHandle { get; set; }
+            public DxfHandle Handle { get; set; }
+            public DxfHandle OwnerHandle { get; set; }
             public IDxfItem Owner { get; private set; }
 
-            void IDxfItemInternal.SetOwner(IDxfItem owner)
+            public void SetOwner(IDxfItem owner)
             {
                 Owner = owner;
             }
@@ -46,7 +46,7 @@ namespace IxMilia.Dxf.Blocks
                 switch (pair.Code)
                 {
                     case 5:
-                        ((IDxfItemInternal)this).Handle = DxfCommonConverters.HandleString(pair.StringValue);
+                        Handle = DxfCommonConverters.HandleString(pair.StringValue);
                         break;
                     case 8:
                         // just a re-iteration of the layer
@@ -68,9 +68,9 @@ namespace IxMilia.Dxf.Blocks
             {
                 var list = new List<DxfCodePair>();
                 list.Add(new DxfCodePair(0, EndBlockText));
-                if (outputHandles && ((IDxfItemInternal)this).Handle.Value != 0)
+                if (outputHandles && Handle.HasValue)
                 {
-                    list.Add(new DxfCodePair(5, DxfCommonConverters.HandleString(((IDxfItemInternal)this).Handle)));
+                    list.Add(new DxfCodePair(5, DxfCommonConverters.HandleString(Handle)));
                 }
 
                 DxfXData.AddValuePairs(Parent.XData, list, version, outputHandles);
@@ -85,7 +85,7 @@ namespace IxMilia.Dxf.Blocks
 
                 if (version >= DxfAcadVersion.R2000)
                 {
-                    list.Add(new DxfCodePair(330, DxfCommonConverters.HandleString(((IDxfItemInternal)Parent).OwnerHandle)));
+                    list.Add(new DxfCodePair(330, DxfCommonConverters.HandleString(Parent.OwnerHandle)));
                 }
 
                 if (version >= DxfAcadVersion.R13)

@@ -86,5 +86,19 @@ namespace Examples
 
             file.SaveExample();
         }
+
+        [Fact]
+        public void AssignCustomHandle()
+        {
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            var line = new DxfLine()
+            {
+                Handle = new DxfHandle(0x1234) // this custom handle will be retained during save
+            };
+            file.Entities.Add(line);
+
+            file.SaveExample();
+        }
     }
 }

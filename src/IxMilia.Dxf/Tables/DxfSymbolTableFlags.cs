@@ -8,7 +8,7 @@ namespace IxMilia.Dxf
     public abstract class DxfSymbolTableFlags : IDxfItemInternal
     {
         public IDxfItem? Owner { get; private set; }
-        void IDxfItemInternal.SetOwner(IDxfItem owner)
+        public void SetOwner(IDxfItem owner)
         {
             Owner = owner;
         }

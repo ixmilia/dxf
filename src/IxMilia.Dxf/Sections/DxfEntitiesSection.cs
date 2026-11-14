@@ -220,7 +220,7 @@ namespace IxMilia.Dxf.Sections
         {
             if (item != null)
             {
-                ((IDxfItemInternal)item).SetOwner(owner);
+                item.SetOwner(owner);
             }
         }
     }

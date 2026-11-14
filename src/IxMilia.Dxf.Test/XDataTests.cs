@@ -37,8 +37,8 @@ namespace IxMilia.Dxf.Test
             // sanity check to verify that it was read correctly
             var dict = file.Objects.OfType<DxfDictionary>().Single();
             var layout = (DxfLayout)dict["some-layout"]!;
-            Assert.Equal(new DxfHandle(0xBBBBBBBB), ((IDxfItemInternal)dict).Handle);
-            Assert.Equal(new DxfHandle(0xCCCCCCCC), ((IDxfItemInternal)layout).Handle);
+            Assert.Equal(new DxfHandle(0xBBBBBBBB), dict.Handle);
+            Assert.Equal(new DxfHandle(0xCCCCCCCC), layout.Handle);
 
             // re-save the file to a garbage stream to re-assign handles
             using (var ms = new MemoryStream())
@@ -46,12 +46,12 @@ namespace IxMilia.Dxf.Test
                 file.Save(ms);
             }
 
-            // verify new handles and owners; note that the assigned handles are unlikely to be 0xBBBBBBBB and 0xCCCCCCCC again
+            // verify handles and owners
             Assert.True(ReferenceEquals(layout.Owner, dict));
-            Assert.NotEqual(new DxfHandle(0xBBBBBBBB), ((IDxfItemInternal)dict).Handle);
-            Assert.NotEqual(new DxfHandle(0xCCCCCCCC), ((IDxfItemInternal)layout).Handle);
-            var dictHandle = ((IDxfItemInternal)dict).Handle;
-            Assert.Equal(dictHandle, ((IDxfItemInternal)layout).OwnerHandle);
+            Assert.Equal(new DxfHandle(0xBBBBBBBB), dict.Handle);
+            Assert.Equal(new DxfHandle(0xCCCCCCCC), layout.Handle);
+            var dictHandle = dict.Handle;
+            Assert.Equal(dictHandle, layout.OwnerHandle);
             var layoutXDataGroups = ((IDxfHasXData)layout).ExtensionDataGroups.Single(g => g.GroupName == "ACAD_REACTORS");
             var ownerCodePair = (DxfCodePair)layoutXDataGroups.Items.Single();
             Assert.Equal(330, ownerCodePair.Code);

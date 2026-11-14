@@ -588,7 +588,7 @@ namespace IxMilia.Dxf.Generator
 
             if (IsPointer(property) && !AllowMultiples(property))
             {
-                writePredicates.Add(string.Format("this.{0}Pointer.Handle.Value != 0", name));
+                writePredicates.Add(string.Format("this.{0}Pointer.Handle.HasValue", name));
             }
 
             var indentPrefix = string.Empty;
@@ -618,7 +618,7 @@ namespace IxMilia.Dxf.Generator
                     {
                         name += "Pointers.Pointers";
                         value = "DxfCommonConverters.HandleString(p.Handle)";
-                        infixPredicate = string.Format(".Where(p => p.Handle.Value != 0)");
+                        infixPredicate = string.Format(".Where(p => p.Handle.HasValue)");
                     }
 
                     lines.Add(string.Format("{0}pairs.AddRange(this.{1}{2}!.Select(p => new DxfCodePair({3}, {4})));", indentPrefix, name, infixPredicate, code, value));

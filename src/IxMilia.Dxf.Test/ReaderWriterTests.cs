@@ -1805,6 +1805,40 @@ namespace IxMilia.Dxf.Test
             Assert.Equal(lineHandle, line.Handle);
         }
 
+        [Fact]
+        public void ExistingHandleValuesAreNotReassignedDuringSaveTest()
+        {
+            // capture the default handle value of the *ACTIVE viewport from an empty file
+            var tempFile = new DxfFile();
+            using (var ms = new MemoryStream())
+            {
+                tempFile.Save(ms);
+            }
+            var activeViewportDefaultHandleValue = tempFile.ActiveViewPort!.Handle.Value;
+
+            // create a file where an entity already has this auto-assigned handle, thus forcing a skip
+            var line = new DxfLine()
+            {
+                Handle = new DxfHandle(activeViewportDefaultHandleValue)
+            };
+            var file = new DxfFile();
+            file.Header.Version = DxfAcadVersion.R14;
+            file.Entities.Add(line);
+
+            // start at 0x01
+            Assert.Equal(new DxfHandle(0x01), file.Header.NextAvailableHandle);
+
+            using (var ms = new MemoryStream())
+            {
+                file.Save(ms); // don't care about the stream
+            }
+
+            // handles have been assigned, so next available should be higher
+            Assert.NotEqual(new DxfHandle(0x01), file.Header.NextAvailableHandle);
+            Assert.Equal(new DxfHandle(activeViewportDefaultHandleValue), line.Handle); // manually assigned handle was retained
+            Assert.NotEqual(new DxfHandle(activeViewportDefaultHandleValue), file.ActiveViewPort!.Handle); // this auto-assigned value is now different
+        }
+
         public static bool IsEntityOrDerived(Type type)
         {
             if (type == typeof(DxfEntity))

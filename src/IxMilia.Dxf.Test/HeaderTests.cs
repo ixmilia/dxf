@@ -2072,7 +2072,7 @@ $SHADOWPLANELOCATION";
             Assert.Equal(DxfLineWeight.ByBlock, header.NewObjectLineWeight);
             Assert.Equal(DxfPlotStyle.ByLayer, header.NewObjectPlotStyle);
             Assert.False(header.NewSolidsContainHistory);
-            Assert.Equal(default(DxfHandle), header.NextAvailableHandle);
+            Assert.Equal(new DxfHandle(0x01), header.NextAvailableHandle);
             Assert.False(header.NodeSnap);
             Assert.True(header.NoTwist);
             Assert.Equal(37, header.ObjectSnapFlags);

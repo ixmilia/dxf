@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using IxMilia.Dxf.Entities;
+using IxMilia.Dxf.Extensions;
 using IxMilia.Dxf.Objects;
 
 namespace IxMilia.Dxf
@@ -162,11 +163,22 @@ namespace IxMilia.Dxf
         public static DxfHandle AssignHandles(DxfFile file)
         {
             var visitedItems = new HashSet<IDxfItemInternal>();
-            var nextPointer = file.Header.NextAvailableHandle;
-            foreach (var item in file.GetFileItems().Where(i => i != null))
+
+            // find max handle
+            var maxHandle = new DxfHandle(0x00);
+            foreach (var item in file.GetFileItems().WhereNotNull())
+            {
+                maxHandle = new DxfHandle(Math.Max(maxHandle.Value, item.Handle.Value));
+                maxHandle = GetMaxHandleFromChildren(maxHandle, item, visitedItems);
+            }
+
+            // assign new handles to be greater than max
+            visitedItems.Clear();
+            var nextPointer = new DxfHandle(maxHandle.Value + 1);
+            foreach (var item in file.GetFileItems().WhereNotNull())
             {
                 nextPointer = AssignHandles(item, nextPointer, default, visitedItems);
-                foreach (var child in item.GetChildItems().Where(c => c != null))
+                foreach (var child in item.GetChildItems().WhereNotNull())
                 {
                     var parentHandle = GetParentHandle(item, child);
                     nextPointer = AssignHandles(child, nextPointer, parentHandle, visitedItems);
@@ -175,6 +187,25 @@ namespace IxMilia.Dxf
             }
 
             return nextPointer;
+        }
+
+        private static DxfHandle GetMaxHandleFromChildren(DxfHandle parentMaxHandle, IDxfItemInternal item, HashSet<IDxfItemInternal> visitedItems)
+        {
+            var nextMaxHandle = parentMaxHandle;
+            foreach (var child in item.GetPointers().Where(c => c.Item != null))
+            {
+                var childItem = child.Item as IDxfItemInternal;
+                if (childItem is not null)
+                {
+                    if (visitedItems.Add(childItem))
+                    {
+                        nextMaxHandle = new DxfHandle(Math.Max(nextMaxHandle.Value, childItem.Handle.Value));
+                        nextMaxHandle = GetMaxHandleFromChildren(nextMaxHandle, childItem, visitedItems);
+                    }
+                }
+            }
+
+            return nextMaxHandle;
         }
 
         private static DxfHandle AssignHandles(IDxfItemInternal? item, DxfHandle nextHandle, DxfHandle ownerHandle, HashSet<IDxfItemInternal> visitedItems)

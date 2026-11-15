@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 0.9.0-preview1 (TBD)
+
+- Maintain object handles during reading and writing.
+
 ## 0.8.4 (13 June 2024)
 
 - Improve handling of empty boundaries in `HATCH` entities.

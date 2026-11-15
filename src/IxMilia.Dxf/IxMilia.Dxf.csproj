@@ -5,7 +5,7 @@
     <Copyright>Copyright 2020</Copyright>
     <AssemblyTitle>IxMilia.Dxf</AssemblyTitle>
     <Authors>IxMilia</Authors>
-    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>$(LibTargetFramework);netstandard2.0</TargetFrameworks>
     <LangVersion>10.0</LangVersion>
     <AssemblyName>IxMilia.Dxf</AssemblyName>
     <PackageId>IxMilia.Dxf</PackageId>

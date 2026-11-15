@@ -8,6 +8,7 @@
     <BaseIntermediateOutputPath>$(ArtifactsDir)\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
     <PackageOutputPath>$(ArtifactsPackagesDir)\$(Configuration)</PackageOutputPath>
     <DebugType>embedded</DebugType>
+    <LibTargetFramework>net10.0</LibTargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

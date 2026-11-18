@@ -456,7 +456,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("public void SetVariable(string name, object value)");
                     AppendLine("{");
                     IncreaseIndent();
-                    AppendLine("switch (name?.ToUpper())");
+                    AppendLine("switch (name?.ToUpperInvariant())");
                     AppendLine("{");
                     IncreaseIndent();
                     var setProperties = new HashSet<string>();
@@ -483,7 +483,7 @@ namespace IxMilia.Dxf.Generator
                     AppendLine("public object? GetVariable(string name)");
                     AppendLine("{");
                     IncreaseIndent();
-                    AppendLine("switch (name?.ToUpper())");
+                    AppendLine("switch (name?.ToUpperInvariant())");
                     AppendLine("{");
                     IncreaseIndent();
                     var getProperties = new HashSet<string>();

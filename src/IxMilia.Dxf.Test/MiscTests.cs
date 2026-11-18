@@ -136,6 +136,24 @@ namespace IxMilia.Dxf.Test
         }
 
         [Fact]
+        public void DimStyleVariablesAreCaseInsensitiveWithTurkishCulture()
+        {
+            var existingCulture = CultureInfo.CurrentCulture;
+            try
+            {
+                CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
+                var style = new DxfDimStyle();
+                style.SetVariable("dimpost", "abc");
+                Assert.Equal("abc", style.DimensioningSuffix);
+                Assert.Equal("abc", style.GetVariable("dimpost"));
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = existingCulture;
+            }
+        }
+
+        [Fact]
         public void GetInsertEntitiesWhenAddedToFile()
         {
             var line = new DxfLine(new DxfPoint(0.0, 0.0, 0.0), new DxfPoint(1.0, 1.0, 0.0));

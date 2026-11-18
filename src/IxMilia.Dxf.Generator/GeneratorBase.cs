@@ -447,7 +447,7 @@ namespace IxMilia.Dxf.Generator
 
         public string CamlCase(string value)
         {
-            return char.ToLower(value[0]) + value.Substring(1);
+            return char.ToLowerInvariant(value[0]) + value.Substring(1);
         }
 
         public string ClassName(XElement xml)

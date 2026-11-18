@@ -4,7 +4,7 @@ namespace IxMilia.Dxf
 {
     internal class DxfEncodingHelper
     {
-        private static readonly Regex DxfCodePagePattern = new Regex(@"^ANSI_(\d+)$", RegexOptions.IgnoreCase);
+        private static readonly Regex DxfCodePagePattern = new Regex(@"^ANSI_(\d+)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         public static bool TryParseEncoding(string encodingName, out int codePage)
         {

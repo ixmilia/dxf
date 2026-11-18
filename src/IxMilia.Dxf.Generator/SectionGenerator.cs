@@ -42,7 +42,7 @@ namespace IxMilia.Dxf.Generator
             var seenKeys = new HashSet<string>();
             foreach (var property in _variables)
             {
-                var name = Name(property).ToUpper();
+                var name = Name(property).ToUpperInvariant();
                 if (!seenKeys.Contains(name))
                 {
                     seenKeys.Add(name);
@@ -331,7 +331,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine("private object GetValue(string variableName)");
             AppendLine("{");
             IncreaseIndent();
-            AppendLine("switch (variableName.ToUpper())");
+            AppendLine("switch (variableName.ToUpperInvariant())");
             AppendLine("{");
             IncreaseIndent();
             seenProperties.Clear();
@@ -360,7 +360,7 @@ namespace IxMilia.Dxf.Generator
             AppendLine("private void SetValue(string variableName, object value)");
             AppendLine("{");
             IncreaseIndent();
-            AppendLine("switch (variableName.ToUpper())");
+            AppendLine("switch (variableName.ToUpperInvariant())");
             AppendLine("{");
             IncreaseIndent();
             seenProperties.Clear();
